@@ -1,0 +1,16 @@
+<UserControl x:Class="NewaccNet.Wpf.Views.Base.MainToolBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars">
+    <dxb:ToolBarControl AllowCustomizationMenu="False" AllowQuickCustomization="False">
+        <dxb:BarButtonItem Name="btnNew" Content="Thêm mới" Command="{Binding NewCommand}" />
+        <dxb:BarButtonItem Name="btnEdit" Content="Sửa" Command="{Binding EditCommand}" />
+        <dxb:BarButtonItem Name="btnDelete" Content="Xóa" Command="{Binding DeleteCommand}" />
+        <dxb:BarItemSeparator/>
+        <dxb:BarButtonItem Name="btnSave" Content="Lưu" Command="{Binding SaveCommand}" />
+        <dxb:BarButtonItem Name="btnRefresh" Content="Nạp lại" Command="{Binding RefreshCommand}" />
+        <dxb:BarButtonItem Name="btnPrint" Content="In ấn" Command="{Binding PrintCommand}" />
+        <dxb:BarItemSeparator/>
+        <dxb:BarButtonItem Name="btnClose" Content="Đóng" Command="{Binding CloseCommand}" />
+    </dxb:ToolBarControl>
+</UserControl>

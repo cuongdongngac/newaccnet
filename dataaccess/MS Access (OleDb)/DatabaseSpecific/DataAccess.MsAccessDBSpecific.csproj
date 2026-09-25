@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <AssemblyName>DataAccess.MsAccessDBSpecific</AssemblyName>
+    <RootNamespace>DataAccess.MsAccess.DatabaseSpecific</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="SD.LLBLGen.Pro.DQE.Access" Version="5.12.0" />
+  </ItemGroup>
+</Project>

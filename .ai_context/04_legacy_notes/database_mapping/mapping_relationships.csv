@@ -1,0 +1,124 @@
+relationship_group,pk_table,pk_field,fk_table,fk_field,on_update,on_delete
+rel_1,Account Balance Entries,Entry ID,Account Balance,Entry ID,CASCADE,CASCADE
+rel_2,Asset Or Capital,Asset Or Capital ID,Account Balance Entries,Asset Or Capital ID,CASCADE,CASCADE
+rel_3,Source List,SrCode,Asset Input Line,SrCode,NO ACTION,NO ACTION
+rel_4,AssetTrackingDep,Asset ID,Asset Input Line,Asset ID,NO ACTION,NO ACTION
+rel_5,Transaction List,ID,Asset Input Line,ID,NO ACTION,NO ACTION
+rel_6,Counter Accounts,ID,Asset Input Line,ID,NO ACTION,NO ACTION
+rel_7,Asset List,Asset ID,Asset Input Line,Asset ID,CASCADE,NO ACTION
+rel_8,Reason List,ReasonID,Asset Input Line,ReasonID,CASCADE,NO ACTION
+rel_9,Origin,Origin ID,Asset Or Capital,Origin ID,CASCADE,CASCADE
+rel_10,Department List,DeptID,AssetTracking,DeptID,NO ACTION,NO ACTION
+rel_11,AssetTrackingDep,Asset ID,AssetTracking,Asset ID,NO ACTION,NO ACTION
+rel_12,Expense Object List,ExObject ID,AssetTracking,ExObject ID,NO ACTION,NO ACTION
+rel_13,InterestRate,EndDate,AssetTracking,EndDate,NO ACTION,NO ACTION
+rel_14,Asset List,Asset ID,AssetTracking,Asset ID,CASCADE,NO ACTION
+rel_15,Expense Object List,ExObject ID,AssetTrackingDep,ExObject ID,NO ACTION,NO ACTION
+rel_16,Department List,DeptID,AssetTrackingDep,DeptID,NO ACTION,NO ACTION
+rel_17,InterestRate,EndDate,AssetTrackingDep,EndDate,NO ACTION,NO ACTION
+rel_18,Account List,Account ID,Balance Sheet,Account ID,NO ACTION,NO ACTION
+rel_19,Account List,Account ID,Counter Accounts,Account ID,NO ACTION,NO ACTION
+rel_20,Counter Accounts,ID,Currency Input Line,ID,NO ACTION,NO ACTION
+rel_21,Transaction List,ID,Currency Input Line,ID,CASCADE,CASCADE
+rel_22,Currency List,Currency ID,Currency Input Line,Currency ID,CASCADE,NO ACTION
+rel_23,Currency List,Currency ID,Currency Liability Line,Currency ID,NO ACTION,NO ACTION
+rel_24,Customer Input Line,Line ID,Currency Liability Line,Line ID,CASCADE,CASCADE
+rel_25,LiabilityReason,LiabilityReasonID,Customer Input Line,LiabilityReasonID,NO ACTION,NO ACTION
+rel_26,Counter Accounts,ID,Customer Input Line,ID,NO ACTION,NO ACTION
+rel_27,Liability Due,Customer ID,Customer Input Line,Customer ID,NO ACTION,NO ACTION
+rel_27,Liability Due,Liability Things ID,Customer Input Line,Liability Things ID,NO ACTION,NO ACTION
+rel_28,Customer List,Customer ID,Customer Input Line,Customer ID,CASCADE,NO ACTION
+rel_29,Liability Things,Liability Things ID,Customer Input Line,Liability Things ID,CASCADE,NO ACTION
+rel_30,Transaction List,ID,Customer Input Line,ID,CASCADE,CASCADE
+rel_31,Source List,SrCode,Depreciation Table,SrCode,NO ACTION,NO ACTION
+rel_32,Asset List,Asset ID,Depreciation Table,Asset ID,NO ACTION,NO ACTION
+rel_33,AssetTrackingDep,Asset ID,Depreciation Table,Asset ID,NO ACTION,NO ACTION
+rel_34,Account List,Account ID,ExAsset Bills,Account ID,NO ACTION,NO ACTION
+rel_35,Expense Object List,ExObject ID,ExAsset Bills,ExObject ID,NO ACTION,NO ACTION
+rel_36,Currency List,Currency ID,Exchange Rate,Currency ID,NO ACTION,NO ACTION
+rel_37,Expense Object List,ExObject ID,ExMaterial Bills,ExObject ID,NO ACTION,NO ACTION
+rel_38,Liability Due,Customer ID,ExObject Customer Input Line,Customer ID,NO ACTION,NO ACTION
+rel_38,Liability Due,Liability Things ID,ExObject Customer Input Line,Liability Things ID,NO ACTION,NO ACTION
+rel_39,Expense Object Input Line,LineID,ExObject Customer Input Line,Line ID,CASCADE,CASCADE
+rel_40,LiabilityReason,LiabilityReasonID,ExObject Customer Input Line,LiabilityReasonID,CASCADE,NO ACTION
+rel_41,Liability Things,Liability Things ID,ExObject Customer Input Line,Liability Things ID,CASCADE,NO ACTION
+rel_42,Customer List,Customer ID,ExObject Customer Input Line,Customer ID,CASCADE,NO ACTION
+rel_43,Expense Object List,ExObject ID,Expence Object Ledger,ExObject ID,NO ACTION,NO ACTION
+rel_44,Expense Atribute List,Expense Atribute ID,Expence Object Ledger,Expense Atribute ID,NO ACTION,NO ACTION
+rel_45,Counter Accounts,ID,Expense Object Input Line,ID,NO ACTION,NO ACTION
+rel_46,Transaction List,ID,Expense Object Input Line,ID,CASCADE,CASCADE
+rel_47,Expense Atribute List,Expense Atribute ID,Expense Object Input Line,Expense Atribute ID,CASCADE,NO ACTION
+rel_48,Expense Object List,ExObject ID,Expense Object Input Line,ExObject ID,CASCADE,NO ACTION
+rel_49,Expense Object Input Line,LineID,Expense Tax Line,LineID,CASCADE,CASCADE
+rel_50,Material Tax Line,Line ID,Interest,Line ID,NO ACTION,NO ACTION
+rel_51,Liability Things,Liability Things ID,Interest,Liability Things ID,NO ACTION,NO ACTION
+rel_52,Customer Input Line,Line ID,Interest,Line ID,NO ACTION,NO ACTION
+rel_53,ExObject Customer Input Line,Line ID,Interest,Line ID,NO ACTION,NO ACTION
+rel_54,LiabilityReason,LiabilityReasonID,Interest,LiabilityReasonID,NO ACTION,NO ACTION
+rel_55,Currency Liability Line,Line ID,Interest,Line ID,NO ACTION,NO ACTION
+rel_56,Customer List,Customer ID,Interest,Customer ID,NO ACTION,NO ACTION
+rel_57,Liability Due,Customer ID,Interest,Customer ID,NO ACTION,NO ACTION
+rel_57,Liability Due,Liability Things ID,Interest,Liability Things ID,NO ACTION,NO ACTION
+rel_58,Material Tax Line,Line ID,InterestDetail,Line ID,NO ACTION,NO ACTION
+rel_59,Customer Input Line,Line ID,InterestDetail,Line ID,NO ACTION,NO ACTION
+rel_60,ExObject Customer Input Line,Line ID,InterestDetail,Line ID,NO ACTION,NO ACTION
+rel_61,Currency Liability Line,Line ID,InterestDetail,Line ID,NO ACTION,NO ACTION
+rel_62,InterestRate,EndDate,InterestDetail,EndDate,NO ACTION,NO ACTION
+rel_63,Customer List,Customer ID,Liability Due,Customer ID,NO ACTION,NO ACTION
+rel_64,Liability Things,Liability Things ID,Liability Due,Liability Things ID,CASCADE,NO ACTION
+rel_65,Liability Things,Liability Things ID,Liability Ledger,Liability Things ID,NO ACTION,NO ACTION
+rel_66,Customer List,Customer ID,Liability Ledger,Customer ID,NO ACTION,NO ACTION
+rel_67,Liability Due,Customer ID,Liability Ledger,Customer ID,NO ACTION,NO ACTION
+rel_67,Liability Due,Liability Things ID,Liability Ledger,Liability Things ID,NO ACTION,NO ACTION
+rel_68,Counter Accounts,ID,Material Input Bill,ID,NO ACTION,NO ACTION
+rel_69,Expense Object List,ExObject ID,Material Input Bill,ExObject ID,NO ACTION,NO ACTION
+rel_70,Transaction List,ID,Material Input Bill,ID,CASCADE,CASCADE
+rel_71,Expense Object List,ExObject ID,Material Input Bill,ExObject ID,NO ACTION,NO ACTION
+rel_72,Warehouse List,Warehouse ID,Material Input Bill,Warehouse ID,CASCADE,NO ACTION
+rel_73,Material List,Material ID,Material Input Line,Material ID,CASCADE,CASCADE
+rel_74,Material Input Bill,MID,Material Input Line,MID,CASCADE,CASCADE
+rel_75,CategoriesList,CategoryID,Material List,CategoryID,NO ACTION,NO ACTION
+rel_76,Material List,Material ID,Material Price List,Material ID,NO ACTION,NO ACTION
+rel_77,Warehouse List,Warehouse ID,Material Price List,Warehouse ID,NO ACTION,NO ACTION
+rel_78,Material Input Line,LineID,Material Tax Line,Line ID,CASCADE,CASCADE
+rel_79,Account Balance,Items ID,PrevBussiness,Items ID,NO ACTION,NO ACTION
+rel_80,Account Balance,Items ID,PrevCash Flow,Items ID,NO ACTION,NO ACTION
+rel_81,Cash Flow List,Cash Flow ID,PrevCash Flow,Cash Flow ID,NO ACTION,NO ACTION
+rel_82,Account List,Account ID,Special Value,Account ID,NO ACTION,NO ACTION
+rel_83,Customer List,Customer ID,Special Value,Customer ID,NO ACTION,NO ACTION
+rel_84,Counter Accounts,ID,tblStockLine,ID,NO ACTION,NO ACTION
+rel_85,Customer List,Customer ID,tblStockLine,Customer ID,NO ACTION,NO ACTION
+rel_86,Transaction List,ID,tblStockLine,ID,CASCADE,CASCADE
+rel_87,tblStocks,StockID,tblStockLine,Stockid,CASCADE,NO ACTION
+rel_88,tblStockTypes,StockTypeID,tblStocks,StockTypeID,CASCADE,NO ACTION
+rel_89,Transaction List,ID,tblVat,ID,NO ACTION,NO ACTION
+rel_90,Counter Accounts,ID,tblVat,ID,NO ACTION,NO ACTION
+rel_91,Account List,Account ID,Transaction List,Account ID,NO ACTION,NO ACTION
+rel_92,Bills,BIll ID,Transaction List,Bill ID,CASCADE,CASCADE
+rel_93,Account List,Account ID,userAccounts,Account ID,NO ACTION,NO ACTION
+rel_94,tblUsers,user,userAccounts,user,NO ACTION,NO ACTION
+rel_new_1,Obligation List,Obligation ID,Obligation Items,Obligation ID,NO ACTION,NO ACTION
+
+rel_new_2,Obligation Items,Items ID,Account and Obligation Items,Items ID,NO ACTION,NO ACTION
+
+rel_new_3,Account List,Account ID,Account and Obligation Items,Account ID,NO ACTION,NO ACTION
+
+rel_new_4,Business Result Items,Items ID,Account And Business Items,Items ID,NO ACTION,NO ACTION
+
+rel_new_5,Account List,Account ID,Account And Business Items,Account ID,NO ACTION,NO ACTION
+
+rel_new_6,Cash Flow List,Cash Flow ID,Cash Flow Items,Cash Flow ID,NO ACTION,NO ACTION
+
+rel_new_7,Cash Flow Items,Items ID,Account And Cash Flow Items,Items ID,NO ACTION,NO ACTION
+
+rel_new_8,Account List,Account ID,Account And Cash Flow Items,Account ID,NO ACTION,NO ACTION
+
+rel_cost_1,Cost Calculating Book List,Book ID,Cost Calculating Items,Book ID,NO ACTION,NO ACTION
+rel_cost_2,Cost Calculating Items,Items ID,Account And Cost Calculating Items,Items ID,NO ACTION,NO ACTION
+rel_cost_3,Account List,Account ID,Account And Cost Calculating Items,Account ID,NO ACTION,NO ACTION
+rel_dynamic_1,Dynamic Book List,Book ID,Dynamic Book And Account,Book ID,NO ACTION,NO ACTION
+rel_dynamic_2,Account List,Account ID,Dynamic Book And Account,Account ID,NO ACTION,NO ACTION
+rel_vat_1,VAT Declare Items,Items ID,Account and VAT Declare Items,Items ID,NO ACTION,NO ACTION
+rel_vat_2,Account List,Account ID,Account and VAT Declare Items,Account ID,NO ACTION,NO ACTION
+rel_vat3_1,VAT3 Tax Items,Items ID,Account and VAT3 Items,Items ID,NO ACTION,NO ACTION
+rel_vat3_2,Account List,Account ID,Account and VAT3 Items,Account ID,NO ACTION,NO ACTION

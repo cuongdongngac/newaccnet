@@ -1,0 +1,29 @@
+# HỒ SƠ BỐI CẢNH DỰ ÁN: NewaccNet (Kế toán Doanh nghiệp)
+Tôi và bạn đang thực hiện dự án chuyển đổi (migration) phần mềm kế toán từ Microsoft Access (VBA/SQL) sang .NET mới nhất. Hãy đọc kỹ bối cảnh dưới đây để tiếp tục làm việc:
+
+## 1. Công nghệ & Bộ luật lõi (Strict Rules)
+- Mô hình thiết kế: "Accounting-first" (Ưu tiên tuyệt đối tính chính xác dữ liệu, luồng nghiệp vụ tài chính, định khoản, sổ cái trước khi làm giao diện UI).
+- Nền tảng: WPF thuần túy (C#) trên .NET mới nhất. TUYỆT ĐỐI KHÔNG dùng thư viện, sự kiện, control, namespace của WinForms (như System.Windows.Forms).
+- Tầng Giao diện (UI): Dùng TOÀN BỘ hệ thống controls của DevExpress v25 cho WPF (GridControl, LayoutControl, DXWindow, SimpleButton...). Nghiêm cấm dùng controls mặc định WPF.
+- Tầng Dữ liệu (ORM): Sử dụng độc quyền LLBLGen Pro (Adapter/SelfServicing/Linq to LLBLGen).
+- Kiến trúc mã nguồn: MVVM nghiêm ngặt. Không viết logic nghiệp vụ/dữ liệu vào Code-Behind (.xaml.cs). Sự kiện từ DevExpress Controls phải được chuyển sang ViewModel qua EventToCommand hoặc Binding.
+
+## 2. Hệ thống Môi trường và Chống tốn Token (Local MCP Config)
+Dự án được cấu hình chạy trực tiếp trên Antigravity CLI tại thư mục local 'D:\NewaccNet' sử dụng giao thức MCP (Model Context Protocol). Bạn có quyền tự gọi các công cụ:
+- Filesystem MCP (Cấu hình động "."): Để đọc/ghi file trực tiếp dưới máy local.
+- Memory MCP: Để lưu trữ đồ thị tri thức dài hạn cục bộ.
+- Cơ chế quản lý tài khoản chữa cháy: Hệ thống đã tạo sẵn 2 file shortcut `.\pvcuong1965.bat` (Tài khoản Google One Pro chính) và `.\cuongdongngac.bat` (Tài khoản Google Free dùng chữa cháy khi hết token). Cả hai profile đều dùng chung một bộ nhớ MCP cục bộ tại máy.
+
+## 3. Cấu trúc thư mục Quản lý Ngữ cảnh hiện tại (.ai_context)
+Thư mục gốc 'D:\NewaccNet' đã được cấu hình cấu trúc tài liệu hóa khép kín sau:
+├── .ai_context/               
+│   ├── 01_architecture/ -> File 'system_design.md': Định nghĩa cấu trúc solution .NET (WPF) gồm các thư mục Views/, ViewModels/, Models/, Services/.
+│   ├── 02_rules/        -> File 'csharp_rules.md' (Luật MVVM, xử lý async, chặn WinForms) và 'ui_ux_rules.md' (Quy định tạo UI Control kế thừa từ BaseUC/BaseWindow và nhúng MainToolBar gồm các nút New, Edit, Delete, Save, Refresh, Print, Close sử dụng DevExpress v25, tích hợp sẵn các hàm public rỗng: LoadData(), Save(), Refresh(), Print(), ValidateData()).
+│   ├── 03_tasks/        -> File 'backlog.md' và 'current_session.md' (Cơ chế giảm token tự động: AI tự ghi nhận tiến độ vào đây cuối phiên, và tự đọc file này đầu phiên sau để tiếp quản công việc mà không quét lại toàn bộ code).
+│   └── 04_legacy_notes/ -> File 'migration_rules.md' cùng 3 thư mục con: `database_mapping/` (chứa file CSV map tên bảng/trường cũ-mới từ Access sang .NET), `legacy_queries/` (chứa file .sql cũ), và `legacy_vba/` (chứa code thuật toán VBA cũ).
+
+## 4. Trạng thái hiện tại của dự án
+- Thư mục dự án 'D:\NewaccNet' đã khởi tạo Git cục bộ thành công.
+- Đã khởi tạo khung Solution .NET mới nhất và dự án WPF rỗng (`NewaccNet.slnx`, `NewaccNet.Wpf/`).
+- Đã tạo sẵn cấu trúc thư mục và các file Base Forms rỗng (`Views/Base/BaseWindow.xaml`, `BaseUC.xaml`, `BaseEntryUC.xaml`, `BaseReportUC.xaml`, `MainToolBar.xaml`).
+- Bước tiếp theo: Chuẩn bị copy các file CSV mapping và mã nguồn thuật toán Access/VBA cũ vào thư mục `04_legacy_notes` để tiến hành phân dịch tự động sang C# MVVM.

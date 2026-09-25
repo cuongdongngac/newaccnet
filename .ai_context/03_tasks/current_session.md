@@ -1,0 +1,2 @@
+# Cơ chế quản lý Token
+Quy trình giảm Token: Cuối mỗi phiên làm việc, Lập trình viên sẽ ra lệnh cho AI tự tổng hợp tiến độ và ghi đè vào file này. Đầu phiên làm việc tiếp theo, AI có nghĩa vụ đọc file này trước tiên để lấy bối cảnh, tuyệt đối không quét lại toàn bộ mã nguồn nếu không được yêu cầu, nhằm tiết kiệm chi phí.
