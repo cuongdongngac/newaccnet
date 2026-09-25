@@ -1,3 +1,7 @@
 <Solution>
+  <Project Path="dataaccess/DatabaseGeneric/DataAccess.csproj" />
+  <Project Path="dataaccess/MS Access (OleDb)/DatabaseSpecific/DataAccess.MsAccessDBSpecific.csproj" />
+  <Project Path="dataaccess/PostgreSql (Npgsql)/DatabaseSpecific/DataAccess.PostgreSqlDBSpecific.csproj" />
+  <Project Path="dataaccess/SQL Server (SqlClient)/DatabaseSpecific/DataAccess.SqlServerDBSpecific.csproj" />
   <Project Path="NewaccNet.Wpf/NewaccNet.Wpf.csproj" />
 </Solution>

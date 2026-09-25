@@ -1,12 +1,81 @@
-﻿<Window x:Class="NewaccNet.Wpf.MainWindow"
+<dx:ThemedWindow x:Class="NewaccNet.Wpf.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+        xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+        xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon"
         xmlns:local="clr-namespace:NewaccNet.Wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Phần mềm Kế toán NewaccNet" Height="600" Width="1000" WindowState="Maximized"
+        Icon="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_report_showdesigner.svg'}">
+    
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
+        <!-- Menu chính dạng Ribbon -->
+        <dxr:RibbonControl Grid.Row="0" RibbonStyle="Office2019" ShowApplicationButton="False">
+            <!-- Tab: Hệ thống -->
+            <dxr:RibbonDefaultPageCategory>
+                <dxr:RibbonPage Caption="Hệ thống">
+                    <dxr:RibbonPageGroup Caption="Quản trị">
+                        <dxb:BarButtonItem Content="Người dùng" ItemClick="BtnUserManagement_ItemClick" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/filtereditor_user.svg'}"/>
+                        <dxb:BarButtonItem Content="Cấu hình DB" ItemClick="BtnConfig_ItemClick" LargeGlyph="{dx:DXImage SvgImages/Setup/Properties.svg}"/>
+                        <dxb:BarButtonItem Content="Khai báo" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_document_object_inplace.svg'}"/>
+                    </dxr:RibbonPageGroup>
+                </dxr:RibbonPage>
+                
+                <!-- Tab: Danh mục -->
+                <dxr:RibbonPage Caption="Danh mục">
+                    <dxr:RibbonPageGroup Caption="Kế toán">
+                        <dxb:BarButtonItem Content="Tài khoản" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/reports/distributerowsevenly.svg'}" ItemClick="BtnCategoryAccount_ItemClick"/>
+                        <dxb:BarButtonItem Content="Đối tượng" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/filtereditor_user.svg'}"/>
+                    </dxr:RibbonPageGroup>
+                    <dxr:RibbonPageGroup Caption="Kho &amp; Vật tư">
+                        <dxb:BarButtonItem Content="Vật tư" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/reports/imageannotation.svg'}"/>
+                        <dxb:BarButtonItem Content="Kho hàng" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/save/saveall.svg'}"/>
+                    </dxr:RibbonPageGroup>
+                </dxr:RibbonPage>
+
+                <!-- Tab: Thiết kế -->
+                <dxr:RibbonPage Caption="Thiết kế">
+                    <dxr:RibbonPageGroup Caption="Báo cáo">
+                        <dxb:BarButtonItem Content="Bảng CĐKT" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_report_showdesigner.svg'}"/>
+                        <dxb:BarButtonItem Content="KQ HĐKD" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/reports/showexportwarnings.svg'}"/>
+                    </dxr:RibbonPageGroup>
+                </dxr:RibbonPage>
+                
+                <dxr:RibbonPage Caption="Nghiệp vụ"/>
+                <dxr:RibbonPage Caption="Báo cáo"/>
+            </dxr:RibbonDefaultPageCategory>
+        </dxr:RibbonControl>
+
+        <!-- Nội dung chính (để trống, sau này thêm DocumentGroup/Tab) -->
+        <Grid Grid.Row="1" Background="#FFF5F5F5">
+            <!-- Vùng làm việc chính -->
+        </Grid>
+
+        <!-- DEBUG: Thanh trạng thái hiển thị thông tin user -->
+        <StatusBar Grid.Row="2" Background="#FF1976D2">
+            <StatusBarItem>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="👤 User: " Foreground="White" FontWeight="Bold"/>
+                    <TextBlock x:Name="txtStatusUsername" Foreground="Yellow" FontWeight="Bold" Margin="0,0,20,0"/>
+                    <TextBlock Text="📋 Họ tên: " Foreground="White" FontWeight="Bold"/>
+                    <TextBlock x:Name="txtStatusFullName" Foreground="Yellow" FontWeight="Bold" Margin="0,0,20,0"/>
+                    <TextBlock Text="🔑 RoleMask: " Foreground="White" FontWeight="Bold"/>
+                    <TextBlock x:Name="txtStatusRoleMask" Foreground="LightGreen" FontWeight="Bold"/>
+                </StackPanel>
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
-</Window>
+</dx:ThemedWindow>
+
+
+
+

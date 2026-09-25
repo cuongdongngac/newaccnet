@@ -1,11 +1,31 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\dataaccess\DatabaseGeneric\DataAccess.csproj" />
+    <ProjectReference Include="..\dataaccess\MS Access (OleDb)\DatabaseSpecific\DataAccess.MsAccessDBSpecific.csproj" />
+    <ProjectReference Include="..\dataaccess\SQL Server (SqlClient)\DatabaseSpecific\DataAccess.SqlServerDBSpecific.csproj" />
+    <ProjectReference Include="..\dataaccess\PostgreSql (Npgsql)\DatabaseSpecific\DataAccess.PostgreSqlDBSpecific.csproj" />
+  </ItemGroup>
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net10.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
+    <ImplicitUsings>disable</ImplicitUsings>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DevExpress.Images" Version="25.2.3" />
+    <PackageReference Include="DevExpress.Reporting.Core" Version="25.2.3" />
+    <PackageReference Include="DevExpress.Wpf.Core" Version="25.2.3" />
+    <PackageReference Include="DevExpress.Wpf.Grid" Version="25.2.3" />
+    <PackageReference Include="DevExpress.Wpf.LayoutControl" Version="25.2.3" />
+    <PackageReference Include="DevExpress.Wpf.Printing" Version="25.2.3" />
+    <PackageReference Include="DevExpress.Wpf.Reporting" Version="25.2.3" />
+    <PackageReference Include="DevExpress.Wpf.Ribbon" Version="25.2.3" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.9.1" />
+    <PackageReference Include="Npgsql" Version="9.0.3" />
+  </ItemGroup>
 
 </Project>

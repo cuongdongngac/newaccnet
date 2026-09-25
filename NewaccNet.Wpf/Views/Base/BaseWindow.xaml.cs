@@ -3,7 +3,7 @@ using System.Windows;
 
 namespace NewaccNet.Wpf.Views.Base
 {
-    public partial class BaseWindow : DXWindow
+    public partial class BaseWindow : ThemedWindow
     {
         public BaseWindow()
         {
