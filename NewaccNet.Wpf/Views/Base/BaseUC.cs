@@ -1,13 +1,13 @@
-using DevExpress.Xpf.Core;
-using System.Windows;
+using System.Windows.Controls;
 
 namespace NewaccNet.Wpf.Views.Base
 {
-    public partial class BaseWindow : ThemedWindow
+    public class BaseUC : UserControl
     {
-        public BaseWindow()
+        public BaseUC()
         {
-            InitializeComponent();
+            // Không có InitializeComponent() vì đây là class C# thuần (không có .xaml),
+            // dùng để làm class cơ sở cho các UserControl khác kế thừa.
         }
 
         public virtual void LoadData() { }

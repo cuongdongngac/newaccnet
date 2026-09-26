@@ -1,9 +1,13 @@
 <Application x:Class="NewaccNet.Wpf.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
              xmlns:local="clr-namespace:NewaccNet.Wpf"
              ShutdownMode="OnExplicitShutdown">
     <Application.Resources>
-         
+        <!-- Set default Icon for all ThemedWindows -->
+        <Style TargetType="dx:ThemedWindow">
+            <Setter Property="Icon" Value="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_mydetails.svg'}" />
+        </Style>
     </Application.Resources>
 </Application>

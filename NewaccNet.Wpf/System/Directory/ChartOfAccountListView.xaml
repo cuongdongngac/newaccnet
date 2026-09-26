@@ -1,0 +1,47 @@
+﻿<local:BaseDictionaryWindow x:Class="NewaccNet.Wpf.AppSystem.Directory.ChartOfAccountListView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+        xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+        xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+        xmlns:local="clr-namespace:NewaccNet.Wpf.AppSystem.Directory"
+        Title="Danh mục Tài Khoản" Height="500" Width="800" WindowStartupLocation="CenterScreen">
+        <DockPanel>
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Background="#FFF5F5F5" Margin="5">
+            <dx:SimpleButton Content="In Danh Sách" Width="120" Height="30" Click="BtnPrint_Click" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_report_showdesigner.svg'}"/>
+        </StackPanel>
+        
+
+        <!-- Lưới dữ liệu -->
+        <dxg:TreeListControl x:Name="treeListControl" Margin="5">
+            <dxg:TreeListControl.View>
+                <dxg:TreeListView x:Name="treeListView" 
+                                  AutoWidth="True" 
+                                  KeyFieldName="AccountId" 
+                                  ParentFieldName="ParentId" 
+                                  AutoExpandAllNodes="True"
+                                  ShowSearchPanelMode="Always" SearchPanelNullText="Nhập từ khóa tìm kiếm...">
+                    <!-- Context Menu -->
+                    <dxg:TreeListView.RowCellMenuCustomizations>
+                        <dxb:BarButtonItem Content="Thêm TK Con" ItemClick="MenuAdd_ItemClick" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_new.svg'}" />
+                        <dxb:BarButtonItem Content="Sửa TK" ItemClick="MenuEdit_ItemClick" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_edit.svg'}" />
+                        <dxb:BarButtonItem Content="Xóa TK" ItemClick="MenuDelete_ItemClick" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_delete.svg'}" />
+                    </dxg:TreeListView.RowCellMenuCustomizations>
+                </dxg:TreeListView>
+            </dxg:TreeListControl.View>
+            <dxg:TreeListColumn FieldName="AccountId" Header="Mã TK" Width="120" ReadOnly="True"/>
+            <dxg:TreeListColumn FieldName="AccountName" Header="Tên Tài Khoản" Width="300"/>
+                        <dxg:TreeListColumn FieldName="CategoryId" Header="Loại TK" Width="150">
+                <dxg:TreeListColumn.EditSettings>
+                    <dxe:ComboBoxEditSettings x:Name="cboGridCategoryId" ValueMember="Code" DisplayMember="Name" />
+                </dxg:TreeListColumn.EditSettings>
+            </dxg:TreeListColumn>
+            <dxg:TreeListColumn FieldName="Taxflag" Header="Thuế" Width="80"/>
+        </dxg:TreeListControl>
+    </DockPanel>
+</local:BaseDictionaryWindow>
+
+
+
+

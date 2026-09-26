@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Windows;
 using DevExpress.Xpf.Core;
 
@@ -29,6 +29,111 @@ public partial class MainWindow : ThemedWindow
         win.LoadData();
         win.Show();
     }
+                    private void BtnCategoryCostElement_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.Directory.CostElementListView();
+        win.LoadData();
+        win.Show();
+    }
+
+        private void BtnCategorySource_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.Directory.SourceListView();
+        win.LoadData();
+        win.Show();
+    }
+
+                private void BtnCategoryCurrency_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.Directory.CurrencyListView();
+        win.LoadData();
+        win.Show();
+    }
+
+        private void BtnCategoryStockType_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.Directory.StockTypeListView();
+        win.LoadData();
+        win.Show();
+    }
+
+    private void BtnCategoryStock_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.Directory.StockListView();
+        win.LoadData();
+        win.Show();
+    }
+
+    private void BtnCategoryExchangeRate_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.Directory.ExchangeRateListView();
+        win.LoadData();
+        win.Show();
+    }
+
+    private void BtnCategoryWarehouse_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.Directory.WarehouseListView();
+        win.LoadData();
+        win.Show();
+    }
+
+    private void BtnCategoryCategory_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.Directory.CategoryListView();
+        win.LoadData();
+        win.Show();
+    }
+
+    private void BtnCategoryInventoryItem_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.Directory.InventoryItemListView();
+        win.LoadData();
+        win.Show();
+    }
+
+    private void BtnCategoryTaxRate_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.Directory.TaxRateListView();
+        win.LoadData();
+        win.Show();
+    }
+
+    private void BtnCategoryReason_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.Directory.ReasonListView();
+        win.LoadData();
+        win.Show();
+    }
+
+    private void BtnCategoryCostObject_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.Directory.CostObjectListView();
+        win.LoadData();
+        win.Show();
+    }
+
+    private void BtnCategoryDebtReason_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.Directory.DebtReasonListView();
+        win.LoadData();
+        win.Show();
+    }
+
+    private void BtnCategoryDebtType_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.Directory.DebtTypeListView();
+        win.LoadData();
+        win.Show();
+    }
+
+    private void BtnCategoryPartner_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.Directory.PartnerListView();
+        win.LoadData();
+        win.Show();
+    }
+
     private void BtnConfig_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
     {
         var configWin = new NewaccNet.Wpf.AppSystem.DbConfigWindow();

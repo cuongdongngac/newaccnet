@@ -1,0 +1,38 @@
+﻿<local:BaseDictionaryWindow x:Class="NewaccNet.Wpf.AppSystem.Directory.UserListView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+        xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+        xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+        xmlns:local="clr-namespace:NewaccNet.Wpf.AppSystem.Directory"
+        Title="Quản lý Người dùng" Height="450" Width="800" WindowStartupLocation="CenterScreen">
+    <DockPanel>
+        <!-- Thanh công cụ -->
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Background="#FFF5F5F5" Margin="5">
+            <dx:SimpleButton Content="Thêm mới" Width="100" Height="30" Margin="0,0,10,0" Click="BtnAdd_Click" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_new.svg'}"/>
+            <dx:SimpleButton Content="Sửa" Width="100" Height="30" Margin="0,0,10,0" Click="BtnEdit_Click" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_edit.svg'}"/>
+            <dx:SimpleButton Content="Xóa" Width="100" Height="30" Click="BtnDelete_Click" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_delete.svg'}"/>
+        </StackPanel>
+
+        <!-- Lưới dữ liệu -->
+        <dxg:GridControl x:Name="gridControl" Margin="5">
+            <dxg:GridControl.View>
+                <dxg:TableView x:Name="tableView" 
+                               AutoWidth="True" 
+                               ShowSearchPanelMode="Always" 
+                               SearchPanelNullText="Nhập từ khóa tìm kiếm..." 
+                               AllowEditing="False">
+                    <!-- Context Menu -->
+                    <dxg:TableView.RowCellMenuCustomizations>
+                        <dxb:BarButtonItem Content="Thêm mới" ItemClick="MenuAdd_ItemClick" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_new.svg'}" />
+                        <dxb:BarButtonItem Content="Sửa" ItemClick="MenuEdit_ItemClick" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_edit.svg'}" />
+                        <dxb:BarButtonItem Content="Xóa" ItemClick="MenuDelete_ItemClick" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_delete.svg'}" />
+                    </dxg:TableView.RowCellMenuCustomizations>
+                </dxg:TableView>
+            </dxg:GridControl.View>
+            <dxg:GridColumn FieldName="Username" Header="Tên đăng nhập" Width="150" />
+            <dxg:GridColumn FieldName="FullName" Header="Họ và tên" Width="250" />
+            <dxg:GridColumn FieldName="RoleMask" Header="Quyền (Bitmask)" Width="100" />
+        </dxg:GridControl>
+    </DockPanel>
+</local:BaseDictionaryWindow>

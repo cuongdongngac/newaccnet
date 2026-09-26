@@ -1,0 +1,100 @@
+<base:BaseWindow xmlns:base="clr-namespace:NewaccNet.Wpf.Views.Base" x:Class="NewaccNet.Wpf.AppSystem.DbConfigWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+        xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+        Title="Cấu hình Kết nối CSDL" Height="560" Width="540" WindowStartupLocation="CenterOwner">
+    <Grid>
+        <dxlc:LayoutControl Orientation="Vertical" Padding="15">
+
+            <!-- Chọn loại DB -->
+            <dxlc:LayoutItem Label="Hệ quản trị CSDL:">
+                <dxe:ComboBoxEdit x:Name="cboDbType" IsTextEditable="False"
+                                  SelectedIndexChanged="CboDbType_SelectedIndexChanged">
+                    <dxe:ComboBoxEditItem Content="Microsoft Access (.accdb)"/>
+                    <dxe:ComboBoxEditItem Content="Microsoft SQL Server"/>
+                    <dxe:ComboBoxEditItem Content="PostgreSQL (Npgsql)"/>
+                </dxe:ComboBoxEdit>
+            </dxlc:LayoutItem>
+
+            <!-- Khung Access -->
+            <dxlc:LayoutGroup x:Name="grpAccess" Header="Cấu hình Access"
+                              View="GroupBox" Orientation="Vertical" Margin="0,8,0,0">
+                <dxlc:LayoutItem Label="Đường dẫn file (.accdb):">
+                    <dxe:ButtonEdit x:Name="txtAccessPath" AllowDefaultButton="False"
+                                    EditValueChanged="AnyField_Changed">
+                        <dxe:ButtonInfo GlyphKind="Custom" Content="..." Click="BtnBrowseAccess_Click"/>
+                    </dxe:ButtonEdit>
+                </dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+
+            <!-- Khung SQL Server -->
+            <dxlc:LayoutGroup x:Name="grpSqlServer" Header="Cấu hình SQL Server"
+                              View="GroupBox" Orientation="Vertical" Margin="0,8,0,0"
+                              Visibility="Collapsed">
+                <dxlc:LayoutItem Label="Tên Server (IP):">
+                    <dxe:TextEdit x:Name="txtServer" EditValueChanged="AnyField_Changed"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Tên Database:">
+                    <dxe:TextEdit x:Name="txtDatabase" EditValueChanged="AnyField_Changed"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem>
+                    <dxe:CheckEdit x:Name="chkIntegrated"
+                                   Content="Dùng tài khoản Windows (Integrated Security)"
+                                   Checked="ChkIntegrated_CheckedChanged"
+                                   Unchecked="ChkIntegrated_CheckedChanged"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Tên đăng nhập (User):">
+                    <dxe:TextEdit x:Name="txtUser" EditValueChanged="AnyField_Changed"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Mật khẩu (Password):">
+                    <dxe:PasswordBoxEdit x:Name="txtPassword" EditValueChanged="AnyField_Changed"/>
+                </dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+
+            <!-- Khung PostgreSQL -->
+            <dxlc:LayoutGroup x:Name="grpPostgreSql" Header="Cấu hình PostgreSQL (Npgsql)"
+                              View="GroupBox" Orientation="Vertical" Margin="0,8,0,0"
+                              Visibility="Collapsed">
+                <dxlc:LayoutItem Label="Host (IP / tên máy):">
+                    <dxe:TextEdit x:Name="txtPgHost" EditValueChanged="AnyField_Changed"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Port:">
+                    <dxe:TextEdit x:Name="txtPgPort" EditValueChanged="AnyField_Changed"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Tên Database:">
+                    <dxe:TextEdit x:Name="txtPgDatabase" EditValueChanged="AnyField_Changed"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Username:">
+                    <dxe:TextEdit x:Name="txtPgUsername" EditValueChanged="AnyField_Changed"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Password:">
+                    <dxe:PasswordBoxEdit x:Name="txtPgPassword" EditValueChanged="AnyField_Changed"/>
+                </dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+
+            <!-- Preview Connection String -->
+            <dxlc:LayoutGroup Header="Connection String (xem trước)" View="GroupBox"
+                              Margin="0,10,0,0">
+                <TextBox x:Name="txtConnPreview"
+                         IsReadOnly="True"
+                         TextWrapping="Wrap"
+                         MinHeight="48"
+                         Background="#FFF8F8F8"
+                         Foreground="#FF1565C0"
+                         FontFamily="Consolas"
+                         FontSize="11"
+                         Padding="6"
+                         BorderThickness="0"/>
+            </dxlc:LayoutGroup>
+
+            <!-- Nút Lưu -->
+            <dx:SimpleButton Content="Lưu Cấu Hình" Height="35" Margin="0,12,0,0"
+                             Click="BtnSave_Click" FontWeight="Bold"
+                             Background="#FF4CAF50" Foreground="White"/>
+        </dxlc:LayoutControl>
+    </Grid>
+</base:BaseWindow>
+
+

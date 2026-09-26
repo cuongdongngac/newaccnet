@@ -1,0 +1,52 @@
+<base:BaseWindow xmlns:base="clr-namespace:NewaccNet.Wpf.Views.Base" x:Class="NewaccNet.Wpf.AppSystem.Directory.UserEditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+        Title="Cập nhật Người dùng" SizeToContent="Height" Width="450" WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Tên đăng nhập:" Grid.Row="0" Margin="0,0,0,5" FontWeight="Bold"/>
+        <dxe:TextEdit x:Name="txtUsername" Grid.Row="1" Margin="0,0,0,10" Height="25" MaxLength="50"/>
+
+        <TextBlock Text="Họ và tên:" Grid.Row="2" Margin="0,0,0,5" FontWeight="Bold"/>
+        <dxe:TextEdit x:Name="txtFullName" Grid.Row="3" Margin="0,0,0,10" Height="25" MaxLength="100"/>
+
+        <GroupBox Header="Mật khẩu (Bỏ trống nếu không đổi)" Grid.Row="4" Margin="0,0,0,10">
+            <StackPanel Margin="10">
+                <TextBlock Text="Mật khẩu mới:" Margin="0,0,0,5"/>
+                <dxe:PasswordBoxEdit x:Name="txtPassword" Margin="0,0,0,10" Height="25"/>
+                <TextBlock Text="Xác nhận mật khẩu:" Margin="0,0,0,5"/>
+                <dxe:PasswordBoxEdit x:Name="txtConfirmPassword" Height="25"/>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Header="Phân quyền (RoleMask)" Grid.Row="5" Margin="0,0,0,10">
+            <UniformGrid Columns="2" Margin="10,5">
+                <CheckBox x:Name="chkRole0" Content="Quản trị - phân quyền" Margin="0,5" VerticalContentAlignment="Center"/>
+                <CheckBox x:Name="chkRole1" Content="Ngoại tệ" Margin="0,5" VerticalContentAlignment="Center"/>
+                <CheckBox x:Name="chkRole2" Content="Vật tư" Margin="0,5" VerticalContentAlignment="Center"/>
+                <CheckBox x:Name="chkRole3" Content="Kế toán tổng hợp" Margin="0,5" VerticalContentAlignment="Center"/>
+                <CheckBox x:Name="chkRole4" Content="Công nợ" Margin="0,5" VerticalContentAlignment="Center"/>
+                <CheckBox x:Name="chkRole5" Content="Chứng khoán" Margin="0,5" VerticalContentAlignment="Center"/>
+                <CheckBox x:Name="chkRole6" Content="Chi phí" Margin="0,5" VerticalContentAlignment="Center"/>
+                <CheckBox x:Name="chkRole7" Content="Tài sản cố định" Margin="0,5" VerticalContentAlignment="Center"/>
+            </UniformGrid>
+        </GroupBox>
+
+        <!-- Buttons -->
+        <StackPanel Grid.Row="6" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
+            <dx:SimpleButton Content="Lưu" Width="90" Height="32" Margin="0,0,20,0" Click="BtnSave_Click" Background="#FF4CAF50" Foreground="White" FontWeight="Bold"/>
+            <dx:SimpleButton Content="Hủy" Width="90" Height="32" Click="BtnCancel_Click"/>
+        </StackPanel>
+    </Grid>
+</base:BaseWindow>
