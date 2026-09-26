@@ -1,4 +1,4 @@
-﻿<dx:ThemedWindow x:Class="NewaccNet.Wpf.MainWindow"
+<dx:ThemedWindow x:Class="NewaccNet.Wpf.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,7 +7,6 @@
         xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
         xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon"
         xmlns:local="clr-namespace:NewaccNet.Wpf"
-        xmlns:auth="clr-namespace:NewaccNet.Wpf.AppSystem"
         mc:Ignorable="d"
         Title="Phần mềm Kế toán NewaccNet" Height="600" Width="1000" WindowState="Maximized"
         Icon="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_report_showdesigner.svg'}">
@@ -23,423 +22,36 @@
         <dxr:RibbonControl Grid.Row="0" RibbonStyle="Office2019" ShowApplicationButton="False">
             <!-- Tab: Hệ thống -->
             <dxr:RibbonDefaultPageCategory>
-                <!-- ==================== Tab: Hệ thống ==================== -->
                 <dxr:RibbonPage Caption="Hệ thống">
                     <dxr:RibbonPageGroup Caption="Quản trị">
-                        <dxb:BarButtonItem Content="Người dùng" ItemClick="BtnUserManagement_ItemClick" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/filtereditor_user.svg'}" auth:AuthHelper.RequiredMask="1">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Quản lý Người dùng &amp; Phân quyền"/>
-                                    <dx:SuperTipItem Content="Thêm, sửa, xóa tài khoản người dùng hệ thống.&#x0a;Thiết lập quyền truy cập (RoleMask) cho từng phân hệ kế toán."/>
-                                    <dx:SuperTipItemSeparator/>
-                                    <dx:SuperTipItem Content="⚠ Chỉ dành cho người có quyền Quản trị (Bit 0)."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
-                        <dxb:BarButtonItem Content="Cấu hình DB" ItemClick="BtnConfig_ItemClick" LargeGlyph="{dx:DXImage SvgImages/Setup/Properties.svg}" auth:AuthHelper.RequiredMask="1">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Cấu hình Kết nối Cơ sở dữ liệu"/>
-                                    <dx:SuperTipItem Content="Thiết lập kết nối đến CSDL: MS Access, SQL Server hoặc PostgreSQL.&#x0a;Cho phép chuyển đổi linh hoạt giữa các hệ quản trị."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
-                        <dxb:BarButtonItem Content="Khai báo" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_document.svg'}" auth:AuthHelper.RequiredMask="1">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Khai báo Thông tin Doanh nghiệp"/>
-                                    <dx:SuperTipItem Content="Khai báo tên công ty, mã số thuế, địa chỉ, năm tài chính và các tham số hệ thống."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
+                        <dxb:BarButtonItem Content="Người dùng" ItemClick="BtnUserManagement_ItemClick" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/filtereditor_user.svg'}"/>
+                        <dxb:BarButtonItem Content="Cấu hình DB" ItemClick="BtnConfig_ItemClick" LargeGlyph="{dx:DXImage SvgImages/Setup/Properties.svg}"/>
+                        <dxb:BarButtonItem Content="Khai báo" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_document_object_inplace.svg'}"/>
                     </dxr:RibbonPageGroup>
                 </dxr:RibbonPage>
                 
-                <!-- ==================== Tab: Danh mục ==================== -->
+                <!-- Tab: Danh mục -->
                 <dxr:RibbonPage Caption="Danh mục">
-                    <!-- Nhóm: Kế toán -->
                     <dxr:RibbonPageGroup Caption="Kế toán">
-                        <dxb:BarButtonItem Content="Tài khoản" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_document.svg'}" ItemClick="BtnCategoryAccount_ItemClick" auth:AuthHelper.RequiredMask="8">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Danh mục Hệ thống Tài khoản Kế toán"/>
-                                    <dx:SuperTipItem Content="Quản lý hệ thống tài khoản kế toán theo Thông tư 200/2014.&#x0a;Cấu trúc cây cha – con, thiết lập thuộc tính thuế (VAT) và in danh mục."/>
-                                    <dx:SuperTipItemSeparator/>
-                                    <dx:SuperTipItem Content="📂 Yêu cầu quyền: Kế toán tổng hợp (Bit 3)."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
-                        <dxb:BarButtonItem Content="Nguồn CT" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_list.svg'}" auth:AuthHelper.RequiredMask="8">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Danh mục Nguồn Chứng từ"/>
-                                    <dx:SuperTipItem Content="Khai báo các loại nguồn chứng từ kế toán (Phiếu thu, Phiếu chi, Phiếu nhập, Phiếu xuất...).&#x0a;Mỗi nguồn gắn với một mẫu phiếu và quy tắc đánh số tự động."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
-                        
-                        <dxb:BarButtonItem Content="Phòng ban" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_department.svg'}" auth:AuthHelper.RequiredMask="8">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Danh mục Phòng ban / Bộ phận"/>
-                                    <dx:SuperTipItem Content="Khai báo cơ cấu tổ chức phòng ban của doanh nghiệp.&#x0a;Dùng để phân bổ chi phí và lập báo cáo quản trị theo bộ phận."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
+                        <dxb:BarButtonItem Content="Tài khoản" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/reports/distributerowsevenly.svg'}" ItemClick="BtnCategoryAccount_ItemClick"/>
+                        <dxb:BarButtonItem Content="Đối tượng" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/filtereditor_user.svg'}"/>
                     </dxr:RibbonPageGroup>
-
-                    <!-- Nhóm: Công nợ -->
-                    <dxr:RibbonPageGroup Caption="Công nợ">
-                        <dxb:BarButtonItem Content="Đối tượng" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/filtereditor_user.svg'}" ItemClick="BtnCategoryPartner_ItemClick" auth:AuthHelper.RequiredMask="16">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Danh mục Đối tượng Công nợ"/>
-                                    <dx:SuperTipItem Content="Quản lý khách hàng, nhà cung cấp, nhân viên tạm ứng.&#x0a;Theo dõi thông vị liên hệ, mã số thuế, hạn mức tín dụng và lịch sử giao dịch."/>
-                                    <dx:SuperTipItemSeparator/>
-                                    <dx:SuperTipItem Content="📂 Yêu cầu quyền: Công nợ (Bit 4)."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
-                        <dxb:BarButtonItem Content="Nội dung công nợ" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_customer.svg'}" ItemClick="BtnCategoryDebtType_ItemClick" auth:AuthHelper.RequiredMask="16">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Danh mục Nội dung Công nợ"/>
-                                    <dx:SuperTipItem Content="Phân loại công nợ: Phải thu khách hàng, Phải trả nhà cung cấp, Tạm ứng, Vay nợ...&#x0a;Gắn với tài khoản kế toán tương ứng (TK 131, 331, 141...)."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
-                        <dxb:BarButtonItem Content="Lý do công nợ" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_document.svg'}" ItemClick="BtnCategoryDebtReason_ItemClick" auth:AuthHelper.RequiredMask="16">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Danh mục Lý do Công nợ"/>
-                                    <dx:SuperTipItem Content="Quản lý các lý do phát sinh công nợ."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
-                    </dxr:RibbonPageGroup>
-
-                    <!-- Nhóm: Kho & Vật tư -->
-                                        <dxr:RibbonPageGroup Caption="Kho &amp; Vật tư">
-                        <dxb:BarButtonItem Content="Kho hàng" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_document.svg'}" ItemClick="BtnCategoryWarehouse_ItemClick" auth:AuthHelper.RequiredMask="4">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Danh mục Kho hàng"/>
-                                    <dx:SuperTipItem Content="Khai báo hệ thống kho: Kho nguyên vật liệu, Kho thành phẩm, Kho hàng hoá...
-Mỗi kho gắn với địa điểm và thủ kho phụ trách."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
-                        <dxb:BarButtonItem Content="Nhóm vật tư" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_category.svg'}" ItemClick="BtnCategoryCategory_ItemClick" auth:AuthHelper.RequiredMask="4">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Danh mục Nhóm Vật tư"/>
-                                    <dx:SuperTipItem Content="Quản lý nhóm vật tư, tự động liên kết với mã Thuế suất mặc định."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
-                        <dxb:BarButtonItem Content="Danh mục vật tư" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_document.svg'}" ItemClick="BtnCategoryInventoryItem_ItemClick" auth:AuthHelper.RequiredMask="4">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Danh mục Vật tư / Hàng hoá"/>
-                                    <dx:SuperTipItem Content="Quản lý mã vật tư, tên hàng hoá, đơn vị tính, nhóm hàng.
-Thiết lập phương pháp tính giá xuất kho (Bình quân, FIFO, Đích danh)."/>
-                                    <dx:SuperTipItemSeparator/>
-                                    <dx:SuperTipItem Content="※ Yêu cầu quyền: Vật tư (Bit 2)."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
-                        <dxb:BarButtonItem Content="Thuế suất" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_sale.svg'}" ItemClick="BtnCategoryTaxRate_ItemClick" auth:AuthHelper.RequiredMask="4">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Danh mục Thuế suất"/>
-                                    <dx:SuperTipItem Content="Khai báo các mức thuế (5%, 8%, 10%...) dùng để gán cho nhóm vật tư."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
-                        <dxb:BarButtonItem Content="Giá vật tư" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_list.svg'}" auth:AuthHelper.RequiredMask="4">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Bảng Giá Vật tư"/>
-                                    <dx:SuperTipItem Content="Thiết lập đơn giá mua, giá bán cho từng mặt hàng.
-Hỗ trợ quản lý giá theo nhà cung cấp và thời kỳ."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
-                    </dxr:RibbonPageGroup>
-
-                    <!-- Nhóm: Ngoại tệ -->
-                                        <dxr:RibbonPageGroup Caption="Ngoại tệ">
-                        <dxb:BarButtonItem Content="Loại tiền" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_document.svg'}" ItemClick="BtnCategoryCurrency_ItemClick" auth:AuthHelper.RequiredMask="2">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Danh sách Tiền tệ"/>
-                                    <dx:SuperTipItem Content="Khai báo các loại tiền tệ sử dụng: VND, USD, EUR, JPY..."/>
-                                    <dx:SuperTipItemSeparator/>
-                                    <dx:SuperTipItem Content="※ Yêu cầu quyền: Ngoại tệ (Bit 1)."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
-                        <dxb:BarButtonItem Content="Tỷ giá" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_sale.svg'}" ItemClick="BtnCategoryExchangeRate_ItemClick" auth:AuthHelper.RequiredMask="2">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Danh mục Tỷ giá Hối đoái"/>
-                                    <dx:SuperTipItem Content="Danh sách gợi ý tỷ giá tham khảo cho các giao dịch theo từng tháng."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
-                    </dxr:RibbonPageGroup>
-
-                    <!-- Nhóm: Chi phí -->
-                                        <dxr:RibbonPageGroup Caption="Chi phí">
-                        <dxb:BarButtonItem Content="Đối tượng CP" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_document.svg'}" ItemClick="BtnCategoryCostObject_ItemClick" auth:AuthHelper.RequiredMask="64">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Danh mục Đối tượng Tập hợp Chi phí"/>
-                                    <dx:SuperTipItem Content="Khai báo đối tượng tập hợp chi phí: Công trình, Đơn hàng, Phân xưởng, Sản phẩm...
-Dùng để phân bổ và tính giá thành theo từng đối tượng."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
-                        <dxb:BarButtonItem Content="Yếu tố CP" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_document.svg'}" ItemClick="BtnCategoryCostElement_ItemClick" auth:AuthHelper.RequiredMask="64">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Danh mục Yếu tố Chi phí"/>
-                                    <dx:SuperTipItem Content="Khai báo các yếu tố chi phí: Nguyên vật liệu, Nhân công, Khấu hao, Dịch vụ mua ngoài...
-Phục vụ lập báo cáo chi phí sản xuất theo yếu tố."/>
-                                    <dx:SuperTipItemSeparator/>
-                                    <dx:SuperTipItem Content="※ Yêu cầu quyền: Chi phí (Bit 6)."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
-                    </dxr:RibbonPageGroup>
-
-                    <!-- Nhóm: Tài sản cố định -->
-                    <dxr:RibbonPageGroup Caption="TSCĐ">
-                        <dxb:BarButtonItem Content="Tài sản" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_list.svg'}" auth:AuthHelper.RequiredMask="128">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Danh mục Tài sản Cố định"/>
-                                    <dx:SuperTipItem Content="Quản lý danh sách TSCĐ: Tên tài sản, nguyên giá, ngày đưa vào sử dụng, bộ phận quản lý.&#x0a;Thiết lập phương pháp và thời gian khấu hao cho từng tài sản."/>
-                                    <dx:SuperTipItemSeparator/>
-                                    <dx:SuperTipItem Content="📂 Yêu cầu quyền: Tài sản cố định (Bit 7)."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
-                                                <dxb:BarButtonItem Content="Nguồn tài sản" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_list.svg'}" ItemClick="BtnCategorySource_ItemClick" auth:AuthHelper.RequiredMask="128">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Danh mục Nguồn Tài Sản"/>
-                                    <dx:SuperTipItem Content="Khai báo nguồn hình thành tài sản cố định (Ngân sách, Vốn tự có, Vay, ...)."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
-                        <dxb:BarButtonItem Content="Lý do tăng giảm" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_document.svg'}" ItemClick="BtnCategoryReason_ItemClick" auth:AuthHelper.RequiredMask="128">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Danh mục Lý do Tăng/Giảm"/>
-                                    <dx:SuperTipItem Content="Quản lý lý do tăng giảm tài sản cố định (Mua mới, Thanh lý, ...)."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
-                    </dxr:RibbonPageGroup>
-
-                    <!-- Nhóm: Chứng khoán -->
-                                        <dxr:RibbonPageGroup Caption="Chứng khoán">
-                        <dxb:BarButtonItem Content="Loại hình CP" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_category.svg'}" ItemClick="BtnCategoryStockType_ItemClick" auth:AuthHelper.RequiredMask="32">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Danh mục Loại hình Cổ phiếu"/>
-                                    <dx:SuperTipItem Content="Phân loại chứng khoán: Cổ phiếu phổ thông, Cổ phiếu ưu đãi, Trái phiếu, Chứng chỉ quỹ..."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
-                        <dxb:BarButtonItem Content="Danh mục CP" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_document.svg'}" ItemClick="BtnCategoryStock_ItemClick" auth:AuthHelper.RequiredMask="32">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Danh mục Cổ phiếu"/>
-                                    <dx:SuperTipItem Content="Khai báo mã chứng khoán đang nắm giữ hoặc giao dịch.
-Bao gồm liên kết tới loại hình tương ứng."/>
-                                    <dx:SuperTipItemSeparator/>
-                                    <dx:SuperTipItem Content="※ Yêu cầu quyền: Chứng khoán (Bit 5)."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
+                    <dxr:RibbonPageGroup Caption="Kho &amp; Vật tư">
+                        <dxb:BarButtonItem Content="Vật tư" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/reports/imageannotation.svg'}"/>
+                        <dxb:BarButtonItem Content="Kho hàng" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/save/saveall.svg'}"/>
                     </dxr:RibbonPageGroup>
                 </dxr:RibbonPage>
 
-                <!-- ==================== Tab: Nghiệp vụ ==================== -->
-                <dxr:RibbonPage Caption="Nghiệp vụ">
-                    <!-- Nhóm: Kế toán tổng hợp -->
-                    <dxr:RibbonPageGroup Caption="Tổng hợp">
-                        <dxb:BarButtonItem Content="Phiếu KT" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_document.svg'}" auth:AuthHelper.RequiredMask="8">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Nhập Phiếu Kế toán Tổng hợp"/>
-                                    <dx:SuperTipItem Content="Nhập bút toán hạch toán thủ công (Nợ / Có).&#x0a;Dùng cho các nghiệp vụ điều chỉnh, kết chuyển, bút toán cuối kỳ."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
-                        <dxb:BarButtonItem Content="Sổ cái" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_list.svg'}" auth:AuthHelper.RequiredMask="8">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Xem Sổ Cái Tài khoản"/>
-                                    <dx:SuperTipItem Content="Tra cứu chi tiết phát sinh Nợ / Có của từng tài khoản theo kỳ.&#x0a;Hỗ trợ lọc theo nguồn chứng từ, đối tượng và khoảng thời gian."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
-                    </dxr:RibbonPageGroup>
-
-                    <!-- Nhóm: Công nợ -->
-                    <dxr:RibbonPageGroup Caption="Công nợ">
-                        <dxb:BarButtonItem Content="Phiếu thu" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_document.svg'}" auth:AuthHelper.RequiredMask="16">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Nhập Phiếu Thu"/>
-                                    <dx:SuperTipItem Content="Lập phiếu thu tiền mặt / chuyển khoản từ khách hàng, thu nội bộ.&#x0a;Tự động hạch toán Nợ TK 111/112 – Có TK đối ứng."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
-                        <dxb:BarButtonItem Content="Phiếu chi" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_document.svg'}" auth:AuthHelper.RequiredMask="16">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Nhập Phiếu Chi"/>
-                                    <dx:SuperTipItem Content="Lập phiếu chi tiền mặt / chuyển khoản trả nhà cung cấp, chi nội bộ.&#x0a;Tự động hạch toán Nợ TK đối ứng – Có TK 111/112."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
-                        <dxb:BarButtonItem Content="Đối trừ" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_document.svg'}" auth:AuthHelper.RequiredMask="16">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Đối trừ Công nợ"/>
-                                    <dx:SuperTipItem Content="Khớp các khoản phải thu / phải trả với các phiếu thanh toán.&#x0a;Hỗ trợ đối trừ tự động hoặc thủ công theo từng hoá đơn."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
-                    </dxr:RibbonPageGroup>
-
-                    <!-- Nhóm: Kho vật tư -->
-                    <dxr:RibbonPageGroup Caption="Kho">
-                        <dxb:BarButtonItem Content="Nhập kho" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_document.svg'}" auth:AuthHelper.RequiredMask="4">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Phiếu Nhập kho Vật tư"/>
-                                    <dx:SuperTipItem Content="Lập phiếu nhập kho: Mua hàng, Nhập từ sản xuất, Nhập điều chuyển.&#x0a;Tự động cập nhật tồn kho và hạch toán kế toán."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
-                        <dxb:BarButtonItem Content="Xuất kho" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_document.svg'}" auth:AuthHelper.RequiredMask="4">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Phiếu Xuất kho Vật tư"/>
-                                    <dx:SuperTipItem Content="Lập phiếu xuất kho: Bán hàng, Xuất sản xuất, Xuất điều chuyển.&#x0a;Tự động tính giá xuất và cập nhật tồn kho."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
-                    </dxr:RibbonPageGroup>
-
-                    <!-- Nhóm: TSCĐ -->
-                    <dxr:RibbonPageGroup Caption="TSCĐ">
-                        <dxb:BarButtonItem Content="Ghi tăng" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_document.svg'}" auth:AuthHelper.RequiredMask="128">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Ghi tăng Tài sản Cố định"/>
-                                    <dx:SuperTipItem Content="Ghi nhận tài sản mới vào sổ: Mua sắm, Xây dựng cơ bản hoàn thành, Nhận góp vốn.&#x0a;Tự động tạo bảng tính khấu hao."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
-                        <dxb:BarButtonItem Content="Khấu hao" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_document.svg'}" auth:AuthHelper.RequiredMask="128">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Trích Khấu hao TSCĐ"/>
-                                    <dx:SuperTipItem Content="Tính và trích khấu hao hàng tháng cho toàn bộ TSCĐ đang sử dụng.&#x0a;Hỗ trợ phương pháp: Đường thẳng, Số dư giảm dần, Sản lượng."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
-                    </dxr:RibbonPageGroup>
-
-                    <!-- Nhóm: Ngoại tệ -->
-                    <dxr:RibbonPageGroup Caption="Ngoại tệ">
-                        <dxb:BarButtonItem Content="Mua/Bán" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_document.svg'}" auth:AuthHelper.RequiredMask="2">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Mua bán Ngoại tệ"/>
-                                    <dx:SuperTipItem Content="Nhập phiếu mua/bán ngoại tệ.&#x0a;Tự động tính chênh lệch tỷ giá và hạch toán lãi/lỗ (TK 515/635)."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
-                    </dxr:RibbonPageGroup>
-
-                    <!-- Nhóm: Chứng khoán -->
-                    <dxr:RibbonPageGroup Caption="Chứng khoán">
-                        <dxb:BarButtonItem Content="Giao dịch" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_document.svg'}" auth:AuthHelper.RequiredMask="32">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Giao dịch Mua / Bán Chứng khoán"/>
-                                    <dx:SuperTipItem Content="Nhập lệnh mua/bán chứng khoán. Tự động tính giá vốn bình quân,&#x0a;lãi/lỗ bán chứng khoán và hạch toán vào sổ kế toán."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
-                    </dxr:RibbonPageGroup>
-                </dxr:RibbonPage>
-
-                <!-- ==================== Tab: Thiết kế Báo cáo ==================== -->
+                <!-- Tab: Thiết kế -->
                 <dxr:RibbonPage Caption="Thiết kế">
-                    <dxr:RibbonPageGroup Caption="Báo cáo tài chính">
-                        <dxb:BarButtonItem Content="Bảng CĐKT" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_report_showdesigner.svg'}" auth:AuthHelper.RequiredMask="8">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Thiết kế Bảng Cân đối Kế toán"/>
-                                    <dx:SuperTipItem Content="Thiết lập công thức tính toán cho các chỉ tiêu trên Bảng cân đối kế toán (B01-DN)."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
-                        <dxb:BarButtonItem Content="KQ HĐKD" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_document.svg'}" auth:AuthHelper.RequiredMask="8">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Thiết kế Báo cáo Kết quả HĐKD"/>
-                                    <dx:SuperTipItem Content="Thiết lập công thức cho Báo cáo kết quả hoạt động kinh doanh (B02-DN)."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
-                        <dxb:BarButtonItem Content="LCTT" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_document.svg'}" auth:AuthHelper.RequiredMask="8">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Thiết kế Báo cáo Lưu chuyển Tiền tệ"/>
-                                    <dx:SuperTipItem Content="Thiết lập công thức cho Báo cáo lưu chuyển tiền tệ (B03-DN).&#x0a;Hỗ trợ cả phương pháp Trực tiếp và Gián tiếp."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
+                    <dxr:RibbonPageGroup Caption="Báo cáo">
+                        <dxb:BarButtonItem Content="Bảng CĐKT" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_report_showdesigner.svg'}"/>
+                        <dxb:BarButtonItem Content="KQ HĐKD" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/reports/showexportwarnings.svg'}"/>
                     </dxr:RibbonPageGroup>
                 </dxr:RibbonPage>
-
-                <!-- ==================== Tab: Báo cáo ==================== -->
-                <dxr:RibbonPage Caption="Báo cáo">
-                    <dxr:RibbonPageGroup Caption="Tài chính">
-                        <dxb:BarButtonItem Content="CĐKT" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_report_showdesigner.svg'}" auth:AuthHelper.RequiredMask="8">
-                            <dxb:BarButtonItem.SuperTip>
-                                <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="In Bảng Cân đối Kế toán (B01-DN)"/>
-                                    <dx:SuperTipItem Content="Xuất và in Bảng cân đối kế toán theo kỳ báo cáo."/>
-                                </dx:SuperTip>
-                            </dxb:BarButtonItem.SuperTip>
-                        </dxb:BarButtonItem>
-                        <dxb:BarButtonItem Content="KQKD" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_document.svg'}" auth:AuthHelper.RequiredMask="8"/>
-                        <dxb:BarButtonItem Content="LCTT" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_document.svg'}" auth:AuthHelper.RequiredMask="8"/>
-                    </dxr:RibbonPageGroup>
-                    <dxr:RibbonPageGroup Caption="Sổ sách">
-                        <dxb:BarButtonItem Content="Sổ cái" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_list.svg'}" auth:AuthHelper.RequiredMask="8"/>
-                        <dxb:BarButtonItem Content="Cân đối PS" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_document.svg'}" auth:AuthHelper.RequiredMask="8"/>
-                        <dxb:BarButtonItem Content="Nhật ký" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_document.svg'}" auth:AuthHelper.RequiredMask="8"/>
-                    </dxr:RibbonPageGroup>
-                    <dxr:RibbonPageGroup Caption="Công nợ">
-                        <dxb:BarButtonItem Content="Tổng hợp CN" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_customer.svg'}" auth:AuthHelper.RequiredMask="16"/>
-                        <dxb:BarButtonItem Content="Chi tiết CN" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_list.svg'}" auth:AuthHelper.RequiredMask="16"/>
-                    </dxr:RibbonPageGroup>
-                    <dxr:RibbonPageGroup Caption="Kho">
-                        <dxb:BarButtonItem Content="Tồn kho" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_document.svg'}" auth:AuthHelper.RequiredMask="4"/>
-                        <dxb:BarButtonItem Content="Nhập xuất" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_document.svg'}" auth:AuthHelper.RequiredMask="4"/>
-                    </dxr:RibbonPageGroup>
-                </dxr:RibbonPage>
+                
+                <dxr:RibbonPage Caption="Nghiệp vụ"/>
+                <dxr:RibbonPage Caption="Báo cáo"/>
             </dxr:RibbonDefaultPageCategory>
         </dxr:RibbonControl>
 
@@ -463,3 +75,7 @@ Bao gồm liên kết tới loại hình tương ứng."/>
         </StatusBar>
     </Grid>
 </dx:ThemedWindow>
+
+
+
+
