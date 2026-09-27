@@ -1023,14 +1023,13 @@ namespace DataAccess.MsAccess.DatabaseSpecific
 		/// <summary>Inits SystemUserEntity's mappings</summary>
 		private void InitSystemUserEntityMappings()
 		{
-			this.AddElementMapping("SystemUserEntity", @"template", @"Default", "SystemUser", 7, 0);
+			this.AddElementMapping("SystemUserEntity", @"template", @"Default", "SystemUser", 6, 0);
 			this.AddElementFieldMapping("SystemUserEntity", "FullName", "FullName", true, "VarWChar", 100, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("SystemUserEntity", "Id", "Id", false, "Integer", 0, 10, 0, true, "@@IDENTITY", null, typeof(System.Int32), 1);
-			this.AddElementFieldMapping("SystemUserEntity", "IdOld", "Id_old", true, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
-			this.AddElementFieldMapping("SystemUserEntity", "IsActive", "IsActive", false, "Boolean", 2, 0, 0, false, "", null, typeof(System.Boolean), 3);
-			this.AddElementFieldMapping("SystemUserEntity", "Password", "Password", false, "VarWChar", 255, 0, 0, false, "", null, typeof(System.String), 4);
-			this.AddElementFieldMapping("SystemUserEntity", "RoleMask", "RoleMask", false, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 5);
-			this.AddElementFieldMapping("SystemUserEntity", "Username", "Username", false, "VarWChar", 50, 0, 0, false, "", null, typeof(System.String), 6);
+			this.AddElementFieldMapping("SystemUserEntity", "IsActive", "IsActive", false, "Boolean", 2, 0, 0, false, "", null, typeof(System.Boolean), 2);
+			this.AddElementFieldMapping("SystemUserEntity", "Password", "Password", false, "VarWChar", 255, 0, 0, false, "", null, typeof(System.String), 3);
+			this.AddElementFieldMapping("SystemUserEntity", "RoleMask", "RoleMask", false, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 4);
+			this.AddElementFieldMapping("SystemUserEntity", "Username", "Username", false, "VarWChar", 50, 0, 0, false, "", null, typeof(System.String), 5);
 		}
 
 		/// <summary>Inits TaxObligationEntity's mappings</summary>

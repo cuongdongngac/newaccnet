@@ -1023,14 +1023,13 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits SystemUserEntity's mappings</summary>
 		private void InitSystemUserEntityMappings()
 		{
-			this.AddElementMapping("SystemUserEntity", @"Default", @"public", "SystemUser", 7, 0);
+			this.AddElementMapping("SystemUserEntity", @"Default", @"public", "SystemUser", 6, 0);
 			this.AddElementFieldMapping("SystemUserEntity", "FullName", "FullName", true, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("SystemUserEntity", "Id", "Id", false, "Integer", 0, 10, 0, true, "SystemIdentity", null, typeof(System.Int32), 1);
-			this.AddElementFieldMapping("SystemUserEntity", "IdOld", "IdOld", true, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
-			this.AddElementFieldMapping("SystemUserEntity", "IsActive", "IsActive", false, "Boolean", 0, 0, 0, false, "", null, typeof(System.Boolean), 3);
-			this.AddElementFieldMapping("SystemUserEntity", "Password", "Password", false, "Varchar", 255, 0, 0, false, "", null, typeof(System.String), 4);
-			this.AddElementFieldMapping("SystemUserEntity", "RoleMask", "RoleMask", false, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 5);
-			this.AddElementFieldMapping("SystemUserEntity", "Username", "Username", false, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 6);
+			this.AddElementFieldMapping("SystemUserEntity", "IsActive", "IsActive", false, "Boolean", 0, 0, 0, false, "", null, typeof(System.Boolean), 2);
+			this.AddElementFieldMapping("SystemUserEntity", "Password", "Password", false, "Varchar", 255, 0, 0, false, "", null, typeof(System.String), 3);
+			this.AddElementFieldMapping("SystemUserEntity", "RoleMask", "RoleMask", false, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 4);
+			this.AddElementFieldMapping("SystemUserEntity", "Username", "Username", false, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 5);
 		}
 
 		/// <summary>Inits TaxObligationEntity's mappings</summary>

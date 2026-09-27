@@ -1023,14 +1023,13 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 		/// <summary>Inits SystemUserEntity's mappings</summary>
 		private void InitSystemUserEntityMappings()
 		{
-			this.AddElementMapping("SystemUserEntity", @"DataAccess", @"dbo", "SystemUser", 7, 0);
+			this.AddElementMapping("SystemUserEntity", @"DataAccess", @"dbo", "SystemUser", 6, 0);
 			this.AddElementFieldMapping("SystemUserEntity", "FullName", "FullName", true, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("SystemUserEntity", "Id", "Id", false, "Int", 0, 10, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int32), 1);
-			this.AddElementFieldMapping("SystemUserEntity", "IdOld", "IdOld", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
-			this.AddElementFieldMapping("SystemUserEntity", "IsActive", "IsActive", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 3);
-			this.AddElementFieldMapping("SystemUserEntity", "Password", "Password", false, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 4);
-			this.AddElementFieldMapping("SystemUserEntity", "RoleMask", "RoleMask", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 5);
-			this.AddElementFieldMapping("SystemUserEntity", "Username", "Username", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 6);
+			this.AddElementFieldMapping("SystemUserEntity", "IsActive", "IsActive", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 2);
+			this.AddElementFieldMapping("SystemUserEntity", "Password", "Password", false, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 3);
+			this.AddElementFieldMapping("SystemUserEntity", "RoleMask", "RoleMask", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 4);
+			this.AddElementFieldMapping("SystemUserEntity", "Username", "Username", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 5);
 		}
 
 		/// <summary>Inits TaxObligationEntity's mappings</summary>

@@ -7,8 +7,8 @@ namespace NewaccNet.Wpf;
 /// <summary>
 /// Interaction logic for MainWindow.xaml
 /// </summary>
-public partial class MainWindow : ThemedWindow
-{
+public partial class MainWindow : ThemedWindow {
+        private void BtnVoucherTest_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e) { new NewaccNet.Wpf.AppSystem.Voucher.VoucherListView().Show(); }
     public MainWindow(string username, string fullName, int roleMask)
     {
         InitializeComponent();

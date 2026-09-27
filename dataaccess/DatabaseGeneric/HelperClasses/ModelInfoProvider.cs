@@ -821,7 +821,7 @@ namespace DataAccess.HelperClasses
 			this.AddElementFieldInfo("JournalEntryEntity", "Modifiedamount", typeof(System.String), false, false, false, true,  (int)JournalEntryFieldIndex.Modifiedamount, 50, 0, 0);
 			this.AddElementFieldInfo("JournalEntryEntity", "Modifydate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)JournalEntryFieldIndex.Modifydate, 0, 0, 0);
 			this.AddElementFieldInfo("JournalEntryEntity", "Modifyuser", typeof(System.String), false, false, false, true,  (int)JournalEntryFieldIndex.Modifyuser, 20, 0, 0);
-			this.AddElementFieldInfo("JournalEntryEntity", "ParentId", typeof(Nullable<System.Int32>), false, false, false, true,  (int)JournalEntryFieldIndex.ParentId, 0, 0, 10);
+			this.AddElementFieldInfo("JournalEntryEntity", "ParentId", typeof(Nullable<System.Int32>), false, true, false, true,  (int)JournalEntryFieldIndex.ParentId, 0, 0, 10);
 			this.AddElementFieldInfo("JournalEntryEntity", "Version", typeof(Nullable<System.Int32>), false, false, false, true,  (int)JournalEntryFieldIndex.Version, 0, 0, 10);
 		}
 
@@ -1032,7 +1032,6 @@ namespace DataAccess.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(SystemUserFieldIndex), "SystemUserEntity");
 			this.AddElementFieldInfo("SystemUserEntity", "FullName", typeof(System.String), false, false, false, true,  (int)SystemUserFieldIndex.FullName, 100, 0, 0);
 			this.AddElementFieldInfo("SystemUserEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)SystemUserFieldIndex.Id, 0, 0, 10);
-			this.AddElementFieldInfo("SystemUserEntity", "IdOld", typeof(Nullable<System.Int32>), false, false, false, true,  (int)SystemUserFieldIndex.IdOld, 0, 0, 10);
 			this.AddElementFieldInfo("SystemUserEntity", "IsActive", typeof(System.Boolean), false, false, false, false,  (int)SystemUserFieldIndex.IsActive, 0, 0, 0);
 			this.AddElementFieldInfo("SystemUserEntity", "Password", typeof(System.String), false, false, false, false,  (int)SystemUserFieldIndex.Password, 255, 0, 0);
 			this.AddElementFieldInfo("SystemUserEntity", "RoleMask", typeof(System.Int32), false, false, false, false,  (int)SystemUserFieldIndex.RoleMask, 0, 0, 10);

@@ -32,8 +32,10 @@ namespace DataAccess.EntityClasses
 		private EntityCollection<DebtDetailEntity> _debtDetails;
 		private EntityCollection<InventoryVoucherEntity> _inventoryVouchers;
 		private EntityCollection<InvestmentDetailEntity> _investmentDetails;
+		private EntityCollection<JournalEntryEntity> _subEntries;
 		private EntityCollection<VatEntryEntity> _vatEntries;
 		private ChartOfAccountEntity _chartOfAccount;
+		private JournalEntryEntity _parentEntry;
 		private JournalVoucherEntity _journalVoucher;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
@@ -46,6 +48,8 @@ namespace DataAccess.EntityClasses
 		{
 			/// <summary>Member name ChartOfAccount</summary>
 			public static readonly string ChartOfAccount = "ChartOfAccount";
+			/// <summary>Member name ParentEntry</summary>
+			public static readonly string ParentEntry = "ParentEntry";
 			/// <summary>Member name JournalVoucher</summary>
 			public static readonly string JournalVoucher = "JournalVoucher";
 			/// <summary>Member name AssetDetails</summary>
@@ -60,6 +64,8 @@ namespace DataAccess.EntityClasses
 			public static readonly string InventoryVouchers = "InventoryVouchers";
 			/// <summary>Member name InvestmentDetails</summary>
 			public static readonly string InvestmentDetails = "InvestmentDetails";
+			/// <summary>Member name SubEntries</summary>
+			public static readonly string SubEntries = "SubEntries";
 			/// <summary>Member name VatEntries</summary>
 			public static readonly string VatEntries = "VatEntries";
 		}
@@ -76,8 +82,10 @@ namespace DataAccess.EntityClasses
 				AddNavigatorMetaData<JournalEntryEntity, EntityCollection<DebtDetailEntity>>("DebtDetails", a => a._debtDetails, (a, b) => a._debtDetails = b, a => a.DebtDetails, () => new JournalEntryRelations().DebtDetailEntityUsingJournalEntryId, typeof(DebtDetailEntity), (int)DataAccess.EntityType.DebtDetailEntity);
 				AddNavigatorMetaData<JournalEntryEntity, EntityCollection<InventoryVoucherEntity>>("InventoryVouchers", a => a._inventoryVouchers, (a, b) => a._inventoryVouchers = b, a => a.InventoryVouchers, () => new JournalEntryRelations().InventoryVoucherEntityUsingJournalEntryId, typeof(InventoryVoucherEntity), (int)DataAccess.EntityType.InventoryVoucherEntity);
 				AddNavigatorMetaData<JournalEntryEntity, EntityCollection<InvestmentDetailEntity>>("InvestmentDetails", a => a._investmentDetails, (a, b) => a._investmentDetails = b, a => a.InvestmentDetails, () => new JournalEntryRelations().InvestmentDetailEntityUsingJournalEntryId, typeof(InvestmentDetailEntity), (int)DataAccess.EntityType.InvestmentDetailEntity);
+				AddNavigatorMetaData<JournalEntryEntity, EntityCollection<JournalEntryEntity>>("SubEntries", a => a._subEntries, (a, b) => a._subEntries = b, a => a.SubEntries, () => new JournalEntryRelations().JournalEntryEntityUsingParentId, typeof(JournalEntryEntity), (int)DataAccess.EntityType.JournalEntryEntity);
 				AddNavigatorMetaData<JournalEntryEntity, EntityCollection<VatEntryEntity>>("VatEntries", a => a._vatEntries, (a, b) => a._vatEntries = b, a => a.VatEntries, () => new JournalEntryRelations().VatEntryEntityUsingId, typeof(VatEntryEntity), (int)DataAccess.EntityType.VatEntryEntity);
 				AddNavigatorMetaData<JournalEntryEntity, ChartOfAccountEntity>("ChartOfAccount", "JournalEntries", (a, b) => a._chartOfAccount = b, a => a._chartOfAccount, (a, b) => a.ChartOfAccount = b, DataAccess.RelationClasses.StaticJournalEntryRelations.ChartOfAccountEntityUsingAccountIdStatic, ()=>new JournalEntryRelations().ChartOfAccountEntityUsingAccountId, null, new int[] { (int)JournalEntryFieldIndex.AccountId }, null, true, (int)DataAccess.EntityType.ChartOfAccountEntity);
+				AddNavigatorMetaData<JournalEntryEntity, JournalEntryEntity>("ParentEntry", "SubEntries", (a, b) => a._parentEntry = b, a => a._parentEntry, (a, b) => a.ParentEntry = b, DataAccess.RelationClasses.StaticJournalEntryRelations.JournalEntryEntityUsingIdParentIdStatic, ()=>new JournalEntryRelations().JournalEntryEntityUsingIdParentId, null, new int[] { (int)JournalEntryFieldIndex.ParentId }, null, true, (int)DataAccess.EntityType.JournalEntryEntity);
 				AddNavigatorMetaData<JournalEntryEntity, JournalVoucherEntity>("JournalVoucher", "JournalEntries", (a, b) => a._journalVoucher = b, a => a._journalVoucher, (a, b) => a.JournalVoucher = b, DataAccess.RelationClasses.StaticJournalEntryRelations.JournalVoucherEntityUsingJournalVoucherIdStatic, ()=>new JournalEntryRelations().JournalVoucherEntityUsingJournalVoucherId, null, new int[] { (int)JournalEntryFieldIndex.JournalVoucherId }, null, true, (int)DataAccess.EntityType.JournalVoucherEntity);
 			}
 		}
@@ -155,6 +163,10 @@ namespace DataAccess.EntityClasses
 		/// <returns></returns>
 		public virtual IRelationPredicateBucket GetRelationInfoInvestmentDetails() { return CreateRelationInfoForNavigator("InvestmentDetails"); }
 
+		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'JournalEntry' to this entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoSubEntries() { return CreateRelationInfoForNavigator("SubEntries"); }
+
 		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'VatEntry' to this entity.</summary>
 		/// <returns></returns>
 		public virtual IRelationPredicateBucket GetRelationInfoVatEntries() { return CreateRelationInfoForNavigator("VatEntries"); }
@@ -162,6 +174,10 @@ namespace DataAccess.EntityClasses
 		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'ChartOfAccount' to this entity.</summary>
 		/// <returns></returns>
 		public virtual IRelationPredicateBucket GetRelationInfoChartOfAccount() { return CreateRelationInfoForNavigator("ChartOfAccount"); }
+
+		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'JournalEntry' to this entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoParentEntry() { return CreateRelationInfoForNavigator("ParentEntry"); }
 
 		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'JournalVoucher' to this entity.</summary>
 		/// <returns></returns>
@@ -221,6 +237,10 @@ namespace DataAccess.EntityClasses
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
 		public static IPrefetchPathElement2 PrefetchPathInvestmentDetails { get { return _staticMetaData.GetPrefetchPathElement("InvestmentDetails", CommonEntityBase.CreateEntityCollection<InvestmentDetailEntity>()); } }
 
+		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'JournalEntry' for this entity.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathSubEntries { get { return _staticMetaData.GetPrefetchPathElement("SubEntries", CommonEntityBase.CreateEntityCollection<JournalEntryEntity>()); } }
+
 		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'VatEntry' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
 		public static IPrefetchPathElement2 PrefetchPathVatEntries { get { return _staticMetaData.GetPrefetchPathElement("VatEntries", CommonEntityBase.CreateEntityCollection<VatEntryEntity>()); } }
@@ -228,6 +248,10 @@ namespace DataAccess.EntityClasses
 		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'ChartOfAccount' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
 		public static IPrefetchPathElement2 PrefetchPathChartOfAccount { get { return _staticMetaData.GetPrefetchPathElement("ChartOfAccount", CommonEntityBase.CreateEntityCollection<ChartOfAccountEntity>()); } }
+
+		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'JournalEntry' for this entity.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathParentEntry { get { return _staticMetaData.GetPrefetchPathElement("ParentEntry", CommonEntityBase.CreateEntityCollection<JournalEntryEntity>()); } }
 
 		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'JournalVoucher' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
@@ -353,6 +377,10 @@ namespace DataAccess.EntityClasses
 		[TypeContainedAttribute(typeof(InvestmentDetailEntity))]
 		public virtual EntityCollection<InvestmentDetailEntity> InvestmentDetails { get { return GetOrCreateEntityCollection<InvestmentDetailEntity, InvestmentDetailEntityFactory>("JournalEntry", true, false, ref _investmentDetails); } }
 
+		/// <summary>Gets the EntityCollection with the related entities of type 'JournalEntryEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
+		[TypeContainedAttribute(typeof(JournalEntryEntity))]
+		public virtual EntityCollection<JournalEntryEntity> SubEntries { get { return GetOrCreateEntityCollection<JournalEntryEntity, JournalEntryEntityFactory>("ParentEntry", true, false, ref _subEntries); } }
+
 		/// <summary>Gets the EntityCollection with the related entities of type 'VatEntryEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(VatEntryEntity))]
 		public virtual EntityCollection<VatEntryEntity> VatEntries { get { return GetOrCreateEntityCollection<VatEntryEntity, VatEntryEntityFactory>("JournalEntry", true, false, ref _vatEntries); } }
@@ -363,6 +391,14 @@ namespace DataAccess.EntityClasses
 		{
 			get { return _chartOfAccount; }
 			set { SetSingleRelatedEntityNavigator(value, "ChartOfAccount"); }
+		}
+
+		/// <summary>Gets / sets related entity of type 'JournalEntryEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
+		[Browsable(false)]
+		public virtual JournalEntryEntity ParentEntry
+		{
+			get { return _parentEntry; }
+			set { SetSingleRelatedEntityNavigator(value, "ParentEntry"); }
 		}
 
 		/// <summary>Gets / sets related entity of type 'JournalVoucherEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
@@ -453,6 +489,12 @@ namespace DataAccess.RelationClasses
 			get { return ModelInfoProviderSingleton.GetInstance().CreateRelation(RelationType.OneToMany, "InvestmentDetails", true, new[] { JournalEntryFields.Id, InvestmentDetailFields.JournalEntryId }); }
 		}
 
+		/// <summary>Returns a new IEntityRelation object, between JournalEntryEntity and JournalEntryEntity over the 1:n relation they have, using the relation between the fields: JournalEntry.Id - JournalEntry.ParentId</summary>
+		public virtual IEntityRelation JournalEntryEntityUsingParentId
+		{
+			get { return ModelInfoProviderSingleton.GetInstance().CreateRelation(RelationType.OneToMany, "SubEntries", true, new[] { JournalEntryFields.Id, JournalEntryFields.ParentId }); }
+		}
+
 		/// <summary>Returns a new IEntityRelation object, between JournalEntryEntity and VatEntryEntity over the 1:n relation they have, using the relation between the fields: JournalEntry.Id - VatEntry.Id</summary>
 		public virtual IEntityRelation VatEntryEntityUsingId
 		{
@@ -463,6 +505,12 @@ namespace DataAccess.RelationClasses
 		public virtual IEntityRelation ChartOfAccountEntityUsingAccountId
 		{
 			get	{ return ModelInfoProviderSingleton.GetInstance().CreateRelation(RelationType.ManyToOne, "ChartOfAccount", false, new[] { ChartOfAccountFields.AccountId, JournalEntryFields.AccountId }); }
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between JournalEntryEntity and JournalEntryEntity over the m:1 relation they have, using the relation between the fields: JournalEntry.ParentId - JournalEntry.Id</summary>
+		public virtual IEntityRelation JournalEntryEntityUsingIdParentId
+		{
+			get	{ return ModelInfoProviderSingleton.GetInstance().CreateRelation(RelationType.ManyToOne, "ParentEntry", false, new[] { JournalEntryFields.Id, JournalEntryFields.ParentId }); }
 		}
 
 		/// <summary>Returns a new IEntityRelation object, between JournalEntryEntity and JournalVoucherEntity over the m:1 relation they have, using the relation between the fields: JournalEntry.JournalVoucherId - JournalVoucher.Id</summary>
@@ -482,8 +530,10 @@ namespace DataAccess.RelationClasses
 		internal static readonly IEntityRelation DebtDetailEntityUsingJournalEntryIdStatic = new JournalEntryRelations().DebtDetailEntityUsingJournalEntryId;
 		internal static readonly IEntityRelation InventoryVoucherEntityUsingJournalEntryIdStatic = new JournalEntryRelations().InventoryVoucherEntityUsingJournalEntryId;
 		internal static readonly IEntityRelation InvestmentDetailEntityUsingJournalEntryIdStatic = new JournalEntryRelations().InvestmentDetailEntityUsingJournalEntryId;
+		internal static readonly IEntityRelation JournalEntryEntityUsingParentIdStatic = new JournalEntryRelations().JournalEntryEntityUsingParentId;
 		internal static readonly IEntityRelation VatEntryEntityUsingIdStatic = new JournalEntryRelations().VatEntryEntityUsingId;
 		internal static readonly IEntityRelation ChartOfAccountEntityUsingAccountIdStatic = new JournalEntryRelations().ChartOfAccountEntityUsingAccountId;
+		internal static readonly IEntityRelation JournalEntryEntityUsingIdParentIdStatic = new JournalEntryRelations().JournalEntryEntityUsingIdParentId;
 		internal static readonly IEntityRelation JournalVoucherEntityUsingJournalVoucherIdStatic = new JournalEntryRelations().JournalVoucherEntityUsingJournalVoucherId;
 
 		/// <summary>CTor</summary>

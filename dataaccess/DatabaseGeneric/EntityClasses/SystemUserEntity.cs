@@ -141,14 +141,6 @@ namespace DataAccess.EntityClasses
 			set { SetValue((int)SystemUserFieldIndex.Id, value); }
 		}
 
-		/// <summary>The IdOld property of the Entity SystemUser<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "SystemUser"."IdOld".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Int32> IdOld
-		{
-			get { return (Nullable<System.Int32>)GetValue((int)SystemUserFieldIndex.IdOld, false); }
-			set { SetValue((int)SystemUserFieldIndex.IdOld, value); }
-		}
-
 		/// <summary>The IsActive property of the Entity SystemUser<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "SystemUser"."IsActive".<br/>Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Boolean IsActive
@@ -195,8 +187,6 @@ namespace DataAccess
 		FullName,
 		///<summary>Id. </summary>
 		Id,
-		///<summary>IdOld. </summary>
-		IdOld,
 		///<summary>IsActive. </summary>
 		IsActive,
 		///<summary>Password. </summary>
