@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using DataAccess.EntityClasses;
@@ -7,7 +7,7 @@ using DataAccess.HelperClasses;
 
 namespace NewaccNet.Wpf.AppSystem.Voucher.Details
 {
-    public partial class CurrencyLiabilityWindow : DevExpress.Xpf.Core.ThemedWindow
+    public partial class CurrencyLiabilityWindow : NewaccNet.Wpf.Views.Base.BaseDetailWindow
     {
         private DebtDetailEntity _debtRow;
         private CurrencyLiabilityLineEntity _currencyLine;
@@ -23,6 +23,14 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             this.DataContext = _currencyLine;
             UpdateTotalText();
             LoadDictionaries();
+
+            this.Loaded += (s, e) => PopulateNumericFields();
+        }
+
+        private void PopulateNumericFields()
+        {
+            txtQuantity.Text = _currencyLine.Quantity.HasValue ? _currencyLine.Quantity.Value.ToString("N2") : "";
+            txtExchangeRate.Text = _currencyLine.ExchangeRate.HasValue ? _currencyLine.ExchangeRate.Value.ToString("N0") : "";
         }
 
         private void LoadDictionaries()
@@ -42,8 +50,27 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             }
         }
 
-        private void CalculateTotal_EditValueChanged(object sender, DevExpress.Xpf.Editors.EditValueChangedEventArgs e)
+        public void NumericField_LostFocus(object sender, RoutedEventArgs e)
         {
+            if (_currencyLine == null) return;
+            var tb = sender as System.Windows.Controls.TextBox;
+            if (tb == null) return;
+
+            double val;
+            bool ok = double.TryParse(tb.Text.Replace(",", "").Trim(),
+                                      System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out val);
+
+            if (tb.Name == "txtQuantity")
+            {
+                _currencyLine.Quantity = ok ? val : (double?)null;
+                if (ok) tb.Text = val.ToString("N2");
+            }
+            else if (tb.Name == "txtExchangeRate")
+            {
+                _currencyLine.ExchangeRate = ok ? val : (double?)null;
+                if (ok) tb.Text = val.ToString("N0");
+            }
+
             UpdateTotalText();
         }
 
@@ -54,7 +81,7 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             txtTotalAmount.Text = (qty * rate).ToString("N0");
         }
 
-        private void BtnAccept_Click(object sender, RoutedEventArgs e)
+        protected override void BtnAccept_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(_currencyLine.CurrencyId))
             {
@@ -77,7 +104,24 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             this.Close();
         }
 
-        private void BtnCancel_Click(object sender, RoutedEventArgs e)
+        public bool IsDeleted { get; private set; } = false;
+
+        private void BtnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            Delete();
+        }
+
+        public override void Delete()
+        {
+            if (MessageBox.Show("Bạn có chắc muốn xóa khai báo ngoại tệ 1-1 này?", "Xác nhận", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            {
+                IsDeleted = true;
+                this.DialogResult = true;
+                this.Close();
+            }
+        }
+
+        protected override void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
             // Trả về false để form gọi biết đường uncheck ô Ngoại tệ nếu vừa tạo mới
             this.DialogResult = false;

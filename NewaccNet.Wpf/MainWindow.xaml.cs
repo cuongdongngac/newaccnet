@@ -20,6 +20,35 @@ public partial class MainWindow : ThemedWindow {
         txtStatusRoleMask.Text = $"{roleMask} → {Convert.ToString(roleMask, 2).PadLeft(32, '0')}";
 
         this.Closed += (_, _) => Application.Current.Shutdown();
+        
+        LoadBackground();
+    }
+
+
+    private void LoadBackground()
+    {
+        try
+        {
+            // Tìm ảnh newacc.jpg ở thư mục chạy hoặc thư mục project
+            string basePath = System.AppDomain.CurrentDomain.BaseDirectory;
+            string imgPath = System.IO.Path.Combine(basePath, "newacc.jpg");
+            
+            if (!System.IO.File.Exists(imgPath))
+            {
+                imgPath = System.IO.Path.Combine(basePath, @"..\..\..\newacc.jpg");
+            }
+
+            if (System.IO.File.Exists(imgPath))
+            {
+                var bitmap = new System.Windows.Media.Imaging.BitmapImage();
+                bitmap.BeginInit();
+                bitmap.CacheOption = System.Windows.Media.Imaging.BitmapCacheOption.OnLoad;
+                bitmap.UriSource = new Uri(System.IO.Path.GetFullPath(imgPath));
+                bitmap.EndInit();
+                imgBackground.Source = bitmap;
+            }
+        }
+        catch { }
     }
 
     private void BtnCategoryAccount_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)

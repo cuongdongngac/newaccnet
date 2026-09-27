@@ -1,4 +1,4 @@
-﻿<dx:ThemedWindow 
+<dx:ThemedWindow 
     x:Class="NewaccNet.Wpf.AppSystem.Voucher.VoucherEntryWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -8,6 +8,7 @@
     xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
     xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
     xmlns:local="clr-namespace:NewaccNet.Wpf.AppSystem.Voucher"
+    xmlns:base="clr-namespace:NewaccNet.Wpf.Views.Base"
     Title="Chứng từ kế toán (Voucher Entry)" Height="768" Width="1024"
     WindowStartupLocation="CenterScreen"
     Closing="ThemedWindow_Closing">
@@ -40,20 +41,18 @@
 
         <!-- TOOLBAR -->
         <dxb:BarContainerControl Grid.Row="0">
-            <dxb:ToolBarControl ShowDragWidget="False" AllowCustomizationMenu="False" AllowHide="False" AllowQuickCustomization="False">
-                <dxb:BarButtonItem Content="Thêm mới" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_new.svg'}" ItemClick="BtnNew_Click"/>
-                <dxb:BarButtonItem Content="Lưu (Save)" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_save.svg'}" ItemClick="BtnSave_Click"/>
-                <dxb:BarButtonItem Content="Xóa" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_delete.svg'}"/>
-                <dxb:BarButtonItem Content="Đóng" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_close.svg'}" ItemClick="BtnClose_Click"/>
+            <dxb:ToolBarControl ShowDragWidget="False" AllowCustomizationMenu="False" AllowHide="False" AllowQuickCustomization="False" GlyphSize="Large">
+                <dxb:BarButtonItem ToolTip="Thêm mới" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_new.svg'}" ItemClick="BtnNew_Click"/>
+                <dxb:BarButtonItem ToolTip="Lưu (Save)" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_save.svg'}" ItemClick="BtnSave_Click"/>
+                <dxb:BarButtonItem ToolTip="Xóa" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_delete.svg'}"/>
+                <dxb:BarButtonItem ToolTip="Đóng" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_close.svg'}" ItemClick="BtnClose_Click"/>
                 <dxb:BarItemSeparator/>
-                <dxb:BarButtonItem Content="Đầu tiên" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/arrows/doublefirst.svg'}" ItemClick="BtnFirst_Click"/>
-                <dxb:BarButtonItem Content="Trước" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/arrows/prev.svg'}" ItemClick="BtnPrev_Click"/>
-                <dxb:BarButtonItem Content="Tiếp" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/arrows/next.svg'}" ItemClick="BtnNext_Click"/>
-                <dxb:BarButtonItem Content="Cuối cùng" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/arrows/doublelast.svg'}" ItemClick="BtnLast_Click"/>
+                <dxb:BarButtonItem ToolTip="Đầu tiên" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/arrows/doublefirst.svg'}" ItemClick="BtnFirst_Click"/>
+                <dxb:BarButtonItem ToolTip="Trước" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/arrows/prev.svg'}" ItemClick="BtnPrev_Click"/>
+                <dxb:BarButtonItem ToolTip="Tiếp" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/arrows/next.svg'}" ItemClick="BtnNext_Click"/>
+                <dxb:BarButtonItem ToolTip="Cuối cùng" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/arrows/doublelast.svg'}" ItemClick="BtnLast_Click"/>
             </dxb:ToolBarControl>
-        </dxb:BarContainerControl>
-
-        <!-- HEADER -->
+        </dxb:BarContainerControl>        <!-- HEADER -->
         <dxlc:LayoutControl Grid.Row="1" Orientation="Vertical" Padding="10">
             <dxlc:LayoutGroup Orientation="Horizontal">
                 <dxlc:LayoutItem Label="ID (Khóa chính):" Width="150">
@@ -87,7 +86,7 @@
                 <TextBlock Text="ĐỊNH KHOẢN CHÍNH (Master - Trái)" FontWeight="Bold" Margin="0,0,0,5" Foreground="DarkGreen"/>
                 <dxg:GridControl Name="gridLeft" VerticalAlignment="Stretch" SelectedItemChanged="gridLeft_SelectedItemChanged" >
                     <dxg:GridControl.View>
-                        <dxg:TableView ShowGroupPanel="False" NewItemRowPosition="Bottom" EnterMoveNextColumn="True" CellValueChanged="GridView_CellValueChanged" PreviewKeyDown="TableViewLeft_PreviewKeyDown"/>
+                        <base:AppDetailTableView ShowGroupPanel="False" NewItemRowPosition="Bottom" EnterMoveNextColumn="True" CellValueChanged="GridView_CellValueChanged" PreviewKeyDown="TableViewLeft_PreviewKeyDown"/>
                     </dxg:GridControl.View>
                     <dxg:GridControl.Columns>
                         <dxg:GridColumn FieldName="Id" Header="ID" Width="40" ReadOnly="True" AllowEditing="False" />
@@ -112,12 +111,12 @@
                 <TextBlock Text="ĐỊNH KHOẢN CHI TIẾT (Detail - Phải)" FontWeight="Bold" Margin="0,0,0,5" Foreground="Blue"/>
                 <dxg:GridControl Name="gridRight" VerticalAlignment="Stretch" >
                     <dxg:GridControl.View>
-                        <dxg:TableView ShowGroupPanel="False" NewItemRowPosition="Bottom" EnterMoveNextColumn="True" CellValueChanged="GridView_CellValueChanged" PreviewKeyDown="TableViewLeft_PreviewKeyDown"/>
+                        <base:AppDetailTableView ShowGroupPanel="False" NewItemRowPosition="Bottom" EnterMoveNextColumn="True" CellValueChanged="GridView_CellValueChanged" PreviewKeyDown="TableViewLeft_PreviewKeyDown"/>
                     </dxg:GridControl.View>
                     <dxg:GridControl.Columns>
                         <dxg:GridColumn FieldName="Id" Header="ID" Width="40" ReadOnly="True" AllowEditing="False" />
                         <dxg:GridColumn Binding="{Binding ParentId}" FieldName="ParentId" Header="ParentId" Width="60" ReadOnly="True" AllowEditing="False" />
-                        <dxg:GridColumn FieldName="Dbcr" Header="Nợ/Có" Width="60">
+                        <dxg:GridColumn FieldName="Dbcr" Header="Nợ/Có" Width="60" ReadOnly="True" AllowEditing="False">
                             <dxg:GridColumn.EditSettings>
                                 <dxe:ComboBoxEditSettings ItemsSource="{Binding DataContext.DbcrList, RelativeSource={RelativeSource AncestorType=Window}}" ValueMember="Id" DisplayMember="Name"/>
                             </dxg:GridColumn.EditSettings>
@@ -142,3 +141,6 @@
         </Border>
     </Grid>
 </dx:ThemedWindow>
+
+
+

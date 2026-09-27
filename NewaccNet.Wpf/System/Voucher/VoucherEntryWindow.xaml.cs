@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
@@ -191,6 +191,18 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
         private void GridView_CellValueChanged(object sender, CellValueChangedEventArgs e)
         {
             _isDirty = true;
+            if (e.Column.FieldName == "Dbcr" && sender == gridLeft.View)
+            {
+                var masterRow = e.Row as JournalEntryEntity;
+                if (masterRow != null && masterRow.Dbcr.HasValue && masterRow.SubEntries != null)
+                {
+                    foreach (var sub in masterRow.SubEntries)
+                    {
+                        sub.Dbcr = (short)-masterRow.Dbcr.Value;
+                    }
+                    gridRight.RefreshData();
+                }
+            }
             CalculateBalance();
         }
 
@@ -290,6 +302,15 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
                 
                 // Nạp chi tiết Ngoại tệ (CurrencyLiabilityLine) cho từng dòng DebtDetail
                 debtNode.SubPath.Add(DebtDetailEntity.PrefetchPathCurrencyLiabilityLine);
+                
+                // Nạp LiabilityDue (Cam kết lãi suất) cho từng dòng DebtDetail (để có LiabilityDuesId)
+                debtNode.SubPath.Add(DebtDetailEntity.PrefetchPathLiabilityDue);
+
+                jeNode.SubPath.Add(JournalEntryEntity.PrefetchPathCurrencyDetails);
+                jeNode.SubPath.Add(JournalEntryEntity.PrefetchPathInvestmentDetails);
+                jeNode.SubPath.Add(JournalEntryEntity.PrefetchPathAssetDetails);
+                var costNode = jeNode.SubPath.Add(JournalEntryEntity.PrefetchPathCostDetails);
+                costNode.SubPath.Add(CostDetailEntity.PrefetchPathExpenseTaxLine);
 
                 // Nạp thêm chi tiết vật tư (nếu có sau này)
                 // jeNode.SubPath.Add(JournalEntryEntity.PrefetchPathInventoryDetails);
@@ -396,7 +417,7 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
                 
                 UnbindHeader();
 
-                _currentVoucher.JournalEntries.Clear();
+                                _currentVoucher.JournalEntries.Clear();
                 foreach (var master in _masterEntries)
                 {
                     _currentVoucher.JournalEntries.Add(master);
@@ -409,7 +430,89 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
 
                 using (var adapter = AppDataAccessAdapter.Create())
                 {
-                    adapter.SaveEntity(_currentVoucher, true, recurse: true);
+                    adapter.StartTransaction(System.Data.IsolationLevel.ReadCommitted, "SaveVoucher");
+                    try
+                    {
+                        if (!_currentVoucher.IsNew)
+                        {
+                            var dbVoucher = new JournalVoucherEntity(_currentVoucher.Id);
+                            var prefetch = new PrefetchPath2((int)DataAccess.EntityType.JournalVoucherEntity);
+                            var jeNode = prefetch.Add(JournalVoucherEntity.PrefetchPathJournalEntries);
+                            jeNode.SubPath.Add(JournalEntryEntity.PrefetchPathDebtDetails);
+                            jeNode.SubPath.Add(JournalEntryEntity.PrefetchPathCurrencyDetails);
+                jeNode.SubPath.Add(JournalEntryEntity.PrefetchPathInvestmentDetails);
+                jeNode.SubPath.Add(JournalEntryEntity.PrefetchPathAssetDetails);
+                var costNode = jeNode.SubPath.Add(JournalEntryEntity.PrefetchPathCostDetails);
+                costNode.SubPath.Add(CostDetailEntity.PrefetchPathExpenseTaxLine);
+
+                            if (adapter.FetchEntity(dbVoucher, prefetch))
+                            {
+                                foreach (var dbJe in dbVoucher.JournalEntries)
+                                {
+                                    var ramJe = _currentVoucher.JournalEntries.FirstOrDefault(x => x.Id == dbJe.Id && !x.IsNew);
+                                    if (ramJe == null)
+                                    {
+                                        // cascade delete manually if necessary, adapter.DeleteEntity will handle it if DB cascade is on
+                                        // but just to be safe, delete child collections first
+                                        foreach (var dbDebt in dbJe.DebtDetails) adapter.DeleteEntity(dbDebt);
+                                        foreach (var dbCurr in dbJe.CurrencyDetails) adapter.DeleteEntity(dbCurr);
+                                        foreach (var dbInv in dbJe.InvestmentDetails) adapter.DeleteEntity(dbInv);
+                                        foreach (var dbAsset in dbJe.AssetDetails) adapter.DeleteEntity(dbAsset);
+                                        foreach (var dbCost in dbJe.CostDetails)
+                                        {
+                                            if (dbCost.ExpenseTaxLine != null) adapter.DeleteEntity(dbCost.ExpenseTaxLine);
+                                            adapter.DeleteEntity(dbCost);
+                                        }
+                                        adapter.DeleteEntity(dbJe);
+                                    }
+                                    else
+                                    {
+                                        foreach (var dbDebt in dbJe.DebtDetails)
+                                        {
+                                            if (!ramJe.DebtDetails.Any(x => x.Id == dbDebt.Id && !x.IsNew))
+                                                adapter.DeleteEntity(dbDebt);
+                                        }
+                                        foreach (var dbCurr in dbJe.CurrencyDetails)
+                                        {
+                                            if (!ramJe.CurrencyDetails.Any(x => x.Id == dbCurr.Id && !x.IsNew))
+                                                adapter.DeleteEntity(dbCurr);
+                                        }
+                                        foreach (var dbInv in dbJe.InvestmentDetails)
+                                        {
+                                            if (!ramJe.InvestmentDetails.Any(x => x.Lineid == dbInv.Lineid && !x.IsNew))
+                                                adapter.DeleteEntity(dbInv);
+                                        }
+                                        foreach (var dbAsset in dbJe.AssetDetails)
+                                        {
+                                            if (!ramJe.AssetDetails.Any(x => x.Id == dbAsset.Id && !x.IsNew))
+                                                adapter.DeleteEntity(dbAsset);
+                                        }
+                                        foreach (var dbCost in dbJe.CostDetails)
+                                        {
+                                            if (!ramJe.CostDetails.Any(x => x.Id == dbCost.Id && !x.IsNew))
+                                            {
+                                                if (dbCost.ExpenseTaxLine != null) adapter.DeleteEntity(dbCost.ExpenseTaxLine);
+                                                adapter.DeleteEntity(dbCost);
+                                            }
+                                            else
+                                            {
+                                                // If CostDetail is kept, but its ExpenseTaxLine is somehow removed (e.g., taxflag changed), we should delete it.
+                                                // But usually Taxflag doesn't change on the fly for an existing account. We can skip this edge case for now.
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        adapter.SaveEntity(_currentVoucher, true, recurse: true);
+                        adapter.Commit();
+                    }
+                    catch
+                    {
+                        adapter.Rollback();
+                        throw;
+                    }
                 }
 
                 _isDirty = false;
@@ -452,3 +555,14 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
         private void BtnLast_Click(object sender, RoutedEventArgs e) { MessageBox.Show("Navigate Cuối cùng"); }
     }
 }
+
+
+
+
+
+
+
+
+
+
+

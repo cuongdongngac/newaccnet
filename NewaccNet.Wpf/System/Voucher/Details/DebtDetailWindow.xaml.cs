@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,9 +13,11 @@ using System.ComponentModel;
 
 namespace NewaccNet.Wpf.AppSystem.Voucher.Details
 {
-    public partial class DebtDetailWindow : DevExpress.Xpf.Core.ThemedWindow
+    public partial class DebtDetailWindow : NewaccNet.Wpf.Views.Base.BaseDetailWindow
     {
         private JournalEntryEntity _parentEntry;
+        private System.Collections.Generic.List<DebtDetailEntity> _originalList;
+        private bool _isSaved = false;
 
         public DebtDetailWindow(JournalEntryEntity parentEntry)
         {
@@ -23,21 +25,10 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             _parentEntry = parentEntry;
             this.DataContext = _parentEntry;
 
+            _originalList = _parentEntry.DebtDetails.ToList();
+            foreach (var item in _originalList) item.SaveFields("undo");
+
             LoadDictionaries();
-
-            TableViewDebt.PreviewKeyDown += TableViewDebt_PreviewKeyDown;
-        }
-
-        private void TableViewDebt_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
-        {
-            if (e.Key == System.Windows.Input.Key.Delete)
-            {
-                var row = GridDebtDetails.SelectedItem as DebtDetailEntity;
-                if (row != null && MessageBox.Show("Bạn có chắc muốn xóa dòng này?", "Xác nhận", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                {
-                    _parentEntry.DebtDetails.Remove(row);
-                }
-            }
         }
 
         private void LoadDictionaries()
@@ -94,18 +85,29 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
         private void BtnTrackLiability_Click(object sender, RoutedEventArgs e)
         {
             var row = GetRowFromButton(sender);
-            if (row != null)
-            {
-                if (string.IsNullOrEmpty(row.PartnerId) || string.IsNullOrEmpty(row.DebtTypeId))
-                {
-                    MessageBox.Show("Vui lòng chọn Đối tượng và Nội dung trước khi mở bảng theo dõi cam kết!", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
+            if (row == null) return;
 
-                var liabilityForm = new LiabilityDueWindow(row.PartnerId, row.DebtTypeId);
-                liabilityForm.Owner = this;
-                liabilityForm.ShowDialog();
+            if (string.IsNullOrEmpty(row.PartnerId) || string.IsNullOrEmpty(row.DebtTypeId))
+            {
+                MessageBox.Show("Vui lòng chọn Đối tượng và Nội dung trước khi mở bảng theo dõi cam kết!", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
             }
+
+            LiabilityDueWindow liabilityForm;
+
+            // Nếu dòng đã được liên kết với một LiabilityDue cụ thể → mở thẳng theo Id
+            if (row.LiabilityDuesId.HasValue)
+            {
+                liabilityForm = new LiabilityDueWindow(row.LiabilityDuesId.Value);
+            }
+            else
+            {
+                // Chưa liên kết → tìm theo (PartnerId, DebtTypeId) hoặc tạo mới
+                liabilityForm = new LiabilityDueWindow(row.PartnerId, row.DebtTypeId);
+            }
+
+            liabilityForm.Owner = this;
+            if (liabilityForm.ShowDialog() == true) { if (liabilityForm.IsDeleted) { row.LiabilityDuesId = null; } else if (liabilityForm.SavedId.HasValue && row.LiabilityDuesId != liabilityForm.SavedId) { row.LiabilityDuesId = liabilityForm.SavedId.Value; } }
         }
 
         private void BtnCurrency_Click(object sender, RoutedEventArgs e)
@@ -115,25 +117,45 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             {
                 var currencyForm = new CurrencyLiabilityWindow(row);
                 currencyForm.Owner = this;
-                currencyForm.ShowDialog();
+                if (currencyForm.ShowDialog() == true)
+                {
+                    if (currencyForm.IsDeleted)
+                    {
+                        row.CurrencyLiabilityLine = null;
+                    }
+                }
             }
         }
 
-        private void BtnAccept_Click(object sender, RoutedEventArgs e)
+        protected override void BtnAccept_Click(object sender, RoutedEventArgs e)
         {
+            TableViewDebt.CloseEditor();
+            TableViewDebt.FocusedRowHandle = DevExpress.Xpf.Grid.GridControl.InvalidRowHandle;
             TableViewDebt.CommitEditing();
             
             double totalDebt = _parentEntry.DebtDetails.Sum(x => x.Amount ?? 0);
             _parentEntry.Amount = totalDebt;
 
+            _isSaved = true;
             this.DialogResult = true;
             this.Close();
         }
 
-        private void BtnCancel_Click(object sender, RoutedEventArgs e)
+        protected override void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = false;
             this.Close();
+        }
+
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            if (!_isSaved)
+            {
+                foreach (var item in _originalList) item.RollbackFields("undo");
+                _parentEntry.DebtDetails.Clear();
+                foreach (var item in _originalList) _parentEntry.DebtDetails.Add(item);
+            }
+            base.OnClosing(e);
         }
     }
 }

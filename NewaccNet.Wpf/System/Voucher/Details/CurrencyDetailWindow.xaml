@@ -1,0 +1,83 @@
+<base:BaseDetailWindow x:Class="NewaccNet.Wpf.AppSystem.Voucher.Details.CurrencyDetailWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+        xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+        xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+        xmlns:base="clr-namespace:NewaccNet.Wpf.Views.Base"
+        Title="Chi tiết ngoại tệ" Height="450" Width="800">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <dxlc:LayoutControl Grid.Row="0" Padding="10">
+            <dxlc:LayoutGroup Orientation="Horizontal">
+                <dxlc:LayoutItem Label="Tài khoản:" Width="150">
+                    <TextBlock Text="{Binding AccountId}" FontWeight="Bold" Foreground="#1976D2"/>
+                </dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+        </dxlc:LayoutControl>
+
+        <dxg:GridControl x:Name="GridCurrencyDetails" Grid.Row="1" Margin="10,0" ItemsSource="{Binding CurrencyDetails}">
+            <dxg:GridControl.View>
+                <base:AppDetailTableView x:Name="TableViewCurrency" ShowGroupPanel="False" NewItemRowPosition="Bottom" 
+                               ShowTotalSummary="True" AlternateRowBackground="#FFF5F5F5" 
+                               InitNewRow="TableViewCurrency_InitNewRow"/>
+            </dxg:GridControl.View>
+            <dxg:GridControl.Columns>
+                
+                <dxg:GridColumn FieldName="CurrencyId" Header="Mã ngoại tệ" Width="150">
+                    <dxg:GridColumn.EditSettings>
+                        <dxg:LookUpEditSettings x:Name="lookupCurrency" DisplayMember="CurrencyId" ValueMember="CurrencyId" AutoPopulateColumns="False" PopupWidth="300">
+                            <dxg:LookUpEditSettings.PopupContentTemplate>
+                                <ControlTemplate>
+                                    <dxg:GridControl Name="PART_GridControl">
+                                        <dxg:GridControl.Columns>
+                                            <dxg:GridColumn FieldName="CurrencyId" Header="Mã NT" Width="100"/>
+                                            <dxg:GridColumn FieldName="CurrencyName" Header="Tên ngoại tệ" Width="200"/>
+                                        </dxg:GridControl.Columns>
+                                    </dxg:GridControl>
+                                </ControlTemplate>
+                            </dxg:LookUpEditSettings.PopupContentTemplate>
+                        </dxg:LookUpEditSettings>
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
+
+                <dxg:GridColumn FieldName="Quantity" Header="Nguyên tệ" Width="120">
+                    <dxg:GridColumn.EditSettings>
+                        <dxe:TextEditSettings MaskType="Numeric" Mask="N2" MaskUseAsDisplayFormat="True"/>
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
+
+                <dxg:GridColumn FieldName="ExchangeRate" Header="Tỷ giá" Width="120">
+                    <dxg:GridColumn.EditSettings>
+                        <dxe:TextEditSettings MaskType="Numeric" Mask="N0" MaskUseAsDisplayFormat="True"/>
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
+
+                <dxg:GridColumn FieldName="AmountVND" Header="Số tiền VNĐ" UnboundType="Decimal" UnboundExpression="[Quantity] * [ExchangeRate]" Width="150" ReadOnly="True">
+                    <dxg:GridColumn.EditSettings>
+                        <dxe:TextEditSettings MaskType="Numeric" Mask="N0" MaskUseAsDisplayFormat="True"/>
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
+
+            </dxg:GridControl.Columns>
+            
+            <dxg:GridControl.TotalSummary>
+                <dxg:GridSummaryItem FieldName="AmountVND" SummaryType="Sum" DisplayFormat="Tổng: {0:N0}"/>
+            </dxg:GridControl.TotalSummary>
+        </dxg:GridControl>
+
+        <Border Grid.Row="2" Background="#F0F0F0" Padding="10" Margin="0,10,0,0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <dx:SimpleButton Content="Chấp nhận" Margin="0,0,10,0" Padding="15,5" Click="BtnAccept_Click" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/icon%20builder/actions_check.svg'}"/>
+                <dx:SimpleButton Content="Hủy bỏ" Padding="15,5" Click="BtnCancel_Click" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/icon%20builder/actions_delete.svg'}"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</base:BaseDetailWindow>

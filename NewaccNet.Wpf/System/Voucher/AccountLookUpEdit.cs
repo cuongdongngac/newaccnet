@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows;
 using DevExpress.Xpf.Editors;
 using DevExpress.Xpf.Grid.LookUp;
@@ -19,7 +19,6 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
             this.IsTextEditable = true;
             this.PopupWidth = 500; 
 
-            // Nút 3 chấm
             var btn = new ButtonInfo();
             btn.Content = "...";
             btn.ToolTip = "Chi tiết tài khoản (Mở form phụ)";
@@ -48,7 +47,6 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
             if (this.EditValue == null) return;
             string accountId = this.EditValue.ToString();
 
-            // 1. Xác định context: Đang đứng trên JournalEntryEntity nào?
             JournalEntryEntity currentEntry = null;
             if (this.DataContext is DevExpress.Xpf.Grid.EditGridCellData cellData)
             {
@@ -61,20 +59,17 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
 
             if (currentEntry == null) 
             {
-                // Fallback nếu đang chạy thử độc lập ngoài lưới
                 currentEntry = new JournalEntryEntity(); 
             }
 
-            // 2. Phân tích tính chất tài khoản
             using (var adapter = AppDataAccessAdapter.Create())
             {
                 var account = new ChartOfAccountEntity(accountId);
                 if (adapter.FetchEntity(account))
                 {
-                    // Fallback test
                     if (string.IsNullOrEmpty(account.CategoryId) && (accountId.StartsWith("131") || accountId.StartsWith("331")))
                     {
-                        account.CategoryId = "A"; // Công nợ
+                        account.CategoryId = "A"; 
                     }
 
                     RouteToDetailForm(account, currentEntry);
@@ -88,22 +83,116 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
 
             if (account.CategoryId == "A")
             {
-                // Loại A: Mở Form Công nợ
                 var debtForm = new Details.DebtDetailWindow(entry);
                 if (owner != null) debtForm.Owner = owner;
                 
                 bool? result = debtForm.ShowDialog();
                 if (result == true && owner is VoucherEntryWindow voucherWindow)
                 {
-                    // Lưới tự cập nhật số tiền qua Binding INotifyPropertyChanged
-                    // Nhưng ta cần chủ động gọi tính lại Tổng cân đối (Total Balance) ở màn hình ngoài
                     voucherWindow.CalculateBalance();
                 }
             }
             else if (account.CategoryId == "B")
             {
-                MessageBox.Show($"Tài khoản {account.AccountId} là loại B. Sẽ bật form tiếp theo (Vật tư/Kho) ở giai đoạn sau!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                var materialForm = new Details.MaterialDetailWindow(entry, true);
+                if (owner != null) materialForm.Owner = owner;
+                bool? result = materialForm.ShowDialog();
+                if (result == true && owner is VoucherEntryWindow voucherWindow)
+                {
+                    if (materialForm.VoucherType == "XB") // Xuất bán
+                    {
+                        entry.AccountId = materialForm.SelectedCostAccount;
+                        entry.Dbcr = (short)1;
+                        entry.Amount = materialForm.TotalCostAmount;
+                        
+                        var subCost = new JournalEntryEntity();
+                        subCost.AccountId = account.AccountId; 
+                        subCost.Dbcr = (short)-1;
+                        subCost.Amount = materialForm.TotalCostAmount;
+                        entry.SubEntries.Add(subCost);
+
+                        var revMaster = new JournalEntryEntity();
+                        revMaster.AccountId = materialForm.SelectedTotalAccount; 
+                        revMaster.Dbcr = (short)1;
+                        revMaster.Amount = materialForm.TotalSellAmount + materialForm.TotalTaxAmount;
+                        
+                        var subRev = new JournalEntryEntity();
+                        subRev.AccountId = materialForm.SelectedRevenueAccount; 
+                        subRev.Dbcr = (short)-1;
+                        subRev.Amount = materialForm.TotalSellAmount;
+                        revMaster.SubEntries.Add(subRev);
+                        
+                        if (materialForm.TotalTaxAmount > 0)
+                        {
+                            var subTax = new JournalEntryEntity();
+                            subTax.AccountId = materialForm.SelectedTaxAccount; 
+                            subTax.Dbcr = (short)-1;
+                            subTax.Amount = materialForm.TotalTaxAmount;
+                            revMaster.SubEntries.Add(subTax);
+                        }
+                        
+                        ((System.Collections.IList)voucherWindow.gridLeft.ItemsSource).Add(revMaster);
+                    }
+                    else if (materialForm.VoucherType == "NM") // Nhập mua
+                    {
+                        entry.AccountId = materialForm.SelectedTotalAccount;
+                        entry.Dbcr = (short)-1;
+                        entry.Amount = materialForm.TotalCostAmount + materialForm.TotalTaxAmount;
+                        
+                        var subCost = new JournalEntryEntity();
+                        subCost.AccountId = account.AccountId; 
+                        subCost.Dbcr = (short)1;
+                        subCost.Amount = materialForm.TotalCostAmount;
+                        entry.SubEntries.Add(subCost);
+                        
+                        if (materialForm.TotalTaxAmount > 0)
+                        {
+                            var subTax = new JournalEntryEntity();
+                            subTax.AccountId = materialForm.SelectedTaxAccount; 
+                            subTax.Dbcr = (short)1;
+                            subTax.Amount = materialForm.TotalTaxAmount;
+                            entry.SubEntries.Add(subTax);
+                        }
+                    }
+                    else // Nhập/Xuất nội bộ
+                    {
+                        entry.AccountId = materialForm.SelectedTotalAccount;
+                        entry.Amount = materialForm.TotalCostAmount;
+                        
+                        var subCost = new JournalEntryEntity();
+                        subCost.AccountId = account.AccountId; 
+                        subCost.Dbcr = (short)(entry.Dbcr == 1 ? -1 : 1);
+                        subCost.Amount = materialForm.TotalCostAmount;
+                        entry.SubEntries.Add(subCost);
+                    }
+
+                    voucherWindow.CalculateBalance();
+                    var view = voucherWindow.gridLeft.View as DevExpress.Xpf.Grid.TableView;
+                    if (view != null) 
+                    {
+                        view.CloseEditor();
+                        voucherWindow.gridLeft.RefreshRow(view.FocusedRowHandle);
+                    }
+                }
+            }
+            else if (account.CategoryId == "E")
+            {
+                bool hasTax = account.Taxflag;
+                var costForm = new Details.CostDetailWindow(entry, hasTax);
+                if (owner != null) costForm.Owner = owner;
+                bool? result = costForm.ShowDialog();
+                if (result == true && owner is VoucherEntryWindow voucherWindow)
+                {
+                    voucherWindow.CalculateBalance();
+                    var view = voucherWindow.gridLeft.View as DevExpress.Xpf.Grid.TableView;
+                    if (view != null) 
+                    {
+                        view.CloseEditor();
+                        voucherWindow.gridLeft.RefreshRow(view.FocusedRowHandle);
+                    }
+                }
             }
         }
     }
 }
+

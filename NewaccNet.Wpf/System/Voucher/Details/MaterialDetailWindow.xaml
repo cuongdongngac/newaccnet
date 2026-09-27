@@ -1,0 +1,166 @@
+<Window x:Class="NewaccNet.Wpf.AppSystem.Voucher.Details.MaterialDetailWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+        xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+        xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+        Title="Chi tiết vật tư, hàng hóa" Height="600" Width="900" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- HEADER -->
+        <dxlc:LayoutControl Grid.Row="0" Orientation="Horizontal" Padding="10">
+            <!-- Left Side: Basic Info -->
+            <dxlc:LayoutGroup Orientation="Vertical" Width="300">
+                <dxlc:LayoutItem Label="Loại phiếu">
+                    <dxe:ComboBoxEdit x:Name="cboVoucherType" DisplayMember="Name" ValueMember="Id" EditValueChanged="cboVoucherType_EditValueChanged"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Kho">
+                    <dxg:LookUpEdit x:Name="lueWarehouse" DisplayMember="WarehouseName" ValueMember="WarehouseId" AutoPopulateColumns="False">
+                        <dxg:LookUpEdit.PopupContentTemplate>
+                            <ControlTemplate>
+                                <dxg:GridControl x:Name="PART_GridControl">
+                                    <dxg:GridControl.Columns>
+                                        <dxg:GridColumn FieldName="WarehouseId" Header="Mã Kho" Width="100"/>
+                                        <dxg:GridColumn FieldName="WarehouseName" Header="Tên Kho"/>
+                                    </dxg:GridControl.Columns>
+                                </dxg:GridControl>
+                            </ControlTemplate>
+                        </dxg:LookUpEdit.PopupContentTemplate>
+                    </dxg:LookUpEdit>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Người giao nhận">
+                    <dxe:TextEdit Text="{Binding Carrier}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem>
+                    <dxe:CheckEdit x:Name="chkHasTax" Content="Hoá đơn VAT" IsChecked="{Binding Taxflag, Mode=TwoWay}" Checked="chkHasTax_CheckedChanged" Unchecked="chkHasTax_CheckedChanged"/>
+                </dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+
+            <!-- Right Side: Tax Info -->
+            <dxlc:LayoutGroup x:Name="pnlTaxInfo" Orientation="Vertical" Visibility="Collapsed" Margin="20,0,0,0">
+                <dxlc:LayoutItem Label="Số hóa đơn:">
+                    <dxe:TextEdit Text="{Binding Vatbillno}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Số Seria:">
+                    <dxe:TextEdit Text="{Binding Serialno}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Ngày hóa đơn:">
+                    <dxe:DateEdit EditValue="{Binding Vatbilldate}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="MS người mua bán:">
+                    <dxg:LookUpEdit x:Name="lueVatObject" DisplayMember="Id" ValueMember="Id" EditValue="{Binding Vatobjectid}" AutoPopulateColumns="False" EditValueChanged="lueVatObject_EditValueChanged">
+                        <dxg:LookUpEdit.PopupContentTemplate>
+                            <ControlTemplate>
+                                <dxg:GridControl x:Name="PART_GridControl">
+                                    <dxg:GridControl.Columns>
+                                        <dxg:GridColumn FieldName="Id" Header="Mã số"/>
+                                        <dxg:GridColumn FieldName="CustomerName" Header="Tên đối tượng"/>
+                                    </dxg:GridControl.Columns>
+                                </dxg:GridControl>
+                            </ControlTemplate>
+                        </dxg:LookUpEdit.PopupContentTemplate>
+                    </dxg:LookUpEdit>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Người mua bán:">
+                    <dxe:TextEdit Text="{Binding Vatobjectname}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Địa chỉ:">
+                    <dxe:TextEdit Text="{Binding Vataddress}"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Mã số thuế:">
+                    <dxe:TextEdit Text="{Binding Taxno}"/>
+                </dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+        </dxlc:LayoutControl>
+
+        <!-- DETAILS GRID -->
+        <dxg:GridControl x:Name="GridMaterialDetails" Grid.Row="1" Margin="10,0" ItemsSource="{Binding InventoryVoucherLines}" CustomUnboundColumnData="GridMaterialDetails_CustomUnboundColumnData" AutoGenerateColumns="None">
+            <dxg:GridControl.View>
+                <dxg:TableView x:Name="viewDetails" ShowGroupPanel="False" NewItemRowPosition="Bottom" InitNewRow="viewDetails_InitNewRow" CellValueChanged="viewDetails_CellValueChanged" FocusedRowChanged="viewDetails_FocusedRowChanged"/>
+            </dxg:GridControl.View>
+            <dxg:GridControl.Bands>
+                <dxg:GridControlBand Header="Thông tin chung" HorizontalHeaderContentAlignment="Center">
+                    <dxg:GridColumn FieldName="MaterialId" Header="Mã vật tư" Width="100">
+                        <dxg:GridColumn.EditSettings>
+                            <dxg:LookUpEditSettings x:Name="lueMaterial" DisplayMember="MaterialId" ValueMember="MaterialId" AutoPopulateColumns="False"/>
+                        </dxg:GridColumn.EditSettings>
+                    </dxg:GridColumn>
+                    <dxg:GridColumn FieldName="MaterialName" Header="Tên vật tư" UnboundType="String" Width="150" ReadOnly="True" AllowEditing="False" />
+                    <dxg:GridColumn FieldName="Unit" Header="Đơn vị tính" UnboundType="String" Width="80" ReadOnly="True" AllowEditing="False" />
+                    <dxg:GridColumn FieldName="Quantity" Header="Số lượng" Width="100">
+                        <dxg:GridColumn.EditSettings>
+                            <dxe:TextEditSettings MaskType="Numeric" Mask="n2" MaskUseAsDisplayFormat="True"/>
+                        </dxg:GridColumn.EditSettings>
+                    </dxg:GridColumn>
+                </dxg:GridControlBand>
+                <dxg:GridControlBand Header="Giá vốn" HorizontalHeaderContentAlignment="Center">
+                    <dxg:GridColumn FieldName="Price" Header="Đơn giá" Width="100">
+                        <dxg:GridColumn.EditSettings>
+                            <dxe:TextEditSettings MaskType="Numeric" Mask="n0" MaskUseAsDisplayFormat="True"/>
+                        </dxg:GridColumn.EditSettings>
+                    </dxg:GridColumn>
+                    <dxg:GridColumn FieldName="Amount" Header="Thành tiền" UnboundType="Decimal" Width="120" ReadOnly="True" AllowEditing="False">
+                        <dxg:GridColumn.EditSettings>
+                            <dxe:TextEditSettings MaskType="Numeric" Mask="n0" MaskUseAsDisplayFormat="True"/>
+                        </dxg:GridColumn.EditSettings>
+                    </dxg:GridColumn>
+                </dxg:GridControlBand>
+                <dxg:GridControlBand x:Name="bandSalesAndTax" Header="Giá bán &amp; Thuế" HorizontalHeaderContentAlignment="Center" Visible="False">
+                    <dxg:GridColumn FieldName="MaterialTaxLine.SellPrice" Header="Đơn giá bán" Width="100">
+                        <dxg:GridColumn.EditSettings>
+                            <dxe:TextEditSettings MaskType="Numeric" Mask="n0" MaskUseAsDisplayFormat="True"/>
+                        </dxg:GridColumn.EditSettings>
+                    </dxg:GridColumn>
+                    <dxg:GridColumn FieldName="SellAmount" Header="Tiền bán" UnboundType="Decimal" Width="120" ReadOnly="True" AllowEditing="False">
+                        <dxg:GridColumn.EditSettings>
+                            <dxe:TextEditSettings MaskType="Numeric" Mask="n0" MaskUseAsDisplayFormat="True"/>
+                        </dxg:GridColumn.EditSettings>
+                    </dxg:GridColumn>
+                    <dxg:GridColumn FieldName="MaterialTaxLine.Taxrateid" Header="% Thuế" Width="80">
+                        <dxg:GridColumn.EditSettings>
+                            <dxg:LookUpEditSettings x:Name="lueTaxRate" DisplayMember="Rate" ValueMember="Taxrateid" AutoPopulateColumns="False"/>
+                        </dxg:GridColumn.EditSettings>
+                    </dxg:GridColumn>
+                    <dxg:GridColumn FieldName="TaxAmount" Header="Tiền thuế" UnboundType="Decimal" Width="120" ReadOnly="True" AllowEditing="False">
+                        <dxg:GridColumn.EditSettings>
+                            <dxe:TextEditSettings MaskType="Numeric" Mask="n0" MaskUseAsDisplayFormat="True"/>
+                        </dxg:GridColumn.EditSettings>
+                    </dxg:GridColumn>
+                </dxg:GridControlBand>
+            </dxg:GridControl.Bands>
+        </dxg:GridControl>
+
+        <!-- FOOTER SUMMARY -->
+        <dxlc:LayoutControl Grid.Row="2" Orientation="Horizontal" Padding="10">
+            <dxlc:LayoutGroup Orientation="Horizontal">
+                <dxlc:LayoutItem Label="Tiền gốc:" HorizontalAlignment="Left">
+                    <dxe:TextEdit x:Name="txtTotalCost" IsReadOnly="True" MaskType="Numeric" Mask="n0" MaskUseAsDisplayFormat="True" Width="150"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Tiền bán:" HorizontalAlignment="Left" x:Name="itemTotalSell" Visibility="Collapsed">
+                    <dxe:TextEdit x:Name="txtTotalSell" IsReadOnly="True" MaskType="Numeric" Mask="n0" MaskUseAsDisplayFormat="True" Width="150"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Thuế:" HorizontalAlignment="Left" x:Name="itemTotalTax" Visibility="Collapsed">
+                    <dxe:TextEdit x:Name="txtTotalTax" IsReadOnly="True" MaskType="Numeric" Mask="n0" MaskUseAsDisplayFormat="True" Width="150"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Tổng (Bán+Thuế):" HorizontalAlignment="Left" x:Name="itemTotalAll" Visibility="Collapsed">
+                    <dxe:TextEdit x:Name="txtTotalAll" IsReadOnly="True" MaskType="Numeric" Mask="n0" MaskUseAsDisplayFormat="True" Width="150" FontWeight="Bold"/>
+                </dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+        </dxlc:LayoutControl>
+
+        <!-- BUTTONS -->
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+            <Button x:Name="BtnAccept" Content="Chấp nhận" Width="100" Height="30" Margin="0,0,10,0" Click="BtnAccept_Click"/>
+            <Button x:Name="BtnCancel" Content="Bỏ qua" Width="100" Height="30" Click="BtnCancel_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>
+
+

@@ -19,6 +19,7 @@ namespace NewaccNet.Wpf.Views.Base
 
         public virtual void LoadData() { }
         public virtual void Save() { }
+        public virtual void Delete() { }
         public virtual void Refresh() { }
         public virtual void Print() { }
         public virtual bool ValidateData() { return true; }

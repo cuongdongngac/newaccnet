@@ -1,0 +1,163 @@
+<base:BaseDetailWindow x:Class="NewaccNet.Wpf.AppSystem.Voucher.Details.CostDetailWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+        xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+        xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+        xmlns:base="clr-namespace:NewaccNet.Wpf.Views.Base"
+        Title="Chi tiết chi phí" Height="600" Width="1000" WindowStartupLocation="CenterScreen">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="6*"/>
+            <ColumnDefinition Width="4*" x:Name="colTax"/>
+        </Grid.ColumnDefinitions>
+
+        <dxlc:LayoutControl Grid.Row="0" Grid.ColumnSpan="2" Padding="10">
+            <dxlc:LayoutGroup Orientation="Horizontal">
+                <dxlc:LayoutItem Label="Tài khoản:" Width="150">
+                    <TextBlock Text="{Binding AccountId}" FontWeight="Bold" Foreground="#1976D2"/>
+                </dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+        </dxlc:LayoutControl>
+
+        <dxg:GridControl x:Name="GridCostDetails" Grid.Row="1" Grid.Column="0" Margin="10,0" ItemsSource="{Binding CostDetails}" CustomUnboundColumnData="GridCostDetails_CustomUnboundColumnData">
+            <dxg:GridControl.View>
+                <base:AppDetailTableView x:Name="TableViewCost" ShowGroupPanel="False" NewItemRowPosition="Bottom" 
+                               ShowTotalSummary="True" AlternateRowBackground="#FFF5F5F5" 
+                               InitNewRow="TableViewCost_InitNewRow" FocusedRowChanged="TableViewCost_FocusedRowChanged" CellValueChanged="TableViewCost_CellValueChanged"/>
+            </dxg:GridControl.View>
+            <dxg:GridControl.Columns>
+                <dxg:GridColumn FieldName="CostObjectId" Header="Đối tượng chi phí" Width="120">
+                    <dxg:GridColumn.EditSettings>
+                        <dxg:LookUpEditSettings x:Name="lookupCostObject" DisplayMember="Id" ValueMember="Id" AutoPopulateColumns="False" PopupWidth="300">
+                            <dxg:LookUpEditSettings.PopupContentTemplate>
+                                <ControlTemplate>
+                                    <dxg:GridControl Name="PART_GridControl">
+                                        <dxg:GridControl.Columns>
+                                            <dxg:GridColumn FieldName="Id" Header="Mã ĐT" Width="100"/>
+                                            <dxg:GridColumn FieldName="ObjectName" Header="Tên đối tượng" Width="200"/>
+                                        </dxg:GridControl.Columns>
+                                    </dxg:GridControl>
+                                </ControlTemplate>
+                            </dxg:LookUpEditSettings.PopupContentTemplate>
+                        </dxg:LookUpEditSettings>
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
+                
+                <dxg:GridColumn FieldName="CostObjectName" Header="Tên đối tượng" UnboundType="String" Width="150" ReadOnly="True" AllowEditing="False" />
+                <dxg:GridColumn FieldName="CostElementId" Header="Yếu tố chi phí" Width="120">
+                    <dxg:GridColumn.EditSettings>
+                        <dxg:LookUpEditSettings x:Name="lookupCostElement" DisplayMember="Id" ValueMember="Id" AutoPopulateColumns="False" PopupWidth="300">
+                            <dxg:LookUpEditSettings.PopupContentTemplate>
+                                <ControlTemplate>
+                                    <dxg:GridControl Name="PART_GridControl">
+                                        <dxg:GridControl.Columns>
+                                            <dxg:GridColumn FieldName="Id" Header="Mã YT" Width="100"/>
+                                            <dxg:GridColumn FieldName="ElementName" Header="Tên yếu tố" Width="200"/>
+                                        </dxg:GridControl.Columns>
+                                    </dxg:GridControl>
+                                </ControlTemplate>
+                            </dxg:LookUpEditSettings.PopupContentTemplate>
+                        </dxg:LookUpEditSettings>
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
+
+                <dxg:GridColumn FieldName="CostElementName" Header="Tên yếu tố" UnboundType="String" Width="150" ReadOnly="True" AllowEditing="False" />
+                <dxg:GridColumn FieldName="Amount" Header="Số tiền" Width="150">
+                    <dxg:GridColumn.EditSettings>
+                        <dxe:TextEditSettings MaskType="Numeric" Mask="N0" MaskUseAsDisplayFormat="True"/>
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
+            </dxg:GridControl.Columns>
+            
+            <dxg:GridControl.TotalSummary>
+                <dxg:GridSummaryItem FieldName="Amount" SummaryType="Sum" DisplayFormat="Tổng: {0:N0}"/>
+            </dxg:GridControl.TotalSummary>
+        </dxg:GridControl>
+
+        <!-- Khung nhập Thuế bên phải -->
+        <Border x:Name="pnlTax" Grid.Row="1" Grid.Column="1" Background="#F9F9F9" BorderBrush="#DDDDDD" BorderThickness="1" Margin="0,0,10,0" Padding="10">
+            <dxlc:LayoutControl Orientation="Vertical" DataContext="{Binding ElementName=GridCostDetails, Path=SelectedItem.ExpenseTaxLine}">
+                <dxlc:LayoutGroup Header="Thông tin thuế VAT" View="GroupBox" Orientation="Vertical">
+                    <dxlc:LayoutItem Label="MS người mua bán:">
+                        <dxg:LookUpEdit x:Name="lookupVatObject" DisplayMember="Id" ValueMember="Id" EditValue="{Binding Vatobjectid, UpdateSourceTrigger=PropertyChanged}" AutoPopulateColumns="False" EditValueChanged="lookupVatObject_EditValueChanged">
+                            <dxg:LookUpEdit.PopupContentTemplate>
+                                <ControlTemplate>
+                                    <dxg:GridControl Name="PART_GridControl">
+                                        <dxg:GridControl.Columns>
+                                            <dxg:GridColumn FieldName="Id" Header="Mã ĐT" Width="100"/>
+                                            <dxg:GridColumn FieldName="CustomerName" Header="Tên đối tượng" Width="200"/>
+                                        </dxg:GridControl.Columns>
+                                    </dxg:GridControl>
+                                </ControlTemplate>
+                            </dxg:LookUpEdit.PopupContentTemplate>
+                        </dxg:LookUpEdit>
+                    </dxlc:LayoutItem>
+                    
+                    <dxlc:LayoutItem Label="Người mua bán:">
+                        <dxe:TextEdit EditValue="{Binding Vatobjectname, UpdateSourceTrigger=PropertyChanged}"/>
+                    </dxlc:LayoutItem>
+                    
+                    <dxlc:LayoutItem Label="Mã số thuế:">
+                        <dxe:TextEdit EditValue="{Binding Taxno, UpdateSourceTrigger=PropertyChanged}"/>
+                    </dxlc:LayoutItem>
+
+                    <dxlc:LayoutItem Label="Địa chỉ:">
+                        <dxe:TextEdit EditValue="{Binding Vataddress, UpdateSourceTrigger=PropertyChanged}"/>
+                    </dxlc:LayoutItem>
+
+                    <dxlc:LayoutItem Label="Số hóa đơn:">
+                        <dxe:TextEdit EditValue="{Binding Vatbillno, UpdateSourceTrigger=PropertyChanged}"/>
+                    </dxlc:LayoutItem>
+
+                    <dxlc:LayoutItem Label="Ngày HĐ:">
+                        <dxe:DateEdit EditValue="{Binding Vatbilldate, UpdateSourceTrigger=PropertyChanged}"/>
+                    </dxlc:LayoutItem>
+
+                    <dxlc:LayoutItem Label="Mức thuế suất:">
+                        <dxg:LookUpEdit x:Name="lookupTaxRate" DisplayMember="Taxrateid" ValueMember="Taxrateid" EditValue="{Binding Taxrateid, UpdateSourceTrigger=PropertyChanged}" AutoPopulateColumns="False" EditValueChanged="lookupTaxRate_EditValueChanged">
+                            <dxg:LookUpEdit.PopupContentTemplate>
+                                <ControlTemplate>
+                                    <dxg:GridControl Name="PART_GridControl">
+                                        <dxg:GridControl.Columns>
+                                            <dxg:GridColumn FieldName="Taxrateid" Header="Mã thuế" Width="80"/>
+                                            <dxg:GridColumn FieldName="Rate" Header="Thuế suất %" Width="100"/>
+                                        </dxg:GridControl.Columns>
+                                    </dxg:GridControl>
+                                </ControlTemplate>
+                            </dxg:LookUpEdit.PopupContentTemplate>
+                        </dxg:LookUpEdit>
+                    </dxlc:LayoutItem>
+                    
+                    <dxlc:LayoutItem Label="Mức thuế suất:">
+                        <dxe:TextEdit EditValue="{Binding Rate, UpdateSourceTrigger=PropertyChanged}" MaskType="Numeric" Mask="N0" MaskUseAsDisplayFormat="True" IsReadOnly="True"/>
+                    </dxlc:LayoutItem>
+                </dxlc:LayoutGroup>
+            </dxlc:LayoutControl>
+        </Border>
+
+        <Border Grid.Row="2" Grid.ColumnSpan="2" Background="#F0F0F0" Padding="10" Margin="0,10,0,0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <dx:SimpleButton Content="Chấp nhận" Margin="0,0,10,0" Padding="15,5" Click="BtnAccept_Click" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/icon%20builder/actions_check.svg'}"/>
+                <dx:SimpleButton Content="Hủy bỏ" Padding="15,5" Click="BtnCancel_Click" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/icon%20builder/actions_delete.svg'}"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</base:BaseDetailWindow>
+
+
+
+
+
+
+
+
+

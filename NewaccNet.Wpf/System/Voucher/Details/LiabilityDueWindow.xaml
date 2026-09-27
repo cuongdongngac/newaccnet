@@ -1,9 +1,10 @@
-﻿<dx:ThemedWindow x:Class="NewaccNet.Wpf.AppSystem.Voucher.Details.LiabilityDueWindow"
+<base:BaseDetailWindow x:Class="NewaccNet.Wpf.AppSystem.Voucher.Details.LiabilityDueWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
         xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
         xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+        xmlns:base="clr-namespace:NewaccNet.Wpf.Views.Base"
         Title="Thời hạn công nợ (Cam kết)" Height="380" Width="450" WindowStartupLocation="CenterOwner" ShowIcon="False" ResizeMode="NoResize">
     
     <Grid Background="#F8F8F8">
@@ -13,7 +14,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Tiêu đề (Tên đối tượng, Tên công trình/nội dung) -->
+        <!-- Tiêu đề -->
         <Border Grid.Row="0" BorderBrush="#E0E0E0" BorderThickness="0,0,0,1" Padding="15,10">
             <StackPanel>
                 <TextBlock x:Name="txtPartnerName" Text="Tên đối tượng..." Foreground="Blue" FontWeight="Bold" FontSize="13" TextWrapping="Wrap"/>
@@ -21,44 +22,54 @@
             </StackPanel>
         </Border>
 
-        <!-- Form nhập liệu -->
-        <dxlc:LayoutControl Grid.Row="1" Orientation="Vertical" Padding="20">
-            <dxlc:LayoutItem Label="Từ ngày:" >
-                <dxe:DateEdit EditValue="{Binding BeginDate, UpdateSourceTrigger=PropertyChanged}"  Mask="dd/MM/yyyy"/>
-            </dxlc:LayoutItem>
-            
-            <dxlc:LayoutItem Label="Đến ngày:"  Margin="0,10,0,0">
-                <dxe:DateEdit EditValue="{Binding EndDate, UpdateSourceTrigger=PropertyChanged}"  Mask="dd/MM/yyyy"/>
-            </dxlc:LayoutItem>
-            
-            <dxlc:LayoutItem Label="Lãi suất:"  Margin="0,10,0,0">
-                <dxe:TextEdit EditValue="{Binding Interestrate, UpdateSourceTrigger=PropertyChanged}" MaskType="Numeric" Mask="N2" MaskUseAsDisplayFormat="True"/>
-            </dxlc:LayoutItem>
+        <!-- Form nhập liệu - dùng TextBox thuần WPF cho số, tránh mọi mask quirk của DevExpress -->
+        <Grid Grid.Row="1" Margin="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="32"/>
+                <RowDefinition Height="32"/>
+                <RowDefinition Height="32"/>
+                <RowDefinition Height="32"/>
+                <RowDefinition Height="32"/>
+                <RowDefinition Height="32"/>
+                <RowDefinition Height="32"/>
+            </Grid.RowDefinitions>
 
-            <dxlc:LayoutItem Label="% Khấu trừ:"  Margin="0,10,0,0">
-                <dxe:TextEdit EditValue="{Binding Feedbackrate, UpdateSourceTrigger=PropertyChanged}" MaskType="Numeric" Mask="N2" MaskUseAsDisplayFormat="True"/>
-            </dxlc:LayoutItem>
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Từ ngày:" VerticalAlignment="Center"/>
+            <dxe:DateEdit Grid.Row="0" Grid.Column="1" EditValue="{Binding BeginDate, UpdateSourceTrigger=PropertyChanged}" Mask="dd/MM/yyyy" Margin="0,2"/>
 
-            <dxlc:LayoutItem Label="Vat đầu ra:"  Margin="0,10,0,0">
-                <dxe:TextEdit EditValue="{Binding Outvatrate, UpdateSourceTrigger=PropertyChanged}" MaskType="Numeric" Mask="N2" MaskUseAsDisplayFormat="True"/>
-            </dxlc:LayoutItem>
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Đến ngày:" VerticalAlignment="Center"/>
+            <dxe:DateEdit Grid.Row="1" Grid.Column="1" EditValue="{Binding EndDate, UpdateSourceTrigger=PropertyChanged}" Mask="dd/MM/yyyy" Margin="0,2"/>
 
-            <dxlc:LayoutItem Label="Kết thúc:"  Margin="0,10,0,0">
-                <dxe:CheckEdit EditValue="{Binding Settledflag, UpdateSourceTrigger=PropertyChanged}"/>
-            </dxlc:LayoutItem>
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Lãi suất (%):" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="2" Grid.Column="1" x:Name="txtInterestrate" Margin="0,2" Padding="4,2"
+                     LostFocus="NumericField_LostFocus" Tag="Interestrate"
+                     Style="{StaticResource {x:Type TextBox}}"/>
 
-            <dxlc:LayoutItem Label="Ghi chú:"  Margin="0,10,0,0">
-                <dxe:TextEdit EditValue="{Binding Remark, UpdateSourceTrigger=PropertyChanged}"/>
-            </dxlc:LayoutItem>
-        </dxlc:LayoutControl>
+            <TextBlock Grid.Row="3" Grid.Column="0" Text="% Khấu trừ:" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="3" Grid.Column="1" x:Name="txtFeedbackrate" Margin="0,2" Padding="4,2"
+                     LostFocus="NumericField_LostFocus" Tag="Feedbackrate"/>
+
+            <TextBlock Grid.Row="4" Grid.Column="0" Text="VAT đầu ra (%):" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="4" Grid.Column="1" x:Name="txtOutvatrate" Margin="0,2" Padding="4,2"
+                     LostFocus="NumericField_LostFocus" Tag="Outvatrate"/>
+
+            <TextBlock Grid.Row="5" Grid.Column="0" Text="Kết thúc:" VerticalAlignment="Center"/>
+            <dxe:CheckEdit Grid.Row="5" Grid.Column="1" EditValue="{Binding Settledflag, UpdateSourceTrigger=PropertyChanged}" Margin="0,2"/>
+
+            <TextBlock Grid.Row="6" Grid.Column="0" Text="Ghi chú:" VerticalAlignment="Center"/>
+            <dxe:TextEdit Grid.Row="6" Grid.Column="1" EditValue="{Binding Remark, UpdateSourceTrigger=PropertyChanged}" Margin="0,2"/>
+        </Grid>
 
         <!-- Buttons -->
         <Border Grid.Row="2" Background="#EAEAEA" Padding="10">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <!-- <dx:SimpleButton Content="Xóa" Width="80" Margin="0,0,10,0" Click="BtnDelete_Click" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/icon%20builder/actions_delete.svg'}"/> -->
-                <dx:SimpleButton Content="Lưu" Width="90" Margin="0,0,10,0" Click="BtnSave_Click" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/save/save.svg'}"/>
-                <dx:SimpleButton Content="Kết thúc" Width="90" Click="BtnClose_Click" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/icon%20builder/actions_delete.svg'}"/>
+                <dx:SimpleButton Content="Chấp nhận" Padding="15,5" Margin="0,0,10,0" Click="BtnAccept_Click" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/icon%20builder/actions_check.svg'}"/>
+                <dx:SimpleButton Content="Hủy bỏ" Padding="15,5" Click="BtnCancel_Click" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/icon%20builder/actions_delete.svg'}"/>
             </StackPanel>
         </Border>
     </Grid>
-</dx:ThemedWindow>
+</base:BaseDetailWindow>
