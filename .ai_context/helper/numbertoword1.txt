@@ -1,0 +1,138 @@
+using System;
+using System.Text;
+
+class Program
+{
+    // Arrays for basic digits and scale units
+    private static readonly string[] Digits = { "không", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín" };
+    private static readonly string[] ScaleUnits = { "", "nghìn", "triệu", "tỷ" };
+
+    static void Main(string[] args)
+    {
+        // Configure console to display Vietnamese characters correctly
+        Console.OutputEncoding = Encoding.UTF8;
+        Console.InputEncoding = Encoding.UTF8;
+
+        // Test cases with various large numbers
+        long[] testNumbers = { 0, 5, 15, 21, 105, 2405, 100004, 123456789, 900000000012 };
+
+        Console.WriteLine("--- NUMBER TO WORDS CONVERTER ---");
+        foreach (var num in testNumbers)
+        {
+            Console.WriteLine($"{num,15} -> {ConvertNumberToWords(num)}");
+        }
+
+        // Interactive user input
+        Console.Write("\nEnter any integer to test: ");
+        if (long.TryParse(Console.ReadLine(), out long userInput))
+        {
+            Console.WriteLine($"Result: {ConvertNumberToWords(userInput)}");
+        }
+        else
+        {
+            Console.WriteLine("Invalid number entered!");
+        }
+    }
+
+    /// <summary>
+    /// Core method to convert a large integer into Vietnamese words
+    /// </summary>
+    public static string ConvertNumberToWords(long number)
+    {
+        if (number == 0) return "Không";
+
+        string prefix = "";
+        if (number < 0)
+        {
+            prefix = "Âm ";
+            number = Math.Abs(number);
+        }
+
+        string result = "";
+        int scaleIndex = 0;
+
+        // Process the number in groups of 3 digits from right to left
+        while (number > 0)
+        {
+            int triplet = (int)(number % 1000);
+            number /= 1000;
+
+            if (triplet > 0)
+            {
+                // Only show "không trăm" if there are more significant digits ahead
+                bool showZeroHundred = (number > 0);
+                string tripletText = ConvertTripletToWords(triplet, showZeroHundred);
+                
+                result = tripletText + " " + ScaleUnits[scaleIndex] + " " + result;
+            }
+            // Special handling for the "Tỷ" (Billion) boundary
+            else if (scaleIndex == 3 && number > 0) 
+            {
+                result = ScaleUnits[scaleIndex] + " " + result;
+            }
+
+            scaleIndex++;
+            // Wrap around the scale index if the number exceeds billions (e.g., thousands of billions)
+            if (scaleIndex > 3 && number > 0) scaleIndex = 1; 
+        }
+
+        // Capitalize the first letter and trim extra spaces
+        result = prefix + result.Trim();
+        return char.ToUpper(result[0]) + result.Substring(1);
+    }
+
+    /// <summary>
+    /// Processes a 3-digit group (e.g., 105 -> một trăm linh năm)
+    /// </summary>
+    private static string ConvertTripletToWords(int triplet, bool showZeroHundred)
+    {
+        int hundreds = triplet / 100;
+        int tens = (triplet % 100) / 10;
+        int ones = triplet % 10;
+
+        StringBuilder sb = new StringBuilder();
+
+        // 1. Handle Hundreds place
+        if (hundreds > 0 || showZeroHundred)
+        {
+            sb.Append(Digits[hundreds]).Append(" trăm ");
+        }
+
+        // 2. Handle Tens place
+        if (tens > 1)
+        {
+            sb.Append(Digits[tens]).Append(" mươi ");
+        }
+        else if (tens == 1)
+        {
+            sb.Append("mười ");
+        }
+        else if (tens == 0 && ones > 0)
+        {
+            // If hundreds place is rendered but tens is zero, insert "linh" or "lẻ"
+            if (hundreds > 0 || showZeroHundred)
+            {
+                sb.Append("linh "); 
+            }
+        }
+
+        // 3. Handle Ones place with grammar variations
+        if (ones > 0)
+        {
+            if (ones == 1 && tens > 1)
+            {
+                sb.Append("mốt"); 
+            }
+            else if (ones == 5 && tens > 0)
+            {
+                sb.Append("lăm"); 
+            }
+            else
+            {
+                sb.Append(Digits[ones]);
+            }
+        }
+
+        return sb.ToString().Trim();
+    }
+}

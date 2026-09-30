@@ -1,4 +1,4 @@
-using System.Windows;
+﻿using System.Windows;
 using DevExpress.Xpf.Core;
 using DevExpress.Xpf.Grid;
 using DataAccess.EntityClasses;
@@ -23,7 +23,6 @@ namespace NewaccNet.Wpf.AppSystem.Directory
                 {
                     var items = new EntityCollection<SourceEntity>();
                     adapter.FetchEntityCollection(items, null);
-                    // Dùng trực tiếp binding collection để Grid có thể thêm mới dễ dàng
                     gridControl.ItemsSource = items;
                 }
             }
@@ -39,14 +38,49 @@ namespace NewaccNet.Wpf.AppSystem.Directory
 
         private void TableView_RowUpdated(object sender, RowEventArgs e)
         {
-            var entity = e.Row as SourceEntity;
-            if (entity == null) return;
+            SaveEntity(e.Row as SourceEntity, showEmptyCodeWarning: true);
+        }
 
-            // Kiểm tra điều kiện bắt buộc
+        private void MenuSave_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+        {
+            gridControl.View.CommitEditing();
+
+            var dataSource = gridControl.ItemsSource as EntityCollection<SourceEntity>;
+            if (dataSource == null)
+            {
+                return;
+            }
+
+            foreach (var entity in dataSource)
+            {
+                if (!entity.IsNew && !entity.IsDirty)
+                {
+                    continue;
+                }
+
+                if (!SaveEntity(entity, showEmptyCodeWarning: true))
+                {
+                    return;
+                }
+            }
+
+            MessageBox.Show("Lưu thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private bool SaveEntity(SourceEntity entity, bool showEmptyCodeWarning)
+        {
+            if (entity == null)
+            {
+                return false;
+            }
+
             if (string.IsNullOrWhiteSpace(entity.Srcode))
             {
-                MessageBox.Show("Mã nguồn không được để trống!", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
+                if (showEmptyCodeWarning)
+                {
+                    MessageBox.Show("Mã nguồn không được để trống!", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+                return false;
             }
 
             try
@@ -55,11 +89,13 @@ namespace NewaccNet.Wpf.AppSystem.Directory
                 {
                     adapter.SaveEntity(entity, true, false);
                 }
+                return true;
             }
             catch (System.Exception ex)
             {
                 MessageBox.Show("Lỗi lưu dữ liệu: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-                LoadData(); // Load lại nếu lỗi để reset grid
+                LoadData();
+                return false;
             }
         }
 

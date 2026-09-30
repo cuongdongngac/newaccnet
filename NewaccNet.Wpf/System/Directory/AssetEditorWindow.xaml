@@ -1,0 +1,164 @@
+<base:BaseWindow 
+    x:Class="NewaccNet.Wpf.AppSystem.Directory.AssetEditorWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+    xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+    xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+    xmlns:dxt="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:base="clr-namespace:NewaccNet.Wpf.Views.Base"
+    Title="Thông tin Tài sản Cố định" Height="780" Width="1240" WindowStartupLocation="CenterOwner" ResizeMode="CanMinimize" ShowInTaskbar="False">
+    
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <dxt:DXTabControl Grid.Row="0" >
+            <dxt:DXTabItem Header="1. Thông tin chung tài sản">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Border Padding="10" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="4" Margin="4">
+                        <dxlc:LayoutControl>
+                            <dxlc:LayoutGroup Orientation="Vertical" View="GroupBox" IsCollapsible="False" Header="Thông tin Thẻ Tài Sản">
+                                <dxlc:LayoutGroup Orientation="Horizontal">
+                                    <dxlc:LayoutItem Label="Mã tài sản: (*)" LabelPosition="Left" Width="420">
+                                        <dxe:TextEdit x:Name="txtAssetId" Height="25" MaxLength="10"/>
+                                    </dxlc:LayoutItem>
+                                    <dxlc:LayoutItem Label="Số thẻ / Bút tệp:" LabelPosition="Left">
+                                        <dxe:TextEdit x:Name="txtAssetHandle" Height="25" MaxLength="10"/>
+                                    </dxlc:LayoutItem>
+                                </dxlc:LayoutGroup>
+                                <dxlc:LayoutItem Label="Tên tài sản: (*)" LabelPosition="Left">
+                                    <dxe:TextEdit x:Name="txtAssetName" Height="25" MaxLength="50"/>
+                                </dxlc:LayoutItem>
+                                <dxlc:LayoutGroup Orientation="Horizontal">
+                                    <dxlc:LayoutItem Label="Đơn vị tính:" LabelPosition="Left" Width="420">
+                                        <dxe:TextEdit x:Name="txtUnit" Height="25" MaxLength="10"/>
+                                    </dxlc:LayoutItem>
+                                    <dxlc:LayoutItem Label="Nước sản xuất / Nguồn gốc:" LabelPosition="Left">
+                                        <dxe:TextEdit x:Name="txtCountry" Height="25" MaxLength="50"/>
+                                    </dxlc:LayoutItem>
+                                </dxlc:LayoutGroup>
+                                <dxlc:LayoutGroup Orientation="Horizontal">
+                                    <dxlc:LayoutItem Label="Ngày nhập / Bắt đầu SD:" LabelPosition="Left" Width="420">
+                                        <dxe:DateEdit x:Name="dtDate" Height="25" MaskUseAsDisplayFormat="True"/>
+                                    </dxlc:LayoutItem>
+                                    <dxlc:LayoutItem Label="Thời gian sử dụng (Tháng):" LabelPosition="Left">
+                                        <dxe:TextEdit x:Name="txtTimeUsing" Height="25" MaskType="Numeric" Mask="N0" MaskUseAsDisplayFormat="True"/>
+                                    </dxlc:LayoutItem>
+                                </dxlc:LayoutGroup>
+                                <dxlc:LayoutGroup Orientation="Horizontal">
+                                    <dxlc:LayoutItem Label="Nguyên giá (Đơn giá):" LabelPosition="Left" Width="420">
+                                        <dxe:TextEdit x:Name="txtPrice" Height="25" MaskType="Numeric" Mask="N0" MaskUseAsDisplayFormat="True"/>
+                                    </dxlc:LayoutItem>
+                                    <dxlc:LayoutItem Label="Số lượng ban đầu:" LabelPosition="Left">
+                                        <dxe:TextEdit x:Name="txtQty" Height="25" MaskType="Numeric" Mask="N2" MaskUseAsDisplayFormat="True"/>
+                                    </dxlc:LayoutItem>
+                                </dxlc:LayoutGroup>
+                            </dxlc:LayoutGroup>
+                        </dxlc:LayoutControl>
+                    </Border>
+                </ScrollViewer>
+            </dxt:DXTabItem>
+
+            <dxt:DXTabItem Header="2. Luân chuyển / Theo dõi sử dụng">
+                <Grid Margin="4">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <dxb:ToolBarControl Grid.Row="0" AllowCustomizationMenu="False" AllowHide="False" AllowQuickCustomization="False" Margin="0,0,0,8">
+                        <dxb:BarButtonItem Content="Thêm dòng" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_new.svg'}" ItemClick="BtnAddTracking_ItemClick"/>
+                        <dxb:BarButtonItem Content="Xóa dòng" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_delete.svg'}" ItemClick="BtnDeleteTracking_ItemClick"/>
+                        <dxb:BarItemLinkSeparator/>
+                        <dxb:BarButtonItem Content="Lưu tạm (Commit dòng)" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_save.svg'}" ItemClick="BtnSaveTracking_ItemClick"/>
+                        <dxb:BarButtonItem Content="Làm mới luân chuyển" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_refresh.svg'}" ItemClick="BtnRefreshTracking_ItemClick"/>
+                        <dxb:BarItemLinkSeparator/>
+                        <dxb:BarButtonItem Content="Mở rộng cột" ItemClick="BtnBestFit_ItemClick"/>
+                    </dxb:ToolBarControl>
+                    <dxg:GridControl x:Name="gridTracking" Grid.Row="1" AutoGenerateColumns="None" SelectionMode="Row">
+                        <dxg:GridControl.View>
+                            <dxg:TableView ShowGroupPanel="False" ShowSearchPanelMode="Always" ShowAutoFilterRow="False"
+                                           AllowEditing="True" NewItemRowPosition="Bottom" 
+                                           RowUpdated="TableView_RowUpdated" 
+                                           InitNewRow="TableView_InitNewRow"
+                                           ShowTotalSummary="True">
+                            </dxg:TableView>
+                        </dxg:GridControl.View>
+                        <dxg:GridControl.Columns>
+                            <dxg:GridColumn FieldName="Deptid" Header="Bộ phận SD" Width="170">
+                                <dxg:GridColumn.EditSettings>
+                                    <dxe:ComboBoxEditSettings x:Name="cboDept" ValueMember="Deptid" DisplayMember="DeptName" AutoComplete="True" ImmediatePopup="True"/>
+                                </dxg:GridColumn.EditSettings>
+                            </dxg:GridColumn>
+                            <dxg:GridColumn FieldName="Begindate" Header="Ngày BĐ SD" Width="130" FixedWidth="True">
+                                <dxg:GridColumn.EditSettings>
+                                    <dxe:DateEditSettings MaskUseAsDisplayFormat="True"/>
+                                </dxg:GridColumn.EditSettings>
+                            </dxg:GridColumn>
+                            <dxg:GridColumn FieldName="Enddate" Header="Ngày KT SD" Width="200">
+                                <dxg:GridColumn.EditSettings>
+                                    <dxe:DateEditSettings MaskUseAsDisplayFormat="True"/>
+                                </dxg:GridColumn.EditSettings>
+                            </dxg:GridColumn>
+
+                            <dxg:GridColumn FieldName="ExobjectId" Header="Đối tượng CP" Width="170">
+                                <dxg:GridColumn.EditSettings>
+                                    <dxe:ComboBoxEditSettings x:Name="cboCostObj" ValueMember="Id" DisplayMember="ObjectName" AutoComplete="True" ImmediatePopup="True"/>
+                                </dxg:GridColumn.EditSettings>
+                            </dxg:GridColumn>
+                            <dxg:GridColumn FieldName="AsaccountId" Header="TK Tài Sản" Width="140">
+                                <dxg:GridColumn.EditSettings>
+                                    <dxe:ComboBoxEditSettings x:Name="cboAsAcct" ValueMember="AccountId" DisplayMember="AccountName" AutoComplete="True" ImmediatePopup="True"/>
+                                </dxg:GridColumn.EditSettings>
+                            </dxg:GridColumn>
+                            <dxg:GridColumn FieldName="ExaccountId" Header="TK Hao Mòn" Width="140">
+                                <dxg:GridColumn.EditSettings>
+                                    <dxe:ComboBoxEditSettings x:Name="cboExAcct" ValueMember="AccountId" DisplayMember="AccountName" AutoComplete="True" ImmediatePopup="True"/>
+                                </dxg:GridColumn.EditSettings>
+                            </dxg:GridColumn>
+                            <dxg:GridColumn FieldName="Qty" Header="SL" Width="90" FixedWidth="True">
+                                <dxg:GridColumn.EditSettings>
+                                    <dxe:TextEditSettings MaskType="Numeric" Mask="N2" MaskUseAsDisplayFormat="True"/>
+                                </dxg:GridColumn.EditSettings>
+                            </dxg:GridColumn>
+                            <dxg:GridColumn FieldName="Depprice" Header="Giá Thực Tế" Width="140" FixedWidth="True">
+                                <dxg:GridColumn.EditSettings>
+                                    <dxe:TextEditSettings MaskType="Numeric" Mask="N0" MaskUseAsDisplayFormat="True"/>
+                                </dxg:GridColumn.EditSettings>
+                            </dxg:GridColumn>
+                            <dxg:GridColumn FieldName="Deprate" Header="Tỷ lệ %" Width="100" FixedWidth="True">
+                                <dxg:GridColumn.EditSettings>
+                                    <dxe:TextEditSettings MaskType="Numeric" Mask="P2" MaskUseAsDisplayFormat="True"/>
+                                </dxg:GridColumn.EditSettings>
+                            </dxg:GridColumn>
+                            <dxg:GridColumn FieldName="Remainvalue" Header="Giá Còn Lại" Width="140" FixedWidth="True">
+                                <dxg:GridColumn.EditSettings>
+                                    <dxe:TextEditSettings MaskType="Numeric" Mask="N0" MaskUseAsDisplayFormat="True"/>
+                                </dxg:GridColumn.EditSettings>
+                            </dxg:GridColumn>
+                            <dxg:GridColumn FieldName="Timeusing" Header="TGSD (Tháng)" Width="120" FixedWidth="True">
+                                <dxg:GridColumn.EditSettings>
+                                    <dxe:TextEditSettings MaskType="Numeric" Mask="N0" MaskUseAsDisplayFormat="True"/>
+                                </dxg:GridColumn.EditSettings>
+                            </dxg:GridColumn>
+                            <dxg:GridColumn FieldName="Country" Header="Ghi chú / Nước" Width="*" />
+                        </dxg:GridControl.Columns>
+                        <dxg:GridControl.TotalSummary>
+                            <dxg:GridSummaryItem FieldName="Qty" SummaryType="Sum" DisplayFormat="Tổng SL: {0:N2}"/>
+                            <dxg:GridSummaryItem FieldName="Remainvalue" SummaryType="Sum" DisplayFormat="Tổng GC Lại: {0:N0}"/>
+                        </dxg:GridControl.TotalSummary>
+                    </dxg:GridControl>
+                </Grid>
+            </dxt:DXTabItem>
+        </dxt:DXTabControl>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
+            <dx:SimpleButton x:Name="btnSave" Content="Lưu &amp; Đóng (Ctrl+S)" Width="170" Height="30" Margin="0,0,10,0" Click="BtnSave_Click" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_save.svg'}"/>
+            <dx:SimpleButton x:Name="btnCancel" Content="Hủy bỏ" Width="120" Height="30" Click="BtnCancel_Click" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_delete.svg'}"/>
+        </StackPanel>
+    </Grid>
+</base:BaseWindow>

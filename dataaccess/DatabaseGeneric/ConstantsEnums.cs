@@ -10,6 +10,36 @@ using System;
 namespace DataAccess
 {
 
+	/// <summary>Index enum to fast-access TypedList Fields in the Columns collection of the Typed List: Diary</summary>
+	public enum DiaryTypedListFieldIndex
+	{
+		///<summary>AccountName</summary>
+		AccountName,
+		///<summary>Taxflag</summary>
+		Taxflag,
+		///<summary>Amount</summary>
+		Amount,
+		///<summary>Dbcr</summary>
+		Dbcr,
+		///<summary>Marked</summary>
+		Marked,
+		///<summary>VoucherNo</summary>
+		VoucherNo,
+		///<summary>Contents</summary>
+		Contents,
+		///<summary>Bookflag</summary>
+		Bookflag,
+		///<summary>Invoicesnumber</summary>
+		Invoicesnumber,
+		///<summary>VoucherDate</summary>
+		VoucherDate,
+		///<summary>AccountId</summary>
+		AccountId,
+		///<summary>JournalVoucherId</summary>
+		JournalVoucherId,
+		/// <summary></summary>
+		AmountOfFields
+	}
 
 	/// <summary>Enum definition for all the entity types defined in this namespace. Used by the entityfields factory.</summary>
 	public enum EntityType

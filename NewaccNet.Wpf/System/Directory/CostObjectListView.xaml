@@ -1,4 +1,4 @@
-﻿<local:BaseDictionaryWindow 
+<local:BaseDictionaryWindow 
     x:Class="NewaccNet.Wpf.AppSystem.Directory.CostObjectListView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -25,7 +25,7 @@
 
         <dxg:GridControl x:Name="gridControl" Grid.Row="1" AutoGenerateColumns="None" SelectionMode="Row">
             <dxg:GridControl.View>
-                <dxg:TableView ShowGroupPanel="True" ShowSearchPanelMode="Always" AllowEditing="False" ShowAutoFilterRow="True" RowDoubleClick="TableView_RowDoubleClick">
+                <dxg:TableView ShowGroupPanel="True" ShowSearchPanelMode="Always" AllowEditing="False" ShowAutoFilterRow="False" RowDoubleClick="TableView_RowDoubleClick">
             <dxg:TableView.RowCellMenuCustomizations>
                 <dxb:BarButtonItem Content="Thêm mới" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_new.svg'}" ItemClick="MenuAdd_ItemClick"/>
                 <dxb:BarButtonItem Content="Sửa" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_edit.svg'}" ItemClick="MenuEdit_ItemClick"/>

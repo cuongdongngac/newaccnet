@@ -283,3 +283,68 @@ public void RefreshVoucherUI()
 ### 8.2. Hệ thống Form Chi tiết (Detail Forms) - Giai đoạn 2
 - **Chi tiết Chi phí:** (Form phụ tương tự Công nợ) để bóc tách phí.
 - **Chi tiết Vật tư / Bán hàng (Category 'B'):** Module phức tạp nhất đòi hỏi Voucher Generator (Tự động hạch toán Giá vốn + Kho + Thuế + Doanh thu từ Form nhập liệu).
+
+---
+
+## PHẦN IX: SỔ NHẬT KÝ & BÁO CÁO (HOÀN THÀNH 29/09/2026)
+
+### 9.1. Sổ Nhật Ký (Diary Report) — Module Báo cáo đầu tiên hoạt động
+
+#### Files chính đã tạo:
+- [DiaryCalculator.cs](file:///d:/NewaccNet/NewaccNet.Wpf/System/Reports/Calculators/DiaryCalculator.cs) — Class tính toán + DTO
+- [DiaryReportWindow.xaml](file:///d:/NewaccNet/NewaccNet.Wpf/System/Reports/DiaryReportWindow.xaml) + `.xaml.cs` — UI xem Nhật ký
+- **Update:** [MainWindow.xaml](file:///d:/NewaccNet/NewaccNet.Wpf/MainWindow.xaml#L331) (gắn ItemClick) + [MainWindow.xaml.cs](file:///d:/NewaccNet/NewaccNet.Wpf/MainWindow.xaml.cs#L215) (handler)
+
+#### Mapping Legacy Access (tham chiếu basequery.txt):
+| Access (Bảng cũ) | LLBLGen (Bảng mới) | Trường tương ứng |
+|------------------|---------------------|-------------------|
+| `Bills` | `JournalVoucherEntity` | `[Bill ID]`→Id, `[Bill No]`→VoucherNo, `[Bill Date]`→VoucherDate, `Contents`→Contents, `BookFlag`→Bookflag |
+| `[Transaction List]` | `JournalEntryEntity` | `[Account ID]`→AccountId, `Amount`→Amount, `DBCR`→Dbcr (1=Nợ, -1=Có) |
+| `[Account List]` | `ChartOfAccountEntity` | `[Account ID]`→AccountId, `[Account Name]`→AccountName |
+
+#### Truy vấn DiaryQueryBase (LINQ to LLBLGen qua LinqMetaData):
+```csharp
+from jv in JournalVoucher
+join je in JournalEntry    on jv.Id equals je.JournalVoucherId
+join coa in ChartOfAccount on je.AccountId equals coa.AccountId
+where  jv.VoucherDate Between FromDate And ToDate
+where  If(onlyBooked) jv.Bookflag == true
+orderby jv.VoucherDate, jv.VoucherNo, jv.Id, je.Dbcr descending
+select new DiaryReportModel { VoucherId, VoucherDate, ... , Debit, Credit }
+```
+
+#### Tính Nợ / Có (tương đương 2 hàm Access VBA):
+```csharp
+raw  = je.Dbcr * je.Amount           // Dbcr=1 * 1tr → Nợ 1tr; Dbcr=-1 * 1tr → Có 1tr
+Debit  = raw > 0 ? raw : 0           // DebitValue()  Access
+Credit = raw <= 0 ? -raw : 0         // CreditValue() Access
+```
+
+#### UI Nhật ký (DiaryReportWindow.xaml):
+- **Row 0 / ToolbarControl:**
+  - 2 `DateEdit` (Từ ngày / Đến ngày — mặc định: đầu tháng → hôm nay)
+  - `BarCheckItem` "Chỉ CT đã ghi sổ (Bookflag=1)" → filter linh hoạt
+  - 5 Nút: **Lọc (F5)** → Làm mới bộ lọc → **In (Ctrl+P)** → Bù cột → **Đóng (Esc)**
+- **Row 1 / Tổng quan:** 4 thẻ nhanh = Số CT / Số bút toán / Tổng Nợ / Tổng Có
+- **Row 2 / GridControl:** 10 cột → Ngày CT (Fixed Left), Số CT (Fixed Left), Nội dung, Mã TK, Tên TK, Ghi sổ (Checkbox), **Nợ/Có (Fixed Right)**.
+  - Có **GroupPanel** (kéo thả Số CT để group).
+  - `TotalSummary` + `GroupSummary` (Sum Nợ, Sum Có).
+  - `ShowSearchPanelMode=Always` (tìm nhanh), `ShowAutoFilterRow=False` (theo quy tắc UI).
+- **Row 3 / Footer Check:** Hiển thị màu XANH "✅ CÂN ĐỐI" nếu `|SumNợ - SumCó| < 0.005`; nếu không sẽ hiện màu ĐỎ "❌ LỆCH" và hiển thị độ lệch.
+
+#### Shortcut keys đã bind:
+- **F5:** Lọc lại dữ liệu Nhật ký theo kỳ mới
+- **Ctrl+P:** In lưới qua `ReportManager.PrintGridControl`
+- **Esc:** Đóng cửa sổ Nhật ký
+
+### 9.2. Kế hoạch sổ sách tiếp theo (sắp xếp độ khó tăng dần):
+| Độ khó | Báo cáo / Sổ sách | Nguồn dữ liệu | Formula chính |
+|--------|-------------------|---------------|---------------|
+| 🟢 Dễ (1) | **Bảng Cân đối Phát sinh (Trial Balance)** | `JournalEntry` (group by AccountId) | Opening + ΣDebit − ΣCredit = Closing |
+| 🟢 Dễ (1) | **Sổ Cái (General Ledger) theo 1 TK** | `JournalEntry` WHERE AccountId = ? | Opening + Roll-forward từng dòng theo ngày |
+| 🟡 TB (2) | **Báo cáo Công nợ** | `DebtLedger` + `JournalEntry` (lọc Category=C) | Group by PartnerId + Detail theo ngày |
+| 🟡 TB (2) | **Báo cáo Kho Nhập Xuất Tồn** | `InventoryLedger` / `InventoryVoucherLine` | Opening + Nhập − Xuất = Tồn Cuối |
+| 🔴 KHÓ (3) | **Báo cáo BCTC (B01, B02, B03)** | `GeneralLedger` + `ReportFormula` (thiết kế từ Designer) | `BalanceSheetCalculator` pattern đã có sẵn → fill dữ liệu |
+
+### 9.3. Check cân đối Nhật ký — "Nguyên tắc vàng"
+> Luôn kiểm tra `Sum(Debit) == Sum(Credit)` ở Footer **mọi lúc**. Nếu lệch (đỏ) → dữ liệu vào sai (có thể do test data nhập thiếu 1 bên, hoặc DB cũ migrate thiếu dòng). Không bao giờ xuất báo cáo / in Nhật ký nếu Footer còn ĐỎ.

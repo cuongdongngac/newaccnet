@@ -21,3 +21,4 @@ Khi lập trình viên ra lệnh ngắn dạng "Tạo màn hình Danh mục Khá
 4. TIÊU CHUẨN GRID KẾ TOÁN: 
 - GridControl trên các màn hình kế toán phải cấu hình để có độ tương phản tốt.
 - Không lạm dụng padding quá lớn, tối ưu hóa mật độ hiển thị dòng dữ liệu (Data Density) cho màn hình kế toán chuyên dụng.
+- GridControl dùng cho **danh mục / nhập liệu**. Không dùng GridControl để in **báo cáo sổ sách**; báo cáo in bằng Band (xem `report_rules.md`).

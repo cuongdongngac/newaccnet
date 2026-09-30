@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Windows;
+using System.Windows.Input;
 using DevExpress.Xpf.Core;
 
 namespace NewaccNet.Wpf;
@@ -7,8 +8,9 @@ namespace NewaccNet.Wpf;
 /// <summary>
 /// Interaction logic for MainWindow.xaml
 /// </summary>
-public partial class MainWindow : ThemedWindow {
-        private void BtnVoucherTest_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e) { new NewaccNet.Wpf.AppSystem.Voucher.VoucherListView().Show(); }
+public partial class MainWindow : ThemedWindow
+{
+    private void BtnVoucherTest_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e) { new NewaccNet.Wpf.AppSystem.Voucher.VoucherListView().Show(); }
     public MainWindow(string username, string fullName, int roleMask)
     {
         InitializeComponent();
@@ -20,7 +22,7 @@ public partial class MainWindow : ThemedWindow {
         txtStatusRoleMask.Text = $"{roleMask} → {Convert.ToString(roleMask, 2).PadLeft(32, '0')}";
 
         this.Closed += (_, _) => Application.Current.Shutdown();
-        
+
         LoadBackground();
     }
 
@@ -32,7 +34,7 @@ public partial class MainWindow : ThemedWindow {
             // Tìm ảnh newacc.jpg ở thư mục chạy hoặc thư mục project
             string basePath = System.AppDomain.CurrentDomain.BaseDirectory;
             string imgPath = System.IO.Path.Combine(basePath, "newacc.jpg");
-            
+
             if (!System.IO.File.Exists(imgPath))
             {
                 imgPath = System.IO.Path.Combine(basePath, @"..\..\..\newacc.jpg");
@@ -58,28 +60,28 @@ public partial class MainWindow : ThemedWindow {
         win.LoadData();
         win.Show();
     }
-                    private void BtnCategoryCostElement_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    private void BtnCategoryCostElement_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
     {
         var win = new NewaccNet.Wpf.AppSystem.Directory.CostElementListView();
         win.LoadData();
         win.Show();
     }
 
-        private void BtnCategorySource_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    private void BtnCategorySource_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
     {
         var win = new NewaccNet.Wpf.AppSystem.Directory.SourceListView();
         win.LoadData();
         win.Show();
     }
 
-                private void BtnCategoryCurrency_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    private void BtnCategoryCurrency_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
     {
         var win = new NewaccNet.Wpf.AppSystem.Directory.CurrencyListView();
         win.LoadData();
         win.Show();
     }
 
-        private void BtnCategoryStockType_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    private void BtnCategoryStockType_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
     {
         var win = new NewaccNet.Wpf.AppSystem.Directory.StockTypeListView();
         win.LoadData();
@@ -163,6 +165,20 @@ public partial class MainWindow : ThemedWindow {
         win.Show();
     }
 
+    private void BtnCategoryDepartment_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.Directory.DepartmentListView();
+        win.LoadData();
+        win.Show();
+    }
+
+    private void BtnCategoryAsset_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.Directory.AssetListView();
+        win.LoadData();
+        win.Show();
+    }
+
     private void BtnConfig_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
     {
         var configWin = new NewaccNet.Wpf.AppSystem.DbConfigWindow();
@@ -174,5 +190,38 @@ public partial class MainWindow : ThemedWindow {
         var win = new NewaccNet.Wpf.AppSystem.Directory.UserListView();
         win.LoadData();
         win.Show();
+    }
+
+    private void BtnDesignBalanceSheet_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.Design.BalanceSheetDesignWindow();
+        win.Owner = this;
+        win.Show();
+    }
+
+    private void BtnDesignBusinessResult_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.Design.BusinessResultDesignWindow();
+        win.Owner = this;
+        win.Show();
+    }
+
+    private void BtnDesignCashFlow_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.Design.CashFlowDesignWindow();
+        win.Owner = this;
+        win.Show();
+    }
+
+    private void BtnReportDiary_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var filter = new NewaccNet.Wpf.AppSystem.Reports.DiaryFilterWindow { Owner = this };
+        if (filter.ShowDialog() != true) return;
+
+        var args = (filter.FromDate, filter.ToDate, filter.OnlyBooked);
+        System.Windows.Threading.Dispatcher.CurrentDispatcher.BeginInvoke(
+            new Action(() => NewaccNet.Wpf.AppSystem.Reports.DiaryReportService.ShowPreview(
+                this, args.FromDate, args.ToDate, args.OnlyBooked)),
+            System.Windows.Threading.DispatcherPriority.Background);
     }
 }

@@ -11,11 +11,9 @@ rel_9,Origin,Origin ID,Asset Or Capital,Origin ID,CASCADE,CASCADE
 rel_10,Department List,DeptID,AssetTracking,DeptID,NO ACTION,NO ACTION
 rel_11,AssetTrackingDep,Asset ID,AssetTracking,Asset ID,NO ACTION,NO ACTION
 rel_12,Expense Object List,ExObject ID,AssetTracking,ExObject ID,NO ACTION,NO ACTION
-rel_13,InterestRate,EndDate,AssetTracking,EndDate,NO ACTION,NO ACTION
 rel_14,Asset List,Asset ID,AssetTracking,Asset ID,CASCADE,NO ACTION
 rel_15,Expense Object List,ExObject ID,AssetTrackingDep,ExObject ID,NO ACTION,NO ACTION
 rel_16,Department List,DeptID,AssetTrackingDep,DeptID,NO ACTION,NO ACTION
-rel_17,InterestRate,EndDate,AssetTrackingDep,EndDate,NO ACTION,NO ACTION
 rel_18,Account List,Account ID,Balance Sheet,Account ID,NO ACTION,NO ACTION
 rel_19,Account List,Account ID,Counter Accounts,Account ID,NO ACTION,NO ACTION
 rel_20,Counter Accounts,ID,Currency Input Line,ID,NO ACTION,NO ACTION
@@ -63,7 +61,6 @@ rel_58,Material Tax Line,Line ID,InterestDetail,Line ID,NO ACTION,NO ACTION
 rel_59,Customer Input Line,Line ID,InterestDetail,Line ID,NO ACTION,NO ACTION
 rel_60,ExObject Customer Input Line,Line ID,InterestDetail,Line ID,NO ACTION,NO ACTION
 rel_61,Currency Liability Line,Line ID,InterestDetail,Line ID,NO ACTION,NO ACTION
-rel_62,InterestRate,EndDate,InterestDetail,EndDate,NO ACTION,NO ACTION
 rel_63,Customer List,Customer ID,Liability Due,Customer ID,NO ACTION,NO ACTION
 rel_64,Liability Things,Liability Things ID,Liability Due,Liability Things ID,CASCADE,NO ACTION
 rel_65,Liability Things,Liability Things ID,Liability Ledger,Liability Things ID,NO ACTION,NO ACTION

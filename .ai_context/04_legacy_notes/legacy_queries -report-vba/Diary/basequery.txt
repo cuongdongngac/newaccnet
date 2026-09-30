@@ -1,0 +1,34 @@
+Bill Dairy Query
+
+SELECT DISTINCTROW Bills.[BIll ID], Bills.[Bill No], Bills.[Bill Date], Bills.Contents, [Transaction List].[Account ID], DebitValue([Transaction List]![DBCR]*[Transaction List]![Amount]) AS Debit, CreditValue([Transaction List]![DBCR]*[Transaction List]![Amount]) AS Credit
+FROM Bills RIGHT JOIN [Transaction List] ON Bills.[BIll ID] = [Transaction List].[Bill ID]
+WHERE (((Bills.BookFlag)=True))
+ORDER BY Bills.[Bill Date], Bills.[Bill No];
+
+Query trong report
+
+SELECT DISTINCTROW [Bill Dairy Query].[BIll ID], [Bill Dairy Query].[Bill No], [Bill Dairy Query].[Bill Date], [Bill Dairy Query].Contents, [Account List].[Account Name], [Bill Dairy Query].Debit, [Bill Dairy Query].Credit, IIf([Bill Dairy Query]!Debit>0,[Bill Dairy Query]![Account ID],Null) AS DebitAccount, IIf([Bill Dairy Query]!Credit>0,[Bill Dairy Query]![Account ID],Null) AS CreditAccount, [Account List].Splite
+FROM [Bill Dairy Query] INNER JOIN [Account List] ON [Bill Dairy Query].[Account ID] = [Account List].[Account ID]
+WHERE ((([Bill Dairy Query].[Bill Date]) Between GetBeginDate() And GetEnDDate()))
+ORDER BY [Bill Dairy Query].[BIll ID], [Bill Dairy Query].[Bill Date], [Bill Dairy Query].Debit DESC;
+
+
+Function DebitValue(value As Variant) As Double
+If value > 0 Then
+DebitValue = value
+Else
+DebitValue = 0
+End If
+
+End Function
+
+Function CreditValue(value As Variant) As Double
+
+If value <= 0 Then
+CreditValue = -value
+Else
+CreditValue = 0
+End If
+
+End Function
+dbcr nhận hai giá trị (1 > debit, -1 -> credit)

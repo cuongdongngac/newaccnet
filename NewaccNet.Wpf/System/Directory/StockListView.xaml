@@ -15,7 +15,8 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         
-        <dxb:ToolBarControl Grid.Row="0" AllowCustomizationMenu="False" AllowHide="False" AllowQuickCustomization="False">
+                <dxb:ToolBarControl Grid.Row="0" AllowCustomizationMenu="False" AllowHide="False" AllowQuickCustomization="False">
+            <dxb:BarButtonItem Content="Lưu" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_save.svg'}" ItemClick="MenuSave_ItemClick"/>
             <dxb:BarButtonItem Content="Xóa" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_delete.svg'}" ItemClick="MenuDelete_ItemClick"/>
             <dxb:BarButtonItem Content="In" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_report_showdesigner.svg'}" ItemClick="MenuPrint_ItemClick"/>
             <dxb:BarButtonItem Content="Làm mới" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_refresh.svg'}" ItemClick="MenuRefresh_ItemClick"/>
@@ -24,7 +25,7 @@
         <dxg:GridControl x:Name="gridControl" Grid.Row="1" AutoGenerateColumns="None" SelectionMode="Row">
             <dxg:GridControl.View>
                 <!-- Bật Edit trên lưới, dòng thêm mới nằm dưới cùng -->
-                <dxg:TableView ShowGroupPanel="True" ShowSearchPanelMode="Always" ShowAutoFilterRow="True" 
+                <dxg:TableView ShowGroupPanel="True" ShowSearchPanelMode="Always" ShowAutoFilterRow="False" 
                                AllowEditing="True" NewItemRowPosition="Bottom" 
                                RowUpdated="TableView_RowUpdated">
                     <dxg:TableView.RowCellMenuCustomizations>
@@ -46,3 +47,5 @@
         </dxg:GridControl>
     </Grid>
 </local:BaseDictionaryWindow>
+
+

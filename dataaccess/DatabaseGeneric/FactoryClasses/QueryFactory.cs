@@ -264,5 +264,32 @@ namespace DataAccess.FactoryClasses
 		/// <inheritdoc/>
 		protected override IElementCreatorCore CreateElementCreator() { return new ElementCreator(); }
  
+		/// <summary>Gets the query to fetch the typed list Newacc.Diary</summary>
+		/// <param name="root">Optional. If specified (not null) it's used as the root of the query to fetch the typed list, otherwise a new EntityQuery(Of JournalVoucherEntity) is used</param>
+		/// <returns>Dynamic Query which fetches <see cref="DataAccess.TypedListClasses.DiaryRow"/> instances </returns>
+		public DynamicQuery<DataAccess.TypedListClasses.DiaryRow> GetDiaryTypedList(EntityQuery<JournalVoucherEntity> root=null)
+		{
+			var rootOfQuery = root ?? this.JournalVoucher;
+			return this.Create()
+						.Select(() => new DataAccess.TypedListClasses.DiaryRow()
+								{
+									AccountName = ChartOfAccountFields.AccountName.ToValue<System.String>(),
+									Taxflag = ChartOfAccountFields.Taxflag.ToValue<System.Boolean>(),
+									Amount = JournalEntryFields.Amount.ToValue<Nullable<System.Double>>(),
+									Dbcr = JournalEntryFields.Dbcr.ToValue<Nullable<System.Int16>>(),
+									Marked = JournalVoucherFields.Marked.ToValue<System.Boolean>(),
+									VoucherNo = JournalVoucherFields.VoucherNo.ToValue<System.String>(),
+									Contents = JournalVoucherFields.Contents.ToValue<System.String>(),
+									Bookflag = JournalVoucherFields.Bookflag.ToValue<System.Boolean>(),
+									Invoicesnumber = JournalVoucherFields.Invoicesnumber.ToValue<System.String>(),
+									VoucherDate = JournalVoucherFields.VoucherDate.ToValue<Nullable<System.DateTime>>(),
+									AccountId = ChartOfAccountFields.AccountId.ToValue<System.String>(),
+									JournalVoucherId = JournalEntryFields.JournalVoucherId.ToValue<Nullable<System.Int32>>()
+								})
+						.From(rootOfQuery
+								.InnerJoin(this.JournalEntry).On(JournalVoucherFields.Id.Equal(JournalEntryFields.JournalVoucherId))
+								.InnerJoin(this.ChartOfAccount).On(JournalEntryFields.AccountId.Equal(ChartOfAccountFields.AccountId)));
+		}
+
 	}
 }

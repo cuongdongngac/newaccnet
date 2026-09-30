@@ -268,7 +268,7 @@ namespace DataAccess.HelperClasses
 			this.AddElementFieldInfo("AssetTrackingEntity", "Depprice", typeof(Nullable<System.Double>), false, false, false, true,  (int)AssetTrackingFieldIndex.Depprice, 0, 0, 15);
 			this.AddElementFieldInfo("AssetTrackingEntity", "Deprate", typeof(Nullable<System.Double>), false, false, false, true,  (int)AssetTrackingFieldIndex.Deprate, 0, 0, 15);
 			this.AddElementFieldInfo("AssetTrackingEntity", "Deptid", typeof(System.String), false, true, false, true,  (int)AssetTrackingFieldIndex.Deptid, 10, 0, 0);
-			this.AddElementFieldInfo("AssetTrackingEntity", "Enddate", typeof(Nullable<System.DateTime>), false, true, false, true,  (int)AssetTrackingFieldIndex.Enddate, 0, 0, 0);
+			this.AddElementFieldInfo("AssetTrackingEntity", "Enddate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)AssetTrackingFieldIndex.Enddate, 0, 0, 0);
 			this.AddElementFieldInfo("AssetTrackingEntity", "ExaccountId", typeof(System.String), false, false, false, true,  (int)AssetTrackingFieldIndex.ExaccountId, 10, 0, 0);
 			this.AddElementFieldInfo("AssetTrackingEntity", "ExobjectId", typeof(System.String), false, true, false, true,  (int)AssetTrackingFieldIndex.ExobjectId, 10, 0, 0);
 			this.AddElementFieldInfo("AssetTrackingEntity", "Qty", typeof(Nullable<System.Double>), false, false, false, true,  (int)AssetTrackingFieldIndex.Qty, 0, 0, 15);

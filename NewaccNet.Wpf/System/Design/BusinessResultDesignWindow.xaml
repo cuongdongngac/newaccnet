@@ -1,0 +1,119 @@
+<base:BaseWindow
+    x:Class="NewaccNet.Wpf.AppSystem.Design.BusinessResultDesignWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+    xmlns:base="clr-namespace:NewaccNet.Wpf.Views.Base"
+    Title="Thiết kế Báo cáo Kết quả Hoạt động Kinh doanh (B02-DN)"
+    Height="880" Width="1450" WindowStartupLocation="CenterScreen"
+    xmlns:auth="clr-namespace:NewaccNet.Wpf.AppSystem">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <dxb:ToolBarControl Grid.Row="0" AllowCustomizationMenu="False" AllowHide="False" AllowQuickCustomization="False" Margin="0,0,0,8">
+            <dxb:BarButtonItem x:Name="btnLoad" Content="Tải cấu hình" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_refresh.svg'}" ItemClick="BtnLoad_ItemClick"/>
+            <dxb:BarButtonItem x:Name="btnSave" Content="Lưu (Ctrl+S)" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_save.svg'}" ItemClick="BtnSave_ItemClick"/>
+            <dxb:BarItemLinkSeparator/>
+            <dxb:BarButtonItem x:Name="btnNew" Content="Thêm chỉ tiêu" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_new.svg'}" ItemClick="BtnNew_ItemClick"/>
+            <dxb:BarButtonItem x:Name="btnDelete" Content="Xóa chỉ tiêu" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_delete.svg'}" ItemClick="BtnDelete_ItemClick"/>
+            <dxb:BarItemLinkSeparator/>
+            <dxb:BarButtonItem Content="Bù cột tự động" ItemClick="BtnBestFit_ItemClick"/>
+        </dxb:ToolBarControl>
+
+        <GroupBox Grid.Row="1" Header="📋 Cấu trúc B02-DN (2 tầng): Chỉ tiêu KQKD → Danh sách TK tham chiếu tính toán" Padding="8">
+            <dxg:GridControl x:Name="gridMain" AutoGenerateColumns="None" SelectionMode="Row">
+                <dxg:GridControl.DetailDescriptor>
+                    <dxg:DataControlDetailDescriptor ItemsSourceBinding="{Binding AccountBusinessResults}">
+                        <dxg:GridControl AutoGenerateColumns="None">
+                            <dxg:GridControl.View>
+                                <dxg:TableView ShowGroupPanel="False" AllowEditing="True" NewItemRowPosition="Bottom"
+                                               ShowAutoFilterRow="False" ShowSearchPanelMode="Always" RowMinHeight="26"
+                                               NavigationStyle="Cell">
+                                    <dxg:TableView.FormatConditions>
+                                        <dxg:FormatCondition FieldName="IsAdd" Expression="[IsAdd] = True" ApplyToRow="True">
+                                            <dxg:FormatCondition.Format><dx:Format Background="#FFE8F5E9"/></dxg:FormatCondition.Format>
+                                        </dxg:FormatCondition>
+                                        <dxg:FormatCondition FieldName="IsAdd" Expression="[IsAdd] = False" ApplyToRow="True">
+                                            <dxg:FormatCondition.Format><dx:Format Background="#FFFCE4EC"/></dxg:FormatCondition.Format>
+                                        </dxg:FormatCondition>
+                                    </dxg:TableView.FormatConditions>
+                                </dxg:TableView>
+                            </dxg:GridControl.View>
+                            <dxg:GridControl.Columns>
+                                <dxg:GridColumn FieldName="Id" Header="ID" Width="60" AllowEditing="False" HorizontalHeaderContentAlignment="Center"/>
+                                <dxg:GridColumn FieldName="BusinessResultItemId" Header="ItemId" Width="80" AllowEditing="False" HorizontalHeaderContentAlignment="Center"/>
+                                <dxg:GridColumn FieldName="AccountId" Header="Tài khoản (*)" Width="140">
+                                    <dxg:GridColumn.EditSettings>
+                                        <dxe:ComboBoxEditSettings x:Name="cboAccDetail" DisplayMember="AccountId" ValueMember="AccountId" AutoComplete="True" ImmediatePopup="True"/>
+                                    </dxg:GridColumn.EditSettings>
+                                </dxg:GridColumn>
+                                <dxg:GridColumn FieldName="CounterAccountId" Header="TK Đối ứng" Width="140">
+                                    <dxg:GridColumn.EditSettings>
+                                        <dxe:ComboBoxEditSettings x:Name="cboCounterDetail" DisplayMember="AccountId" ValueMember="AccountId" AutoComplete="True" ImmediatePopup="True"/>
+                                    </dxg:GridColumn.EditSettings>
+                                </dxg:GridColumn>
+                                <dxg:GridColumn FieldName="IsAdd" Header="Cộng(+)/Trừ(-)" Width="100">
+                                    <dxg:GridColumn.EditSettings>
+                                        <dxe:CheckEditSettings Content="Cộng" IsThreeState="False"/>
+                                    </dxg:GridColumn.EditSettings>
+                                </dxg:GridColumn>
+                                <dxg:GridColumn FieldName="Method" Header="Phương pháp" Width="110"/>
+                            </dxg:GridControl.Columns>
+                        </dxg:GridControl>
+                    </dxg:DataControlDetailDescriptor>
+                </dxg:GridControl.DetailDescriptor>
+                <dxg:GridControl.View>
+                    <dxg:TableView ShowGroupPanel="False" AllowEditing="True" NewItemRowPosition="Bottom"
+                                   ShowAutoFilterRow="False" ShowSearchPanelMode="Always" RowMinHeight="28"
+                                   NavigationStyle="Cell">
+                        <dxg:TableView.FormatConditions>
+                            <dxg:FormatCondition FieldName="IsBold" Expression="[IsBold] = True" ApplyToRow="True">
+                                <dxg:FormatCondition.Format><dx:Format Background="#FFFFF9C4" FontWeight="Bold"/></dxg:FormatCondition.Format>
+                            </dxg:FormatCondition>
+                            <dxg:FormatCondition FieldName="IsItalic" Expression="[IsItalic] = True" ApplyToRow="True">
+                                <dxg:FormatCondition.Format><dx:Format FontStyle="Italic"/></dxg:FormatCondition.Format>
+                            </dxg:FormatCondition>
+                            <dxg:FormatCondition FieldName="Id" Expression="[Id] % 2 = 0" ApplyToRow="True">
+                                <dxg:FormatCondition.Format><dx:Format Background="#FFF5F5FF"/></dxg:FormatCondition.Format>
+                            </dxg:FormatCondition>
+                        </dxg:TableView.FormatConditions>
+                    </dxg:TableView>
+                </dxg:GridControl.View>
+                <dxg:GridControl.Columns>
+                    <dxg:GridColumn FieldName="Id" Header="ID" Width="60" AllowEditing="False" HorizontalHeaderContentAlignment="Center"/>
+                    <dxg:GridColumn FieldName="Code" Header="Mã chỉ tiêu" Width="100"/>
+                    <dxg:GridColumn FieldName="ItemName" Header="Tên chỉ tiêu KQKD (*)" Width="380"/>
+                    <dxg:GridColumn FieldName="Illustration" Header="Minh họa / Mô tả" Width="220"/>
+                    <dxg:GridColumn FieldName="IsDecrease" Header="Giảm trừ" Width="90" HorizontalHeaderContentAlignment="Center">
+                        <dxg:GridColumn.EditSettings>
+                            <dxe:CheckEditSettings IsThreeState="False"/>
+                        </dxg:GridColumn.EditSettings>
+                    </dxg:GridColumn>
+                    <dxg:GridColumn FieldName="IsBold" Header="In đậm" Width="80" HorizontalHeaderContentAlignment="Center">
+                        <dxg:GridColumn.EditSettings>
+                            <dxe:CheckEditSettings IsThreeState="False"/>
+                        </dxg:GridColumn.EditSettings>
+                    </dxg:GridColumn>
+                    <dxg:GridColumn FieldName="IsItalic" Header="In nghiêng" Width="90" HorizontalHeaderContentAlignment="Center">
+                        <dxg:GridColumn.EditSettings>
+                            <dxe:CheckEditSettings IsThreeState="False"/>
+                        </dxg:GridColumn.EditSettings>
+                    </dxg:GridColumn>
+                    <dxg:GridColumn FieldName="OrderNo" Header="Thứ tự in" Width="90" HorizontalHeaderContentAlignment="Center"/>
+                </dxg:GridControl.Columns>
+            </dxg:GridControl>
+        </GroupBox>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
+            <dx:SimpleButton x:Name="btnClose" Content="Đóng cửa sổ" Width="140" Height="30" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_close.svg'}" Click="BtnClose_Click"/>
+        </StackPanel>
+    </Grid>
+</base:BaseWindow>

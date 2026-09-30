@@ -1,0 +1,66 @@
+<base:BaseWindow
+    x:Class="NewaccNet.Wpf.AppSystem.Reports.DiaryFilterWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:base="clr-namespace:NewaccNet.Wpf.Views.Base"
+    Title="Thông số in Sổ Nhật Ký"
+    SizeToContent="Height" Width="520"
+    ResizeMode="NoResize"
+    WindowStartupLocation="CenterOwner"
+    ShowInTaskbar="False"
+    WindowStyle="ToolWindow">
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Tiêu đề -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,14">
+            <TextBlock Text="📘 Sổ Nhật Ký Kế Toán" FontSize="22" FontWeight="Bold" Foreground="#FF0D47A1"/>
+            <TextBlock Text="Vui lòng chọn khoảng ngày và tùy chọn để xuất báo cáo" Foreground="#FF616161" Margin="0,4,0,0"/>
+        </StackPanel>
+
+        <!-- Từ ngày / Đến ngày -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,6,0,6">
+            <TextBlock Text="Từ ngày:" VerticalAlignment="Center" Width="100" FontWeight="SemiBold"/>
+            <dxe:DateEdit x:Name="dtFrom" Width="200" Height="28" Mask="dd/MM/yyyy" MaskUseAsDisplayFormat="True"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,6,0,6">
+            <TextBlock Text="Đến ngày:" VerticalAlignment="Center" Width="100" FontWeight="SemiBold"/>
+            <dxe:DateEdit x:Name="dtTo" Width="200" Height="28" Mask="dd/MM/yyyy" MaskUseAsDisplayFormat="True"/>
+        </StackPanel>
+
+        <!-- Check chỉ ghi sổ -->
+        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,10,0,10">
+            <dxe:CheckEdit x:Name="chkOnlyBooked" Content="Chỉ bao gồm các chứng từ ĐÃ GHI SỔ (Bookflag = 1)"
+                           FontSize="13" IsChecked="True"/>
+        </StackPanel>
+
+        <!-- Lời nhắc -->
+        <Border Grid.Row="4" Background="#FFE8F5E9" CornerRadius="4" Padding="10" Margin="0,4,0,12">
+            <StackPanel>
+                <TextBlock Text="💡 Lưu ý:" FontWeight="Bold" Foreground="#FF2E7D32"/>
+                <TextBlock Text="• Mặc định: kỳ báo cáo = Tháng hiện tại." Foreground="#FF388E3C" Margin="0,2,0,0"/>
+                <TextBlock Text="• Sau khi nhấn OK: hệ thống sẽ tính toán và mở cửa sổ Xem trước In." Foreground="#FF388E3C" Margin="0,2,0,0"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Nút OK / Cancel -->
+        <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="btnCancel" Content="Hủy bỏ (Esc)" Width="110" Height="32" Margin="0,0,8,0"
+                    IsCancel="True" Click="BtnCancel_Click"/>
+            <Button x:Name="btnOK" Content="OK — Xuất Nhật ký (Enter)" Width="180" Height="32"
+                    Background="#FF1565C0" Foreground="White" FontWeight="Bold"
+                    IsDefault="True" Click="BtnOK_Click"/>
+        </StackPanel>
+    </Grid>
+</base:BaseWindow>

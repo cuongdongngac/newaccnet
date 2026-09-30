@@ -29,7 +29,6 @@ namespace DataAccess.EntityClasses
 		private AssetEntity _asset;
 		private CostObjectEntity _costObject;
 		private DepartmentEntity _department;
-		private InterestRateEntity _interestRate;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
@@ -45,8 +44,6 @@ namespace DataAccess.EntityClasses
 			public static readonly string CostObject = "CostObject";
 			/// <summary>Member name Department</summary>
 			public static readonly string Department = "Department";
-			/// <summary>Member name InterestRate</summary>
-			public static readonly string InterestRate = "InterestRate";
 		}
 
 		/// <summary>Static meta-data storage for navigator related information</summary>
@@ -58,7 +55,6 @@ namespace DataAccess.EntityClasses
 				AddNavigatorMetaData<AssetTrackingEntity, AssetEntity>("Asset", "AssetTrackings", (a, b) => a._asset = b, a => a._asset, (a, b) => a.Asset = b, DataAccess.RelationClasses.StaticAssetTrackingRelations.AssetEntityUsingAssetIdStatic, ()=>new AssetTrackingRelations().AssetEntityUsingAssetId, null, new int[] { (int)AssetTrackingFieldIndex.AssetId }, null, true, (int)DataAccess.EntityType.AssetEntity);
 				AddNavigatorMetaData<AssetTrackingEntity, CostObjectEntity>("CostObject", "AssetTrackings", (a, b) => a._costObject = b, a => a._costObject, (a, b) => a.CostObject = b, DataAccess.RelationClasses.StaticAssetTrackingRelations.CostObjectEntityUsingExobjectIdStatic, ()=>new AssetTrackingRelations().CostObjectEntityUsingExobjectId, null, new int[] { (int)AssetTrackingFieldIndex.ExobjectId }, null, true, (int)DataAccess.EntityType.CostObjectEntity);
 				AddNavigatorMetaData<AssetTrackingEntity, DepartmentEntity>("Department", "AssetTrackings", (a, b) => a._department = b, a => a._department, (a, b) => a.Department = b, DataAccess.RelationClasses.StaticAssetTrackingRelations.DepartmentEntityUsingDeptidStatic, ()=>new AssetTrackingRelations().DepartmentEntityUsingDeptid, null, new int[] { (int)AssetTrackingFieldIndex.Deptid }, null, true, (int)DataAccess.EntityType.DepartmentEntity);
-				AddNavigatorMetaData<AssetTrackingEntity, InterestRateEntity>("InterestRate", "AssetTrackings", (a, b) => a._interestRate = b, a => a._interestRate, (a, b) => a.InterestRate = b, DataAccess.RelationClasses.StaticAssetTrackingRelations.InterestRateEntityUsingEnddateStatic, ()=>new AssetTrackingRelations().InterestRateEntityUsingEnddate, null, new int[] { (int)AssetTrackingFieldIndex.Enddate }, null, true, (int)DataAccess.EntityType.InterestRateEntity);
 			}
 		}
 
@@ -122,10 +118,6 @@ namespace DataAccess.EntityClasses
 		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'Department' to this entity.</summary>
 		/// <returns></returns>
 		public virtual IRelationPredicateBucket GetRelationInfoDepartment() { return CreateRelationInfoForNavigator("Department"); }
-
-		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'InterestRate' to this entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoInterestRate() { return CreateRelationInfoForNavigator("InterestRate"); }
 		
 		/// <inheritdoc/>
 		protected override EntityStaticMetaDataBase GetEntityStaticMetaData() {	return _staticMetaData; }
@@ -168,10 +160,6 @@ namespace DataAccess.EntityClasses
 		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'Department' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
 		public static IPrefetchPathElement2 PrefetchPathDepartment { get { return _staticMetaData.GetPrefetchPathElement("Department", CommonEntityBase.CreateEntityCollection<DepartmentEntity>()); } }
-
-		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'InterestRate' for this entity.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathInterestRate { get { return _staticMetaData.GetPrefetchPathElement("InterestRate", CommonEntityBase.CreateEntityCollection<InterestRateEntity>()); } }
 
 		/// <summary>The AsaccountId property of the Entity AssetTracking<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "AssetTracking"."AsaccountId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
@@ -309,14 +297,6 @@ namespace DataAccess.EntityClasses
 			set { SetSingleRelatedEntityNavigator(value, "Department"); }
 		}
 
-		/// <summary>Gets / sets related entity of type 'InterestRateEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
-		[Browsable(false)]
-		public virtual InterestRateEntity InterestRate
-		{
-			get { return _interestRate; }
-			set { SetSingleRelatedEntityNavigator(value, "InterestRate"); }
-		}
-
 		// __LLBLGENPRO_USER_CODE_REGION_START CustomEntityCode
 		// __LLBLGENPRO_USER_CODE_REGION_END
 
@@ -384,12 +364,6 @@ namespace DataAccess.RelationClasses
 			get	{ return ModelInfoProviderSingleton.GetInstance().CreateRelation(RelationType.ManyToOne, "Department", false, new[] { DepartmentFields.Deptid, AssetTrackingFields.Deptid }); }
 		}
 
-		/// <summary>Returns a new IEntityRelation object, between AssetTrackingEntity and InterestRateEntity over the m:1 relation they have, using the relation between the fields: AssetTracking.Enddate - InterestRate.Enddate</summary>
-		public virtual IEntityRelation InterestRateEntityUsingEnddate
-		{
-			get	{ return ModelInfoProviderSingleton.GetInstance().CreateRelation(RelationType.ManyToOne, "InterestRate", false, new[] { InterestRateFields.Enddate, AssetTrackingFields.Enddate }); }
-		}
-
 	}
 	
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
@@ -398,7 +372,6 @@ namespace DataAccess.RelationClasses
 		internal static readonly IEntityRelation AssetEntityUsingAssetIdStatic = new AssetTrackingRelations().AssetEntityUsingAssetId;
 		internal static readonly IEntityRelation CostObjectEntityUsingExobjectIdStatic = new AssetTrackingRelations().CostObjectEntityUsingExobjectId;
 		internal static readonly IEntityRelation DepartmentEntityUsingDeptidStatic = new AssetTrackingRelations().DepartmentEntityUsingDeptid;
-		internal static readonly IEntityRelation InterestRateEntityUsingEnddateStatic = new AssetTrackingRelations().InterestRateEntityUsingEnddate;
 
 		/// <summary>CTor</summary>
 		static StaticAssetTrackingRelations() { }
