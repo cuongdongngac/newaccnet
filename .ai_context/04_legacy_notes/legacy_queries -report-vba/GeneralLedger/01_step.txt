@@ -1,0 +1,77 @@
+Mapping:  Bills ->JournalVoucher, Transaction List -> VoucherEntry
+
+
+Account Begin Balance Query (dùng để tính số dư đầu kỳ)
+
+SELECT DISTINCTROW [Transaction List]![Amount]*[Transaction List]![DBCR] AS Amount
+FROM Bills RIGHT JOIN [Transaction List] ON Bills.[BIll ID] = [Transaction List].[Bill ID]
+WHERE (((Bills.[Bill Date])<GetBeginDate()) AND (([Transaction List].[Account ID]) Like GetAccountID() & "*") AND ((Bills.BookFlag)=True));
+UNION ALL SELECT [Transaction List]![Amount]*[Transaction List]![DBCR] AS AMount
+FROM [Transaction List]
+WHERE ((([Transaction List].[Bill ID]) Is Null) AND (([Transaction List].[Account ID]) Like GetAccountID() & "*"));
+
+
+
+
+
+Union Summary Ledger Query (tính giao dịch phát sinh)
+SELECT Bills.[BIll ID], Bills.[Bill No], Bills.[Bill Date], Bills.Contents, [Transaction List_1].[Account ID], [Transaction List].Amount, [Transaction List_1].DBCR, [Transaction List].[Account ID] AS [Counter Account ID]
+FROM Bills INNER JOIN ([Transaction List] INNER JOIN [Transaction List] AS [Transaction List_1] ON [Transaction List].ParrentID = [Transaction List_1].ID) ON Bills.[BIll ID] = [Transaction List].[Bill ID]
+WHERE ((([Transaction List_1].[Account ID]) Like GetAccountID() & "*") AND ((Bills.BookFlag)=True))
+UNION ALL SELECT Bills.[BIll ID], Bills.[Bill No], Bills.[Bill Date], Bills.Contents, [Transaction List].[Account ID], [Transaction List].Amount, [Transaction List].DBCR, [Transaction List_1].[Account ID] AS [Counter Account ID]
+FROM Bills INNER JOIN ([Transaction List] INNER JOIN [Transaction List] AS [Transaction List_1] ON [Transaction List].ParrentID = [Transaction List_1].ID) ON Bills.[BIll ID] = [Transaction List].[Bill ID]
+WHERE ((([Transaction List].[Account ID]) Like GetAccountID() & "*")  AND ((Bills.BookFlag)=True))
+UNION ALL SELECT [Transaction List].[Bill ID], Bills.[Bill No], IIf(IsNull([Transaction List]![Bill ID]),LastDate(),[Bills]![Bill Date]) AS [Bill Date], Bills.Contents, [Transaction List].[Account ID], [Transaction List].Amount, [Transaction List].DBCR, Null AS [Counter Account ID]
+FROM [Transaction List] LEFT JOIN Bills ON [Transaction List].[Bill ID] = Bills.[BIll ID]
+WHERE ((([Transaction List].[Bill ID]) Is Null) AND (([Transaction List].[Account ID]) Like GetAccountID() & "*"));
+
+
+Account Interval Balance Query
+SELECT DISTINCTROW [Union Summary Ledger Query].[BIll ID], [Union Summary Ledger Query].[Bill No], [Union Summary Ledger Query].[Bill Date], [Union Summary Ledger Query].Contents, IIf([Union Summary Ledger Query]![DBCR]=1,[Union Summary Ledger Query]![Amount],0) AS Debit, IIf([Union Summary Ledger Query]![DBCR]=-1,[Union Summary Ledger Query]![Amount],0) AS Credit, [Union Summary Ledger Query].[Counter Account ID]
+FROM [Union Summary Ledger Query]
+WHERE ((([Union Summary Ledger Query].[Bill Date]) Between GetBeginDate() And GetEndDate()));
+UNION ALL SELECT DISTINCTROW [Ground Table].[Bill ID],[Ground Table].[Bill No], [Ground Table].[Bill Date], [Ground Table].Contents, 0 as Debit, 0 as  Credit,   "  "  as [Counter Account ID]
+FROM [Ground Table]
+ORDER BY [Bill Date], [Bill No];
+
+
+Make General Ledger Query
+SELECT DISTINCTROW [Account Interval Balance Query].*, 1 AS EndBalance
+FROM [Account Interval Balance Query];
+
+
+
+MakeCalculateTable("Make General Ledger Query", "General Ledger") - Tạo bảng trung gian
+
+Function GeneralLeger()
+Dim MyDB As DAO.Database
+Dim MyRecordset As DAO.Recordset
+Dim m As Variant
+Dim RECORDS, i As Long
+Dim EndBalance As Double
+DoCmd.Hourglass True
+EndBalance = EvalDefault(DSum("Amount", "Account Begin Balance Query"), 0)
+Set MyDB = CurrentDb()
+m = MakeCalculateTable("Make General Ledger Query", "General Ledger")
+
+Set MyRecordset = MyDB.OpenRecordset("General Ledger")
+MyRecordset.MoveLast
+RECORDS = MyRecordset.RecordCount
+MyRecordset.MoveFirst
+m = SysCmd(SYSCMD_INITMETER, "Calculating:", RECORDS)
+i = 1
+Do While Not MyRecordset.EOF
+EndBalance = EndBalance + EvalDefault(MyRecordset("Debit"), 0) - EvalDefault(MyRecordset("Credit"), 0)
+MyRecordset.Edit
+MyRecordset("EndBalance") = EndBalance
+MyRecordset.Update
+MyRecordset.MoveNext
+m = SysCmd(SYSCMD_UPDATEMETER, i)
+i = i + 1
+Loop
+MyRecordset.Close
+MyDB.Close
+DoCmd.Hourglass False
+m = SysCmd(SYSCMD_REMOVEMETER)
+
+End Function

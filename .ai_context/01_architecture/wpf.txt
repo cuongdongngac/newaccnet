@@ -1,0 +1,17 @@
+Đóng vai là chuyên gia nâng cấp và tối ưu dự án DevExpress WPF. Dự án của tôi là một ứng dụng thuần WPF, không sử dụng WinForms, và đang chạy trên phiên bản DevExpress mới (v20.1 trở lên).
+
+Hãy quét toàn bộ codebase (các file .cs và .xaml) và thực hiện việc dọn dẹp, sửa lỗi tương thích liên quan đến DevExpress theo các tiêu chí sau:
+
+Loại bỏ thuộc tính lỗi thời: Tìm và xóa bỏ hoàn toàn việc gọi UseLightweightTemplates trong các control như TableView, TreeListView (vì DevExpress đã chuyển sang Optimized Mode mặc định).
+
+Sửa sai tên thuộc tính hiển thị: Tìm các khai báo PrintGroupSummaryDisplayMode (của bản cũ) và thay thế bằng GroupSummaryDisplayMode chuẩn của WPF hiện tại.
+
+Chuẩn hóa khởi tạo Control trong Code-behind: Tìm các đoạn code tạo UI Control bằng code (như GridControl, TableView...). Đảm bảo rằng việc gọi ((System.ComponentModel.ISupportInitialize)control).BeginInit(); và EndInit(); được bọc cẩn thận trong cấu trúc try { ... } finally { control.EndInit(); }.
+
+Loại bỏ tàn dư WinForms: Phát hiện và cảnh báo nếu có bất kỳ class nào thuộc không gian tên DevExpress.XtraGrid hoặc DevExpress.XtraEditors (thư viện WinForms) đang bị dùng nhầm trong code WPF. Thay thế chúng bằng các control tương đương của WPF (như DevExpress.Xpf.Grid, DevExpress.Xpf.Editors).
+
+Yêu cầu:
+
+Hãy liệt kê danh sách các file đang vi phạm các quy tắc trên.
+
+Cung cấp đoạn code đã sửa cho từng file hoặc hướng dẫn chi tiết cách sửa dòng lỗi đó.

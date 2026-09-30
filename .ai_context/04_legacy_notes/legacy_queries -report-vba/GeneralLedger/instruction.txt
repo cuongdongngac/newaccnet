@@ -1,0 +1,48 @@
+Hãy đóng vai trò là một chuyên gia C# .NET và LLBLGen Pro.
+Tôi cần viết một Service để trích xuất dữ liệu "Sổ chi tiết tài khoản" (Ledger) từ Database, dàn phẳng các giao dịch đệ quy, xuất ra file tạm JSON và tính toán số dư lũy kế trên RAM.
+
+1. Cấu trúc Database (LINQ to LLBLGen Pro):
+
+JournalVoucherEntity: Chứa Header (Id, VoucherNo, VoucherDate, Contents).
+
+JournalEntryEntity: Chứa Detail (Id, JournalVoucherId, ParentId, AccountId, Amount, Dbcr).
+
+Quan hệ Parent-Child bằng ParentId. Quy ước Dbcr: 1 = Nợ, 0 = Có.
+
+2. Cấu trúc Output (DTO):
+Tạo class LedgerDTO:
+RowType (int: 0 = Đầu kỳ, 1 = Phát sinh), VoucherDate, VoucherNo, Contents, AccountId, CounterAccountId (Tài khoản đối ứng), Amount, Dbcr, Balance (Số dư lũy kế).
+
+3. Yêu cầu Logic Truy vấn (Rất quan trọng):
+Viết hàm nhận tham số: string accountPrefix (Ví dụ: "111"), DateTime startDate, DateTime endDate, decimal openingBalance.
+Phải "vét cạn" dữ liệu bằng cách chia làm 3 vế IQueryable để đảo chiều logic. LƯU Ý CỐT LÕI: Tất cả các vế đều phải dùng .StartsWith(accountPrefix) để lọc (không dùng ==) nhằm quét toàn bộ tài khoản con.
+
+Vế 1 (Tài khoản đang xét là Parent):
+Join t và child qua t.Id == child.ParentId.
+Lọc: t.AccountId.StartsWith(accountPrefix).
+Đảo chiều: CounterAccountId = child.AccountId, Amount = child.Amount.
+
+Vế 2 (Tài khoản đang xét là Child):
+Join t và parent qua t.ParentId == parent.Id.
+Lọc: t.AccountId.StartsWith(accountPrefix).
+Đảo chiều: CounterAccountId = parent.AccountId, giữ Amount = t.Amount.
+
+Vế 3 (Tài khoản độc lập/Mồ côi):
+Lọc: t.ParentId == null VÀ t.AccountId.StartsWith(accountPrefix).
+Gán: CounterAccountId = null, giữ Amount = t.Amount.
+
+4. Xử lý gộp, Cache và Tính toán:
+
+Gộp 3 vế bằng .Concat(). Cấp cho tất cả các dòng này RowType = 1. Lọc thêm điều kiện ngày tháng (VoucherDate) nếu cần. Gọi .ToList() để lấy dữ liệu về RAM.
+
+Tạo 1 object LedgerDTO giả làm Số dư đầu kỳ: RowType = 0, gán Balance = openingBalance. Nhét object này vào List.
+
+Sắp xếp List theo thứ tự: RowType -> VoucherDate -> VoucherNo.
+
+Serialize toàn bộ List này thành chuỗi JSON và lưu vào một file tạm (VD: temp_ledger.json).
+
+Ngay sau đó, Deserialize file JSON đó lên lại thành List.
+
+Dùng vòng lặp foreach duyệt List vừa load: Nếu RowType == 0, lấy Balance làm gốc. Nếu RowType == 1, cộng trừ Amount dựa vào Dbcr để tính số dư lũy kế (Balance) của dòng đó.
+
+Trả về List<LedgerDTO> cuối cùng. Viết code C# sạch sẽ, tối ưu, có comment rõ ràng các bước.

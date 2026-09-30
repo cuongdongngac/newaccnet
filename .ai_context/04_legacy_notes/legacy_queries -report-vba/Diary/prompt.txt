@@ -1,0 +1,10 @@
+"Dữ liệu model và logic load dữ liệu tôi đã làm xong và có sẵn một List<DiaryReportModel>. Tuyệt đối không sinh code UI WPF như GridControl.
+
+Hãy viết code C# cấu hình một báo cáo DevExpress.XtraReports.UI.XtraReport chuẩn in ấn:
+
+Gán DataSource bằng danh sách dữ liệu.
+
+Khai báo GroupHeaderBand để phân nhóm theo VoucherNo. Vùng này chứa các XRLabel hiển thị thông tin chung (Ngày CT, Số CT, Diễn giải).
+
+Khai báo DetailBand chứa các XRLabel hiển thị chi tiết (Tài khoản, Nợ, Có).
+Chỉ cần viết phần code định nghĩa các Band và Bind dữ liệu cho Report này."

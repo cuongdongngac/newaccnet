@@ -1,0 +1,11 @@
+---
+description: Báo cáo sổ sách/BCTC dùng XtraReport Band thuần WPF; GridControl chỉ in danh mục
+alwaysApply: true
+---
+
+# In ấn: Báo cáo vs Danh mục
+
+- **Báo cáo / sổ sách / BCTC** (Nhật ký, Sổ cái, Cân đối PS, B01–B03, …): thuần WPF + `XtraReport` với **Band** (`ReportHeader`, `PageHeader`, `GroupHeader`, `Detail`, footer). Filter = dialog WPF; dữ liệu = Calculator; in = `*ReportFactory` + `PrintHelper.ShowPrintPreview`.
+- **Cấm** dựng `GridControl` (kể cả grid ẩn) và **cấm** `ReportManager.PrintGridControl` cho báo cáo — chỉ gây lỗi infinite grid height và không ra layout in kế toán.
+- **Danh mục**: `GridControl` trên màn hình; in danh mục mới được dùng `ReportManager.PrintGridControl`.
+- Chi tiết: `.ai_context/02_rules/report_rules.md`. Mẫu: `DiaryReportFactory.cs`.
