@@ -25,7 +25,8 @@ namespace NewaccNet.Wpf.AppSystem.Reports
                     return;
                 }
 
-                var report = DiaryReportFactory.CreateReport(rows, fromDate, toDate);
+                var dtoList = new NewaccNet.Reports.DiaryCalculator().Calculate(rows);
+                var report = new NewaccNet.Wpf.AppSystem.Reports.diary.DiaryReport(dtoList);
                 Mouse.OverrideCursor = null;
                 DevExpress.Xpf.Printing.PrintHelper.ShowPrintPreview(owner, report);
             }
@@ -41,3 +42,4 @@ namespace NewaccNet.Wpf.AppSystem.Reports
         }
     }
 }
+

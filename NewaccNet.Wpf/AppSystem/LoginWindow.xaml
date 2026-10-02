@@ -4,9 +4,21 @@
         xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
         xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
         xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
-        Title="Đăng nhập Hệ thống" Height="250" Width="400" WindowStartupLocation="CenterScreen">
+        Title="Đăng nhập Hệ thống" Height="320" Width="450" WindowStartupLocation="CenterScreen">
     <Grid>
-        <dxlc:LayoutControl Orientation="Vertical" Padding="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <Border Grid.Row="0" Background="#F5F5F5" Padding="15"><StackPanel Orientation="Horizontal">
+            <Image Source="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/icon%20builder/security_key.svg'}" Width="64" Height="64" Margin="0,0,15,0"/>
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock Text="NEWACCNET" FontSize="24" FontWeight="Bold" Foreground="#FF1976D2"/>
+                <TextBlock Text="Phần mềm Kế toán Doanh nghiệp" FontSize="14" Foreground="Gray"/>
+            </StackPanel>
+        </StackPanel></Border>
+        <dxlc:LayoutControl Grid.Row="1" Orientation="Vertical" Padding="20">
             <dxlc:LayoutItem Label="Tên đăng nhập:">
                 <dxe:TextEdit x:Name="txtUsername" />
             </dxlc:LayoutItem>
@@ -27,4 +39,5 @@
         </dxlc:LayoutControl>
     </Grid>
 </base:BaseWindow>
+
 

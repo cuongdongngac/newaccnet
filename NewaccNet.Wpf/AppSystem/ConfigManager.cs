@@ -9,7 +9,7 @@ namespace NewaccNet.Wpf.AppSystem
     /// </summary>
     public static class ConfigManager
     {
-        private static readonly string ConfigFilePath = "appsettings.json";
+        private static readonly string ConfigFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appsettings.json");
         public static AppConfig Current { get; private set; } = new AppConfig();
 
         public static void LoadConfig()
@@ -73,5 +73,6 @@ namespace NewaccNet.Wpf.AppSystem
         }
     }
 }
+
 
 

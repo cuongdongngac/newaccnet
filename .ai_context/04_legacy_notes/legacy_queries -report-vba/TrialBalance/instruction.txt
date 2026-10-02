@@ -1,0 +1,9 @@
+Phương thức  tính toán dựa theo mô hinh ORM và hướng đối tượng - lõi giữ liệu thuộc entity JournalEntry
+Đầu vào à enddate và begindate 
+Khác với mô hình kế toán là chỉ lọc một tài khoản và còn liên quan đối ứng việc tính này chỉ cần lọc gia giao dịch
+
+Các vấn đề cần xử lý
+JournalEntry chỉ chứa các tài khoản con - vì chỉ tài khoản con mới có giao dịch nhưng bảng trialBalance cần có cả tài khoản con
+Các tài khoản công nợ các con số không tính ở tài khoản mà tính ở chi tiết vì cần phân định tôi nợ bao nhiêu, người ta nợ tôi bao nhiêu.
+Đề nghị đưa ra phương án tốt nhất
+Dữ liệu sẽ được bơm vò  bảng trialbalance có trong cơ sở dữ liệu, lưu  ý có biến splite - cho nghĩa là có phải tài khoản cha hay không, dữ liệu này đã được sum lại rồi

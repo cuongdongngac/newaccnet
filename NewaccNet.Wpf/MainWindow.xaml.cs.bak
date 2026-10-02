@@ -8,13 +8,12 @@ namespace NewaccNet.Wpf;
 /// <summary>
 /// Interaction logic for MainWindow.xaml
 /// </summary>
-public partial class MainWindow : ThemedWindow {
-    private bool _isExiting = false;
+public partial class MainWindow : ThemedWindow
+{
     private void BtnVoucherTest_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e) { new NewaccNet.Wpf.AppSystem.Voucher.VoucherListView().Show(); }
     public MainWindow(string username, string fullName, int roleMask)
     {
         InitializeComponent();
-        this.Closing += MainWindow_Closing;
 
         // Hiển thị thông tin user đăng nhập trên StatusBar
         txtStatusUsername.Text = username;
@@ -231,28 +230,4 @@ public partial class MainWindow : ThemedWindow {
         var filter = new NewaccNet.Wpf.AppSystem.Reports.GeneralLedgerFilterWindow { Owner = this };
         filter.Show();
     }
-    private void BtnExit_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
-    {
-        _isExiting = true;
-        if (MessageBox.Show("Bạn có chắc chắn muốn thoát ứng dụng không?", "Xác nhận", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-        {
-            Application.Current.Shutdown();
-        }
-        else
-        {
-            _isExiting = false;
-        }
-    }
-
-    private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-    {
-        if (!_isExiting)
-        {
-            if (MessageBox.Show("Bạn có chắc chắn muốn thoát ứng dụng không?", "Xác nhận", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
-            {
-                e.Cancel = true;
-            }
-        }
-    }
 }
-

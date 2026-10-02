@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="ORMDataModel1.xpo" />
+    <None Remove="ORMDataModel1.xpo.diagram" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DevExpress.Reporting.Core" Version="25.2.3" />
+    <PackageReference Include="DevExpress.Wpf.Printing" Version="25.2.3" />
+    <PackageReference Include="DevExpress.Wpf.Reporting" Version="25.2.3" />
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="3.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\dataaccess\DatabaseGeneric\DataAccess.csproj" />
+  </ItemGroup>
+
+</Project>
+

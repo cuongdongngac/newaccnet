@@ -1,0 +1,88 @@
+<base:BaseWindow
+    x:Class="NewaccNet.Wpf.AppSystem.Reports.GeneralLedgerFilterWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+    xmlns:base="clr-namespace:NewaccNet.Wpf.Views.Base"
+    xmlns:voucher="clr-namespace:NewaccNet.Wpf.AppSystem.Voucher"
+    Title="Thông số in Sổ Cái"
+    SizeToContent="Height" Width="525"
+    ResizeMode="NoResize"
+    WindowStartupLocation="CenterOwner"
+    ShowInTaskbar="False"
+    WindowStyle="ToolWindow"
+    Loaded="Window_Loaded">
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Tiêu đề -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,14">
+            <TextBlock Text="In Sổ Cái Tài Khoản" FontSize="22" FontWeight="Bold" Foreground="#FF0D47A1"/>
+            <TextBlock Text="Vui lòng chọn tài khoản và khoảng thời gian báo cáo" Foreground="#FF616161" Margin="0,4,0,0"/>
+        </StackPanel>
+        
+        <!-- Tài khoản -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,6,0,12">
+            <TextBlock Text="Tài khoản:" VerticalAlignment="Center" Width="100" FontWeight="SemiBold"/>
+                        <dxg:LookUpEdit x:Name="lkAccount" Width="380" Height="28" DisplayMember="AccountId" ValueMember="AccountId" AutoPopulateColumns="False" AutoComplete="True" ImmediatePopup="True" IsTextEditable="True">
+                <dxg:LookUpEdit.PopupContentTemplate>
+                    <ControlTemplate>
+                        <dxg:GridControl x:Name="PART_GridControl">
+                            <dxg:GridControl.Columns>
+                                <dxg:GridColumn FieldName="AccountId" Header="Tài khoản" Width="100"/>
+                                <dxg:GridColumn FieldName="AccountName" Header="Tên tài khoản" Width="*"/>
+                            </dxg:GridControl.Columns>
+                            <dxg:GridControl.View>
+                                <dxg:TableView AutoWidth="True" ShowGroupPanel="False"/>
+                            </dxg:GridControl.View>
+                        </dxg:GridControl>
+                    </ControlTemplate>
+                </dxg:LookUpEdit.PopupContentTemplate>
+            </dxg:LookUpEdit>
+        </StackPanel>
+
+        <!-- Từ ngày / Đến ngày -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,6,0,6">
+            <TextBlock Text="Từ ngày:" VerticalAlignment="Center" Width="100" FontWeight="SemiBold"/>
+            <dxe:DateEdit x:Name="dtFrom" Width="150" Height="28" Mask="dd/MM/yyyy" MaskUseAsDisplayFormat="True"/>
+            <TextBlock Text="Đến ngày:" VerticalAlignment="Center" Width="70" Margin="10,0,0,0" FontWeight="SemiBold"/>
+            <dxe:DateEdit x:Name="dtTo" Width="150" Height="28" Mask="dd/MM/yyyy" MaskUseAsDisplayFormat="True"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,10,0,10">
+            <dxe:CheckEdit x:Name="chkOnlyBooked" Content="Chỉ bao gồm các chứng từ ĐÃ GHI SỔ (Bookflag = 1)" FontSize="13" IsChecked="True"/>
+        </StackPanel>
+
+        <!-- Lời nhắc -->
+        <Border Grid.Row="4" Background="#FFE8F5E9" CornerRadius="4" Padding="10" Margin="0,14,0,12">
+            <StackPanel>
+                <TextBlock Text="👉 Lưu ý:" FontWeight="Bold" Foreground="#FF2E7D32"/>
+                <TextBlock Text="  Hệ thống sẽ tự động lưu lại các tham số này cho lần sau." Foreground="#FF388E3C" Margin="0,2,0,0"/>
+                <TextBlock Text="  Sau khi nhấn OK: sẽ mở cửa sổ Xem trước In." Foreground="#FF388E3C" Margin="0,2,0,0"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Nút OK / Cancel -->
+        <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="btnCancel" Content="Hủy bỏ (Esc)" Width="110" Height="32" Margin="0,0,8,0"
+                    IsCancel="True" Click="BtnCancel_Click"/>
+            <Button x:Name="btnOK" Content="OK - Xuất Sổ Cái (Enter)" Width="180" Height="32"
+                    Background="#FF1565C0" Foreground="White" FontWeight="Bold"
+                    IsDefault="True" Click="BtnOK_Click"/>
+        </StackPanel>
+    </Grid>
+</base:BaseWindow>
+
+
+
+

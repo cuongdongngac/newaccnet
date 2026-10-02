@@ -15,7 +15,7 @@ public partial class App : Application
         ConfigManager.LoadConfig();
 
         // 2. Kiểm tra xem file cấu hình đã tồn tại chưa (Lần chạy đầu tiên)
-        if (!File.Exists("appsettings.json"))
+        if (!File.Exists(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "appsettings.json")))
         {
             // Gợi ý mặc định trỏ vào file mẫu template.accdb
             var config = ConfigManager.Current;
@@ -27,7 +27,7 @@ public partial class App : Application
             configWindow.ShowDialog();
             
             // Sau khi form cấu hình đóng (hoặc tự restart sau khi lưu), tắt luồng hiện tại.
-            Application.Current.Shutdown();
+            System.Environment.Exit(0);
             return;
         }
         else
@@ -57,9 +57,11 @@ public partial class App : Application
             else
             {
                 // Người dùng bấm Hủy/Thoát hoặc đóng form Login
-                Application.Current.Shutdown();
+                System.Environment.Exit(0);
             }
         }
     }
 }
+
+
 

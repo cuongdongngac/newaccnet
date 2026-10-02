@@ -1,0 +1,69 @@
+<dir:BaseDictionaryWindow 
+    x:Class="NewaccNet.Wpf.AppSystem.Voucher.VoucherListView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+    xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:local="clr-namespace:NewaccNet.Wpf.AppSystem" xmlns:dir="clr-namespace:NewaccNet.Wpf.AppSystem.Directory"
+    Title="Quản lý &amp; Tìm kiếm chứng từ" Height="650" Width="1000" WindowStartupLocation="CenterScreen">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <dxb:BarContainerControl Grid.Row="0">
+            <dxb:ToolBarControl ShowDragWidget="False" AllowCustomizationMenu="False" AllowHide="False" AllowQuickCustomization="False">
+                <dxb:BarButtonItem Content="Thêm mới" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_new.svg'}" ItemClick="BtnAdd_Click" BarItemDisplayMode="ContentAndGlyph" />
+                <dxb:BarButtonItem Content="Sửa (Edit)" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_edit.svg'}" ItemClick="BtnEdit_Click"/>
+                <dxb:BarButtonItem Content="Xóa" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_delete.svg'}" ItemClick="BtnDelete_Click"/>
+                <dxb:BarButtonItem Content="Đóng" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_close.svg'}" ItemClick="BtnClose_Click"/>
+            </dxb:ToolBarControl>
+        </dxb:BarContainerControl>
+
+        <Border Grid.Row="1" Background="#F0F0F0" Padding="10" Margin="5" CornerRadius="3">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Từ ngày:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                <dxe:DateEdit x:Name="dtFrom" Width="120" Mask="dd/MM/yyyy" MaskUseAsDisplayFormat="True"/>
+                
+                <TextBlock Text="Đến ngày:" VerticalAlignment="Center" Margin="15,0,5,0"/>
+                <dxe:DateEdit x:Name="dtTo" Width="120" Mask="dd/MM/yyyy" MaskUseAsDisplayFormat="True"/>
+                
+                <TextBlock Text="Trạng thái:" VerticalAlignment="Center" Margin="15,0,5,0"/>
+                <dxe:ComboBoxEdit x:Name="cboStatus" Width="150" IsTextEditable="False">
+                    <dxe:ComboBoxEditItem Content="Tất cả"/>
+                    <dxe:ComboBoxEditItem Content="Chưa ghi sổ"/>
+                    <dxe:ComboBoxEditItem Content="Đã ghi sổ"/>
+                </dxe:ComboBoxEdit>
+
+                <TextBlock Text="Loại hình:" VerticalAlignment="Center" Margin="15,0,5,0"/>
+                <dxe:ComboBoxEdit x:Name="cboTransactionType" Width="150" IsTextEditable="False" DisplayMember="Name" ValueMember="Code"/>
+                
+                <Button Content="Tìm kiếm" Width="100" Margin="15,0,0,0" Click="BtnSearch_Click" Background="#FF1565C0" Foreground="White" FontWeight="Bold"/>
+            </StackPanel>
+        </Border>
+
+        <dxg:GridControl Name="gridControl" Grid.Row="2" AutoGenerateColumns="None" MouseDoubleClick="GridControl_MouseDoubleClick">
+            <dxg:GridControl.View>
+                <dxg:TableView ShowAutoFilterRow="True" AllowEditing="False" ShowGroupPanel="True" SearchPanelFindMode="Always"/>
+            </dxg:GridControl.View>
+            <dxg:GridControl.Columns>
+                <dxg:GridColumn FieldName="Id" Header="ID" Width="80" Visible="False"/><dxg:GridColumn FieldName="TransactionType" Header="Loại giao dịch" Width="120"/>
+                <dxg:GridColumn FieldName="VoucherNo" Header="Số chứng từ" Width="120"/>
+                <dxg:GridColumn FieldName="VoucherDate" Header="Ngày chứng từ" Width="120">
+                    <dxg:GridColumn.EditSettings>
+                        <dxe:DateEditSettings DisplayFormat="dd/MM/yyyy"/>
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
+                <dxg:GridColumn FieldName="Contents" Header="Nội dung" Width="*"/>
+                <dxg:GridColumn FieldName="Bookflag" Header="Ghi sổ" Width="80"/>
+            </dxg:GridControl.Columns>
+        </dxg:GridControl>
+    </Grid>
+</dir:BaseDictionaryWindow>
+
+

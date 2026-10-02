@@ -1,6 +1,7 @@
 using System;
 using System.Windows;
 using NewaccNet.Wpf.Views.Base;
+using NewaccNet.Wpf.AppSystem.Helpers;
 
 namespace NewaccNet.Wpf.AppSystem.Reports
 {
@@ -13,7 +14,8 @@ namespace NewaccNet.Wpf.AppSystem.Reports
         public DiaryFilterWindow()
         {
             InitializeComponent();
-            Loaded += (_, _) => InitDefaults();
+            Loaded += (_, _) => { InitDefaults(); UserPreferencesHelper.LoadState(this); };
+            
         }
 
         private void InitDefaults()
@@ -51,12 +53,18 @@ namespace NewaccNet.Wpf.AppSystem.Reports
             FromDate = from;
             ToDate = to;
             OnlyBooked = chkOnlyBooked.IsChecked == true;
-            DialogResult = true;
+            UserPreferencesHelper.SaveState(this);
+            NewaccNet.Wpf.AppSystem.Reports.DiaryReportService.ShowPreview(this, from, to, chkOnlyBooked.IsChecked == true);
         }
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = false;
+            this.Close();
         }
     }
 }
+
+
+
+
+

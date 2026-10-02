@@ -1,0 +1,75 @@
+<base:BaseWindow
+    x:Class="NewaccNet.Wpf.AppSystem.Reports.Fincance.TrialBalanceFilterWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:base="clr-namespace:NewaccNet.Wpf.Views.Base"
+    Title="Bảng Cân Đối Phát Sinh"
+    SizeToContent="Height" Width="525"
+    ResizeMode="NoResize"
+    WindowStartupLocation="CenterOwner"
+    ShowInTaskbar="False"
+    WindowStyle="ToolWindow"
+    Loaded="Window_Loaded">
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Tiêu đề -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,14">
+            <TextBlock Text="⚖️ Bảng Cân Đối Phát Sinh" FontSize="22" FontWeight="Bold" Foreground="#FF0D47A1"/>
+            <TextBlock Text="Vui lòng chọn khoảng thời gian và tùy chọn kết xuất" Foreground="#FF616161" Margin="0,4,0,0"/>
+        </StackPanel>
+
+        <!-- Từ ngày / Đến ngày -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,6,0,6">
+            <TextBlock Text="Từ ngày:" VerticalAlignment="Center" Width="100" FontWeight="SemiBold"/>
+            <dxe:DateEdit x:Name="dtFromDate" Width="150" Height="28" Mask="dd/MM/yyyy" MaskUseAsDisplayFormat="True"/>
+            <TextBlock Text="Đến ngày:" VerticalAlignment="Center" Width="70" Margin="10,0,0,0" FontWeight="SemiBold"/>
+            <dxe:DateEdit x:Name="dtToDate" Width="150" Height="28" Mask="dd/MM/yyyy" MaskUseAsDisplayFormat="True"/>
+        </StackPanel>
+
+                <!-- Tùy chọn dữ liệu -->
+                <StackPanel Grid.Row="2" Orientation="Vertical" Margin="0,10,0,10">
+            <TextBlock Text="Chọn tài khoản để in (Để trống = In tất cả):" FontWeight="SemiBold" Margin="0,0,0,4"/>
+            <dxe:ComboBoxEdit x:Name="cboSelectedAccounts" DisplayMember="AccountId" ValueMember="AccountId" Height="28">
+                <dxe:ComboBoxEdit.StyleSettings>
+                    <dxe:CheckedComboBoxStyleSettings />
+                </dxe:ComboBoxEdit.StyleSettings>
+            </dxe:ComboBoxEdit>
+            
+            <dxe:CheckEdit x:Name="chkOnlyBooked" Content="Chỉ bao gồm các chứng từ ĐÃ GHI SỔ (Bookflag = 1)" FontSize="13" IsChecked="True" Margin="0,10,0,8"/>
+            <dxe:CheckEdit x:Name="chkUseOldData" Content="Sử dụng dữ liệu đã tính trước đó" FontSize="13" IsChecked="False"/>
+        </StackPanel>
+
+        <!-- Lời nhắc -->
+        <Border Grid.Row="3" Background="#FFE8F5E9" CornerRadius="4" Padding="10" Margin="0,4,0,12">
+            <StackPanel>
+                <TextBlock Text="💡 Giải thích tùy chọn:" FontWeight="Bold" Foreground="#FF2E7D32"/>
+                <TextBlock Text="• Tích chọn: Không tính toán lại, hệ thống sẽ lấy trực tiếp dữ liệu đã lưu sẵn trong CSDL lên để in (tốc độ tức thì)." TextWrapping="Wrap" Foreground="#FF388E3C" Margin="0,2,0,0"/>
+                <TextBlock Text="• Bỏ chọn (Mặc định): Quét lại toàn bộ chứng từ để tính ra Bảng CĐPS mới tinh rồi mới in ra báo cáo." TextWrapping="Wrap" Foreground="#FF388E3C" Margin="0,2,0,0"/>
+                <TextBlock Text="• Mẹo: Nhấn chuột (Click) vào ô Mã Tài Khoản trực tiếp trên Báo cáo để mở Sổ Cái chi tiết của tài khoản đó." TextWrapping="Wrap" Foreground="#FF388E3C" Margin="0,2,0,0"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Nút OK / Cancel -->
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="btnCancel" Content="Hủy bỏ (Esc)" Width="110" Height="32" Margin="0,0,8,0"
+                    IsCancel="True" Click="BtnCancel_Click"/>
+            <Button x:Name="btnOK" Content="OK — Thực hiện (Enter)" Width="180" Height="32"
+                    Background="#FF1565C0" Foreground="White" FontWeight="Bold"
+                    IsDefault="True" Click="BtnOK_Click"/>
+        </StackPanel>
+    </Grid>
+</base:BaseWindow>
+
+
+

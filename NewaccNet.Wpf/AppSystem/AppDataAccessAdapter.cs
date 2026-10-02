@@ -19,11 +19,11 @@ namespace NewaccNet.Wpf.AppSystem
                 {
                     if (string.IsNullOrWhiteSpace(conn)) conn = @"Server=.\SQLEXPRESS;Database=Greeneast;Integrated Security=SSPI;TrustServerCertificate=True;";
 
-                    System.Data.Common.DbProviderFactories.RegisterFactory("System.Data.SqlClient", System.Data.SqlClient.SqlClientFactory.Instance);
+                    System.Data.Common.DbProviderFactories.RegisterFactory("Microsoft.Data.SqlClient", Microsoft.Data.SqlClient.SqlClientFactory.Instance);
                     SD.LLBLGen.Pro.ORMSupportClasses.RuntimeConfiguration.ConfigureDQE<SD.LLBLGen.Pro.DQE.SqlServer.SQLServerDQEConfiguration>(
-                        c => c.AddDbProviderFactory(typeof(System.Data.SqlClient.SqlClientFactory)));
+                        c => c.AddDbProviderFactory(typeof(Microsoft.Data.SqlClient.SqlClientFactory)));
 
-                    var builder = new System.Data.SqlClient.SqlConnectionStringBuilder(conn);
+                    var builder = new Microsoft.Data.SqlClient.SqlConnectionStringBuilder(conn);
                     string dbName = builder.InitialCatalog;
                     var sqlAdapter = new DataAccess.SqlServer.DatabaseSpecific.DataAccessAdapter(conn, false, CatalogNameUsage.ForceName, dbName);
                     return sqlAdapter;

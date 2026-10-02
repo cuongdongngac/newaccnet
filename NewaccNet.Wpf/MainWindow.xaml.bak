@@ -25,8 +25,8 @@
             <dxr:RibbonDefaultPageCategory>
                 <!-- ==================== Tab 1: NGHIỆP VỤ (ƯU TIÊN) ==================== -->
                 <dxr:RibbonPage Caption="Nghiệp vụ" IsSelected="True">
-                    <dxr:RibbonPageGroup Caption="Chứng từ">
-                        <dxb:BarButtonItem Content="" Hint="Chứng từ" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_invoice.svg'}" ItemClick="BtnVoucherTest_ItemClick" auth:AuthHelper.RequiredMask="8">
+                    <dxr:RibbonPageGroup Caption="Nhập liệu">
+                        <dxb:BarButtonItem Content="Nhập chứng từ" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_invoice.svg'}" ItemClick="BtnVoucherTest_ItemClick" auth:AuthHelper.RequiredMask="8">
                             <dxb:BarButtonItem.SuperTip>
                                 <dx:SuperTip>
                                     <dx:SuperTipHeaderItem Content="Nhập Phiếu Kế toán Tổng hợp"/>
@@ -39,9 +39,6 @@
 
                 <!-- ==================== Tab: Hệ thống ==================== -->
                 <dxr:RibbonPage Caption="Hệ thống">
-                    <dxr:RibbonPageGroup Caption="Ứng dụng">
-                        <dxb:BarButtonItem Content="Thoát" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_close.svg'}" ItemClick="BtnExit_ItemClick"/>
-                    </dxr:RibbonPageGroup>
                     <dxr:RibbonPageGroup Caption="Quản trị">
                         <dxb:BarButtonItem Content="Người dùng" ItemClick="BtnUserManagement_ItemClick" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/filtereditor_user.svg'}" auth:AuthHelper.RequiredMask="1">
                             <dxb:BarButtonItem.SuperTip>
@@ -365,7 +362,4 @@ Bao gồm liên kết tới loại hình tương ứng."/>
         </StatusBar>
     </Grid>
 </dx:ThemedWindow>
-
-
-
 
