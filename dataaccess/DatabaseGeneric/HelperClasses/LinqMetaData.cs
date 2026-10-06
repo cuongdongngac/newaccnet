@@ -110,6 +110,8 @@ namespace DataAccess.Linq
 					return this.CustomCostReportAccount;
 				case DataAccess.EntityType.CustomerExportLineEntity:
 					return this.CustomerExportLine;
+				case DataAccess.EntityType.DebtBalanceEntity:
+					return this.DebtBalance;
 				case DataAccess.EntityType.DebtDetailEntity:
 					return this.DebtDetail;
 				case DataAccess.EntityType.DebtLedgerEntity:
@@ -180,8 +182,6 @@ namespace DataAccess.Linq
 					return this.SecurityPolicy;
 				case DataAccess.EntityType.SourceEntity:
 					return this.Source;
-				case DataAccess.EntityType.SpecialValueEntity:
-					return this.SpecialValue;
 				case DataAccess.EntityType.StockEntity:
 					return this.Stock;
 				case DataAccess.EntityType.StockTypeEntity:
@@ -331,6 +331,9 @@ namespace DataAccess.Linq
 		/// <summary>returns the datasource to use in a Linq query when targeting CustomerExportLineEntity instances in the database.</summary>
 		public DataSource2<CustomerExportLineEntity> CustomerExportLine {	get { return new DataSource2<CustomerExportLineEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
 		
+		/// <summary>returns the datasource to use in a Linq query when targeting DebtBalanceEntity instances in the database.</summary>
+		public DataSource2<DebtBalanceEntity> DebtBalance {	get { return new DataSource2<DebtBalanceEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
+		
 		/// <summary>returns the datasource to use in a Linq query when targeting DebtDetailEntity instances in the database.</summary>
 		public DataSource2<DebtDetailEntity> DebtDetail {	get { return new DataSource2<DebtDetailEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
 		
@@ -435,9 +438,6 @@ namespace DataAccess.Linq
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting SourceEntity instances in the database.</summary>
 		public DataSource2<SourceEntity> Source {	get { return new DataSource2<SourceEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
-		
-		/// <summary>returns the datasource to use in a Linq query when targeting SpecialValueEntity instances in the database.</summary>
-		public DataSource2<SpecialValueEntity> SpecialValue {	get { return new DataSource2<SpecialValueEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting StockEntity instances in the database.</summary>
 		public DataSource2<StockEntity> Stock {	get { return new DataSource2<StockEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }

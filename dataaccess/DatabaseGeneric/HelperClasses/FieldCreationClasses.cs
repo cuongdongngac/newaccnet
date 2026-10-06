@@ -599,6 +599,39 @@ namespace DataAccess.HelperClasses
 		public static EntityField2 LineId { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(CustomerExportLineFieldIndex.LineId); }}
 	}
 
+	/// <summary>Field Creation Class for entity DebtBalanceEntity</summary>
+	public partial class DebtBalanceFields
+	{
+		/// <summary>Creates a new DebtBalanceEntity.AccountId field instance</summary>
+		public static EntityField2 AccountId { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(DebtBalanceFieldIndex.AccountId); }}
+		/// <summary>Creates a new DebtBalanceEntity.Beginbalance field instance</summary>
+		public static EntityField2 Beginbalance { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(DebtBalanceFieldIndex.Beginbalance); }}
+		/// <summary>Creates a new DebtBalanceEntity.Begincredit field instance</summary>
+		public static EntityField2 Begincredit { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(DebtBalanceFieldIndex.Begincredit); }}
+		/// <summary>Creates a new DebtBalanceEntity.Begindebit field instance</summary>
+		public static EntityField2 Begindebit { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(DebtBalanceFieldIndex.Begindebit); }}
+		/// <summary>Creates a new DebtBalanceEntity.DebtTypeId field instance</summary>
+		public static EntityField2 DebtTypeId { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(DebtBalanceFieldIndex.DebtTypeId); }}
+		/// <summary>Creates a new DebtBalanceEntity.Endbalance field instance</summary>
+		public static EntityField2 Endbalance { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(DebtBalanceFieldIndex.Endbalance); }}
+		/// <summary>Creates a new DebtBalanceEntity.Endcredit field instance</summary>
+		public static EntityField2 Endcredit { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(DebtBalanceFieldIndex.Endcredit); }}
+		/// <summary>Creates a new DebtBalanceEntity.Enddebit field instance</summary>
+		public static EntityField2 Enddebit { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(DebtBalanceFieldIndex.Enddebit); }}
+		/// <summary>Creates a new DebtBalanceEntity.Id field instance</summary>
+		public static EntityField2 Id { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(DebtBalanceFieldIndex.Id); }}
+		/// <summary>Creates a new DebtBalanceEntity.Inbalance field instance</summary>
+		public static EntityField2 Inbalance { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(DebtBalanceFieldIndex.Inbalance); }}
+		/// <summary>Creates a new DebtBalanceEntity.Incredit field instance</summary>
+		public static EntityField2 Incredit { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(DebtBalanceFieldIndex.Incredit); }}
+		/// <summary>Creates a new DebtBalanceEntity.Indebit field instance</summary>
+		public static EntityField2 Indebit { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(DebtBalanceFieldIndex.Indebit); }}
+		/// <summary>Creates a new DebtBalanceEntity.LongtermFlag field instance</summary>
+		public static EntityField2 LongtermFlag { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(DebtBalanceFieldIndex.LongtermFlag); }}
+		/// <summary>Creates a new DebtBalanceEntity.PartnerId field instance</summary>
+		public static EntityField2 PartnerId { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(DebtBalanceFieldIndex.PartnerId); }}
+	}
+
 	/// <summary>Field Creation Class for entity DebtDetailEntity</summary>
 	public partial class DebtDetailFields
 	{
@@ -1264,35 +1297,6 @@ namespace DataAccess.HelperClasses
 		public static EntityField2 Srcode { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(SourceFieldIndex.Srcode); }}
 		/// <summary>Creates a new SourceEntity.Srname field instance</summary>
 		public static EntityField2 Srname { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(SourceFieldIndex.Srname); }}
-	}
-
-	/// <summary>Field Creation Class for entity SpecialValueEntity</summary>
-	public partial class SpecialValueFields
-	{
-		/// <summary>Creates a new SpecialValueEntity.AccountId field instance</summary>
-		public static EntityField2 AccountId { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(SpecialValueFieldIndex.AccountId); }}
-		/// <summary>Creates a new SpecialValueEntity.Beginbalance field instance</summary>
-		public static EntityField2 Beginbalance { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(SpecialValueFieldIndex.Beginbalance); }}
-		/// <summary>Creates a new SpecialValueEntity.Begincredit field instance</summary>
-		public static EntityField2 Begincredit { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(SpecialValueFieldIndex.Begincredit); }}
-		/// <summary>Creates a new SpecialValueEntity.Begindebit field instance</summary>
-		public static EntityField2 Begindebit { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(SpecialValueFieldIndex.Begindebit); }}
-		/// <summary>Creates a new SpecialValueEntity.CustomerId field instance</summary>
-		public static EntityField2 CustomerId { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(SpecialValueFieldIndex.CustomerId); }}
-		/// <summary>Creates a new SpecialValueEntity.Endbalance field instance</summary>
-		public static EntityField2 Endbalance { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(SpecialValueFieldIndex.Endbalance); }}
-		/// <summary>Creates a new SpecialValueEntity.Endcredit field instance</summary>
-		public static EntityField2 Endcredit { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(SpecialValueFieldIndex.Endcredit); }}
-		/// <summary>Creates a new SpecialValueEntity.Enddebit field instance</summary>
-		public static EntityField2 Enddebit { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(SpecialValueFieldIndex.Enddebit); }}
-		/// <summary>Creates a new SpecialValueEntity.Id field instance</summary>
-		public static EntityField2 Id { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(SpecialValueFieldIndex.Id); }}
-		/// <summary>Creates a new SpecialValueEntity.Inbalance field instance</summary>
-		public static EntityField2 Inbalance { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(SpecialValueFieldIndex.Inbalance); }}
-		/// <summary>Creates a new SpecialValueEntity.Incredit field instance</summary>
-		public static EntityField2 Incredit { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(SpecialValueFieldIndex.Incredit); }}
-		/// <summary>Creates a new SpecialValueEntity.Indebit field instance</summary>
-		public static EntityField2 Indebit { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(SpecialValueFieldIndex.Indebit); }}
 	}
 
 	/// <summary>Field Creation Class for entity StockEntity</summary>

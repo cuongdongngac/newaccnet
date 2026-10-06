@@ -21,6 +21,11 @@ namespace NewaccNet.Reports
         public int? JournalVoucherId { get; set; }
 
         /// <summary>
+        /// ID dòng chứng từ chi tiết
+        /// </summary>
+        public int? JournalEntryId { get; set; }
+
+        /// <summary>
         /// Số chứng từ
         /// </summary>
         public string VoucherNo { get; set; }

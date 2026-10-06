@@ -110,6 +110,8 @@ namespace DataAccess
 		CustomCostReportAccountEntity,
 		///<summary>CustomerExportLine</summary>
 		CustomerExportLineEntity,
+		///<summary>DebtBalance</summary>
+		DebtBalanceEntity,
 		///<summary>DebtDetail</summary>
 		DebtDetailEntity,
 		///<summary>DebtLedger</summary>
@@ -180,8 +182,6 @@ namespace DataAccess
 		SecurityPolicyEntity,
 		///<summary>Source</summary>
 		SourceEntity,
-		///<summary>SpecialValue</summary>
-		SpecialValueEntity,
 		///<summary>Stock</summary>
 		StockEntity,
 		///<summary>StockType</summary>

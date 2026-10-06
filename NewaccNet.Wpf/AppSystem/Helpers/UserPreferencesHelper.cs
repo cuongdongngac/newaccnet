@@ -38,6 +38,16 @@ namespace NewaccNet.Wpf.AppSystem.Helpers
             return new Dictionary<string, string>();
         }
 
+        public static string GetSetting(string key)
+        {
+            var settings = LoadAllSettings();
+            if (settings.TryGetValue(key, out string val))
+            {
+                return val;
+            }
+            return null;
+        }
+
         private static void SaveAllSettings(Dictionary<string, string> settings)
         {
             try

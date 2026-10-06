@@ -25,7 +25,7 @@
     <PackageReference Include="DevExpress.Wpf.Printing" Version="25.2.3" />
     <PackageReference Include="DevExpress.Wpf.Reporting" Version="25.2.3" />
     <PackageReference Include="DevExpress.Wpf.Ribbon" Version="25.2.3" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.2" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
     <PackageReference Include="Npgsql" Version="9.0.3" />
   </ItemGroup>
 
@@ -35,4 +35,5 @@
     </None>
   </ItemGroup>
 </Project>
+
 

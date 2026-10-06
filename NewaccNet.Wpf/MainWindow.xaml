@@ -25,8 +25,8 @@
             <dxr:RibbonDefaultPageCategory>
                 <!-- ==================== Tab 1: NGHIỆP VỤ (ƯU TIÊN) ==================== -->
                 <dxr:RibbonPage Caption="Nghiệp vụ" IsSelected="True">
-                    <dxr:RibbonPageGroup Caption="Chứng từ">
-                        <dxb:BarButtonItem Content="" Hint="Chứng từ" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_invoice.svg'}" ItemClick="BtnVoucherTest_ItemClick" auth:AuthHelper.RequiredMask="8">
+                    <dxr:RibbonPageGroup Caption=" ">
+                        <dxb:BarButtonItem Content="Chứng từ" Hint="Chứng từ" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_invoice.svg'}" ItemClick="BtnVoucherTest_ItemClick" auth:AuthHelper.RequiredMask="8">
                             <dxb:BarButtonItem.SuperTip>
                                 <dx:SuperTip>
                                     <dx:SuperTipHeaderItem Content="Nhập Phiếu Kế toán Tổng hợp"/>
@@ -173,7 +173,7 @@ Thiết lập phương pháp tính giá xuất kho (Bình quân, FIFO, Đích da
                                 </dx:SuperTip>
                             </dxb:BarButtonItem.SuperTip>
                         </dxb:BarButtonItem>
-                        <dxb:BarButtonItem Content="Giá vật tư" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_list.svg'}" auth:AuthHelper.RequiredMask="4">
+                        <dxb:BarButtonItem Content="Giá vật tư" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_list.svg'}" ItemClick="BtnCategoryMaterialPrice_ItemClick" auth:AuthHelper.RequiredMask="4">
                             <dxb:BarButtonItem.SuperTip>
                                 <dx:SuperTip>
                                     <dx:SuperTipHeaderItem Content="Bảng Giá Vật tư"/>
@@ -317,7 +317,7 @@ Bao gồm liên kết tới loại hình tương ứng."/>
                 <!-- ==================== Tab: Báo cáo ==================== -->
                 <dxr:RibbonPage Caption="Báo cáo">
                     <dxr:RibbonPageGroup Caption="Tài chính">
-                        <dxb:BarButtonItem Content="CĐKT" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_report_showdesigner.svg'}" auth:AuthHelper.RequiredMask="8">
+                        <dxb:BarButtonItem Content="CĐKT" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_report_showdesigner.svg'}" auth:AuthHelper.RequiredMask="8" ItemClick="BtnReportBalanceSheet_ItemClick">
                             <dxb:BarButtonItem.SuperTip>
                                 <dx:SuperTip>
                                     <dx:SuperTipHeaderItem Content="In Bảng Cân đối Kế toán (B01-DN)"/>
@@ -334,7 +334,7 @@ Bao gồm liên kết tới loại hình tương ứng."/>
                         <dxb:BarButtonItem Content="Nhật ký" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_scheduler.svg'}" auth:AuthHelper.RequiredMask="8" ItemClick="BtnReportDiary_ItemClick"/>
                     </dxr:RibbonPageGroup>
                     <dxr:RibbonPageGroup Caption="Công nợ">
-                        <dxb:BarButtonItem Content="Tổng hợp CN" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_customer.svg'}" auth:AuthHelper.RequiredMask="16"/>
+                        <dxb:BarButtonItem Content="Tổng hợp CN" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_customer.svg'}" auth:AuthHelper.RequiredMask="16" ItemClick="BtnOpenDebtBalanceFilter_ItemClick"/>
                         <dxb:BarButtonItem Content="Chi tiết CN" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_appearance.svg'}" auth:AuthHelper.RequiredMask="16"/>
                     </dxr:RibbonPageGroup>
                     <dxr:RibbonPageGroup Caption="Kho">
@@ -365,6 +365,10 @@ Bao gồm liên kết tới loại hình tương ứng."/>
         </StatusBar>
     </Grid>
 </dx:ThemedWindow>
+
+
+
+
 
 
 

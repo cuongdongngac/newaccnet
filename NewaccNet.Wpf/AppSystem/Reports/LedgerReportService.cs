@@ -45,7 +45,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports
 
                 // Gọi class tính toán ở project Reports
                 var calc = new LedgerCalculator();
-                var dtoList = calc.Calculate(rawEntries, accountId, fromDate, toDate, onlyBooked);
+                var dtoList = calc.Calculate(adapter, rawEntries, accountId, fromDate, toDate, onlyBooked);
 
                 // Lấy thông tin Tên Tài khoản để truyền vào header báo cáo
                 string mockAccountName = $"Tài khoản {accountId}";

@@ -69,6 +69,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 			InitCustomCostReportEntityMappings();
 			InitCustomCostReportAccountEntityMappings();
 			InitCustomerExportLineEntityMappings();
+			InitDebtBalanceEntityMappings();
 			InitDebtDetailEntityMappings();
 			InitDebtLedgerEntityMappings();
 			InitDebtReasonEntityMappings();
@@ -104,7 +105,6 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 			InitReportSectionEntityMappings();
 			InitSecurityPolicyEntityMappings();
 			InitSourceEntityMappings();
-			InitSpecialValueEntityMappings();
 			InitStockEntityMappings();
 			InitStockTypeEntityMappings();
 			InitSystemUserEntityMappings();
@@ -122,7 +122,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits AccountBusinessResultEntity's mappings</summary>
 		private void InitAccountBusinessResultEntityMappings()
 		{
-			this.AddElementMapping("AccountBusinessResultEntity", @"Default", @"public", "AccountBusinessResult", 6, 0);
+			this.AddElementMapping("AccountBusinessResultEntity", @"Default", @"Newacc", "AccountBusinessResult", 6, 0);
 			this.AddElementFieldMapping("AccountBusinessResultEntity", "AccountId", "AccountId", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("AccountBusinessResultEntity", "BusinessResultItemId", "BusinessResultItemId", true, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("AccountBusinessResultEntity", "CounterAccountId", "CounterAccountId", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 2);
@@ -134,7 +134,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits AccountCashFlowItemEntity's mappings</summary>
 		private void InitAccountCashFlowItemEntityMappings()
 		{
-			this.AddElementMapping("AccountCashFlowItemEntity", @"Default", @"public", "AccountCashFlowItem", 5, 0);
+			this.AddElementMapping("AccountCashFlowItemEntity", @"Default", @"Newacc", "AccountCashFlowItem", 5, 0);
 			this.AddElementFieldMapping("AccountCashFlowItemEntity", "AccountId", "AccountId", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("AccountCashFlowItemEntity", "CashFlowItemId", "CashFlowItemId", true, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("AccountCashFlowItemEntity", "CounterAccountId", "CounterAccountId", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 2);
@@ -145,7 +145,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits AccountCostCalculatingItemEntity's mappings</summary>
 		private void InitAccountCostCalculatingItemEntityMappings()
 		{
-			this.AddElementMapping("AccountCostCalculatingItemEntity", @"Default", @"public", "AccountCostCalculatingItem", 5, 0);
+			this.AddElementMapping("AccountCostCalculatingItemEntity", @"Default", @"Newacc", "AccountCostCalculatingItem", 5, 0);
 			this.AddElementFieldMapping("AccountCostCalculatingItemEntity", "AccountId", "AccountId", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("AccountCostCalculatingItemEntity", "CostCalculatingItemId", "CostCalculatingItemId", true, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("AccountCostCalculatingItemEntity", "Id", "Id", false, "Integer", 0, 10, 0, true, "SystemIdentity", null, typeof(System.Int32), 2);
@@ -156,7 +156,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits AccountTaxObligationEntity's mappings</summary>
 		private void InitAccountTaxObligationEntityMappings()
 		{
-			this.AddElementMapping("AccountTaxObligationEntity", @"Default", @"public", "AccountTaxObligation", 7, 0);
+			this.AddElementMapping("AccountTaxObligationEntity", @"Default", @"Newacc", "AccountTaxObligation", 7, 0);
 			this.AddElementFieldMapping("AccountTaxObligationEntity", "AccountId", "AccountId", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("AccountTaxObligationEntity", "ColIndex", "ColIndex", true, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("AccountTaxObligationEntity", "CounterAccountId", "CounterAccountId", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 2);
@@ -169,7 +169,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits AccountVat3ItemEntity's mappings</summary>
 		private void InitAccountVat3ItemEntityMappings()
 		{
-			this.AddElementMapping("AccountVat3ItemEntity", @"Default", @"public", "AccountVat3Item", 6, 0);
+			this.AddElementMapping("AccountVat3ItemEntity", @"Default", @"Newacc", "AccountVat3Item", 6, 0);
 			this.AddElementFieldMapping("AccountVat3ItemEntity", "AccountId", "AccountId", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("AccountVat3ItemEntity", "CounterAccountId", "CounterAccountId", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("AccountVat3ItemEntity", "Id", "Id", false, "Integer", 0, 10, 0, true, "SystemIdentity", null, typeof(System.Int32), 2);
@@ -181,7 +181,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits AccountVatDeclareItemEntity's mappings</summary>
 		private void InitAccountVatDeclareItemEntityMappings()
 		{
-			this.AddElementMapping("AccountVatDeclareItemEntity", @"Default", @"public", "AccountVatDeclareItem", 7, 0);
+			this.AddElementMapping("AccountVatDeclareItemEntity", @"Default", @"Newacc", "AccountVatDeclareItem", 7, 0);
 			this.AddElementFieldMapping("AccountVatDeclareItemEntity", "AccountId", "AccountId", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("AccountVatDeclareItemEntity", "ColumnNo", "ColumnNo", true, "Smallint", 0, 5, 0, false, "", null, typeof(System.Int16), 1);
 			this.AddElementFieldMapping("AccountVatDeclareItemEntity", "CounterAccountId", "CounterAccountId", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 2);
@@ -194,7 +194,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits AssetEntity's mappings</summary>
 		private void InitAssetEntityMappings()
 		{
-			this.AddElementMapping("AssetEntity", @"Default", @"public", "Asset", 9, 0);
+			this.AddElementMapping("AssetEntity", @"Default", @"Newacc", "Asset", 9, 0);
 			this.AddElementFieldMapping("AssetEntity", "AssetHandle", "AssetHandle", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("AssetEntity", "AssetId", "AssetId", false, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("AssetEntity", "AssetName", "AssetName", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 2);
@@ -209,7 +209,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits AssetDetailEntity's mappings</summary>
 		private void InitAssetDetailEntityMappings()
 		{
-			this.AddElementMapping("AssetDetailEntity", @"Default", @"public", "AssetDetail", 7, 0);
+			this.AddElementMapping("AssetDetailEntity", @"Default", @"Newacc", "AssetDetail", 7, 0);
 			this.AddElementFieldMapping("AssetDetailEntity", "AssetId", "AssetId", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("AssetDetailEntity", "Id", "Id", false, "Integer", 0, 10, 0, true, "SystemIdentity", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("AssetDetailEntity", "JournalEntryId", "JournalEntryId", true, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
@@ -222,7 +222,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits AssetExportVoucherEntity's mappings</summary>
 		private void InitAssetExportVoucherEntityMappings()
 		{
-			this.AddElementMapping("AssetExportVoucherEntity", @"Default", @"public", "AssetExportVoucher", 5, 0);
+			this.AddElementMapping("AssetExportVoucherEntity", @"Default", @"Newacc", "AssetExportVoucher", 5, 0);
 			this.AddElementFieldMapping("AssetExportVoucherEntity", "AccountId", "AccountId", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("AssetExportVoucherEntity", "CounterAccountId", "CounterAccountId", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("AssetExportVoucherEntity", "ExobjectId", "ExobjectId", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 2);
@@ -233,7 +233,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits AssetLedgerEntity's mappings</summary>
 		private void InitAssetLedgerEntityMappings()
 		{
-			this.AddElementMapping("AssetLedgerEntity", @"Default", @"public", "AssetLedger", 14, 0);
+			this.AddElementMapping("AssetLedgerEntity", @"Default", @"Newacc", "AssetLedger", 14, 0);
 			this.AddElementFieldMapping("AssetLedgerEntity", "Camount", "Camount", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 0);
 			this.AddElementFieldMapping("AssetLedgerEntity", "Contents", "Contents", true, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("AssetLedgerEntity", "Cprice", "Cprice", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 2);
@@ -253,7 +253,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits AssetTrackingEntity's mappings</summary>
 		private void InitAssetTrackingEntityMappings()
 		{
-			this.AddElementMapping("AssetTrackingEntity", @"Default", @"public", "AssetTracking", 14, 0);
+			this.AddElementMapping("AssetTrackingEntity", @"Default", @"Newacc", "AssetTracking", 14, 0);
 			this.AddElementFieldMapping("AssetTrackingEntity", "AsaccountId", "AsaccountId", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("AssetTrackingEntity", "AssetId", "AssetId", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("AssetTrackingEntity", "Assettrackingid", "Assettrackingid", false, "Integer", 0, 10, 0, true, "SystemIdentity", null, typeof(System.Int32), 2);
@@ -273,7 +273,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits AssetTrackingDepreciationEntity's mappings</summary>
 		private void InitAssetTrackingDepreciationEntityMappings()
 		{
-			this.AddElementMapping("AssetTrackingDepreciationEntity", @"Default", @"public", "AssetTrackingDepreciation", 12, 0);
+			this.AddElementMapping("AssetTrackingDepreciationEntity", @"Default", @"Newacc", "AssetTrackingDepreciation", 12, 0);
 			this.AddElementFieldMapping("AssetTrackingDepreciationEntity", "AsaccountId", "AsaccountId", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("AssetTrackingDepreciationEntity", "AssetId", "AssetId", false, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("AssetTrackingDepreciationEntity", "Begindate", "Begindate", true, "Date", 0, 0, 0, false, "", null, typeof(System.DateTime), 2);
@@ -291,7 +291,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits BusinessResultItemEntity's mappings</summary>
 		private void InitBusinessResultItemEntityMappings()
 		{
-			this.AddElementMapping("BusinessResultItemEntity", @"Default", @"public", "BusinessResultItem", 7, 0);
+			this.AddElementMapping("BusinessResultItemEntity", @"Default", @"Newacc", "BusinessResultItem", 7, 0);
 			this.AddElementFieldMapping("BusinessResultItemEntity", "Code", "Code", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("BusinessResultItemEntity", "Id", "Id", false, "Integer", 0, 10, 0, true, "SystemIdentity", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("BusinessResultItemEntity", "Illustration", "Illustration", true, "Varchar", 255, 0, 0, false, "", null, typeof(System.String), 2);
@@ -304,7 +304,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits CashFlowBalanceEntity's mappings</summary>
 		private void InitCashFlowBalanceEntityMappings()
 		{
-			this.AddElementMapping("CashFlowBalanceEntity", @"Default", @"public", "CashFlowBalance", 5, 0);
+			this.AddElementMapping("CashFlowBalanceEntity", @"Default", @"Newacc", "CashFlowBalance", 5, 0);
 			this.AddElementFieldMapping("CashFlowBalanceEntity", "Id", "Id", false, "Integer", 0, 10, 0, true, "SystemIdentity", null, typeof(System.Int32), 0);
 			this.AddElementFieldMapping("CashFlowBalanceEntity", "Prevbeginbalance", "Prevbeginbalance", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 1);
 			this.AddElementFieldMapping("CashFlowBalanceEntity", "Prevendbalance", "Prevendbalance", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 2);
@@ -315,7 +315,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits CashFlowCategoryEntity's mappings</summary>
 		private void InitCashFlowCategoryEntityMappings()
 		{
-			this.AddElementMapping("CashFlowCategoryEntity", @"Default", @"public", "CashFlowCategory", 3, 0);
+			this.AddElementMapping("CashFlowCategoryEntity", @"Default", @"Newacc", "CashFlowCategory", 3, 0);
 			this.AddElementFieldMapping("CashFlowCategoryEntity", "CashFlowName", "CashFlowName", true, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("CashFlowCategoryEntity", "CashFlowNameRepeate", "CashFlowNameRepeate", true, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("CashFlowCategoryEntity", "Id", "Id", false, "Integer", 0, 10, 0, true, "SystemIdentity", null, typeof(System.Int32), 2);
@@ -324,7 +324,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits CashFlowItemEntity's mappings</summary>
 		private void InitCashFlowItemEntityMappings()
 		{
-			this.AddElementMapping("CashFlowItemEntity", @"Default", @"public", "CashFlowItem", 8, 0);
+			this.AddElementMapping("CashFlowItemEntity", @"Default", @"Newacc", "CashFlowItem", 8, 0);
 			this.AddElementFieldMapping("CashFlowItemEntity", "CashFlowCategoryId", "CashFlowCategoryId", true, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 0);
 			this.AddElementFieldMapping("CashFlowItemEntity", "Code", "Code", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("CashFlowItemEntity", "Dbcr", "Dbcr", false, "Boolean", 0, 0, 0, false, "", null, typeof(System.Boolean), 2);
@@ -338,7 +338,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits CashFlowPreviousPeriodEntity's mappings</summary>
 		private void InitCashFlowPreviousPeriodEntityMappings()
 		{
-			this.AddElementMapping("CashFlowPreviousPeriodEntity", @"Default", @"public", "CashFlowPreviousPeriod", 9, 0);
+			this.AddElementMapping("CashFlowPreviousPeriodEntity", @"Default", @"Newacc", "CashFlowPreviousPeriod", 9, 0);
 			this.AddElementFieldMapping("CashFlowPreviousPeriodEntity", "Amount", "Amount", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 0);
 			this.AddElementFieldMapping("CashFlowPreviousPeriodEntity", "Bold", "Bold", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("CashFlowPreviousPeriodEntity", "CashFlowId", "CashFlowId", true, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
@@ -353,7 +353,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits CashFlowYearBalanceEntity's mappings</summary>
 		private void InitCashFlowYearBalanceEntityMappings()
 		{
-			this.AddElementMapping("CashFlowYearBalanceEntity", @"Default", @"public", "CashFlowYearBalance", 3, 0);
+			this.AddElementMapping("CashFlowYearBalanceEntity", @"Default", @"Newacc", "CashFlowYearBalance", 3, 0);
 			this.AddElementFieldMapping("CashFlowYearBalanceEntity", "Id", "Id", false, "Integer", 0, 10, 0, true, "SystemIdentity", null, typeof(System.Int32), 0);
 			this.AddElementFieldMapping("CashFlowYearBalanceEntity", "Prevbeginbalance", "Prevbeginbalance", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 1);
 			this.AddElementFieldMapping("CashFlowYearBalanceEntity", "Thisbeginbalance", "Thisbeginbalance", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 2);
@@ -362,7 +362,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits CategoryEntity's mappings</summary>
 		private void InitCategoryEntityMappings()
 		{
-			this.AddElementMapping("CategoryEntity", @"Default", @"public", "Category", 3, 0);
+			this.AddElementMapping("CategoryEntity", @"Default", @"Newacc", "Category", 3, 0);
 			this.AddElementFieldMapping("CategoryEntity", "Categoryid", "Categoryid", false, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("CategoryEntity", "Categoryname", "Categoryname", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("CategoryEntity", "Taxrateid", "Taxrateid", true, "Smallint", 0, 5, 0, false, "", null, typeof(System.Int16), 2);
@@ -371,7 +371,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits ChartOfAccountEntity's mappings</summary>
 		private void InitChartOfAccountEntityMappings()
 		{
-			this.AddElementMapping("ChartOfAccountEntity", @"Default", @"public", "ChartOfAccount", 8, 0);
+			this.AddElementMapping("ChartOfAccountEntity", @"Default", @"Newacc", "ChartOfAccount", 8, 0);
 			this.AddElementFieldMapping("ChartOfAccountEntity", "AccountId", "AccountId", false, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("ChartOfAccountEntity", "AccountName", "AccountName", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("ChartOfAccountEntity", "CategoryId", "CategoryId", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 2);
@@ -385,7 +385,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits CostCalculatingBookEntity's mappings</summary>
 		private void InitCostCalculatingBookEntityMappings()
 		{
-			this.AddElementMapping("CostCalculatingBookEntity", @"Default", @"public", "CostCalculatingBook", 2, 0);
+			this.AddElementMapping("CostCalculatingBookEntity", @"Default", @"Newacc", "CostCalculatingBook", 2, 0);
 			this.AddElementFieldMapping("CostCalculatingBookEntity", "BookName", "BookName", true, "Varchar", 255, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("CostCalculatingBookEntity", "Id", "Id", false, "Integer", 0, 10, 0, true, "SystemIdentity", null, typeof(System.Int32), 1);
 		}
@@ -393,7 +393,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits CostCalculatingItemEntity's mappings</summary>
 		private void InitCostCalculatingItemEntityMappings()
 		{
-			this.AddElementMapping("CostCalculatingItemEntity", @"Default", @"public", "CostCalculatingItem", 4, 0);
+			this.AddElementMapping("CostCalculatingItemEntity", @"Default", @"Newacc", "CostCalculatingItem", 4, 0);
 			this.AddElementFieldMapping("CostCalculatingItemEntity", "Code", "Code", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("CostCalculatingItemEntity", "CostCalculatingBookId", "CostCalculatingBookId", true, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("CostCalculatingItemEntity", "Id", "Id", false, "Integer", 0, 10, 0, true, "SystemIdentity", null, typeof(System.Int32), 2);
@@ -403,7 +403,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits CostDetailEntity's mappings</summary>
 		private void InitCostDetailEntityMappings()
 		{
-			this.AddElementMapping("CostDetailEntity", @"Default", @"public", "CostDetail", 8, 0);
+			this.AddElementMapping("CostDetailEntity", @"Default", @"Newacc", "CostDetail", 8, 0);
 			this.AddElementFieldMapping("CostDetailEntity", "Amount", "Amount", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 0);
 			this.AddElementFieldMapping("CostDetailEntity", "CostElementId", "CostElementId", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("CostDetailEntity", "CostObjectId", "CostObjectId", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 2);
@@ -417,7 +417,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits CostElementEntity's mappings</summary>
 		private void InitCostElementEntityMappings()
 		{
-			this.AddElementMapping("CostElementEntity", @"Default", @"public", "CostElement", 3, 0);
+			this.AddElementMapping("CostElementEntity", @"Default", @"Newacc", "CostElement", 3, 0);
 			this.AddElementFieldMapping("CostElementEntity", "ElementName", "ElementName", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("CostElementEntity", "Id", "Id", false, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("CostElementEntity", "Taxflag", "Taxflag", false, "Boolean", 0, 0, 0, false, "", null, typeof(System.Boolean), 2);
@@ -426,7 +426,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits CostLedgerEntity's mappings</summary>
 		private void InitCostLedgerEntityMappings()
 		{
-			this.AddElementMapping("CostLedgerEntity", @"Default", @"public", "CostLedger", 10, 0);
+			this.AddElementMapping("CostLedgerEntity", @"Default", @"Newacc", "CostLedger", 10, 0);
 			this.AddElementFieldMapping("CostLedgerEntity", "Contents", "Contents", true, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("CostLedgerEntity", "Credit", "Credit", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 1);
 			this.AddElementFieldMapping("CostLedgerEntity", "Debit", "Debit", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 2);
@@ -442,7 +442,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits CostObjectEntity's mappings</summary>
 		private void InitCostObjectEntityMappings()
 		{
-			this.AddElementMapping("CostObjectEntity", @"Default", @"public", "CostObject", 3, 0);
+			this.AddElementMapping("CostObjectEntity", @"Default", @"Newacc", "CostObject", 3, 0);
 			this.AddElementFieldMapping("CostObjectEntity", "Id", "Id", false, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("CostObjectEntity", "ObjectName", "ObjectName", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("CostObjectEntity", "Syncronizeflag", "Syncronizeflag", false, "Boolean", 0, 0, 0, false, "", null, typeof(System.Boolean), 2);
@@ -451,7 +451,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits CurrencyEntity's mappings</summary>
 		private void InitCurrencyEntityMappings()
 		{
-			this.AddElementMapping("CurrencyEntity", @"Default", @"public", "Currency", 2, 0);
+			this.AddElementMapping("CurrencyEntity", @"Default", @"Newacc", "Currency", 2, 0);
 			this.AddElementFieldMapping("CurrencyEntity", "CurrencyId", "CurrencyId", false, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("CurrencyEntity", "CurrencyName", "CurrencyName", true, "Varchar", 20, 0, 0, false, "", null, typeof(System.String), 1);
 		}
@@ -459,7 +459,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits CurrencyDetailEntity's mappings</summary>
 		private void InitCurrencyDetailEntityMappings()
 		{
-			this.AddElementMapping("CurrencyDetailEntity", @"Default", @"public", "CurrencyDetail", 5, 0);
+			this.AddElementMapping("CurrencyDetailEntity", @"Default", @"Newacc", "CurrencyDetail", 5, 0);
 			this.AddElementFieldMapping("CurrencyDetailEntity", "CurrencyId", "CurrencyId", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("CurrencyDetailEntity", "ExchangeRate", "ExchangeRate", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 1);
 			this.AddElementFieldMapping("CurrencyDetailEntity", "Id", "Id", false, "Integer", 0, 10, 0, true, "SystemIdentity", null, typeof(System.Int32), 2);
@@ -470,7 +470,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits CurrencyLedgerEntity's mappings</summary>
 		private void InitCurrencyLedgerEntityMappings()
 		{
-			this.AddElementMapping("CurrencyLedgerEntity", @"Default", @"public", "CurrencyLedger", 14, 0);
+			this.AddElementMapping("CurrencyLedgerEntity", @"Default", @"Newacc", "CurrencyLedger", 14, 0);
 			this.AddElementFieldMapping("CurrencyLedgerEntity", "Camount", "Camount", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 0);
 			this.AddElementFieldMapping("CurrencyLedgerEntity", "Contents", "Contents", true, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("CurrencyLedgerEntity", "Cquantity", "Cquantity", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 2);
@@ -490,7 +490,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits CurrencyLiabilityLineEntity's mappings</summary>
 		private void InitCurrencyLiabilityLineEntityMappings()
 		{
-			this.AddElementMapping("CurrencyLiabilityLineEntity", @"Default", @"public", "CurrencyLiabilityLine", 4, 0);
+			this.AddElementMapping("CurrencyLiabilityLineEntity", @"Default", @"Newacc", "CurrencyLiabilityLine", 4, 0);
 			this.AddElementFieldMapping("CurrencyLiabilityLineEntity", "CurrencyId", "CurrencyId", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("CurrencyLiabilityLineEntity", "ExchangeRate", "ExchangeRate", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 1);
 			this.AddElementFieldMapping("CurrencyLiabilityLineEntity", "LineId", "LineId", false, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
@@ -500,7 +500,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits CustomCostReportEntity's mappings</summary>
 		private void InitCustomCostReportEntityMappings()
 		{
-			this.AddElementMapping("CustomCostReportEntity", @"Default", @"public", "CustomCostReport", 4, 0);
+			this.AddElementMapping("CustomCostReportEntity", @"Default", @"Newacc", "CustomCostReport", 4, 0);
 			this.AddElementFieldMapping("CustomCostReportEntity", "BookName", "BookName", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("CustomCostReportEntity", "BookType", "BookType", true, "Smallint", 0, 5, 0, false, "", null, typeof(System.Int16), 1);
 			this.AddElementFieldMapping("CustomCostReportEntity", "Dbcr", "Dbcr", true, "Smallint", 0, 5, 0, false, "", null, typeof(System.Int16), 2);
@@ -510,7 +510,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits CustomCostReportAccountEntity's mappings</summary>
 		private void InitCustomCostReportAccountEntityMappings()
 		{
-			this.AddElementMapping("CustomCostReportAccountEntity", @"Default", @"public", "CustomCostReportAccount", 3, 0);
+			this.AddElementMapping("CustomCostReportAccountEntity", @"Default", @"Newacc", "CustomCostReportAccount", 3, 0);
 			this.AddElementFieldMapping("CustomCostReportAccountEntity", "AccountId", "AccountId", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("CustomCostReportAccountEntity", "CustomCostReportId", "CustomCostReportId", true, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("CustomCostReportAccountEntity", "Id", "Id", false, "Integer", 0, 10, 0, true, "SystemIdentity", null, typeof(System.Int32), 2);
@@ -519,7 +519,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits CustomerExportLineEntity's mappings</summary>
 		private void InitCustomerExportLineEntityMappings()
 		{
-			this.AddElementMapping("CustomerExportLineEntity", @"Default", @"public", "CustomerExportLine", 7, 0);
+			this.AddElementMapping("CustomerExportLineEntity", @"Default", @"Newacc", "CustomerExportLine", 7, 0);
 			this.AddElementFieldMapping("CustomerExportLineEntity", "CustomerId", "CustomerId", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("CustomerExportLineEntity", "DebtReasonId", "DebtReasonId", true, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("CustomerExportLineEntity", "DebtTypeId", "DebtTypeId", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 2);
@@ -529,10 +529,30 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 			this.AddElementFieldMapping("CustomerExportLineEntity", "LineId", "LineId", false, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 6);
 		}
 
+		/// <summary>Inits DebtBalanceEntity's mappings</summary>
+		private void InitDebtBalanceEntityMappings()
+		{
+			this.AddElementMapping("DebtBalanceEntity", @"Default", @"Newacc", "DebtBalance", 14, 0);
+			this.AddElementFieldMapping("DebtBalanceEntity", "AccountId", "AccountId", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 0);
+			this.AddElementFieldMapping("DebtBalanceEntity", "Beginbalance", "Beginbalance", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 1);
+			this.AddElementFieldMapping("DebtBalanceEntity", "Begincredit", "Begincredit", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 2);
+			this.AddElementFieldMapping("DebtBalanceEntity", "Begindebit", "Begindebit", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 3);
+			this.AddElementFieldMapping("DebtBalanceEntity", "DebtTypeId", "DebtTypeId", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 4);
+			this.AddElementFieldMapping("DebtBalanceEntity", "Endbalance", "Endbalance", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 5);
+			this.AddElementFieldMapping("DebtBalanceEntity", "Endcredit", "Endcredit", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 6);
+			this.AddElementFieldMapping("DebtBalanceEntity", "Enddebit", "Enddebit", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 7);
+			this.AddElementFieldMapping("DebtBalanceEntity", "Id", "Id", false, "Integer", 0, 10, 0, true, "SystemIdentity", null, typeof(System.Int32), 8);
+			this.AddElementFieldMapping("DebtBalanceEntity", "Inbalance", "Inbalance", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 9);
+			this.AddElementFieldMapping("DebtBalanceEntity", "Incredit", "Incredit", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 10);
+			this.AddElementFieldMapping("DebtBalanceEntity", "Indebit", "Indebit", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 11);
+			this.AddElementFieldMapping("DebtBalanceEntity", "LongtermFlag", "LongtermFlag", true, "Smallint", 0, 5, 0, false, "", null, typeof(System.Int16), 12);
+			this.AddElementFieldMapping("DebtBalanceEntity", "PartnerId", "PartnerId", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 13);
+		}
+
 		/// <summary>Inits DebtDetailEntity's mappings</summary>
 		private void InitDebtDetailEntityMappings()
 		{
-			this.AddElementMapping("DebtDetailEntity", @"Default", @"public", "DebtDetail", 10, 0);
+			this.AddElementMapping("DebtDetailEntity", @"Default", @"Newacc", "DebtDetail", 10, 0);
 			this.AddElementFieldMapping("DebtDetailEntity", "Amount", "Amount", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 0);
 			this.AddElementFieldMapping("DebtDetailEntity", "Currency", "Currency", false, "Boolean", 0, 0, 0, false, "", null, typeof(System.Boolean), 1);
 			this.AddElementFieldMapping("DebtDetailEntity", "DebtReasonId", "DebtReasonId", true, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
@@ -548,7 +568,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits DebtLedgerEntity's mappings</summary>
 		private void InitDebtLedgerEntityMappings()
 		{
-			this.AddElementMapping("DebtLedgerEntity", @"Default", @"public", "DebtLedger", 11, 0);
+			this.AddElementMapping("DebtLedgerEntity", @"Default", @"Newacc", "DebtLedger", 11, 0);
 			this.AddElementFieldMapping("DebtLedgerEntity", "Contents", "Contents", true, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("DebtLedgerEntity", "Credit", "Credit", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 1);
 			this.AddElementFieldMapping("DebtLedgerEntity", "CustomerId", "CustomerId", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 2);
@@ -565,7 +585,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits DebtReasonEntity's mappings</summary>
 		private void InitDebtReasonEntityMappings()
 		{
-			this.AddElementMapping("DebtReasonEntity", @"Default", @"public", "DebtReason", 3, 0);
+			this.AddElementMapping("DebtReasonEntity", @"Default", @"Newacc", "DebtReason", 3, 0);
 			this.AddElementFieldMapping("DebtReasonEntity", "Id", "Id", false, "Integer", 0, 10, 0, true, "SystemIdentity", null, typeof(System.Int32), 0);
 			this.AddElementFieldMapping("DebtReasonEntity", "ReasonName", "ReasonName", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("DebtReasonEntity", "Visible", "Visible", false, "Boolean", 0, 0, 0, false, "", null, typeof(System.Boolean), 2);
@@ -574,7 +594,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits DebtTypeEntity's mappings</summary>
 		private void InitDebtTypeEntityMappings()
 		{
-			this.AddElementMapping("DebtTypeEntity", @"Default", @"public", "DebtType", 3, 0);
+			this.AddElementMapping("DebtTypeEntity", @"Default", @"Newacc", "DebtType", 3, 0);
 			this.AddElementFieldMapping("DebtTypeEntity", "Id", "Id", false, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("DebtTypeEntity", "Syncronizeflag", "Syncronizeflag", false, "Boolean", 0, 0, 0, false, "", null, typeof(System.Boolean), 1);
 			this.AddElementFieldMapping("DebtTypeEntity", "TypeName", "TypeName", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 2);
@@ -583,7 +603,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits DepartmentEntity's mappings</summary>
 		private void InitDepartmentEntityMappings()
 		{
-			this.AddElementMapping("DepartmentEntity", @"Default", @"public", "Department", 2, 0);
+			this.AddElementMapping("DepartmentEntity", @"Default", @"Newacc", "Department", 2, 0);
 			this.AddElementFieldMapping("DepartmentEntity", "Deptid", "Deptid", false, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("DepartmentEntity", "DeptName", "DeptName", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 1);
 		}
@@ -591,7 +611,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits DepreciationEntity's mappings</summary>
 		private void InitDepreciationEntityMappings()
 		{
-			this.AddElementMapping("DepreciationEntity", @"Default", @"public", "Depreciation", 7, 0);
+			this.AddElementMapping("DepreciationEntity", @"Default", @"Newacc", "Depreciation", 7, 0);
 			this.AddElementFieldMapping("DepreciationEntity", "Amount", "Amount", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 0);
 			this.AddElementFieldMapping("DepreciationEntity", "AssetId", "AssetId", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("DepreciationEntity", "Flag", "Flag", true, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
@@ -604,7 +624,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits ExchangeRateEntity's mappings</summary>
 		private void InitExchangeRateEntityMappings()
 		{
-			this.AddElementMapping("ExchangeRateEntity", @"Default", @"public", "ExchangeRate", 4, 0);
+			this.AddElementMapping("ExchangeRateEntity", @"Default", @"Newacc", "ExchangeRate", 4, 0);
 			this.AddElementFieldMapping("ExchangeRateEntity", "CurrencyId", "CurrencyId", false, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("ExchangeRateEntity", "ExchangeRate", "ExchangeRate", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 1);
 			this.AddElementFieldMapping("ExchangeRateEntity", "Id", "Id", false, "Integer", 0, 10, 0, true, "SystemIdentity", null, typeof(System.Int32), 2);
@@ -614,7 +634,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits ExpenseTaxLineEntity's mappings</summary>
 		private void InitExpenseTaxLineEntityMappings()
 		{
-			this.AddElementMapping("ExpenseTaxLineEntity", @"Default", @"public", "ExpenseTaxLine", 10, 0);
+			this.AddElementMapping("ExpenseTaxLineEntity", @"Default", @"Newacc", "ExpenseTaxLine", 10, 0);
 			this.AddElementFieldMapping("ExpenseTaxLineEntity", "Lineid", "Lineid", false, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 0);
 			this.AddElementFieldMapping("ExpenseTaxLineEntity", "Printflag", "Printflag", false, "Boolean", 0, 0, 0, false, "", null, typeof(System.Boolean), 1);
 			this.AddElementFieldMapping("ExpenseTaxLineEntity", "Rate", "Rate", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 2);
@@ -630,7 +650,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits FinancialMonthEntity's mappings</summary>
 		private void InitFinancialMonthEntityMappings()
 		{
-			this.AddElementMapping("FinancialMonthEntity", @"Default", @"public", "FinancialMonth", 2, 0);
+			this.AddElementMapping("FinancialMonthEntity", @"Default", @"Newacc", "FinancialMonth", 2, 0);
 			this.AddElementFieldMapping("FinancialMonthEntity", "Month", "Month", false, "Integer", 0, 10, 0, true, "SystemIdentity", null, typeof(System.Int32), 0);
 			this.AddElementFieldMapping("FinancialMonthEntity", "MonthName", "MonthName", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 1);
 		}
@@ -638,7 +658,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits GeneralLedgerEntity's mappings</summary>
 		private void InitGeneralLedgerEntityMappings()
 		{
-			this.AddElementMapping("GeneralLedgerEntity", @"Default", @"public", "GeneralLedger", 9, 0);
+			this.AddElementMapping("GeneralLedgerEntity", @"Default", @"Newacc", "GeneralLedger", 9, 0);
 			this.AddElementFieldMapping("GeneralLedgerEntity", "Contents", "Contents", true, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("GeneralLedgerEntity", "CounterAccountId", "CounterAccountId", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("GeneralLedgerEntity", "Credit", "Credit", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 2);
@@ -653,7 +673,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits InterestEntity's mappings</summary>
 		private void InitInterestEntityMappings()
 		{
-			this.AddElementMapping("InterestEntity", @"Default", @"public", "Interest", 17, 0);
+			this.AddElementMapping("InterestEntity", @"Default", @"Newacc", "Interest", 17, 0);
 			this.AddElementFieldMapping("InterestEntity", "Amount", "Amount", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 0);
 			this.AddElementFieldMapping("InterestEntity", "Balance", "Balance", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 1);
 			this.AddElementFieldMapping("InterestEntity", "Contents", "Contents", true, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 2);
@@ -676,7 +696,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits InterestDetailEntity's mappings</summary>
 		private void InitInterestDetailEntityMappings()
 		{
-			this.AddElementMapping("InterestDetailEntity", @"Default", @"public", "InterestDetail", 7, 0);
+			this.AddElementMapping("InterestDetailEntity", @"Default", @"Newacc", "InterestDetail", 7, 0);
 			this.AddElementFieldMapping("InterestDetailEntity", "Amount", "Amount", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 0);
 			this.AddElementFieldMapping("InterestDetailEntity", "Begindate", "Begindate", true, "Date", 0, 0, 0, false, "", null, typeof(System.DateTime), 1);
 			this.AddElementFieldMapping("InterestDetailEntity", "Enddate", "Enddate", true, "Date", 0, 0, 0, false, "", null, typeof(System.DateTime), 2);
@@ -689,7 +709,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits InterestRateEntity's mappings</summary>
 		private void InitInterestRateEntityMappings()
 		{
-			this.AddElementMapping("InterestRateEntity", @"Default", @"public", "InterestRate", 2, 0);
+			this.AddElementMapping("InterestRateEntity", @"Default", @"Newacc", "InterestRate", 2, 0);
 			this.AddElementFieldMapping("InterestRateEntity", "Enddate", "Enddate", false, "Date", 0, 0, 0, false, "", null, typeof(System.DateTime), 0);
 			this.AddElementFieldMapping("InterestRateEntity", "Rate", "Rate", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 1);
 		}
@@ -697,7 +717,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits InventoryExportVoucherEntity's mappings</summary>
 		private void InitInventoryExportVoucherEntityMappings()
 		{
-			this.AddElementMapping("InventoryExportVoucherEntity", @"Default", @"public", "InventoryExportVoucher", 3, 0);
+			this.AddElementMapping("InventoryExportVoucherEntity", @"Default", @"Newacc", "InventoryExportVoucher", 3, 0);
 			this.AddElementFieldMapping("InventoryExportVoucherEntity", "ExobjectId", "ExobjectId", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("InventoryExportVoucherEntity", "Id", "Id", false, "Integer", 0, 10, 0, true, "SystemIdentity", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("InventoryExportVoucherEntity", "JournalVoucherId", "JournalVoucherId", true, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
@@ -706,7 +726,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits InventoryItemEntity's mappings</summary>
 		private void InitInventoryItemEntityMappings()
 		{
-			this.AddElementMapping("InventoryItemEntity", @"Default", @"public", "InventoryItem", 4, 0);
+			this.AddElementMapping("InventoryItemEntity", @"Default", @"Newacc", "InventoryItem", 4, 0);
 			this.AddElementFieldMapping("InventoryItemEntity", "Categoryid", "Categoryid", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("InventoryItemEntity", "MaterialId", "MaterialId", false, "Varchar", 20, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("InventoryItemEntity", "MaterialName", "MaterialName", true, "Varchar", 255, 0, 0, false, "", null, typeof(System.String), 2);
@@ -716,7 +736,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits InventoryLedgerEntity's mappings</summary>
 		private void InitInventoryLedgerEntityMappings()
 		{
-			this.AddElementMapping("InventoryLedgerEntity", @"Default", @"public", "InventoryLedger", 13, 0);
+			this.AddElementMapping("InventoryLedgerEntity", @"Default", @"Newacc", "InventoryLedger", 13, 0);
 			this.AddElementFieldMapping("InventoryLedgerEntity", "Camount", "Camount", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 0);
 			this.AddElementFieldMapping("InventoryLedgerEntity", "Contents", "Contents", true, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("InventoryLedgerEntity", "Cprice", "Cprice", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 2);
@@ -735,7 +755,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits InventoryVoucherEntity's mappings</summary>
 		private void InitInventoryVoucherEntityMappings()
 		{
-			this.AddElementMapping("InventoryVoucherEntity", @"Default", @"public", "InventoryVoucher", 16, 0);
+			this.AddElementMapping("InventoryVoucherEntity", @"Default", @"Newacc", "InventoryVoucher", 16, 0);
 			this.AddElementFieldMapping("InventoryVoucherEntity", "Carrier", "Carrier", true, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("InventoryVoucherEntity", "ExobjectId", "ExobjectId", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("InventoryVoucherEntity", "Id", "Id", false, "Integer", 0, 10, 0, true, "SystemIdentity", null, typeof(System.Int32), 2);
@@ -757,7 +777,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits InventoryVoucherLineEntity's mappings</summary>
 		private void InitInventoryVoucherLineEntityMappings()
 		{
-			this.AddElementMapping("InventoryVoucherLineEntity", @"Default", @"public", "InventoryVoucherLine", 6, 0);
+			this.AddElementMapping("InventoryVoucherLineEntity", @"Default", @"Newacc", "InventoryVoucherLine", 6, 0);
 			this.AddElementFieldMapping("InventoryVoucherLineEntity", "Id", "Id", false, "Integer", 0, 10, 0, true, "SystemIdentity", null, typeof(System.Int32), 0);
 			this.AddElementFieldMapping("InventoryVoucherLineEntity", "InventoryVoucherId", "InventoryVoucherId", true, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("InventoryVoucherLineEntity", "MaterialId", "MaterialId", true, "Varchar", 20, 0, 0, false, "", null, typeof(System.String), 2);
@@ -769,7 +789,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits InvestmentDetailEntity's mappings</summary>
 		private void InitInvestmentDetailEntityMappings()
 		{
-			this.AddElementMapping("InvestmentDetailEntity", @"Default", @"public", "InvestmentDetail", 10, 0);
+			this.AddElementMapping("InvestmentDetailEntity", @"Default", @"Newacc", "InvestmentDetail", 10, 0);
 			this.AddElementFieldMapping("InvestmentDetailEntity", "CustomerId", "CustomerId", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("InvestmentDetailEntity", "Inprice", "Inprice", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 1);
 			this.AddElementFieldMapping("InvestmentDetailEntity", "JournalEntryId", "JournalEntryId", true, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
@@ -785,7 +805,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits InvestmentLedgerEntity's mappings</summary>
 		private void InitInvestmentLedgerEntityMappings()
 		{
-			this.AddElementMapping("InvestmentLedgerEntity", @"Default", @"public", "InvestmentLedger", 13, 0);
+			this.AddElementMapping("InvestmentLedgerEntity", @"Default", @"Newacc", "InvestmentLedger", 13, 0);
 			this.AddElementFieldMapping("InvestmentLedgerEntity", "Camount", "Camount", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 0);
 			this.AddElementFieldMapping("InvestmentLedgerEntity", "Contents", "Contents", true, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("InvestmentLedgerEntity", "Cprice", "Cprice", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 2);
@@ -804,7 +824,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits JournalEntryEntity's mappings</summary>
 		private void InitJournalEntryEntityMappings()
 		{
-			this.AddElementMapping("JournalEntryEntity", @"Default", @"public", "JournalEntry", 12, 0);
+			this.AddElementMapping("JournalEntryEntity", @"Default", @"Newacc", "JournalEntry", 12, 0);
 			this.AddElementFieldMapping("JournalEntryEntity", "AccountId", "AccountId", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("JournalEntryEntity", "Amount", "Amount", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 1);
 			this.AddElementFieldMapping("JournalEntryEntity", "Createdate", "Createdate", true, "Date", 0, 0, 0, false, "", null, typeof(System.DateTime), 2);
@@ -822,7 +842,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits JournalVoucherEntity's mappings</summary>
 		private void InitJournalVoucherEntityMappings()
 		{
-			this.AddElementMapping("JournalVoucherEntity", @"Default", @"public", "JournalVoucher", 16, 0);
+			this.AddElementMapping("JournalVoucherEntity", @"Default", @"Newacc", "JournalVoucher", 16, 0);
 			this.AddElementFieldMapping("JournalVoucherEntity", "Bookflag", "Bookflag", false, "Boolean", 0, 0, 0, false, "", null, typeof(System.Boolean), 0);
 			this.AddElementFieldMapping("JournalVoucherEntity", "Contents", "Contents", true, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("JournalVoucherEntity", "Flag", "Flag", false, "Boolean", 0, 0, 0, false, "", null, typeof(System.Boolean), 2);
@@ -844,7 +864,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits LiabilityDueEntity's mappings</summary>
 		private void InitLiabilityDueEntityMappings()
 		{
-			this.AddElementMapping("LiabilityDueEntity", @"Default", @"public", "LiabilityDue", 10, 0);
+			this.AddElementMapping("LiabilityDueEntity", @"Default", @"Newacc", "LiabilityDue", 10, 0);
 			this.AddElementFieldMapping("LiabilityDueEntity", "BeginDate", "BeginDate", true, "Date", 0, 0, 0, false, "", null, typeof(System.DateTime), 0);
 			this.AddElementFieldMapping("LiabilityDueEntity", "CustomerId", "CustomerId", false, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("LiabilityDueEntity", "DebtTypeId", "DebtTypeId", false, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 2);
@@ -860,7 +880,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits MaterialPriceEntity's mappings</summary>
 		private void InitMaterialPriceEntityMappings()
 		{
-			this.AddElementMapping("MaterialPriceEntity", @"Default", @"public", "MaterialPrice", 5, 0);
+			this.AddElementMapping("MaterialPriceEntity", @"Default", @"Newacc", "MaterialPrice", 5, 0);
 			this.AddElementFieldMapping("MaterialPriceEntity", "Id", "Id", false, "Integer", 0, 10, 0, true, "SystemIdentity", null, typeof(System.Int32), 0);
 			this.AddElementFieldMapping("MaterialPriceEntity", "MaterialId", "MaterialId", false, "Varchar", 20, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("MaterialPriceEntity", "Price", "Price", false, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 2);
@@ -871,7 +891,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits MaterialTaxLineEntity's mappings</summary>
 		private void InitMaterialTaxLineEntityMappings()
 		{
-			this.AddElementMapping("MaterialTaxLineEntity", @"Default", @"public", "MaterialTaxLine", 4, 0);
+			this.AddElementMapping("MaterialTaxLineEntity", @"Default", @"Newacc", "MaterialTaxLine", 4, 0);
 			this.AddElementFieldMapping("MaterialTaxLineEntity", "LineId", "LineId", false, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 0);
 			this.AddElementFieldMapping("MaterialTaxLineEntity", "Rate", "Rate", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 1);
 			this.AddElementFieldMapping("MaterialTaxLineEntity", "SellPrice", "SellPrice", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 2);
@@ -881,7 +901,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits PartnerEntity's mappings</summary>
 		private void InitPartnerEntityMappings()
 		{
-			this.AddElementMapping("PartnerEntity", @"Default", @"public", "Partner", 8, 0);
+			this.AddElementMapping("PartnerEntity", @"Default", @"Newacc", "Partner", 8, 0);
 			this.AddElementFieldMapping("PartnerEntity", "Address", "Address", true, "Varchar", 255, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("PartnerEntity", "CustomerName", "CustomerName", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("PartnerEntity", "Faxnumber", "Faxnumber", true, "Varchar", 30, 0, 0, false, "", null, typeof(System.String), 2);
@@ -895,7 +915,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits PreviousBusinessPeriodEntity's mappings</summary>
 		private void InitPreviousBusinessPeriodEntityMappings()
 		{
-			this.AddElementMapping("PreviousBusinessPeriodEntity", @"Default", @"public", "PreviousBusinessPeriod", 7, 0);
+			this.AddElementMapping("PreviousBusinessPeriodEntity", @"Default", @"Newacc", "PreviousBusinessPeriod", 7, 0);
 			this.AddElementFieldMapping("PreviousBusinessPeriodEntity", "Bold", "Bold", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("PreviousBusinessPeriodEntity", "Code", "Code", false, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("PreviousBusinessPeriodEntity", "Illu", "Illu", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 2);
@@ -908,7 +928,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits ReasonEntity's mappings</summary>
 		private void InitReasonEntityMappings()
 		{
-			this.AddElementMapping("ReasonEntity", @"Default", @"public", "Reason", 3, 0);
+			this.AddElementMapping("ReasonEntity", @"Default", @"Newacc", "Reason", 3, 0);
 			this.AddElementFieldMapping("ReasonEntity", "Flag", "Flag", false, "Boolean", 0, 0, 0, false, "", null, typeof(System.Boolean), 0);
 			this.AddElementFieldMapping("ReasonEntity", "Reasonid", "Reasonid", false, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("ReasonEntity", "ReasonName", "ReasonName", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 2);
@@ -917,7 +937,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits ReportCategoryEntity's mappings</summary>
 		private void InitReportCategoryEntityMappings()
 		{
-			this.AddElementMapping("ReportCategoryEntity", @"Default", @"public", "ReportCategory", 4, 0);
+			this.AddElementMapping("ReportCategoryEntity", @"Default", @"Newacc", "ReportCategory", 4, 0);
 			this.AddElementFieldMapping("ReportCategoryEntity", "CategoryName", "CategoryName", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("ReportCategoryEntity", "Code", "Code", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("ReportCategoryEntity", "Id", "Id", false, "Integer", 0, 10, 0, true, "SystemIdentity", null, typeof(System.Int32), 2);
@@ -927,7 +947,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits ReportFormulaEntity's mappings</summary>
 		private void InitReportFormulaEntityMappings()
 		{
-			this.AddElementMapping("ReportFormulaEntity", @"Default", @"public", "ReportFormula", 10, 0);
+			this.AddElementMapping("ReportFormulaEntity", @"Default", @"Newacc", "ReportFormula", 10, 0);
 			this.AddElementFieldMapping("ReportFormulaEntity", "Calculate", "Calculate", false, "Boolean", 0, 0, 0, false, "", null, typeof(System.Boolean), 0);
 			this.AddElementFieldMapping("ReportFormulaEntity", "Code", "Code", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("ReportFormulaEntity", "Formula", "Formula", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 2);
@@ -943,7 +963,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits ReportFormulaAccountEntity's mappings</summary>
 		private void InitReportFormulaAccountEntityMappings()
 		{
-			this.AddElementMapping("ReportFormulaAccountEntity", @"Default", @"public", "ReportFormulaAccount", 3, 0);
+			this.AddElementMapping("ReportFormulaAccountEntity", @"Default", @"Newacc", "ReportFormulaAccount", 3, 0);
 			this.AddElementFieldMapping("ReportFormulaAccountEntity", "AccountId", "AccountId", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("ReportFormulaAccountEntity", "Id", "Id", false, "Integer", 0, 10, 0, true, "SystemIdentity", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("ReportFormulaAccountEntity", "ItemsId", "ItemsId", true, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
@@ -952,7 +972,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits ReportItemEntity's mappings</summary>
 		private void InitReportItemEntityMappings()
 		{
-			this.AddElementMapping("ReportItemEntity", @"Default", @"public", "ReportItem", 4, 0);
+			this.AddElementMapping("ReportItemEntity", @"Default", @"Newacc", "ReportItem", 4, 0);
 			this.AddElementFieldMapping("ReportItemEntity", "Code", "Code", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("ReportItemEntity", "EntryName", "EntryName", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("ReportItemEntity", "Id", "Id", false, "Integer", 0, 10, 0, true, "SystemIdentity", null, typeof(System.Int32), 2);
@@ -962,7 +982,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits ReportSectionEntity's mappings</summary>
 		private void InitReportSectionEntityMappings()
 		{
-			this.AddElementMapping("ReportSectionEntity", @"Default", @"public", "ReportSection", 3, 0);
+			this.AddElementMapping("ReportSectionEntity", @"Default", @"Newacc", "ReportSection", 3, 0);
 			this.AddElementFieldMapping("ReportSectionEntity", "Id", "Id", false, "Integer", 0, 10, 0, true, "SystemIdentity", null, typeof(System.Int32), 0);
 			this.AddElementFieldMapping("ReportSectionEntity", "Indebit", "Indebit", false, "Boolean", 0, 0, 0, false, "", null, typeof(System.Boolean), 1);
 			this.AddElementFieldMapping("ReportSectionEntity", "SectionName", "SectionName", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 2);
@@ -971,7 +991,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits SecurityPolicyEntity's mappings</summary>
 		private void InitSecurityPolicyEntityMappings()
 		{
-			this.AddElementMapping("SecurityPolicyEntity", @"Default", @"public", "SecurityPolicy", 3, 0);
+			this.AddElementMapping("SecurityPolicyEntity", @"Default", @"Newacc", "SecurityPolicy", 3, 0);
 			this.AddElementFieldMapping("SecurityPolicyEntity", "Id", "Id", false, "Integer", 0, 10, 0, true, "SystemIdentity", null, typeof(System.Int32), 0);
 			this.AddElementFieldMapping("SecurityPolicyEntity", "SecurityLevel", "SecurityLevel", true, "Varchar", 20, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("SecurityPolicyEntity", "UserName", "UserName", true, "Varchar", 20, 0, 0, false, "", null, typeof(System.String), 2);
@@ -980,33 +1000,15 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits SourceEntity's mappings</summary>
 		private void InitSourceEntityMappings()
 		{
-			this.AddElementMapping("SourceEntity", @"Default", @"public", "Source", 2, 0);
+			this.AddElementMapping("SourceEntity", @"Default", @"Newacc", "Source", 2, 0);
 			this.AddElementFieldMapping("SourceEntity", "Srcode", "Srcode", false, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("SourceEntity", "Srname", "Srname", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 1);
-		}
-
-		/// <summary>Inits SpecialValueEntity's mappings</summary>
-		private void InitSpecialValueEntityMappings()
-		{
-			this.AddElementMapping("SpecialValueEntity", @"Default", @"public", "SpecialValue", 12, 0);
-			this.AddElementFieldMapping("SpecialValueEntity", "AccountId", "AccountId", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 0);
-			this.AddElementFieldMapping("SpecialValueEntity", "Beginbalance", "Beginbalance", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 1);
-			this.AddElementFieldMapping("SpecialValueEntity", "Begincredit", "Begincredit", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 2);
-			this.AddElementFieldMapping("SpecialValueEntity", "Begindebit", "Begindebit", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 3);
-			this.AddElementFieldMapping("SpecialValueEntity", "CustomerId", "CustomerId", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 4);
-			this.AddElementFieldMapping("SpecialValueEntity", "Endbalance", "Endbalance", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 5);
-			this.AddElementFieldMapping("SpecialValueEntity", "Endcredit", "Endcredit", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 6);
-			this.AddElementFieldMapping("SpecialValueEntity", "Enddebit", "Enddebit", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 7);
-			this.AddElementFieldMapping("SpecialValueEntity", "Id", "Id", false, "Integer", 0, 10, 0, true, "SystemIdentity", null, typeof(System.Int32), 8);
-			this.AddElementFieldMapping("SpecialValueEntity", "Inbalance", "Inbalance", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 9);
-			this.AddElementFieldMapping("SpecialValueEntity", "Incredit", "Incredit", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 10);
-			this.AddElementFieldMapping("SpecialValueEntity", "Indebit", "Indebit", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 11);
 		}
 
 		/// <summary>Inits StockEntity's mappings</summary>
 		private void InitStockEntityMappings()
 		{
-			this.AddElementMapping("StockEntity", @"Default", @"public", "Stock", 3, 0);
+			this.AddElementMapping("StockEntity", @"Default", @"Newacc", "Stock", 3, 0);
 			this.AddElementFieldMapping("StockEntity", "Description", "Description", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("StockEntity", "Stockid", "Stockid", false, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("StockEntity", "Stocktypeid", "Stocktypeid", true, "Smallint", 0, 5, 0, false, "", null, typeof(System.Int16), 2);
@@ -1015,7 +1017,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits StockTypeEntity's mappings</summary>
 		private void InitStockTypeEntityMappings()
 		{
-			this.AddElementMapping("StockTypeEntity", @"Default", @"public", "StockType", 2, 0);
+			this.AddElementMapping("StockTypeEntity", @"Default", @"Newacc", "StockType", 2, 0);
 			this.AddElementFieldMapping("StockTypeEntity", "Description", "Description", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("StockTypeEntity", "Stocktypeid", "Stocktypeid", false, "Smallint", 0, 5, 0, false, "", null, typeof(System.Int16), 1);
 		}
@@ -1023,7 +1025,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits SystemUserEntity's mappings</summary>
 		private void InitSystemUserEntityMappings()
 		{
-			this.AddElementMapping("SystemUserEntity", @"Default", @"public", "SystemUser", 6, 0);
+			this.AddElementMapping("SystemUserEntity", @"Default", @"Newacc", "SystemUser", 6, 0);
 			this.AddElementFieldMapping("SystemUserEntity", "FullName", "FullName", true, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("SystemUserEntity", "Id", "Id", false, "Integer", 0, 10, 0, true, "SystemIdentity", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("SystemUserEntity", "IsActive", "IsActive", false, "Boolean", 0, 0, 0, false, "", null, typeof(System.Boolean), 2);
@@ -1035,7 +1037,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits TaxObligationEntity's mappings</summary>
 		private void InitTaxObligationEntityMappings()
 		{
-			this.AddElementMapping("TaxObligationEntity", @"Default", @"public", "TaxObligation", 2, 0);
+			this.AddElementMapping("TaxObligationEntity", @"Default", @"Newacc", "TaxObligation", 2, 0);
 			this.AddElementFieldMapping("TaxObligationEntity", "Id", "Id", false, "Integer", 0, 10, 0, true, "SystemIdentity", null, typeof(System.Int32), 0);
 			this.AddElementFieldMapping("TaxObligationEntity", "ObligationName", "ObligationName", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 1);
 		}
@@ -1043,7 +1045,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits TaxObligationItemEntity's mappings</summary>
 		private void InitTaxObligationItemEntityMappings()
 		{
-			this.AddElementMapping("TaxObligationItemEntity", @"Default", @"public", "TaxObligationItem", 4, 0);
+			this.AddElementMapping("TaxObligationItemEntity", @"Default", @"Newacc", "TaxObligationItem", 4, 0);
 			this.AddElementFieldMapping("TaxObligationItemEntity", "Code", "Code", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("TaxObligationItemEntity", "Id", "Id", false, "Integer", 0, 10, 0, true, "SystemIdentity", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("TaxObligationItemEntity", "ItemName", "ItemName", true, "Varchar", 255, 0, 0, false, "", null, typeof(System.String), 2);
@@ -1053,7 +1055,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits TaxRateEntity's mappings</summary>
 		private void InitTaxRateEntityMappings()
 		{
-			this.AddElementMapping("TaxRateEntity", @"Default", @"public", "TaxRate", 3, 0);
+			this.AddElementMapping("TaxRateEntity", @"Default", @"Newacc", "TaxRate", 3, 0);
 			this.AddElementFieldMapping("TaxRateEntity", "Rate", "Rate", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 0);
 			this.AddElementFieldMapping("TaxRateEntity", "Taxratedes", "Taxratedes", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("TaxRateEntity", "Taxrateid", "Taxrateid", false, "Integer", 0, 10, 0, true, "SystemIdentity", null, typeof(System.Int32), 2);
@@ -1062,7 +1064,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits TrialBalanceEntity's mappings</summary>
 		private void InitTrialBalanceEntityMappings()
 		{
-			this.AddElementMapping("TrialBalanceEntity", @"Default", @"public", "TrialBalance", 10, 0);
+			this.AddElementMapping("TrialBalanceEntity", @"Default", @"Newacc", "TrialBalance", 10, 0);
 			this.AddElementFieldMapping("TrialBalanceEntity", "AccountId", "AccountId", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("TrialBalanceEntity", "Begincredit", "Begincredit", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 1);
 			this.AddElementFieldMapping("TrialBalanceEntity", "Begindebit", "Begindebit", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 2);
@@ -1078,7 +1080,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits UserAccountEntity's mappings</summary>
 		private void InitUserAccountEntityMappings()
 		{
-			this.AddElementMapping("UserAccountEntity", @"Default", @"public", "UserAccount", 3, 0);
+			this.AddElementMapping("UserAccountEntity", @"Default", @"Newacc", "UserAccount", 3, 0);
 			this.AddElementFieldMapping("UserAccountEntity", "AccountId", "AccountId", false, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("UserAccountEntity", "Id", "Id", false, "Integer", 0, 10, 0, true, "SystemIdentity", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("UserAccountEntity", "User", "User", false, "Varchar", 20, 0, 0, false, "", null, typeof(System.String), 2);
@@ -1087,7 +1089,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits Vat3TaxItemEntity's mappings</summary>
 		private void InitVat3TaxItemEntityMappings()
 		{
-			this.AddElementMapping("Vat3TaxItemEntity", @"Default", @"public", "Vat3TaxItem", 5, 0);
+			this.AddElementMapping("Vat3TaxItemEntity", @"Default", @"Newacc", "Vat3TaxItem", 5, 0);
 			this.AddElementFieldMapping("Vat3TaxItemEntity", "Code", "Code", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("Vat3TaxItemEntity", "Id", "Id", false, "Integer", 0, 10, 0, true, "SystemIdentity", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("Vat3TaxItemEntity", "IsBold", "IsBold", false, "Boolean", 0, 0, 0, false, "", null, typeof(System.Boolean), 2);
@@ -1098,7 +1100,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits VatDeclareItemEntity's mappings</summary>
 		private void InitVatDeclareItemEntityMappings()
 		{
-			this.AddElementMapping("VatDeclareItemEntity", @"Default", @"public", "VatDeclareItem", 5, 0);
+			this.AddElementMapping("VatDeclareItemEntity", @"Default", @"Newacc", "VatDeclareItem", 5, 0);
 			this.AddElementFieldMapping("VatDeclareItemEntity", "Code", "Code", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("VatDeclareItemEntity", "Id", "Id", false, "Integer", 0, 10, 0, true, "SystemIdentity", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("VatDeclareItemEntity", "IsBold", "IsBold", false, "Boolean", 0, 0, 0, false, "", null, typeof(System.Boolean), 2);
@@ -1109,7 +1111,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits VatEntryEntity's mappings</summary>
 		private void InitVatEntryEntityMappings()
 		{
-			this.AddElementMapping("VatEntryEntity", @"Default", @"public", "VatEntry", 16, 0);
+			this.AddElementMapping("VatEntryEntity", @"Default", @"Newacc", "VatEntry", 16, 0);
 			this.AddElementFieldMapping("VatEntryEntity", "Amount", "Amount", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 0);
 			this.AddElementFieldMapping("VatEntryEntity", "Beforetaxamount", "Beforetaxamount", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 1);
 			this.AddElementFieldMapping("VatEntryEntity", "Catid", "Catid", true, "Smallint", 0, 5, 0, false, "", null, typeof(System.Int16), 2);
@@ -1131,7 +1133,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits WarehouseEntity's mappings</summary>
 		private void InitWarehouseEntityMappings()
 		{
-			this.AddElementMapping("WarehouseEntity", @"Default", @"public", "Warehouse", 3, 0);
+			this.AddElementMapping("WarehouseEntity", @"Default", @"Newacc", "Warehouse", 3, 0);
 			this.AddElementFieldMapping("WarehouseEntity", "Place", "Place", true, "Varchar", 255, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("WarehouseEntity", "WarehouseId", "WarehouseId", false, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("WarehouseEntity", "WarehouseName", "WarehouseName", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 2);

@@ -230,7 +230,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Order property of the Entity ReportFormula<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ReportFormula"."Order".<br/>Table field type characteristics (type, precision, scale, length): TinyInt, 3, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "ReportFormula"."Order".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Int32 Order
 		{
 			get { return (System.Int32)GetValue((int)ReportFormulaFieldIndex.Order, true); }

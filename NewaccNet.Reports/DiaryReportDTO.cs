@@ -17,10 +17,9 @@ namespace NewaccNet.Reports
         public string? VoucherNo { get; set; }
         public DateTime VoucherDate { get; set; }
         public string? Contents { get; set; }
+        public string? AccountId { get; set; }
         public string? AccountName { get; set; }
-        public string? DebitAccount { get; set; }
-        public string? CreditAccount { get; set; }
-        public decimal Debit { get; set; }
-        public decimal Credit { get; set; }
+        public short Dbcr { get; set; }
+        public decimal Amount { get; set; }
     }
 }

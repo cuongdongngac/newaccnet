@@ -394,6 +394,16 @@ namespace DataAccess.FactoryClasses
 		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new CustomerExportLineEntity(fields); }
 	}
 
+	/// <summary>Factory to create new, empty DebtBalanceEntity objects.</summary>
+	[Serializable]
+	public partial class DebtBalanceEntityFactory : EntityFactoryBase2<DebtBalanceEntity> 
+	{
+		/// <summary>CTor</summary>
+		public DebtBalanceEntityFactory() : base("DebtBalanceEntity", DataAccess.EntityType.DebtBalanceEntity, false) { }
+		/// <inheritdoc/>
+		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new DebtBalanceEntity(fields); }
+	}
+
 	/// <summary>Factory to create new, empty DebtDetailEntity objects.</summary>
 	[Serializable]
 	public partial class DebtDetailEntityFactory : EntityFactoryBase2<DebtDetailEntity> 
@@ -744,16 +754,6 @@ namespace DataAccess.FactoryClasses
 		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new SourceEntity(fields); }
 	}
 
-	/// <summary>Factory to create new, empty SpecialValueEntity objects.</summary>
-	[Serializable]
-	public partial class SpecialValueEntityFactory : EntityFactoryBase2<SpecialValueEntity> 
-	{
-		/// <summary>CTor</summary>
-		public SpecialValueEntityFactory() : base("SpecialValueEntity", DataAccess.EntityType.SpecialValueEntity, false) { }
-		/// <inheritdoc/>
-		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new SpecialValueEntity(fields); }
-	}
-
 	/// <summary>Factory to create new, empty StockEntity objects.</summary>
 	[Serializable]
 	public partial class StockEntityFactory : EntityFactoryBase2<StockEntity> 
@@ -987,6 +987,8 @@ namespace DataAccess.FactoryClasses
 					return new CustomCostReportAccountEntityFactory();
 				case DataAccess.EntityType.CustomerExportLineEntity:
 					return new CustomerExportLineEntityFactory();
+				case DataAccess.EntityType.DebtBalanceEntity:
+					return new DebtBalanceEntityFactory();
 				case DataAccess.EntityType.DebtDetailEntity:
 					return new DebtDetailEntityFactory();
 				case DataAccess.EntityType.DebtLedgerEntity:
@@ -1057,8 +1059,6 @@ namespace DataAccess.FactoryClasses
 					return new SecurityPolicyEntityFactory();
 				case DataAccess.EntityType.SourceEntity:
 					return new SourceEntityFactory();
-				case DataAccess.EntityType.SpecialValueEntity:
-					return new SpecialValueEntityFactory();
 				case DataAccess.EntityType.StockEntity:
 					return new StockEntityFactory();
 				case DataAccess.EntityType.StockTypeEntity:

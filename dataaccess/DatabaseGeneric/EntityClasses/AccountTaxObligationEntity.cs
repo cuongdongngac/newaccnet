@@ -146,7 +146,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The ColIndex property of the Entity AccountTaxObligation<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AccountTaxObligation"."ColIndex".<br/>Table field type characteristics (type, precision, scale, length): TinyInt, 3, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AccountTaxObligation"."ColIndex".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> ColIndex
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)AccountTaxObligationFieldIndex.ColIndex, false); }

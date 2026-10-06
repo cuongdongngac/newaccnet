@@ -1,0 +1,28 @@
+<base:BaseWindow
+    x:Class="NewaccNet.Wpf.AppSystem.Reports.Fincance.BalanceSheetReportWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+    xmlns:base="clr-namespace:NewaccNet.Wpf.Views.Base"
+    Title="Bảng Cân Đối Kế Toán (B01-DN) - DTO Test"
+    Width="1000" Height="600"
+    WindowStartupLocation="CenterScreen"
+    Loaded="Window_Loaded">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Margin="10">
+            <Button x:Name="btnGenerate" Content="Lấy Dữ Liệu DTO" Width="150" Height="30" Click="BtnGenerate_Click" Background="#FF1565C0" Foreground="White" FontWeight="Bold"/>
+            <Button x:Name="btnPrint" Content="Mở Báo Cáo" Width="150" Height="30" Click="BtnPrint_Click" Background="#FF2E7D32" Foreground="White" FontWeight="Bold" Margin="10,0,0,0"/>
+        </StackPanel>
+
+        <!-- Dùng DataGrid hoặc DXGrid đều được. Ở đây xài DataGrid cho nhẹ -->
+        <DataGrid Grid.Row="1" x:Name="dgData" AutoGenerateColumns="True" IsReadOnly="True" Margin="10"/>
+    </Grid>
+</base:BaseWindow>

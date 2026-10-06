@@ -3,15 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using DataAccess.EntityClasses;
 using DataAccess.HelperClasses;
+using SD.LLBLGen.Pro.QuerySpec;
+using SD.LLBLGen.Pro.QuerySpec.Adapter;
 
 namespace NewaccNet.Reports
 {
     public class LedgerCalculator
     {
-        public List<LedgerReportDTO> Calculate(List<JournalEntryEntity> rawEntries, string accountId, DateTime beginDate, DateTime endDate, bool onlyBooked = true)
+        public List<LedgerReportDTO> Calculate(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter adapter, List<JournalEntryEntity> rawEntries, string accountId, DateTime beginDate, DateTime endDate, bool onlyBooked = true)
         {
             var result = new List<LedgerReportDTO>();
             decimal currentBalance = 0;
+            
+            var qf = new DataAccess.FactoryClasses.QueryFactory();
+            var accountsDict = adapter.FetchQuery(qf.ChartOfAccount).Cast<ChartOfAccountEntity>().ToDictionary(a => a.AccountId, a => a.AccountName);
 
             // 1. Tính số dư đầu kỳ (Trước ngày beginDate)
             var openingEntries = rawEntries.Where(x => 
@@ -70,7 +75,7 @@ namespace NewaccNet.Reports
                 {
                     foreach (var child in entry.SubEntries)
                     {
-                        AddPeriodRow(result, entry.JournalVoucher, entry.Dbcr, (decimal)(child.Amount ?? 0), entry.AccountId, child.AccountId, ref currentBalance, ref totalPeriodDebit, ref totalPeriodCredit);
+                        AddPeriodRow(result, accountsDict, entry.JournalVoucher, entry.Dbcr, (decimal)(child.Amount ?? 0), entry.AccountId, child.AccountId, child.Id, ref currentBalance, ref totalPeriodDebit, ref totalPeriodCredit);
                     }
                 }
                 else
@@ -78,18 +83,18 @@ namespace NewaccNet.Reports
                     // Nếu là dòng con, đối ứng là cha
                     if (entry.ParentId.HasValue && entry.ParentEntry != null)
                     {
-                        AddPeriodRow(result, entry.JournalVoucher, entry.Dbcr, (decimal)(entry.Amount ?? 0), entry.AccountId, entry.ParentEntry.AccountId, ref currentBalance, ref totalPeriodDebit, ref totalPeriodCredit);
+                        AddPeriodRow(result, accountsDict, entry.JournalVoucher, entry.Dbcr, (decimal)(entry.Amount ?? 0), entry.AccountId, entry.ParentEntry.AccountId, entry.Id, ref currentBalance, ref totalPeriodDebit, ref totalPeriodCredit);
                     }
                     else
                     {
                         // Dòng độc lập
-                        AddPeriodRow(result, entry.JournalVoucher, entry.Dbcr, (decimal)(entry.Amount ?? 0), entry.AccountId, "", ref currentBalance, ref totalPeriodDebit, ref totalPeriodCredit);
+                        AddPeriodRow(result, accountsDict, entry.JournalVoucher, entry.Dbcr, (decimal)(entry.Amount ?? 0), entry.AccountId, "", entry.Id, ref currentBalance, ref totalPeriodDebit, ref totalPeriodCredit);
                     }
                 }
             }
 
-            // Sắp xếp lại theo thời gian và số chứng từ
-            result = result.OrderBy(x => x.RowType).ThenBy(x => x.VoucherDate).ThenBy(x => x.VoucherNo).ToList();
+            // Sắp xếp lại theo thời gian và journalentryid
+            result = result.OrderBy(x => x.RowType).ThenBy(x => x.VoucherDate).ThenBy(x => x.JournalEntryId).ToList();
 
             // Thêm dòng Cộng phát sinh
             result.Add(new LedgerReportDTO
@@ -103,28 +108,14 @@ namespace NewaccNet.Reports
                 DebitAmount = totalPeriodDebit,
                 CreditAmount = totalPeriodCredit,
                 Balance = currentBalance,
-                JournalVoucherId = null
-            });
-
-            // Thêm dòng Dư cuối kỳ
-            result.Add(new LedgerReportDTO
-            {
-                RowType = 3,
-                VoucherDate = endDate,
-                VoucherNo = "",
-                Contents = "Số dư cuối kỳ",
-                AccountId = "",
-                CounterAccountId = "",
-                DebitAmount = 0,
-                CreditAmount = 0,
-                Balance = currentBalance,
-                JournalVoucherId = null
+                JournalVoucherId = null,
+                JournalEntryId = null
             });
 
             return result;
         }
 
-        private void AddPeriodRow(List<LedgerReportDTO> result, JournalVoucherEntity voucher, short? dbcr, decimal amount, string accountId, string counterAcc, ref decimal currentBalance, ref decimal totalDebit, ref decimal totalCredit)
+        private void AddPeriodRow(List<LedgerReportDTO> result, Dictionary<string, string> accountsDict, JournalVoucherEntity voucher, short? dbcr, decimal amount, string accountId, string counterAcc, int? entryId, ref decimal currentBalance, ref decimal totalDebit, ref decimal totalCredit)
         {
             decimal debit = 0;
             decimal credit = 0;
@@ -142,15 +133,23 @@ namespace NewaccNet.Reports
                 currentBalance -= amount;
             }
 
+            string counterAccountName = "";
+            if (!string.IsNullOrEmpty(counterAcc) && accountsDict.TryGetValue(counterAcc, out var accName))
+            {
+                counterAccountName = accName;
+            }
+
             result.Add(new LedgerReportDTO
             {
                 RowType = 1,
                 JournalVoucherId = voucher?.Id,
+                JournalEntryId = entryId,
                 VoucherNo = voucher?.VoucherNo ?? "",
                 VoucherDate = voucher?.VoucherDate,
                 Contents = voucher?.Contents ?? "",
                 AccountId = accountId,
                 CounterAccountId = counterAcc,
+                CounterAccountName = counterAccountName,
                 DebitAmount = debit,
                 CreditAmount = credit,
                 Balance = currentBalance

@@ -1,0 +1,4 @@
+Mẫu bảng cân đối kế toán ở tệp report.png.
+Bảng cân đối kế toán có  4 lớp (nhóm) cần thể hiện
+Nhóm 1 (Tài sản/Nguồn vốn) -> Nhóm cấp 1 -> nhóm cấp 2 -tiêu chí -> mô hình tính toán
+ 

@@ -1,0 +1,93 @@
+<local:BaseDictionaryWindow 
+    x:Class="NewaccNet.Wpf.AppSystem.Directory.MaterialPriceListView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+    xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:local="clr-namespace:NewaccNet.Wpf.AppSystem.Directory"
+    Title="Quản lý giá vốn vật tư" Height="600" Width="900" WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <dxb:ToolBarControl Grid.Row="0" AllowCustomizationMenu="False" AllowHide="False" AllowQuickCustomization="False">
+            <!-- Phương pháp tính giá xuất kho -->
+            <dxb:BarEditItem x:Name="cboCalcMethod" Content="Phương pháp:" EditWidth="230">
+                <dxb:BarEditItem.EditSettings>
+                    <dxe:ComboBoxEditSettings ValueMember="Value" DisplayMember="Text" IsTextEditable="False"/>
+                </dxb:BarEditItem.EditSettings>
+            </dxb:BarEditItem>
+
+            <!-- Mốc thời điểm tính: chỉ lấy giao dịch có ngày chứng từ <= ngày này -->
+            <dxb:BarEditItem x:Name="dteAsOfDate" Content="Tính đến ngày:" EditWidth="110">
+                <dxb:BarEditItem.EditSettings>
+                    <dxe:DateEditSettings DisplayFormat="dd/MM/yyyy" MaskType="DateTime" Mask="dd/MM/yyyy" MaskUseAsDisplayFormat="True"/>
+                </dxb:BarEditItem.EditSettings>
+            </dxb:BarEditItem>
+
+            <!-- Filter Kho (đồng thời là phạm vi tính giá) -->
+            <dxb:BarEditItem x:Name="cboWarehouseFilter" Content="Kho:" EditWidth="140" EditValueChanged="Filter_Changed">
+                <dxb:BarEditItem.EditSettings>
+                    <dxe:ComboBoxEditSettings ValueMember="WarehouseId" DisplayMember="WarehouseName" NullText="Tất cả kho" AllowNullInput="True" IsTextEditable="False"/>
+                </dxb:BarEditItem.EditSettings>
+            </dxb:BarEditItem>
+
+            <dxb:BarItemLinkSeparator />
+
+            <!-- Nút Lưu (dành cho chỉnh sửa thủ công) -->
+            <dxb:BarButtonItem Content="Lưu" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/save/save.svg'}" ItemClick="BtnSave_ItemClick"/>
+
+            <dxb:BarItemLinkSeparator />
+
+            <!-- Nút Tính giá -->
+            <dxb:BarButtonItem Content="Chạy tính giá lại" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/spreadsheet/calculatesheet.svg'}" ItemClick="BtnCalculatePrice_ItemClick"/>
+            
+            <dxb:BarButtonItem Content="Làm mới Grid" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_refresh.svg'}" ItemClick="BtnRefresh_ItemClick"/>
+        </dxb:ToolBarControl>
+
+        <!-- Lưới hiển thị danh mục Vật tư kèm giá đã tính -->
+        <dxg:GridControl x:Name="gridControl" Grid.Row="1" AutoGenerateColumns="None" SelectionMode="Row">
+            <dxg:GridControl.View>
+                <dxg:TableView ShowGroupPanel="True" ShowSearchPanelMode="Always" ShowAutoFilterRow="False" 
+                               AllowEditing="True" NewItemRowPosition="Bottom" 
+                               RowUpdated="TableView_RowUpdated" InitNewRow="TableView_InitNewRow">
+                    <dxg:TableView.FormatConditions>
+                        <dxg:FormatCondition Expression="[Quantity] &lt; 0" FieldName="Quantity">
+                            <dx:Format Foreground="Red" FontWeight="Bold"/>
+                        </dxg:FormatCondition>
+                    </dxg:TableView.FormatConditions>
+                </dxg:TableView>
+            </dxg:GridControl.View>
+            <dxg:GridControl.Columns>
+                <dxg:GridColumn FieldName="MaterialId" Header="Mã Vật Tư" Width="120" FixedWidth="True" />
+                <dxg:GridColumn FieldName="InventoryItem.MaterialName" Header="Tên Vật Tư" Width="*" AllowEditing="False" ReadOnly="True" />
+                <dxg:GridColumn FieldName="WarehouseId" Header="Kho" Width="150" FixedWidth="True">
+                    <dxg:GridColumn.EditSettings>
+                        <dxe:ComboBoxEditSettings x:Name="cboGridWarehouse" ValueMember="WarehouseId" DisplayMember="WarehouseName" />
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
+                <dxg:GridColumn FieldName="Quantity" Header="Số lượng tồn" Width="100" FixedWidth="True">
+                    <dxg:GridColumn.EditSettings>
+                        <dxe:TextEditSettings DisplayFormat="N2" />
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
+                <dxg:GridColumn FieldName="Price" Header="Đơn giá tồn" Width="120" FixedWidth="True">
+                    <dxg:GridColumn.EditSettings>
+                        <dxe:TextEditSettings DisplayFormat="N2" />
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
+                <dxg:GridColumn FieldName="StockValue" Header="Giá trị tồn" Width="130" FixedWidth="True"
+                                UnboundType="Decimal" UnboundExpression="IsNull([Quantity], 0) * [Price]" AllowEditing="False" ReadOnly="True">
+                    <dxg:GridColumn.EditSettings>
+                        <dxe:TextEditSettings DisplayFormat="N0" />
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
+            </dxg:GridControl.Columns>
+        </dxg:GridControl>
+    </Grid>
+</local:BaseDictionaryWindow>

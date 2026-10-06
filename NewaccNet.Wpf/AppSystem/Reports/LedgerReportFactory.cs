@@ -73,6 +73,31 @@ namespace NewaccNet.Wpf.AppSystem.Reports
                 SetParameter(summaryReport, "prmBeginDate", beginDate);
                 SetParameter(summaryReport, "prmEndDate", endDate);
                 summaryReport.RequestParameters = false;
+
+                // Lấy đích danh Band và Cell theo tên bạn đã đặt
+                var groupBand = summaryReport.Bands["CounterAccountBand"] as DevExpress.XtraReports.UI.GroupHeaderBand;
+                if (groupBand != null)
+                {
+                    // Quét các Table/Cell bên trong Band này để gán Tag, giúp click vào BẤT KỲ ô nào trên dòng này cũng nhận được ID
+                    foreach (XRControl control in groupBand.Controls)
+                    {
+                        if (control is XRTable table)
+                        {
+                            foreach (XRTableRow row in table.Rows)
+                            {
+                                foreach (XRTableCell cell in row.Cells)
+                                {
+                                    cell.ExpressionBindings.Add(new ExpressionBinding("BeforePrint", "Tag", "[CounterAccountId]"));
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                // (Tuỳ chọn) Nếu bạn chỉ muốn gán cho đúng cell CounterAccountId thì dùng FindControl
+                // var idCell = summaryReport.FindControl("CounterAccountId", true) as XRTableCell;
+                // if (idCell != null) idCell.ExpressionBindings.Add(new ExpressionBinding("BeforePrint", "Tag", "[CounterAccountId]"));
+
                 summaryReport.CreateDocument(false);
                 
                 DocumentPreviewWindow newWindow = new DocumentPreviewWindow();
@@ -83,18 +108,17 @@ namespace NewaccNet.Wpf.AppSystem.Reports
                 newWindow.PreviewControl.DocumentPreviewMouseClick += (sPreview, eClick) =>
                 {
                     var visualBrick = eClick.Brick as DevExpress.XtraPrinting.VisualBrick;
-                    if (visualBrick != null && visualBrick.Text != null)
+                    if (visualBrick != null && visualBrick.Value != null)
                     {
                         var brickOwner = visualBrick.BrickOwner as DevExpress.XtraReports.UI.XRControl;
-                        // Kiểm tra click vào cột Mã TK đối ứng (tableCell18)
-                        if (brickOwner != null && brickOwner.Name == "tableCell18")
+
+                        // Chỉ cho phép drill-down nếu click trúng ô CounterAccountId HOẶC nằm trong CounterAccountBand
+                        // Vì bạn muốn "click vào band là quay ngược lại", ta ưu tiên kiểm tra dữ liệu Value đã được gán Tag.
+                        string clickedAccountId = visualBrick.Value.ToString().Trim();
+                        if (!string.IsNullOrEmpty(clickedAccountId))
                         {
-                            string clickedAccountId = visualBrick.Text.Trim();
-                            if (!string.IsNullOrEmpty(clickedAccountId))
-                            {
-                                // Mở sổ cái chi tiết cho tài khoản vừa click (Gọi API fetch data mới hoàn toàn)
-                                LedgerReportService.ShowPreview(window, beginDate, endDate, clickedAccountId, onlyBooked);
-                            }
+                            // Mở sổ cái chi tiết cho tài khoản vừa click
+                            LedgerReportService.ShowPreview(window, beginDate, endDate, clickedAccountId, onlyBooked);
                         }
                     }
                 };

@@ -1,4 +1,6 @@
-﻿using System;
+using System.Windows.Input;
+using DataAccess.FactoryClasses;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -13,6 +15,8 @@ namespace NewaccNet.Wpf.AppSystem.Design
     public partial class BalanceSheetDesignWindow : BaseWindow
     {
         private EntityCollection<ReportSectionEntity> _sections = new EntityCollection<ReportSectionEntity>();
+        private Dictionary<int, decimal> _testSectionBalances = new Dictionary<int, decimal>();
+        private Dictionary<int, decimal> _testItemBalances = new Dictionary<int, decimal>();
         private EntityCollection<ChartOfAccountEntity> _accounts = new EntityCollection<ChartOfAccountEntity>();
 
         private List<ReportSectionEntity> _origSections = new List<ReportSectionEntity>();
@@ -509,6 +513,68 @@ namespace NewaccNet.Wpf.AppSystem.Design
             }
         }
 
+                private async void BtnTestCalc_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+        {
+            try
+            {
+                Mouse.OverrideCursor = Cursors.Wait;
+                _testSectionBalances.Clear();
+                _testItemBalances.Clear();
+
+                var dtos = await System.Threading.Tasks.Task.Run(() =>
+                {
+                    using var adapter = NewaccNet.Wpf.AppSystem.AppDataAccessAdapter.Create();
+                    var service = new NewaccNet.Reports.BalanceSheet.BalanceSheetService();
+                    return service.GenerateReport(adapter);
+                });
+
+                foreach (var dto in dtos)
+                {
+                    if (!_testSectionBalances.ContainsKey(dto.SectionId)) _testSectionBalances[dto.SectionId] = 0;
+                    _testSectionBalances[dto.SectionId] += dto.EndAmount;
+
+                    if (!_testItemBalances.ContainsKey(dto.ItemId)) _testItemBalances[dto.ItemId] = 0;
+                    _testItemBalances[dto.ItemId] += dto.EndAmount;
+                }
+
+                gridSections.RefreshData();
+                gridItems.RefreshData();
+                MessageBox.Show("Đã test tính toán và gắn số dư lên lưới thành công!", "Test CĐKT", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi: " + ex.Message);
+            }
+            finally
+            {
+                Mouse.OverrideCursor = null;
+            }
+        }
+
+        private void GridSections_CustomUnboundColumnData(object sender, DevExpress.Xpf.Grid.GridColumnDataEventArgs e)
+        {
+            if (e.Column.FieldName == "TestBalance" && e.IsGetData)
+            {
+                if (gridSections.GetRowByListIndex(e.ListSourceRowIndex) is DataAccess.EntityClasses.ReportSectionEntity section)
+                {
+                    if (_testSectionBalances.TryGetValue(section.Id, out decimal val))
+                        e.Value = val;
+                }
+            }
+        }
+
+        private void GridItems_CustomUnboundColumnData(object sender, DevExpress.Xpf.Grid.GridColumnDataEventArgs e)
+        {
+            if (e.Column.FieldName == "TestBalance" && e.IsGetData)
+            {
+                if (gridItems.GetRowByListIndex(e.ListSourceRowIndex) is DataAccess.EntityClasses.ReportItemEntity item)
+                {
+                    if (_testItemBalances.TryGetValue(item.Id, out decimal val))
+                        e.Value = val;
+                }
+            }
+        }
+
         private void BtnBestFit_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
         {
             (gridSections.View as TableView)?.BestFitColumns();
@@ -521,3 +587,9 @@ namespace NewaccNet.Wpf.AppSystem.Design
         }
     }
 }
+
+
+
+
+
+

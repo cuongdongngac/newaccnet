@@ -69,6 +69,7 @@ namespace DataAccess.MsAccess.DatabaseSpecific
 			InitCustomCostReportEntityMappings();
 			InitCustomCostReportAccountEntityMappings();
 			InitCustomerExportLineEntityMappings();
+			InitDebtBalanceEntityMappings();
 			InitDebtDetailEntityMappings();
 			InitDebtLedgerEntityMappings();
 			InitDebtReasonEntityMappings();
@@ -104,7 +105,6 @@ namespace DataAccess.MsAccess.DatabaseSpecific
 			InitReportSectionEntityMappings();
 			InitSecurityPolicyEntityMappings();
 			InitSourceEntityMappings();
-			InitSpecialValueEntityMappings();
 			InitStockEntityMappings();
 			InitStockTypeEntityMappings();
 			InitSystemUserEntityMappings();
@@ -527,6 +527,26 @@ namespace DataAccess.MsAccess.DatabaseSpecific
 			this.AddElementFieldMapping("CustomerExportLineEntity", "Liabilitydate", "Liabilitydate", true, "Date", 0, 0, 0, false, "", null, typeof(System.DateTime), 4);
 			this.AddElementFieldMapping("CustomerExportLineEntity", "LiabilityDuesId", "LiabilityDuesId", true, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 5);
 			this.AddElementFieldMapping("CustomerExportLineEntity", "LineId", "LineId", false, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 6);
+		}
+
+		/// <summary>Inits DebtBalanceEntity's mappings</summary>
+		private void InitDebtBalanceEntityMappings()
+		{
+			this.AddElementMapping("DebtBalanceEntity", @"template", @"Default", "DebtBalance", 14, 0);
+			this.AddElementFieldMapping("DebtBalanceEntity", "AccountId", "AccountId", true, "VarWChar", 10, 0, 0, false, "", null, typeof(System.String), 0);
+			this.AddElementFieldMapping("DebtBalanceEntity", "Beginbalance", "Beginbalance", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 1);
+			this.AddElementFieldMapping("DebtBalanceEntity", "Begincredit", "Begincredit", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 2);
+			this.AddElementFieldMapping("DebtBalanceEntity", "Begindebit", "Begindebit", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 3);
+			this.AddElementFieldMapping("DebtBalanceEntity", "DebtTypeId", "DebtTypeId", true, "VarWChar", 10, 0, 0, false, "", null, typeof(System.String), 4);
+			this.AddElementFieldMapping("DebtBalanceEntity", "Endbalance", "Endbalance", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 5);
+			this.AddElementFieldMapping("DebtBalanceEntity", "Endcredit", "Endcredit", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 6);
+			this.AddElementFieldMapping("DebtBalanceEntity", "Enddebit", "Enddebit", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 7);
+			this.AddElementFieldMapping("DebtBalanceEntity", "Id", "Id", false, "Integer", 0, 10, 0, true, "@@IDENTITY", null, typeof(System.Int32), 8);
+			this.AddElementFieldMapping("DebtBalanceEntity", "Inbalance", "Inbalance", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 9);
+			this.AddElementFieldMapping("DebtBalanceEntity", "Incredit", "Incredit", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 10);
+			this.AddElementFieldMapping("DebtBalanceEntity", "Indebit", "Indebit", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 11);
+			this.AddElementFieldMapping("DebtBalanceEntity", "LongtermFlag", "LongtermFlag", true, "SmallInt", 0, 5, 0, false, "", null, typeof(System.Int16), 12);
+			this.AddElementFieldMapping("DebtBalanceEntity", "PartnerId", "PartnerId", true, "VarWChar", 10, 0, 0, false, "", null, typeof(System.String), 13);
 		}
 
 		/// <summary>Inits DebtDetailEntity's mappings</summary>
@@ -983,24 +1003,6 @@ namespace DataAccess.MsAccess.DatabaseSpecific
 			this.AddElementMapping("SourceEntity", @"template", @"Default", "Source", 2, 0);
 			this.AddElementFieldMapping("SourceEntity", "Srcode", "Srcode", false, "VarWChar", 10, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("SourceEntity", "Srname", "Srname", true, "VarWChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
-		}
-
-		/// <summary>Inits SpecialValueEntity's mappings</summary>
-		private void InitSpecialValueEntityMappings()
-		{
-			this.AddElementMapping("SpecialValueEntity", @"template", @"Default", "SpecialValue", 12, 0);
-			this.AddElementFieldMapping("SpecialValueEntity", "AccountId", "AccountId", true, "VarWChar", 10, 0, 0, false, "", null, typeof(System.String), 0);
-			this.AddElementFieldMapping("SpecialValueEntity", "Beginbalance", "Beginbalance", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 1);
-			this.AddElementFieldMapping("SpecialValueEntity", "Begincredit", "Begincredit", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 2);
-			this.AddElementFieldMapping("SpecialValueEntity", "Begindebit", "Begindebit", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 3);
-			this.AddElementFieldMapping("SpecialValueEntity", "CustomerId", "CustomerId", true, "VarWChar", 10, 0, 0, false, "", null, typeof(System.String), 4);
-			this.AddElementFieldMapping("SpecialValueEntity", "Endbalance", "Endbalance", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 5);
-			this.AddElementFieldMapping("SpecialValueEntity", "Endcredit", "Endcredit", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 6);
-			this.AddElementFieldMapping("SpecialValueEntity", "Enddebit", "Enddebit", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 7);
-			this.AddElementFieldMapping("SpecialValueEntity", "Id", "Id", false, "Integer", 0, 10, 0, true, "@@IDENTITY", null, typeof(System.Int32), 8);
-			this.AddElementFieldMapping("SpecialValueEntity", "Inbalance", "Inbalance", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 9);
-			this.AddElementFieldMapping("SpecialValueEntity", "Incredit", "Incredit", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 10);
-			this.AddElementFieldMapping("SpecialValueEntity", "Indebit", "Indebit", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 11);
 		}
 
 		/// <summary>Inits StockEntity's mappings</summary>

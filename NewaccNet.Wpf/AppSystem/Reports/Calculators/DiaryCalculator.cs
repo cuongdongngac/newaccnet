@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using DataAccess.FactoryClasses;
@@ -35,7 +35,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Calculators
 
             var q = qf.GetDiaryTypedList()
                 .Where(predicate)
-                .OrderBy(JournalVoucherFields.VoucherDate.Ascending(), JournalVoucherFields.VoucherNo.Ascending(), JournalVoucherFields.Id.Ascending(), JournalEntryFields.Dbcr.Descending());
+                .OrderBy(JournalVoucherFields.VoucherDate.Ascending(), JournalEntryFields.Id.Ascending());
 
             return adapter.FetchQuery(q);
         }
@@ -57,9 +57,10 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Calculators
             {
                 TotalVouchers = rows.Select(x => x.JournalVoucherId).Distinct().Count(),
                 TotalEntries = rows.Count,
-                SumDebit = rows.Sum(x => x.Debit),
-                SumCredit = rows.Sum(x => x.Credit)
+                SumDebit = rows.Sum(x => x.Dbcr == 1 ? (decimal)(x.Amount ?? 0) : 0),
+                SumCredit = rows.Sum(x => x.Dbcr != 1 ? (decimal)(x.Amount ?? 0) : 0)
             };
         }
     }
 }
+

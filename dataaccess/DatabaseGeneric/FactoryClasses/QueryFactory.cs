@@ -117,6 +117,9 @@ namespace DataAccess.FactoryClasses
 		/// <summary>Creates and returns a new EntityQuery for the CustomerExportLine entity</summary>
 		public EntityQuery<CustomerExportLineEntity> CustomerExportLine { get { return Create<CustomerExportLineEntity>(); } }
 
+		/// <summary>Creates and returns a new EntityQuery for the DebtBalance entity</summary>
+		public EntityQuery<DebtBalanceEntity> DebtBalance { get { return Create<DebtBalanceEntity>(); } }
+
 		/// <summary>Creates and returns a new EntityQuery for the DebtDetail entity</summary>
 		public EntityQuery<DebtDetailEntity> DebtDetail { get { return Create<DebtDetailEntity>(); } }
 
@@ -221,9 +224,6 @@ namespace DataAccess.FactoryClasses
 
 		/// <summary>Creates and returns a new EntityQuery for the Source entity</summary>
 		public EntityQuery<SourceEntity> Source { get { return Create<SourceEntity>(); } }
-
-		/// <summary>Creates and returns a new EntityQuery for the SpecialValue entity</summary>
-		public EntityQuery<SpecialValueEntity> SpecialValue { get { return Create<SpecialValueEntity>(); } }
 
 		/// <summary>Creates and returns a new EntityQuery for the Stock entity</summary>
 		public EntityQuery<StockEntity> Stock { get { return Create<StockEntity>(); } }

@@ -6,3 +6,5 @@
 - **In ấn:** Báo cáo/sổ sách/BCTC = `XtraReport` + Band (xem `.ai_context/02_rules/report_rules.md`). `GridControl` + `ReportManager.PrintGridControl` **chỉ** cho in danh mục.
 - **ORM:** Dùng độc quyền LLBLGen Pro. Tuân thủ đúng cấu trúc Entity, TypedList, và Adapter/SelfServicing.
 - **Kiến trúc:** MVVM nghiêm ngặt. Không viết logic nghiệp vụ/dữ liệu vào Code-Behind (`.xaml.cs`). Toàn bộ sự kiện từ DevExpress phải chuyển sang ViewModel qua EventToCommand hoặc Binding.
+
+- **Kiến trúc DB-Agnostic (CORE DIRECTIVE):** Ứng dụng đa nền tảng, lớp giao tiếp không biết DB là gì. BẮT BUỘC sử dụng ORM và Lập trình Hướng đối tượng (OOP) cho toàn bộ logic/tính toán. TUYỆT ĐỐI KHÔNG dùng bất kỳ thủ tục (Stored Procedure) hay hàm cơ sở dữ liệu nào để xử lý nghiệp vụ.

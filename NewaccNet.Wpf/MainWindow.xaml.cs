@@ -254,5 +254,24 @@ public partial class MainWindow : ThemedWindow {
             }
         }
     }
-}
 
+    private void BtnCategoryMaterialPrice_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.Directory.MaterialPriceListView();
+        win.Show();
+    }
+
+    private void BtnReportBalanceSheet_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.Reports.Fincance.BalanceSheetFilterWindow();
+        win.Owner = this;
+        win.ShowDialog();
+    }
+
+    private void BtnOpenDebtBalanceFilter_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.Reports.Fincance.DebtBalanceFilterWindow();
+        win.Owner = this;
+        win.ShowDialog();
+    }
+}

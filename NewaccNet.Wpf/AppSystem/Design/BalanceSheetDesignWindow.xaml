@@ -1,4 +1,4 @@
-﻿<base:BaseWindow
+<base:BaseWindow
     x:Class="NewaccNet.Wpf.AppSystem.Design.BalanceSheetDesignWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -34,7 +34,7 @@
 
         <!-- Grid 1: Tầng 1 (Section) + Tầng 2 (Category) — master-detail -->
         <GroupBox Grid.Row="1" Header="📘 Bậc 1-2: Mục lớn (Section) → Nhóm chỉ tiêu (Category) — Chọn một Nhóm để xem Chỉ tiêu bên dưới" Padding="6">
-            <dxg:GridControl x:Name="gridSections" AutoGenerateColumns="None" SelectionMode="Row"
+            <dxg:GridControl x:Name="gridSections" CustomUnboundColumnData="GridSections_CustomUnboundColumnData" AutoGenerateColumns="None" SelectionMode="Row"
                              MasterRowExpanded="GridSections_MasterRowExpanded">
                 <!-- Detail: Tầng 2 - ReportCategory -->
                 <dxg:GridControl.DetailDescriptor>
@@ -81,6 +81,7 @@
                 <dxg:GridControl.Columns>
                     <!-- ReportSectionEntity fields: Id, SectionName, Indebit -->
                     <dxg:GridColumn FieldName="Id" Header="ID" Width="60" AllowEditing="False" Visible="False" HorizontalHeaderContentAlignment="Center"/>
+                    <dxg:GridColumn FieldName="TestBalance" Header="Số dư (Test)" Width="120" UnboundType="Decimal" ReadOnly="True"/>
                     <dxg:GridColumn FieldName="SectionName" Header="Mục lớn (I, II, III) (*)" Width="350"/>
                     <dxg:GridColumn FieldName="Indebit" Header="Bên Nợ" Width="80" HorizontalHeaderContentAlignment="Center">
                         <dxg:GridColumn.EditSettings>
@@ -95,7 +96,7 @@
 
         <!-- Grid 2: Tầng 3 (Item) + Tầng 4 (Formula) + Tầng 5 (FormulaAccount) -->
         <GroupBox Grid.Row="3" Header="📗 Bậc 3-5: Chỉ tiêu (Item) → Công thức (Formula) → Tài khoản tham chiếu (Account) [Theo Nhóm đã chọn ở trên]" Padding="6">
-            <dxg:GridControl x:Name="gridItems" AutoGenerateColumns="None" SelectionMode="Row">
+            <dxg:GridControl x:Name="gridItems" CustomUnboundColumnData="GridItems_CustomUnboundColumnData" AutoGenerateColumns="None" SelectionMode="Row">
                 <!-- Detail Tầng 4: ReportFormula -->
                 <dxg:GridControl.DetailDescriptor>
                     <dxg:DataControlDetailDescriptor ItemsSourceBinding="{Binding ReportFormulas}">
@@ -179,6 +180,7 @@
                     <!-- ReportItemEntity fields: Id, Code, EntryName, ReportCategoryId -->
                     <dxg:GridColumn FieldName="Id" Header="ID" Width="55" AllowEditing="False" Visible="False" HorizontalHeaderContentAlignment="Center"/>
                     <dxg:GridColumn FieldName="Code" Header="Mã chỉ tiêu" Width="110"/>
+                    <dxg:GridColumn FieldName="TestBalance" Header="Số dư (Test)" Width="120" UnboundType="Decimal" ReadOnly="True"/>
                     <dxg:GridColumn FieldName="EntryName" Header="Tên chỉ tiêu (*)" Width="280"/>
                     <dxg:GridColumn FieldName="ReportCategoryId" Header="CategoryId" Width="80" AllowEditing="False" Visible="False"/>
                 </dxg:GridControl.Columns>
@@ -190,3 +192,6 @@
         </StackPanel>
     </Grid>
 </base:BaseWindow>
+
+
+

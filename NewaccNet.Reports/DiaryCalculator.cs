@@ -20,11 +20,10 @@ namespace NewaccNet.Reports
                 VoucherNo = row.VoucherNo,
                 VoucherDate = row.VoucherDate ?? System.DateTime.MinValue,
                 Contents = row.Contents,
+                AccountId = row.AccountId,
                 AccountName = row.AccountName,
-                DebitAccount = row.DebitAccount,
-                CreditAccount = row.CreditAccount,
-                Debit = row.Debit,
-                Credit = row.Credit
+                Dbcr = row.Dbcr ?? 0,
+                Amount = (decimal)(row.Amount ?? 0)
             }).ToList();
         }
     }
