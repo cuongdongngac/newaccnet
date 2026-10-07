@@ -56,6 +56,10 @@
                         </dxe:ButtonEdit.Buttons>
                     </dxe:ButtonEdit>
                 </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                    <TextBlock Text="Tiêu đề cột:" VerticalAlignment="Center" Width="80"/>
+                    <dxe:TextEdit x:Name="txtOtherAmountTitle" Width="400" Height="28" NullText="Ví dụ: Luỹ kế từ đầu năm (hoặc Kỳ trước)"/>
+                </StackPanel>
             </StackPanel>
         </GroupBox>
 

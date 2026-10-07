@@ -59,6 +59,7 @@
             this.DetailData1 = new DevExpress.XtraReports.UI.XRControlStyle();
             this.DetailData3_Odd = new DevExpress.XtraReports.UI.XRControlStyle();
             this.PageInfo = new DevExpress.XtraReports.UI.XRControlStyle();
+            this.prmOtherAmount = new DevExpress.XtraReports.Parameters.Parameter();
             ((System.ComponentModel.ISupportInitialize)(this.table1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.table2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.objectDataSource1)).BeginInit();
@@ -175,11 +176,13 @@
             // OtherAmount
             // 
             this.OtherAmount.BackColor = System.Drawing.Color.White;
+            this.OtherAmount.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
+            new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "?prmOtherAmount")});
             this.OtherAmount.Name = "OtherAmount";
             this.OtherAmount.StyleName = "DetailCaption1";
             this.OtherAmount.StylePriority.UseBackColor = false;
             this.OtherAmount.StylePriority.UseTextAlignment = false;
-            this.OtherAmount.Text = "Other Amount";
+            this.OtherAmount.Text = "Lũy kế từ đầu năm";
             this.OtherAmount.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
             this.OtherAmount.Weight = 0.24726486843593651D;
             // 
@@ -371,6 +374,12 @@
             this.PageInfo.Name = "PageInfo";
             this.PageInfo.Padding = new DevExpress.XtraPrinting.PaddingInfo(6F, 6F, 0F, 0F, 100F);
             // 
+            // prmOtherAmount
+            // 
+            this.prmOtherAmount.Description = "Parameter1";
+            this.prmOtherAmount.Name = "prmOtherAmount";
+            this.prmOtherAmount.ValueInfo = "Lũy kế từ đầu năm";
+            // 
             // VatReturn
             // 
             this.Bands.AddRange(new DevExpress.XtraReports.UI.Band[] {
@@ -388,6 +397,8 @@
             this.PageHeightF = 826.7717F;
             this.PageWidthF = 1169.291F;
             this.PaperKind = DevExpress.Drawing.Printing.DXPaperKind.A4;
+            this.Parameters.AddRange(new DevExpress.XtraReports.Parameters.Parameter[] {
+            this.prmOtherAmount});
             this.StyleSheet.AddRange(new DevExpress.XtraReports.UI.XRControlStyle[] {
             this.Title,
             this.DetailCaption1,
@@ -434,5 +445,6 @@
         private DevExpress.XtraReports.UI.XRCheckBox checkBox2;
         private DevExpress.XtraReports.UI.XRTableCell tableCell11;
         private DevExpress.XtraReports.UI.XRTableCell tableCell12;
+        private DevExpress.XtraReports.Parameters.Parameter prmOtherAmount;
     }
 }

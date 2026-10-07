@@ -22,6 +22,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
             
             if (!string.IsNullOrEmpty(settings.VatReturnAccJsonPath)) txtAccJsonPath.Text = settings.VatReturnAccJsonPath;
             if (!string.IsNullOrEmpty(settings.VatReturnTitle)) txtReportTitle.Text = settings.VatReturnTitle;
+            if (!string.IsNullOrEmpty(settings.VatReturnOtherAmountTitle)) txtOtherAmountTitle.Text = settings.VatReturnOtherAmountTitle;
         }
 
         private void BtnBrowseAccJson_Click(object sender, RoutedEventArgs e)
@@ -90,6 +91,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
                 if (report.Parameters["prmFromDate"] != null) report.Parameters["prmFromDate"].Value = fromDate;
                 if (report.Parameters["prmToDate"] != null) report.Parameters["prmToDate"].Value = toDate;
                 if (report.Parameters["prmTitle"] != null) report.Parameters["prmTitle"].Value = txtReportTitle.Text;
+                if (report.Parameters["prmOtherAmount"] != null) report.Parameters["prmOtherAmount"].Value = txtOtherAmountTitle.Text;
                 
                 report.RequestParameters = false;
                 report.CreateDocument(false);
@@ -168,6 +170,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
             settings.VatReturnToDate = dtToDate.DateTime;
             settings.VatReturnAccJsonPath = txtAccJsonPath.Text;
             settings.VatReturnTitle = txtReportTitle.Text;
+            settings.VatReturnOtherAmountTitle = txtOtherAmountTitle.Text;
             ReportSettingsHelper.Save(settings);
         }
     }

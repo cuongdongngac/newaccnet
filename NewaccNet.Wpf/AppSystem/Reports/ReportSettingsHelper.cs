@@ -27,6 +27,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports
         public DateTime? VatReturnToDate { get; set; }
         public string VatReturnAccJsonPath { get; set; }
         public string VatReturnTitle { get; set; }
+        public string VatReturnOtherAmountTitle { get; set; }
     }
 
     public static class ReportSettingsHelper
