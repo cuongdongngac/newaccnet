@@ -22,6 +22,11 @@ namespace NewaccNet.Wpf.AppSystem.Reports
         public DateTime? ObligationTaxToDate { get; set; }
         public string ObligationTaxPrevJsonPath { get; set; }
         public string ObligationTaxAccJsonPath { get; set; }
+
+        public DateTime? VatReturnFromDate { get; set; }
+        public DateTime? VatReturnToDate { get; set; }
+        public string VatReturnAccJsonPath { get; set; }
+        public string VatReturnTitle { get; set; }
     }
 
     public static class ReportSettingsHelper
