@@ -35,7 +35,7 @@ namespace NewaccNet.Reports.TrialBalance
                         return rawE.DebtDetails.Select(d => new {
                             PartnerId = d.PartnerId ?? string.Empty,
                             Dbcr = e.Dbcr,
-                            Amount = (double)(d.Amount ?? ((decimal?)e.Amount ?? 0)),
+                            Amount = (double)(d.Amount.HasValue ? (decimal)d.Amount.Value : (e.Amount)),
                             IsOpening = e.IsOpeningBalance(beginDate),
                             VoucherDate = e.VoucherDate
                         });
@@ -103,8 +103,7 @@ namespace NewaccNet.Reports.TrialBalance
                         Intdebit = intDebit,
                         Intcredit = intCredit,
                         Enddebit = sumEndDebit,
-                        Endcredit = sumEndCredit,
-                        IsSummary = false
+                        Endcredit = sumEndCredit
                     });
                 }
             }

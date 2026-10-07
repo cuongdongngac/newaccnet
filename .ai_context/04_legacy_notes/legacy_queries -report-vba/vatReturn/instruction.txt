@@ -1,0 +1,15 @@
+Tính toán tương tự như ở phần Obligation - tuy nhiên bỏ qua cột trường columnno
+Các điêu kiện neo
+ - CounterAccountID*
+ - Method = DBCR ở  JournalEntry
+ - isAdd   True  thì nhân với -1
+ Sau rốt lại nhân với -1
+
+Dto
+Name  VatReturn
+Code
+ItemName
+IsBodl
+IsItalic
+Amount
+OtherAmount

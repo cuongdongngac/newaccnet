@@ -7,7 +7,7 @@ namespace NewaccNet.Reports
 {
     public class FlattenedLedgerEntry
     {
-        public long EntryId { get; set; }
+        public int EntryId { get; set; }
         public string AccountId { get; set; }
         public string CounterAccountId { get; set; }
         public short Dbcr { get; set; }

@@ -289,6 +289,13 @@ public partial class MainWindow : ThemedWindow {
         win.ShowDialog();
     }
 
+    private void BtnReportVatReturn_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.Reports.Fincance.VatReturnFilterWindow();
+        win.Owner = this;
+        win.ShowDialog();
+    }
+
     private void BtnOpenDebtBalanceFilter_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
     {
         var win = new NewaccNet.Wpf.AppSystem.Reports.Fincance.DebtBalanceFilterWindow();

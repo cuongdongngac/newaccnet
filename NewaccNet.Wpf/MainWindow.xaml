@@ -327,7 +327,8 @@ Bao gồm liên kết tới loại hình tương ứng."/>
                         </dxb:BarButtonItem>
                         <dxb:BarButtonItem Content="KQKD" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_pivotchart.svg'}" auth:AuthHelper.RequiredMask="8" ItemClick="BtnReportBusinessResult_ItemClick"/>
                         <dxb:BarButtonItem Content="LCTT" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_sale.svg'}" auth:AuthHelper.RequiredMask="8" ItemClick="BtnReportCashFlow_ItemClick"/>
-                        <dxb:BarButtonItem Content="Thuế" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_security_permission.svg'}" auth:AuthHelper.RequiredMask="8" ItemClick="BtnReportObligationTax_ItemClick"/>
+                        <dxb:BarButtonItem Content="Thuế Nghĩa vụ" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_security_permission.svg'}" auth:AuthHelper.RequiredMask="8" ItemClick="BtnReportObligationTax_ItemClick"/>
+                        <dxb:BarButtonItem Content="Thuế Khấu trừ" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_document.svg'}" auth:AuthHelper.RequiredMask="8" ItemClick="BtnReportVatReturn_ItemClick"/>
                     </dxr:RibbonPageGroup>
                     <dxr:RibbonPageGroup Caption="Sổ sách">
                         <dxb:BarButtonItem Content="Sổ cái" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_list.svg'}" auth:AuthHelper.RequiredMask="8" ItemClick="BtnReportLedger_ItemClick"/>

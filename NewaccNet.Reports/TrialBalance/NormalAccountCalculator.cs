@@ -55,8 +55,7 @@ namespace NewaccNet.Reports.TrialBalance
                         Intdebit = intDebit,
                         Intcredit = intCredit,
                         Enddebit = endDebit,
-                        Endcredit = endCredit,
-                        IsSummary = false
+                        Endcredit = endCredit
                     });
                 }
             }
