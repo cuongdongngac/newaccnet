@@ -136,8 +136,8 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
 
                 System.Windows.Input.Mouse.OverrideCursor = null;
 
-                // Xuất JSON chỉ mang theo Code và OtherAmount (OtherAmount của kỳ này sẽ trở thành OtherAmount luỹ kế cho kỳ tiếp theo ghép vào)
-                var exportData = data.Select(x => new { x.Code, x.OtherAmount }).ToList();
+                // Xuất JSON chỉ mang theo Code và Amount để sau này nhồi vào OtherAmount của kỳ báo cáo khác (so sánh)
+                var exportData = data.Select(x => new { x.Code, x.Amount }).ToList();
 
                 var sfd = new SaveFileDialog
                 {

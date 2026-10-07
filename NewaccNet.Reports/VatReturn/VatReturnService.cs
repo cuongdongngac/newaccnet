@@ -131,7 +131,7 @@ namespace NewaccNet.Reports.VatReturn
                 });
             }
 
-            // 4. MERGE JSON LUỸ KẾ
+            // 4. MERGE JSON
             if (hasAccJson)
             {
                 try
@@ -140,30 +140,12 @@ namespace NewaccNet.Reports.VatReturn
                     var prevData = JsonSerializer.Deserialize<List<VatReturnReportDTO>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
                     if (prevData != null)
                     {
-                        var prevDict = prevData.GroupBy(x => x.Code).ToDictionary(g => g.Key, g => g.Sum(x => x.OtherAmount));
+                        var prevDict = prevData.GroupBy(x => x.Code).ToDictionary(g => g.Key, g => g.Sum(x => x.Amount));
                         
                         foreach (var res in results)
                         {
-                            // Lấy luỹ kế từ quý trước
-                            decimal prevOther = prevDict.ContainsKey(res.Code) ? prevDict[res.Code] : 0;
-                            
-                            // Xác định xem chỉ tiêu này có phải là số dư đầu kỳ (Method == 0) không
-                            // Cách nhanh nhất: kiểm tra config DB (nếu có bất kỳ tài khoản nào Method = 0 thì nó là Balance)
-                            var configItem = items.FirstOrDefault(i => i.Code == res.Code);
-                            bool isBalanceItem = configItem != null && configItem.AccountVat3Items.Any(a => (a.Method ?? 0) == 0);
-
-                            if (isBalanceItem)
-                            {
-                                // Đối với các chỉ tiêu SỐ DƯ ĐẦU KỲ (ví dụ Thuế GTGT còn được KT đầu kỳ):
-                                // Luỹ kế từ đầu năm LUÔN bằng Số dư từ đầu năm (tức là prevOther). Nó không bao giờ bị cộng thêm Amount của quý này.
-                                res.OtherAmount = prevOther;
-                            }
-                            else
-                            {
-                                // Đối với các chỉ tiêu PHÁT SINH (ví dụ Thuế GTGT đầu ra phát sinh, Số thuế GTGT phát sinh):
-                                // Luỹ kế kỳ này = Luỹ kế kỳ trước + Phát sinh kỳ này
-                                res.OtherAmount = prevOther + res.Amount;
-                            }
+                            // Nhồi trực tiếp giá trị Amount từ JSON vào OtherAmount
+                            res.OtherAmount = prevDict.ContainsKey(res.Code) ? prevDict[res.Code] : 0;
                         }
                     }
                 }
