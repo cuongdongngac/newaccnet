@@ -1,0 +1,77 @@
+<base:BaseWindow
+    x:Class="NewaccNet.Wpf.AppSystem.Reports.Fincance.CashFlowFilterWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:base="clr-namespace:NewaccNet.Wpf.Views.Base"
+    Title="Báo Cáo Lưu Chuyển Tiền Tệ (B03-DN)"
+    SizeToContent="Height" Width="550"
+    ResizeMode="NoResize"
+    WindowStartupLocation="CenterOwner"
+    ShowInTaskbar="False"
+    WindowStyle="ToolWindow"
+    Loaded="Window_Loaded">
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Tiêu đề -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,14">
+            <TextBlock Text="💵 Lưu Chuyển Tiền Tệ (B03-DN)" FontSize="22" FontWeight="Bold" Foreground="#FF0D47A1"/>
+            <TextBlock Text="Vui lòng chọn kỳ báo cáo và dữ liệu so sánh (Kỳ trước)" Foreground="#FF616161" Margin="0,4,0,0"/>
+        </StackPanel>
+
+        <!-- Kỳ báo cáo -->
+        <GroupBox Grid.Row="1" Header="Kỳ báo cáo (Dữ liệu truy vấn từ Database)" Margin="0,0,0,10" FontWeight="SemiBold">
+            <StackPanel Orientation="Vertical" Margin="8,8,8,4" TextElement.FontWeight="Normal">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Từ ngày:" VerticalAlignment="Center" Width="80"/>
+                    <dxe:DateEdit x:Name="dtFromDate" Width="140" Height="28" Mask="dd/MM/yyyy" MaskUseAsDisplayFormat="True"/>
+                    <TextBlock Text="Đến ngày:" VerticalAlignment="Center" Width="80" Margin="20,0,0,0"/>
+                    <dxe:DateEdit x:Name="dtToDate" Width="140" Height="28" Mask="dd/MM/yyyy" MaskUseAsDisplayFormat="True"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                    <TextBlock Text="Tiêu đề cột:" VerticalAlignment="Center" Width="80"/>
+                    <dxe:TextEdit x:Name="txtCurrentColumnName" Text="Năm nay" Width="140" Height="28"/>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+
+        <!-- Dữ liệu kỳ trước -->
+        <GroupBox Grid.Row="2" Header="Kỳ so sánh (Dữ liệu nhồi từ Snapshot JSON)" Margin="0,0,0,14" FontWeight="SemiBold">
+            <StackPanel Orientation="Vertical" Margin="8,8,8,4" TextElement.FontWeight="Normal">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="File dữ liệu:" VerticalAlignment="Center" Width="80"/>
+                    <dxe:ButtonEdit x:Name="txtPrevJsonPath" Width="300" Height="28" AllowDefaultButton="False" NullText="Bỏ trống nếu không cần so sánh">
+                        <dxe:ButtonEdit.Buttons>
+                            <dxe:ButtonInfo GlyphKind="Regular" ToolTip="Chọn file JSON kỳ trước" Click="BtnBrowseJson_Click"/>
+                            <dxe:ButtonInfo GlyphKind="Cancel" ToolTip="Xóa chọn" Click="BtnClearJson_Click"/>
+                        </dxe:ButtonEdit.Buttons>
+                    </dxe:ButtonEdit>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                    <TextBlock Text="Tiêu đề cột:" VerticalAlignment="Center" Width="80"/>
+                    <dxe:TextEdit x:Name="txtPrevColumnName" Text="Năm trước" Width="140" Height="28"/>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+
+        <!-- Nút OK / Cancel -->
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="btnExportJson" Content="Xuất JSON kỳ này" Width="130" Height="32" Margin="0,0,8,0"
+                    Click="BtnExportJson_Click" Background="#FFF57F17" Foreground="White" FontWeight="Bold"/>
+            <Button x:Name="btnCancel" Content="Hủy bỏ (Esc)" Width="110" Height="32" Margin="0,0,8,0"
+                    IsCancel="True" Click="BtnCancel_Click"/>
+            <Button x:Name="btnOK" Content="Xem báo cáo (Enter)" Width="160" Height="32"
+                    Background="#FF1565C0" Foreground="White" FontWeight="Bold"
+                    IsDefault="True" Click="BtnOK_Click"/>
+        </StackPanel>
+    </Grid>
+</base:BaseWindow>

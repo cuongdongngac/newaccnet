@@ -276,9 +276,9 @@ namespace NewaccNet.Wpf.AppSystem.Services
 
                 movements.Add(new StockMovement
                 {
-                    VoucherDate = voucher.JournalEntry.JournalVoucher.VoucherDate,
-                    VoucherId = voucher.Id.ToString(),
-                    LineId = line.Id.ToString(),
+                    VoucherDate = voucher.JournalEntry?.JournalVoucher?.VoucherDate ?? DateTime.MinValue,
+                    VoucherId = voucher.Id,
+                    LineId = line.Id,
                     IsReceipt = isReceipt,
                     Quantity = (decimal)(line.Quantity ?? 0),
                     Price = (decimal)(line.Price ?? 0),
@@ -301,7 +301,7 @@ namespace NewaccNet.Wpf.AppSystem.Services
             // Cập nhật kết quả vào Store (để save xuống MaterialPrice)
             var record = GetOrAdd(materialId, warehouseId);
             record.Quantity = (double)balance.Quantity;
-            record.Price = (double)balance.AveragePrice;
+            record.Price = (double)balance.Price;
         }
 
         // =====================================================================

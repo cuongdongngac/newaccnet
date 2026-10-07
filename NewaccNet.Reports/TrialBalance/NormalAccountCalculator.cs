@@ -12,29 +12,31 @@ namespace NewaccNet.Reports.TrialBalance
         {
             var results = new List<TrialBalanceEntity>();
             
+            // SỬ DỤNG TRỤC TRUNG GIAN ĐỂ LÀM PHẲNG
+            var flattenedSource = FlattenedLedgerService.Flatten(rawEntries, beginDate);
+            
             // Lọc các giao dịch thuộc các tài khoản thường
-            var targetEntries = rawEntries.Where(e => accountIds.Contains(e.AccountId)).ToList();
+            var targetEntries = flattenedSource.Where(e => accountIds.Contains(e.AccountId)).ToList();
 
             foreach (var accountId in accountIds)
             {
                 var accountEntries = targetEntries.Where(e => e.AccountId == accountId).ToList();
 
-                // Dư đầu kỳ (trước beginDate hoặc là số dư đầu kỳ không có Voucher)
-                var beginEntries = accountEntries.Where(e => e.JournalVoucher == null || e.JournalVoucher.VoucherDate < beginDate).ToList();
-                double sumBeginDebit = beginEntries.Where(e => e.Dbcr == 1).Sum(e => e.Amount ?? 0);
-                double sumBeginCredit = beginEntries.Where(e => e.Dbcr != 1).Sum(e => e.Amount ?? 0);
+                // Số dư đầu kỳ
+                var beginEntries = accountEntries.Where(e => e.IsOpeningBalance(beginDate)).ToList();
+                double sumBeginDebit = (double)beginEntries.Where(e => e.Dbcr == 1).Sum(e => e.Amount);
+                double sumBeginCredit = (double)beginEntries.Where(e => e.Dbcr != 1).Sum(e => e.Amount);
                 
                 double netBeginDebit = 0;
                 double netBeginCredit = 0;
                 if (sumBeginDebit > sumBeginCredit) netBeginDebit = sumBeginDebit - sumBeginCredit;
                 else netBeginCredit = sumBeginCredit - sumBeginDebit;
 
-                // Phát sinh trong kỳ (beginDate -> endDate)
-                var intEntries = accountEntries.Where(e => e.JournalVoucher != null && e.JournalVoucher.VoucherDate >= beginDate && e.JournalVoucher.VoucherDate <= endDate).ToList();
-                double intDebit = intEntries.Where(e => e.Dbcr == 1).Sum(e => e.Amount ?? 0);
-                double intCredit = intEntries.Where(e => e.Dbcr != 1).Sum(e => e.Amount ?? 0);
+                // Phát sinh trong kỳ
+                var intEntries = accountEntries.Where(e => !e.IsOpeningBalance(beginDate) && e.VoucherDate <= endDate).ToList();
+                double intDebit = (double)intEntries.Where(e => e.Dbcr == 1).Sum(e => e.Amount);
+                double intCredit = (double)intEntries.Where(e => e.Dbcr != 1).Sum(e => e.Amount);
 
-                // Dư cuối kỳ = (Dư Nợ đầu + Phát sinh Nợ) - (Dư Có đầu + Phát sinh Có)
                 double totalDebit = netBeginDebit + intDebit;
                 double totalCredit = netBeginCredit + intCredit;
                 
@@ -43,7 +45,6 @@ namespace NewaccNet.Reports.TrialBalance
                 if (totalDebit > totalCredit) endDebit = totalDebit - totalCredit;
                 else endCredit = totalCredit - totalDebit;
 
-                // Chỉ tạo record nếu có số liệu
                 if (netBeginDebit > 0 || netBeginCredit > 0 || intDebit > 0 || intCredit > 0 || endDebit > 0 || endCredit > 0)
                 {
                     results.Add(new TrialBalanceEntity
@@ -55,11 +56,11 @@ namespace NewaccNet.Reports.TrialBalance
                         Intcredit = intCredit,
                         Enddebit = endDebit,
                         Endcredit = endCredit,
-                        Splite = 0
+                        IsSummary = false
                     });
                 }
             }
-            
+
             return results;
         }
     }

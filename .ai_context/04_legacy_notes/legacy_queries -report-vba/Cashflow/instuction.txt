@@ -1,0 +1,5 @@
+Qui tắc  tính toán
+Tìm trong Journal entry giao dịch nào thỏa mãn  dòng điều kiện trong AccountCashFlowItem (tài khoản cần tính tương ứng với tài khoản đối ứng) và thỏa mã điều kiện ghi có hay nợ dbcr ở bảng cashflowitem và khoảng ngày trong journalvoucher
+Tạo dto gồm
+CachFlowName, CashFlowNameRepeate
+Inlustration. code, IsBold, IsItalic, ItemName , Amoung ( bằng tổng Ammount của các dòng tính toán ở  AccountCashFlowItem (amount * CashflowItem.dbcr

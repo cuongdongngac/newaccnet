@@ -348,3 +348,16 @@ Credit = raw <= 0 ? -raw : 0         // CreditValue() Access
 
 ### 9.3. Check cân đối Nhật ký — "Nguyên tắc vàng"
 > Luôn kiểm tra `Sum(Debit) == Sum(Credit)` ở Footer **mọi lúc**. Nếu lệch (đỏ) → dữ liệu vào sai (có thể do test data nhập thiếu 1 bên, hoặc DB cũ migrate thiếu dòng). Không bao giờ xuất báo cáo / in Nhật ký nếu Footer còn ĐỎ.
+
+### 10. Báo Cáo Nghĩa Vụ Thuế (ObligationTax) & Tối Ưu Hóa Tương Lai
+- **Thiết kế hiện tại**: Sử dụng kiến trúc Data-Driven & Snapshot JSON. Hệ thống gom dữ liệu theo ColIndex và Method để tính toán BeginTax, DebitTax, CreditTax và chốt EndTax. Dữ liệu các kỳ được chuyển tiếp thông qua Snapshot JSON giúp cắt đứt sự phụ thuộc chéo giữa các Database / Năm tài chính.
+- **Dữ liệu JSON xuất ra**: Chỉ lưu Code (Mã chỉ tiêu) và EndTax (Số dư cuối kỳ). Cấu trúc này tối giản, đủ để merge lại thành BeginTax hoặc AccTax (Lũy kế) ở kỳ báo cáo tiếp theo thông qua cơ chế Deserialize linh hoạt.
+- **Ghi chú tối ưu hóa (Technical Debt)**: 
+  - Hiện tại hàm FetchJournalEntryPairs kéo toàn bộ JournalEntry trong khoảng thời gian romDate -> 	oDate về RAM rồi dùng LINQ in-memory filtering.
+  - Tương lai (khi có hàng triệu bút toán), nếu hiệu năng bị ảnh hưởng: Nâng cấp thuật toán bằng cách đọc trước danh sách AccountId từ AccountTaxObligations, sau đó đẩy xuống database thành mệnh đề IN hoặc LIKE trong SQL query thông qua PredicateExpression của LLBLGen để giảm thiểu lượng dữ liệu tải về RAM. 
+  - Tạm thời đã bọc Async / Await trên UI (bật con trỏ xoay) để tránh treo ứng dụng khi tính toán lâu.
+
+### 10. Kiến Trúc Tổng Hợp: Trục Trung Gian Làm Phẳng (Flattened Ledger Service)
+- **Vấn đề cũ**: Các báo cáo như Sổ Cái (Ledger), Cân đối phát sinh (Trial Balance), và Báo cáo thuế đều có các hàm Calculate độc lập để tính dữ liệu từ JournalEntry. Việc này dẫn đến sự không nhất quán khi tính Số dư đầu kỳ.
+- **Giải pháp (Domain-Driven Design)**: Tạo ra lớp logic đáy FlattenedLedgerService chịu trách nhiệm Làm phẳng mọi bút toán. Giao dịch đơn (nhập số dư) tự động Nhồi VoucherDate. Tiện lợi cho mọi báo cáo, sau này có thể Materialize thành DB Cache.
+

@@ -18,24 +18,22 @@ namespace NewaccNet.Reports
             var qf = new DataAccess.FactoryClasses.QueryFactory();
             var accountsDict = adapter.FetchQuery(qf.ChartOfAccount).Cast<ChartOfAccountEntity>().ToDictionary(a => a.AccountId, a => a.AccountName);
 
-            // 1. Tính số dư đầu kỳ (Trước ngày beginDate)
-            var openingEntries = rawEntries.Where(x => 
-                (x.JournalVoucher == null || x.JournalVoucher.VoucherDate < beginDate) && 
-                x.AccountId != null && x.AccountId.StartsWith(accountId)).ToList();
+            // BƯỚC 1: LÀM PHẲNG TOÀN BỘ GIAO DỊCH THÀNH TRỤC TRUNG GIAN
+            var flattenedEntries = FlattenedLedgerService.Flatten(rawEntries, beginDate);
+
+            // Lọc ra các dòng phẳng thuộc về AccountId đang xét
+            var targetEntries = flattenedEntries.Where(x => x.AccountId != null && x.AccountId.StartsWith(accountId)).ToList();
+
+            // BƯỚC 2: TÍNH SỐ DƯ ĐẦU KỲ
+            var openingEntries = targetEntries.Where(x => x.IsOpeningBalance(beginDate)).ToList();
 
             decimal openingDebit = 0;
             decimal openingCredit = 0;
 
             foreach (var entry in openingEntries)
             {
-                // Nếu Entry là Parent (có con) => Bỏ qua vì các dòng con đã chứa số tiền chi tiết
-                if (entry.SubEntries != null && entry.SubEntries.Count > 0)
-                    continue;
-
-                decimal amount = (decimal)(entry.Amount ?? 0);
-                if (entry.Dbcr == 1) openingDebit += amount;
-                else if (entry.Dbcr == -1 || entry.Dbcr == 0 || entry.Dbcr == 2) openingCredit += amount; 
-                // Legacy thường Dbcr = 1 (Nợ), -1 hoặc 2 hoặc 0 (Có)
+                if (entry.Dbcr == 1) openingDebit += entry.Amount;
+                else openingCredit += entry.Amount;
             }
 
             currentBalance = openingDebit - openingCredit;
@@ -45,7 +43,7 @@ namespace NewaccNet.Reports
             {
                 RowType = 0,
                 VoucherDate = beginDate.AddDays(-1),
-                VoucherNo = "",
+                VoucherNo = "SDDK",
                 Contents = "Số dư đầu kỳ",
                 AccountId = accountId,
                 CounterAccountId = "",
@@ -55,42 +53,18 @@ namespace NewaccNet.Reports
                 JournalVoucherId = null
             });
 
-            // 2. Tính phát sinh trong kỳ
-            var periodEntries = rawEntries.Where(x => 
-                x.JournalVoucher != null && 
-                x.JournalVoucher.VoucherDate >= beginDate && 
-                x.JournalVoucher.VoucherDate <= endDate &&
-                (!onlyBooked || x.JournalVoucher.Bookflag == true)).ToList();
+            // BƯỚC 3: TÍNH PHÁT SINH TRONG KỲ
+            var periodEntries = targetEntries.Where(x => 
+                !x.IsOpeningBalance(beginDate) && 
+                x.VoucherDate <= endDate &&
+                (!onlyBooked || (x.JournalVoucher != null && x.JournalVoucher.Bookflag == true))).ToList();
 
             decimal totalPeriodDebit = 0;
             decimal totalPeriodCredit = 0;
 
             foreach (var entry in periodEntries)
             {
-                if (entry.AccountId == null || !entry.AccountId.StartsWith(accountId))
-                    continue;
-
-                // Nếu có dòng con => split
-                if (entry.SubEntries != null && entry.SubEntries.Count > 0)
-                {
-                    foreach (var child in entry.SubEntries)
-                    {
-                        AddPeriodRow(result, accountsDict, entry.JournalVoucher, entry.Dbcr, (decimal)(child.Amount ?? 0), entry.AccountId, child.AccountId, child.Id, ref currentBalance, ref totalPeriodDebit, ref totalPeriodCredit);
-                    }
-                }
-                else
-                {
-                    // Nếu là dòng con, đối ứng là cha
-                    if (entry.ParentId.HasValue && entry.ParentEntry != null)
-                    {
-                        AddPeriodRow(result, accountsDict, entry.JournalVoucher, entry.Dbcr, (decimal)(entry.Amount ?? 0), entry.AccountId, entry.ParentEntry.AccountId, entry.Id, ref currentBalance, ref totalPeriodDebit, ref totalPeriodCredit);
-                    }
-                    else
-                    {
-                        // Dòng độc lập
-                        AddPeriodRow(result, accountsDict, entry.JournalVoucher, entry.Dbcr, (decimal)(entry.Amount ?? 0), entry.AccountId, "", entry.Id, ref currentBalance, ref totalPeriodDebit, ref totalPeriodCredit);
-                    }
-                }
+                AddPeriodRow(result, accountsDict, entry.JournalVoucher, entry.Dbcr, entry.Amount, entry.AccountId, entry.CounterAccountId, (int)entry.EntryId, ref currentBalance, ref totalPeriodDebit, ref totalPeriodCredit);
             }
 
             // Sắp xếp lại theo thời gian và journalentryid
@@ -157,4 +131,3 @@ namespace NewaccNet.Reports
         }
     }
 }
-

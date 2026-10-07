@@ -12,23 +12,32 @@ namespace NewaccNet.Reports.TrialBalance
         {
             var results = new List<TrialBalanceEntity>();
             
-            var targetEntries = rawEntries.Where(e => accountIds.Contains(e.AccountId)).ToList();
+            // SỬ DỤNG TRỤC TRUNG GIAN ĐỂ LÀM PHẲNG
+            var flattenedSource = FlattenedLedgerService.Flatten(rawEntries, beginDate);
+
+            // Tạo từ điển map ngược EntryId -> JournalEntryEntity gốc để lấy DebtDetails
+            var rawDict = rawEntries.ToDictionary(e => e.Id);
+            
+            var targetEntries = flattenedSource.Where(e => accountIds.Contains(e.AccountId)).ToList();
 
             foreach (var accountId in accountIds)
             {
                 var accountEntries = targetEntries.Where(e => e.AccountId == accountId).ToList();
 
-                // Lấy chi tiết công nợ hoặc lấy trực tiếp từ JournalEntry nếu không có
-                var flattenedEntries = accountEntries.SelectMany(e => 
+                // Lấy chi tiết công nợ hoặc lấy trực tiếp từ bảng phẳng nếu không có
+                var flattenedDebtEntries = accountEntries.SelectMany(e => 
                 {
-                    if (e.DebtDetails != null && e.DebtDetails.Count > 0)
+                    JournalEntryEntity rawE = null;
+                    rawDict.TryGetValue(e.EntryId, out rawE);
+
+                    if (rawE != null && rawE.DebtDetails != null && rawE.DebtDetails.Count > 0)
                     {
-                        return e.DebtDetails.Select(d => new {
+                        return rawE.DebtDetails.Select(d => new {
                             PartnerId = d.PartnerId ?? string.Empty,
                             Dbcr = e.Dbcr,
-                            Amount = d.Amount ?? (e.Amount ?? 0),
-                            VoucherDate = e.JournalVoucher?.VoucherDate,
-                            HasVoucher = e.JournalVoucher != null
+                            Amount = (double)(d.Amount ?? ((decimal?)e.Amount ?? 0)),
+                            IsOpening = e.IsOpeningBalance(beginDate),
+                            VoucherDate = e.VoucherDate
                         });
                     }
                     else
@@ -36,15 +45,15 @@ namespace NewaccNet.Reports.TrialBalance
                         return new[] { new {
                             PartnerId = string.Empty,
                             Dbcr = e.Dbcr,
-                            Amount = e.Amount ?? 0,
-                            VoucherDate = e.JournalVoucher?.VoucherDate,
-                            HasVoucher = e.JournalVoucher != null
+                            Amount = (double)e.Amount,
+                            IsOpening = e.IsOpeningBalance(beginDate),
+                            VoucherDate = e.VoucherDate
                         } }.AsEnumerable();
                     }
                 }).ToList();
 
                 // Dư đầu kỳ
-                var beginEntries = flattenedEntries.Where(e => !e.HasVoucher || e.VoucherDate < beginDate).ToList();
+                var beginEntries = flattenedDebtEntries.Where(e => e.IsOpening).ToList();
                 var partnerBeginBalances = beginEntries
                     .GroupBy(e => e.PartnerId)
                     .Select(g => new {
@@ -62,12 +71,12 @@ namespace NewaccNet.Reports.TrialBalance
                 }
 
                 // Phát sinh trong kỳ
-                var intEntries = flattenedEntries.Where(e => e.HasVoucher && e.VoucherDate >= beginDate && e.VoucherDate <= endDate).ToList();
+                var intEntries = flattenedDebtEntries.Where(e => !e.IsOpening && e.VoucherDate <= endDate).ToList();
                 double intDebit = intEntries.Where(e => e.Dbcr == 1).Sum(e => e.Amount);
                 double intCredit = intEntries.Where(e => e.Dbcr != 1).Sum(e => e.Amount);
 
                 // Dư cuối kỳ
-                var endEntries = flattenedEntries.Where(e => !e.HasVoucher || e.VoucherDate <= endDate).ToList();
+                var endEntries = flattenedDebtEntries.Where(e => e.IsOpening || e.VoucherDate <= endDate).ToList();
                 var partnerEndBalances = endEntries
                     .GroupBy(e => e.PartnerId)
                     .Select(g => new {
@@ -78,10 +87,10 @@ namespace NewaccNet.Reports.TrialBalance
 
                 double sumEndDebit = 0;
                 double sumEndCredit = 0;
-                foreach (var pe in partnerEndBalances)
+                foreach (var pb in partnerEndBalances)
                 {
-                    if (pe.Debit > pe.Credit) sumEndDebit += (pe.Debit - pe.Credit);
-                    else sumEndCredit += (pe.Credit - pe.Debit);
+                    if (pb.Debit > pb.Credit) sumEndDebit += (pb.Debit - pb.Credit);
+                    else sumEndCredit += (pb.Credit - pb.Debit);
                 }
 
                 if (sumBeginDebit > 0 || sumBeginCredit > 0 || intDebit > 0 || intCredit > 0 || sumEndDebit > 0 || sumEndCredit > 0)
@@ -95,11 +104,11 @@ namespace NewaccNet.Reports.TrialBalance
                         Intcredit = intCredit,
                         Enddebit = sumEndDebit,
                         Endcredit = sumEndCredit,
-                        Splite = 0
+                        IsSummary = false
                     });
                 }
             }
-            
+
             return results;
         }
     }

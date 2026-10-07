@@ -41,7 +41,7 @@
                     <dxg:DataControlDetailDescriptor ItemsSourceBinding="{Binding ReportCategories}">
                         <dxg:GridControl AutoGenerateColumns="None">
                             <dxg:GridControl.View>
-                                <dxg:TableView ShowGroupPanel="False" AllowEditing="True" NewItemRowPosition="Bottom"
+                                <dxg:TableView AutoWidth="True" ShowGroupPanel="False" AllowEditing="True" NewItemRowPosition="Bottom"
                                                NavigationStyle="Cell" DetailHeaderContent="Nhóm chỉ tiêu"
                                                ShowAutoFilterRow="False" ShowSearchPanelMode="Always" RowMinHeight="30"
                                                FocusedRowChanged="CategoryView_FocusedRowChanged">
@@ -55,9 +55,9 @@
                             <dxg:GridControl.Columns>
                                 <!-- ReportCategoryEntity fields: Id, Code, CategoryName, ReportSectionId -->
                                 <dxg:GridColumn FieldName="Id" Header="ID" Width="55" AllowEditing="False" Visible="False" HorizontalHeaderContentAlignment="Center"/>
-                                <dxg:GridColumn FieldName="Code" Header="Mã nhóm" Width="110"/>
+                                <dxg:GridColumn FieldName="Code" Header="Mã nhóm" Width="80"/>
                                 <dxg:GridColumn FieldName="CategoryName" Header="Tên nhóm chỉ tiêu (*)" Width="300"/>
-                                <dxg:GridColumn FieldName="ReportSectionId" Header="SectionId" Width="80" AllowEditing="False" Visible="False"/>
+                                <dxg:GridColumn FieldName="ReportSectionId" Header="SectionId" Width="" AllowEditing="False" Visible="False"/>
                             </dxg:GridControl.Columns>
                         </dxg:GridControl>
                     </dxg:DataControlDetailDescriptor>
@@ -65,7 +65,7 @@
 
                 <!-- Master View: Tầng 1 - ReportSection -->
                 <dxg:GridControl.View>
-                    <dxg:TableView ShowGroupPanel="False" AllowEditing="True" NewItemRowPosition="Bottom"
+                    <dxg:TableView AutoWidth="True" ShowGroupPanel="False" AllowEditing="True" NewItemRowPosition="Bottom"
                                    NavigationStyle="Cell" ShowAutoFilterRow="False" ShowSearchPanelMode="Always"
                                    RowMinHeight="32">
                         <dxg:TableView.FormatConditions>
@@ -81,9 +81,9 @@
                 <dxg:GridControl.Columns>
                     <!-- ReportSectionEntity fields: Id, SectionName, Indebit -->
                     <dxg:GridColumn FieldName="Id" Header="ID" Width="60" AllowEditing="False" Visible="False" HorizontalHeaderContentAlignment="Center"/>
-                    <dxg:GridColumn FieldName="TestBalance" Header="Số dư (Test)" Width="120" UnboundType="Decimal" ReadOnly="True"/>
-                    <dxg:GridColumn FieldName="SectionName" Header="Mục lớn (I, II, III) (*)" Width="350"/>
-                    <dxg:GridColumn FieldName="Indebit" Header="Bên Nợ" Width="80" HorizontalHeaderContentAlignment="Center">
+                    <dxg:GridColumn FieldName="TestBalance" Header="Số dư (Test)" Width="120" Visible="False" UnboundType="Decimal" ReadOnly="True"/>
+                    <dxg:GridColumn FieldName="SectionName" Header="Mục lớn (I, II, III) (*)" Width="300"/>
+                    <dxg:GridColumn FieldName="Indebit" Header="Bên Nợ" Width="50" Visible="False" HorizontalHeaderContentAlignment="Center">
                         <dxg:GridColumn.EditSettings>
                             <dxe:CheckEditSettings IsThreeState="False"/>
                         </dxg:GridColumn.EditSettings>
@@ -106,7 +106,7 @@
                                 <dxg:DataControlDetailDescriptor ItemsSourceBinding="{Binding ReportFormulaAccounts}">
                                     <dxg:GridControl AutoGenerateColumns="None">
                                         <dxg:GridControl.View>
-                                            <dxg:TableView ShowGroupPanel="False" AllowEditing="True" NewItemRowPosition="Bottom"
+                                            <dxg:TableView AutoWidth="True" ShowGroupPanel="False" AllowEditing="True" NewItemRowPosition="Bottom"
                                                            NavigationStyle="Cell" DetailHeaderContent="Tài khoản tham chiếu"
                                                            ShowAutoFilterRow="False" ShowSearchPanelMode="Always" RowMinHeight="26">
                                             </dxg:TableView>
@@ -126,7 +126,7 @@
                             </dxg:GridControl.DetailDescriptor>
 
                             <dxg:GridControl.View>
-                                <dxg:TableView ShowGroupPanel="False" AllowEditing="True" NewItemRowPosition="Bottom"
+                                <dxg:TableView AutoWidth="True" ShowGroupPanel="False" AllowEditing="True" NewItemRowPosition="Bottom"
                                                NavigationStyle="Cell" DetailHeaderContent="Công thức tính"
                                                ShowAutoFilterRow="False" ShowSearchPanelMode="Always" RowMinHeight="28">
                                     <dxg:TableView.FormatConditions>
@@ -143,15 +143,15 @@
                                 <!-- ReportFormulaEntity fields: Id, Code, ItemsName, Formula, Calculate, Illu, Longorshortterm, Order, Print, ReportItemId -->
                                 <dxg:GridColumn FieldName="Id" Header="ID" Width="55" AllowEditing="False" Visible="False" HorizontalHeaderContentAlignment="Center"/>
                                 <dxg:GridColumn FieldName="Code" Header="Mã" Width="80"/>
-                                <dxg:GridColumn FieldName="ItemsName" Header="Tên chỉ tiêu con" Width="200"/>
-                                <dxg:GridColumn FieldName="Formula" Header="Công thức" Width="150"/>
+                                <dxg:GridColumn FieldName="ItemsName" Header="Tên chỉ tiêu con" Width="*"/>
+                                <dxg:GridColumn FieldName="Formula" Header="Công thức" Width="*"/>
                                 <dxg:GridColumn FieldName="Calculate" Header="Tính toán" Width="80" HorizontalHeaderContentAlignment="Center">
                                     <dxg:GridColumn.EditSettings>
                                         <dxe:CheckEditSettings IsThreeState="False"/>
                                     </dxg:GridColumn.EditSettings>
                                 </dxg:GridColumn>
                                 <dxg:GridColumn FieldName="Illu" Header="Minh họa" Width="80"/>
-                                <dxg:GridColumn FieldName="Longorshortterm" Header="Dài/Ngắn hạn" Width="100" HorizontalHeaderContentAlignment="Center"/>
+                                <dxg:GridColumn FieldName="Longorshortterm" Header="Dài/Ngắn hạn" Width="80" HorizontalHeaderContentAlignment="Center"/>
                                 <dxg:GridColumn FieldName="Order" Header="Thứ tự" Width="70" HorizontalHeaderContentAlignment="Center"/>
                                 <dxg:GridColumn FieldName="Print" Header="In" Width="60" HorizontalHeaderContentAlignment="Center">
                                     <dxg:GridColumn.EditSettings>
@@ -166,7 +166,7 @@
 
                 <!-- Master View: Tầng 3 - ReportItem -->
                 <dxg:GridControl.View>
-                    <dxg:TableView ShowGroupPanel="False" AllowEditing="True" NewItemRowPosition="Bottom"
+                    <dxg:TableView AutoWidth="True" ShowGroupPanel="False" AllowEditing="True" NewItemRowPosition="Bottom"
                                    NavigationStyle="Cell" DetailHeaderContent="Chỉ tiêu BCTC"
                                    ShowAutoFilterRow="False" ShowSearchPanelMode="Always" RowMinHeight="30">
                         <dxg:TableView.FormatConditions>
@@ -179,9 +179,9 @@
                 <dxg:GridControl.Columns>
                     <!-- ReportItemEntity fields: Id, Code, EntryName, ReportCategoryId -->
                     <dxg:GridColumn FieldName="Id" Header="ID" Width="55" AllowEditing="False" Visible="False" HorizontalHeaderContentAlignment="Center"/>
-                    <dxg:GridColumn FieldName="Code" Header="Mã chỉ tiêu" Width="110"/>
-                    <dxg:GridColumn FieldName="TestBalance" Header="Số dư (Test)" Width="120" UnboundType="Decimal" ReadOnly="True"/>
-                    <dxg:GridColumn FieldName="EntryName" Header="Tên chỉ tiêu (*)" Width="280"/>
+                    <dxg:GridColumn FieldName="Code" Header="Mã chỉ tiêu" Width="80"/>
+                    <dxg:GridColumn FieldName="TestBalance" Header="Số dư (Test)" Width="120"  Visible="False" UnboundType="Decimal" ReadOnly="True"/>
+                    <dxg:GridColumn FieldName="EntryName" Header="Tên chỉ tiêu (*)" Width="*"/>
                     <dxg:GridColumn FieldName="ReportCategoryId" Header="CategoryId" Width="80" AllowEditing="False" Visible="False"/>
                 </dxg:GridControl.Columns>
             </dxg:GridControl>

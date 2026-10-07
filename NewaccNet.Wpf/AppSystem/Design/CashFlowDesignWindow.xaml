@@ -40,9 +40,9 @@
                                    NavigationStyle="Cell" AutoWidth="True"/>
                 </dxg:GridControl.View>
                 <dxg:GridControl.Columns>
-                    <dxg:GridColumn FieldName="Id" Header="ID" Width="60" AllowEditing="False" Fixed="Left" HorizontalHeaderContentAlignment="Center"/>
-                    <dxg:GridColumn FieldName="CashFlowName" Header="Tên Nhóm LCTT (*)" Width="3*"/>
-                    <dxg:GridColumn FieldName="CashFlowNameRepeate" Header="Tên lặp lại (in báo cáo)" Width="3*"/>
+                    <dxg:GridColumn FieldName="Id" Header="ID" Width="60" AllowEditing="False" Fixed="Left" HorizontalHeaderContentAlignment="Center" Visible="False"/>
+                    <dxg:GridColumn FieldName="CashFlowName" Header="Tên Nhóm LCTT (*)" Width="300"/>
+                    <dxg:GridColumn FieldName="CashFlowNameRepeate" Header="Tên lặp lại (in báo cáo)" Width="300"/>
                     <dxg:GridColumn FieldName="OrderNo" Header="Thứ tự in" Width="100" HorizontalHeaderContentAlignment="Center"/>
                 </dxg:GridControl.Columns>
             </dxg:GridControl>
@@ -61,18 +61,18 @@
                                                ShowAutoFilterRow="False" ShowSearchPanelMode="Always" RowMinHeight="26"
                                                NavigationStyle="Cell">
                                     <dxg:TableView.FormatConditions>
-                                        <dxg:FormatCondition FieldName="Dbcr" Expression="[Dbcr] = 'D'" ApplyToRow="True">
+                                        <dxg:FormatCondition FieldName="Dbcr" Expression="[Dbcr] = True" ApplyToRow="True">
                                             <dxg:FormatCondition.Format><dx:Format Background="#FFE3F2FD"/></dxg:FormatCondition.Format>
                                         </dxg:FormatCondition>
-                                        <dxg:FormatCondition FieldName="Dbcr" Expression="[Dbcr] = 'C'" ApplyToRow="True">
+                                        <dxg:FormatCondition FieldName="Dbcr" Expression="[Dbcr] = False" ApplyToRow="True">
                                             <dxg:FormatCondition.Format><dx:Format Background="#FFE8F5E9"/></dxg:FormatCondition.Format>
                                         </dxg:FormatCondition>
                                     </dxg:TableView.FormatConditions>
                                 </dxg:TableView>
                             </dxg:GridControl.View>
                             <dxg:GridControl.Columns>
-                                <dxg:GridColumn FieldName="Id" Header="ID" Width="60" AllowEditing="False" HorizontalHeaderContentAlignment="Center"/>
-                                <dxg:GridColumn FieldName="CashFlowItemId" Header="ItemId" Width="80" AllowEditing="False" HorizontalHeaderContentAlignment="Center"/>
+                                <dxg:GridColumn FieldName="Id" Header="ID" Width="60" AllowEditing="False" HorizontalHeaderContentAlignment="Center" Visible="False"/>
+                                <dxg:GridColumn FieldName="CashFlowItemId" Header="ItemId" Width="80" AllowEditing="False" HorizontalHeaderContentAlignment="Center" Visible="False"/>
                                 <dxg:GridColumn FieldName="AccountId" Header="Tài khoản (*)" Width="140">
                                     <dxg:GridColumn.EditSettings>
                                         <dxe:ComboBoxEditSettings x:Name="cboAccDetail" DisplayMember="AccountId" ValueMember="AccountId" AutoComplete="True" ImmediatePopup="True"/>
@@ -83,14 +83,9 @@
                                         <dxe:ComboBoxEditSettings x:Name="cboCounterDetail" DisplayMember="AccountId" ValueMember="AccountId" AutoComplete="True" ImmediatePopup="True"/>
                                     </dxg:GridColumn.EditSettings>
                                 </dxg:GridColumn>
-                                <dxg:GridColumn FieldName="Dbcr" Header="Nợ / Có (*)" Width="100">
+                                <dxg:GridColumn FieldName="Dbcr" Header="Thu/Chi (*)" Width="80">
                                     <dxg:GridColumn.EditSettings>
-                                        <dxe:ComboBoxEditSettings IsTextEditable="False">
-                                            <dxe:ComboBoxEditSettings.Items>
-                                                <dxe:ComboBoxEditItem Content="D — Nợ (Vào)"/>
-                                                <dxe:ComboBoxEditItem Content="C — Có (Ra)"/>
-                                            </dxe:ComboBoxEditSettings.Items>
-                                        </dxe:ComboBoxEditSettings>
+                                        <dxe:CheckEditSettings/>
                                     </dxg:GridColumn.EditSettings>
                                 </dxg:GridColumn>
                             </dxg:GridControl.Columns>
@@ -104,27 +99,22 @@
                                    NavigationStyle="Cell"/>
                 </dxg:GridControl.View>
                 <dxg:GridControl.Columns>
-                    <dxg:GridColumn FieldName="Id" Header="ID" Width="60" AllowEditing="False" Fixed="Left" HorizontalHeaderContentAlignment="Center"/>
-                    <dxg:GridColumn FieldName="CashFlowCategoryId" Header="CatId" Width="70" AllowEditing="False" HorizontalHeaderContentAlignment="Center"/>
+                    <dxg:GridColumn FieldName="Id" Header="ID" Width="60" AllowEditing="False" Fixed="Left" HorizontalHeaderContentAlignment="Center" Visible="False"/>
+                    <dxg:GridColumn FieldName="CashFlowCategoryId" Header="CatId" Width="70" AllowEditing="False" HorizontalHeaderContentAlignment="Center" Visible="False"/>
                     <dxg:GridColumn FieldName="Code" Header="Mã chỉ tiêu" Width="110"/>
-                    <dxg:GridColumn FieldName="ItemName" Header="Tên chỉ tiêu LCTT (*)" Width="3*"/>
-                    <dxg:GridColumn FieldName="Illustration" Header="Minh họa/Mô tả" Width="2*"/>
-                    <dxg:GridColumn FieldName="Dbcr" Header="Nợ/Có (*)" Width="100">
-                        <dxg:GridColumn.EditSettings>
-                            <dxe:ComboBoxEditSettings IsTextEditable="False">
-                                <dxe:ComboBoxEditSettings.Items>
-                                    <dxe:ComboBoxEditItem Content="D — Nợ (Vào)"/>
-                                    <dxe:ComboBoxEditItem Content="C — Có (Ra)"/>
-                                </dxe:ComboBoxEditSettings.Items>
-                            </dxe:ComboBoxEditSettings>
-                        </dxg:GridColumn.EditSettings>
-                    </dxg:GridColumn>
-                    <dxg:GridColumn FieldName="IsBold" Header="In đậm" Width="80" HorizontalHeaderContentAlignment="Center">
+                    <dxg:GridColumn FieldName="ItemName" Header="Tên chỉ tiêu LCTT (*)" Width="400"/>
+                    <dxg:GridColumn FieldName="Illustration" Header="Thuyết minh" Width="100"/>
+                    <dxg:GridColumn FieldName="Dbcr" Header="Thu/Chi (*)" Width="80">
+                                    <dxg:GridColumn.EditSettings>
+                                        <dxe:CheckEditSettings/>
+                                    </dxg:GridColumn.EditSettings>
+                                </dxg:GridColumn>
+                    <dxg:GridColumn FieldName="IsBold" Header="Đậm" Width="80" HorizontalHeaderContentAlignment="Center">
                         <dxg:GridColumn.EditSettings>
                             <dxe:CheckEditSettings IsThreeState="False"/>
                         </dxg:GridColumn.EditSettings>
                     </dxg:GridColumn>
-                    <dxg:GridColumn FieldName="IsItalic" Header="In nghiêng" Width="90" HorizontalHeaderContentAlignment="Center">
+                    <dxg:GridColumn FieldName="IsItalic" Header="Nghiêng" Width="90" HorizontalHeaderContentAlignment="Center">
                         <dxg:GridColumn.EditSettings>
                             <dxe:CheckEditSettings IsThreeState="False"/>
                         </dxg:GridColumn.EditSettings>
@@ -139,3 +129,5 @@
         </StackPanel>
     </Grid>
 </base:BaseWindow>
+
+

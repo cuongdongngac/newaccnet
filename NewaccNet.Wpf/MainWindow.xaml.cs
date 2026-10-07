@@ -268,6 +268,27 @@ public partial class MainWindow : ThemedWindow {
         win.ShowDialog();
     }
 
+    private void BtnReportBusinessResult_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.Reports.Fincance.BusinessResultFilterWindow();
+        win.Owner = this;
+        win.ShowDialog();
+    }
+
+    private void BtnReportCashFlow_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.Reports.Fincance.CashFlowFilterWindow();
+        win.Owner = this;
+        win.ShowDialog();
+    }
+
+    private void BtnReportObligationTax_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.Reports.Fincance.ObligationTaxFilterWindow();
+        win.Owner = this;
+        win.ShowDialog();
+    }
+
     private void BtnOpenDebtBalanceFilter_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
     {
         var win = new NewaccNet.Wpf.AppSystem.Reports.Fincance.DebtBalanceFilterWindow();

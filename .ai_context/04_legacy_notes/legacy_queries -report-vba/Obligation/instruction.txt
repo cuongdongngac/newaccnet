@@ -1,0 +1,20 @@
+Tạo ObligationResultDto
+ObligationId, ObligationName, Code, ItemName , BeginTax, DebitTax, CreditTax, EndTax, AccTax
+
+Duyệt danh sách AccountTaxObligation
+Begintax  = Tổng của các dòng giao dịch  (journalEntry)
+Số phát sinh thoả mãn điều kiện  Voucherdate < BeginDate, (Accountid, CounterAccountID, colindex=0  BebitTax =amout*dbcr
+DebitTax  = Tổng của các dòng giao dịch  (journalEntry)
+Số phát sinh thoả mãn điều kiện BeginDate > = Voucherdate < = EndateDate, (Accountid, CounterAccountID, Method =1, DebitTax =Amount
+
+Credit Tax = Tổng của các dòng giao dịch  (journalEntry)
+Số phát sinh thoả mãn điều kiện BeginDate > = Voucherdate < = EndateDate, (Accountid, CounterAccountID, Method =-1, CreditTax =Amount
+Lưu ý, so sánh đối ứng chỉ theo prefix (CounterAccountID*)
+
+
+Khi load vào dto thi ơr form filter có hai chỗ cần merge
+Json ky truoc
+Json lũy kế (để  để gép EndTax của Json thành  AccTax)
+Json kỳ trước (để ghép Entax của Json thành BeginTax)
+
+Có thể tính luôn EndTax =BeginTax + CreditTax -DebitTax sau khi quá trình tính và merge dữ liệu đã xong vì cần xuất ra json kỳ này
