@@ -440,3 +440,22 @@ Credit = raw <= 0 ? -raw : 0         // CreditValue() Access
 
 
 
+
+### 15. Phân Hệ Chuyển Đổi Số Dư Sang Năm Mới (Balance Transfer - Flat & Multi-DB)
+- **Tài liệu thiết kế chi tiết**: [.ai_context/BalanceTransfer_Design_Doc.md](file:///d:/NewaccNet/.ai_context/BalanceTransfer_Design_Doc.md).
+- **Giao diện Chuyển đổi số dư (`TransferBalanceWindow`)**:
+  - Tích hợp gọi từ Ribbon menu hệ thống.
+  - Hỗ trợ chọn CSDL đích linh hoạt (MS Access, SQL Server, PostgreSQL) và kiểm tra kết nối động.
+  - Loại bỏ các CheckBox lựa chọn phân hệ đơn lẻ: Quy trình chuyển đổi là **hàng loạt toàn bộ (Batch/All-in-one)** nhằm đảm bảo tính cân đối kế toán tuyệt đối.
+  - Tích hợp thanh tiến trình `ProgressBar`, nhãn bước thực thi thời gian thực (`lblCurrentStep`) và khung ghi log chi tiết.
+- **Kiến trúc Dịch vụ & Làm phẳng (FLAT Architecture)**:
+  - Khởi tạo `IBalanceTransferService` và `BalanceTransferService` hoạt động hoàn toàn ở tầng ORM (LLBLGen Pro), độc lập với CSDL đích.
+  - Bắt đầu từ cấp bảng chi tiết (`DebtDetail`, `InventoryVoucherLine`, `CostDetail`, `AssetDetail`, `InvestmentDetail`, `CurrencyDetail`) truy ngược lên `JournalEntry` / `InventoryVoucher`, dùng LINQ tính tổng Net Amount/Quantity và gom vào các DTO phẳng.
+- **Đồng bộ Danh mục & Quy tắc Quản trị người dùng**:
+  - Bước tiền đề tự động đồng bộ toàn bộ Master Data (`ChartOfAccount`, `Partner`, `Warehouse`, `Category`, `InventoryItem`, `Asset`, `CostObject`, `CostElement`, `Stock`, `Currency`) sang CSDL đích trước để triệt tiêu lỗi ràng buộc khóa ngoại (Foreign Key).
+  - Đối với `SystemUser`: Tài khoản `admin` trong CSDL đích được **UPDATE** mật khẩu và thông tin thực tế từ nguồn (thay vì mật khẩu mặc định `newacc` của template), các user khác thực hiện **INSERT**.
+- **Xử lý đặc thù theo từng phân hệ**:
+  - Hàng tồn kho (`Category = 'B'`): Tự động tạo `JournalEntry` (`Dbcr = 1`) kèm chứng từ Nhập kho nội bộ NNB (`InventoryVoucher` với `Taxflag = false`) và các dòng `InventoryVoucherLine`.
+  - Ngoại tệ (`Category = 'C'`): Tự động tính ngược tỷ giá ghi sổ bình quân đầu kỳ: $\text{ExchangeRate} = \frac{\text{Tổng VND}}{\text{Tổng ngoại tệ}}$.
+  - Tách bạch từng bước thực thi trong `ExecuteTransferAsync` kèm try-catch để ghi log chi tiết và phát hiện ngay vị trí phát sinh lỗi.
+- **Trạng thái**: **ĐÃ HOÀN THÀNH TOÀN DIỆN, BUILD SUCCEEDED (0 LỖI)**.
