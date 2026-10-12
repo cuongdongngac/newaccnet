@@ -9,7 +9,8 @@
     xmlns:base="clr-namespace:NewaccNet.Wpf.Views.Base"
     Title="Thiết kế Báo cáo Kết quả Hoạt động Kinh doanh (B02-DN)"
     Height="880" Width="1450" WindowStartupLocation="CenterScreen"
-    xmlns:auth="clr-namespace:NewaccNet.Wpf.AppSystem">
+    xmlns:auth="clr-namespace:NewaccNet.Wpf.AppSystem"
+    xmlns:local="clr-namespace:NewaccNet.Wpf.AppSystem.Design">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -50,22 +51,14 @@
                             <dxg:GridControl.Columns>
                                 <dxg:GridColumn FieldName="Id" Header="ID" Width="60" AllowEditing="False" HorizontalHeaderContentAlignment="Center" Visible="False"/>
                                 <dxg:GridColumn FieldName="BusinessResultItemId" Header="ItemId" Width="80" AllowEditing="False" HorizontalHeaderContentAlignment="Center" Visible="False"/>
-                                <dxg:GridColumn FieldName="AccountId" Header="Tài khoản (*)" Width="140">
-                                    <dxg:GridColumn.EditSettings>
-                                        <dxe:ComboBoxEditSettings x:Name="cboAccDetail" DisplayMember="AccountId" ValueMember="AccountId" AutoComplete="True" ImmediatePopup="True"/>
-                                    </dxg:GridColumn.EditSettings>
-                                </dxg:GridColumn>
-                                <dxg:GridColumn FieldName="CounterAccountId" Header="TK Đối ứng" Width="140">
-                                    <dxg:GridColumn.EditSettings>
-                                        <dxe:ComboBoxEditSettings x:Name="cboCounterDetail" DisplayMember="AccountId" ValueMember="AccountId" AutoComplete="True" ImmediatePopup="True"/>
-                                    </dxg:GridColumn.EditSettings>
-                                </dxg:GridColumn>
+                                <local:AccountGridColumn FieldName="AccountId" Header="Tài khoản (*)" Width="140"/>
+                                <local:AccountGridColumn FieldName="CounterAccountId" Header="TK Đối ứng" Width="140"/>
                                 <dxg:GridColumn FieldName="IsAdd" Header="Cộng(+)/Trừ(-)" Width="80">
                                     <dxg:GridColumn.EditSettings>
                                         <dxe:CheckEditSettings Content="Cộng" IsThreeState="False"/>
                                     </dxg:GridColumn.EditSettings>
                                 </dxg:GridColumn>
-                                <dxg:GridColumn FieldName="Method" Header="Phương pháp" Width="80"/>
+                                <local:MethodGridColumn FieldName="Method" Width="150"/>
                             </dxg:GridControl.Columns>
                         </dxg:GridControl>
                     </dxg:DataControlDetailDescriptor>
@@ -90,9 +83,9 @@
                 <dxg:GridControl.Columns>
                     <dxg:GridColumn FieldName="Id" Header="ID" Width="60" AllowEditing="False" HorizontalHeaderContentAlignment="Center" Visible="False"/>
                     <dxg:GridColumn FieldName="Code" Header="Mã chỉ tiêu" Width="80"/>
-                    <dxg:GridColumn FieldName="ItemName" Header="Tên chỉ tiêu KQKD (*)" Width="*"/>
-                    <dxg:GridColumn FieldName="Illustration" Header="Minh họa / Mô tả" Width="*"/>
-                    <dxg:GridColumn FieldName="IsDecrease" Header="Giảm trừ" Width="70" HorizontalHeaderContentAlignment="Center">
+                    <dxg:GridColumn FieldName="ItemName" Header="Tên chỉ tiêu KQKD (300)" Width="300"/>
+                    <dxg:GridColumn FieldName="Illustration" Header="Minh họa / Mô tả" Width="80"/>
+                    <dxg:GridColumn FieldName="IsDecrease" Header="Giảm trừ" Width="50" HorizontalHeaderContentAlignment="Center">
                         <dxg:GridColumn.EditSettings>
                             <dxe:CheckEditSettings IsThreeState="False"/>
                         </dxg:GridColumn.EditSettings>

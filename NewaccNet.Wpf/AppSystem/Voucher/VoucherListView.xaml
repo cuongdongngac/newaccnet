@@ -21,6 +21,7 @@
                 <dxb:BarButtonItem Content="Thêm mới" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_new.svg'}" ItemClick="BtnAdd_Click" BarItemDisplayMode="ContentAndGlyph" />
                 <dxb:BarButtonItem Content="Sửa (Edit)" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_edit.svg'}" ItemClick="BtnEdit_Click"/>
                 <dxb:BarButtonItem Content="Xóa" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_delete.svg'}" ItemClick="BtnDelete_Click"/>
+                <dxb:BarButtonItem Content="Làm mới" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_refresh.svg'}" ItemClick="BtnRefresh_Click"/>
                 <dxb:BarButtonItem Content="Đóng" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_close.svg'}" ItemClick="BtnClose_Click"/>
             </dxb:ToolBarControl>
         </dxb:BarContainerControl>
@@ -60,7 +61,11 @@
                     </dxg:GridColumn.EditSettings>
                 </dxg:GridColumn>
                 <dxg:GridColumn FieldName="Contents" Header="Nội dung" Width="*"/>
-                <dxg:GridColumn FieldName="Bookflag" Header="Ghi sổ" Width="80"/>
+                <dxg:GridColumn FieldName="Bookflag" Header="Ghi sổ" Width="70" FixedWidth="True" HorizontalHeaderContentAlignment="Center">
+                    <dxg:GridColumn.EditSettings>
+                        <dxe:CheckEditSettings HorizontalContentAlignment="Center"/>
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
             </dxg:GridControl.Columns>
         </dxg:GridControl>
     </Grid>

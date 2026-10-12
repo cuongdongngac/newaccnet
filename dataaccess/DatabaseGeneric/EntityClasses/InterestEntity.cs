@@ -174,7 +174,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathPartner { get { return _staticMetaData.GetPrefetchPathElement("Partner", CommonEntityBase.CreateEntityCollection<PartnerEntity>()); } }
 
 		/// <summary>The Amount property of the Entity Interest<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Interest"."Amount".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "Interest"."Amount".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Amount
 		{
 			get { return (Nullable<System.Double>)GetValue((int)InterestFieldIndex.Amount, false); }
@@ -182,7 +182,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Balance property of the Entity Interest<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Interest"."Balance".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "Interest"."Balance".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Balance
 		{
 			get { return (Nullable<System.Double>)GetValue((int)InterestFieldIndex.Balance, false); }
@@ -190,7 +190,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Contents property of the Entity Interest<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Interest"."Contents".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "Interest"."Contents".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 100.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Contents
 		{
 			get { return (System.String)GetValue((int)InterestFieldIndex.Contents, true); }
@@ -198,7 +198,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The CustomerId property of the Entity Interest<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Interest"."CustomerId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "Interest"."CustomerId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String CustomerId
 		{
 			get { return (System.String)GetValue((int)InterestFieldIndex.CustomerId, true); }
@@ -206,7 +206,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Dayno property of the Entity Interest<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Interest"."Dayno".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "Interest"."Dayno".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> Dayno
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)InterestFieldIndex.Dayno, false); }
@@ -214,7 +214,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Dbcr property of the Entity Interest<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Interest"."Dbcr".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "Interest"."Dbcr".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> Dbcr
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)InterestFieldIndex.Dbcr, false); }
@@ -222,7 +222,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The DebtReasonId property of the Entity Interest<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Interest"."DebtReasonId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "Interest"."DebtReasonId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> DebtReasonId
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)InterestFieldIndex.DebtReasonId, false); }
@@ -230,7 +230,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The DebtTypeId property of the Entity Interest<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Interest"."DebtTypeId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "Interest"."DebtTypeId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String DebtTypeId
 		{
 			get { return (System.String)GetValue((int)InterestFieldIndex.DebtTypeId, true); }
@@ -238,7 +238,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Id property of the Entity Interest<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Interest"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "Interest"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)InterestFieldIndex.Id, true); }
@@ -246,7 +246,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Interest property of the Entity Interest<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Interest"."Interest".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "Interest"."Interest".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Interest
 		{
 			get { return (Nullable<System.Double>)GetValue((int)InterestFieldIndex.Interest, false); }
@@ -254,7 +254,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Interestbalance property of the Entity Interest<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Interest"."Interestbalance".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "Interest"."Interestbalance".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Interestbalance
 		{
 			get { return (Nullable<System.Double>)GetValue((int)InterestFieldIndex.Interestbalance, false); }
@@ -262,7 +262,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Interestflag property of the Entity Interest<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Interest"."Interestflag".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "Interest"."Interestflag".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> Interestflag
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)InterestFieldIndex.Interestflag, false); }
@@ -270,7 +270,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The JournalVoucherId property of the Entity Interest<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Interest"."JournalVoucherId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "Interest"."JournalVoucherId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> JournalVoucherId
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)InterestFieldIndex.JournalVoucherId, false); }
@@ -278,7 +278,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The LiabilityDuesId property of the Entity Interest<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Interest"."LiabilityDuesId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "Interest"."LiabilityDuesId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> LiabilityDuesId
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)InterestFieldIndex.LiabilityDuesId, false); }
@@ -286,7 +286,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The LineId property of the Entity Interest<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Interest"."LineId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "Interest"."LineId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> LineId
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)InterestFieldIndex.LineId, false); }
@@ -294,7 +294,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The VoucherDate property of the Entity Interest<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Interest"."VoucherDate".<br/>Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "Interest"."VoucherDate".<br/>Table field type characteristics (type, precision, scale, length): Date, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.DateTime> VoucherDate
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)InterestFieldIndex.VoucherDate, false); }
@@ -302,7 +302,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The VoucherNo property of the Entity Interest<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Interest"."VoucherNo".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "Interest"."VoucherNo".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String VoucherNo
 		{
 			get { return (System.String)GetValue((int)InterestFieldIndex.VoucherNo, true); }

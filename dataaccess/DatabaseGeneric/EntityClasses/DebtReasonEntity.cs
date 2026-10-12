@@ -162,7 +162,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathInterests { get { return _staticMetaData.GetPrefetchPathElement("Interests", CommonEntityBase.CreateEntityCollection<InterestEntity>()); } }
 
 		/// <summary>The Id property of the Entity DebtReason<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DebtReason"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "DebtReason"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)DebtReasonFieldIndex.Id, true); }
@@ -170,7 +170,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The ReasonName property of the Entity DebtReason<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DebtReason"."ReasonName".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "DebtReason"."ReasonName".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String ReasonName
 		{
 			get { return (System.String)GetValue((int)DebtReasonFieldIndex.ReasonName, true); }
@@ -178,7 +178,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Visible property of the Entity DebtReason<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DebtReason"."Visible".<br/>Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "DebtReason"."Visible".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Boolean Visible
 		{
 			get { return (System.Boolean)GetValue((int)DebtReasonFieldIndex.Visible, true); }

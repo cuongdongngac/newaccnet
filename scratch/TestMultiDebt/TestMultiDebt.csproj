@@ -1,7 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
     <ProjectReference Include="..\..\dataaccess\DatabaseGeneric\DataAccess.csproj" />
+    <ProjectReference Include="..\..\dataaccess\SQL Server (SqlClient)\DatabaseSpecific\DataAccess.SqlServerDBSpecific.csproj" />
+    <ProjectReference Include="..\..\dataaccess\MS Access (OleDb)\DatabaseSpecific\DataAccess.MsAccessDBSpecific.csproj" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.2" />
+    <PackageReference Include="System.Data.OleDb" Version="9.0.2" />
   </ItemGroup>
 
   <PropertyGroup>

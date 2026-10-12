@@ -9,15 +9,16 @@ using DataAccess.EntityClasses;
 using DataAccess.HelperClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using NewaccNet.Wpf.Views.Base;
+using NewaccNet.Wpf.AppSystem.Helpers;
 
 namespace NewaccNet.Wpf.AppSystem.Design
 {
     public partial class BalanceSheetDesignWindow : BaseWindow
     {
         private EntityCollection<ReportSectionEntity> _sections = new EntityCollection<ReportSectionEntity>();
+        private readonly HierarchyDirtyTracker _dirtyTracker = new HierarchyDirtyTracker();
         private Dictionary<int, decimal> _testSectionBalances = new Dictionary<int, decimal>();
         private Dictionary<int, decimal> _testItemBalances = new Dictionary<int, decimal>();
-        private EntityCollection<ChartOfAccountEntity> _accounts = new EntityCollection<ChartOfAccountEntity>();
 
         private List<ReportSectionEntity> _origSections = new List<ReportSectionEntity>();
         private Dictionary<int, List<ReportCategoryEntity>> _origCategoriesBySectionId = new Dictionary<int, List<ReportCategoryEntity>>();
@@ -28,31 +29,26 @@ namespace NewaccNet.Wpf.AppSystem.Design
         public BalanceSheetDesignWindow()
         {
             InitializeComponent();
+
+            // Cấu hình Domino Bubble-Up Trigger dùng chung cho cây 5 tầng:
+            // Tầng 1: Section -> Tầng 2: Category -> Tầng 3: Item -> Tầng 4: Formula -> Tầng 5: FormulaAccount
+            // Bất kỳ sửa/thêm/xóa ở tầng con đều tự động bubble-up báo cha là IsDirty
+            _dirtyTracker
+                .RegisterChild<ReportSectionEntity, ReportCategoryEntity>(sec => sec.ReportCategories)
+                .RegisterChild<ReportCategoryEntity, ReportItemEntity>(cat => cat.ReportItems)
+                .RegisterChild<ReportItemEntity, ReportFormulaEntity>(item => item.ReportFormulas)
+                .RegisterChild<ReportFormulaEntity, ReportFormulaAccountEntity>(formula => formula.ReportFormulaAccounts);
+
             this.Loaded += (_, _) =>
             {
-                LoadLookups();
+                DesignLookupHelper.EnsureAccountsLoaded();
                 LoadData();
             };
 
-            // Link giữa 2 grid: khi user expand Category detail row → load Items tương ứng
-            // Sử dụng MasterRowExpanded event trên GridControl
-            }
-
-        private void LoadLookups()
-        {
-            try
+            this.Unloaded += (_, _) =>
             {
-                using var adapter = AppDataAccessAdapter.Create();
-                _accounts = new EntityCollection<ChartOfAccountEntity>();
-                adapter.FetchEntityCollection(_accounts, null);
-
-                cboAccount.ItemsSource = _accounts;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi tải lookup tài khoản: " + ex.Message, "Lỗi",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+                _dirtyTracker.Dispose();
+            };
         }
 
                 private void GridSections_MasterRowExpanded(object sender, RowEventArgs e)
@@ -95,6 +91,9 @@ namespace NewaccNet.Wpf.AppSystem.Design
                 _sections = list;
                 gridSections.ItemsSource = list;
                 gridItems.ItemsSource = null;
+
+                // Kích hoạt theo dõi Domino Dirty toàn bộ 5 tầng của cây
+                _dirtyTracker.Attach(list);
 
                 SnapshotOriginsForDeltaDelete(list);
 
@@ -401,116 +400,76 @@ namespace NewaccNet.Wpf.AppSystem.Design
             tv.MoveLastRow();
         }
 
+        private void DeleteFocusedRow(bool confirm)
+        {
+            var activeGrid = gridItems.IsKeyboardFocusWithin ? gridItems : gridSections;
+            var rootTv = activeGrid.View as TableView;
+            var focusedView = rootTv?.FocusedView as TableView ?? rootTv;
+            var currentItem = focusedView?.Grid?.CurrentItem;
+
+            if (currentItem == null)
+            {
+                var otherGrid = activeGrid == gridItems ? gridSections : gridItems;
+                var otherTv = otherGrid.View as TableView;
+                var otherFocused = otherTv?.FocusedView as TableView ?? otherTv;
+                if (otherFocused?.Grid?.CurrentItem != null)
+                {
+                    focusedView = otherFocused;
+                    currentItem = focusedView.Grid.CurrentItem;
+                }
+            }
+
+            if (focusedView == null || currentItem == null)
+            {
+                MessageBox.Show("Vui lòng chọn dòng cần xóa (ở bất kỳ cấp độ nào).", "Cảnh báo",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            string prompt = "Xóa dòng đang chọn (kèm toàn bộ chi tiết con nếu có)?";
+            if (currentItem is ReportSectionEntity sec)
+                prompt = $"Xóa mục lớn '{sec.SectionName}' và toàn bộ cấu trúc con bên dưới?";
+            else if (currentItem is ReportCategoryEntity cat)
+                prompt = $"Xóa nhóm chỉ tiêu '{cat.CategoryName}' và toàn bộ chỉ tiêu con bên dưới?";
+            else if (currentItem is ReportItemEntity item)
+                prompt = $"Xóa chỉ tiêu '{item.EntryName}' và toàn bộ công thức con bên dưới?";
+            else if (currentItem is ReportFormulaEntity f)
+                prompt = $"Xóa công thức '{f.ItemsName}' và toàn bộ tài khoản tham chiếu?";
+            else if (currentItem is ReportFormulaAccountEntity acc)
+                prompt = $"Xóa tài khoản tham chiếu '{acc.AccountId}'?";
+
+            if (confirm && MessageBox.Show(prompt, "Xác nhận",
+                    MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes)
+                return;
+
+            focusedView.CancelRowEdit();
+
+            if (focusedView.Grid.ItemsSource is System.Collections.IList list && list.Contains(currentItem))
+            {
+                list.Remove(currentItem);
+            }
+
+            if (currentItem is ReportSectionEntity || currentItem is ReportCategoryEntity)
+            {
+                gridItems.ItemsSource = null;
+            }
+        }
+
         private void BtnDelete_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
         {
-            // Xóa dòng đang chọn trên grid nào đang có focus
-            var focusedGrid = gridItems.IsKeyboardFocusWithin ? gridItems : gridSections;
+            DeleteFocusedRow(confirm: true);
+        }
 
-            if (focusedGrid == gridSections)
-            {
-                // Xóa Section từ gridSections
-                var sel = gridSections.SelectedItem as IEntityCore;
-                if (sel == null)
-                {
-                    MessageBox.Show("Vui lòng chọn dòng cần xóa.", "Cảnh báo",
-                        MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
-                if (sel is ReportSectionEntity section)
-                {
-                    if (MessageBox.Show($"Xóa mục lớn '{section.SectionName}' và toàn bộ cấu trúc con bên dưới?", "Xác nhận",
-                        MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-                    {
-                        var src = gridSections.ItemsSource as EntityCollection<ReportSectionEntity>;
-                        src?.Remove(section);
-                        gridItems.ItemsSource = null; // Clear gridItems khi xóa section
-                    }
-                }
-                else if (sel is ReportCategoryEntity category)
-                {
-                    if (MessageBox.Show($"Xóa nhóm chỉ tiêu '{category.CategoryName}' và toàn bộ cấu trúc con bên dưới?", "Xác nhận",
-                        MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-                    {
-                        // Tìm parent section và remove category
-                        foreach (var sec in _sections)
-                        {
-                            if (sec.ReportCategories != null && sec.ReportCategories.Contains(category))
-                            {
-                                sec.ReportCategories.Remove(category);
-                                gridItems.ItemsSource = null;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            else
-            {
-                // Xóa Item, Formula hoặc Account từ gridItems
-                var sel = gridItems.SelectedItem as IEntityCore;
-                if (sel == null)
-                {
-                    MessageBox.Show("Vui lòng chọn dòng cần xóa.", "Cảnh báo",
-                        MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
+        private void Grid_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Delete) return;
 
-                if (sel is ReportFormulaAccountEntity account)
-                {
-                    if (MessageBox.Show($"Xóa tài khoản tham chiếu?", "Xác nhận",
-                        MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-                    {
-                        // Tìm parent formula và remove account
-                        var src = gridItems.ItemsSource as EntityCollection<ReportItemEntity>;
-                        if (src != null)
-                        {
-                            foreach (var item in src)
-                            {
-                                if (item.ReportFormulas != null)
-                                {
-                                    foreach (var formula in item.ReportFormulas)
-                                    {
-                                        if (formula.ReportFormulaAccounts != null && formula.ReportFormulaAccounts.Contains(account))
-                                        {
-                                            formula.ReportFormulaAccounts.Remove(account);
-                                            return;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                else if (sel is ReportFormulaEntity formula)
-                {
-                    if (MessageBox.Show($"Xóa công thức và toàn bộ tài khoản tham chiếu?", "Xác nhận",
-                        MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-                    {
-                        // Tìm parent item và remove formula
-                        var src = gridItems.ItemsSource as EntityCollection<ReportItemEntity>;
-                        if (src != null)
-                        {
-                            foreach (var item in src)
-                            {
-                                if (item.ReportFormulas != null && item.ReportFormulas.Contains(formula))
-                                {
-                                    item.ReportFormulas.Remove(formula);
-                                    return;
-                                }
-                            }
-                        }
-                    }
-                }
-                else if (sel is ReportItemEntity item)
-                {
-                    if (MessageBox.Show($"Xóa chỉ tiêu '{item.EntryName}' và toàn bộ cấu trúc con bên dưới?", "Xác nhận",
-                        MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-                    {
-                        var src = gridItems.ItemsSource as EntityCollection<ReportItemEntity>;
-                        src?.Remove(item);
-                    }
-                }
-            }
+            var tv = (sender as GridControl)?.View as TableView;
+            var focusedView = tv?.FocusedView as TableView ?? tv;
+            if (focusedView == null || focusedView.ActiveEditor != null) return; // Đang sửa ô text thì không xóa dòng
+
+            DeleteFocusedRow(confirm: true);
+            e.Handled = true;
         }
 
                 private async void BtnTestCalc_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)

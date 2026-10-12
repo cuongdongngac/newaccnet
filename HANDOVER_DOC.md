@@ -177,3 +177,22 @@ _Thiết kế đã thỏa thuận user 28/09/2026:_
 ### 4.2 Icon chuyên biệt Ribbon (Treo, cần quy trình thử-sai)
 
 - Thay icon chuyên biệt cho Ribbon (hiện đang dùng icon tạm `bo_...`).
+
+### 4.3 Bàn giao & Định hướng phân hệ Nhập liệu Vật tư (Inventory Voucher - Cập nhật 10/10/2026)
+- **Kiến trúc cốt lõi**:
+  - Dữ liệu 2 tầng: Tầng 1 (`InventoryVoucherLine` - giá vốn/giá gốc chung cho cả 4 loại NNB, XNB, NM, XB); Tầng 2 (`MaterialTaxLine` - quan hệ 1-1 cho giá bán & thuế).
+  - Làm phẳng thuộc tính qua Partial Class (`InventoryVoucherLineEntity.Custom.cs`): Thuộc tính phẳng `SellPrice`, `Taxrateid`, `Rate` đồng bộ 2 chiều với thực thể con `MaterialTaxLine`, kèm cơ chế tự động dọn dẹp `CleanUpTaxLine()`.
+  - Chân form Vật tư (`MaterialDetailWindow`): Các ô chọn tài khoản đối ứng độc lập (đang hiển thị đầy đủ 4 nhóm để quan sát trực quan).
+  - Khi Save quay về Form chính (`JournalVoucher` / `VoucherEntryWindow`): Form chính ráp nối Lưới hạch toán kép (Master - SubEntry):
+    - Xuất bán (`XB` - 5 bản ghi): Cha 1 = Nợ 632, Con = Có 156 (dòng vật tư ban đầu đảo chiều); Cha 2 = Nợ 131, Con 1 = Có 511, Con 2 = Có 3331.
+    - Nhập mua (`NM` - 3 bản ghi): Cha = Có 331, Con 1 = Nợ 156, Con 2 = Nợ 1331.
+    - Nội bộ (`NNB`, `XNB`): 2 bản ghi (1 Cha, 1 Con).
+- **Các cải tiến & xử lý UI mới nhất**:
+  1. *Dropdown vật tư trên Grid bị list trắng*: Đã bổ sung `PopupContentTemplate` với `PART_GridControl` (gồm 3 cột: Mã VT, Tên vật tư, ĐVT).
+  2. *Dropdown thuế trên Grid bị list trắng*: Đã bổ sung `PopupContentTemplate` với 2 cột (Thuế %, Mô tả) và đưa trường `Taxratedes` vào nạp nguồn `lueTaxRate.ItemsSource`.
+  3. *Bấm "Chấp nhận" luôn báo "Vui lòng chọn Kho"*: Đã bổ sung 2-way binding `EditValue="{Binding WarehouseId, Mode=TwoWay}"` trên `lueWarehouse`, thêm sự kiện `EditValueChanged`, tự gợi ý kho mặc định cho phiếu mới, và fallback đọc trực tiếp từ `lueWarehouse.EditValue` khi bấm Chấp nhận.
+  4. *Ràng buộc chỉ được chọn Tài khoản sau khi đã chọn Nợ/Có*: Bắt sự kiện `TableView_ShowingEditor` trên cả 2 lưới Master và Detail của `VoucherEntryWindow`. Nếu chưa có Nợ/Có, ngăn kích hoạt ô Tài khoản (`e.Cancel = true`), tự động chuyển con trỏ và kích hoạt ComboBox Nợ/Có.
+  5. *Tối ưu cột Vật tư gọn gàng, không bị rối mắt*: Bỏ cột Tên vật tư riêng biệt trên Grid `MaterialDetailWindow`. Cột `MaterialId` hiển thị trực tiếp Tên vật tư (`DisplayMember="MaterialName"`), và trong popup dropdown đưa cột Tên vật tư lên hàng đầu để tìm kiếm theo tên làm chủ đạo giống như cột Thuế.
+- **Tài liệu tham khảo chi tiết**:
+  - [.ai_context/InventoryVoucher_Tasks_Plan.md](file:///d:/NewaccNet/.ai_context/InventoryVoucher_Tasks_Plan.md)
+  - [PROGRESS_LOG.md (Mục 11)](file:///d:/NewaccNet/PROGRESS_LOG.md#L363)

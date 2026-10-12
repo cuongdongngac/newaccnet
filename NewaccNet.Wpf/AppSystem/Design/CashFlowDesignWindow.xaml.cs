@@ -13,7 +13,6 @@ namespace NewaccNet.Wpf.AppSystem.Design
     public partial class CashFlowDesignWindow : BaseWindow
     {
         private EntityCollection<CashFlowCategoryEntity> _categories = new EntityCollection<CashFlowCategoryEntity>();
-        private EntityCollection<ChartOfAccountEntity> _accounts = new EntityCollection<ChartOfAccountEntity>();
 
         private List<CashFlowCategoryEntity> _origCategories = new List<CashFlowCategoryEntity>();
         private Dictionary<int, List<CashFlowItemEntity>> _origItemsByCategoryId = new Dictionary<int, List<CashFlowItemEntity>>();
@@ -24,30 +23,12 @@ namespace NewaccNet.Wpf.AppSystem.Design
             InitializeComponent();
             this.Loaded += (_, _) =>
             {
-                LoadLookups();
+                DesignLookupHelper.EnsureAccountsLoaded();
                 LoadData();
             };
 
             // Link giữa 2 grid: khi chọn Category trên gridCategories → load Items tương ứng
             gridCategories.SelectedItemChanged += GridCategories_SelectedItemChanged;
-        }
-
-        private void LoadLookups()
-        {
-            try
-            {
-                using var adapter = AppDataAccessAdapter.Create();
-                _accounts = new EntityCollection<ChartOfAccountEntity>();
-                adapter.FetchEntityCollection(_accounts, null);
-
-                cboAccDetail.ItemsSource = _accounts;
-                cboCounterDetail.ItemsSource = _accounts;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi tải lookup tài khoản: " + ex.Message, "Lỗi",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-            }
         }
 
         private void GridCategories_SelectedItemChanged(object sender, SelectedItemChangedEventArgs e)

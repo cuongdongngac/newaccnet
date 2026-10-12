@@ -32,6 +32,7 @@
             this.TopMargin = new DevExpress.XtraReports.UI.TopMarginBand();
             this.BottomMargin = new DevExpress.XtraReports.UI.BottomMarginBand();
             this.ReportHeader = new DevExpress.XtraReports.UI.ReportHeaderBand();
+            this.xrLabel1 = new DevExpress.XtraReports.UI.XRLabel();
             this.label1 = new DevExpress.XtraReports.UI.XRLabel();
             this.GroupHeader1 = new DevExpress.XtraReports.UI.GroupHeaderBand();
             this.table1 = new DevExpress.XtraReports.UI.XRTable();
@@ -60,6 +61,8 @@
             this.DetailData3_Odd = new DevExpress.XtraReports.UI.XRControlStyle();
             this.PageInfo = new DevExpress.XtraReports.UI.XRControlStyle();
             this.prmOtherAmount = new DevExpress.XtraReports.Parameters.Parameter();
+            this.prmReportTitle = new DevExpress.XtraReports.Parameters.Parameter();
+            this.prmSubtitle = new DevExpress.XtraReports.Parameters.Parameter();
             ((System.ComponentModel.ISupportInitialize)(this.table1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.table2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.objectDataSource1)).BeginInit();
@@ -78,17 +81,36 @@
             // ReportHeader
             // 
             this.ReportHeader.Controls.AddRange(new DevExpress.XtraReports.UI.XRControl[] {
+            this.xrLabel1,
             this.label1});
             this.ReportHeader.HeightF = 60F;
             this.ReportHeader.Name = "ReportHeader";
             // 
+            // xrLabel1
+            // 
+            this.xrLabel1.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
+            new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "?prmSubtitle")});
+            this.xrLabel1.Font = new DevExpress.Drawing.DXFont("Arial", 12F);
+            this.xrLabel1.LocationFloat = new DevExpress.Utils.PointFloat(0F, 25.80567F);
+            this.xrLabel1.Name = "xrLabel1";
+            this.xrLabel1.SizeF = new System.Drawing.SizeF(1149.291F, 24.19433F);
+            this.xrLabel1.StyleName = "Title";
+            this.xrLabel1.StylePriority.UseFont = false;
+            this.xrLabel1.StylePriority.UseTextAlignment = false;
+            this.xrLabel1.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
+            // 
             // label1
             // 
+            this.label1.ExpressionBindings.AddRange(new DevExpress.XtraReports.UI.ExpressionBinding[] {
+            new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Text", "?prmReportTitle")});
+            this.label1.Font = new DevExpress.Drawing.DXFont("Arial", 14.25F, DevExpress.Drawing.DXFontStyle.Bold);
             this.label1.LocationFloat = new DevExpress.Utils.PointFloat(0F, 0F);
             this.label1.Name = "label1";
             this.label1.SizeF = new System.Drawing.SizeF(1149.291F, 24.19433F);
             this.label1.StyleName = "Title";
-            this.label1.Text = "HOÀN THUẾ";
+            this.label1.StylePriority.UseFont = false;
+            this.label1.StylePriority.UseTextAlignment = false;
+            this.label1.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             // 
             // GroupHeader1
             // 
@@ -376,9 +398,21 @@
             // 
             // prmOtherAmount
             // 
-            this.prmOtherAmount.Description = "Parameter1";
+            this.prmOtherAmount.Description = "Tiêu để cột phải";
             this.prmOtherAmount.Name = "prmOtherAmount";
             this.prmOtherAmount.ValueInfo = "Lũy kế từ đầu năm";
+            // 
+            // prmReportTitle
+            // 
+            this.prmReportTitle.Description = "reportTitle";
+            this.prmReportTitle.Name = "prmReportTitle";
+            this.prmReportTitle.ValueInfo = "PHẦN II. THUẾ GIÁ TRỊ GIA TĂNG ĐƯỢC KHẤU TRỪ, ĐƯỢC HOÀN LẠI, ĐƯỢC MIỄN GIẢM";
+            // 
+            // prmSubtitle
+            // 
+            this.prmSubtitle.Description = "subtitle";
+            this.prmSubtitle.Name = "prmSubtitle";
+            this.prmSubtitle.ValueInfo = "Từ ngày              Đến ngày";
             // 
             // VatReturn
             // 
@@ -397,8 +431,14 @@
             this.PageHeightF = 826.7717F;
             this.PageWidthF = 1169.291F;
             this.PaperKind = DevExpress.Drawing.Printing.DXPaperKind.A4;
+            this.ParameterPanelLayoutItems.AddRange(new DevExpress.XtraReports.Parameters.ParameterPanelLayoutItem[] {
+            new DevExpress.XtraReports.Parameters.ParameterLayoutItem(this.prmOtherAmount, DevExpress.XtraReports.Parameters.Orientation.Horizontal),
+            new DevExpress.XtraReports.Parameters.ParameterLayoutItem(this.prmReportTitle, DevExpress.XtraReports.Parameters.Orientation.Horizontal),
+            new DevExpress.XtraReports.Parameters.ParameterLayoutItem(this.prmSubtitle, DevExpress.XtraReports.Parameters.Orientation.Horizontal)});
             this.Parameters.AddRange(new DevExpress.XtraReports.Parameters.Parameter[] {
-            this.prmOtherAmount});
+            this.prmOtherAmount,
+            this.prmReportTitle,
+            this.prmSubtitle});
             this.StyleSheet.AddRange(new DevExpress.XtraReports.UI.XRControlStyle[] {
             this.Title,
             this.DetailCaption1,
@@ -446,5 +486,8 @@
         private DevExpress.XtraReports.UI.XRTableCell tableCell11;
         private DevExpress.XtraReports.UI.XRTableCell tableCell12;
         private DevExpress.XtraReports.Parameters.Parameter prmOtherAmount;
+        private DevExpress.XtraReports.Parameters.Parameter prmReportTitle;
+        private DevExpress.XtraReports.UI.XRLabel xrLabel1;
+        private DevExpress.XtraReports.Parameters.Parameter prmSubtitle;
     }
 }

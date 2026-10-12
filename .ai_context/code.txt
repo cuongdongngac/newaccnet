@@ -1,0 +1,84 @@
+Để không phải sửa thói quen "chỉ truyền thằng to nhất" và giữ code gọn gàng, bạn chỉ cần thay đổi đúng 1 dòng code ở hàm Lưu bằng cách đổi từ UnitOfWork thông thường sang sử dụng tính năng UnitOfWork2 (nếu dùng mô hình Adapter) kết hợp với việc gán Context, hoặc dùng chiêu vừa quét vừa add tự động.
+Dưới đây là 2 cách xử lý tiện nhất, bạn chọn cách phù hợp với dự án của mình nhé:
+
+Cách 1: Sử dụng Context để LLBLGen tự động "gắn keo" các cấp (Khuyên dùng)
+
+LLBLGen cung cấp một đối tượng gọi là Context. Khi bạn ném Entity to nhất vào Context, nó sẽ tự động quản lý và theo dõi tất cả các thực thể con cháu chắt ở mọi cấp độ. Khi lưu, bạn chỉ cần báo UOW nạp dữ liệu từ Context đó ra.
+csharp
+// 1. Tạo một Context bén dòng dữ liệu
+Context context = new Context();
+context.Add(myRootEntity); // Thằng to nhất
+
+// 2. Gom quân vào UOW thông qua Context
+UnitOfWork2 uow = new UnitOfWork2();
+uow.AddCollectionForSave(context.GetEntitiesInContext(), true); 
+// Dòng này sẽ ép UOW nhìn thấy TẤT CẢ các thực thể đang có trong bộ nhớ, bất kể mấy cấp
+
+// 3. Commit như bình thường
+using (var adapter = new DataAccessAdapter())
+{
+    uow.Commit(adapter, true);
+}
+Use code with caution.
+
+Cách 2: Viết một hàm mở rộng SaveGraph (Chỉ cần gọi 1 dòng cho thằng to nhất)
+
+Nếu bạn lười sửa cấu trúc code UOW hiện tại, hãy viết một hàm tiện ích chạy ngầm. Trước khi add thằng to nhất vào UOW, nó sẽ tự động chạy đệ quy lùng sục các tầng dưới để add đích danh các ông bị IsDirty vào hàng chờ lưu.
+Bạn tạo một class tiện ích:
+csharp
+public static class LLBLGenUtils
+{
+    public static void SmartAddForSave(this UnitOfWork2 uow, IEntity2 rootEntity)
+    {
+        // Vẫn add thằng to nhất với tham số đệ quy true để lo phần Thêm mới/Xóa
+        uow.AddForSave(rootEntity, true);
+        
+        // Quét đệ quy ngầm để ép UOW nhận diện các ông bị Sửa ở cấp sâu
+        var visited = new HashSet<IEntity2>();
+        FindAndAddDirtyChildren(rootEntity, uow, visited);
+    }
+
+    private static void FindAndAddDirtyChildren(IEntity2 entity, UnitOfWork2 uow, HashSet<IEntity2> visited)
+    {
+        if (entity == null || !visited.Add(entity)) return;
+
+        // Nếu thằng con/cháu này bị sửa -> Ép UOW phải lưu nó bằng cách add đích danh
+        if (entity.IsDirty && !entity.IsNew) 
+        {
+            uow.AddForSave(entity); 
+        }
+
+        // Bò tiếp xuống các tập hợp con
+        foreach (var collection in entity.GetRelatedCollections())
+        {
+            if (collection == null) continue;
+            foreach (IEntity2 child in collection)
+            {
+                FindAndAddDirtyChildren(child, uow, visited);
+            }
+        }
+    }
+}
+Use code with caution.
+Khi dùng tại nút Lưu, bạn chỉ cần thay đổi đúng dòng gọi AddForSave thành:
+csharp
+UnitOfWork2 uow = new UnitOfWork2();
+
+// Thay vì: uow.AddForSave(myRootEntity, true);
+uow.SmartAddForSave(myRootEntity); // Xong! Vẫn chỉ truyền thằng to nhất.
+
+using (var adapter = new DataAccessAdapter())
+{
+    uow.Commit(adapter, true);
+}
+Use code with caution.
+Áp dụng một trong hai cách trên thì từ nay về sau, dự án của bạn có lên tới 7 cấp, 10 cấp đi chăng nữa, bạn vẫn giữ nguyên được thói quen "chỉ đưa thằng to nhất vào tham số" mà dữ liệu sửa ở bất kỳ hang cùng ngõ hẻm nào dưới lưới cũng sẽ được UPDATE chuẩn chỉ 100% xuống database!
+Bạn đang dùng LLBLGen bản cũ (mô hình SelfServicing - dùng UnitOfWork) hay bản mới hơn (mô hình Adapter - dùng UnitOfWork2) để mình chuẩn hóa lại chính xác đoạn code khai báo kiểu dữ liệu (IEntityCore, IEntity2) cho bạn nhé?
+
+Bạn   cho toàn bộ những cái trên kể cả code demo để mình  copy. Cái hàm nào sẽ dùng chung được bạn note vào, vì chẳng nhẽ ở mỗi tác vụ lại phải làm build lại hàm à
+
+It looks like there's no response available for this search. Try asking something else.
+
+bạn gộp câu trả lời vừa rồi vào thành một box
+
+It looks like there's no response available for this search. Try asking something else.

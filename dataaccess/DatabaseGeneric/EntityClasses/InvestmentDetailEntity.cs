@@ -162,7 +162,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathStock { get { return _staticMetaData.GetPrefetchPathElement("Stock", CommonEntityBase.CreateEntityCollection<StockEntity>()); } }
 
 		/// <summary>The CustomerId property of the Entity InvestmentDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InvestmentDetail"."CustomerId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InvestmentDetail"."CustomerId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String CustomerId
 		{
 			get { return (System.String)GetValue((int)InvestmentDetailFieldIndex.CustomerId, true); }
@@ -170,7 +170,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Inprice property of the Entity InvestmentDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InvestmentDetail"."Inprice".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InvestmentDetail"."Inprice".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Inprice
 		{
 			get { return (Nullable<System.Double>)GetValue((int)InvestmentDetailFieldIndex.Inprice, false); }
@@ -178,7 +178,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The JournalEntryId property of the Entity InvestmentDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InvestmentDetail"."JournalEntryId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InvestmentDetail"."JournalEntryId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> JournalEntryId
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)InvestmentDetailFieldIndex.JournalEntryId, false); }
@@ -186,7 +186,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Lineid property of the Entity InvestmentDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InvestmentDetail"."Lineid".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "InvestmentDetail"."Lineid".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Lineid
 		{
 			get { return (System.Int32)GetValue((int)InvestmentDetailFieldIndex.Lineid, true); }
@@ -194,7 +194,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Originamount property of the Entity InvestmentDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InvestmentDetail"."Originamount".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InvestmentDetail"."Originamount".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Originamount
 		{
 			get { return (Nullable<System.Double>)GetValue((int)InvestmentDetailFieldIndex.Originamount, false); }
@@ -202,7 +202,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Otherexpense property of the Entity InvestmentDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InvestmentDetail"."Otherexpense".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InvestmentDetail"."Otherexpense".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Otherexpense
 		{
 			get { return (Nullable<System.Double>)GetValue((int)InvestmentDetailFieldIndex.Otherexpense, false); }
@@ -210,7 +210,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Outprice property of the Entity InvestmentDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InvestmentDetail"."Outprice".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InvestmentDetail"."Outprice".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Outprice
 		{
 			get { return (Nullable<System.Double>)GetValue((int)InvestmentDetailFieldIndex.Outprice, false); }
@@ -218,7 +218,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Quantity property of the Entity InvestmentDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InvestmentDetail"."Quantity".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InvestmentDetail"."Quantity".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Quantity
 		{
 			get { return (Nullable<System.Double>)GetValue((int)InvestmentDetailFieldIndex.Quantity, false); }
@@ -226,7 +226,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Stockid property of the Entity InvestmentDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InvestmentDetail"."Stockid".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InvestmentDetail"."Stockid".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Stockid
 		{
 			get { return (System.String)GetValue((int)InvestmentDetailFieldIndex.Stockid, true); }

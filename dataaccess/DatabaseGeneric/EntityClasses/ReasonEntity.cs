@@ -138,7 +138,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathAssetDetails { get { return _staticMetaData.GetPrefetchPathElement("AssetDetails", CommonEntityBase.CreateEntityCollection<AssetDetailEntity>()); } }
 
 		/// <summary>The Flag property of the Entity Reason<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Reason"."Flag".<br/>Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "Reason"."Flag".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Boolean Flag
 		{
 			get { return (System.Boolean)GetValue((int)ReasonFieldIndex.Flag, true); }
@@ -146,7 +146,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Reasonid property of the Entity Reason<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Reason"."Reasonid".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		/// <remarks>Mapped on  table field: "Reason"."Reasonid".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
 		public virtual System.String Reasonid
 		{
 			get { return (System.String)GetValue((int)ReasonFieldIndex.Reasonid, true); }
@@ -154,7 +154,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The ReasonName property of the Entity Reason<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Reason"."ReasonName".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "Reason"."ReasonName".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String ReasonName
 		{
 			get { return (System.String)GetValue((int)ReasonFieldIndex.ReasonName, true); }

@@ -210,7 +210,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathLiabilityDues { get { return _staticMetaData.GetPrefetchPathElement("LiabilityDues", CommonEntityBase.CreateEntityCollection<LiabilityDueEntity>()); } }
 
 		/// <summary>The Address property of the Entity Partner<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Partner"."Address".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "Partner"."Address".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Address
 		{
 			get { return (System.String)GetValue((int)PartnerFieldIndex.Address, true); }
@@ -218,7 +218,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The CustomerName property of the Entity Partner<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Partner"."CustomerName".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "Partner"."CustomerName".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String CustomerName
 		{
 			get { return (System.String)GetValue((int)PartnerFieldIndex.CustomerName, true); }
@@ -226,7 +226,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Faxnumber property of the Entity Partner<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Partner"."Faxnumber".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "Partner"."Faxnumber".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 30.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Faxnumber
 		{
 			get { return (System.String)GetValue((int)PartnerFieldIndex.Faxnumber, true); }
@@ -234,7 +234,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Id property of the Entity Partner<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Partner"."Id".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		/// <remarks>Mapped on  table field: "Partner"."Id".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
 		public virtual System.String Id
 		{
 			get { return (System.String)GetValue((int)PartnerFieldIndex.Id, true); }
@@ -242,7 +242,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Isemployee property of the Entity Partner<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Partner"."Isemployee".<br/>Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "Partner"."Isemployee".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Boolean Isemployee
 		{
 			get { return (System.Boolean)GetValue((int)PartnerFieldIndex.Isemployee, true); }
@@ -250,7 +250,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Note property of the Entity Partner<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Partner"."Note".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "Partner"."Note".<br/>Table field type characteristics (type, precision, scale, length): LongVarWChar, 0, 0, 536870911.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Note
 		{
 			get { return (System.String)GetValue((int)PartnerFieldIndex.Note, true); }
@@ -258,7 +258,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Phonenumber property of the Entity Partner<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Partner"."Phonenumber".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "Partner"."Phonenumber".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 30.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Phonenumber
 		{
 			get { return (System.String)GetValue((int)PartnerFieldIndex.Phonenumber, true); }
@@ -266,7 +266,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Taxno property of the Entity Partner<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Partner"."Taxno".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "Partner"."Taxno".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Taxno
 		{
 			get { return (System.String)GetValue((int)PartnerFieldIndex.Taxno, true); }

@@ -1324,8 +1324,6 @@ namespace DataAccess.HelperClasses
 	{
 		/// <summary>Creates a new SystemUserEntity.FullName field instance</summary>
 		public static EntityField2 FullName { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(SystemUserFieldIndex.FullName); }}
-		/// <summary>Creates a new SystemUserEntity.Id field instance</summary>
-		public static EntityField2 Id { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(SystemUserFieldIndex.Id); }}
 		/// <summary>Creates a new SystemUserEntity.IsActive field instance</summary>
 		public static EntityField2 IsActive { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(SystemUserFieldIndex.IsActive); }}
 		/// <summary>Creates a new SystemUserEntity.Password field instance</summary>

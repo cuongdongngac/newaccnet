@@ -138,7 +138,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathInventoryVoucherLine { get { return _staticMetaData.GetPrefetchPathElement("InventoryVoucherLine", CommonEntityBase.CreateEntityCollection<InventoryVoucherLineEntity>()); } }
 
 		/// <summary>The LineId property of the Entity MaterialTaxLine<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "MaterialTaxLine"."LineId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		/// <remarks>Mapped on  table field: "MaterialTaxLine"."LineId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
 		public virtual System.Int32 LineId
 		{
 			get { return (System.Int32)GetValue((int)MaterialTaxLineFieldIndex.LineId, true); }
@@ -146,7 +146,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Rate property of the Entity MaterialTaxLine<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "MaterialTaxLine"."Rate".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "MaterialTaxLine"."Rate".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Rate
 		{
 			get { return (Nullable<System.Double>)GetValue((int)MaterialTaxLineFieldIndex.Rate, false); }
@@ -154,7 +154,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The SellPrice property of the Entity MaterialTaxLine<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "MaterialTaxLine"."SellPrice".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "MaterialTaxLine"."SellPrice".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> SellPrice
 		{
 			get { return (Nullable<System.Double>)GetValue((int)MaterialTaxLineFieldIndex.SellPrice, false); }
@@ -162,7 +162,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Taxrateid property of the Entity MaterialTaxLine<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "MaterialTaxLine"."Taxrateid".<br/>Table field type characteristics (type, precision, scale, length): SmallInt, 5, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "MaterialTaxLine"."Taxrateid".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int16> Taxrateid
 		{
 			get { return (Nullable<System.Int16>)GetValue((int)MaterialTaxLineFieldIndex.Taxrateid, false); }

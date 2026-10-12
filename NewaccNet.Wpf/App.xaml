@@ -2,12 +2,50 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
              xmlns:local="clr-namespace:NewaccNet.Wpf"
              ShutdownMode="OnExplicitShutdown">
     <Application.Resources>
-        <!-- Set default Icon for all ThemedWindows -->
-        <Style TargetType="dx:ThemedWindow">
-            <Setter Property="Icon" Value="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_mydetails.svg'}" />
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/NewaccNet.Wpf;component/AppSystem/Common/AccountTemplates.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- Set default Icon for all ThemedWindows -->
+            <Style TargetType="dx:ThemedWindow">
+                <Setter Property="Icon" Value="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_report_showdesigner.svg'}" />
+            </Style>
+
+            <!-- Set default dd/MM/yyyy format and MinWidth for all DateEdit controls -->
+            <Style TargetType="{x:Type dxe:DateEdit}">
+                <Setter Property="Mask" Value="dd/MM/yyyy"/>
+                <Setter Property="MaskType" Value="DateTimeAdvancingCaret"/>
+                <Setter Property="MaskUseAsDisplayFormat" Value="True"/>
+                <Setter Property="DisplayFormatString" Value="dd/MM/yyyy"/>
+                <Setter Property="MinWidth" Value="115"/>
+            </Style>
+
+            <!-- Set default dd/MM/yyyy format for all DateEditSettings in GridControl -->
+            <Style TargetType="{x:Type dxe:DateEditSettings}">
+                <Setter Property="Mask" Value="dd/MM/yyyy"/>
+                <Setter Property="MaskType" Value="DateTimeAdvancingCaret"/>
+                <Setter Property="MaskUseAsDisplayFormat" Value="True"/>
+                <Setter Property="DisplayFormat" Value="dd/MM/yyyy"/>
+            </Style>
+
+            <!-- Set default Centered Column Headers for all Grid & TreeList columns -->
+            <Style TargetType="{x:Type dxg:GridColumn}">
+                <Setter Property="HorizontalHeaderContentAlignment" Value="Center"/>
+            </Style>
+
+            <Style TargetType="{x:Type dxg:TreeListColumn}">
+                <Setter Property="HorizontalHeaderContentAlignment" Value="Center"/>
+            </Style>
+
+            <Style TargetType="{x:Type dxg:GridControlBand}">
+                <Setter Property="HorizontalHeaderContentAlignment" Value="Center"/>
+            </Style>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
+using DevExpress.Xpf.Core;
 using DevExpress.Xpf.Grid;
 using DevExpress.Xpf.Editors;
 using DataAccess.EntityClasses;
@@ -11,55 +12,86 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace NewaccNet.Wpf.AppSystem.Voucher.Details
 {
-    public partial class MaterialDetailWindow : Window
+    public partial class MaterialDetailWindow : ThemedWindow
     {
+        private MaterialTransactionContext _context;
         private InventoryVoucherEntity _currentEntity;
-        private JournalEntryEntity _parentEntry;
         private bool _isNew;
 
+        public System.Collections.ObjectModel.ObservableCollection<InventoryItemEntity> Materials { get; } = new System.Collections.ObjectModel.ObservableCollection<InventoryItemEntity>();
         private List<InventoryItemEntity> _materials = new List<InventoryItemEntity>();
         private List<TaxRateEntity> _taxRates = new List<TaxRateEntity>();
         private List<PartnerEntity> _partners = new List<PartnerEntity>();
 
-        public string SelectedCostAccount { get; private set; } = "";
-        public string SelectedRevenueAccount { get; private set; } = "";
-        public string SelectedTaxAccount { get; private set; } = "";
-        public string SelectedTotalAccount { get; private set; } = "";
-        
-        public string VoucherType { get; private set; } = "";
-        public double TotalCostAmount { get; private set; } = 0;
-        public double TotalSellAmount { get; private set; } = 0;
-        public double TotalTaxAmount { get; private set; } = 0;
+        public MaterialTransactionContext Context => _context;
 
-        public class VoucherTypeInfo
+        public string SelectedCostAccount => _context?.CostAccountId ?? "";
+        public string SelectedRevenueAccount => _context?.RevenueAccountId ?? "";
+        public string SelectedTaxAccount => _context?.TaxAccountId ?? "";
+        public string SelectedTotalAccount => _context?.TotalAccountId ?? "";
+        
+        public string VoucherType => _context?.VoucherType ?? "";
+        public double TotalCostAmount => _context?.TotalCostAmount ?? 0;
+        public double TotalSellAmount => _context?.TotalSellAmount ?? 0;
+        public double TotalTaxAmount => _context?.TotalTaxAmount ?? 0;
+
+        public class MaterialBillTypeItem
         {
-            public string Id { get; set; } = "";
-            public string Name { get; set; } = "";
-            public int Dbcr { get; set; }
+            public bool Taxflag { get; set; }
+            public string Description { get; set; } = "";
+        }
+
+        public class TaxRateItem
+        {
+            public int Taxrateid { get; set; }
+            public double Rate { get; set; }
+            public string Display => (Rate > 1) ? $"{Rate:G29}%" : $"{Rate * 100:G29}%";
         }
 
         public MaterialDetailWindow(JournalEntryEntity parentEntry, bool isNew)
+            : this(isNew ? MaterialTransactionContext.CreateNew(parentEntry) : MaterialTransactionContext.FromExisting(parentEntry))
         {
+        }
+
+        public MaterialDetailWindow(JournalEntryEntity parentEntry, string voucherType, bool isNew = false)
+            : this(isNew ? MaterialTransactionContext.CreateNew(parentEntry, voucherType) : MaterialTransactionContext.FromExisting(parentEntry))
+        {
+        }
+
+        public MaterialDetailWindow(JournalEntryEntity parentEntry, JournalVoucherEntity voucher, bool isNew = false)
+            : this(isNew ? MaterialTransactionContext.CreateNew(parentEntry, voucher) : MaterialTransactionContext.FromExisting(parentEntry, voucher))
+        {
+        }
+
+        private bool _isLoading = true;
+
+        public MaterialDetailWindow(MaterialTransactionContext context)
+        {
+            _isLoading = true;
             InitializeComponent();
-            _parentEntry = parentEntry;
-            _isNew = isNew;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _currentEntity = _context.InventoryVoucher;
+            _isNew = _context.IsNew;
 
             LoadLookupData();
             InitData();
+            _isLoading = false;
         }
 
         private void LoadLookupData()
         {
-            var voucherTypes = new List<VoucherTypeInfo>();
-            if (_parentEntry.Dbcr == 1)
+            var voucherTypes = new List<MaterialBillTypeItem>();
+            int dbcr = _context?.MaterialEntry?.Dbcr ?? 1;
+
+            if (dbcr == 1)
             {
-                voucherTypes.Add(new VoucherTypeInfo { Id = "NM", Name = "Nhập mua", Dbcr = 1 });
-                voucherTypes.Add(new VoucherTypeInfo { Id = "NNB", Name = "Nhập nội bộ", Dbcr = 1 });
+                voucherTypes.Add(new MaterialBillTypeItem { Taxflag = false, Description = "Nhập nội bộ" });
+                voucherTypes.Add(new MaterialBillTypeItem { Taxflag = true, Description = "Nhập mua" });
             }
             else
             {
-                voucherTypes.Add(new VoucherTypeInfo { Id = "XB", Name = "Xuất bán", Dbcr = -1 });
-                voucherTypes.Add(new VoucherTypeInfo { Id = "XNB", Name = "Xuất nội bộ", Dbcr = -1 });
+                voucherTypes.Add(new MaterialBillTypeItem { Taxflag = false, Description = "Xuất nội bộ" });
+                voucherTypes.Add(new MaterialBillTypeItem { Taxflag = true, Description = "Xuất bán" });
             }
             cboVoucherType.ItemsSource = voucherTypes;
 
@@ -72,116 +104,209 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
                 var materials = new EntityCollection<InventoryItemEntity>();
                 adapter.FetchEntityCollection(materials, null);
                 _materials = materials.ToList();
-                lueMaterial.ItemsSource = _materials;
+                Materials.Clear();
+                foreach (var m in materials) Materials.Add(m);
 
                 var taxRates = new EntityCollection<TaxRateEntity>();
                 adapter.FetchEntityCollection(taxRates, null);
                 _taxRates = taxRates.ToList();
-                lueTaxRate.ItemsSource = _taxRates.Select(t => new { Taxrateid = (short)t.Taxrateid, Rate = t.Rate }).ToList();
+                lueTaxRate.ItemsSource = _taxRates.Select(t => new TaxRateItem 
+                { 
+                    Taxrateid = t.Taxrateid, 
+                    Rate = t.Rate ?? 0 
+                }).ToList();
 
                 var partners = new EntityCollection<PartnerEntity>();
                 adapter.FetchEntityCollection(partners, null);
                 _partners = partners.ToList();
                 lueVatObject.ItemsSource = _partners;
+
+                var accounts = new EntityCollection<ChartOfAccountEntity>();
+                adapter.FetchEntityCollection(accounts, null);
+                var parentIds = accounts.Select(a => a.ParentId).Where(id => !string.IsNullOrEmpty(id)).Distinct().ToHashSet();
+                var nonMaterialAccList = accounts
+                    .Where(a => !parentIds.Contains(a.AccountId) && a.CategoryId != "B" && !a.AccountId.StartsWith("15"))
+                    .OrderBy(a => a.AccountId)
+                    .ToList();
+                lueCostAccount.ItemsSource = nonMaterialAccList;
+                lueRevenueAccount.ItemsSource = nonMaterialAccList;
+                lueTaxAccount.ItemsSource = nonMaterialAccList;
+                lueTotalAccount.ItemsSource = nonMaterialAccList;
+            }
+        }
+
+        private void BtnAddWarehouse_Click(object sender, RoutedEventArgs e)
+        {
+            var newWh = new WarehouseEntity();
+            var editor = new Directory.WarehouseEditorWindow(newWh, true);
+            editor.Owner = this;
+            if (editor.ShowDialog() == true)
+            {
+                try
+                {
+                    using (var adapter = AppDataAccessAdapter.Create())
+                    {
+                        adapter.SaveEntity(newWh, true);
+                    }
+
+                    if (lueWarehouse.ItemsSource is EntityCollection<WarehouseEntity> whCollection)
+                    {
+                        if (!whCollection.Any(x => x.WarehouseId == newWh.WarehouseId))
+                        {
+                            whCollection.Add(newWh);
+                        }
+                    }
+                    lueWarehouse.EditValue = newWh.WarehouseId;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi lưu kho hàng: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private void BtnAddVatPartner_Click(object sender, RoutedEventArgs e)
+        {
+            var newPartner = new PartnerEntity();
+            var editor = new Directory.PartnerEditorWindow(newPartner, true);
+            editor.Owner = this;
+            if (editor.ShowDialog() == true)
+            {
+                try
+                {
+                    using (var adapter = AppDataAccessAdapter.Create())
+                    {
+                        adapter.SaveEntity(newPartner, true);
+                    }
+
+                    _partners.Add(newPartner);
+                    lueVatObject.ItemsSource = null;
+                    lueVatObject.ItemsSource = _partners;
+                    lueVatObject.EditValue = newPartner.Id;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi lưu đối tượng thuế: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private void BtnAddMaterial_Click(object sender, RoutedEventArgs e)
+        {
+            var newMat = new InventoryItemEntity();
+            var editor = new Directory.InventoryItemEditorWindow(newMat, true);
+            editor.Owner = this;
+            if (editor.ShowDialog() == true)
+            {
+                try
+                {
+                    using (var adapter = AppDataAccessAdapter.Create())
+                    {
+                        adapter.SaveEntity(newMat, true);
+                    }
+
+                    if (!Materials.Any(x => x.MaterialId == newMat.MaterialId))
+                    {
+                        Materials.Add(newMat);
+                    }
+
+                    var buttonInfo = sender as DevExpress.Xpf.Editors.ButtonInfo;
+                    var cellData = buttonInfo?.DataContext as EditGridCellData;
+                    var row = cellData?.RowData?.Row as InventoryVoucherLineEntity;
+                    if (row == null)
+                    {
+                        row = GridMaterialDetails.SelectedItem as InventoryVoucherLineEntity;
+                    }
+
+                    if (row != null)
+                    {
+                        row.MaterialId = newMat.MaterialId;
+                    }
+                    GridMaterialDetails.SetCellValue(viewDetails.FocusedRowHandle, "MaterialId", newMat.MaterialId);
+                    viewDetails.CloseEditor();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi lưu vật tư hàng hóa: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
 
         private void InitData()
         {
-            if (_isNew || _parentEntry.InventoryVouchers.Count == 0)
+            this.DataContext = _context;
+
+            if (_isNew)
             {
-                _currentEntity = new InventoryVoucherEntity();
-                _parentEntry.InventoryVouchers.Add(_currentEntity);
-                
-                if (cboVoucherType.ItemsSource is List<VoucherTypeInfo> list && list.Count > 0)
+                if (string.IsNullOrEmpty(_context.WarehouseId))
                 {
-                    _currentEntity.ExobjectId = list[0].Id;
-                    cboVoucherType.EditValue = list[0].Id;
+                    if (lueWarehouse.ItemsSource is EntityCollection<WarehouseEntity> wList && wList.Count > 0)
+                    {
+                        _context.WarehouseId = wList[0].WarehouseId;
+                    }
                 }
             }
             else
             {
-                _currentEntity = _parentEntry.InventoryVouchers[0];
-                cboVoucherType.EditValue = _currentEntity.ExobjectId;
+                // Đồng bộ Rate nếu dòng chi tiết đã có Taxrateid
+                if (_currentEntity != null && _currentEntity.InventoryVoucherLines != null)
+                {
+                    foreach (var line in _currentEntity.InventoryVoucherLines)
+                    {
+                        if (line.Taxrateid.HasValue && (line.Rate == null || line.Rate == 0))
+                        {
+                            var tr = _taxRates.FirstOrDefault(t => t.Taxrateid == line.Taxrateid.Value);
+                            if (tr != null)
+                                line.Rate = tr.Rate;
+                        }
+                    }
+                }
             }
 
-            this.DataContext = _currentEntity;
             UpdateUIVisibility();
-            CalculateTotals();
+            _context.RecalculateTotals();
         }
 
         private void cboVoucherType_EditValueChanged(object sender, EditValueChangedEventArgs e)
         {
-            if (_currentEntity == null) return;
-            string type = cboVoucherType.EditValue as string ?? "";
-            _currentEntity.ExobjectId = type;
-            
-            if (type == "NM" || type == "XB")
-                chkHasTax.IsChecked = true;
-            else
-                chkHasTax.IsChecked = false;
+            if (_isLoading) return;
 
-            UpdateUIVisibility();
-        }
+            if (e.NewValue is bool val && _context != null)
+            {
+                if (_context.Taxflag != val)
+                {
+                    _context.Taxflag = val;
+                }
+            }
 
-        private void chkHasTax_CheckedChanged(object sender, RoutedEventArgs e)
-        {
             UpdateUIVisibility();
         }
 
         private void UpdateUIVisibility()
         {
-            string type = cboVoucherType.EditValue as string ?? "";
-            bool hasTax = chkHasTax.IsChecked == true;
-
-            if (hasTax)
-                pnlTaxInfo.Visibility = Visibility.Visible;
-            else
-                pnlTaxInfo.Visibility = Visibility.Collapsed;
+            string type = _context?.VoucherType ?? "";
 
             if (type == "XB")
             {
+                bandSalesAndTax.Header = "Giá bán & Thuế";
                 bandSalesAndTax.Visible = true;
-                itemTotalSell.Visibility = Visibility.Visible;
-                itemTotalTax.Visibility = Visibility.Visible;
-                itemTotalAll.Visibility = Visibility.Visible;
-                GridMaterialDetails.Columns["MaterialTaxLine.SellPrice"].Visible = true;
+                GridMaterialDetails.Columns["SellPrice"].Visible = true;
                 GridMaterialDetails.Columns["SellAmount"].Visible = true;
+                GridMaterialDetails.Columns["Taxrateid"].Visible = true;
+                GridMaterialDetails.Columns["TaxAmount"].Visible = true;
             }
             else if (type == "NM")
             {
+                bandSalesAndTax.Header = "Thuế GTGT";
                 bandSalesAndTax.Visible = true;
-                GridMaterialDetails.Columns["MaterialTaxLine.SellPrice"].Visible = false;
+                GridMaterialDetails.Columns["SellPrice"].Visible = false;
                 GridMaterialDetails.Columns["SellAmount"].Visible = false;
-                GridMaterialDetails.Columns["MaterialTaxLine.Taxrateid"].Visible = true;
+                GridMaterialDetails.Columns["Taxrateid"].Visible = true;
                 GridMaterialDetails.Columns["TaxAmount"].Visible = true;
-                
-                itemTotalSell.Visibility = Visibility.Collapsed;
-                itemTotalTax.Visibility = Visibility.Visible;
-                itemTotalAll.Visibility = Visibility.Visible;
             }
             else
             {
                 bandSalesAndTax.Visible = false;
-                itemTotalSell.Visibility = Visibility.Collapsed;
-                itemTotalTax.Visibility = Visibility.Collapsed;
-                itemTotalAll.Visibility = Visibility.Collapsed;
-            }
-
-            EnsureTaxLines(type);
-        }
-
-        private void EnsureTaxLines(string type)
-        {
-            if (_currentEntity == null) return;
-            bool needsTaxLine = (type == "XB" || type == "NM");
-
-            foreach (var line in _currentEntity.InventoryVoucherLines)
-            {
-                if (needsTaxLine && line.MaterialTaxLine == null)
-                {
-                    line.MaterialTaxLine = new MaterialTaxLineEntity();
-                }
             }
         }
 
@@ -190,7 +315,7 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             var row = GridMaterialDetails.GetRowByListIndex(e.RowHandle) as InventoryVoucherLineEntity;
             if (row != null)
             {
-                string type = cboVoucherType.EditValue as string ?? "";
+                string type = _context?.VoucherType ?? "";
                 if (type == "XB" || type == "NM")
                 {
                     row.MaterialTaxLine = new MaterialTaxLineEntity();
@@ -203,7 +328,7 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             var row = e.NewRow as InventoryVoucherLineEntity;
             if (row != null)
             {
-                string type = cboVoucherType.EditValue as string ?? "";
+                string type = _context?.VoucherType ?? "";
                 if ((type == "XB" || type == "NM") && row.MaterialTaxLine == null)
                 {
                     row.MaterialTaxLine = new MaterialTaxLineEntity();
@@ -220,7 +345,7 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             {
                 if (!string.IsNullOrEmpty(row.MaterialId) && _materials != null)
                 {
-                    var mat = _materials.FirstOrDefault(m => m.MaterialId == row.MaterialId);
+                    var mat = _materials.FirstOrDefault(m => string.Equals(m.MaterialId?.Trim(), row.MaterialId?.Trim(), StringComparison.OrdinalIgnoreCase));
                     e.Value = mat?.MaterialName;
                 }
             }
@@ -228,7 +353,7 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             {
                 if (!string.IsNullOrEmpty(row.MaterialId) && _materials != null)
                 {
-                    var mat = _materials.FirstOrDefault(m => m.MaterialId == row.MaterialId);
+                    var mat = _materials.FirstOrDefault(m => string.Equals(m.MaterialId?.Trim(), row.MaterialId?.Trim(), StringComparison.OrdinalIgnoreCase));
                     e.Value = mat?.Unit;
                 }
             }
@@ -238,21 +363,13 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             }
             else if (e.Column.FieldName == "SellAmount" && e.IsGetData)
             {
-                if (row.MaterialTaxLine != null)
-                    e.Value = (row.Quantity ?? 0) * (row.MaterialTaxLine.SellPrice ?? 0);
-                else
-                    e.Value = 0;
+                e.Value = (row.Quantity ?? 0) * (row.SellPrice ?? 0);
             }
             else if (e.Column.FieldName == "TaxAmount" && e.IsGetData)
             {
-                if (row.MaterialTaxLine != null)
-                {
-                    string type = cboVoucherType.EditValue as string ?? "";
-                    double baseAmount = (type == "XB") ? ((row.Quantity ?? 0) * (row.MaterialTaxLine.SellPrice ?? 0)) : ((row.Quantity ?? 0) * (row.Price ?? 0));
-                    e.Value = baseAmount * (row.MaterialTaxLine.Rate ?? 0) / 100.0;
-                }
-                else
-                    e.Value = 0;
+                string type = _context?.VoucherType ?? "";
+                double baseAmount = (type == "XB") ? ((row.Quantity ?? 0) * (row.SellPrice ?? 0)) : ((row.Quantity ?? 0) * (row.Price ?? 0));
+                e.Value = baseAmount * (row.Rate ?? 0);
             }
         }
 
@@ -263,71 +380,48 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
                 GridMaterialDetails.RefreshRow(e.RowHandle);
             }
             else if (e.Column.FieldName == "Quantity" || e.Column.FieldName == "Price" || 
-                     e.Column.FieldName == "MaterialTaxLine.SellPrice" || e.Column.FieldName == "MaterialTaxLine.Taxrateid")
+                     e.Column.FieldName == "SellPrice" || e.Column.FieldName == "Taxrateid")
             {
-                if (e.Column.FieldName == "MaterialTaxLine.Taxrateid")
+                if (e.Column.FieldName == "Taxrateid")
                 {
                     var row = e.Row as InventoryVoucherLineEntity;
-                    if (row != null && row.MaterialTaxLine != null && _taxRates != null)
+                    if (row != null)
                     {
-                        var rate = _taxRates.FirstOrDefault(t => t.Taxrateid == row.MaterialTaxLine.Taxrateid);
-                        if (rate != null)
-                            row.MaterialTaxLine.Rate = rate.Rate;
+                        int taxId = 0;
+                        if (e.Value != null && int.TryParse(e.Value.ToString(), out int parsedId))
+                        {
+                            taxId = parsedId;
+                            row.Taxrateid = parsedId;
+                        }
+                        else if (row.Taxrateid.HasValue)
+                        {
+                            taxId = row.Taxrateid.Value;
+                        }
+
+                        if (taxId > 0 && _taxRates != null)
+                        {
+                            var rate = _taxRates.FirstOrDefault(t => t.Taxrateid == taxId);
+                            row.Rate = rate?.Rate ?? 0;
+                        }
+                        else
+                        {
+                            row.Rate = 0;
+                        }
                     }
                 }
                 GridMaterialDetails.RefreshRow(e.RowHandle);
-                CalculateTotals();
+                _context?.RecalculateTotals();
             }
         }
 
         private void lueVatObject_EditValueChanged(object sender, EditValueChangedEventArgs e)
         {
-            if (lueVatObject.SelectedItem is PartnerEntity partner)
+            if (lueVatObject.SelectedItem is PartnerEntity partner && _context?.InventoryVoucher != null)
             {
-                _currentEntity.Vatobjectname = partner.CustomerName;
-                _currentEntity.Vataddress = partner.Address;
-                _currentEntity.Taxno = partner.Taxno;
+                _context.InventoryVoucher.Vatobjectname = partner.CustomerName;
+                _context.InventoryVoucher.Vataddress = partner.Address;
+                _context.InventoryVoucher.Taxno = partner.Taxno;
             }
-        }
-
-        private void CalculateTotals()
-        {
-            double totalCost = 0;
-            double totalSell = 0;
-            double totalTax = 0;
-
-            string type = cboVoucherType.EditValue as string ?? "";
-
-            foreach (var line in _currentEntity.InventoryVoucherLines)
-            {
-                double cost = (line.Quantity ?? 0) * (line.Price ?? 0);
-                totalCost += cost;
-
-                if (line.MaterialTaxLine != null)
-                {
-                    if (type == "XB")
-                    {
-                        double sell = (line.Quantity ?? 0) * (line.MaterialTaxLine.SellPrice ?? 0);
-                        totalSell += sell;
-                        totalTax += sell * (line.MaterialTaxLine.Rate ?? 0) / 100.0;
-                    }
-                    else if (type == "NM")
-                    {
-                        totalTax += cost * (line.MaterialTaxLine.Rate ?? 0) / 100.0;
-                    }
-                }
-            }
-
-            txtTotalCost.EditValue = totalCost;
-            txtTotalSell.EditValue = totalSell;
-            txtTotalTax.EditValue = totalTax;
-            
-            if (type == "XB")
-                txtTotalAll.EditValue = totalSell + totalTax;
-            else if (type == "NM")
-                txtTotalAll.EditValue = totalCost + totalTax;
-            else
-                txtTotalAll.EditValue = totalCost;
         }
 
         private void BtnAccept_Click(object sender, RoutedEventArgs e)
@@ -335,47 +429,90 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             viewDetails.CommitEditing();
             GridMaterialDetails.View.CommitEditing();
 
-            if (string.IsNullOrEmpty(_currentEntity.WarehouseId))
+            if (string.IsNullOrEmpty(_context.WarehouseId))
             {
                 MessageBox.Show("Vui lòng chọn Kho.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            var emptyLines = _currentEntity.InventoryVoucherLines.Where(l => string.IsNullOrEmpty(l.MaterialId)).ToList();
+            var emptyLines = _context.InventoryVoucher.InventoryVoucherLines.Where(l => string.IsNullOrEmpty(l.MaterialId)).ToList();
             foreach (var line in emptyLines)
-                _currentEntity.InventoryVoucherLines.Remove(line);
+                _context.InventoryVoucher.InventoryVoucherLines.Remove(line);
 
-            if (_currentEntity.InventoryVoucherLines.Count == 0)
+            foreach (var line in _context.InventoryVoucher.InventoryVoucherLines)
+                line.CleanUpTaxLine();
+
+            if (_context.InventoryVoucher.InventoryVoucherLines.Count == 0)
             {
                 MessageBox.Show("Vui lòng nhập ít nhất một dòng chi tiết vật tư.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            this.VoucherType = cboVoucherType.EditValue as string ?? "";
-            this.TotalCostAmount = Convert.ToDouble(txtTotalCost.EditValue);
-            this.TotalSellAmount = Convert.ToDouble(txtTotalSell.EditValue);
-            this.TotalTaxAmount = Convert.ToDouble(txtTotalTax.EditValue);
+            _context.Apply();
 
-            if (_isNew)
+            this.DialogResult = true;
+            this.Close();
+        }
+
+        private void viewDetails_RowDeleted(object sender, Views.Base.RowDeletedEventArgs e)
+        {
+            _context?.RecalculateTotals();
+        }
+
+        private void Window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.S && (System.Windows.Input.Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Control) == System.Windows.Input.ModifierKeys.Control)
             {
-                var accountPopup = new MaterialAccountSelectionWindow(VoucherType, TotalCostAmount, TotalSellAmount, TotalTaxAmount);
-                accountPopup.Owner = this;
-                if (accountPopup.ShowDialog() == true)
-                {
-                    this.SelectedCostAccount = accountPopup.CostAccount;
-                    this.SelectedRevenueAccount = accountPopup.RevenueAccount;
-                    this.SelectedTaxAccount = accountPopup.TaxAccount;
-                    this.SelectedTotalAccount = accountPopup.TotalAccount;
-                    
-                    this.DialogResult = true;
-                    this.Close();
-                }
+                BtnAccept_Click(this, (RoutedEventArgs)null);
+                e.Handled = true;
             }
-            else
+            else if (e.Key == System.Windows.Input.Key.P && (System.Windows.Input.Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Control) == System.Windows.Input.ModifierKeys.Control)
             {
-                this.DialogResult = true;
-                this.Close();
+                ExecutePrint();
+                e.Handled = true;
             }
+            else if (e.Key == System.Windows.Input.Key.Escape)
+            {
+                BtnCancel_Click(this, (RoutedEventArgs)null);
+                e.Handled = true;
+            }
+        }
+
+        private void BtnAddRow_Click(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+        {
+            viewDetails.AddNewRow();
+        }
+
+        private void BtnDeleteRow_Click(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+        {
+            if (viewDetails.FocusedRowHandle >= 0)
+            {
+                viewDetails.ExecuteDeleteRow(viewDetails.FocusedRowHandle);
+            }
+        }
+
+        private void BtnPrint_Click(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+        {
+            ExecutePrint();
+        }
+
+        private void ExecutePrint()
+        {
+            string voucherTypeDesc = (cboVoucherType.SelectedItem as MaterialBillTypeItem)?.Description ?? "Phiếu kho";
+            string billNo = _context?.InventoryVoucher?.Vatbillno ?? "";
+            string title = (_context?.MaterialEntry?.Dbcr == 1) ? "Phiếu Nhập Kho" : "Phiếu Xuất Kho";
+            string info = string.IsNullOrEmpty(billNo) ? "" : $" (Số HĐ/CT: {billNo})";
+            MessageBox.Show($"Xem trước và In: {title} - {voucherTypeDesc}{info}.", "In phiếu kho", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void BtnAccept_Click(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+        {
+            BtnAccept_Click(sender, (RoutedEventArgs)null);
+        }
+
+        private void BtnCancel_Click(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+        {
+            BtnCancel_Click(sender, (RoutedEventArgs)null);
         }
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)

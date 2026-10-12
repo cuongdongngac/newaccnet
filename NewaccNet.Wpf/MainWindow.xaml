@@ -34,6 +34,14 @@
                                 </dx:SuperTip>
                             </dxb:BarButtonItem.SuperTip>
                         </dxb:BarButtonItem>
+                        <dxb:BarButtonItem Content="Nhập số dư" Hint="Nhập số dư tài khoản" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_lead.svg'}" ItemClick="BtnOpeningBalance_ItemClick" auth:AuthHelper.RequiredMask="8">
+                            <dxb:BarButtonItem.SuperTip>
+                                <dx:SuperTip>
+                                    <dx:SuperTipHeaderItem Content="Nhập số dư"/>
+                                    <dx:SuperTipItem Content="Nhập số dư các tài khoản kế toán trực tiếp trên lưới."/>
+                                </dx:SuperTip>
+                            </dxb:BarButtonItem.SuperTip>
+                        </dxb:BarButtonItem>
                     </dxr:RibbonPageGroup>
                 </dxr:RibbonPage>
 
@@ -66,6 +74,16 @@
                                 <dx:SuperTip>
                                     <dx:SuperTipHeaderItem Content="Khai báo Thông tin Doanh nghiệp"/>
                                     <dx:SuperTipItem Content="Khai báo tên công ty, mã số thuế, địa chỉ, năm tài chính và các tham số hệ thống."/>
+                                </dx:SuperTip>
+                            </dxb:BarButtonItem.SuperTip>
+                        </dxb:BarButtonItem>
+                    </dxr:RibbonPageGroup>
+                    <dxr:RibbonPageGroup Caption="Dữ liệu &amp; Niên độ">
+                        <dxb:BarButtonItem Content="Chuyển số dư" ItemClick="BtnTransferBalance_ItemClick" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/icon%20builder/actions_arrow4right.svg'}" auth:AuthHelper.RequiredMask="1">
+                            <dxb:BarButtonItem.SuperTip>
+                                <dx:SuperTip>
+                                    <dx:SuperTipHeaderItem Content="Chuyển đổi số dư sang Niên độ mới"/>
+                                    <dx:SuperTipItem Content="Chốt sổ cuối kỳ và kết chuyển số dư tài khoản, công nợ, kho vật tư... sang cơ sở dữ liệu niên độ mới."/>
                                 </dx:SuperTip>
                             </dxb:BarButtonItem.SuperTip>
                         </dxb:BarButtonItem>
@@ -311,6 +329,30 @@ Bao gồm liên kết tới loại hình tương ứng."/>
                                 </dx:SuperTip>
                             </dxb:BarButtonItem.SuperTip>
                         </dxb:BarButtonItem>
+                        <dxb:BarButtonItem Content="Nghĩa vụ NSNN" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_report.svg'}" auth:AuthHelper.RequiredMask="8" ItemClick="BtnDesignTaxObligation_ItemClick">
+                            <dxb:BarButtonItem.SuperTip>
+                                <dx:SuperTip>
+                                    <dx:SuperTipHeaderItem Content="Thiết kế Báo cáo Nghĩa vụ với NSNN"/>
+                                    <dx:SuperTipItem Content="Thiết lập cấu trúc tính toán báo cáo nghĩa vụ với NSNN."/>
+                                </dx:SuperTip>
+                            </dxb:BarButtonItem.SuperTip>
+                        </dxb:BarButtonItem>
+                        <dxb:BarButtonItem Content="Tờ khai VAT" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_document.svg'}" auth:AuthHelper.RequiredMask="8" ItemClick="BtnDesignVatReturn_ItemClick">
+                            <dxb:BarButtonItem.SuperTip>
+                                <dx:SuperTip>
+                                    <dx:SuperTipHeaderItem Content="Thiết kế Tờ khai Thuế GTGT"/>
+                                    <dx:SuperTipItem Content="Thiết lập công thức tính toán cho các chỉ tiêu trên Tờ khai thuế GTGT khấu trừ."/>
+                                </dx:SuperTip>
+                            </dxb:BarButtonItem.SuperTip>
+                        </dxb:BarButtonItem>
+                        <dxb:BarButtonItem Content="Tờ khai 01/GTGT" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_document.svg'}" auth:AuthHelper.RequiredMask="8" ItemClick="BtnDesignVatDeclare_ItemClick">
+                            <dxb:BarButtonItem.SuperTip>
+                                <dx:SuperTip>
+                                    <dx:SuperTipHeaderItem Content="Thiết kế Tờ khai Thuế GTGT Mẫu 01/GTGT"/>
+                                    <dx:SuperTipItem Content="Thiết lập công thức tính toán và phân bổ cột cho các chỉ tiêu Tờ khai thuế GTGT Mẫu 01/GTGT."/>
+                                </dx:SuperTip>
+                            </dxb:BarButtonItem.SuperTip>
+                        </dxb:BarButtonItem>
                     </dxr:RibbonPageGroup>
                 </dxr:RibbonPage>
 
@@ -329,6 +371,14 @@ Bao gồm liên kết tới loại hình tương ứng."/>
                         <dxb:BarButtonItem Content="LCTT" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_sale.svg'}" auth:AuthHelper.RequiredMask="8" ItemClick="BtnReportCashFlow_ItemClick"/>
                         <dxb:BarButtonItem Content="Thuế Nghĩa vụ" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_security_permission.svg'}" auth:AuthHelper.RequiredMask="8" ItemClick="BtnReportObligationTax_ItemClick"/>
                         <dxb:BarButtonItem Content="Thuế Khấu trừ" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_document.svg'}" auth:AuthHelper.RequiredMask="8" ItemClick="BtnReportVatReturn_ItemClick"/>
+                        <dxb:BarButtonItem Content="Tờ khai 01/GTGT" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_document.svg'}" auth:AuthHelper.RequiredMask="8" ItemClick="BtnReportVatDeclare_ItemClick">
+                            <dxb:BarButtonItem.SuperTip>
+                                <dx:SuperTip>
+                                    <dx:SuperTipHeaderItem Content="Tờ khai Thuế VAT (Mẫu số 01/GTGT)"/>
+                                    <dx:SuperTipItem Content="Xem và in Tờ khai thuế GTGT Mẫu 01/GTGT theo quy định."/>
+                                </dx:SuperTip>
+                            </dxb:BarButtonItem.SuperTip>
+                        </dxb:BarButtonItem>
                     </dxr:RibbonPageGroup>
                     <dxr:RibbonPageGroup Caption="Sổ sách">
                         <dxb:BarButtonItem Content="Sổ cái" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_list.svg'}" auth:AuthHelper.RequiredMask="8" ItemClick="BtnReportLedger_ItemClick"/>
@@ -367,6 +417,7 @@ Bao gồm liên kết tới loại hình tương ứng."/>
         </StatusBar>
     </Grid>
 </dx:ThemedWindow>
+
 
 
 

@@ -138,7 +138,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathTaxObligationItem { get { return _staticMetaData.GetPrefetchPathElement("TaxObligationItem", CommonEntityBase.CreateEntityCollection<TaxObligationItemEntity>()); } }
 
 		/// <summary>The AccountId property of the Entity AccountTaxObligation<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AccountTaxObligation"."AccountId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AccountTaxObligation"."AccountId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String AccountId
 		{
 			get { return (System.String)GetValue((int)AccountTaxObligationFieldIndex.AccountId, true); }
@@ -146,7 +146,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The ColIndex property of the Entity AccountTaxObligation<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AccountTaxObligation"."ColIndex".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AccountTaxObligation"."ColIndex".<br/>Table field type characteristics (type, precision, scale, length): UnsignedTinyInt, 3, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> ColIndex
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)AccountTaxObligationFieldIndex.ColIndex, false); }
@@ -154,7 +154,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The CounterAccountId property of the Entity AccountTaxObligation<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AccountTaxObligation"."CounterAccountId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AccountTaxObligation"."CounterAccountId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String CounterAccountId
 		{
 			get { return (System.String)GetValue((int)AccountTaxObligationFieldIndex.CounterAccountId, true); }
@@ -162,7 +162,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Id property of the Entity AccountTaxObligation<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AccountTaxObligation"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "AccountTaxObligation"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)AccountTaxObligationFieldIndex.Id, true); }
@@ -170,7 +170,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The IsAdd property of the Entity AccountTaxObligation<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AccountTaxObligation"."IsAdd".<br/>Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AccountTaxObligation"."IsAdd".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Boolean IsAdd
 		{
 			get { return (System.Boolean)GetValue((int)AccountTaxObligationFieldIndex.IsAdd, true); }
@@ -186,7 +186,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The TaxObligationItemId property of the Entity AccountTaxObligation<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AccountTaxObligation"."TaxObligationItemId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AccountTaxObligation"."TaxObligationItemId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> TaxObligationItemId
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)AccountTaxObligationFieldIndex.TaxObligationItemId, false); }

@@ -16,7 +16,11 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
         private bool _isSaved = false;
         private bool _hasTax = false;
 
-        public CostDetailWindow(JournalEntryEntity parentEntry, bool hasTax)
+        public EntityCollection<CostObjectEntity> CostObjects { get; } = new EntityCollection<CostObjectEntity>();
+        public EntityCollection<CostElementEntity> CostElements { get; } = new EntityCollection<CostElementEntity>();
+        public EntityCollection<PartnerEntity> Partners { get; } = new EntityCollection<PartnerEntity>();
+
+        public CostDetailWindow(JournalEntryEntity parentEntry, bool hasTax = false)
         {
             InitializeComponent();
             _parentEntry = parentEntry;
@@ -45,19 +49,17 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             {
                 using (var adapter = AppDataAccessAdapter.Create())
                 {
-                    var elements = new EntityCollection<CostElementEntity>();
-                    adapter.FetchEntityCollection(elements, null);
-                    lookupCostElement.ItemsSource = elements;
+                    CostElements.Clear();
+                    adapter.FetchEntityCollection(CostElements, null);
 
-                    var objects = new EntityCollection<CostObjectEntity>();
-                    adapter.FetchEntityCollection(objects, null);
-                    lookupCostObject.ItemsSource = objects;
+                    CostObjects.Clear();
+                    adapter.FetchEntityCollection(CostObjects, null);
 
                     if (_hasTax)
                     {
-                        var partners = new EntityCollection<PartnerEntity>();
-                        adapter.FetchEntityCollection(partners, null);
-                        lookupVatObject.ItemsSource = partners;
+                        Partners.Clear();
+                        adapter.FetchEntityCollection(Partners, null);
+                        lookupVatObject.ItemsSource = Partners;
 
                         var taxRates = new EntityCollection<TaxRateEntity>();
                         adapter.FetchEntityCollection(taxRates, null);
@@ -85,6 +87,118 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             }
         }
 
+        private void BtnAddCostObject_Click(object sender, RoutedEventArgs e)
+        {
+            var newObj = new CostObjectEntity();
+            var editor = new Directory.CostObjectEditorWindow(newObj, true);
+            editor.Owner = this;
+            if (editor.ShowDialog() == true)
+            {
+                try
+                {
+                    using (var adapter = AppDataAccessAdapter.Create())
+                    {
+                        adapter.SaveEntity(newObj, true);
+                    }
+
+                    if (!CostObjects.Any(x => x.Id == newObj.Id))
+                    {
+                        CostObjects.Add(newObj);
+                    }
+
+                    var buttonInfo = sender as DevExpress.Xpf.Editors.ButtonInfo;
+                    var cellData = buttonInfo?.DataContext as EditGridCellData;
+                    var row = cellData?.RowData?.Row as CostDetailEntity;
+                    if (row == null)
+                    {
+                        row = GridCostDetails.SelectedItem as CostDetailEntity;
+                    }
+
+                    if (row != null)
+                    {
+                        row.CostObjectId = newObj.Id;
+                    }
+                    GridCostDetails.SetCellValue(TableViewCost.FocusedRowHandle, "CostObjectId", newObj.Id);
+                    TableViewCost.CloseEditor();
+                    GridCostDetails.RefreshRow(TableViewCost.FocusedRowHandle);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi lưu đối tượng chi phí: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private void BtnAddCostElement_Click(object sender, RoutedEventArgs e)
+        {
+            var newEl = new CostElementEntity();
+            var editor = new Directory.CostElementEditorWindow(newEl, true);
+            editor.Owner = this;
+            if (editor.ShowDialog() == true)
+            {
+                try
+                {
+                    using (var adapter = AppDataAccessAdapter.Create())
+                    {
+                        adapter.SaveEntity(newEl, true);
+                    }
+
+                    if (!CostElements.Any(x => x.Id == newEl.Id))
+                    {
+                        CostElements.Add(newEl);
+                    }
+
+                    var buttonInfo = sender as DevExpress.Xpf.Editors.ButtonInfo;
+                    var cellData = buttonInfo?.DataContext as EditGridCellData;
+                    var row = cellData?.RowData?.Row as CostDetailEntity;
+                    if (row == null)
+                    {
+                        row = GridCostDetails.SelectedItem as CostDetailEntity;
+                    }
+
+                    if (row != null)
+                    {
+                        row.CostElementId = newEl.Id;
+                    }
+                    GridCostDetails.SetCellValue(TableViewCost.FocusedRowHandle, "CostElementId", newEl.Id);
+                    TableViewCost.CloseEditor();
+                    GridCostDetails.RefreshRow(TableViewCost.FocusedRowHandle);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi lưu yếu tố chi phí: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private void BtnAddCostVatPartner_Click(object sender, RoutedEventArgs e)
+        {
+            var newPartner = new PartnerEntity();
+            var editor = new Directory.PartnerEditorWindow(newPartner, true);
+            editor.Owner = this;
+            if (editor.ShowDialog() == true)
+            {
+                try
+                {
+                    using (var adapter = AppDataAccessAdapter.Create())
+                    {
+                        adapter.SaveEntity(newPartner, true);
+                    }
+
+                    if (!Partners.Any(x => x.Id == newPartner.Id))
+                    {
+                        Partners.Add(newPartner);
+                    }
+
+                    lookupVatObject.EditValue = newPartner.Id;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi lưu đối tượng thuế: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
         private void GridCostDetails_CustomUnboundColumnData(object sender, DevExpress.Xpf.Grid.GridColumnDataEventArgs e)
         {
             if (e.IsGetData)
@@ -95,13 +209,13 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
                 if (e.Column.FieldName == "CostObjectName")
                 {
                     if (string.IsNullOrEmpty(row.CostObjectId)) return;
-                    var obj = (lookupCostObject.ItemsSource as System.Collections.Generic.IEnumerable<CostObjectEntity>)?.FirstOrDefault(x => x.Id == row.CostObjectId);
+                    var obj = CostObjects.FirstOrDefault(x => x.Id == row.CostObjectId);
                     e.Value = obj?.ObjectName;
                 }
                 else if (e.Column.FieldName == "CostElementName")
                 {
                     if (string.IsNullOrEmpty(row.CostElementId)) return;
-                    var el = (lookupCostElement.ItemsSource as System.Collections.Generic.IEnumerable<CostElementEntity>)?.FirstOrDefault(x => x.Id == row.CostElementId);
+                    var el = CostElements.FirstOrDefault(x => x.Id == row.CostElementId);
                     e.Value = el?.ElementName;
                 }
             }
@@ -157,13 +271,17 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             TableViewCost.FocusedRowHandle = DevExpress.Xpf.Grid.GridControl.InvalidRowHandle;
             TableViewCost.CommitEditing();
 
-            double totalAmount = 0;
-            foreach (var item in _parentEntry.CostDetails)
+            // Dùng Reflection kiểm tra UpdateFilter: Nếu UpdateFilter = true thì chỉ cập nhật từ con vật tư
+            if (_parentEntry.CanUpdateFromChild(this))
             {
-                totalAmount += item.Amount ?? 0;
-            }
+                double totalAmount = 0;
+                foreach (var item in _parentEntry.CostDetails)
+                {
+                    totalAmount += item.Amount ?? 0;
+                }
 
-            _parentEntry.Amount = totalAmount > 0 ? totalAmount : 0;
+                _parentEntry.Amount = Math.Round(totalAmount > 0 ? totalAmount : 0, 0);
+            }
 
             _isSaved = true;
             this.DialogResult = true;

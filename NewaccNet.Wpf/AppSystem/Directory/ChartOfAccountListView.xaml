@@ -1,4 +1,4 @@
-﻿<local:BaseDictionaryWindow x:Class="NewaccNet.Wpf.AppSystem.Directory.ChartOfAccountListView"
+<local:BaseDictionaryWindow x:Class="NewaccNet.Wpf.AppSystem.Directory.ChartOfAccountListView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
@@ -37,7 +37,11 @@
                     <dxe:ComboBoxEditSettings x:Name="cboGridCategoryId" ValueMember="Code" DisplayMember="Name" />
                 </dxg:TreeListColumn.EditSettings>
             </dxg:TreeListColumn>
-            <dxg:TreeListColumn FieldName="Taxflag" Header="Thuế" Width="80"/>
+            <dxg:TreeListColumn FieldName="Taxflag" Header="Thuế" Width="70" FixedWidth="True" HorizontalHeaderContentAlignment="Center">
+                <dxg:TreeListColumn.EditSettings>
+                    <dxe:CheckEditSettings HorizontalContentAlignment="Center"/>
+                </dxg:TreeListColumn.EditSettings>
+            </dxg:TreeListColumn>
         </dxg:TreeListControl>
     </DockPanel>
 </local:BaseDictionaryWindow>

@@ -13,7 +13,6 @@ namespace NewaccNet.Wpf.AppSystem.Design
     public partial class BusinessResultDesignWindow : BaseWindow
     {
         private EntityCollection<BusinessResultItemEntity> _items = new EntityCollection<BusinessResultItemEntity>();
-        private EntityCollection<ChartOfAccountEntity> _accounts = new EntityCollection<ChartOfAccountEntity>();
 
         private List<BusinessResultItemEntity> _origItems = new List<BusinessResultItemEntity>();
         private Dictionary<int, List<AccountBusinessResultEntity>> _origDetailsByItemId = new Dictionary<int, List<AccountBusinessResultEntity>>();
@@ -23,27 +22,9 @@ namespace NewaccNet.Wpf.AppSystem.Design
             InitializeComponent();
             this.Loaded += (_, _) =>
             {
-                LoadLookups();
+                DesignLookupHelper.EnsureAccountsLoaded();
                 LoadData();
             };
-        }
-
-        private void LoadLookups()
-        {
-            try
-            {
-                using var adapter = AppDataAccessAdapter.Create();
-                _accounts = new EntityCollection<ChartOfAccountEntity>();
-                adapter.FetchEntityCollection(_accounts, null);
-
-                cboAccDetail.ItemsSource = _accounts;
-                cboCounterDetail.ItemsSource = _accounts;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi tải lookup tài khoản: " + ex.Message, "Lỗi",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-            }
         }
 
         public void LoadData()

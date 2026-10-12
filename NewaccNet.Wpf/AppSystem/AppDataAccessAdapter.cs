@@ -10,12 +10,15 @@ namespace NewaccNet.Wpf.AppSystem
     {
         public static IDataAccessAdapter Create()
         {
+            ConfigManager.BuildConnectionString();
+            return CreateCustom(ConfigManager.Current.ConnectionString, ConfigManager.Current.DbType);
+        }
+
+        public static IDataAccessAdapter CreateCustom(string conn, DatabaseType dbType)
+        {
             try
             {
-                ConfigManager.BuildConnectionString();
-                string conn = ConfigManager.Current.ConnectionString;
-                
-                if (ConfigManager.Current.DbType == DatabaseType.SqlServer)
+                if (dbType == DatabaseType.SqlServer)
                 {
                     if (string.IsNullOrWhiteSpace(conn)) conn = @"Server=.\SQLEXPRESS;Database=Greeneast;Integrated Security=SSPI;TrustServerCertificate=True;";
 
@@ -28,7 +31,7 @@ namespace NewaccNet.Wpf.AppSystem
                     var sqlAdapter = new DataAccess.SqlServer.DatabaseSpecific.DataAccessAdapter(conn, false, CatalogNameUsage.ForceName, dbName);
                     return sqlAdapter;
                 }
-                else if (ConfigManager.Current.DbType == DatabaseType.PostgreSql)
+                else if (dbType == DatabaseType.PostgreSql)
                 {
                     if (string.IsNullOrWhiteSpace(conn)) conn = "Host=localhost;Port=5432;Database=Greeneast;Username=postgres;Password=;";
 
@@ -59,4 +62,3 @@ namespace NewaccNet.Wpf.AppSystem
         }
     }
 }
-

@@ -19,6 +19,10 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
         private System.Collections.Generic.List<DebtDetailEntity> _originalList;
         private bool _isSaved = false;
 
+        public EntityCollection<PartnerEntity> Partners { get; } = new EntityCollection<PartnerEntity>();
+        public EntityCollection<DebtTypeEntity> DebtTypes { get; } = new EntityCollection<DebtTypeEntity>();
+        public EntityCollection<DebtReasonEntity> DebtReasons { get; } = new EntityCollection<DebtReasonEntity>();
+
         public DebtDetailWindow(JournalEntryEntity parentEntry)
         {
             InitializeComponent();
@@ -37,22 +41,142 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             {
                 using (var adapter = AppDataAccessAdapter.Create())
                 {
-                    var partners = new EntityCollection<PartnerEntity>();
-                    adapter.FetchEntityCollection(partners, null);
-                    lookupPartner.ItemsSource = partners;
+                    Partners.Clear();
+                    adapter.FetchEntityCollection(Partners, null);
 
-                    var debtTypes = new EntityCollection<DebtTypeEntity>();
-                    adapter.FetchEntityCollection(debtTypes, null);
-                    lookupDebtType.ItemsSource = debtTypes;
+                    DebtTypes.Clear();
+                    adapter.FetchEntityCollection(DebtTypes, null);
 
-                    var debtReasons = new EntityCollection<DebtReasonEntity>();
-                    adapter.FetchEntityCollection(debtReasons, null);
-                    lookupDebtReason.ItemsSource = debtReasons;
+                    DebtReasons.Clear();
+                    adapter.FetchEntityCollection(DebtReasons, null);
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Lỗi tải danh mục: " + ex.Message);
+            }
+        }
+
+        private void BtnAddPartner_Click(object sender, RoutedEventArgs e)
+        {
+            var newPartner = new PartnerEntity();
+            var editor = new Directory.PartnerEditorWindow(newPartner, true);
+            editor.Owner = this;
+            if (editor.ShowDialog() == true)
+            {
+                try
+                {
+                    using (var adapter = AppDataAccessAdapter.Create())
+                    {
+                        adapter.SaveEntity(newPartner, true);
+                    }
+
+                    if (!Partners.Any(x => x.Id == newPartner.Id))
+                    {
+                        Partners.Add(newPartner);
+                    }
+
+                    var buttonInfo = sender as DevExpress.Xpf.Editors.ButtonInfo;
+                    var cellData = buttonInfo?.DataContext as EditGridCellData;
+                    var row = cellData?.RowData?.Row as DebtDetailEntity;
+                    if (row == null)
+                    {
+                        row = GridDebtDetails.SelectedItem as DebtDetailEntity;
+                    }
+
+                    if (row != null)
+                    {
+                        row.PartnerId = newPartner.Id;
+                    }
+                    GridDebtDetails.SetCellValue(TableViewDebt.FocusedRowHandle, "PartnerId", newPartner.Id);
+                    TableViewDebt.CloseEditor();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi lưu đối tượng công nợ: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private void BtnAddDebtType_Click(object sender, RoutedEventArgs e)
+        {
+            var newDebtType = new DebtTypeEntity();
+            var editor = new Directory.DebtTypeEditorWindow(newDebtType, true);
+            editor.Owner = this;
+            if (editor.ShowDialog() == true)
+            {
+                try
+                {
+                    using (var adapter = AppDataAccessAdapter.Create())
+                    {
+                        adapter.SaveEntity(newDebtType, true);
+                    }
+
+                    if (!DebtTypes.Any(x => x.Id == newDebtType.Id))
+                    {
+                        DebtTypes.Add(newDebtType);
+                    }
+
+                    var buttonInfo = sender as DevExpress.Xpf.Editors.ButtonInfo;
+                    var cellData = buttonInfo?.DataContext as EditGridCellData;
+                    var row = cellData?.RowData?.Row as DebtDetailEntity;
+                    if (row == null)
+                    {
+                        row = GridDebtDetails.SelectedItem as DebtDetailEntity;
+                    }
+
+                    if (row != null)
+                    {
+                        row.DebtTypeId = newDebtType.Id;
+                    }
+                    GridDebtDetails.SetCellValue(TableViewDebt.FocusedRowHandle, "DebtTypeId", newDebtType.Id);
+                    TableViewDebt.CloseEditor();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi lưu nội dung công nợ: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private void BtnAddDebtReason_Click(object sender, RoutedEventArgs e)
+        {
+            var newReason = new DebtReasonEntity();
+            var editor = new Directory.DebtReasonEditorWindow(newReason, true);
+            editor.Owner = this;
+            if (editor.ShowDialog() == true)
+            {
+                try
+                {
+                    using (var adapter = AppDataAccessAdapter.Create())
+                    {
+                        adapter.SaveEntity(newReason, true);
+                    }
+
+                    if (!DebtReasons.Any(x => x.Id == newReason.Id))
+                    {
+                        DebtReasons.Add(newReason);
+                    }
+
+                    var buttonInfo = sender as DevExpress.Xpf.Editors.ButtonInfo;
+                    var cellData = buttonInfo?.DataContext as EditGridCellData;
+                    var row = cellData?.RowData?.Row as DebtDetailEntity;
+                    if (row == null)
+                    {
+                        row = GridDebtDetails.SelectedItem as DebtDetailEntity;
+                    }
+
+                    if (row != null)
+                    {
+                        row.DebtReasonId = newReason.Id;
+                    }
+                    GridDebtDetails.SetCellValue(TableViewDebt.FocusedRowHandle, "DebtReasonId", newReason.Id);
+                    TableViewDebt.CloseEditor();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi lưu lý do công nợ: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
 
@@ -133,8 +257,12 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             TableViewDebt.FocusedRowHandle = DevExpress.Xpf.Grid.GridControl.InvalidRowHandle;
             TableViewDebt.CommitEditing();
             
-            double totalDebt = _parentEntry.DebtDetails.Sum(x => x.Amount ?? 0);
-            _parentEntry.Amount = totalDebt;
+            // Dùng Reflection kiểm tra UpdateFilter: Nếu UpdateFilter = true thì chỉ cập nhật từ con vật tư
+            if (_parentEntry.CanUpdateFromChild(this))
+            {
+                double totalDebt = _parentEntry.DebtDetails.Sum(x => x.Amount ?? 0);
+                _parentEntry.Amount = Math.Round(totalDebt, 0);
+            }
 
             _isSaved = true;
             this.DialogResult = true;

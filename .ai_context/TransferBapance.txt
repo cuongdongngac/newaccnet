@@ -1,0 +1,12 @@
+Cuối năm kế toán là hành động chốt sổ và chuyển sang sổ mới
+Chốt sổ bao gồm
+Tạo cơ sỏ dữ liệu mới
+Chuyển dữ liệu agreate sang db khác
+
+Đối với Access  thì đã có tệp rổng md lên chỉ cần nhân bản tệp đó lên và đặt lại tên
+Đỗi với MSSQL thì tạo dữ liệu  rỗng mới và chuyển sang
+Hành động chuyển  thực ra tương tư như việc nhập số sư với từng tài khoản kèm chi tiết
+Chúng ta tái tạo lại việc này thôi.
+Nếu con số là âm thì định khoản có
+Nếu con số là dương định khoản nợ
+Riêng vật tư thì làm phiếu nhật kho nội bộ

@@ -138,7 +138,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathInventoryItems { get { return _staticMetaData.GetPrefetchPathElement("InventoryItems", CommonEntityBase.CreateEntityCollection<InventoryItemEntity>()); } }
 
 		/// <summary>The Categoryid property of the Entity Category<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Category"."Categoryid".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		/// <remarks>Mapped on  table field: "Category"."Categoryid".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
 		public virtual System.String Categoryid
 		{
 			get { return (System.String)GetValue((int)CategoryFieldIndex.Categoryid, true); }
@@ -146,7 +146,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Categoryname property of the Entity Category<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Category"."Categoryname".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "Category"."Categoryname".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Categoryname
 		{
 			get { return (System.String)GetValue((int)CategoryFieldIndex.Categoryname, true); }

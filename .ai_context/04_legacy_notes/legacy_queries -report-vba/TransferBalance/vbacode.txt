@@ -1,0 +1,711 @@
+Option Compare Database   'Use database order for string comparisons
+
+Public Sub AssetBalanceInput(DesDatabaseFile)
+Dim i As Integer
+Dim Recno As Variant
+Dim SQL As String
+Dim desdb As DAO.Database
+Dim MyDB As DAO.Database
+Dim MyRecordset As DAO.Recordset
+Dim TransactionRecordset As DAO.Recordset
+Dim result As Variant
+
+Set MyDB = CurrentDb()
+Set desdb = DBEngine.Workspaces(0).OpenDatabase(DesDatabaseFile)
+Set TransactionRecordset = desdb.OpenRecordset("Transaction List")
+TransactionRecordset.MoveLast
+Recno = TransactionRecordset.RecordCount
+
+Set MyRecordset = MyDB.OpenRecordset("Asset Balance Account Query")
+If MyRecordset.RecordCount = 0 Then
+ TransactionRecordset.Close
+ MyRecordset.Close
+ MyDB.Close
+ desdb.Close
+ Exit Sub
+End If
+SysCmd acSysCmdInitMeter, " Transfering Aset Balance...", MyRecordset.RecordCount
+MyRecordset.MoveFirst
+'Update balance for accounts with debit amount
+
+i = 1
+Do While Not MyRecordset.EOF
+
+ If MyRecordset("DBAmount") <> 0 Then
+  TransactionRecordset.AddNew
+  TransactionRecordset("Account ID") = MyRecordset("Account ID")
+  TransactionRecordset("Amount") = MyRecordset("DBAmount")
+  TransactionRecordset("DBCR") = 1
+  TransactionRecordset.Update
+ ' Recno = Recno + 1
+  TransactionRecordset.MoveLast
+  Recno = TransactionRecordset("ID")
+  
+  SQL = "INSERT INTO [Asset Input Line] ( ID, [Asset ID], [Quantity],Price,  ReasonID, SrCode)  IN  " & "'" & DesDatabaseFile & "' "
+  SQL = SQL & " SELECT DISTINCTROW  " & Recno & " AS ID, [Asset Balance Line Query].[Asset ID] as [Asset ID], "
+  SQL = SQL & " [Asset Balance Line Query].[Quantity] as [Quantity],"
+  SQL = SQL & " [Asset Balance Line Query].[Amount]/[Asset Balance Line Query].[Quantity]  as [Price], "
+  SQL = SQL & "[Asset Balance Line Query].[ReasonID] as ReasonID, "
+  SQL = SQL & "[Asset Balance Line Query].[SrCode] as SrCode "
+  SQL = SQL & " FROM [Asset Balance Line Query] "
+  SQL = SQL & " WHERE [Asset Balance Line Query].[Quantity] >0  And "
+  SQL = SQL & " [Asset Balance Line Query].[Account ID]=" & "'" & MyRecordset("Account ID") & "';"
+  MyDB.Execute (SQL)
+  
+  End If
+
+ If MyRecordset("CRAmount") <> 0 Then
+  TransactionRecordset.AddNew
+  TransactionRecordset("Account ID") = MyRecordset("Account ID")
+  TransactionRecordset("Amount") = MyRecordset("CRAmount")
+  TransactionRecordset("DBCR") = -1
+  TransactionRecordset.Update
+  'Recno = Recno + 1
+  TransactionRecordset.MoveLast
+  Recno = TransactionRecordset("ID")
+  
+  SQL = "INSERT INTO [Asset Input Line] ( ID, [Asset ID], [Quantity],Price,  ReasonID, SrCode)  IN  " & "'" & DesDatabaseFile & "' "
+  SQL = SQL & " SELECT DISTINCTROW  " & Recno & " AS ID, [Asset Balance Line Query].[Asset ID] as [Asset ID], "
+  SQL = SQL & " -[Asset Balance Line Query].[Quantity] as [Quantity],"
+  SQL = SQL & " [Asset Balance Line Query].[Amount]/[Asset Balance Line Query].[Quantity]  as [Price], "
+  SQL = SQL & "[Asset Balance Line Query].[ReasonID] as ReasonID, "
+  SQL = SQL & "[Asset Balance Line Query].[SrCode] as SrCode "
+  SQL = SQL & " FROM [Asset Balance Line Query] "
+  SQL = SQL & " WHERE [Asset Balance Line Query].[Quantity] < 0  And "
+  SQL = SQL & " [Asset Balance Line Query].[Account ID]=" & "'" & MyRecordset("Account ID") & "';"
+  MyDB.Execute (SQL)
+ End If
+  MyRecordset.MoveNext
+  i = i + 1
+SysCmd acSysCmdUpdateMeter, i
+Loop
+
+TransactionRecordset.Close
+MyRecordset.Close
+MyDB.Close
+desdb.Close
+
+SysCmd acSysCmdRemoveMeter
+
+End Sub
+
+Public Sub CurrencyBalanceInput(DesDatabaseFile)
+On Error Resume Next
+Dim i As Integer
+Dim Recno As Variant
+Dim SQL As String
+Dim desdb As DAO.Database
+Dim MyDB As DAO.Database
+Dim MyRecordset As DAO.Recordset
+Dim TransactionRecordset As DAO.Recordset
+Dim result As Variant
+Set MyDB = CurrentDb()
+Set desdb = DBEngine.Workspaces(0).OpenDatabase(DesDatabaseFile)
+Set TransactionRecordset = desdb.OpenRecordset("Transaction List")
+TransactionRecordset.MoveLast
+Recno = TransactionRecordset.RecordCount
+
+Set MyRecordset = MyDB.OpenRecordset("Currency Balance Account Query")
+If MyRecordset.RecordCount = 0 Then
+ TransactionRecordset.Close
+ MyRecordset.Close
+ MyDB.Close
+ desdb.Close
+ Exit Sub
+End If
+
+SysCmd acSysCmdInitMeter, "Transfering Currency Balance...", MyRecordset.RecordCount
+MyRecordset.MoveFirst
+'Update balance for accounts with debit amount
+
+i = 1
+Do While Not MyRecordset.EOF
+
+ If MyRecordset("DBAmount") <> 0 Then
+  TransactionRecordset.AddNew
+  TransactionRecordset("Account ID") = MyRecordset("Account ID")
+  TransactionRecordset("Amount") = MyRecordset("DBAmount")
+  TransactionRecordset("DBCR") = 1
+  TransactionRecordset.Update
+ ' Recno = Recno + 1
+  TransactionRecordset.MoveLast
+  Recno = TransactionRecordset("ID")
+  
+  SQL = "INSERT INTO [Currency Input Line] ( ID, [Currency ID], [Quantity],[Exchange Rate])  IN  " & "'" & DesDatabaseFile & "' "
+  SQL = SQL & " SELECT DISTINCTROW  " & Recno & " AS ID, [Currency Balance Line Query].[Currency ID], "
+  SQL = SQL & " [Currency Balance Line Query].[Quantity],"
+  SQL = SQL & " [Currency Balance Line Query].[Amount]/[Currency Balance Line Query].[Quantity]  "
+  SQL = SQL & " FROM [Currency Balance Line Query] "
+  SQL = SQL & " WHERE [Currency Balance Line Query].[Quantity] >0  And "
+  SQL = SQL & " [Currency Balance Line Query].[Account ID]=" & "'" & MyRecordset("Account ID") & "';"
+  
+  MyDB.Execute (SQL)
+  
+  End If
+
+ If MyRecordset("CRAmount") <> 0 Then
+  TransactionRecordset.AddNew
+  TransactionRecordset("Account ID") = MyRecordset("Account ID")
+  TransactionRecordset("Amount") = MyRecordset("CRAmount")
+  TransactionRecordset("DBCR") = -1
+  TransactionRecordset.Update
+ ' Recno = Recno + 1
+  TransactionRecordset.MoveLast
+  Recno = TransactionRecordset("ID")
+  
+  SQL = "INSERT INTO [Currency Input Line] ( ID, [Currency ID], [Quantity],[Exchange Rate])  IN  " & "'" & DesDatabaseFile & "' "
+  SQL = SQL & " SELECT DISTINCTROW  " & Recno & " AS ID, [Currency Balance Line Query].[Currency ID], "
+  SQL = SQL & " -[Currency Balance Line Query].[Quantity],"
+  SQL = SQL & " -[Currency Balance Line Query].[Amount]/[Currency Balance Line Query].[Quantity]  "
+  SQL = SQL & " FROM [Currency Balance Line Query] "
+  SQL = SQL & " WHERE [Currency Balance Line Query].[Quantity] <0  And "
+  SQL = SQL & " [Currency Balance Line Query].[Account ID]=" & "'" & MyRecordset("Account ID") & "';"
+  
+  MyDB.Execute (SQL)
+ End If
+  MyRecordset.MoveNext
+  i = i + 1
+ SysCmd acSysCmdUpdateMeter, i
+Loop
+
+TransactionRecordset.Close
+MyRecordset.Close
+
+MyDB.Close
+desdb.Close
+
+SysCmd acSysCmdRemoveMeter
+
+End Sub
+
+Public Sub ExpenceBalanceInput(DesDatabaseFile)
+Dim i As Integer
+Dim Recno As Variant
+Dim SQL As String
+Dim desdb As DAO.Database
+Dim MyDB As DAO.Database
+Dim MyRecordset As DAO.Recordset
+Dim TransactionRecordset As DAO.Recordset
+Dim result As Variant
+Dim m As Integer
+Set MyDB = CurrentDb()
+Set desdb = DBEngine.Workspaces(0).OpenDatabase(DesDatabaseFile)
+Set TransactionRecordset = desdb.OpenRecordset("Transaction List")
+TransactionRecordset.MoveLast
+Recno = TransactionRecordset.RecordCount
+
+Set MyRecordset = MyDB.OpenRecordset("Expence Balance Account Query")
+If MyRecordset.RecordCount = 0 Then
+ TransactionRecordset.Close
+ MyRecordset.Close
+ MyDB.Close
+ desdb.Close
+ Exit Sub
+End If
+SysCmd acSysCmdInitMeter, "Transfering Expense Balance...", MyRecordset.RecordCount
+
+MyRecordset.MoveFirst
+'Update balance for accounts with debit amount
+
+i = 1
+Do While Not MyRecordset.EOF
+
+ If MyRecordset("DBAmount") <> 0 Then
+  TransactionRecordset.AddNew
+  TransactionRecordset("Account ID") = MyRecordset("Account ID")
+  TransactionRecordset("Amount") = MyRecordset("DBAmount")
+  TransactionRecordset("DBCR") = 1
+  TransactionRecordset.Update
+  'Recno = Recno + 1
+  TransactionRecordset.MoveLast
+  Recno = TransactionRecordset("ID")
+  
+  SQL = "INSERT INTO [Expense Object Input Line] ( ID, [ExObject ID], [Expense Atribute ID], Amount )  IN  " & "'" & DesDatabaseFile & "' "
+  SQL = SQL & " SELECT DISTINCTROW  " & Recno & " AS ID, [Expence Balance Line Query].[ExObject ID], "
+  SQL = SQL & " [Expence Balance Line Query].[Expense Atribute ID], [Expence Balance Line Query].Amount "
+  SQL = SQL & " FROM [Expence Balance Line Query] "
+  SQL = SQL & " WHERE [Expence Balance Line Query].Amount>0 AND "
+  SQL = SQL & " [Expence Balance Line Query].[Account ID]=" & "'" & MyRecordset("Account ID") & "';"
+  
+  MyDB.Execute (SQL)
+  
+  End If
+
+ If MyRecordset("CRAmount") <> 0 Then
+  TransactionRecordset.AddNew
+  TransactionRecordset("Account ID") = MyRecordset("Account ID")
+  TransactionRecordset("Amount") = MyRecordset("CRAmount")
+  TransactionRecordset("DBCR") = -1
+  TransactionRecordset.Update
+  'Recno = Recno + 1
+  TransactionRecordset.MoveLast
+  Recno = TransactionRecordset("ID")
+  
+  SQL = "INSERT INTO [Expense Object Input Line] ( ID, [ExObject ID], [Expense Atribute ID], Amount )  IN  " & "'" & DesDatabaseFile & "' "
+  SQL = SQL & "SELECT DISTINCTROW  " & Recno & " AS ID, [Expence Balance Line Query].[ExObject ID], "
+  SQL = SQL & "[Expence Balance Line Query].[Expense Atribute ID], -[Expence Balance Line Query].Amount "
+  SQL = SQL & "FROM [Expence Balance Line Query] "
+  SQL = SQL & "WHERE [Expence Balance Line Query].Amount<0 AND "
+  SQL = SQL & " [Expence Balance Line Query].[Account ID]=" & "'" & MyRecordset("Account ID") & "';"
+
+  MyDB.Execute (SQL)
+ End If
+  MyRecordset.MoveNext
+  i = i + 1
+ SysCmd acSysCmdUpdateMeter, i
+Loop
+
+TransactionRecordset.Close
+MyRecordset.Close
+MyDB.Close
+desdb.Close
+
+SysCmd acSysCmdRemoveMeter
+
+
+End Sub
+
+Public Sub LiabilityBalanceInput(DesDatabaseFile)
+On Error Resume Next
+Dim i As Integer
+Dim Recno As Variant
+Dim SQL As String
+Dim BillRecordset As DAO.Recordset
+Dim desdb As DAO.Database
+Dim MyDB As DAO.Database
+Dim MyRecordset As DAO.Recordset
+Dim TransactionRecordset As DAO.Recordset
+Dim result As Variant
+Set MyDB = CurrentDb()
+Set desdb = DBEngine.Workspaces(0).OpenDatabase(DesDatabaseFile)
+Set TransactionRecordset = desdb.OpenRecordset("Transaction List")
+
+Set MyRecordset = MyDB.OpenRecordset("Liability Balance Account Query")
+If MyRecordset.RecordCount = 0 Then
+ TransactionRecordset.Close
+ MyRecordset.Close
+ MyDB.Close
+ desdb.Close
+ Exit Sub
+End If
+Recno = TransactionRecordset.RecordCount
+TransactionRecordset.MoveLast
+SysCmd acSysCmdInitMeter, "Transfering Liability Balance...", MyRecordset.RecordCount
+MyRecordset.MoveFirst
+'Update balance for accounts with debit amount
+
+i = 1
+Do While Not MyRecordset.EOF
+
+ If MyRecordset("DBAmount") <> 0 Then
+  TransactionRecordset.AddNew
+  TransactionRecordset("Account ID") = MyRecordset("Account ID")
+  TransactionRecordset("Amount") = MyRecordset("DBAmount")
+  TransactionRecordset("DBCR") = 1
+  TransactionRecordset.Update
+  'Recno = Recno + 1
+  TransactionRecordset.MoveLast
+  Recno = TransactionRecordset("ID")
+  
+  SQL = "INSERT INTO [Customer Input Line] ( ID, [Customer ID], [Liability Things ID], Amount )  IN  " & "'" & DesDatabaseFile & "' "
+  SQL = SQL & "SELECT DISTINCTROW  " & Recno & " AS ID, [Customer Balance Line Query].[Customer ID], "
+  SQL = SQL & "[Customer Balance Line Query].[Liability Things ID], [Customer Balance Line Query].Amount "
+  SQL = SQL & "FROM [Customer Balance Line Query] "
+  SQL = SQL & "WHERE [Customer Balance Line Query].Amount>0 AND "
+  SQL = SQL & " [Customer Balance Line Query].[Account ID]=" & "'" & MyRecordset("Account ID") & "';"
+  
+  MyDB.Execute (SQL)
+  
+  End If
+
+ If MyRecordset("CRAmount") <> 0 Then
+  TransactionRecordset.AddNew
+  TransactionRecordset("Account ID") = MyRecordset("Account ID")
+  TransactionRecordset("Amount") = MyRecordset("CRAmount")
+  TransactionRecordset("DBCR") = -1
+  TransactionRecordset.Update
+  'Recno = Recno + 1
+  TransactionRecordset.MoveLast
+  Recno = TransactionRecordset("ID")
+  
+  SQL = "INSERT INTO [Customer Input Line] ( ID, [Customer ID], [Liability Things ID], Amount )  IN  " & "'" & DesDatabaseFile & "' "
+  SQL = SQL & "SELECT DISTINCTROW  " & Recno & " AS ID, [Customer Balance Line Query].[Customer ID], "
+  SQL = SQL & "[Customer Balance Line Query].[Liability Things ID], -[Customer Balance Line Query].Amount "
+  SQL = SQL & "FROM [Customer Balance Line Query] "
+  SQL = SQL & "WHERE [Customer Balance Line Query].Amount <0 AND "
+  SQL = SQL & " [Customer Balance Line Query].[Account ID]=" & "'" & MyRecordset("Account ID") & "';"
+
+  MyDB.Execute (SQL)
+ End If
+  MyRecordset.MoveNext
+  i = i + 1
+ SysCmd acSysCmdUpdateMeter, i
+Loop
+
+TransactionRecordset.Close
+MyRecordset.Close
+MyDB.Close
+desdb.Close
+
+SysCmd acSysCmdRemoveMeter
+
+End Sub
+
+
+
+Public Sub MaterialBalanceInput(DesDatabaseFile)
+Dim i As Integer
+Dim Recno As Variant
+Dim MIDNo As Variant
+Dim SQL As String
+Dim desdb As DAO.Database
+Dim MyDB As DAO.Database
+Dim MyRecordset As DAO.Recordset
+Dim TransactionRecordset As DAO.Recordset
+Dim MaterialBillRecordset As DAO.Recordset
+
+Dim result As Variant
+Set MyDB = CurrentDb()
+Set desdb = DBEngine.Workspaces(0).OpenDatabase(DesDatabaseFile)
+Set TransactionRecordset = desdb.OpenRecordset("Transaction List")
+Set MaterialBillRecordset = desdb.OpenRecordset("Material Input Bill")
+TransactionRecordset.MoveLast
+Recno = TransactionRecordset.RecordCount
+
+Set MyRecordset = MyDB.OpenRecordset("Material Balance Account Query")
+If MyRecordset.RecordCount = 0 Then
+TransactionRecordset.Close
+  MaterialBillRecordset.Close
+ MyRecordset.Close
+ MyDB.Close
+ desdb.Close
+
+
+ Exit Sub
+End If
+SysCmd acSysCmdInitMeter, "Transfering Material Balance....", MyRecordset.RecordCount
+MyRecordset.MoveFirst
+'Update balance for accounts with debit amount
+
+i = 1
+Do While Not MyRecordset.EOF
+
+ If MyRecordset("DBAmount") <> 0 Then
+  TransactionRecordset.AddNew
+  TransactionRecordset("Account ID") = MyRecordset("Account ID")
+  TransactionRecordset("Amount") = MyRecordset("DBAmount")
+  TransactionRecordset("DBCR") = 1
+  TransactionRecordset.Update
+  
+  TransactionRecordset.MoveLast
+  Recno = TransactionRecordset("ID")
+
+  MaterialBillRecordset.AddNew
+  MaterialBillRecordset("Warehouse ID") = MyRecordset("Warehouse ID")
+  MaterialBillRecordset("TaxFlag") = False
+  MaterialBillRecordset("ID") = Recno
+  MaterialBillRecordset.Update
+  
+  MaterialBillRecordset.MoveLast
+  MIDNo = MaterialBillRecordset("MID")
+  SQL = "INSERT INTO [Material Input Line] ( MID, [Material ID], [Quantity],Price)  IN  " & "'" & DesDatabaseFile & "' "
+  SQL = SQL & " SELECT DISTINCTROW  " & MIDNo & " AS MID, [Material Balance Line Query].[Material ID], "
+  SQL = SQL & " [Material Balance Line Query].[Quantity],"
+  SQL = SQL & " [Material Balance Line Query].[Amount]/[Material Balance Line Query].[Quantity]  "
+  SQL = SQL & " FROM [Material Balance Line Query] "
+  SQL = SQL & " WHERE [Material Balance Line Query].[Quantity] >0  And "
+  SQL = SQL & " [Material Balance Line Query].[Account ID]=" & "'" & MyRecordset("Account ID") & "';"
+  MyDB.Execute (SQL)
+
+ End If
+
+ If MyRecordset("CRAmount") <> 0 Then
+  TransactionRecordset.AddNew
+  TransactionRecordset("Account ID") = MyRecordset("Account ID")
+  TransactionRecordset("Amount") = MyRecordset("CRAmount")
+  TransactionRecordset("DBCR") = -1
+  TransactionRecordset.Update
+  TransactionRecordset.MoveLast
+  Recno = TransactionRecordset("ID")
+ 
+  MaterialBillRecordset.AddNew
+  MaterialBillRecordset("Warehouse ID") = MyRecordset("Warehouse ID")
+  MaterialBillRecordset("TaxFlag") = False
+  MaterialBillRecordset("ID") = Recno
+  MaterialBillRecordset.Update
+  
+  MaterialBillRecordset.MoveLast
+  MIDNo = MaterialBillRecordset("MID")
+
+  SQL = "INSERT INTO [Material Input Line] ( MID, [Material ID], [Quantity],Price)  IN  " & "'" & DesDatabaseFile & "' "
+  SQL = SQL & " SELECT DISTINCTROW  " & MIDNo & " AS MID, [Material Balance Line Query].[Material ID], "
+  SQL = SQL & " -[Material Balance Line Query].[Quantity],"
+  SQL = SQL & " -[Material Balance Line Query].[Amount]/[Material Balance Line Query].[Quantity]  "
+  SQL = SQL & " FROM [Material Balance Line Query] "
+  SQL = SQL & " WHERE [Material Balance Line Query].[Quantity] <0  And "
+  SQL = SQL & " [Material Balance Line Query].[Account ID]=" & "'" & MyRecordset("Account ID") & "';"
+  
+  MyDB.Execute (SQL)
+ End If
+  MyRecordset.MoveNext
+  i = i + 1
+ SysCmd acSysCmdUpdateMeter, i
+  
+  
+Loop
+
+TransactionRecordset.Close
+MyRecordset.Close
+MaterialBillRecordset.Close
+MyDB.Close
+desdb.Close
+
+SysCmd acSysCmdRemoveMeter
+
+End Sub
+
+
+Public Sub NoDetailedBalanceInPut(DesDatabaseFile)
+Dim i As Integer
+Dim SQL As String
+Dim desdb As DAO.Database
+Dim MyDB As DAO.Database
+Dim MyRecordset As DAO.Recordset
+Dim TransactionRecordset As DAO.Recordset
+Dim result As Variant
+Set MyDB = CurrentDb()
+Set desdb = DBEngine.Workspaces(0).OpenDatabase(DesDatabaseFile)
+Set TransactionRecordset = desdb.OpenRecordset("Transaction List")
+Set MyRecordset = MyDB.OpenRecordset("Input Balance Query for NoDetailed Account Query")
+MyRecordset.MoveLast
+If MyRecordset.RecordCount = 0 Then
+ TransactionRecordset.Close
+ MyDB.Close
+ Exit Sub
+End If
+
+MyRecordset.MoveLast
+result = SysCmd(acSysCmdInitMeter, "Transfering Balance:", MyRecordset.RecordCount)
+MyRecordset.MoveFirst
+i = 1
+Do While Not MyRecordset.EOF
+
+  TransactionRecordset.AddNew
+  TransactionRecordset("Account ID") = MyRecordset("Account ID")
+  TransactionRecordset("Amount") = Abs(MyRecordset("Amount"))
+  TransactionRecordset("DBCR") = IIf(MyRecordset("Amount") > 0, 1, -1)
+  TransactionRecordset.Update
+  
+  SysCmd acSysCmdUpdateMeter, i
+  i = i + 1
+  MyRecordset.MoveNext
+Loop
+ 
+TransactionRecordset.Close
+MyRecordset.Close
+MyDB.Close
+desdb.Close
+SysCmd acSysCmdRemoveMeter
+End Sub
+
+Public Sub CashFlowInterval(DesDatabaseFile)
+On Error Resume Next
+Dim i As Integer
+Dim SQL As String
+Dim desdb As DAO.Database
+Dim MyDB As DAO.Database
+Dim MyRecordset As DAO.Recordset
+Dim PrevCashFlowRecordset As DAO.Recordset
+Dim result As Variant
+Dim m As Variant
+Dim n As Variant
+m = SaveRecord()
+m = MakeAccountCashFlowReference()
+n = SaveRecord()
+n = MakeCalculateTable("Cash Account Query", "Cash Flow Balance")
+
+Set MyDB = CurrentDb()
+Set desdb = DBEngine.Workspaces(0).OpenDatabase(DesDatabaseFile)
+Set PrevCashFlowRecordset = desdb.OpenRecordset("PrevCash Flow")
+Set MyRecordset = MyDB.OpenRecordset("Cash Flow Interval Query")
+
+If MyRecordset.RecordCount = 0 Then
+    Exit Sub
+End If
+MyRecordset.MoveFirst
+i = 1
+Do While Not MyRecordset.EOF
+
+  PrevCashFlowRecordset.AddNew
+  PrevCashFlowRecordset("Cash Flow ID") = MyRecordset("Cash Flow ID")
+  PrevCashFlowRecordset("Cash Flow  Name") = MyRecordset("Cash Flow  Name")
+  PrevCashFlowRecordset("Code") = MyRecordset("Code")
+  PrevCashFlowRecordset("Items ID") = MyRecordset("Items ID")
+  PrevCashFlowRecordset("Items Name") = MyRecordset("Items Name")
+  PrevCashFlowRecordset("Bold") = MyRecordset("Bold")
+  PrevCashFlowRecordset("Italic") = MyRecordset("Italic")
+  PrevCashFlowRecordset("Cash Flow  Name (Repeate)") = MyRecordset("Cash Flow  Name (Repeate)")
+  PrevCashFlowRecordset("Amount") = MyRecordset("Amount")
+  PrevCashFlowRecordset.Update
+  
+  SysCmd acSysCmdUpdateMeter, i
+  i = i + 1
+  MyRecordset.MoveNext
+Loop
+ 
+PrevCashFlowRecordset.Close
+MyRecordset.Close
+MyDB.Close
+desdb.Close
+SysCmd acSysCmdRemoveMeter
+End Sub
+
+Public Sub BussinessResult(DesDatabaseFile)
+On Error Resume Next
+Dim i As Integer
+Dim SQL As String
+Dim desdb As DAO.Database
+Dim MyDB As DAO.Database
+Dim MyRecordset As DAO.Recordset
+Dim PrevBussinessRecordset As DAO.Recordset
+Dim result As Variant
+result = SaveRecord()
+result = MakeAccountBusinessReference()
+Set MyDB = CurrentDb()
+Set desdb = DBEngine.Workspaces(0).OpenDatabase(DesDatabaseFile)
+Set PrevBussinessRecordset = desdb.OpenRecordset("PrevBussiness")
+Set MyRecordset = MyDB.OpenRecordset("Bussines Result OutPut Year Query")
+
+MyRecordset.MoveFirst
+i = 1
+Do While Not MyRecordset.EOF
+
+  PrevBussinessRecordset.AddNew
+  PrevBussinessRecordset("Items ID") = MyRecordset("Items ID")
+  PrevBussinessRecordset("Code") = MyRecordset("Code")
+  PrevBussinessRecordset("Items Name") = MyRecordset("Items Name")
+  PrevBussinessRecordset("Bold") = MyRecordset("Bold")
+  PrevBussinessRecordset("Italic") = MyRecordset("Italic")
+  PrevBussinessRecordset("PrevYearAmount") = MyRecordset("PrevYearAmount")
+  PrevBussinessRecordset("Illu") = MyRecordset("Illu")
+  PrevBussinessRecordset.Update
+  
+  SysCmd acSysCmdUpdateMeter, i
+  i = i + 1
+  MyRecordset.MoveNext
+Loop
+ 
+PrevBussinessRecordset.Close
+MyRecordset.Close
+MyDB.Close
+desdb.Close
+SysCmd acSysCmdRemoveMeter
+End Sub
+Public Sub AccountandCashFlowReference()
+
+Dim SQL As String
+'Dim srdb As DAO.Database
+Dim MyDB As DAO.Database
+Dim srRecordset As DAO.Recordset
+Dim desRecordset As DAO.Recordset
+Dim result As Variant
+
+Set MyDB = CurrentDb()
+'Set srdb = DBEngine.Workspaces(0).OpenDatabase(PrevDatabase)
+Set srRecordset = MyDB.OpenRecordset("Account and Cash Flow Reference")
+Set desRecordset = MyDB.OpenRecordset("Account and Cash Flow Reference New")
+'Update balance for accounts with debit amount
+
+
+Do While Not srRecordset.EOF
+    desRecordset.AddNew
+    desRecordset("Items ID") = srRecordset("Items ID")
+    desRecordset("Account ID") = srRecordset("Account ID")
+    desRecordset("Counter Account ID") = srRecordset("Counter Account ID")
+    desRecordset("DBCR") = srRecordset("DBCR")
+    desRecordset.Update
+    
+    
+    srRecordset.MoveNext
+Loop
+desRecordset.Close
+srRecordset.Close
+MyDB.Close
+'srdb.Close
+SysCmd acSysCmdRemoveMeter
+End Sub
+Public Sub PrevCash(DesDatabaseFile)
+'On Error Resume Next
+'Dim i As Integer
+'Dim SQL As String
+'Dim desdb As DAO.Database
+'Dim mydb As DAO.Database
+'Dim Myrecordset As DAO.Recordset
+'Dim PrevBussinessRecordset As DAO.Recordset
+'Dim Result As Variant
+'Set mydb = CurrentDb()
+'Set desdb = DBEngine.Workspaces(0).OpenDatabase(DesDatabaseFile)
+'Set PrevBussinessRecordset = desdb.OpenRecordset("PrevCash")
+'Set Myrecordset = mydb.OpenRecordset("Cash Flow Result Interval Query1")
+
+'Myrecordset.MoveFirst
+
+'Do While Not Myrecordset.EOF
+'  PrevBussinessRecordset.AddNew
+'   PrevBussinessRecordset("Amount") = Myrecordset("Amount")
+'  PrevBussinessRecordset.Update
+ 
+ ' Myrecordset.MoveNext
+'Loop
+ 
+'PrevBussinessRecordset.Close
+'Myrecordset.Close
+'mydb.Close
+'desdb.Close
+
+End Sub
+Public Sub YearCashFlowBalance(DesDatabaseFile)
+Dim SQL As String
+Dim desdb As DAO.Database
+Dim MyDB As DAO.Database
+Dim MyRecordset As DAO.Recordset
+Dim CashRecordset As DAO.Recordset
+
+Set MyDB = CurrentDb()
+'SQL = "Delete * from [Year Cash Flow Balance]"
+'mydb.Execute (SQL)
+Set desdb = DBEngine.Workspaces(0).OpenDatabase(DesDatabaseFile)
+Set CashRecordset = desdb.OpenRecordset("Year Cash Flow Balance")
+Set MyRecordset = MyDB.OpenRecordset("YearCashAccountQuery")
+If MyRecordset.RecordCount = 0 Then
+ CashRecordset.Close
+ MyRecordset.Close
+ MyDB.Close
+ desdb.Close
+ Exit Sub
+End If
+SysCmd acSysCmdInitMeter, " Transfering Aset Balance...", MyRecordset.RecordCount
+MyRecordset.MoveFirst
+'Update balance for accounts with debit amount
+'Do While Not Myrecordset.EOF
+  
+  CashRecordset.AddNew
+  CashRecordset("PrevBeginBalance") = MyRecordset("PrevBeginBalance")
+  CashRecordset("ThisBeginBalance") = MyRecordset("ThisBeginBalance")
+  CashRecordset.Update
+
+'Loop
+  
+CashRecordset.Close
+MyRecordset.Close
+MyDB.Close
+desdb.Close
+SysCmd acSysCmdRemoveMeter
+End Sub
+Mapping
+Transaction List - JournalEntry
+
+Sample Flate AssetDetail
+SELECT DISTINCTROW [Union Asset Line Query].[Account ID], [Union Asset Line Query].[Asset ID], [Union Asset Line Query].SrCode, [Union Asset Line Query].ReasonID, Sum([Union Asset Line Query]![Quantity]*[Union Asset Line Query]![DBCR]) AS Quantity, Sum([Union Asset Line Query]![Quantity]*[Union Asset Line Query]![Price]*[Union Asset Line Query]![DBCR]) AS Amount
+FROM [Union Asset Line Query]
+GROUP BY [Union Asset Line Query].[Account ID], [Union Asset Line Query].[Asset ID], [Union Asset Line Query].SrCode, [Union Asset Line Query].ReasonID;

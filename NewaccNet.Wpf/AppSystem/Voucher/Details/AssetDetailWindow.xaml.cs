@@ -68,13 +68,16 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             TableViewAsset.FocusedRowHandle = DevExpress.Xpf.Grid.GridControl.InvalidRowHandle;
             TableViewAsset.CommitEditing();
 
-            double totalAmount = 0;
-            foreach (var item in _parentEntry.AssetDetails)
+            if (!_parentEntry.IsMaterialBound)
             {
-                totalAmount += (item.Quantity ?? 0) * (item.Price ?? 0);
-            }
+                double totalAmount = 0;
+                foreach (var item in _parentEntry.AssetDetails)
+                {
+                    totalAmount += (item.Quantity ?? 0) * (item.Price ?? 0);
+                }
 
-            _parentEntry.Amount = totalAmount > 0 ? totalAmount : 0;
+                _parentEntry.Amount = totalAmount > 0 ? totalAmount : 0;
+            }
 
             _isSaved = true;
             this.DialogResult = true;

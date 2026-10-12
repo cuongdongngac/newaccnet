@@ -11,6 +11,7 @@ namespace NewaccNet.Wpf;
 public partial class MainWindow : ThemedWindow {
     private bool _isExiting = false;
     private void BtnVoucherTest_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e) { new NewaccNet.Wpf.AppSystem.Voucher.VoucherListView().Show(); }
+    private void BtnOpeningBalance_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e) { new NewaccNet.Wpf.AppSystem.Voucher.OpeningBalanceWindow().Show(); }
     public MainWindow(string username, string fullName, int roleMask)
     {
         InitializeComponent();
@@ -186,6 +187,13 @@ public partial class MainWindow : ThemedWindow {
         configWin.Owner = this;
         configWin.ShowDialog();
     }
+
+    private void BtnTransferBalance_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var transferWin = new NewaccNet.Wpf.AppSystem.BalanceTransfer.TransferBalanceWindow();
+        transferWin.Owner = this;
+        transferWin.ShowDialog();
+    }
     private void BtnUserManagement_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
     {
         var win = new NewaccNet.Wpf.AppSystem.Directory.UserListView();
@@ -207,9 +215,30 @@ public partial class MainWindow : ThemedWindow {
         win.Show();
     }
 
+    private void BtnDesignTaxObligation_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.Design.TaxObligationDesignWindow();
+        win.Owner = this;
+        win.Show();
+    }
+
     private void BtnDesignCashFlow_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
     {
         var win = new NewaccNet.Wpf.AppSystem.Design.CashFlowDesignWindow();
+        win.Owner = this;
+        win.Show();
+    }
+
+    private void BtnDesignVatReturn_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.Design.VatReturnDesignWindow();
+        win.Owner = this;
+        win.Show();
+    }
+
+    private void BtnDesignVatDeclare_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.Design.VatDeclareDesignWindow();
         win.Owner = this;
         win.Show();
     }
@@ -292,6 +321,13 @@ public partial class MainWindow : ThemedWindow {
     private void BtnReportVatReturn_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
     {
         var win = new NewaccNet.Wpf.AppSystem.Reports.Fincance.VatReturnFilterWindow();
+        win.Owner = this;
+        win.ShowDialog();
+    }
+
+    private void BtnReportVatDeclare_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.Reports.Fincance.VatDeclareFilterWindow();
         win.Owner = this;
         win.ShowDialog();
     }

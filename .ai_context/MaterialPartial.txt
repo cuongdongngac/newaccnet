@@ -1,0 +1,111 @@
+hai niem partial class trong c#
+
+Drafting entity extensions and form logic for loading data.
+Dưới đây là code đầy đủ. Mình giả định bạn dùng Adapter và tên entity là HoaDonEntity, ChiTietVatTuEntity, ChiTietBanMuaEntity. Bạn đổi lại theo tên thực tế mà LLBLGen sinh ra.
+
+1. File partial (tạo mới, ví dụ ChiTietVatTuEntity.Custom.cs)
+
+Đặt cùng namespace với entity mà LLBLGen sinh ra.
+
+csharp
+public partial class ChiTietVatTuEntity
+{
+    // Truy ngược lên hóa đơn cha để biết có phải bán/mua không
+    private bool CoBanMua =>
+        HoaDon != null &&
+        (HoaDon.LoaiHoaDon == (int)LoaiHoaDon.Ban ||
+         HoaDon.LoaiHoaDon == (int)LoaiHoaDon.Mua);
+
+    // Trả về entity con; chỉ tạo mới khi đúng ngữ cảnh và có giá trị
+    private ChiTietBanMuaEntity LayBanMua(bool canTao)
+    {
+        if (!CoBanMua) return null;
+        if (ChiTietBanMua == null && canTao)
+            ChiTietBanMua = new ChiTietBanMuaEntity();
+        return ChiTietBanMua;
+    }
+
+    public decimal? GiaBan
+    {
+        get => ChiTietBanMua?.GiaBan;
+        set
+        {
+            var bm = LayBanMua(value != null);
+            if (bm != null) bm.GiaBan = value ?? 0;
+        }
+    }
+
+    public decimal? Thue
+    {
+        get => ChiTietBanMua?.Thue;
+        set
+        {
+            var bm = LayBanMua(value != null);
+            if (bm != null) bm.Thue = value ?? 0;
+        }
+    }
+
+    // Gọi trước khi lưu: bỏ entity con mới tạo nhưng bị xóa trắng
+    public void DonDepBanMua()
+    {
+        if (ChiTietBanMua != null && ChiTietBanMua.IsNew &&
+            ChiTietBanMua.GiaBan == 0 && ChiTietBanMua.Thue == 0)
+            ChiTietBanMua = null;
+    }
+}
+Nếu cột LoaiHoaDon trong DB đã được map sang enum thì bỏ ép kiểu (int). Còn nếu cột giá/thuế trong DB cho phép null thì gán thẳng value thay cho value ?? 0.
+
+2. Form: tải, hiển thị, lưu
+
+csharp
+private HoaDonEntity _hoaDon;
+
+private void TaiHoaDon(int id)
+{
+    _hoaDon = new HoaDonEntity(id);
+
+    var path = new PrefetchPath2(EntityType.HoaDonEntity);
+    path.Add(HoaDonEntity.PrefetchPathChiTietVatTus)
+        .SubPath.Add(ChiTietVatTuEntity.PrefetchPathChiTietBanMua);
+
+    using (var adapter = new DataAccessAdapter())
+        adapter.FetchEntity(_hoaDon, path);
+
+    grid.DataSource = _hoaDon.ChiTietVatTus;
+
+    bool coBanMua = _hoaDon.LoaiHoaDon == (int)LoaiHoaDon.Ban ||
+                    _hoaDon.LoaiHoaDon == (int)LoaiHoaDon.Mua;
+    grid.Columns["GiaBan"].Visible = coBanMua;
+    grid.Columns["Thue"].Visible   = coBanMua;
+}
+
+private void Luu()
+{
+    foreach (var ct in _hoaDon.ChiTietVatTus)
+        ct.DonDepBanMua();
+
+    using (var adapter = new DataAccessAdapter())
+        adapter.SaveEntity(_hoaDon, true, true); // refetch, recurse
+}
+Vài điểm cần lưu ý
+
+Grid bind vào _hoaDon.ChiTietVatTus, nên dòng mới thêm trên grid tự được gán HoaDon. Nhờ vậy CoBanMua luôn đúng.
+Save có recurse = true thì LLBLGen tự mở transaction và lưu cả ba tầng.
+Nếu grid không tự hiện cột GiaBan/Thue, bạn thêm cột thủ công với DataPropertyName = "GiaBan".
+Hàm DonDepBanMua chỉ bỏ entity mới. Với dòng đã có trong DB mà người dùng xóa trắng giá, bạn tự quyết theo nghiệp vụ: giữ lại với giá 0, hay xóa bằng adapter.DeleteEntity.
+Khi  chung ta viet mot mot partial class thi vo tinh da mo rong entity cua ORM, luc save vao no lai venh nhau voi db that
+
+Explaining how partial class properties interact with database persistence.
+Explaining how partial class properties interact with database persistence.
+Không bị vênh. Partial chỉ mở rộng class C#, không mở rộng mapping. LLBLGen chỉ lưu những field có trong mapping mà Designer sinh ra (tập Fields của entity), còn property bạn tự viết thêm thì nó hoàn toàn bỏ qua khi tạo câu INSERT/UPDATE.
+
+Trong code ở trên, GiaBan và Thue không chứa dữ liệu riêng. Chúng chỉ là “cửa ngõ” ghi vào field thật của ChiTietBanMuaEntity. Khi save, LLBLGen thấy ChiTietBanMua bị thay đổi và lưu đúng vào bảng của nó. DB không cần thêm cột nào.
+
+Tuy vậy, có vài chỗ dễ gây lệch nếu không để ý:
+
+Property tự viết có giữ dữ liệu riêng: ví dụ public decimal ChietKhau { get; set; } với backing field riêng thì sẽ không bao giờ được lưu, và mất khi load lại. Mọi dữ liệu cần lưu phải đi qua field đã map.
+Dùng trong truy vấn LINQ: where ct.GiaBan > 100 sẽ lỗi lúc chạy, vì LLBLGen không dịch được property không map sang SQL. Phải viết theo đường map thật: ct.ChiTietBanMua.GiaBan > 100.
+Null với 0: value ?? 0 sẽ ghi 0 vào DB khi người dùng xóa trắng. Nếu cột cho phép null và nghiệp vụ phân biệt “chưa có giá” với “giá bằng 0”, thì phải gán thẳng value.
+Đổi DB rồi regenerate: nếu đổi tên cột hoặc relation, file partial sẽ báo lỗi biên dịch. Đây là điều tốt, vì bạn phát hiện lệch ngay chứ không bị lỗi ngầm.
+Serialize ra JSON/WCF: property mới có thể lọt vào dữ liệu gửi đi. Nếu không muốn, đánh dấu [JsonIgnore] hoặc thuộc tính tương ứng.
+Tóm lại, cứ để property partial chỉ đọc/ghi qua entity đã map, thì DB và entity luôn khớp nhau.

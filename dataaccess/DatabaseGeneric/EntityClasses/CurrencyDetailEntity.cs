@@ -150,7 +150,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathJournalEntry { get { return _staticMetaData.GetPrefetchPathElement("JournalEntry", CommonEntityBase.CreateEntityCollection<JournalEntryEntity>()); } }
 
 		/// <summary>The CurrencyId property of the Entity CurrencyDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CurrencyDetail"."CurrencyId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CurrencyDetail"."CurrencyId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String CurrencyId
 		{
 			get { return (System.String)GetValue((int)CurrencyDetailFieldIndex.CurrencyId, true); }
@@ -158,7 +158,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The ExchangeRate property of the Entity CurrencyDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CurrencyDetail"."ExchangeRate".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CurrencyDetail"."ExchangeRate".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> ExchangeRate
 		{
 			get { return (Nullable<System.Double>)GetValue((int)CurrencyDetailFieldIndex.ExchangeRate, false); }
@@ -166,7 +166,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Id property of the Entity CurrencyDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CurrencyDetail"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "CurrencyDetail"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)CurrencyDetailFieldIndex.Id, true); }
@@ -174,7 +174,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The JournalEntryId property of the Entity CurrencyDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CurrencyDetail"."JournalEntryId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CurrencyDetail"."JournalEntryId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> JournalEntryId
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)CurrencyDetailFieldIndex.JournalEntryId, false); }
@@ -182,7 +182,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Quantity property of the Entity CurrencyDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CurrencyDetail"."Quantity".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CurrencyDetail"."Quantity".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Quantity
 		{
 			get { return (Nullable<System.Double>)GetValue((int)CurrencyDetailFieldIndex.Quantity, false); }

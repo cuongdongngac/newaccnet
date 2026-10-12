@@ -11,7 +11,7 @@ namespace NewaccNet.Wpf.Views.Base
         {
             // Set some default properties for detail windows if needed
             this.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            this.ShowIcon = false;
+            this.ShowIcon = true;
             this.ResizeMode = ResizeMode.NoResize;
         }
 

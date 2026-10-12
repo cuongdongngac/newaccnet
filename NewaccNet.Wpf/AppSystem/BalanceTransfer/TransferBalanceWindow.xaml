@@ -1,0 +1,141 @@
+<base:BaseWindow xmlns:base="clr-namespace:NewaccNet.Wpf.Views.Base" 
+        x:Class="NewaccNet.Wpf.AppSystem.BalanceTransfer.TransferBalanceWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+        xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+        Title="Chuyển đổi số dư sang Niên độ mới (Balance Transfer)" 
+        Height="730" Width="820" WindowStartupLocation="CenterOwner">
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <dxlc:LayoutControl Orientation="Vertical" Padding="15">
+
+                <!-- KHỐI 1: CSDL NGUỒN (HIỆN HÀNH) -->
+                <dxlc:LayoutGroup Header="1. Cơ sở dữ liệu Nguồn (Niên độ hiện tại)" View="GroupBox" Orientation="Vertical">
+                    <dxlc:LayoutGroup Orientation="Horizontal">
+                        <dxlc:LayoutItem Label="Hệ quản trị CSDL:" Width="280">
+                            <dxe:TextEdit x:Name="txtSourceDbType" IsReadOnly="True" FontWeight="SemiBold" Background="#FFF5F5F5"/>
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="Năm làm việc nguồn:" Width="180">
+                            <dxe:SpinEdit x:Name="spnSourceYear" IsReadOnly="True" FontWeight="Bold" Foreground="#FF1565C0" Background="#FFF5F5F5" Mask="####"/>
+                        </dxlc:LayoutItem>
+                    </dxlc:LayoutGroup>
+                    <dxlc:LayoutItem Label="Thông tin kết nối nguồn:" Margin="0,4,0,0">
+                        <dxe:TextEdit x:Name="txtSourceDbInfo" IsReadOnly="True" Background="#FFF5F5F5" Foreground="#FF555555"/>
+                    </dxlc:LayoutItem>
+                </dxlc:LayoutGroup>
+
+                <!-- KHỐI 2: CSDL ĐÍCH (NIÊN ĐỘ MỚI) -->
+                <dxlc:LayoutGroup Header="2. Cấu hình Cơ sở dữ liệu Đích (Niên độ mới)" View="GroupBox" Orientation="Vertical" Margin="0,10,0,0">
+                    <dxlc:LayoutGroup Orientation="Horizontal">
+                        <dxlc:LayoutItem Label="Hệ quản trị CSDL đích:" HorizontalAlignment="Stretch">
+                            <dxe:ComboBoxEdit x:Name="cboDestDbType" IsTextEditable="False"
+                                              SelectedIndexChanged="CboDestDbType_SelectedIndexChanged">
+                                <dxe:ComboBoxEditItem Content="Microsoft Access (.accdb / .mdb)"/>
+                                <dxe:ComboBoxEditItem Content="Microsoft SQL Server"/>
+                                <dxe:ComboBoxEditItem Content="PostgreSQL (Npgsql)"/>
+                            </dxe:ComboBoxEdit>
+                        </dxlc:LayoutItem>
+                    </dxlc:LayoutGroup>
+
+                    <!-- Khung Access đích -->
+                    <dxlc:LayoutGroup x:Name="grpDestAccess" Orientation="Vertical" Margin="0,6,0,0">
+                        <dxlc:LayoutItem Label="Đường dẫn file (.accdb / .mdb):">
+                            <dxe:ButtonEdit x:Name="txtDestAccessPath" AllowDefaultButton="False" EditValueChanged="DestField_Changed">
+                                <dxe:ButtonInfo GlyphKind="Custom" Content="..." Click="BtnBrowseDestAccess_Click"/>
+                            </dxe:ButtonEdit>
+                        </dxlc:LayoutItem>
+                    </dxlc:LayoutGroup>
+
+                    <!-- Khung SQL Server đích -->
+                    <dxlc:LayoutGroup x:Name="grpDestSqlServer" Orientation="Vertical" Margin="0,6,0,0" Visibility="Collapsed">
+                        <dxlc:LayoutGroup Orientation="Horizontal">
+                            <dxlc:LayoutItem Label="Tên Server (IP):" HorizontalAlignment="Stretch">
+                                <dxe:TextEdit x:Name="txtDestServer" EditValueChanged="DestField_Changed"/>
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Tên Database đích:" HorizontalAlignment="Stretch">
+                                <dxe:TextEdit x:Name="txtDestDatabase" EditValueChanged="DestField_Changed"/>
+                            </dxlc:LayoutItem>
+                        </dxlc:LayoutGroup>
+                        <dxlc:LayoutItem Margin="0,4,0,0">
+                            <dxe:CheckEdit x:Name="chkDestIntegrated" Content="Dùng tài khoản Windows (Integrated Security)"
+                                           Checked="ChkDestIntegrated_CheckedChanged" Unchecked="ChkDestIntegrated_CheckedChanged"/>
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutGroup Orientation="Horizontal" Margin="0,4,0,0">
+                            <dxlc:LayoutItem Label="Tên đăng nhập (User):" HorizontalAlignment="Stretch">
+                                <dxe:TextEdit x:Name="txtDestUser" EditValueChanged="DestField_Changed"/>
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Mật khẩu (Password):" HorizontalAlignment="Stretch">
+                                <dxe:PasswordBoxEdit x:Name="txtDestPassword" EditValueChanged="DestField_Changed"/>
+                            </dxlc:LayoutItem>
+                        </dxlc:LayoutGroup>
+                    </dxlc:LayoutGroup>
+
+                    <!-- Khung PostgreSQL đích -->
+                    <dxlc:LayoutGroup x:Name="grpDestPostgreSql" Orientation="Vertical" Margin="0,6,0,0" Visibility="Collapsed">
+                        <dxlc:LayoutGroup Orientation="Horizontal">
+                            <dxlc:LayoutItem Label="Host (IP):" HorizontalAlignment="Stretch">
+                                <dxe:TextEdit x:Name="txtDestPgHost" EditValueChanged="DestField_Changed"/>
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Port:" Width="120">
+                                <dxe:TextEdit x:Name="txtDestPgPort" EditValueChanged="DestField_Changed"/>
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Tên Database:" HorizontalAlignment="Stretch">
+                                <dxe:TextEdit x:Name="txtDestPgDatabase" EditValueChanged="DestField_Changed"/>
+                            </dxlc:LayoutItem>
+                        </dxlc:LayoutGroup>
+                        <dxlc:LayoutGroup Orientation="Horizontal" Margin="0,4,0,0">
+                            <dxlc:LayoutItem Label="Username:" HorizontalAlignment="Stretch">
+                                <dxe:TextEdit x:Name="txtDestPgUsername" EditValueChanged="DestField_Changed"/>
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Password:" HorizontalAlignment="Stretch">
+                                <dxe:PasswordBoxEdit x:Name="txtDestPgPassword" EditValueChanged="DestField_Changed"/>
+                            </dxlc:LayoutItem>
+                        </dxlc:LayoutGroup>
+                    </dxlc:LayoutGroup>
+
+                    <!-- Chuỗi kết nối xem trước & Nút Test Connection -->
+                    <dxlc:LayoutItem Label="Chuỗi kết nối đích:" Margin="0,6,0,0">
+                        <dxe:TextEdit x:Name="txtDestConnPreview" IsReadOnly="True" FontFamily="Consolas" FontSize="11" Foreground="#FF1565C0" Background="#FFF9F9F9"/>
+                    </dxlc:LayoutItem>
+
+                    <dxlc:LayoutItem Margin="0,6,0,0" HorizontalAlignment="Right">
+                        <dx:SimpleButton Content="Kiểm tra kết nối CSDL đích" Width="200" Height="28" Click="BtnTestConnection_Click"/>
+                    </dxlc:LayoutItem>
+                </dxlc:LayoutGroup>
+
+                <!-- KHỐI 3: THIẾT LẬP NIÊN ĐỘ MỚI -->
+                <dxlc:LayoutGroup Header="3. Tùy chọn Niên độ mới" View="GroupBox" Orientation="Vertical" Margin="0,10,0,0">
+                    <dxlc:LayoutGroup Orientation="Horizontal">
+                        <dxlc:LayoutItem Label="Năm tài chính mới:" Width="200">
+                            <dxe:SpinEdit x:Name="spnDestYear" FontWeight="Bold" Foreground="#FF2E7D32" Mask="####" EditValueChanged="SpnDestYear_EditValueChanged"/>
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="Ngày ghi nhận số dư đầu kỳ:" Width="260">
+                            <dxe:DateEdit x:Name="dtOpeningDate" MinWidth="115"/>
+                        </dxlc:LayoutItem>
+                    </dxlc:LayoutGroup>
+                    <TextBlock Text="* Hệ thống sẽ tự động tổng hợp và chuyển giao toàn bộ số dư: Tài khoản thường (I), Công nợ (A), Tồn kho vật tư NNB (B), Chi phí dở dang (E), TSCĐ (D), Cổ phiếu/Đầu tư (S)."
+                               Foreground="#FF555555" FontStyle="Italic" Margin="0,8,0,2"/>
+                </dxlc:LayoutGroup>
+
+                <!-- KHỐI 4: TIẾN ĐỘ THỰC THI & NHẬT KÝ THỜI GIAN THỰC -->
+                <dxlc:LayoutGroup Header="4. Tiến độ thực thi &amp; Nhật ký chuyển đổi" View="GroupBox" Orientation="Vertical" Margin="0,10,0,0">
+                    <TextBlock x:Name="lblCurrentStep" Text="Sẵn sàng thực hiện chuyển đổi số dư..." FontWeight="SemiBold" Foreground="#FF1565C0" Margin="0,0,0,6"/>
+                    <dxe:ProgressBarEdit x:Name="pbProgress" Height="22" Minimum="0" Maximum="100" Value="0" ContentDisplayMode="Value"/>
+                    <TextBox x:Name="txtLogs" Margin="0,8,0,0" Height="150" IsReadOnly="True" 
+                             VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" 
+                             FontFamily="Consolas" FontSize="11" Background="#FFFDFDFD" Foreground="#FF333333"/>
+                </dxlc:LayoutGroup>
+
+                <!-- KHỐI 5: NÚT HÀNH ĐỘNG -->
+                <dxlc:LayoutGroup Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
+                    <dx:SimpleButton x:Name="btnStart" Content="Bắt đầu chuyển đổi" Width="170" Height="36" 
+                                     FontWeight="Bold" Background="#FF1565C0" Foreground="White" Click="BtnStart_Click"/>
+                    <dx:SimpleButton x:Name="btnClose" Content="Đóng" Width="100" Height="36" Margin="10,0,0,0" Click="BtnClose_Click"/>
+                </dxlc:LayoutGroup>
+
+            </dxlc:LayoutControl>
+        </ScrollViewer>
+    </Grid>
+</base:BaseWindow>

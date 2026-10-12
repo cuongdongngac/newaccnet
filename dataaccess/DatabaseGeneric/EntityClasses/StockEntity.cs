@@ -150,7 +150,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathStockType { get { return _staticMetaData.GetPrefetchPathElement("StockType", CommonEntityBase.CreateEntityCollection<StockTypeEntity>()); } }
 
 		/// <summary>The Description property of the Entity Stock<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Stock"."Description".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "Stock"."Description".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Description
 		{
 			get { return (System.String)GetValue((int)StockFieldIndex.Description, true); }
@@ -158,7 +158,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Stockid property of the Entity Stock<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Stock"."Stockid".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		/// <remarks>Mapped on  table field: "Stock"."Stockid".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
 		public virtual System.String Stockid
 		{
 			get { return (System.String)GetValue((int)StockFieldIndex.Stockid, true); }

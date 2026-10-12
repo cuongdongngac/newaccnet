@@ -1,0 +1,106 @@
+<base:BaseWindow
+    x:Class="NewaccNet.Wpf.AppSystem.Design.TaxObligationDesignWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+    xmlns:base="clr-namespace:NewaccNet.Wpf.Views.Base"
+    xmlns:local="clr-namespace:NewaccNet.Wpf.AppSystem.Design"
+    Title="Thiết kế Báo cáo Nghĩa Vụ Thuế với NSNN"
+    Height="950" Width="1500" WindowStartupLocation="CenterScreen">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <dxb:ToolBarControl Grid.Row="0" AllowCustomizationMenu="False" AllowHide="False" AllowQuickCustomization="False" Margin="0,0,0,8">
+            <dxb:BarButtonItem x:Name="btnLoad" Content="Tải cấu hình" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_refresh.svg'}" ItemClick="BtnLoad_ItemClick"/>
+            <dxb:BarButtonItem x:Name="btnSave" Content="Lưu (Ctrl+S)" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_save.svg'}" ItemClick="BtnSave_ItemClick"/>
+            <dxb:BarItemLinkSeparator/>
+            <dxb:BarButtonItem x:Name="btnNewObligation" Content="Thêm Nghĩa vụ" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_new.svg'}" ItemClick="BtnNewObligation_ItemClick"/>
+            <dxb:BarButtonItem x:Name="btnNewItem" Content="Thêm Chỉ tiêu" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_new.svg'}" ItemClick="BtnNewItem_ItemClick"/>
+            <dxb:BarButtonItem x:Name="btnDelete" Content="Xóa dòng đang chọn" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_delete.svg'}" ItemClick="BtnDelete_ItemClick"/>
+            <dxb:BarItemLinkSeparator/>
+            <dxb:BarButtonItem Content="Bù cột tự động" ItemClick="BtnBestFit_ItemClick"/>
+        </dxb:ToolBarControl>
+
+        <!-- Top: TaxObligation (danh sách các Nghĩa vụ thuế) -->
+        <GroupBox Grid.Row="1" Header="📘 Bậc 1: Nghĩa vụ thuế (TaxObligation) — Chọn một nghĩa vụ để xem các Chỉ tiêu bên dưới" Padding="6">
+            <dxg:GridControl x:Name="gridObligations" AutoGenerateColumns="None" SelectionMode="Row" PreviewKeyDown="Grid_PreviewKeyDown">
+                <dxg:GridControl.View>
+                    <dxg:TableView ShowGroupPanel="False" AllowEditing="True" NewItemRowPosition="Bottom"
+                                   ShowAutoFilterRow="False" ShowSearchPanelMode="Always"
+                                   NavigationStyle="Cell" AutoWidth="True"/>
+                </dxg:GridControl.View>
+                <dxg:GridControl.Columns>
+                    <dxg:GridColumn FieldName="Id" Header="ID" Width="60" AllowEditing="False" Fixed="Left" HorizontalHeaderContentAlignment="Center" Visible="False"/>
+                    <dxg:GridColumn FieldName="ObligationName" Header="Tên Nghĩa vụ thuế (*)" Width="*"/>
+                </dxg:GridControl.Columns>
+            </dxg:GridControl>
+        </GroupBox>
+
+        <GridSplitter Grid.Row="2" HorizontalAlignment="Stretch" Background="#FFC0C0C0" ResizeDirection="Rows" ShowsPreview="False"/>
+
+        <!-- Bottom: TaxObligationItem → AccountTaxObligation (Master-Detail theo Obligation đã chọn) -->
+        <GroupBox Grid.Row="3" Header="📗 Bậc 2-3: Chỉ tiêu (TaxObligationItem) → Danh sách TK tham chiếu (AccountTaxObligation) [Theo Nghĩa vụ đã chọn ở trên]" Padding="6">
+            <dxg:GridControl x:Name="gridItems" AutoGenerateColumns="None" SelectionMode="Row" PreviewKeyDown="Grid_PreviewKeyDown">
+                <dxg:GridControl.DetailDescriptor>
+                    <dxg:DataControlDetailDescriptor ItemsSourceBinding="{Binding AccountTaxObligations}">
+                        <dxg:GridControl AutoGenerateColumns="None">
+                            <dxg:GridControl.View>
+                                <dxg:TableView ShowGroupPanel="False" AllowEditing="True" NewItemRowPosition="Bottom"
+                                               ShowAutoFilterRow="False" ShowSearchPanelMode="Always" RowMinHeight="26"
+                                               NavigationStyle="Cell">
+                                    <dxg:TableView.FormatConditions>
+                                        <dxg:FormatCondition FieldName="IsAdd" Expression="[IsAdd] = True" ApplyToRow="True">
+                                            <dxg:FormatCondition.Format><dx:Format Background="#FFE8F5E9"/></dxg:FormatCondition.Format>
+                                        </dxg:FormatCondition>
+                                        <dxg:FormatCondition FieldName="IsAdd" Expression="[IsAdd] = False" ApplyToRow="True">
+                                            <dxg:FormatCondition.Format><dx:Format Background="#FFFCE4EC"/></dxg:FormatCondition.Format>
+                                        </dxg:FormatCondition>
+                                    </dxg:TableView.FormatConditions>
+                                </dxg:TableView>
+                            </dxg:GridControl.View>
+                            <dxg:GridControl.Columns>
+                                <dxg:GridColumn FieldName="Id" Header="ID" Width="60" AllowEditing="False" HorizontalHeaderContentAlignment="Center" Visible="False"/>
+                                <dxg:GridColumn FieldName="TaxObligationItemId" Header="ItemId" Width="80" AllowEditing="False" HorizontalHeaderContentAlignment="Center" Visible="False"/>
+                                <local:AccountGridColumn FieldName="AccountId" Header="Tài khoản (*)" Width="140"/>
+                                <local:AccountGridColumn FieldName="CounterAccountId" Header="TK Đối ứng" Width="140"/>
+                                <dxg:GridColumn FieldName="ColIndex" Header="Cột" Width="80" HorizontalHeaderContentAlignment="Center"/>
+                                <dxg:GridColumn FieldName="IsAdd" Header="Trừ(-)" Width="100" HorizontalHeaderContentAlignment="Center">
+                                    <dxg:GridColumn.EditSettings>
+                                        <dxe:CheckEditSettings Content="Cộng (+)" IsThreeState="False"/>
+                                    </dxg:GridColumn.EditSettings>
+                                </dxg:GridColumn>
+                                <local:MethodGridColumn FieldName="Method" Width="160"/>
+                            </dxg:GridControl.Columns>
+                        </dxg:GridControl>
+                    </dxg:DataControlDetailDescriptor>
+                </dxg:GridControl.DetailDescriptor>
+
+                <dxg:GridControl.View>
+                    <dxg:TableView ShowGroupPanel="False" AllowEditing="True" NewItemRowPosition="Bottom"
+                                   ShowAutoFilterRow="False" ShowSearchPanelMode="Always" RowMinHeight="28"
+                                   NavigationStyle="Cell" AutoWidth="True"/>
+                </dxg:GridControl.View>
+                <dxg:GridControl.Columns>
+                    <dxg:GridColumn FieldName="Id" Header="ID" Width="60" AllowEditing="False" Fixed="Left" HorizontalHeaderContentAlignment="Center" Visible="False"/>
+                    <dxg:GridColumn FieldName="TaxObligationId" Header="ObligationId" Width="70" AllowEditing="False" HorizontalHeaderContentAlignment="Center" Visible="False"/>
+                    <dxg:GridColumn FieldName="Code" Header="Mã chỉ tiêu" Width="80"/>
+                    <dxg:GridColumn FieldName="ItemName" Header="Tên chỉ tiêu (*)" Width="300"/>
+                </dxg:GridControl.Columns>
+            </dxg:GridControl>
+        </GroupBox>
+
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
+            <dx:SimpleButton x:Name="btnClose" Content="Đóng cửa sổ" Width="140" Height="30" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_close.svg'}" Click="BtnClose_Click"/>
+        </StackPanel>
+    </Grid>
+</base:BaseWindow>

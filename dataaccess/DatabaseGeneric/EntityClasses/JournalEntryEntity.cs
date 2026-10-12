@@ -258,7 +258,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathJournalVoucher { get { return _staticMetaData.GetPrefetchPathElement("JournalVoucher", CommonEntityBase.CreateEntityCollection<JournalVoucherEntity>()); } }
 
 		/// <summary>The AccountId property of the Entity JournalEntry<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "JournalEntry"."AccountId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "JournalEntry"."AccountId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String AccountId
 		{
 			get { return (System.String)GetValue((int)JournalEntryFieldIndex.AccountId, true); }
@@ -266,7 +266,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Amount property of the Entity JournalEntry<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "JournalEntry"."Amount".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "JournalEntry"."Amount".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Amount
 		{
 			get { return (Nullable<System.Double>)GetValue((int)JournalEntryFieldIndex.Amount, false); }
@@ -274,7 +274,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Createdate property of the Entity JournalEntry<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "JournalEntry"."Createdate".<br/>Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "JournalEntry"."Createdate".<br/>Table field type characteristics (type, precision, scale, length): Date, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.DateTime> Createdate
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)JournalEntryFieldIndex.Createdate, false); }
@@ -282,7 +282,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Createuser property of the Entity JournalEntry<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "JournalEntry"."Createuser".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "JournalEntry"."Createuser".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 20.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Createuser
 		{
 			get { return (System.String)GetValue((int)JournalEntryFieldIndex.Createuser, true); }
@@ -298,7 +298,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Id property of the Entity JournalEntry<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "JournalEntry"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "JournalEntry"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)JournalEntryFieldIndex.Id, true); }
@@ -306,7 +306,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The JournalVoucherId property of the Entity JournalEntry<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "JournalEntry"."JournalVoucherId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "JournalEntry"."JournalVoucherId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> JournalVoucherId
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)JournalEntryFieldIndex.JournalVoucherId, false); }
@@ -314,7 +314,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Modifiedamount property of the Entity JournalEntry<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "JournalEntry"."Modifiedamount".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "JournalEntry"."Modifiedamount".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Modifiedamount
 		{
 			get { return (System.String)GetValue((int)JournalEntryFieldIndex.Modifiedamount, true); }
@@ -322,7 +322,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Modifydate property of the Entity JournalEntry<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "JournalEntry"."Modifydate".<br/>Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "JournalEntry"."Modifydate".<br/>Table field type characteristics (type, precision, scale, length): Date, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.DateTime> Modifydate
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)JournalEntryFieldIndex.Modifydate, false); }
@@ -330,7 +330,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Modifyuser property of the Entity JournalEntry<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "JournalEntry"."Modifyuser".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "JournalEntry"."Modifyuser".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 20.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Modifyuser
 		{
 			get { return (System.String)GetValue((int)JournalEntryFieldIndex.Modifyuser, true); }
@@ -338,7 +338,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The ParentId property of the Entity JournalEntry<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "JournalEntry"."ParentId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "JournalEntry"."ParentId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> ParentId
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)JournalEntryFieldIndex.ParentId, false); }
@@ -346,7 +346,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Version property of the Entity JournalEntry<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "JournalEntry"."Version".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "JournalEntry"."Version".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> Version
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)JournalEntryFieldIndex.Version, false); }

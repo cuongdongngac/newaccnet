@@ -138,7 +138,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathJournalEntries { get { return _staticMetaData.GetPrefetchPathElement("JournalEntries", CommonEntityBase.CreateEntityCollection<JournalEntryEntity>()); } }
 
 		/// <summary>The Bookflag property of the Entity JournalVoucher<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "JournalVoucher"."Bookflag".<br/>Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "JournalVoucher"."Bookflag".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Boolean Bookflag
 		{
 			get { return (System.Boolean)GetValue((int)JournalVoucherFieldIndex.Bookflag, true); }
@@ -146,7 +146,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Contents property of the Entity JournalVoucher<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "JournalVoucher"."Contents".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "JournalVoucher"."Contents".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 100.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Contents
 		{
 			get { return (System.String)GetValue((int)JournalVoucherFieldIndex.Contents, true); }
@@ -154,7 +154,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Flag property of the Entity JournalVoucher<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "JournalVoucher"."Flag".<br/>Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "JournalVoucher"."Flag".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Boolean Flag
 		{
 			get { return (System.Boolean)GetValue((int)JournalVoucherFieldIndex.Flag, true); }
@@ -162,7 +162,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Id property of the Entity JournalVoucher<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "JournalVoucher"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "JournalVoucher"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)JournalVoucherFieldIndex.Id, true); }
@@ -170,7 +170,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Invoicesnumber property of the Entity JournalVoucher<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "JournalVoucher"."Invoicesnumber".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "JournalVoucher"."Invoicesnumber".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Invoicesnumber
 		{
 			get { return (System.String)GetValue((int)JournalVoucherFieldIndex.Invoicesnumber, true); }
@@ -178,7 +178,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Marked property of the Entity JournalVoucher<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "JournalVoucher"."Marked".<br/>Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "JournalVoucher"."Marked".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Boolean Marked
 		{
 			get { return (System.Boolean)GetValue((int)JournalVoucherFieldIndex.Marked, true); }
@@ -186,7 +186,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Outtableflag property of the Entity JournalVoucher<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "JournalVoucher"."Outtableflag".<br/>Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "JournalVoucher"."Outtableflag".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Boolean Outtableflag
 		{
 			get { return (System.Boolean)GetValue((int)JournalVoucherFieldIndex.Outtableflag, true); }
@@ -194,7 +194,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Paymentacc property of the Entity JournalVoucher<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "JournalVoucher"."Paymentacc".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "JournalVoucher"."Paymentacc".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Paymentacc
 		{
 			get { return (System.String)GetValue((int)JournalVoucherFieldIndex.Paymentacc, true); }
@@ -202,7 +202,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Paymentbank property of the Entity JournalVoucher<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "JournalVoucher"."Paymentbank".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 150.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "JournalVoucher"."Paymentbank".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 150.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Paymentbank
 		{
 			get { return (System.String)GetValue((int)JournalVoucherFieldIndex.Paymentbank, true); }
@@ -210,7 +210,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Personaddress property of the Entity JournalVoucher<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "JournalVoucher"."Personaddress".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "JournalVoucher"."Personaddress".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Personaddress
 		{
 			get { return (System.String)GetValue((int)JournalVoucherFieldIndex.Personaddress, true); }
@@ -218,7 +218,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Personname property of the Entity JournalVoucher<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "JournalVoucher"."Personname".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "JournalVoucher"."Personname".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Personname
 		{
 			get { return (System.String)GetValue((int)JournalVoucherFieldIndex.Personname, true); }
@@ -226,7 +226,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Recievedacc property of the Entity JournalVoucher<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "JournalVoucher"."Recievedacc".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "JournalVoucher"."Recievedacc".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Recievedacc
 		{
 			get { return (System.String)GetValue((int)JournalVoucherFieldIndex.Recievedacc, true); }
@@ -234,7 +234,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Recievedbank property of the Entity JournalVoucher<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "JournalVoucher"."Recievedbank".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 150.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "JournalVoucher"."Recievedbank".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 150.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Recievedbank
 		{
 			get { return (System.String)GetValue((int)JournalVoucherFieldIndex.Recievedbank, true); }
@@ -242,7 +242,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Recievedcorp property of the Entity JournalVoucher<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "JournalVoucher"."Recievedcorp".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 150.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "JournalVoucher"."Recievedcorp".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 150.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Recievedcorp
 		{
 			get { return (System.String)GetValue((int)JournalVoucherFieldIndex.Recievedcorp, true); }
@@ -250,7 +250,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The VoucherDate property of the Entity JournalVoucher<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "JournalVoucher"."VoucherDate".<br/>Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "JournalVoucher"."VoucherDate".<br/>Table field type characteristics (type, precision, scale, length): Date, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.DateTime> VoucherDate
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)JournalVoucherFieldIndex.VoucherDate, false); }
@@ -258,7 +258,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The VoucherNo property of the Entity JournalVoucher<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "JournalVoucher"."VoucherNo".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "JournalVoucher"."VoucherNo".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String VoucherNo
 		{
 			get { return (System.String)GetValue((int)JournalVoucherFieldIndex.VoucherNo, true); }

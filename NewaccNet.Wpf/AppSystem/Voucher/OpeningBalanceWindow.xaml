@@ -1,0 +1,75 @@
+<dx:ThemedWindow 
+    x:Class="NewaccNet.Wpf.AppSystem.Voucher.OpeningBalanceWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+    xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:local="clr-namespace:NewaccNet.Wpf.AppSystem.Voucher"
+    xmlns:base="clr-namespace:NewaccNet.Wpf.Views.Base"
+    Title="Nhập số dư" Height="500" Width="660" MinWidth="540" MinHeight="380"
+    WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <DataTemplate x:Key="AccountColumnTemplate">
+            <local:AccountLookUpEdit x:Name="PART_Editor" ImmediatePopup="True" AutoComplete="True"/>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- TOOLBAR TINH GỌN: LƯU, THÊM, XÓA DÒNG -->
+        <dxb:BarContainerControl Grid.Row="0">
+            <dxb:ToolBarControl ShowDragWidget="False" AllowCustomizationMenu="False" AllowHide="False" AllowQuickCustomization="False" GlyphSize="Small">
+                <dxb:BarButtonItem Name="btnSave" Content="Lưu (Ctrl+S)" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_save.svg'}" ItemClick="BtnSave_Click" BarItemDisplayMode="ContentAndGlyph"/>
+                <dxb:BarButtonItem Name="btnAdd" Content="Thêm dòng" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_new.svg'}" ItemClick="BtnAdd_Click" BarItemDisplayMode="ContentAndGlyph"/>
+                <dxb:BarButtonItem Name="btnDelete" Content="Xóa dòng (Del)" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_delete.svg'}" ItemClick="BtnDelete_Click" BarItemDisplayMode="ContentAndGlyph"/>
+            </dxb:ToolBarControl>
+        </dxb:BarContainerControl>
+
+        <!-- LƯỚI NHẬP SỐ DƯ (CÓ BORDER PHÂN CHIA CỘT, KHÔNG TỰ ĐỘNG LƯU Ở BACKGROUND) -->
+        <dxg:GridControl x:Name="gridEntries" Grid.Row="1" ItemsSource="{Binding Entries}" PreviewKeyDown="GridEntries_PreviewKeyDown">
+            <dxg:GridControl.View>
+                <base:AppDetailTableView x:Name="viewEntries" 
+                               ShowGroupPanel="False" 
+                               ShowIndicator="True" 
+                               ShowTotalSummary="False" 
+                               NewItemRowPosition="Bottom" 
+                               EnterMoveNextColumn="True" 
+                               AutoWidth="True" 
+                               ShowHorizontalLines="True" 
+                               ShowVerticalLines="True" 
+                               EditorButtonShowMode="ShowForFocusedRow" 
+                               InitNewRow="ViewEntries_InitNewRow" 
+                               RowDoubleClick="ViewEntries_RowDoubleClick"
+                               RowDeleting="ViewEntries_RowDeleting"/>
+            </dxg:GridControl.View>
+
+            <dxg:GridControl.Columns>
+                <!-- Cột 1: Nợ/Có (Thu nhỏ vừa vặn) -->
+                <dxg:GridColumn FieldName="Dbcr" Header="Nợ/Có" Width="65" FixedWidth="True">
+                    <dxg:GridColumn.EditSettings>
+                        <dxe:ComboBoxEditSettings ItemsSource="{Binding DataContext.DbcrList, RelativeSource={RelativeSource AncestorType=Window}}" 
+                                                  ValueMember="Id" DisplayMember="Name" 
+                                                  IsTextEditable="False" AutoComplete="True" ImmediatePopup="True"/>
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
+
+                <!-- Cột 2: Tài khoản (Thu nhỏ vừa đủ mã TK và nút ...) -->
+                <dxg:GridColumn FieldName="AccountId" Header="Tài khoản" Width="110" FixedWidth="True" CellTemplate="{StaticResource AccountColumnTemplate}"/>
+
+                <!-- Cột 3: Số tiền (Ưu tiên rộng nhất, căn phải để số lớn không bị che) -->
+                <dxg:GridColumn FieldName="Amount" Header="Số tiền" Width="*" MinWidth="220" HorizontalHeaderContentAlignment="Right">
+                    <dxg:GridColumn.EditSettings>
+                        <dxe:TextEditSettings DisplayFormat="N0" Mask="N0" MaskType="Numeric" MaskUseAsDisplayFormat="True" HorizontalContentAlignment="Right"/>
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
+            </dxg:GridControl.Columns>
+        </dxg:GridControl>
+    </Grid>
+</dx:ThemedWindow>

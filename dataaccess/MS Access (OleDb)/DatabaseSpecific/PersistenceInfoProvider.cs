@@ -156,7 +156,7 @@ namespace DataAccess.MsAccess.DatabaseSpecific
 		/// <summary>Inits AccountTaxObligationEntity's mappings</summary>
 		private void InitAccountTaxObligationEntityMappings()
 		{
-			this.AddElementMapping("AccountTaxObligationEntity", @"template", @"Default", "AccountTaxObligation", 7, 3);
+			this.AddElementMapping("AccountTaxObligationEntity", @"template", @"Default", "AccountTaxObligation", 7, 0);
 			this.AddElementFieldMapping("AccountTaxObligationEntity", "AccountId", "AccountId", true, "VarWChar", 50, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("AccountTaxObligationEntity", "ColIndex", "ColIndex", true, "UnsignedTinyInt", 0, 3, 0, false, "", new SD.LLBLGen.Pro.ORMSupportClasses.ChangeTypeConverter<System.Int32>(), typeof(System.Byte), 1);
 			this.AddElementFieldMapping("AccountTaxObligationEntity", "CounterAccountId", "CounterAccountId", true, "VarWChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
@@ -639,7 +639,7 @@ namespace DataAccess.MsAccess.DatabaseSpecific
 			this.AddElementFieldMapping("ExpenseTaxLineEntity", "Printflag", "Printflag", false, "Boolean", 2, 0, 0, false, "", null, typeof(System.Boolean), 1);
 			this.AddElementFieldMapping("ExpenseTaxLineEntity", "Rate", "Rate", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 2);
 			this.AddElementFieldMapping("ExpenseTaxLineEntity", "Taxno", "Taxno", true, "VarWChar", 20, 0, 0, false, "", null, typeof(System.String), 3);
-			this.AddElementFieldMapping("ExpenseTaxLineEntity", "Taxrateid", "Taxrateid", true, "SmallInt", 0, 5, 0, false, "", null, typeof(System.Int16), 4);
+			this.AddElementFieldMapping("ExpenseTaxLineEntity", "Taxrateid", "Taxrateid", true, "Integer", 0, 10, 0, false, "", new SD.LLBLGen.Pro.ORMSupportClasses.ChangeTypeConverter<System.Int16>(), typeof(System.Int32), 4);
 			this.AddElementFieldMapping("ExpenseTaxLineEntity", "Vataddress", "Vataddress", true, "VarWChar", 50, 0, 0, false, "", null, typeof(System.String), 5);
 			this.AddElementFieldMapping("ExpenseTaxLineEntity", "Vatbilldate", "Vatbilldate", true, "Date", 0, 0, 0, false, "", null, typeof(System.DateTime), 6);
 			this.AddElementFieldMapping("ExpenseTaxLineEntity", "Vatbillno", "Vatbillno", true, "VarWChar", 10, 0, 0, false, "", null, typeof(System.String), 7);
@@ -895,7 +895,7 @@ namespace DataAccess.MsAccess.DatabaseSpecific
 			this.AddElementFieldMapping("MaterialTaxLineEntity", "LineId", "LineId", false, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 0);
 			this.AddElementFieldMapping("MaterialTaxLineEntity", "Rate", "Rate", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 1);
 			this.AddElementFieldMapping("MaterialTaxLineEntity", "SellPrice", "SellPrice", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 2);
-			this.AddElementFieldMapping("MaterialTaxLineEntity", "Taxrateid", "Taxrateid", true, "SmallInt", 0, 5, 0, false, "", null, typeof(System.Int16), 3);
+			this.AddElementFieldMapping("MaterialTaxLineEntity", "Taxrateid", "Taxrateid", true, "Integer", 0, 10, 0, false, "", new SD.LLBLGen.Pro.ORMSupportClasses.ChangeTypeConverter<System.Int16>(), typeof(System.Int32), 3);
 		}
 
 		/// <summary>Inits PartnerEntity's mappings</summary>
@@ -1025,13 +1025,12 @@ namespace DataAccess.MsAccess.DatabaseSpecific
 		/// <summary>Inits SystemUserEntity's mappings</summary>
 		private void InitSystemUserEntityMappings()
 		{
-			this.AddElementMapping("SystemUserEntity", @"template", @"Default", "SystemUser", 6, 0);
+			this.AddElementMapping("SystemUserEntity", @"template", @"Default", "SystemUser", 5, 0);
 			this.AddElementFieldMapping("SystemUserEntity", "FullName", "FullName", true, "VarWChar", 100, 0, 0, false, "", null, typeof(System.String), 0);
-			this.AddElementFieldMapping("SystemUserEntity", "Id", "Id", false, "Integer", 0, 10, 0, true, "@@IDENTITY", null, typeof(System.Int32), 1);
-			this.AddElementFieldMapping("SystemUserEntity", "IsActive", "IsActive", false, "Boolean", 2, 0, 0, false, "", null, typeof(System.Boolean), 2);
-			this.AddElementFieldMapping("SystemUserEntity", "Password", "Password", false, "VarWChar", 255, 0, 0, false, "", null, typeof(System.String), 3);
-			this.AddElementFieldMapping("SystemUserEntity", "RoleMask", "RoleMask", false, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 4);
-			this.AddElementFieldMapping("SystemUserEntity", "Username", "Username", false, "VarWChar", 50, 0, 0, false, "", null, typeof(System.String), 5);
+			this.AddElementFieldMapping("SystemUserEntity", "IsActive", "IsActive", false, "Boolean", 2, 0, 0, false, "", null, typeof(System.Boolean), 1);
+			this.AddElementFieldMapping("SystemUserEntity", "Password", "Password", false, "VarWChar", 255, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("SystemUserEntity", "RoleMask", "RoleMask", false, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 3);
+			this.AddElementFieldMapping("SystemUserEntity", "Username", "Username", false, "VarWChar", 50, 0, 0, false, "", null, typeof(System.String), 4);
 		}
 
 		/// <summary>Inits TaxObligationEntity's mappings</summary>

@@ -1,0 +1,17 @@
+---
+description: Quy tắc tương tác và cộng tác hai chiều - Trao đổi, phản biện và thống nhất trước khi làm
+alwaysApply: true
+---
+
+# Quy tắc Tương tác & Cộng tác Hai chiều
+
+1. **Trao đổi trước khi làm:**
+   - Luôn thảo luận, nêu rõ kế hoạch và thống nhất giải pháp kiến trúc với người dùng trước khi tiến hành viết code.
+   - Không tự ý sửa đổi hàng loạt khi chưa có sự đồng thuận.
+
+2. **Tương tác hai chiều & Phản biện xây dựng:**
+   - Khi người dùng đưa ra vấn đề hoặc giải pháp, hãy chủ động trao đổi, hỏi lại hoặc phản biện nếu thấy có rủi ro kỹ thuật hoặc có cách làm tối ưu hơn dựa trên kinh nghiệm.
+   - Lắng nghe kinh nghiệm thực tế của người dùng để điều chỉnh thiết kế cho phù hợp nhất với nghiệp vụ.
+
+3. **Tập trung đúng trọng tâm:**
+   - Chỉ tác động chính xác vào điểm cần sửa, không rà soát hay sửa lan man nhiều nơi không liên quan.

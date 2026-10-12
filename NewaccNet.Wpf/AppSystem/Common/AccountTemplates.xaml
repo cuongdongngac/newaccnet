@@ -1,0 +1,19 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+                    xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid">
+
+    <!-- Lego Block: Template hiển thị item Tài khoản trong Dropdown popup [Mã TK | Tên TK] -->
+    <!-- Dùng chung cho cả Form Thiết kế (Design) và Form Nhập liệu (Voucher Entry) -->
+    <DataTemplate x:Key="AccountDropDownItemTemplate">
+        <Grid Margin="4,2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="{Binding AccountId}" FontWeight="SemiBold" VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="1" Text="{Binding AccountName}" Foreground="#FF555555" Margin="10,0,0,0" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+        </Grid>
+    </DataTemplate>
+
+</ResourceDictionary>

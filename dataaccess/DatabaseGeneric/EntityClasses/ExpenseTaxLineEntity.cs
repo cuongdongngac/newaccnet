@@ -138,7 +138,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathCostDetail { get { return _staticMetaData.GetPrefetchPathElement("CostDetail", CommonEntityBase.CreateEntityCollection<CostDetailEntity>()); } }
 
 		/// <summary>The Lineid property of the Entity ExpenseTaxLine<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ExpenseTaxLine"."Lineid".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		/// <remarks>Mapped on  table field: "ExpenseTaxLine"."Lineid".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
 		public virtual System.Int32 Lineid
 		{
 			get { return (System.Int32)GetValue((int)ExpenseTaxLineFieldIndex.Lineid, true); }
@@ -146,7 +146,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Printflag property of the Entity ExpenseTaxLine<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ExpenseTaxLine"."Printflag".<br/>Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "ExpenseTaxLine"."Printflag".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Boolean Printflag
 		{
 			get { return (System.Boolean)GetValue((int)ExpenseTaxLineFieldIndex.Printflag, true); }
@@ -154,7 +154,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Rate property of the Entity ExpenseTaxLine<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ExpenseTaxLine"."Rate".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "ExpenseTaxLine"."Rate".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Rate
 		{
 			get { return (Nullable<System.Double>)GetValue((int)ExpenseTaxLineFieldIndex.Rate, false); }
@@ -162,7 +162,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Taxno property of the Entity ExpenseTaxLine<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ExpenseTaxLine"."Taxno".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "ExpenseTaxLine"."Taxno".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 20.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Taxno
 		{
 			get { return (System.String)GetValue((int)ExpenseTaxLineFieldIndex.Taxno, true); }
@@ -170,7 +170,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Taxrateid property of the Entity ExpenseTaxLine<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ExpenseTaxLine"."Taxrateid".<br/>Table field type characteristics (type, precision, scale, length): SmallInt, 5, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "ExpenseTaxLine"."Taxrateid".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int16> Taxrateid
 		{
 			get { return (Nullable<System.Int16>)GetValue((int)ExpenseTaxLineFieldIndex.Taxrateid, false); }
@@ -178,7 +178,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Vataddress property of the Entity ExpenseTaxLine<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ExpenseTaxLine"."Vataddress".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "ExpenseTaxLine"."Vataddress".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Vataddress
 		{
 			get { return (System.String)GetValue((int)ExpenseTaxLineFieldIndex.Vataddress, true); }
@@ -186,7 +186,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Vatbilldate property of the Entity ExpenseTaxLine<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ExpenseTaxLine"."Vatbilldate".<br/>Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "ExpenseTaxLine"."Vatbilldate".<br/>Table field type characteristics (type, precision, scale, length): Date, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.DateTime> Vatbilldate
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)ExpenseTaxLineFieldIndex.Vatbilldate, false); }
@@ -194,7 +194,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Vatbillno property of the Entity ExpenseTaxLine<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ExpenseTaxLine"."Vatbillno".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "ExpenseTaxLine"."Vatbillno".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Vatbillno
 		{
 			get { return (System.String)GetValue((int)ExpenseTaxLineFieldIndex.Vatbillno, true); }
@@ -202,7 +202,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Vatobjectid property of the Entity ExpenseTaxLine<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ExpenseTaxLine"."Vatobjectid".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "ExpenseTaxLine"."Vatobjectid".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Vatobjectid
 		{
 			get { return (System.String)GetValue((int)ExpenseTaxLineFieldIndex.Vatobjectid, true); }
@@ -210,7 +210,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Vatobjectname property of the Entity ExpenseTaxLine<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ExpenseTaxLine"."Vatobjectname".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "ExpenseTaxLine"."Vatobjectname".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Vatobjectname
 		{
 			get { return (System.String)GetValue((int)ExpenseTaxLineFieldIndex.Vatobjectname, true); }

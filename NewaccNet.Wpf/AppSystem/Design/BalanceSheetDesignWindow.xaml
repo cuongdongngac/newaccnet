@@ -9,7 +9,8 @@
     xmlns:base="clr-namespace:NewaccNet.Wpf.Views.Base"
     Title="Thiết kế Bảng Cân Đối Kế Toán (B01-DN)"
     Height="950" Width="1500" WindowStartupLocation="CenterScreen"
-    xmlns:auth="clr-namespace:NewaccNet.Wpf.AppSystem">
+    xmlns:auth="clr-namespace:NewaccNet.Wpf.AppSystem"
+    xmlns:local="clr-namespace:NewaccNet.Wpf.AppSystem.Design">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -35,7 +36,7 @@
         <!-- Grid 1: Tầng 1 (Section) + Tầng 2 (Category) — master-detail -->
         <GroupBox Grid.Row="1" Header="📘 Bậc 1-2: Mục lớn (Section) → Nhóm chỉ tiêu (Category) — Chọn một Nhóm để xem Chỉ tiêu bên dưới" Padding="6">
             <dxg:GridControl x:Name="gridSections" CustomUnboundColumnData="GridSections_CustomUnboundColumnData" AutoGenerateColumns="None" SelectionMode="Row"
-                             MasterRowExpanded="GridSections_MasterRowExpanded">
+                             MasterRowExpanded="GridSections_MasterRowExpanded" PreviewKeyDown="Grid_PreviewKeyDown">
                 <!-- Detail: Tầng 2 - ReportCategory -->
                 <dxg:GridControl.DetailDescriptor>
                     <dxg:DataControlDetailDescriptor ItemsSourceBinding="{Binding ReportCategories}">
@@ -57,7 +58,7 @@
                                 <dxg:GridColumn FieldName="Id" Header="ID" Width="55" AllowEditing="False" Visible="False" HorizontalHeaderContentAlignment="Center"/>
                                 <dxg:GridColumn FieldName="Code" Header="Mã nhóm" Width="80"/>
                                 <dxg:GridColumn FieldName="CategoryName" Header="Tên nhóm chỉ tiêu (*)" Width="300"/>
-                                <dxg:GridColumn FieldName="ReportSectionId" Header="SectionId" Width="" AllowEditing="False" Visible="False"/>
+                                <dxg:GridColumn FieldName="ReportSectionId" Header="SectionId" Width="80" AllowEditing="False" Visible="False"/>
                             </dxg:GridControl.Columns>
                         </dxg:GridControl>
                     </dxg:DataControlDetailDescriptor>
@@ -96,7 +97,7 @@
 
         <!-- Grid 2: Tầng 3 (Item) + Tầng 4 (Formula) + Tầng 5 (FormulaAccount) -->
         <GroupBox Grid.Row="3" Header="📗 Bậc 3-5: Chỉ tiêu (Item) → Công thức (Formula) → Tài khoản tham chiếu (Account) [Theo Nhóm đã chọn ở trên]" Padding="6">
-            <dxg:GridControl x:Name="gridItems" CustomUnboundColumnData="GridItems_CustomUnboundColumnData" AutoGenerateColumns="None" SelectionMode="Row">
+            <dxg:GridControl x:Name="gridItems" CustomUnboundColumnData="GridItems_CustomUnboundColumnData" AutoGenerateColumns="None" SelectionMode="Row" PreviewKeyDown="Grid_PreviewKeyDown">
                 <!-- Detail Tầng 4: ReportFormula -->
                 <dxg:GridControl.DetailDescriptor>
                     <dxg:DataControlDetailDescriptor ItemsSourceBinding="{Binding ReportFormulas}">
@@ -114,11 +115,7 @@
                                         <dxg:GridControl.Columns>
                                             <!-- ReportFormulaAccountEntity fields: Id, AccountId, ItemsId -->
                                             <dxg:GridColumn FieldName="Id" Header="ID" Width="60" AllowEditing="False" Visible="False" HorizontalHeaderContentAlignment="Center"/>
-                                            <dxg:GridColumn FieldName="AccountId" Header="Mã TK (*)" Width="140">
-                                                <dxg:GridColumn.EditSettings>
-                                                    <dxe:ComboBoxEditSettings x:Name="cboAccount" DisplayMember="AccountId" ValueMember="AccountId" AutoComplete="True" ImmediatePopup="True"/>
-                                                </dxg:GridColumn.EditSettings>
-                                            </dxg:GridColumn>
+                                            <local:AccountGridColumn FieldName="AccountId" Header="Mã TK (*)" Width="140"/>
                                             <dxg:GridColumn FieldName="ItemsId" Header="FormulaId" Width="80" AllowEditing="False" Visible="False"/>
                                         </dxg:GridControl.Columns>
                                     </dxg:GridControl>
@@ -143,8 +140,8 @@
                                 <!-- ReportFormulaEntity fields: Id, Code, ItemsName, Formula, Calculate, Illu, Longorshortterm, Order, Print, ReportItemId -->
                                 <dxg:GridColumn FieldName="Id" Header="ID" Width="55" AllowEditing="False" Visible="False" HorizontalHeaderContentAlignment="Center"/>
                                 <dxg:GridColumn FieldName="Code" Header="Mã" Width="80"/>
-                                <dxg:GridColumn FieldName="ItemsName" Header="Tên chỉ tiêu con" Width="*"/>
-                                <dxg:GridColumn FieldName="Formula" Header="Công thức" Width="*"/>
+                                <dxg:GridColumn FieldName="ItemsName" Header="Tên chỉ tiêu con" Width="300"/>
+                                <dxg:GridColumn FieldName="Formula" Header="Công thức"   Visible="False" Width="*"/>
                                 <dxg:GridColumn FieldName="Calculate" Header="Tính toán" Width="80" HorizontalHeaderContentAlignment="Center">
                                     <dxg:GridColumn.EditSettings>
                                         <dxe:CheckEditSettings IsThreeState="False"/>
@@ -179,9 +176,9 @@
                 <dxg:GridControl.Columns>
                     <!-- ReportItemEntity fields: Id, Code, EntryName, ReportCategoryId -->
                     <dxg:GridColumn FieldName="Id" Header="ID" Width="55" AllowEditing="False" Visible="False" HorizontalHeaderContentAlignment="Center"/>
-                    <dxg:GridColumn FieldName="Code" Header="Mã chỉ tiêu" Width="80"/>
+                    <dxg:GridColumn FieldName="Code" Header="Mã chỉ tiêu" Width="50"/>
                     <dxg:GridColumn FieldName="TestBalance" Header="Số dư (Test)" Width="120"  Visible="False" UnboundType="Decimal" ReadOnly="True"/>
-                    <dxg:GridColumn FieldName="EntryName" Header="Tên chỉ tiêu (*)" Width="*"/>
+                    <dxg:GridColumn FieldName="EntryName" Header="Tên chỉ tiêu (*)" Width="300"/>
                     <dxg:GridColumn FieldName="ReportCategoryId" Header="CategoryId" Width="80" AllowEditing="False" Visible="False"/>
                 </dxg:GridControl.Columns>
             </dxg:GridControl>

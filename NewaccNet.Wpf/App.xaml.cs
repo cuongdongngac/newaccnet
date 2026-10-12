@@ -11,6 +11,27 @@ public partial class App : Application
         base.OnStartup(e);
         DevExpress.Xpf.Core.ApplicationThemeHelper.ApplicationThemeName = "Office2019Colorful";
 
+        // Đồng bộ Icon ứng dụng cho tất cả các cửa sổ khi mở lên
+        EventManager.RegisterClassHandler(typeof(Window), Window.LoadedEvent, new RoutedEventHandler((s, args) =>
+        {
+            if (s is Window win && win.Icon == null)
+            {
+                win.Icon = NewaccNet.Wpf.Views.Base.AppIconHelper.GetAppIcon();
+            }
+        }));
+
+        // Tự động chuẩn hóa định dạng dd/MM/yyyy cho mọi DateEdit khi Loaded
+        EventManager.RegisterClassHandler(typeof(DevExpress.Xpf.Editors.DateEdit), FrameworkElement.LoadedEvent, new RoutedEventHandler((s, args) =>
+        {
+            if (s is DevExpress.Xpf.Editors.DateEdit dateEdit)
+            {
+                NewaccNet.Wpf.Views.Base.AppDateEdit.ApplyDefaultDateFormat(dateEdit);
+            }
+        }));
+
+        // Khởi tạo cấu hình tìm kiếm danh mục (Mã/Tên, tiếng Việt không dấu)
+        NewaccNet.Wpf.Controls.Search.SearchSetup.Initialize();
+
         // 1. Tải cấu hình từ hệ thống
         ConfigManager.LoadConfig();
 
@@ -40,7 +61,6 @@ public partial class App : Application
             {
                 try 
                 {
-                    MessageBox.Show("Chuẩn bị mở MainWindow...", "Debug");
                     var mainWindow = new MainWindow(
                         loginWindow.LoggedUsername,
                         loginWindow.LoggedFullName,

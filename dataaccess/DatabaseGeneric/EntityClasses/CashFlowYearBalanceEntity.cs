@@ -126,7 +126,7 @@ namespace DataAccess.EntityClasses
 		public static CashFlowYearBalanceRelations Relations { get { return _relationsFactory; } }
 
 		/// <summary>The Id property of the Entity CashFlowYearBalance<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CashFlowYearBalance"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "CashFlowYearBalance"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)CashFlowYearBalanceFieldIndex.Id, true); }
@@ -134,7 +134,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Prevbeginbalance property of the Entity CashFlowYearBalance<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CashFlowYearBalance"."Prevbeginbalance".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CashFlowYearBalance"."Prevbeginbalance".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Prevbeginbalance
 		{
 			get { return (Nullable<System.Double>)GetValue((int)CashFlowYearBalanceFieldIndex.Prevbeginbalance, false); }
@@ -142,7 +142,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Thisbeginbalance property of the Entity CashFlowYearBalance<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CashFlowYearBalance"."Thisbeginbalance".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CashFlowYearBalance"."Thisbeginbalance".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Thisbeginbalance
 		{
 			get { return (Nullable<System.Double>)GetValue((int)CashFlowYearBalanceFieldIndex.Thisbeginbalance, false); }

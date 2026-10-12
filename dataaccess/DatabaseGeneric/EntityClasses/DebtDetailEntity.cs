@@ -198,7 +198,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathCurrencyLiabilityLine { get { return _staticMetaData.GetPrefetchPathElement("CurrencyLiabilityLine", CommonEntityBase.CreateEntityCollection<CurrencyLiabilityLineEntity>()); } }
 
 		/// <summary>The Amount property of the Entity DebtDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DebtDetail"."Amount".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "DebtDetail"."Amount".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Amount
 		{
 			get { return (Nullable<System.Double>)GetValue((int)DebtDetailFieldIndex.Amount, false); }
@@ -206,7 +206,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Currency property of the Entity DebtDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DebtDetail"."Currency".<br/>Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "DebtDetail"."Currency".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Boolean Currency
 		{
 			get { return (System.Boolean)GetValue((int)DebtDetailFieldIndex.Currency, true); }
@@ -214,7 +214,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The DebtReasonId property of the Entity DebtDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DebtDetail"."DebtReasonId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "DebtDetail"."DebtReasonId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> DebtReasonId
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)DebtDetailFieldIndex.DebtReasonId, false); }
@@ -222,7 +222,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The DebtTypeId property of the Entity DebtDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DebtDetail"."DebtTypeId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "DebtDetail"."DebtTypeId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String DebtTypeId
 		{
 			get { return (System.String)GetValue((int)DebtDetailFieldIndex.DebtTypeId, true); }
@@ -230,7 +230,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Id property of the Entity DebtDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DebtDetail"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "DebtDetail"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)DebtDetailFieldIndex.Id, true); }
@@ -238,7 +238,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Interestflag property of the Entity DebtDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DebtDetail"."Interestflag".<br/>Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "DebtDetail"."Interestflag".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Boolean Interestflag
 		{
 			get { return (System.Boolean)GetValue((int)DebtDetailFieldIndex.Interestflag, true); }
@@ -246,7 +246,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The JournalEntryId property of the Entity DebtDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DebtDetail"."JournalEntryId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "DebtDetail"."JournalEntryId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> JournalEntryId
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)DebtDetailFieldIndex.JournalEntryId, false); }
@@ -254,7 +254,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Liabilitydate property of the Entity DebtDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DebtDetail"."Liabilitydate".<br/>Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "DebtDetail"."Liabilitydate".<br/>Table field type characteristics (type, precision, scale, length): Date, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.DateTime> Liabilitydate
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)DebtDetailFieldIndex.Liabilitydate, false); }
@@ -262,7 +262,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The LiabilityDuesId property of the Entity DebtDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DebtDetail"."LiabilityDuesId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "DebtDetail"."LiabilityDuesId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> LiabilityDuesId
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)DebtDetailFieldIndex.LiabilityDuesId, false); }
@@ -270,7 +270,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The PartnerId property of the Entity DebtDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DebtDetail"."PartnerId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "DebtDetail"."PartnerId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String PartnerId
 		{
 			get { return (System.String)GetValue((int)DebtDetailFieldIndex.PartnerId, true); }

@@ -361,3 +361,82 @@ Credit = raw <= 0 ? -raw : 0         // CreditValue() Access
 - **Vấn đề cũ**: Các báo cáo như Sổ Cái (Ledger), Cân đối phát sinh (Trial Balance), và Báo cáo thuế đều có các hàm Calculate độc lập để tính dữ liệu từ JournalEntry. Việc này dẫn đến sự không nhất quán khi tính Số dư đầu kỳ.
 - **Giải pháp (Domain-Driven Design)**: Tạo ra lớp logic đáy FlattenedLedgerService chịu trách nhiệm Làm phẳng mọi bút toán. Giao dịch đơn (nhập số dư) tự động Nhồi VoucherDate. Tiện lợi cho mọi báo cáo, sau này có thể Materialize thành DB Cache.
 
+### 11. Phân Hệ Nhập Liệu Vật Tư (Inventory Voucher Architecture & Tasks)
+- **Bản chất nghiệp vụ**:
+  - Tách bạch 2 tầng: Tầng 1 (giá vốn/giá gốc - `InventoryVoucherLine`), Tầng 2 (giá bán/thuế - `MaterialTaxLine` quan hệ 1-1).
+  - Chân trang form Vật tư đặt các ô chọn tài khoản độc lập (không phải lưới). Khi bấm Chấp nhận quay về form chính `JournalVoucher`, form chính mới là Lưới, thực hiện gán định khoản ban đầu (TK 156) thành con của định khoản mới (TK 632) và đảo chiều Nợ/Có.
+- **Các lỗi cần giải quyết**:
+  1. Vật tư chưa load lên Grid khi mở chứng từ cũ (do thiếu PrefetchPath 3 tầng và cờ `isNew` bị gán cứng).
+  2. Cột `MaterialTaxLine` (Giá bán, Thuế) trên Grid chỉ Đọc, chưa Edit được (do cơ chế Binding thuộc tính lồng trên EntityCollection LLBLGen).
+  3. Đồng bộ trạng thái Ẩn/Hiện và Change-Tracking khi Lưu chứng từ.
+- **Tài liệu & Kế hoạch chi tiết**: Đã lưu tại [.ai_context/InventoryVoucher_Tasks_Plan.md](file:///d:/NewaccNet/.ai_context/InventoryVoucher_Tasks_Plan.md).
+
+### 12. Kế Hoạch Nâng Cấp Form Chứng Từ & Hóa Đơn (Voucher & Invoice Enhancements)
+- **Các yêu cầu trọng tâm**:
+  1. Đưa thông tin in ấn bổ trợ vào vùng Accordion (Collapsible Group), mặc định thu gọn, bỏ qua focus bàn phím, chỉ mở khi click chuột.
+  2. Co gọn khoảng trắng vùng Header cho liền mạch và trực quan.
+  3. Xây dựng Collection of Voucher trong RAM để thanh Navigation di chuyển linh hoạt giữa các phần tử.
+  4. Nút New trong form tạo phần tử mới, thêm vào Collection và Set Current ngay lập tức; tích hợp Navigation control DevExpress.
+  5. Thêm nút Tạo mới nhanh (+) trên các LookUpEdit/ComboBox danh mục (Công nợ, Chi phí, Kho...) gọi Form Editor tương ứng và tự động add vào collection của dropdown.
+- **Tài liệu chi tiết & Checklist**: Đã ghi nhận tại [.ai_context/VOUCHER_ENHANCEMENT_PLAN.md](file:///d:/NewaccNet/.ai_context/VOUCHER_ENHANCEMENT_PLAN.md).
+- **Trạng thái thực hiện**: **ĐÃ HOÀN THÀNH 100%**.
+  - **Accordion in ấn & Header co gọn**: Header 1 dòng gọn gàng, nhóm thông tin in ấn và tài khoản ngân hàng đặt trong Accordion `dxlc:LayoutGroup` thu gọn, `KeyboardNavigation.IsTabStop="False"` bỏ qua tab phím.
+  - **Lô chứng từ & Navigation**: Quản lý `_voucherBatch` và chỉ số `_currentVoucherIndex` kèm các nút điều hướng First, Prev, Next, Last và nhãn `[X / N]`. Nút New commit chứng từ cũ, thêm chứng từ mới và set current ngay. Nút Save kiểm tra cân đối toàn bộ lô và lưu trong 1 Transaction duy nhất. `VoucherListView` giữ nguyên trạng thái tĩnh khi thoát form.
+  - **Nút Tạo mới nhanh (+)**: Đã tích hợp nút `+` vào toàn bộ các LookUpEdit danh mục:
+    - Công nợ (`DebtDetailWindow`): Đối tượng (`Partner`), Nội dung (`DebtType`), Lý do (`DebtReason`).
+    - Chi phí (`CostDetailWindow`): Đối tượng chi phí (`CostObject`), Yếu tố chi phí (`CostElement`), Đối tượng thuế (`Partner`).
+    - Vật tư & Kho (`MaterialDetailWindow`): Kho hàng (`Warehouse`), Vật tư (`Material`), Đối tượng thuế (`Partner`).
+    - Tạo mới `WarehouseEditorWindow` phục vụ tạo mới kho trực tiếp.
+    - Cấu hình `EditorButtonShowMode="ShowForFocusedRow"` và `CellTemplate` với `PART_Editor`, lưu tự động vào DB và cập nhật ngay vào collection nguồn cũng như ô/dòng hiện hành.
+  - **Khắc phục lỗi tràn số chứng từ (VoucherNo Overflow Fix):**
+    - Cột `VoucherNo` trong database tối đa 10 ký tự (`VarWChar(10)`). Đã thay thế định dạng cũ 11 ký tự bằng hàm `GenerateNextVoucherNo()` tự động tăng số chứng từ trong lô (ví dụ `PK001` -> `PK002`) hoặc mặc định theo ngày `CTyyMMdd{seq:D2}` (đúng 10 ký tự).
+    - Cấu hình thuộc tính `MaxLength` trên XAML và cơ chế cắt an toàn trên C# cho toàn bộ các trường header & accordion (`VoucherNo`, `Contents`, `Invoicesnumber`, `Personname`, `Paymentacc`, v.v.).
+  - **Build Status**: Dự án biên dịch thành công 0 lỗi (`Build Succeeded`).
+
+### 13. Phân Hệ Khai Báo Số Dư Đầu Kỳ & Tích Hợp Search LookUp
+- **Tích hợp Search LookUp (`NewaccNet.Wpf.Controls.Search`)**:
+  - Chuẩn hóa namespace và đăng ký `SearchProfiles` cho 8 danh mục cốt lõi (`ChartOfAccountEntity`, `PartnerEntity`, `WarehouseEntity`, `CostObjectEntity`, `CostElementEntity`, `InventoryItemEntity`, `DebtTypeEntity`, `DebtReasonEntity`).
+  - Hỗ trợ tìm kiếm tiếng Việt không dấu (`VnStartsWith`, `VnContainsAll`), tự động cấu hình 2 cột `[Mã | Tên]`, tự động quản lý `DisplayMember`.
+  - Tích hợp `SearchLookUpBehavior` vào `DebtDetailWindow`, `CostDetailWindow`, `MaterialDetailWindow`.
+- **Form Nhập số dư (`OpeningBalanceWindow`) - Chuẩn theo mẫu nguyên bản**:
+  - Đặt nút **"Nhập số dư"** ngay cạnh nút **"Chứng từ"** trên Ribbon tab "Nghiệp vụ" (`MainWindow.xaml`).
+  - Giao diện siêu gọn, đúng nguyên bản mẫu của chương trình (Title: "Nhập số dư", kích thước nhỏ gọn ~480x360).
+  - Không có thanh Toolbar cồng kềnh, không có Footer kiểm tra cân đối hay cảnh báo Nợ/Có.
+  - Lưới nhập liệu gồm đúng 3 cột đồng bộ chuẩn với Voucher:
+    1. **Nợ/Có** (`Dbcr`: Dropdown chọn "Nợ" / "Có").
+    2. **Tài khoản** (`AccountId`: Dùng chung `AccountLookUpEdit` như ở Voucher, có sẵn nút `...` ngay trên combobox để người dùng bấm vào sửa chi tiết công nợ/chi phí mà không phải gõ lại tài khoản).
+    3. **Số tiền** (`Amount`: Ô nhập số tiền thông thường định dạng `N0`, không nút bấm thừa).
+  - Tự động lưu (`SaveDataSilently`) khi chuyển dòng (`RowUpdated`) hoặc khi đóng cửa sổ (`Closing`), xóa dòng bằng phím `Delete`, lưu bằng `Ctrl+S`, đóng bằng `Esc`. Không bao giờ chặn hay hỏi về cân đối.
+- **Trạng thái**: **ĐÃ HOÀN THÀNH**.
+
+### 14. Chuẩn Hóa UI, Tối Ưu Hiển Thị & Nền Tảng Xóa Theo Lô (Unit of Work)
+- **Cột Nút Xóa Dòng Dùng Chung (`AppDetailTableView`)**:
+  - Kế thừa `TableView`, tự động nhúng cột xóa vector thùng rác tinh gọn ở cuối dòng (`colRowDeleteAction`, Width 36px).
+  - Tự động ẩn trên `NewItemRow` và `AutoFilterRow`, hiệu ứng hover tròn đỏ tinh tế.
+  - Xử lý mượt mà cả với Grid thường lẫn Grid dùng Bands (`GridControlBand`).
+  - Phát lệnh xóa trực tiếp lên binding context (`DeleteRow`), bắn sự kiện `RowDeleting` (cho phép can thiệp/hủy) và `RowDeleted` (tính toán lại số liệu).
+- **Cơ Chế Xóa In-Memory (Unit of Work Pattern)**:
+  - Mọi thao tác xóa dòng chi tiết hoặc xóa chứng từ trong lô chỉ tác động lên Collection trong RAM (không xóa ngay trong DB).
+  - Chỉ commit xóa và lưu xuống DB trong cùng 1 Transaction duy nhất khi bấm nút "Lưu (Save)".
+- **Tối Ưu Form Nhập Số Dư (`OpeningBalanceWindow`)**:
+  - Mở rộng kích thước form lên `660x500` (MinWidth 540, MinHeight 380).
+  - Cột `Dbcr` (65px, FixedWidth), `AccountId` (110px, FixedWidth).
+  - Cột `Amount` co giãn tự do (`Width="*" MinWidth="220"`), căn phải chuẩn kế toán. Với `AutoWidth="True"`, cột `Amount` chiếm toàn bộ phần còn lại (> 410px), khắc phục triệt để lỗi khuất số tiền.
+  - Chuẩn hóa thuộc tính `x:Name="PART_Editor"` giải quyết triệt để lỗi biên dịch `XLS0513`/`XDG0008`.
+- **Tối Ưu Form Chi Tiết Vật Tư (`MaterialDetailWindow`)**:
+  - Mở rộng cửa sổ lên `1150x680` (MinWidth 1000, MinHeight 550).
+  - Header Thông tin hóa đơn (`pnlTaxInfo`) bố trí 2 cột ngang gọn gàng, giảm chiều cao từ 250px xuống ~100px.
+  - Độ rộng các cột trên lưới chuẩn hóa: `MaterialId` co giãn (`Width="*" MinWidth="180"`), các cột số liệu tối ưu vừa vặn. Toàn bộ các cột (bao gồm `% Thuế` và `Tiền thuế`) luôn nằm trọn trong vùng nhìn thấy khi XB/NM.
+  - Tiêu đề Band đổi động: "Giá bán & Thuế" khi XB, "Thuế GTGT" khi NM.
+  - Footer co giãn thông minh qua DataTrigger: Tự động co cột Doanh thu về 0 khi NM để hiển thị 3 cột sạch sẽ (Tiền hàng $\rightarrow$ Thuế $\rightarrow$ Tổng TT); hiển thị 4 cột khi XB.
+- **Tối Ưu Header & Layout Voucher Entry (`VoucherEntryWindow`)**:
+  - Header 2 hàng: Hàng 1 chứa thông tin chứng từ, ComboBox Loại phiếu in (5 loại: Thông thường, Thu, Chi, UNC, Giấy nộp tiền), Nút in, Checkbox Đã ghi sổ. Hàng 2 chứa trường "Nội dung diễn giải" kéo dài 100% toàn bộ chiều ngang.
+  - Nút In trên Toolbar chính và Header tự động Enable khi chọn loại phiếu đặc thù; Accordion thông tin in ấn & ngân hàng tự động mở rộng.
+  - Khắc phục khoảng trắng thừa: Thay `dxlc:LayoutControl` bằng `Grid` WPF chuẩn 2 hàng, kéo tiêu đề định khoản chính/chi tiết áp sát ngay trên mỗi Grid (khoảng cách chỉ 4px), lưới giãn nở lấp đầy màn hình.
+- **Phác Thảo Kế Hoạch Chốt Sổ & Chuyển Số Dư Cuối Năm (`TransferBalance.md`)**:
+  - Ghi nhận đầy đủ mô hình clone CSDL (Access/MSSQL), quy tắc chuyển số dư Nợ/Có, sinh phiếu Nhập kho nội bộ (NNB) cho vật tư ngày 01/01 năm mới, tách biệt module kết chuyển lợi nhuận cuối kỳ và định hướng rà soát cấu trúc chi tiết đa chiều.
+- **Trạng thái**: **ĐÃ HOÀN THÀNH VÀ TEST SƠ BỘ OK**.
+
+
+
+

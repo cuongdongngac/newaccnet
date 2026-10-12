@@ -15,19 +15,7 @@
 
     <Window.Resources>
         <DataTemplate x:Key="AccountColumnTemplate">
-            <local:AccountLookUpEdit Name="PART_Editor" ItemsSource="{Binding DataContext.Accounts, RelativeSource={RelativeSource AncestorType=Window}}">
-                <local:AccountLookUpEdit.PopupContentTemplate>
-                    <ControlTemplate>
-                        <dxg:GridControl Name="PART_GridControl">
-                            <dxg:GridControl.Columns>
-                                <dxg:GridColumn FieldName="AccountId" Header="Mã TK" Width="100"/>
-                                <dxg:GridColumn FieldName="AccountName" Header="Tên tài khoản" Width="*"/>
-                                <dxg:GridColumn FieldName="CategoryId" Header="Loại" Width="50"/>
-                            </dxg:GridControl.Columns>
-                        </dxg:GridControl>
-                    </ControlTemplate>
-                </local:AccountLookUpEdit.PopupContentTemplate>
-            </local:AccountLookUpEdit>
+            <local:AccountLookUpEdit x:Name="PART_Editor"/>
         </DataTemplate>
     </Window.Resources>
 
@@ -44,37 +32,105 @@
             <dxb:ToolBarControl ShowDragWidget="False" AllowCustomizationMenu="False" AllowHide="False" AllowQuickCustomization="False" GlyphSize="Large">
                 <dxb:BarButtonItem ToolTip="Thêm mới" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_new.svg'}" ItemClick="BtnNew_Click"/>
                 <dxb:BarButtonItem ToolTip="Lưu (Save)" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_save.svg'}" ItemClick="BtnSave_Click"/>
-                <dxb:BarButtonItem ToolTip="Xóa" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_delete.svg'}"/>
+                <dxb:BarButtonItem ToolTip="Xóa chứng từ" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_delete.svg'}" ItemClick="BtnDeleteVoucher_Click"/>
+                <dxb:BarButtonItem Name="btnPrintToolbar" ToolTip="In chứng từ" IsEnabled="False" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/print/print.svg'}" ItemClick="BtnPrint_Click"/>
                 <dxb:BarButtonItem ToolTip="Đóng" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_close.svg'}" ItemClick="BtnClose_Click"/>
                 <dxb:BarItemSeparator/>
-                <dxb:BarButtonItem ToolTip="Đầu tiên" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/arrows/doublefirst.svg'}" ItemClick="BtnFirst_Click"/>
-                <dxb:BarButtonItem ToolTip="Trước" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/arrows/prev.svg'}" ItemClick="BtnPrev_Click"/>
-                <dxb:BarButtonItem ToolTip="Tiếp" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/arrows/next.svg'}" ItemClick="BtnNext_Click"/>
-                <dxb:BarButtonItem ToolTip="Cuối cùng" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/arrows/doublelast.svg'}" ItemClick="BtnLast_Click"/>
+                <dxb:BarButtonItem Name="btnFirst" ToolTip="Đầu tiên" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/arrows/doublefirst.svg'}" ItemClick="BtnFirst_Click"/>
+                <dxb:BarButtonItem Name="btnPrev" ToolTip="Trước" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/arrows/prev.svg'}" ItemClick="BtnPrev_Click"/>
+                <dxb:BarStaticItem Name="lblNavPosition" Content="1 / 1" ShowBorder="True"/>
+                <dxb:BarButtonItem Name="btnNext" ToolTip="Tiếp" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/arrows/next.svg'}" ItemClick="BtnNext_Click"/>
+                <dxb:BarButtonItem Name="btnLast" ToolTip="Cuối cùng" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/arrows/doublelast.svg'}" ItemClick="BtnLast_Click"/>
             </dxb:ToolBarControl>
-        </dxb:BarContainerControl>        <!-- HEADER -->
-        <dxlc:LayoutControl Grid.Row="1" Orientation="Vertical" Padding="10">
+        </dxb:BarContainerControl>
+
+        <!-- HEADER -->
+        <dxlc:LayoutControl Grid.Row="1" Orientation="Vertical" Padding="10,6,10,2">
+            <!-- Hàng 1: ID, Số CT, Ngày CT, Loại phiếu in, Nút in, Đã ghi sổ -->
             <dxlc:LayoutGroup Orientation="Horizontal">
-                <dxlc:LayoutItem Label="ID (Khóa chính):" Width="150">
+                <dxlc:LayoutItem Label="ID:" Width="90" Visibility="Collapsed">
                     <dxe:TextEdit Name="txtVoucherId" IsReadOnly="True" />
                 </dxlc:LayoutItem>
-                <dxlc:LayoutItem Label="Số chứng từ:" Width="200">
-                    <dxe:TextEdit Name="txtVoucherNo" FontWeight="Bold"/>
+                <dxlc:LayoutItem Label="Số chứng từ:" Width="170">
+                    <dxe:TextEdit Name="txtVoucherNo" FontWeight="Bold" MaxLength="10"/>
                 </dxlc:LayoutItem>
-                <dxlc:LayoutItem Label="Ngày chứng từ:" Width="200">
-                    <dxe:DateEdit Name="txtVoucherDate"/>
+                <dxlc:LayoutItem Label="Ngày chứng từ:" Width="215">
+                    <dxe:DateEdit Name="txtVoucherDate" MinWidth="115"/>
                 </dxlc:LayoutItem>
-                <dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Loại phiếu in:" Width="210">
+                    <dxe:ComboBoxEdit Name="cboPrintType" 
+                                      ItemsSource="{Binding PrintTypeList}" 
+                                      DisplayMember="Name" 
+                                      ValueMember="Type" 
+                                      IsTextEditable="False"
+                                      AutoComplete="True" 
+                                      ImmediatePopup="True"
+                                      EditValueChanged="cboPrintType_EditValueChanged"/>
+                </dxlc:LayoutItem>
+                <Button Name="btnPrintHeader" Content="In phiếu" Width="75" Height="24" Margin="5,0,0,0" IsEnabled="False" Click="BtnPrint_Click"/>
+                <dxlc:LayoutItem HorizontalAlignment="Right" Width="165">
                     <dxe:CheckEdit Name="chkBookflag" Content="Đã ghi sổ (Confirmed)" FontWeight="Bold" Foreground="DarkRed"/>
                 </dxlc:LayoutItem>
             </dxlc:LayoutGroup>
-            <dxlc:LayoutItem Label="Nội dung:">
-                <dxe:TextEdit Name="txtContents"/>
-            </dxlc:LayoutItem>
+
+            <!-- Hàng 2: Nội dung kéo dài toàn bộ chiều ngang -->
+            <dxlc:LayoutGroup Orientation="Horizontal" Margin="0,3,0,0">
+                <dxlc:LayoutItem Label="Nội dung:" HorizontalAlignment="Stretch">
+                    <dxe:TextEdit Name="txtContents" MaxLength="100"/>
+                </dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+
+            <!-- ACCORDION: THÔNG TIN IN ẤN VÀ THANH TOÁN (MẶC ĐỊNH THU GỌN, KHÔNG BỊ TAB FOCUS) -->
+            <dxlc:LayoutGroup x:Name="grpPrintAndBankInfo" View="GroupBox" 
+                              Header="Thông tin in chứng từ &amp; Thanh toán ngân hàng (Mở rộng)" 
+                              IsCollapsible="True" 
+                              IsCollapsed="True" 
+                              Margin="0,4,0,0"
+                              Padding="6"
+                              KeyboardNavigation.TabNavigation="None"
+                              KeyboardNavigation.IsTabStop="False">
+                <dxlc:LayoutGroup Orientation="Horizontal">
+                    <!-- Cột 1: Người nộp/nhận & chứng từ gốc -->
+                    <dxlc:LayoutGroup Orientation="Vertical">
+                        <dxlc:LayoutItem Label="Người nộp / nhận:">
+                            <dxe:TextEdit Name="txtPersonname" MaxLength="50" KeyboardNavigation.IsTabStop="False"/>
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="Địa chỉ:">
+                            <dxe:TextEdit Name="txtPersonaddress" MaxLength="255" KeyboardNavigation.IsTabStop="False"/>
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="Kèm theo số CT gốc:">
+                            <dxe:TextEdit Name="txtInvoicesnumber" MaxLength="2" KeyboardNavigation.IsTabStop="False"/>
+                        </dxlc:LayoutItem>
+                    </dxlc:LayoutGroup>
+
+                    <!-- Cột 2: Tài khoản chi / thanh toán -->
+                    <dxlc:LayoutGroup Orientation="Vertical" Margin="10,0,0,0">
+                        <dxlc:LayoutItem Label="TK thanh toán (Chi):">
+                            <dxe:TextEdit Name="txtPaymentacc" MaxLength="50" KeyboardNavigation.IsTabStop="False"/>
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="Ngân hàng thanh toán:">
+                            <dxe:TextEdit Name="txtPaymentbank" MaxLength="150" KeyboardNavigation.IsTabStop="False"/>
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="Đơn vị nhận (Thụ hưởng):">
+                            <dxe:TextEdit Name="txtRecievedcorp" MaxLength="150" KeyboardNavigation.IsTabStop="False"/>
+                        </dxlc:LayoutItem>
+                    </dxlc:LayoutGroup>
+
+                    <!-- Cột 3: Tài khoản & ngân hàng người nhận -->
+                    <dxlc:LayoutGroup Orientation="Vertical" Margin="10,0,0,0">
+                        <dxlc:LayoutItem Label="TK người nhận:">
+                            <dxe:TextEdit Name="txtRecievedacc" MaxLength="50" KeyboardNavigation.IsTabStop="False"/>
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="Ngân hàng người nhận:">
+                            <dxe:TextEdit Name="txtRecievedbank" MaxLength="150" KeyboardNavigation.IsTabStop="False"/>
+                        </dxlc:LayoutItem>
+                    </dxlc:LayoutGroup>
+                </dxlc:LayoutGroup>
+            </dxlc:LayoutGroup>
         </dxlc:LayoutControl>
 
-        <!-- BODY: TWO GRIDS -->
-        <Grid Grid.Row="2" Margin="10">
+        <!-- BODY: TWO GRIDS (CO GẦN VỚI TIÊU ĐỀ, LOẠI BỎ KHOẢNG TRẮNG THỪA) -->
+        <Grid Grid.Row="2" Margin="10,2,10,6">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="10"/>
@@ -82,18 +138,22 @@
             </Grid.ColumnDefinitions>
 
             <!-- LEFT GRID: CHÍNH (Master) -->
-            <dxlc:LayoutControl Grid.Column="0" Orientation="Vertical" Padding="0">
-                <TextBlock Text="ĐỊNH KHOẢN CHÍNH (Master - Trái)" FontWeight="Bold" Margin="0,0,0,5" Foreground="DarkGreen"/>
-                <dxg:GridControl Name="gridLeft" VerticalAlignment="Stretch" SelectedItemChanged="gridLeft_SelectedItemChanged" >
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Text="ĐỊNH KHOẢN CHÍNH (Master - Trái)" FontWeight="Bold" Margin="0,0,0,4" Foreground="DarkGreen"/>
+                <dxg:GridControl Grid.Row="1" Name="gridLeft" VerticalAlignment="Stretch" SelectedItemChanged="gridLeft_SelectedItemChanged" CurrentItemChanged="gridLeft_CurrentItemChanged">
                     <dxg:GridControl.View>
-                        <base:AppDetailTableView ShowGroupPanel="False" NewItemRowPosition="Bottom" EnterMoveNextColumn="True" CellValueChanged="GridView_CellValueChanged" PreviewKeyDown="TableViewLeft_PreviewKeyDown"/>
+                        <base:AppDetailTableView ShowGroupPanel="False" NewItemRowPosition="Bottom" EnterMoveNextColumn="True" FixDeleteButtonToRight="False" CellValueChanged="GridView_CellValueChanged" PreviewKeyDown="TableView_PreviewKeyDown" ShowingEditor="TableView_ShowingEditor" RowDoubleClick="TableView_RowDoubleClick" RowDeleted="TableView_RowDeleted"/>
                     </dxg:GridControl.View>
                     <dxg:GridControl.Columns>
-                        <dxg:GridColumn FieldName="Id" Header="ID" Width="40" ReadOnly="True" AllowEditing="False" />
-                        <dxg:GridColumn Binding="{Binding ParentId}" FieldName="ParentId" Header="ParentId" Width="60" ReadOnly="True" AllowEditing="False" />
+                        <dxg:GridColumn FieldName="Id" Header="ID" Width="40" ReadOnly="True" AllowEditing="False" Visible="False" ShowInColumnChooser="False"/>
+                        <dxg:GridColumn Binding="{Binding ParentId}" FieldName="ParentId" Header="ParentId" Width="60" ReadOnly="True" AllowEditing="False" Visible="False" ShowInColumnChooser="False"/>
                         <dxg:GridColumn FieldName="Dbcr" Header="Nợ/Có" Width="60">
                             <dxg:GridColumn.EditSettings>
-                                <dxe:ComboBoxEditSettings ItemsSource="{Binding DataContext.DbcrList, RelativeSource={RelativeSource AncestorType=Window}}" ValueMember="Id" DisplayMember="Name"/>
+                                <dxe:ComboBoxEditSettings ItemsSource="{Binding DataContext.DbcrList, RelativeSource={RelativeSource AncestorType=Window}}" ValueMember="Id" DisplayMember="Name" IsTextEditable="False" AutoComplete="True" ImmediatePopup="True"/>
                             </dxg:GridColumn.EditSettings>
                         </dxg:GridColumn>
                         <dxg:GridColumn FieldName="AccountId" Header="Tài khoản" Width="150" CellTemplate="{StaticResource AccountColumnTemplate}"/>
@@ -104,21 +164,25 @@
                         </dxg:GridColumn>
                     </dxg:GridControl.Columns>
                 </dxg:GridControl>
-            </dxlc:LayoutControl>
+            </Grid>
 
             <!-- RIGHT GRID: CHI TIẾT (Detail) -->
-            <dxlc:LayoutControl Grid.Column="2" Orientation="Vertical" Padding="0">
-                <TextBlock Text="ĐỊNH KHOẢN CHI TIẾT (Detail - Phải)" FontWeight="Bold" Margin="0,0,0,5" Foreground="Blue"/>
-                <dxg:GridControl Name="gridRight" VerticalAlignment="Stretch" >
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Text="ĐỊNH KHOẢN CHI TIẾT (Detail - Phải)" FontWeight="Bold" Margin="0,0,0,4" Foreground="Blue"/>
+                <dxg:GridControl Grid.Row="1" Name="gridRight" VerticalAlignment="Stretch" >
                     <dxg:GridControl.View>
-                        <base:AppDetailTableView ShowGroupPanel="False" NewItemRowPosition="Bottom" EnterMoveNextColumn="True" CellValueChanged="GridView_CellValueChanged" PreviewKeyDown="TableViewLeft_PreviewKeyDown"/>
+                        <base:AppDetailTableView ShowGroupPanel="False" NewItemRowPosition="Bottom" EnterMoveNextColumn="True" FixDeleteButtonToRight="False" CellValueChanged="GridView_CellValueChanged" PreviewKeyDown="TableView_PreviewKeyDown" ShowingEditor="TableView_ShowingEditor" RowDoubleClick="TableView_RowDoubleClick" RowDeleted="TableView_RowDeleted"/>
                     </dxg:GridControl.View>
                     <dxg:GridControl.Columns>
-                        <dxg:GridColumn FieldName="Id" Header="ID" Width="40" ReadOnly="True" AllowEditing="False" />
-                        <dxg:GridColumn Binding="{Binding ParentId}" FieldName="ParentId" Header="ParentId" Width="60" ReadOnly="True" AllowEditing="False" />
-                        <dxg:GridColumn FieldName="Dbcr" Header="Nợ/Có" Width="60" ReadOnly="True" AllowEditing="False">
+                        <dxg:GridColumn FieldName="Id" Header="ID" Width="40" ReadOnly="True" AllowEditing="False" Visible="False" ShowInColumnChooser="False"/>
+                        <dxg:GridColumn Binding="{Binding ParentId}" FieldName="ParentId" Header="ParentId" Width="60" ReadOnly="True" AllowEditing="False" Visible="False" ShowInColumnChooser="False"/>
+                        <dxg:GridColumn FieldName="Dbcr" Header="Nợ/Có" Width="60">
                             <dxg:GridColumn.EditSettings>
-                                <dxe:ComboBoxEditSettings ItemsSource="{Binding DataContext.DbcrList, RelativeSource={RelativeSource AncestorType=Window}}" ValueMember="Id" DisplayMember="Name"/>
+                                <dxe:ComboBoxEditSettings ItemsSource="{Binding DataContext.DbcrList, RelativeSource={RelativeSource AncestorType=Window}}" ValueMember="Id" DisplayMember="Name" IsTextEditable="False" AutoComplete="True" ImmediatePopup="True"/>
                             </dxg:GridColumn.EditSettings>
                         </dxg:GridColumn>
                         <dxg:GridColumn FieldName="AccountId" Header="Tài khoản" Width="150" CellTemplate="{StaticResource AccountColumnTemplate}"/>
@@ -129,7 +193,7 @@
                         </dxg:GridColumn>
                     </dxg:GridControl.Columns>
                 </dxg:GridControl>
-            </dxlc:LayoutControl>
+            </Grid>
         </Grid>
         
         <!-- FOOTER: CÂN ĐỐI -->

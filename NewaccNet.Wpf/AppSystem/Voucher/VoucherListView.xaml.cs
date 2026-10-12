@@ -9,6 +9,9 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using NewaccNet.Wpf.AppSystem.Helpers;
 using System.Collections.Generic;
 using DataAccess;
+using DataAccess.FactoryClasses;
+using SD.LLBLGen.Pro.QuerySpec;
+using SD.LLBLGen.Pro.QuerySpec.Adapter;
 
 namespace NewaccNet.Wpf.AppSystem.Voucher
 {
@@ -18,7 +21,7 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
         public string VoucherNo { get; set; }
         public DateTime VoucherDate { get; set; }
         public string Contents { get; set; }
-        public int Bookflag { get; set; }
+        public bool Bookflag { get; set; }
         public string TransactionType { get; set; }
     }
 
@@ -32,6 +35,7 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
         {
             InitializeComponent();
             InitDefaults();
+            // Không tự động load dữ liệu khi mở form, chỉ tìm kiếm khi người dùng bấm nút Tìm kiếm
         }
 
         private void InitDefaults()
@@ -42,17 +46,24 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
             cboTransactionType.EditValue = "";
 
             DateTime today = DateTime.Today;
-            dtFrom.DateTime = new DateTime(today.Year, today.Month, 1);
+            // Mặc định lấy từ đầu năm đến hôm nay để không bỏ sót chứng từ
+            dtFrom.DateTime = new DateTime(today.Year, 1, 1);
             dtTo.DateTime = today;
             cboStatus.SelectedIndex = 0; // Tất cả
             
-            // Load lại state đã lưu
+            // Load lại state đã lưu (nếu có)
             UserPreferencesHelper.LoadState(this);
+
+            // Đảm bảo dtTo không bị bé hơn dtFrom
+            if (dtTo.DateTime < dtFrom.DateTime)
+            {
+                dtTo.DateTime = today;
+            }
         }
 
         public override void LoadData()
         {
-            // Do not load all data by default on start
+            DoSearch();
         }
 
         private void BtnSearch_Click(object sender, RoutedEventArgs e)
@@ -67,7 +78,8 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
                 ShowLoading("Đang tải danh sách chứng từ...");
                 
                 FromDate = dtFrom.DateTime.Date;
-                ToDate = dtTo.DateTime.Date;
+                // Bao gồm trọn vẹn cả ngày ToDate đến 23:59:59
+                ToDate = dtTo.DateTime.Date.AddDays(1).AddSeconds(-1);
                 StatusIndex = cboStatus.SelectedIndex;
                 string transactionTypeFilter = cboTransactionType.EditValue?.ToString();
                 
@@ -76,72 +88,88 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
                 
                 using (var adapter = AppDataAccessAdapter.Create())
                 {
-                    var vouchers = new EntityCollection<JournalVoucherEntity>();
-                    
-                    var filter = new RelationPredicateBucket();
-                    filter.PredicateExpression.Add(JournalVoucherFields.VoucherDate >= FromDate);
-                    filter.PredicateExpression.Add(JournalVoucherFields.VoucherDate <= ToDate);
-                    
+                    var qf = new QueryFactory();
+
+                    var predicate = JournalVoucherFields.VoucherDate.GreaterEqual(FromDate)
+                        .And(JournalVoucherFields.VoucherDate.LesserEqual(ToDate));
+
                     if (StatusIndex == 1) // Chưa ghi sổ
                     {
-                        filter.PredicateExpression.Add(JournalVoucherFields.Bookflag == false);
+                        predicate = predicate.And(JournalVoucherFields.Bookflag.Equal(false));
                     }
                     else if (StatusIndex == 2) // Đã ghi sổ
                     {
-                        filter.PredicateExpression.Add(JournalVoucherFields.Bookflag == true);
+                        predicate = predicate.And(JournalVoucherFields.Bookflag.Equal(true));
                     }
-                    
-                    var prefetch = new PrefetchPath2((int)DataAccess.EntityType.JournalVoucherEntity);
-                    prefetch.Add(JournalVoucherEntity.PrefetchPathJournalEntries)
-                            .SubPath.Add(JournalEntryEntity.PrefetchPathChartOfAccount);
-                    
-                    adapter.FetchEntityCollection(vouchers, filter, 0, null, prefetch);
-                    
-                    var listDto = new List<VoucherListDto>();
+
+                    // Dùng bảng FLAT (DiaryTypedList) đồng bộ với hệ thống báo cáo
+                    var q = qf.GetDiaryTypedList()
+                        .Where(predicate)
+                        .OrderBy(JournalVoucherFields.VoucherDate.Descending(), JournalVoucherFields.Id.Descending());
+
+                    var flatRows = adapter.FetchQuery(q);
+
+                    // Lấy danh mục tài khoản để map CategoryId
+                    var coaList = adapter.FetchQuery(qf.ChartOfAccount).Cast<ChartOfAccountEntity>().ToList();
+                    var coaCatMap = coaList.Where(c => !string.IsNullOrEmpty(c.CategoryId))
+                                           .ToDictionary(c => c.AccountId?.Trim() ?? "", c => c.CategoryId);
+
                     var allTypes = AccountTypeMapping.GetAccountTypes();
 
-                    foreach (var v in vouchers)
+                    // Nhóm theo JournalVoucherId để lấy UNIQUE chứng từ (vì bảng flat bị phân mảnh khi định khoản kép)
+                    var grouped = flatRows
+                        .Where(r => r.JournalVoucherId.HasValue && r.JournalVoucherId.Value > 0)
+                        .GroupBy(r => r.JournalVoucherId.Value);
+
+                    var listDto = new List<VoucherListDto>();
+
+                    foreach (var g in grouped)
                     {
+                        var first = g.First();
+
+                        // Xác định CategoryId của chứng từ từ tất cả các dòng hạch toán
+                        var catCodes = g.Select(r => GetCategoryForAccount(r.AccountId, coaCatMap))
+                                        .Where(c => !string.IsNullOrEmpty(c))
+                                        .Distinct()
+                                        .ToList();
+
+                        // Ưu tiên xác định loại chứng từ: Vật tư (B) > Công nợ (A) > Chi phí (E) > Tài sản (D) > Tiền mặt (I) > Thuế (V)
                         string transTypeCode = "";
-                        string transTypeName = "Khác";
-                        
-                        foreach (var en in v.JournalEntries)
-                        {
-                            if (en.ChartOfAccount != null && !string.IsNullOrEmpty(en.ChartOfAccount.CategoryId))
-                            {
-                                transTypeCode = en.ChartOfAccount.CategoryId;
-                                break;
-                            }
-                        }
-                        
-                        if (!string.IsNullOrEmpty(transTypeCode))
-                        {
-                            var matchedType = allTypes.FirstOrDefault(t => t.Code == transTypeCode);
-                            if (matchedType != null)
-                            {
-                                transTypeName = matchedType.Name;
-                            }
-                        }
-                        
-                        // Nếu có filter loại giao dịch và chứng từ này không khớp thì bỏ qua
+                        if (catCodes.Contains("B")) transTypeCode = "B";
+                        else if (catCodes.Contains("A")) transTypeCode = "A";
+                        else if (catCodes.Contains("E")) transTypeCode = "E";
+                        else if (catCodes.Contains("D")) transTypeCode = "D";
+                        else if (catCodes.Contains("I")) transTypeCode = "I";
+                        else if (catCodes.Contains("V")) transTypeCode = "V";
+                        else transTypeCode = catCodes.FirstOrDefault() ?? "";
+
+                        // Nếu có lọc loại hình giao dịch mà không khớp thì bỏ qua
                         if (!string.IsNullOrEmpty(transactionTypeFilter) && transTypeCode != transactionTypeFilter)
                         {
                             continue;
                         }
-                        
+
+                        var matchedType = allTypes.FirstOrDefault(t => t.Code == transTypeCode);
+                        string transTypeName = matchedType?.Name ?? "Khác";
+
                         listDto.Add(new VoucherListDto
                         {
-                            Id = v.Id,
-                            VoucherNo = v.VoucherNo,
-                            VoucherDate = v.VoucherDate ?? DateTime.Today,
-                            Contents = v.Contents,
-                            Bookflag = v.Bookflag ? 1 : 0,
+                            Id = g.Key,
+                            VoucherNo = first.VoucherNo,
+                            VoucherDate = first.VoucherDate ?? DateTime.Today,
+                            Contents = first.Contents,
+                            Bookflag = first.Bookflag,
                             TransactionType = transTypeName
                         });
                     }
-                    
+
+                    // Sắp xếp chứng từ mới nhất lên đầu danh sách
+                    var sortedDto = listDto.OrderByDescending(x => x.VoucherDate)
+                                           .ThenByDescending(x => x.Id)
+                                           .ToList();
+
                     gridControl.ItemsSource = null;
-                    gridControl.ItemsSource = listDto;
+                    gridControl.ItemsSource = sortedDto;
                 }
             }
             catch (Exception ex)
@@ -154,13 +182,30 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
             }
         }
 
+        private static string GetCategoryForAccount(string accountId, Dictionary<string, string> coaCatMap)
+        {
+            if (string.IsNullOrEmpty(accountId)) return "";
+            string trimmed = accountId.Trim();
+            if (coaCatMap.TryGetValue(trimmed, out var catId) && !string.IsNullOrEmpty(catId))
+                return catId;
+
+            // Nhận diện theo đầu số chuẩn kế toán
+            if (trimmed.StartsWith("15")) return "B"; // Kho / Vật tư
+            if (trimmed.StartsWith("131") || trimmed.StartsWith("331") || trimmed.StartsWith("141")) return "A"; // Công nợ
+            if (trimmed.StartsWith("6") || trimmed.StartsWith("8")) return "E"; // Chi phí
+            if (trimmed.StartsWith("21")) return "D"; // Tài sản
+            if (trimmed.StartsWith("11")) return "I"; // Tiền mặt / Ngân hàng
+            if (trimmed.StartsWith("333")) return "V"; // Thuế VAT
+
+            return "";
+        }
+
         private void BtnRefresh_Click(object sender, RoutedEventArgs e) => DoSearch();
 
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
             var frm = new VoucherEntryWindow(null);
             frm.ShowDialog();
-            DoSearch(); 
         }
 
         private void BtnEdit_Click(object sender, RoutedEventArgs e) => EditSelected();
@@ -181,7 +226,6 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
             {
                 var frm = new VoucherEntryWindow(selected.Id);
                 frm.ShowDialog();
-                DoSearch();
             }
         }
 

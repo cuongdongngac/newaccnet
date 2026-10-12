@@ -1,0 +1,41 @@
+<base:BaseWindow 
+    x:Class="NewaccNet.Wpf.AppSystem.Directory.WarehouseEditorWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:base="clr-namespace:NewaccNet.Wpf.Views.Base"
+    Title="Cập nhật Kho hàng" SizeToContent="Height" Width="450" WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+    
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Mã Kho -->
+        <TextBlock Text="Mã kho: (*)" Grid.Row="0" Grid.Column="0" Margin="0,5,5,5" VerticalAlignment="Center"/>
+        <dxe:TextEdit x:Name="txtWarehouseId" Grid.Row="0" Grid.Column="1" Margin="0,0,0,10" Height="25" MaxLength="50"/>
+
+        <!-- Tên Kho -->
+        <TextBlock Text="Tên kho: (*)" Grid.Row="1" Grid.Column="0" Margin="0,5,5,5" VerticalAlignment="Center"/>
+        <dxe:TextEdit x:Name="txtWarehouseName" Grid.Row="1" Grid.Column="1" Margin="0,0,0,10" Height="25" MaxLength="255"/>
+
+        <!-- Địa điểm / Vị trí -->
+        <TextBlock Text="Địa điểm / Vị trí:" Grid.Row="2" Grid.Column="0" Margin="0,5,5,5" VerticalAlignment="Center"/>
+        <dxe:TextEdit x:Name="txtPlace" Grid.Row="2" Grid.Column="1" Margin="0,0,0,15" Height="25" MaxLength="255"/>
+
+        <!-- Nút bấm -->
+        <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <dx:SimpleButton x:Name="btnSave" Content="Lưu" Width="100" Height="30" Margin="0,0,10,0" Click="BtnSave_Click" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_save.svg'}"/>
+            <dx:SimpleButton x:Name="btnCancel" Content="Hủy" Width="100" Height="30" Click="BtnCancel_Click" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_delete.svg'}"/>
+        </StackPanel>
+    </Grid>
+</base:BaseWindow>

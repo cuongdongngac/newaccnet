@@ -174,7 +174,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathSource { get { return _staticMetaData.GetPrefetchPathElement("Source", CommonEntityBase.CreateEntityCollection<SourceEntity>()); } }
 
 		/// <summary>The AssetId property of the Entity AssetDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AssetDetail"."AssetId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AssetDetail"."AssetId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String AssetId
 		{
 			get { return (System.String)GetValue((int)AssetDetailFieldIndex.AssetId, true); }
@@ -182,7 +182,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Id property of the Entity AssetDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AssetDetail"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "AssetDetail"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)AssetDetailFieldIndex.Id, true); }
@@ -190,7 +190,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The JournalEntryId property of the Entity AssetDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AssetDetail"."JournalEntryId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AssetDetail"."JournalEntryId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> JournalEntryId
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)AssetDetailFieldIndex.JournalEntryId, false); }
@@ -198,7 +198,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Price property of the Entity AssetDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AssetDetail"."Price".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AssetDetail"."Price".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Price
 		{
 			get { return (Nullable<System.Double>)GetValue((int)AssetDetailFieldIndex.Price, false); }
@@ -206,7 +206,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Quantity property of the Entity AssetDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AssetDetail"."Quantity".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AssetDetail"."Quantity".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Quantity
 		{
 			get { return (Nullable<System.Double>)GetValue((int)AssetDetailFieldIndex.Quantity, false); }
@@ -214,7 +214,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Reasonid property of the Entity AssetDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AssetDetail"."Reasonid".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AssetDetail"."Reasonid".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Reasonid
 		{
 			get { return (System.String)GetValue((int)AssetDetailFieldIndex.Reasonid, true); }
@@ -222,7 +222,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Srcode property of the Entity AssetDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AssetDetail"."Srcode".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AssetDetail"."Srcode".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Srcode
 		{
 			get { return (System.String)GetValue((int)AssetDetailFieldIndex.Srcode, true); }

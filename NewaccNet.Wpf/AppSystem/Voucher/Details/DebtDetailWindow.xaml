@@ -1,4 +1,5 @@
 <base:BaseDetailWindow x:Class="NewaccNet.Wpf.AppSystem.Voucher.Details.DebtDetailWindow"
+        x:Name="debtWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
@@ -6,6 +7,8 @@
         xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
         xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
         xmlns:base="clr-namespace:NewaccNet.Wpf.Views.Base"
+        xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+        xmlns:dxs="clr-namespace:NewaccNet.Wpf.Controls.Search"
         Title="Chi tiết công nợ" Height="450" Width="900">
     
     <Grid>
@@ -30,43 +33,68 @@
             <dxg:GridControl.View>
                 <base:AppDetailTableView x:Name="TableViewDebt" ShowGroupPanel="False" NewItemRowPosition="Bottom" 
                                ShowTotalSummary="True" AlternateRowBackground="#FFF5F5F5" 
+                               EditorButtonShowMode="ShowForFocusedRow"
                                CellValueChanged="TableViewDebt_CellValueChanged"
                                InitNewRow="TableViewDebt_InitNewRow"/>
             </dxg:GridControl.View>
             <dxg:GridControl.Columns>
                 
-                <dxg:GridColumn FieldName="PartnerId" Header="Đối tượng" Width="150">
-                    <dxg:GridColumn.EditSettings>
-                        <dxg:LookUpEditSettings x:Name="lookupPartner" DisplayMember="CustomerName" ValueMember="Id" AutoPopulateColumns="False" PopupWidth="400">
-                            <dxg:LookUpEditSettings.PopupContentTemplate>
-                                <ControlTemplate>
-                                    <dxg:GridControl Name="PART_GridControl">
-                                        <dxg:GridControl.Columns>
-                                            <dxg:GridColumn FieldName="Id" Header="Mã ĐT" Width="100"/>
-                                            <dxg:GridColumn FieldName="CustomerName" Header="Tên ĐT" Width="200"/>
-                                        </dxg:GridControl.Columns>
-                                    </dxg:GridControl>
-                                </ControlTemplate>
-                            </dxg:LookUpEditSettings.PopupContentTemplate>
-                        </dxg:LookUpEditSettings>
-                    </dxg:GridColumn.EditSettings>
+                <dxg:GridColumn FieldName="PartnerId" Header="Đối tượng" Width="180">
+                    <dxg:GridColumn.CellTemplate>
+                        <DataTemplate>
+                            <dxg:LookUpEdit Name="PART_Editor"
+                                            ItemsSource="{Binding Path=Partners, ElementName=debtWindow}"
+                                            DisplayMember="CustomerName" ValueMember="Id"
+                                            AutoPopulateColumns="False" PopupWidth="420"
+                                            AutoComplete="True" ImmediatePopup="True" IsTextEditable="True">
+                                <dxmvvm:Interaction.Behaviors>
+                                    <dxs:SearchLookUpBehavior/>
+                                </dxmvvm:Interaction.Behaviors>
+                                <dxg:LookUpEdit.Buttons>
+                                    <dxe:ButtonInfo GlyphKind="Plus" ToolTip="Tạo mới đối tượng công nợ" Click="BtnAddPartner_Click"/>
+                                </dxg:LookUpEdit.Buttons>
+                                <dxg:LookUpEdit.PopupContentTemplate>
+                                    <ControlTemplate>
+                                        <dxg:GridControl Name="PART_GridControl">
+                                            <dxg:GridControl.Columns>
+                                                <dxg:GridColumn FieldName="Id" Header="Mã ĐT" Width="100"/>
+                                                <dxg:GridColumn FieldName="CustomerName" Header="Tên ĐT" Width="220"/>
+                                            </dxg:GridControl.Columns>
+                                        </dxg:GridControl>
+                                    </ControlTemplate>
+                                </dxg:LookUpEdit.PopupContentTemplate>
+                            </dxg:LookUpEdit>
+                        </DataTemplate>
+                    </dxg:GridColumn.CellTemplate>
                 </dxg:GridColumn>
 
-                <dxg:GridColumn FieldName="DebtTypeId" Header="Nội dung" Width="150">
-                    <dxg:GridColumn.EditSettings>
-                        <dxg:LookUpEditSettings x:Name="lookupDebtType" DisplayMember="TypeName" ValueMember="Id" AutoPopulateColumns="False" PopupWidth="300">
-                            <dxg:LookUpEditSettings.PopupContentTemplate>
-                                <ControlTemplate>
-                                    <dxg:GridControl Name="PART_GridControl">
-                                        <dxg:GridControl.Columns>
-                                            <dxg:GridColumn FieldName="Id" Header="Mã ND" Width="100"/>
-                                            <dxg:GridColumn FieldName="TypeName" Header="Tên ND" Width="200"/>
-                                        </dxg:GridControl.Columns>
-                                    </dxg:GridControl>
-                                </ControlTemplate>
-                            </dxg:LookUpEditSettings.PopupContentTemplate>
-                        </dxg:LookUpEditSettings>
-                    </dxg:GridColumn.EditSettings>
+                <dxg:GridColumn FieldName="DebtTypeId" Header="Nội dung" Width="160">
+                    <dxg:GridColumn.CellTemplate>
+                        <DataTemplate>
+                            <dxg:LookUpEdit Name="PART_Editor"
+                                            ItemsSource="{Binding Path=DebtTypes, ElementName=debtWindow}"
+                                            DisplayMember="TypeName" ValueMember="Id"
+                                            AutoPopulateColumns="False" PopupWidth="320"
+                                            AutoComplete="True" ImmediatePopup="True" IsTextEditable="True">
+                                <dxmvvm:Interaction.Behaviors>
+                                    <dxs:SearchLookUpBehavior/>
+                                </dxmvvm:Interaction.Behaviors>
+                                <dxg:LookUpEdit.Buttons>
+                                    <dxe:ButtonInfo GlyphKind="Plus" ToolTip="Tạo mới nội dung công nợ" Click="BtnAddDebtType_Click"/>
+                                </dxg:LookUpEdit.Buttons>
+                                <dxg:LookUpEdit.PopupContentTemplate>
+                                    <ControlTemplate>
+                                        <dxg:GridControl Name="PART_GridControl">
+                                            <dxg:GridControl.Columns>
+                                                <dxg:GridColumn FieldName="Id" Header="Mã ND" Width="100"/>
+                                                <dxg:GridColumn FieldName="TypeName" Header="Tên ND" Width="200"/>
+                                            </dxg:GridControl.Columns>
+                                        </dxg:GridControl>
+                                    </ControlTemplate>
+                                </dxg:LookUpEdit.PopupContentTemplate>
+                            </dxg:LookUpEdit>
+                        </DataTemplate>
+                    </dxg:GridColumn.CellTemplate>
                 </dxg:GridColumn>
 
                 <dxg:GridColumn FieldName="Amount" Header="Số tiền" Width="120">
@@ -75,10 +103,33 @@
                     </dxg:GridColumn.EditSettings>
                 </dxg:GridColumn>
 
-                <dxg:GridColumn FieldName="DebtReasonId" Header="Lý do" Width="120">
-                    <dxg:GridColumn.EditSettings>
-                        <dxg:LookUpEditSettings x:Name="lookupDebtReason" DisplayMember="ReasonName" ValueMember="Id"/>
-                    </dxg:GridColumn.EditSettings>
+                <dxg:GridColumn FieldName="DebtReasonId" Header="Lý do" Width="140">
+                    <dxg:GridColumn.CellTemplate>
+                        <DataTemplate>
+                            <dxg:LookUpEdit Name="PART_Editor"
+                                            ItemsSource="{Binding Path=DebtReasons, ElementName=debtWindow}"
+                                            DisplayMember="ReasonName" ValueMember="Id"
+                                            AutoPopulateColumns="False" PopupWidth="300"
+                                            AutoComplete="True" ImmediatePopup="True" IsTextEditable="True">
+                                <dxmvvm:Interaction.Behaviors>
+                                    <dxs:SearchLookUpBehavior/>
+                                </dxmvvm:Interaction.Behaviors>
+                                <dxg:LookUpEdit.Buttons>
+                                    <dxe:ButtonInfo GlyphKind="Plus" ToolTip="Tạo mới lý do" Click="BtnAddDebtReason_Click"/>
+                                </dxg:LookUpEdit.Buttons>
+                                <dxg:LookUpEdit.PopupContentTemplate>
+                                    <ControlTemplate>
+                                        <dxg:GridControl Name="PART_GridControl">
+                                            <dxg:GridControl.Columns>
+                                                <dxg:GridColumn FieldName="Id" Header="Mã" Width="60"/>
+                                                <dxg:GridColumn FieldName="ReasonName" Header="Tên lý do" Width="220"/>
+                                            </dxg:GridControl.Columns>
+                                        </dxg:GridControl>
+                                    </ControlTemplate>
+                                </dxg:LookUpEdit.PopupContentTemplate>
+                            </dxg:LookUpEdit>
+                        </DataTemplate>
+                    </dxg:GridColumn.CellTemplate>
                 </dxg:GridColumn>
 
                 <dxg:GridColumn FieldName="Liabilitydate" Header="Ngày ghi nợ" Width="100">

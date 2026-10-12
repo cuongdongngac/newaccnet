@@ -138,7 +138,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathCostObject { get { return _staticMetaData.GetPrefetchPathElement("CostObject", CommonEntityBase.CreateEntityCollection<CostObjectEntity>()); } }
 
 		/// <summary>The ExobjectId property of the Entity InventoryExportVoucher<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryExportVoucher"."ExobjectId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InventoryExportVoucher"."ExobjectId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String ExobjectId
 		{
 			get { return (System.String)GetValue((int)InventoryExportVoucherFieldIndex.ExobjectId, true); }
@@ -146,7 +146,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Id property of the Entity InventoryExportVoucher<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryExportVoucher"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "InventoryExportVoucher"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)InventoryExportVoucherFieldIndex.Id, true); }
@@ -154,7 +154,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The JournalVoucherId property of the Entity InventoryExportVoucher<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryExportVoucher"."JournalVoucherId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InventoryExportVoucher"."JournalVoucherId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> JournalVoucherId
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)InventoryExportVoucherFieldIndex.JournalVoucherId, false); }

@@ -150,7 +150,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathDepreciations { get { return _staticMetaData.GetPrefetchPathElement("Depreciations", CommonEntityBase.CreateEntityCollection<DepreciationEntity>()); } }
 
 		/// <summary>The Srcode property of the Entity Source<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Source"."Srcode".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		/// <remarks>Mapped on  table field: "Source"."Srcode".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
 		public virtual System.String Srcode
 		{
 			get { return (System.String)GetValue((int)SourceFieldIndex.Srcode, true); }
@@ -158,7 +158,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Srname property of the Entity Source<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Source"."Srname".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "Source"."Srname".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Srname
 		{
 			get { return (System.String)GetValue((int)SourceFieldIndex.Srname, true); }

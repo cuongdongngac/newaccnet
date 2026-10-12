@@ -9,7 +9,8 @@
     xmlns:base="clr-namespace:NewaccNet.Wpf.Views.Base"
     Title="Thiết kế Báo cáo Lưu Chuyển Tiền tệ (B03-DN)"
     Height="950" Width="1500" WindowStartupLocation="CenterScreen"
-    xmlns:auth="clr-namespace:NewaccNet.Wpf.AppSystem">
+    xmlns:auth="clr-namespace:NewaccNet.Wpf.AppSystem"
+    xmlns:local="clr-namespace:NewaccNet.Wpf.AppSystem.Design">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -73,16 +74,8 @@
                             <dxg:GridControl.Columns>
                                 <dxg:GridColumn FieldName="Id" Header="ID" Width="60" AllowEditing="False" HorizontalHeaderContentAlignment="Center" Visible="False"/>
                                 <dxg:GridColumn FieldName="CashFlowItemId" Header="ItemId" Width="80" AllowEditing="False" HorizontalHeaderContentAlignment="Center" Visible="False"/>
-                                <dxg:GridColumn FieldName="AccountId" Header="Tài khoản (*)" Width="140">
-                                    <dxg:GridColumn.EditSettings>
-                                        <dxe:ComboBoxEditSettings x:Name="cboAccDetail" DisplayMember="AccountId" ValueMember="AccountId" AutoComplete="True" ImmediatePopup="True"/>
-                                    </dxg:GridColumn.EditSettings>
-                                </dxg:GridColumn>
-                                <dxg:GridColumn FieldName="CounterAccountId" Header="TK Đối ứng" Width="140">
-                                    <dxg:GridColumn.EditSettings>
-                                        <dxe:ComboBoxEditSettings x:Name="cboCounterDetail" DisplayMember="AccountId" ValueMember="AccountId" AutoComplete="True" ImmediatePopup="True"/>
-                                    </dxg:GridColumn.EditSettings>
-                                </dxg:GridColumn>
+                                <local:AccountGridColumn FieldName="AccountId" Header="Tài khoản (*)" Width="140"/>
+                                <local:AccountGridColumn FieldName="CounterAccountId" Header="TK Đối ứng" Width="140"/>
                                 <dxg:GridColumn FieldName="Dbcr" Header="Thu/Chi (*)" Width="80">
                                     <dxg:GridColumn.EditSettings>
                                         <dxe:CheckEditSettings/>
@@ -129,5 +122,3 @@
         </StackPanel>
     </Grid>
 </base:BaseWindow>
-
-

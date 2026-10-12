@@ -72,18 +72,18 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="id">PK value for SystemUser which data should be fetched into this SystemUser object</param>
-		public SystemUserEntity(System.Int32 id) : this(id, null)
+		/// <param name="username">PK value for SystemUser which data should be fetched into this SystemUser object</param>
+		public SystemUserEntity(System.String username) : this(username, null)
 		{
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="id">PK value for SystemUser which data should be fetched into this SystemUser object</param>
+		/// <param name="username">PK value for SystemUser which data should be fetched into this SystemUser object</param>
 		/// <param name="validator">The custom validator object for this SystemUserEntity</param>
-		public SystemUserEntity(System.Int32 id, IValidator validator)
+		public SystemUserEntity(System.String username, IValidator validator)
 		{
 			InitClassEmpty(validator, null);
-			this.Id = id;
+			this.Username = username;
 		}
 
 		/// <summary>Private CTor for deserialization</summary>
@@ -126,23 +126,15 @@ namespace DataAccess.EntityClasses
 		public static SystemUserRelations Relations { get { return _relationsFactory; } }
 
 		/// <summary>The FullName property of the Entity SystemUser<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "SystemUser"."FullName".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "SystemUser"."FullName".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 100.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String FullName
 		{
 			get { return (System.String)GetValue((int)SystemUserFieldIndex.FullName, true); }
 			set { SetValue((int)SystemUserFieldIndex.FullName, value); }
 		}
 
-		/// <summary>The Id property of the Entity SystemUser<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "SystemUser"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
-		public virtual System.Int32 Id
-		{
-			get { return (System.Int32)GetValue((int)SystemUserFieldIndex.Id, true); }
-			set { SetValue((int)SystemUserFieldIndex.Id, value); }
-		}
-
 		/// <summary>The IsActive property of the Entity SystemUser<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "SystemUser"."IsActive".<br/>Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "SystemUser"."IsActive".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Boolean IsActive
 		{
 			get { return (System.Boolean)GetValue((int)SystemUserFieldIndex.IsActive, true); }
@@ -150,7 +142,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Password property of the Entity SystemUser<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "SystemUser"."Password".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "SystemUser"."Password".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String Password
 		{
 			get { return (System.String)GetValue((int)SystemUserFieldIndex.Password, true); }
@@ -158,7 +150,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The RoleMask property of the Entity SystemUser<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "SystemUser"."RoleMask".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "SystemUser"."RoleMask".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Int32 RoleMask
 		{
 			get { return (System.Int32)GetValue((int)SystemUserFieldIndex.RoleMask, true); }
@@ -166,7 +158,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Username property of the Entity SystemUser<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "SystemUser"."Username".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "SystemUser"."Username".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
 		public virtual System.String Username
 		{
 			get { return (System.String)GetValue((int)SystemUserFieldIndex.Username, true); }
@@ -185,8 +177,6 @@ namespace DataAccess
 	{
 		///<summary>FullName. </summary>
 		FullName,
-		///<summary>Id. </summary>
-		Id,
 		///<summary>IsActive. </summary>
 		IsActive,
 		///<summary>Password. </summary>
