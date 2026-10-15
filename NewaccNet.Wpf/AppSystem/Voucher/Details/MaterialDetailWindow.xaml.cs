@@ -246,12 +246,13 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
                     }
                 }
             }
-            else
+            else if (_context?.MaterialEntry?.InventoryVouchers != null)
             {
-                // Đồng bộ Rate nếu dòng chi tiết đã có Taxrateid
-                if (_currentEntity != null && _currentEntity.InventoryVoucherLines != null)
+                // Đồng bộ Rate nếu dòng chi tiết đã có Taxrateid trên tất cả các phiếu kho
+                foreach (var iv in _context.MaterialEntry.InventoryVouchers)
                 {
-                    foreach (var line in _currentEntity.InventoryVoucherLines)
+                    if (iv?.InventoryVoucherLines == null) continue;
+                    foreach (var line in iv.InventoryVoucherLines)
                     {
                         if (line.Taxrateid.HasValue && (line.Rate == null || line.Rate == 0))
                         {
@@ -266,6 +267,90 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             UpdateUIVisibility();
             _context.RecalculateTotals();
         }
+
+        private void CommitCurrentEditing()
+        {
+            viewDetails.CommitEditing();
+            GridMaterialDetails.View.CommitEditing();
+        }
+
+        private void BtnAddVoucher_Click(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+        {
+            if (_context == null) return;
+            CommitCurrentEditing();
+
+            string defaultWh = "";
+            if (lueWarehouse.ItemsSource is EntityCollection<WarehouseEntity> wList && wList.Count > 0)
+            {
+                // Ưu tiên gợi ý kho chưa có trong danh sách phiếu kho của tài khoản này
+                var usedWh = _context.MaterialEntry.InventoryVouchers
+                    .Where(x => !string.IsNullOrWhiteSpace(x.WarehouseId))
+                    .Select(x => x.WarehouseId.Trim())
+                    .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+                var unused = wList.FirstOrDefault(w => !string.IsNullOrWhiteSpace(w.WarehouseId) && !usedWh.Contains(w.WarehouseId.Trim()));
+                defaultWh = unused?.WarehouseId ?? wList[0].WarehouseId;
+            }
+
+            _isLoading = true;
+            _context.AddNewInventoryVoucher(defaultWh);
+            _currentEntity = _context.InventoryVoucher;
+            GridMaterialDetails.ItemsSource = null;
+            GridMaterialDetails.ItemsSource = _context.CurrentLines;
+            GridMaterialDetails.RefreshData();
+            UpdateUIVisibility();
+            _isLoading = false;
+        }
+
+        private void BtnDeleteVoucher_Click(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+        {
+            if (_context == null || _context.InventoryVoucher == null) return;
+            CommitCurrentEditing();
+
+            string whName = _context.WarehouseId ?? "";
+            int idx = _context.CurrentVoucherIndex + 1;
+            int total = _context.VoucherCount;
+
+            if (MessageBox.Show($"Bạn có chắc chắn muốn xóa phiếu kho thứ {idx}/{total} (Kho: {whName})?",
+                                "Xác nhận xóa phiếu kho", MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes)
+            {
+                return;
+            }
+
+            string defaultWh = "";
+            if (lueWarehouse.ItemsSource is EntityCollection<WarehouseEntity> wList && wList.Count > 0)
+            {
+                defaultWh = wList[0].WarehouseId;
+            }
+
+            _isLoading = true;
+            _context.RemoveCurrentInventoryVoucher(defaultWh);
+            _currentEntity = _context.InventoryVoucher;
+            GridMaterialDetails.ItemsSource = null;
+            GridMaterialDetails.ItemsSource = _context.CurrentLines;
+            GridMaterialDetails.RefreshData();
+            UpdateUIVisibility();
+            _isLoading = false;
+        }
+
+        private void SwitchVoucherTo(int targetIndex)
+        {
+            if (_context == null) return;
+            CommitCurrentEditing();
+            _isLoading = true;
+            _context.NavigateTo(targetIndex);
+            _currentEntity = _context.InventoryVoucher;
+            GridMaterialDetails.ItemsSource = null;
+            GridMaterialDetails.ItemsSource = _context.CurrentLines;
+            GridMaterialDetails.RefreshData();
+            UpdateUIVisibility();
+            _isLoading = false;
+        }
+
+        private void BtnFirstVoucher_Click(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e) => SwitchVoucherTo(0);
+        private void BtnPrevVoucher_Click(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e) => SwitchVoucherTo(_context.CurrentVoucherIndex - 1);
+        private void BtnNextVoucher_Click(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e) => SwitchVoucherTo(_context.CurrentVoucherIndex + 1);
+        private void BtnLastVoucher_Click(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e) => SwitchVoucherTo(_context.VoucherCount - 1);
 
         private void cboVoucherType_EditValueChanged(object sender, EditValueChangedEventArgs e)
         {
@@ -359,17 +444,15 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             }
             else if (e.Column.FieldName == "Amount" && e.IsGetData)
             {
-                e.Value = (row.Quantity ?? 0) * (row.Price ?? 0);
+                e.Value = row.Amount;
             }
             else if (e.Column.FieldName == "SellAmount" && e.IsGetData)
             {
-                e.Value = (row.Quantity ?? 0) * (row.SellPrice ?? 0);
+                e.Value = row.SellAmount;
             }
             else if (e.Column.FieldName == "TaxAmount" && e.IsGetData)
             {
-                string type = _context?.VoucherType ?? "";
-                double baseAmount = (type == "XB") ? ((row.Quantity ?? 0) * (row.SellPrice ?? 0)) : ((row.Quantity ?? 0) * (row.Price ?? 0));
-                e.Value = baseAmount * (row.Rate ?? 0);
+                e.Value = row.TaxAmount;
             }
         }
 
@@ -410,7 +493,6 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
                     }
                 }
                 GridMaterialDetails.RefreshRow(e.RowHandle);
-                _context?.RecalculateTotals();
             }
         }
 
@@ -426,26 +508,48 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
 
         private void BtnAccept_Click(object sender, RoutedEventArgs e)
         {
-            viewDetails.CommitEditing();
-            GridMaterialDetails.View.CommitEditing();
+            CommitCurrentEditing();
 
-            if (string.IsNullOrEmpty(_context.WarehouseId))
+            var vouchers = _context.MaterialEntry.InventoryVouchers;
+            for (int i = 0; i < vouchers.Count; i++)
             {
-                MessageBox.Show("Vui lòng chọn Kho.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
+                var iv = vouchers[i];
+                var emptyLines = iv.InventoryVoucherLines.Where(l => string.IsNullOrEmpty(l.MaterialId)).ToList();
+                foreach (var line in emptyLines)
+                    iv.InventoryVoucherLines.Remove(line);
+
+                foreach (var line in iv.InventoryVoucherLines)
+                    line.CleanUpTaxLine();
             }
 
-            var emptyLines = _context.InventoryVoucher.InventoryVoucherLines.Where(l => string.IsNullOrEmpty(l.MaterialId)).ToList();
-            foreach (var line in emptyLines)
-                _context.InventoryVoucher.InventoryVoucherLines.Remove(line);
-
-            foreach (var line in _context.InventoryVoucher.InventoryVoucherLines)
-                line.CleanUpTaxLine();
-
-            if (_context.InventoryVoucher.InventoryVoucherLines.Count == 0)
+            // Nếu có nhiều hơn 1 phiếu kho mà có phiếu mới thêm bị bỏ trống (0 dòng), tự động dọn bỏ phiếu trống đó
+            if (vouchers.Count > 1)
             {
-                MessageBox.Show("Vui lòng nhập ít nhất một dòng chi tiết vật tư.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
+                var emptyVouchers = vouchers.Where(v => v.InventoryVoucherLines.Count == 0).ToList();
+                if (emptyVouchers.Count < vouchers.Count)
+                {
+                    foreach (var ev in emptyVouchers)
+                        vouchers.Remove(ev);
+                    _context.SetActiveInventoryVoucher(0);
+                }
+            }
+
+            for (int i = 0; i < vouchers.Count; i++)
+            {
+                var iv = vouchers[i];
+                if (string.IsNullOrWhiteSpace(iv.WarehouseId))
+                {
+                    SwitchVoucherTo(i);
+                    MessageBox.Show($"Vui lòng chọn Kho cho phiếu kho thứ {i + 1}/{vouchers.Count}.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                if (iv.InventoryVoucherLines.Count == 0)
+                {
+                    SwitchVoucherTo(i);
+                    MessageBox.Show($"Vui lòng nhập ít nhất một dòng chi tiết vật tư cho phiếu kho thứ {i + 1}/{vouchers.Count}.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
             }
 
             _context.Apply();

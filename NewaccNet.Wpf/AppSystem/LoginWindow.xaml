@@ -31,7 +31,7 @@
                     <dx:SimpleButton Content="Thoát" Width="80" Height="30" Click="BtnExit_Click"/>
                 </StackPanel>
             </dxlc:LayoutItem>
-            <dxlc:LayoutItem Margin="0,10,0,0" HorizontalAlignment="Center">
+            <dxlc:LayoutItem x:Name="layoutItemDbConfig" Margin="0,10,0,0" HorizontalAlignment="Center" Visibility="Collapsed">
                 <TextBlock>
                     <Hyperlink Click="LnkConfig_Click">Cấu hình Cơ sở dữ liệu</Hyperlink>
                 </TextBlock>

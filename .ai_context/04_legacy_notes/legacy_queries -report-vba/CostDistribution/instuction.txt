@@ -1,0 +1,50 @@
+# Yêu cầu hệ thống: Xây dựng Module Phân bổ Chi phí Kế toán (Cost Allocation)
+
+Bạn là một chuyên gia phát triển phần mềm .NET C# am hiểu sâu về hệ thống kế toán và kiến trúc Domain-Driven Design. Hãy viết mã C# cho module phân bổ chi phí dựa trên phương pháp tỷ lệ bình quân gia quyền.
+
+## 1. Kiến trúc & Ràng buộc kỹ thuật
+- Sử dụng **C# .NET**, thiết kế theo hướng đối tượng (OOP) hoàn toàn.
+- Sử dụng **LINQ to Entities (ORM)**, tuyệt đối không dùng raw SQL hoặc Stored Procedures.
+- Áp dụng mẫu **Unit of Work** và **Repository Pattern** để xử lý transaction.
+- Dữ liệu giao dịch được thiết kế theo dạng phẳng (flat schema): một bảng `TransactionLine` chứa tất cả các bút toán chi tiết (gồm tài khoản, đối tượng tập hợp chi phí, số tiền, cờ đánh dấu bút toán tự động).
+
+## 2. Mô hình Dữ liệu (Domain Models)
+Giả định chúng ta có các entity cơ bản sau (hãy tự tạo các class này):
+- `TransactionLine`: Id, VoucherDate, AccountId, CostObjectId (Đối tượng chi phí), Amount (Số tiền thuần), IsAllocationGenerated (Cờ đánh dấu bút toán do hệ thống tự động phân bổ sinh ra - tương đương TransFlag).
+- `CostObject`: Id, Name.
+
+## 3. Logic Nghiệp vụ cần triển khai (CostAllocationService)
+Tạo một service class `CostAllocationService` với method `DistributeCosts(...)` nhận vào các tham số:
+- `DateTime fromDate`, `DateTime toDate`: Kỳ phân bổ.
+- `string sourceAccountId`: Tài khoản nguồn chứa tổng chi phí cần phân bổ.
+- `string destinationAccountId`: Tài khoản đích để ghi nhận chi phí sau phân bổ.
+- `List<string> allocationBaseAccountIds`: Danh sách các tài khoản dùng làm tiêu thức (mẫu số) để tính tỷ lệ.
+
+**Quy trình thực thi trong method:**
+
+**Bước 1: Tính Tổng chi phí cần phân bổ (Tử số chung - TotalPoolAmount)**
+- Dùng LINQ truy vấn bảng `TransactionLine` để tính tổng `Amount` của `sourceAccountId` trong khoảng thời gian `fromDate` đến `toDate`. (Lưu ý: bỏ qua các dòng có `IsAllocationGenerated == true`).
+
+**Bước 2: Tập hợp Tiêu thức phân bổ (Mẫu số - AllocationBase)**
+- Dùng LINQ truy vấn bảng `TransactionLine` trong cùng kỳ.
+- Lọc những dòng có `AccountId` nằm trong danh sách `allocationBaseAccountIds`.
+- ĐK Bắt buộc: `IsAllocationGenerated == false` (chỉ lấy giao dịch gốc).
+- Group by theo `CostObjectId` và tính tổng `Amount` cho từng đối tượng.
+- Tính tổng cộng toàn bộ tiêu thức (`TotalBaseAmount`). Bẫy lỗi `DivideByZeroException` nếu `TotalBaseAmount == 0`.
+
+**Bước 3: Tính toán tỷ lệ và số tiền phân bổ**
+- Duyệt qua từng `CostObjectId` lấy được ở Bước 2.
+- Tính Tỷ lệ % = `Amount của đối tượng` / `TotalBaseAmount`.
+- Tính Số tiền phân bổ = `Tỷ lệ %` * `TotalPoolAmount`. (Làm tròn số theo chuẩn kế toán).
+
+**Bước 4: Sinh bút toán phân bổ (Journal Entry Generation)**
+- Tạo một tập hợp các `TransactionLine` mới cho bút toán phân bổ:
+  + 1 dòng Ghi Có (hoặc giảm trừ) cho Tài khoản nguồn (`sourceAccountId`) với tổng số tiền `TotalPoolAmount`.
+  + N dòng Ghi Nợ (hoặc tăng) cho Tài khoản đích (`destinationAccountId`), mỗi dòng gắn với một `CostObjectId` tương ứng và số tiền đã tính ở Bước 3.
+- Tất cả các dòng này phải được gán cờ `IsAllocationGenerated = true`.
+- Lưu toàn bộ tập hợp này vào database thông qua `UnitOfWork.CommitAsync()` trong một transaction thống nhất.
+
+## 4. Output yêu cầu
+- Viết interface `ICostAllocationService`.
+- Viết class `CostAllocationService` triển khai toàn bộ logic LINQ/ORM một cách tối ưu nhất (tránh N+1 query).
+- Bố cục code sạch, có comment tóm tắt tại các bước tính toán công thức: Tỷ trọng = (Amount / Total) và Số tiền = Tỷ trọng * Nguồn.

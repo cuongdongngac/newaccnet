@@ -45,6 +45,8 @@
                                ShowHorizontalLines="True" 
                                ShowVerticalLines="True" 
                                EditorButtonShowMode="ShowForFocusedRow" 
+                               ShowingEditor="ViewEntries_ShowingEditor"
+                               CellValueChanged="ViewEntries_CellValueChanged"
                                InitNewRow="ViewEntries_InitNewRow" 
                                RowDoubleClick="ViewEntries_RowDoubleClick"
                                RowDeleting="ViewEntries_RowDeleting"/>

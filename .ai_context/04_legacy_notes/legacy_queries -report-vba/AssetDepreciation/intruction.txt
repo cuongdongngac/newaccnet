@@ -1,0 +1,7 @@
+Khi mua mới một tài sản, hệ thống sẽ phát sinh một chứng từ kế toán  bình thường và có một giao dịch tài khoản. 
+Tuy hiên ngoài việc xuất  hiên mới trog hệ thống còn phải khai báo một số thông tin vào bảng AccesTracking
+Đến một thời điểm nào đó cần tính toán khấu hảo thì phải tạo ra một thực thề gọi là AccesTrackingDept
+Đây chỉ là bản ghi duy cuối cùng của hệ thống
+Dựa trên thực thế này tạo thực thể khấu hao
+Dựa trên bảng  khấu hao và các thông số  về tài khoản chi phí để tạo chứng từ
+

@@ -22,6 +22,7 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             this.DataContext = _parentEntry;
 
             _originalList = _parentEntry.CurrencyDetails.ToList();
+            _parentEntry.SaveFields("undo_parent");
             foreach (var item in _originalList) item.SaveFields("undo");
 
             LoadDictionaries();
@@ -60,8 +61,7 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             TableViewCurrency.FocusedRowHandle = DevExpress.Xpf.Grid.GridControl.InvalidRowHandle;
             TableViewCurrency.CommitEditing();
 
-            double totalAmount = _parentEntry.CurrencyDetails.Sum(x => (x.Quantity ?? 0) * (x.ExchangeRate ?? 0));
-            _parentEntry.Amount = totalAmount > 0 ? totalAmount : 0;
+            _parentEntry.NotifyChildCollectionChanged();
 
             _isSaved = true;
             this.DialogResult = true;
@@ -78,9 +78,18 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
         {
             if (!_isSaved)
             {
-                foreach (var item in _originalList) item.RollbackFields("undo");
-                _parentEntry.CurrencyDetails.Clear();
-                foreach (var item in _originalList) _parentEntry.CurrencyDetails.Add(item);
+                _parentEntry.IsDominoSuspended = true;
+                try
+                {
+                    foreach (var item in _originalList) item.RollbackFields("undo");
+                    _parentEntry.CurrencyDetails.Clear();
+                    foreach (var item in _originalList) _parentEntry.CurrencyDetails.Add(item);
+                    _parentEntry.RollbackFields("undo_parent");
+                }
+                finally
+                {
+                    _parentEntry.IsDominoSuspended = false;
+                }
             }
             base.OnClosing(e);
         }

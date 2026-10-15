@@ -1063,7 +1063,7 @@ namespace DataAccess.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(TaxRateFieldIndex), "TaxRateEntity");
 			this.AddElementFieldInfo("TaxRateEntity", "Rate", typeof(Nullable<System.Double>), false, false, false, true,  (int)TaxRateFieldIndex.Rate, 0, 0, 15);
 			this.AddElementFieldInfo("TaxRateEntity", "Taxratedes", typeof(System.String), false, false, false, true,  (int)TaxRateFieldIndex.Taxratedes, 50, 0, 0);
-			this.AddElementFieldInfo("TaxRateEntity", "Taxrateid", typeof(System.Int32), true, false, true, false,  (int)TaxRateFieldIndex.Taxrateid, 0, 0, 10);
+			this.AddElementFieldInfo("TaxRateEntity", "Taxrateid", typeof(System.Int32), true, false, false, false,  (int)TaxRateFieldIndex.Taxrateid, 0, 0, 10);
 		}
 
 		/// <summary>Inits TrialBalanceEntity's info objects</summary>

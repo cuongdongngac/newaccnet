@@ -1057,7 +1057,7 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 			this.AddElementMapping("TaxRateEntity", @"DataAccess", @"Newacc", "TaxRate", 3, 0);
 			this.AddElementFieldMapping("TaxRateEntity", "Rate", "Rate", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 0);
 			this.AddElementFieldMapping("TaxRateEntity", "Taxratedes", "Taxratedes", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
-			this.AddElementFieldMapping("TaxRateEntity", "Taxrateid", "Taxrateid", false, "Int", 0, 10, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int32), 2);
+			this.AddElementFieldMapping("TaxRateEntity", "Taxrateid", "Taxrateid", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
 		}
 
 		/// <summary>Inits TrialBalanceEntity's mappings</summary>

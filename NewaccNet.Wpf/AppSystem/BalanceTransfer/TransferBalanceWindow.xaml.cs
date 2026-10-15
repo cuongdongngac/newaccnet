@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using Microsoft.Win32;
 
@@ -15,6 +17,25 @@ namespace NewaccNet.Wpf.AppSystem.BalanceTransfer
             _transferService = new BalanceTransferService();
 
             InitSourceAndDestination();
+        }
+
+        private string FindDefaultTemplatePath()
+        {
+            string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+            string[] candidates = new[]
+            {
+                Path.Combine(baseDir, "Template", "template.accdb"),
+                Path.Combine(baseDir, "template.accdb"),
+                Path.GetFullPath(Path.Combine(baseDir, @"..\..\..\Template\template.accdb")),
+                @"D:\NewaccNet\NewaccNet.Wpf\Template\template.accdb"
+            };
+
+            foreach (var path in candidates)
+            {
+                if (File.Exists(path))
+                    return path;
+            }
+            return string.Empty;
         }
 
         private void InitSourceAndDestination()
@@ -46,10 +67,13 @@ namespace NewaccNet.Wpf.AppSystem.BalanceTransfer
             spnDestYear.Value = nextYear;
             dtOpeningDate.DateTime = new DateTime(nextYear, 1, 1);
 
+            // Đường dẫn tệp mẫu template.accdb mặc định
+            txtTemplateAccessPath.Text = FindDefaultTemplatePath();
+
             // Khởi tạo các ô CSDL đích
             if (src.DbType == DatabaseType.Access)
             {
-                string dir = !string.IsNullOrEmpty(src.AccessFilePath) ? Path.GetDirectoryName(src.AccessFilePath) : "";
+                string dir = !string.IsNullOrEmpty(src.AccessFilePath) ? Path.GetDirectoryName(src.AccessFilePath) ?? "" : "";
                 txtDestAccessPath.Text = !string.IsNullOrEmpty(dir) ? Path.Combine(dir, $"Data_{nextYear}.accdb") : "";
             }
             else if (src.DbType == DatabaseType.SqlServer)
@@ -108,7 +132,7 @@ namespace NewaccNet.Wpf.AppSystem.BalanceTransfer
 
         private void SpnDestYear_EditValueChanged(object sender, DevExpress.Xpf.Editors.EditValueChangedEventArgs e)
         {
-            if (spnDestYear?.Value != null && int.TryParse(spnDestYear.Value.ToString(), out int y))
+            if (spnDestYear?.Value != null && int.TryParse(spnDestYear.Value.ToString(), out int y) && y >= 1900 && y <= 2100)
             {
                 dtOpeningDate.DateTime = new DateTime(y, 1, 1);
             }
@@ -118,52 +142,107 @@ namespace NewaccNet.Wpf.AppSystem.BalanceTransfer
         {
             if (txtDestConnPreview == null) return;
 
-            int idx = cboDestDbType.SelectedIndex;
-            string preview = string.Empty;
+            var cfg = BuildDestConfig();
+            txtDestConnPreview.Text = cfg.ConnectionString;
+        }
 
-            if (idx == 0) // Access
+        private void BtnBrowseTemplateAccess_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new OpenFileDialog
             {
-                string path = txtDestAccessPath?.Text ?? "";
-                preview = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={path}";
-            }
-            else if (idx == 1) // SQL Server
+                Title = "Chọn tệp mẫu Access (template.accdb / .mdb)",
+                Filter = "Access Database|*.accdb;*.mdb|All Files|*.*"
+            };
+            if (!string.IsNullOrWhiteSpace(txtTemplateAccessPath.Text) && File.Exists(txtTemplateAccessPath.Text))
             {
-                string server = txtDestServer?.Text ?? "";
-                string db = txtDestDatabase?.Text ?? "";
-                bool integrated = chkDestIntegrated?.IsChecked ?? false;
-
-                if (integrated)
-                    preview = $"data source={server};initial catalog={db};Integrated Security=SSPI;TrustServerCertificate=True;";
-                else
-                {
-                    string user = txtDestUser?.Text ?? "";
-                    string pass = txtDestPassword?.EditValue as string ?? "";
-                    preview = $"data source={server};initial catalog={db};User ID={user};Password={pass};TrustServerCertificate=True;";
-                }
+                dlg.InitialDirectory = Path.GetDirectoryName(txtTemplateAccessPath.Text);
+                dlg.FileName = Path.GetFileName(txtTemplateAccessPath.Text);
             }
-            else if (idx == 2) // PostgreSQL
+            if (dlg.ShowDialog() == true)
             {
-                string host = txtDestPgHost?.Text ?? "";
-                string port = txtDestPgPort?.Text ?? "5432";
-                string db = txtDestPgDatabase?.Text ?? "";
-                string user = txtDestPgUsername?.Text ?? "";
-                string pass = txtDestPgPassword?.EditValue as string ?? "";
-                preview = $"Host={host};Port={port};Database={db};Username={user};Password={pass};";
+                txtTemplateAccessPath.Text = dlg.FileName;
             }
-
-            txtDestConnPreview.Text = preview;
         }
 
         private void BtnBrowseDestAccess_Click(object sender, RoutedEventArgs e)
         {
-            var dlg = new OpenFileDialog
+            var dlg = new SaveFileDialog
             {
-                Title = "Chọn tệp CSDL Access đích (.accdb / .mdb)",
-                Filter = "Access Database|*.accdb;*.mdb|All Files|*.*"
+                Title = "Chọn hoặc đặt tên tệp CSDL Access đích (.accdb / .mdb)",
+                Filter = "Access Database (*.accdb)|*.accdb|Access 2000-2003 (*.mdb)|*.mdb|All Files|*.*",
+                DefaultExt = ".accdb",
+                OverwritePrompt = false
             };
+            if (!string.IsNullOrWhiteSpace(txtDestAccessPath.Text))
+            {
+                string? dir = Path.GetDirectoryName(txtDestAccessPath.Text);
+                if (!string.IsNullOrEmpty(dir) && System.IO.Directory.Exists(dir))
+                    dlg.InitialDirectory = dir;
+                dlg.FileName = Path.GetFileName(txtDestAccessPath.Text);
+            }
             if (dlg.ShowDialog() == true)
             {
                 txtDestAccessPath.Text = dlg.FileName;
+                UpdateDestPreview();
+            }
+        }
+
+        private void BtnCopyFromTemplate_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string templatePath = txtTemplateAccessPath.Text?.Trim() ?? "";
+                if (string.IsNullOrEmpty(templatePath) || !File.Exists(templatePath))
+                {
+                    MessageBox.Show("Vui lòng chọn đường dẫn tệp mẫu (template.accdb) hợp lệ trước!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                string destPath = txtDestAccessPath.Text?.Trim() ?? "";
+                if (string.IsNullOrEmpty(destPath))
+                {
+                    BtnBrowseDestAccess_Click(sender, e);
+                    destPath = txtDestAccessPath.Text?.Trim() ?? "";
+                    if (string.IsNullOrEmpty(destPath)) return;
+                }
+
+                string srcPath = ConfigManager.Current.AccessFilePath?.Trim() ?? "";
+                if (string.Equals(destPath, srcPath, StringComparison.OrdinalIgnoreCase))
+                {
+                    MessageBox.Show("Đường dẫn tệp CSDL đích không được trùng với tệp CSDL nguồn đang làm việc!", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                if (string.Equals(destPath, templatePath, StringComparison.OrdinalIgnoreCase))
+                {
+                    MessageBox.Show("Đường dẫn tệp CSDL đích không được trùng với tệp mẫu (template.accdb)!", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                if (File.Exists(destPath))
+                {
+                    var res = MessageBox.Show(
+                        $"Tệp đích '{Path.GetFileName(destPath)}' đã tồn tại.\nBạn có muốn ghi đè (tạo mới lại) từ tệp mẫu template.accdb không?",
+                        "Xác nhận tạo tệp từ Template",
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Question);
+                    if (res != MessageBoxResult.Yes) return;
+                }
+
+                string? destDir = Path.GetDirectoryName(destPath);
+                if (!string.IsNullOrEmpty(destDir) && !System.IO.Directory.Exists(destDir))
+                {
+                    System.IO.Directory.CreateDirectory(destDir);
+                }
+
+                File.Copy(templatePath, destPath, overwrite: true);
+                AppendLog($"[TEMPLATE] Đã tạo tệp CSDL đích mới từ mẫu: {destPath}");
+                MessageBox.Show($"Đã nhân bản thành công tệp CSDL mới từ Template:\n{destPath}", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                AppendLog($"[LỖI TEMPLATE] Không thể copy từ tệp mẫu: {ex.Message}");
+                MessageBox.Show($"Lỗi khi tạo tệp từ Template: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -175,19 +254,34 @@ namespace NewaccNet.Wpf.AppSystem.BalanceTransfer
                        : idx == 1 ? DatabaseType.SqlServer
                        : DatabaseType.PostgreSql;
 
-            cfg.AccessFilePath = txtDestAccessPath.Text?.Trim() ?? "";
+            cfg.AccessFilePath = txtDestAccessPath?.Text?.Trim() ?? "";
 
-            cfg.SqlServerName = txtDestServer.Text?.Trim() ?? "";
-            cfg.SqlDatabaseName = txtDestDatabase.Text?.Trim() ?? "";
-            cfg.SqlIntegratedSecurity = chkDestIntegrated.IsChecked ?? false;
-            cfg.SqlUsername = txtDestUser.Text?.Trim() ?? "";
-            cfg.SqlPassword = txtDestPassword.EditValue as string ?? "";
+            cfg.SqlServerName = txtDestServer?.Text?.Trim() ?? "";
+            cfg.SqlDatabaseName = txtDestDatabase?.Text?.Trim() ?? "";
+            cfg.SqlIntegratedSecurity = chkDestIntegrated?.IsChecked ?? false;
+            cfg.SqlUsername = txtDestUser?.Text?.Trim() ?? "";
+            cfg.SqlPassword = txtDestPassword?.EditValue as string ?? "";
 
-            cfg.PgHost = txtDestPgHost.Text?.Trim() ?? "";
-            cfg.PgPort = int.TryParse(txtDestPgPort.Text, out int port) ? port : 5432;
-            cfg.PgDatabase = txtDestPgDatabase.Text?.Trim() ?? "";
-            cfg.PgUsername = txtDestPgUsername.Text?.Trim() ?? "";
-            cfg.PgPassword = txtDestPgPassword.EditValue as string ?? "";
+            cfg.PgHost = txtDestPgHost?.Text?.Trim() ?? "";
+            cfg.PgPort = int.TryParse(txtDestPgPort?.Text, out int port) ? port : 5432;
+            cfg.PgDatabase = txtDestPgDatabase?.Text?.Trim() ?? "";
+            cfg.PgUsername = txtDestPgUsername?.Text?.Trim() ?? "";
+            cfg.PgPassword = txtDestPgPassword?.EditValue as string ?? "";
+
+            if (cfg.DbType == DatabaseType.Access)
+            {
+                cfg.ConnectionString = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={cfg.AccessFilePath}";
+            }
+            else if (cfg.DbType == DatabaseType.SqlServer)
+            {
+                cfg.ConnectionString = cfg.SqlIntegratedSecurity
+                    ? $"data source={cfg.SqlServerName};initial catalog={cfg.SqlDatabaseName};Integrated Security=SSPI;TrustServerCertificate=True;"
+                    : $"data source={cfg.SqlServerName};initial catalog={cfg.SqlDatabaseName};User ID={cfg.SqlUsername};Password={cfg.SqlPassword};TrustServerCertificate=True;";
+            }
+            else
+            {
+                cfg.ConnectionString = $"Host={cfg.PgHost};Port={cfg.PgPort};Database={cfg.PgDatabase};Username={cfg.PgUsername};Password={cfg.PgPassword};";
+            }
 
             return cfg;
         }
@@ -208,7 +302,7 @@ namespace NewaccNet.Wpf.AppSystem.BalanceTransfer
                 else
                 {
                     AppendLog("=> Kết nối CSDL đích THẤT BẠI. Vui lòng kiểm tra lại đường dẫn/server/database!");
-                    MessageBox.Show("Không thể kết nối tới Cơ sở dữ liệu đích.\nVui lòng kiểm tra lại thông số cấu hình!", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Không thể kết nối tới Cơ sở dữ liệu đích.\n(Nếu là Access và tệp chưa tồn tại, bạn có thể nhấn nút 'Tạo file đích từ Template' trước).", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
             catch (Exception ex)
@@ -220,9 +314,87 @@ namespace NewaccNet.Wpf.AppSystem.BalanceTransfer
 
         private async void BtnStart_Click(object sender, RoutedEventArgs e)
         {
+            var destCfg = BuildDestConfig();
+
+            // Kiểm tra riêng cho MS Access: tự động copy từ Template nếu file đích chưa tồn tại
+            if (destCfg.DbType == DatabaseType.Access)
+            {
+                if (string.IsNullOrWhiteSpace(destCfg.AccessFilePath))
+                {
+                    MessageBox.Show("Vui lòng chọn hoặc nhập đường dẫn tệp CSDL Access đích!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                string srcPath = ConfigManager.Current.AccessFilePath?.Trim() ?? "";
+                if (string.Equals(destCfg.AccessFilePath, srcPath, StringComparison.OrdinalIgnoreCase))
+                {
+                    MessageBox.Show("Đường dẫn tệp CSDL đích không được trùng với tệp CSDL nguồn đang làm việc!", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                if (!File.Exists(destCfg.AccessFilePath))
+                {
+                    string templatePath = txtTemplateAccessPath.Text?.Trim() ?? "";
+                    if (!string.IsNullOrEmpty(templatePath) && File.Exists(templatePath))
+                    {
+                        var createConfirm = MessageBox.Show(
+                            $"Tệp CSDL đích '{Path.GetFileName(destCfg.AccessFilePath)}' chưa tồn tại.\nBạn có muốn tự động tạo tệp này từ tệp mẫu (template.accdb) và bắt đầu chuyển số dư ngay không?",
+                            "Tạo CSDL đích từ Template",
+                            MessageBoxButton.YesNo,
+                            MessageBoxImage.Question);
+
+                        if (createConfirm != MessageBoxResult.Yes) return;
+
+                        string? destDir = Path.GetDirectoryName(destCfg.AccessFilePath);
+                        if (!string.IsNullOrEmpty(destDir) && !System.IO.Directory.Exists(destDir))
+                        {
+                            System.IO.Directory.CreateDirectory(destDir);
+                        }
+
+                        File.Copy(templatePath, destCfg.AccessFilePath, overwrite: true);
+                        AppendLog($"[TEMPLATE] Đã tự động tạo tệp CSDL đích từ mẫu: {destCfg.AccessFilePath}");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Tệp CSDL đích chưa tồn tại và đường dẫn tệp mẫu (template.accdb) không hợp lệ!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+                }
+            }
+
+            bool hasAnyModule = (chkTransferLibrary.IsChecked == true) ||
+                                (chkTransferDesign.IsChecked == true) ||
+                                (chkTransferNormal.IsChecked == true) ||
+                                (chkTransferDebt.IsChecked == true) ||
+                                (chkTransferMaterial.IsChecked == true) ||
+                                (chkTransferCost.IsChecked == true) ||
+                                (chkTransferAsset.IsChecked == true) ||
+                                (chkTransferStock.IsChecked == true) ||
+                                (chkTransferCurrency.IsChecked == true);
+
+            if (!hasAnyModule)
+            {
+                MessageBox.Show("Vui lòng tích chọn ít nhất một phân hệ để thực hiện chuyển đổi!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             int destYear = Convert.ToInt32(spnDestYear.Value);
+
+            var selectedModules = new List<string>();
+            if (chkTransferLibrary.IsChecked == true) selectedModules.Add("1. Danh mục");
+            if (chkTransferDesign.IsChecked == true) selectedModules.Add("2. Thiết kế");
+            if (chkTransferNormal.IsChecked == true) selectedModules.Add("3. TK thường (Loại I)");
+            if (chkTransferDebt.IsChecked == true) selectedModules.Add("4. Công nợ (Loại A)");
+            if (chkTransferMaterial.IsChecked == true) selectedModules.Add("5. Vật tư (Loại B)");
+            if (chkTransferCost.IsChecked == true) selectedModules.Add("6. Chi phí (Loại E)");
+            if (chkTransferAsset.IsChecked == true) selectedModules.Add("7. TSCĐ (Loại D)");
+            if (chkTransferStock.IsChecked == true) selectedModules.Add("8. Cổ phiếu (Loại S)");
+            if (chkTransferCurrency.IsChecked == true) selectedModules.Add("9. Ngoại tệ (Loại C)");
+
+            string moduleListStr = string.Join("\n - ", selectedModules);
+
             var confirm = MessageBox.Show(
-                $"Bạn có chắc chắn muốn thực hiện chuyển đổi toàn bộ số dư sang niên độ mới ({destYear})?\n\n(Lưu ý: Quá trình này sẽ tổng hợp hàng loạt số dư cuối kỳ và chuyển vào CSDL đích)",
+                $"Bạn có chắc chắn muốn thực hiện chuyển đổi các phân hệ sau sang niên độ mới ({destYear})?\n\n - {moduleListStr}\n\n(Lưu ý: Nếu phân hệ đã có số dư trong CSDL đích, hệ thống sẽ tự động dọn dẹp số dư cũ của phân hệ đó trước khi nạp mới)",
                 "Xác nhận chuyển đổi số dư",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Question);
@@ -240,10 +412,19 @@ namespace NewaccNet.Wpf.AppSystem.BalanceTransfer
                 var context = new TransferBalanceContext
                 {
                     SourceConfig = ConfigManager.Current,
-                    DestinationConfig = BuildDestConfig(),
+                    DestinationConfig = destCfg,
                     SourceYear = Convert.ToInt32(spnSourceYear.Value),
                     DestinationYear = destYear,
-                    OpeningDate = dtOpeningDate.DateTime
+                    OpeningDate = dtOpeningDate.DateTime,
+                    TransferLibrary = chkTransferLibrary.IsChecked == true,
+                    TransferDesign = chkTransferDesign.IsChecked == true,
+                    TransferNormal = chkTransferNormal.IsChecked == true,
+                    TransferDebt = chkTransferDebt.IsChecked == true,
+                    TransferMaterial = chkTransferMaterial.IsChecked == true,
+                    TransferCost = chkTransferCost.IsChecked == true,
+                    TransferAsset = chkTransferAsset.IsChecked == true,
+                    TransferStock = chkTransferStock.IsChecked == true,
+                    TransferCurrency = chkTransferCurrency.IsChecked == true
                 };
 
                 var progress = new Progress<TransferProgressReport>(report =>
@@ -270,6 +451,64 @@ namespace NewaccNet.Wpf.AppSystem.BalanceTransfer
                 btnStart.IsEnabled = true;
                 btnClose.IsEnabled = true;
             }
+        }
+
+        private void BtnSelectAll_Click(object sender, RoutedEventArgs e)
+        {
+            SetAllModulesChecked(true);
+        }
+
+        private void BtnUnselectAll_Click(object sender, RoutedEventArgs e)
+        {
+            SetAllModulesChecked(false);
+        }
+
+        private void ModuleCheck_Changed(object sender, RoutedEventArgs e)
+        {
+            UpdateModuleHeader();
+        }
+
+        private void UpdateModuleHeader()
+        {
+            if (grpModularTransfer == null) return;
+
+            int count = 0;
+            if (chkTransferLibrary?.IsChecked == true) count++;
+            if (chkTransferDesign?.IsChecked == true) count++;
+            if (chkTransferNormal?.IsChecked == true) count++;
+            if (chkTransferDebt?.IsChecked == true) count++;
+            if (chkTransferMaterial?.IsChecked == true) count++;
+            if (chkTransferCost?.IsChecked == true) count++;
+            if (chkTransferAsset?.IsChecked == true) count++;
+            if (chkTransferStock?.IsChecked == true) count++;
+            if (chkTransferCurrency?.IsChecked == true) count++;
+
+            if (count == 9)
+            {
+                grpModularTransfer.Header = "4. Tùy chọn Phân hệ chuyển đổi (Mặc định: Tất cả 9 phân hệ - Bấm để mở rộng)";
+            }
+            else if (count == 0)
+            {
+                grpModularTransfer.Header = "4. Tùy chọn Phân hệ chuyển đổi (Chưa chọn phân hệ nào - Bấm để mở rộng)";
+            }
+            else
+            {
+                grpModularTransfer.Header = $"4. Tùy chọn Phân hệ chuyển đổi (Đã chọn: {count}/9 phân hệ - Bấm để mở rộng)";
+            }
+        }
+
+        private void SetAllModulesChecked(bool isChecked)
+        {
+            chkTransferLibrary.IsChecked = isChecked;
+            chkTransferDesign.IsChecked = isChecked;
+            chkTransferNormal.IsChecked = isChecked;
+            chkTransferDebt.IsChecked = isChecked;
+            chkTransferMaterial.IsChecked = isChecked;
+            chkTransferCost.IsChecked = isChecked;
+            chkTransferAsset.IsChecked = isChecked;
+            chkTransferStock.IsChecked = isChecked;
+            chkTransferCurrency.IsChecked = isChecked;
+            UpdateModuleHeader();
         }
 
         private void AppendLog(string message)

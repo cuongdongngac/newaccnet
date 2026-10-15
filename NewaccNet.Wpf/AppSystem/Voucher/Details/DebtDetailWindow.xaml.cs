@@ -30,6 +30,7 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             this.DataContext = _parentEntry;
 
             _originalList = _parentEntry.DebtDetails.ToList();
+            _parentEntry.SaveFields("undo_parent");
             foreach (var item in _originalList) item.SaveFields("undo");
 
             LoadDictionaries();
@@ -256,13 +257,8 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             TableViewDebt.CloseEditor();
             TableViewDebt.FocusedRowHandle = DevExpress.Xpf.Grid.GridControl.InvalidRowHandle;
             TableViewDebt.CommitEditing();
-            
-            // Dùng Reflection kiểm tra UpdateFilter: Nếu UpdateFilter = true thì chỉ cập nhật từ con vật tư
-            if (_parentEntry.CanUpdateFromChild(this))
-            {
-                double totalDebt = _parentEntry.DebtDetails.Sum(x => x.Amount ?? 0);
-                _parentEntry.Amount = Math.Round(totalDebt, 0);
-            }
+
+            _parentEntry.NotifyChildCollectionChanged();
 
             _isSaved = true;
             this.DialogResult = true;
@@ -279,9 +275,18 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
         {
             if (!_isSaved)
             {
-                foreach (var item in _originalList) item.RollbackFields("undo");
-                _parentEntry.DebtDetails.Clear();
-                foreach (var item in _originalList) _parentEntry.DebtDetails.Add(item);
+                _parentEntry.IsDominoSuspended = true;
+                try
+                {
+                    foreach (var item in _originalList) item.RollbackFields("undo");
+                    _parentEntry.DebtDetails.Clear();
+                    foreach (var item in _originalList) _parentEntry.DebtDetails.Add(item);
+                    _parentEntry.RollbackFields("undo_parent");
+                }
+                finally
+                {
+                    _parentEntry.IsDominoSuspended = false;
+                }
             }
             base.OnClosing(e);
         }

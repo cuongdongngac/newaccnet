@@ -6,7 +6,7 @@
         xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
         xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
         Title="Chuyển đổi số dư sang Niên độ mới (Balance Transfer)" 
-        Height="730" Width="820" WindowStartupLocation="CenterOwner">
+        Height="720" Width="860" WindowStartupLocation="CenterOwner">
     <Grid>
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <dxlc:LayoutControl Orientation="Vertical" Padding="15">
@@ -14,11 +14,11 @@
                 <!-- KHỐI 1: CSDL NGUỒN (HIỆN HÀNH) -->
                 <dxlc:LayoutGroup Header="1. Cơ sở dữ liệu Nguồn (Niên độ hiện tại)" View="GroupBox" Orientation="Vertical">
                     <dxlc:LayoutGroup Orientation="Horizontal">
-                        <dxlc:LayoutItem Label="Hệ quản trị CSDL:" Width="280">
+                        <dxlc:LayoutItem Label="Hệ quản trị CSDL:" Width="300">
                             <dxe:TextEdit x:Name="txtSourceDbType" IsReadOnly="True" FontWeight="SemiBold" Background="#FFF5F5F5"/>
                         </dxlc:LayoutItem>
-                        <dxlc:LayoutItem Label="Năm làm việc nguồn:" Width="180">
-                            <dxe:SpinEdit x:Name="spnSourceYear" IsReadOnly="True" FontWeight="Bold" Foreground="#FF1565C0" Background="#FFF5F5F5" Mask="####"/>
+                        <dxlc:LayoutItem Label="Năm làm việc nguồn:" Width="260" Margin="15,0,0,0">
+                            <dxe:SpinEdit x:Name="spnSourceYear" MinWidth="110" IsReadOnly="True" FontWeight="Bold" Foreground="#FF1565C0" Background="#FFF5F5F5" Mask="d" MaskUseAsDisplayFormat="True"/>
                         </dxlc:LayoutItem>
                     </dxlc:LayoutGroup>
                     <dxlc:LayoutItem Label="Thông tin kết nối nguồn:" Margin="0,4,0,0">
@@ -41,11 +41,21 @@
 
                     <!-- Khung Access đích -->
                     <dxlc:LayoutGroup x:Name="grpDestAccess" Orientation="Vertical" Margin="0,6,0,0">
-                        <dxlc:LayoutItem Label="Đường dẫn file (.accdb / .mdb):">
-                            <dxe:ButtonEdit x:Name="txtDestAccessPath" AllowDefaultButton="False" EditValueChanged="DestField_Changed">
-                                <dxe:ButtonInfo GlyphKind="Custom" Content="..." Click="BtnBrowseDestAccess_Click"/>
+                        <dxlc:LayoutItem Label="Tệp mẫu (template.accdb):">
+                            <dxe:ButtonEdit x:Name="txtTemplateAccessPath" AllowDefaultButton="False" NullText="Chọn đường dẫn tệp mẫu template.accdb...">
+                                <dxe:ButtonInfo GlyphKind="Custom" Content="..." ToolTip="Chọn tệp mẫu template.accdb" Click="BtnBrowseTemplateAccess_Click"/>
                             </dxe:ButtonEdit>
                         </dxlc:LayoutItem>
+                        <dxlc:LayoutGroup Orientation="Horizontal" Margin="0,4,0,0">
+                            <dxlc:LayoutItem Label="Đường dẫn file đích (.accdb):" HorizontalAlignment="Stretch">
+                                <dxe:ButtonEdit x:Name="txtDestAccessPath" AllowDefaultButton="False" EditValueChanged="DestField_Changed" NullText="Chọn hoặc nhập tên tệp CSDL đích mới...">
+                                    <dxe:ButtonInfo GlyphKind="Custom" Content="..." ToolTip="Chọn hoặc đặt tên tệp CSDL đích" Click="BtnBrowseDestAccess_Click"/>
+                                </dxe:ButtonEdit>
+                            </dxlc:LayoutItem>
+                            <dx:SimpleButton x:Name="btnCopyFromTemplate" Content="Tạo file đích từ Template" Width="175" Height="26" Margin="8,0,0,0"
+                                             ToolTip="Nhân bản tệp mẫu template.accdb thành tệp CSDL đích mới"
+                                             Click="BtnCopyFromTemplate_Click"/>
+                        </dxlc:LayoutGroup>
                     </dxlc:LayoutGroup>
 
                     <!-- Khung SQL Server đích -->
@@ -108,19 +118,60 @@
                 <!-- KHỐI 3: THIẾT LẬP NIÊN ĐỘ MỚI -->
                 <dxlc:LayoutGroup Header="3. Tùy chọn Niên độ mới" View="GroupBox" Orientation="Vertical" Margin="0,10,0,0">
                     <dxlc:LayoutGroup Orientation="Horizontal">
-                        <dxlc:LayoutItem Label="Năm tài chính mới:" Width="200">
-                            <dxe:SpinEdit x:Name="spnDestYear" FontWeight="Bold" Foreground="#FF2E7D32" Mask="####" EditValueChanged="SpnDestYear_EditValueChanged"/>
+                        <dxlc:LayoutItem Label="Năm tài chính mới:" Width="260">
+                            <dxe:SpinEdit x:Name="spnDestYear" MinWidth="110" FontWeight="Bold" Foreground="#FF2E7D32" Mask="d" MaskUseAsDisplayFormat="True" EditValueChanged="SpnDestYear_EditValueChanged"/>
                         </dxlc:LayoutItem>
-                        <dxlc:LayoutItem Label="Ngày ghi nhận số dư đầu kỳ:" Width="260">
-                            <dxe:DateEdit x:Name="dtOpeningDate" MinWidth="115"/>
+                        <dxlc:LayoutItem Label="Ngày ghi nhận số dư đầu kỳ:" Width="310" Margin="15,0,0,0">
+                            <dxe:DateEdit x:Name="dtOpeningDate" MinWidth="130"/>
                         </dxlc:LayoutItem>
                     </dxlc:LayoutGroup>
-                    <TextBlock Text="* Hệ thống sẽ tự động tổng hợp và chuyển giao toàn bộ số dư: Tài khoản thường (I), Công nợ (A), Tồn kho vật tư NNB (B), Chi phí dở dang (E), TSCĐ (D), Cổ phiếu/Đầu tư (S)."
-                               Foreground="#FF555555" FontStyle="Italic" Margin="0,8,0,2"/>
                 </dxlc:LayoutGroup>
 
-                <!-- KHỐI 4: TIẾN ĐỘ THỰC THI & NHẬT KÝ THỜI GIAN THỰC -->
-                <dxlc:LayoutGroup Header="4. Tiến độ thực thi &amp; Nhật ký chuyển đổi" View="GroupBox" Orientation="Vertical" Margin="0,10,0,0">
+                <!-- KHỐI 4: TÙY CHỌN PHÂN HỆ CHUYỂN ĐỔI (ACCORDION THU GỌN MẶC ĐỊNH ĐỂ TIẾT KIỆM DIỆN TÍCH) -->
+                <dxlc:LayoutGroup x:Name="grpModularTransfer" 
+                                  Header="4. Tùy chọn Phân hệ chuyển đổi (Mặc định: Tất cả 9 phân hệ - Bấm để mở rộng)" 
+                                  View="GroupBox" 
+                                  Orientation="Vertical" 
+                                  IsCollapsible="True" 
+                                  IsCollapsed="True" 
+                                  Margin="0,10,0,0">
+                    <dxlc:LayoutGroup Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,6">
+                        <dx:SimpleButton x:Name="btnSelectAll" Content="Chọn tất cả" Width="100" Height="24" Margin="0,0,8,0" Click="BtnSelectAll_Click"/>
+                        <dx:SimpleButton x:Name="btnUnselectAll" Content="Bỏ chọn tất cả" Width="110" Height="24" Click="BtnUnselectAll_Click"/>
+                    </dxlc:LayoutGroup>
+                    <Grid Margin="0,2,0,2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Cột 1 -->
+                        <dxe:CheckEdit x:Name="chkTransferLibrary" Grid.Row="0" Grid.Column="0" Content="1. Danh mục &amp; Thư viện (Master data)" IsChecked="True" Margin="0,3,10,3" Checked="ModuleCheck_Changed" Unchecked="ModuleCheck_Changed"/>
+                        <dxe:CheckEdit x:Name="chkTransferDesign" Grid.Row="1" Grid.Column="0" Content="2. Bảng thiết kế báo cáo (B01..B03, Thuế)" IsChecked="True" Margin="0,3,10,3" Checked="ModuleCheck_Changed" Unchecked="ModuleCheck_Changed"/>
+                        <dxe:CheckEdit x:Name="chkTransferNormal" Grid.Row="2" Grid.Column="0" Content="3. Tài khoản thông thường (Loại I)" IsChecked="True" Margin="0,3,10,3" Checked="ModuleCheck_Changed" Unchecked="ModuleCheck_Changed"/>
+
+                        <!-- Cột 2 -->
+                        <dxe:CheckEdit x:Name="chkTransferDebt" Grid.Row="0" Grid.Column="1" Content="4. Chi tiết Công nợ (Loại A - 131, 331...)" IsChecked="True" Margin="0,3,10,3" Checked="ModuleCheck_Changed" Unchecked="ModuleCheck_Changed"/>
+                        <dxe:CheckEdit x:Name="chkTransferMaterial" Grid.Row="1" Grid.Column="1" Content="5. Tồn kho Vật tư - Hàng hóa (Loại B - NNB)" IsChecked="True" Margin="0,3,10,3" Checked="ModuleCheck_Changed" Unchecked="ModuleCheck_Changed"/>
+                        <dxe:CheckEdit x:Name="chkTransferCost" Grid.Row="2" Grid.Column="1" Content="6. Chi phí SXKD dở dang (Loại E - 154)" IsChecked="True" Margin="0,3,10,3" Checked="ModuleCheck_Changed" Unchecked="ModuleCheck_Changed"/>
+
+                        <!-- Cột 3 -->
+                        <dxe:CheckEdit x:Name="chkTransferAsset" Grid.Row="0" Grid.Column="2" Content="7. Tài sản cố định (Loại D - 211, 214)" IsChecked="True" Margin="0,3,0,3" Checked="ModuleCheck_Changed" Unchecked="ModuleCheck_Changed"/>
+                        <dxe:CheckEdit x:Name="chkTransferStock" Grid.Row="1" Grid.Column="2" Content="8. Cổ phiếu, Đầu tư CK (Loại S - 121..)" IsChecked="True" Margin="0,3,0,3" Checked="ModuleCheck_Changed" Unchecked="ModuleCheck_Changed"/>
+                        <dxe:CheckEdit x:Name="chkTransferCurrency" Grid.Row="2" Grid.Column="2" Content="9. Ngoại tệ &amp; Tỷ giá ghi sổ (Loại C)" IsChecked="True" Margin="0,3,0,3" Checked="ModuleCheck_Changed" Unchecked="ModuleCheck_Changed"/>
+                    </Grid>
+                    <TextBlock Text="* Ghi chú: Nếu tệp CSDL đích đã tồn tại, bạn có thể chọn riêng từng phân hệ để chạy lại độc lập. Hệ thống sẽ tự động dọn dẹp số dư đầu kỳ cũ của phân hệ được chọn trước khi nạp mới, đảm bảo tuyệt đối không bị trùng lặp số liệu."
+                               Foreground="#FF1565C0" FontStyle="Italic" TextWrapping="Wrap" Margin="0,6,0,2"/>
+                </dxlc:LayoutGroup>
+
+                <!-- KHỐI 5: TIẾN ĐỘ THỰC THI & NHẬT KÝ THỜI GIAN THỰC -->
+                <dxlc:LayoutGroup Header="5. Tiến độ thực thi &amp; Nhật ký chuyển đổi" View="GroupBox" Orientation="Vertical" Margin="0,10,0,0">
                     <TextBlock x:Name="lblCurrentStep" Text="Sẵn sàng thực hiện chuyển đổi số dư..." FontWeight="SemiBold" Foreground="#FF1565C0" Margin="0,0,0,6"/>
                     <dxe:ProgressBarEdit x:Name="pbProgress" Height="22" Minimum="0" Maximum="100" Value="0" ContentDisplayMode="Value"/>
                     <TextBox x:Name="txtLogs" Margin="0,8,0,0" Height="150" IsReadOnly="True" 
@@ -128,7 +179,7 @@
                              FontFamily="Consolas" FontSize="11" Background="#FFFDFDFD" Foreground="#FF333333"/>
                 </dxlc:LayoutGroup>
 
-                <!-- KHỐI 5: NÚT HÀNH ĐỘNG -->
+                <!-- KHỐI 6: NÚT HÀNH ĐỘNG -->
                 <dxlc:LayoutGroup Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
                     <dx:SimpleButton x:Name="btnStart" Content="Bắt đầu chuyển đổi" Width="170" Height="36" 
                                      FontWeight="Bold" Background="#FF1565C0" Foreground="White" Click="BtnStart_Click"/>

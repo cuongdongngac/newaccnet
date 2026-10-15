@@ -48,6 +48,13 @@ namespace NewaccNet.Wpf.AppSystem.Helpers
             return null;
         }
 
+        public static void SetSetting(string key, string value)
+        {
+            var settings = LoadAllSettings();
+            settings[key] = value;
+            SaveAllSettings(settings);
+        }
+
         private static void SaveAllSettings(Dictionary<string, string> settings)
         {
             try
@@ -106,7 +113,12 @@ namespace NewaccNet.Wpf.AppSystem.Helpers
 
         private static object GetControlValue(FrameworkElement element)
         {
-            // Ưu tiên controls của DevExpress (LookUpEdit, DateEdit, TextEdit...)
+            if (element is DevExpress.Xpf.Editors.DateEdit de)
+            {
+                return de.DateTime;
+            }
+
+            // Ưu tiên controls của DevExpress (LookUpEdit, ComboBoxEdit, TextEdit...)
             PropertyInfo editValueProp = element.GetType().GetProperty("EditValue");
             if (editValueProp != null)
             {
@@ -124,6 +136,15 @@ namespace NewaccNet.Wpf.AppSystem.Helpers
 
         private static void SetControlValue(FrameworkElement element, string strVal)
         {
+            if (element is DevExpress.Xpf.Editors.DateEdit de)
+            {
+                if (DateTime.TryParse(strVal, out DateTime dt))
+                {
+                    de.DateTime = dt;
+                }
+                return;
+            }
+
             PropertyInfo editValueProp = element.GetType().GetProperty("EditValue");
             if (editValueProp != null)
             {

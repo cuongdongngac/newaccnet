@@ -18,6 +18,11 @@ namespace NewaccNet.Wpf.AppSystem.BalanceTransfer
         Task TransferDictionariesAsync(TransferBalanceContext context, IProgress<TransferProgressReport> progress);
 
         /// <summary>
+        /// Bước chuyển các bảng Thiết kế báo cáo &amp; Công thức tính (CĐKT, KQKD, LCTT, Nghĩa vụ thuế, Tờ khai VAT, Thẻ giá thành...).
+        /// </summary>
+        Task TransferDesignTablesAsync(TransferBalanceContext context, IProgress<TransferProgressReport> progress);
+
+        /// <summary>
         /// 1. Chuyển số dư tài khoản thông thường không theo dõi chi tiết (Category 'I' - Tiền mặt, Tiền gửi, Vốn...).
         /// </summary>
         Task TransferNoDetailsAsync(TransferBalanceContext context, IProgress<TransferProgressReport> progress);

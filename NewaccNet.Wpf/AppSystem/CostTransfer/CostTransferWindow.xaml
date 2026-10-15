@@ -1,0 +1,126 @@
+<base:BaseWindow x:Class="NewaccNet.Wpf.AppSystem.CostTransfer.CostTransferWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+        xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+        xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+        xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+        xmlns:dxs="clr-namespace:NewaccNet.Wpf.Controls.Search"
+        xmlns:base="clr-namespace:NewaccNet.Wpf.Views.Base"
+        Title="Kết chuyển chi phí"
+        Height="640" Width="980" MinHeight="480" MinWidth="780"
+        WindowStartupLocation="CenterOwner">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- KHỐI 1: THAM SỐ -->
+        <dxlc:LayoutControl Grid.Row="0" Orientation="Vertical" Padding="12,10,12,6">
+            <dxlc:LayoutGroup Orientation="Horizontal">
+                <dxlc:LayoutItem Label="Đến ngày:" Width="240">
+                    <dxe:DateEdit x:Name="dtEndDate" Mask="dd/MM/yyyy" MaskUseAsDisplayFormat="True"
+                                  EditValueChanged="Param_Changed"/>
+                </dxlc:LayoutItem>
+
+                <dxlc:LayoutItem Label="Tài khoản nguồn:" HorizontalAlignment="Stretch" Margin="15,0,0,0">
+                    <dxg:LookUpEdit x:Name="lueSourceAccount"
+                                    ValueMember="AccountId"
+                                    AutoComplete="False" ImmediatePopup="True" IsTextEditable="True"
+                                    EditValueChanged="SourceAccount_Changed">
+                        <dxmvvm:Interaction.Behaviors>
+                            <dxs:SearchLookUpBehavior Display="Code" SearchMode="All"/>
+                        </dxmvvm:Interaction.Behaviors>
+                    </dxg:LookUpEdit>
+                </dxlc:LayoutItem>
+
+                <dxlc:LayoutItem Label="Tài khoản đích:" HorizontalAlignment="Stretch" Margin="15,0,0,0">
+                    <dxg:LookUpEdit x:Name="lueDestAccount"
+                                    ValueMember="AccountId"
+                                    AutoComplete="False" ImmediatePopup="True" IsTextEditable="True"
+                                    EditValueChanged="Param_Changed">
+                        <dxmvvm:Interaction.Behaviors>
+                            <dxs:SearchLookUpBehavior Display="Code" SearchMode="All"/>
+                        </dxmvvm:Interaction.Behaviors>
+                    </dxg:LookUpEdit>
+                </dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+
+            <dxlc:LayoutGroup Orientation="Horizontal" Margin="0,6,0,0">
+                <dxlc:LayoutItem Label="Nội dung chứng từ:" HorizontalAlignment="Stretch">
+                    <dxe:TextEdit x:Name="txtContents" EditValueChanged="Param_Changed"/>
+                </dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+        </dxlc:LayoutControl>
+
+        <!-- KHỐI 2: LƯỚI SỐ DƯ CHI PHÍ THEO (ĐỐI TƯỢNG, YẾU TỐ) -->
+        <GroupBox Grid.Row="1" Header="Số dư chi phí tài khoản nguồn" Margin="10,2,10,2">
+            <dxg:GridControl x:Name="gridRows">
+                <dxg:GridControl.Columns>
+                    <dxg:GridColumn FieldName="CostObjectName" Header="Đối tượng chi phí" Width="*" MinWidth="220" ReadOnly="True"/>
+                    <dxg:GridColumn FieldName="CostElementName" Header="Yếu tố chi phí" Width="200" FixedWidth="True" ReadOnly="True"/>
+                    <dxg:GridColumn FieldName="Selected" Header="KC" Width="45" FixedWidth="True">
+                        <dxg:GridColumn.EditSettings>
+                            <dxe:CheckEditSettings/>
+                        </dxg:GridColumn.EditSettings>
+                    </dxg:GridColumn>
+                    <dxg:GridColumn FieldName="Rest" Header="Số dư chi phí" Width="150" FixedWidth="True" ReadOnly="True">
+                        <dxg:GridColumn.EditSettings>
+                            <dxe:TextEditSettings DisplayFormat="#,##0" HorizontalContentAlignment="Right"/>
+                        </dxg:GridColumn.EditSettings>
+                    </dxg:GridColumn>
+                    <dxg:GridColumn FieldName="Keep" Header="Chi phí để lại" Width="150" FixedWidth="True">
+                        <dxg:GridColumn.EditSettings>
+                            <dxe:TextEditSettings DisplayFormat="#,##0" HorizontalContentAlignment="Right"/>
+                        </dxg:GridColumn.EditSettings>
+                    </dxg:GridColumn>
+                    <dxg:GridColumn FieldName="TransferAmount" Header="Số kết chuyển" Width="150" FixedWidth="True" ReadOnly="True">
+                        <dxg:GridColumn.EditSettings>
+                            <dxe:TextEditSettings DisplayFormat="#,##0" HorizontalContentAlignment="Right"/>
+                        </dxg:GridColumn.EditSettings>
+                    </dxg:GridColumn>
+                </dxg:GridControl.Columns>
+                <dxg:GridControl.View>
+                    <dxg:TableView ShowGroupPanel="False" AllowEditing="True" AutoWidth="False"
+                                   ShowTotalSummary="True" NavigationStyle="Cell" EditorShowMode="MouseDown"/>
+                </dxg:GridControl.View>
+                <dxg:GridControl.TotalSummary>
+                    <dxg:GridSummaryItem FieldName="Rest" SummaryType="Sum" DisplayFormat="Tổng: {0:#,##0}"/>
+                    <dxg:GridSummaryItem FieldName="TransferAmount" SummaryType="Sum" DisplayFormat="Tổng: {0:#,##0}"/>
+                </dxg:GridControl.TotalSummary>
+            </dxg:GridControl>
+        </GroupBox>
+
+        <!-- KHỐI 3: NÚT HÀNH ĐỘNG & TRẠNG THÁI -->
+        <Border Grid.Row="2" Background="#FFF5F5F5" BorderBrush="#FFE0E0E0" BorderThickness="0,1,0,0" Padding="14,8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock x:Name="lblStatus" Grid.Column="0"
+                           Text="Chọn tài khoản nguồn, tài khoản đích rồi bấm 'Tính toán'."
+                           FontSize="13" FontWeight="SemiBold" Foreground="#FF616161"
+                           VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <dx:SimpleButton x:Name="btnSelectAll" Content="Chọn hết" Width="90" Height="32"
+                                     Click="BtnSelectAll_Click"/>
+                    <dx:SimpleButton x:Name="btnSelectNone" Content="Bỏ chọn" Width="90" Height="32" Margin="6,0,0,0"
+                                     Click="BtnSelectNone_Click"/>
+                    <dx:SimpleButton x:Name="btnCalculate" Content="Tính toán" Width="120" Height="32" Margin="16,0,0,0"
+                                     Click="BtnCalculate_Click"/>
+                    <dx:SimpleButton x:Name="btnTransfer" Content="Kết chuyển" Width="130" Height="32" Margin="10,0,0,0"
+                                     FontWeight="Bold" IsEnabled="False"
+                                     Click="BtnTransfer_Click"/>
+                    <dx:SimpleButton x:Name="btnClose" Content="Kết thúc" Width="100" Height="32" Margin="10,0,0,0"
+                                     Click="BtnClose_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</base:BaseWindow>

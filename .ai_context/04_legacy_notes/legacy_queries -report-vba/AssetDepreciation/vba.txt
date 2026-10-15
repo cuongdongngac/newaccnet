@@ -1,0 +1,189 @@
+Tạo dữ liệu phẳng AssetTrackingDep từ bảng AccessTraking (chỉ  lấy thông tin bản ghi cuối cùng 
+SQL = "Delete * from AssetTrackingDep"
+INSERT INTO AssetTrackingDep ( [Asset ID], DeptID, Qty, DepPrice, RemainValue, DepRate, [AsAccount ID], [ExAccount ID], [ExObject ID], EndDate )
+SELECT AssetTracking.[Asset ID], Last(AssetTracking.DeptID) AS LastOfDeptID, Last(AssetTracking.Qty) AS LastOfQty, Last(AssetTracking.DepPrice) AS LastOfDepPrice, Last(AssetTracking.RemainValue) AS LastOfRemainValue, Last(AssetTracking.DepRate) AS LastOfDepRate, Last(AssetTracking.[AsAccount ID]) AS [LastOfAsAccount ID], Last(AssetTracking.[ExAccount ID]) AS [LastOfExAccount ID], Last(AssetTracking.[ExObject ID]) AS [LastOfExObject ID], Last(AssetTracking.EndDate) AS LastOfEndDate
+FROM AssetTracking
+GROUP BY AssetTracking.[Asset ID];
+
+Tạo dữ liệu phẳng của  AccessDetail, có kết nối với dữ liệu phẳng ở trên để lấy thêm một số trường
+
+Tính toán bảng khấu hao từ dữ liệu phẳng ở trên
+
+Private Function Refreshing()
+Dim SQL
+Dim MyDB As DAO.Database
+Set MyDB = CurrentDb()
+DoCmd.SetWarnings False
+m = SaveRecord()
+DoCmd.RunSQL "DELETE DISTINCTROW * FROM [Depreciation Table];"
+
+SQL = "INSERT INTO [Depreciation Table] ( [Asset ID], SrCode,Rest,RestQty, Amount, Flag ) "
+SQL = SQL & "SELECT DISTINCTROW [Union Asset Line Query].[Asset ID], [Union Asset Line Query].[SrCode],"
+SQL = SQL & "Sum([Union Asset Line Query]![Quantity]*"
+SQL = SQL & "([Union Asset Line Query]![Price]-[Union Asset Line Query]![RemainValue])*"
+SQL = SQL & "[Union Asset Line Query]![DBCR]) AS Rest, "
+
+SQL = SQL & "Sum(-[Union Asset Line Query]![Quantity]*"
+SQL = SQL & "[Union Asset Line Query]![Flag]*"
+SQL = SQL & "[Union Asset Line Query]![DBCR]) AS RestQty, "
+
+SQL = SQL & "First(GetDepreciation(GetBeginDate(),GetEndDate(),[Asset List]![Date],[Asset List]![TimeUsing],[AssetTracking]![DepRate],[AssetTracking]![DepPrice])) "
+SQL = SQL & "AS Amount, First(-1) AS Flag "
+SQL = SQL & "FROM ([Union Asset Line Query] INNER JOIN [Asset List] "
+SQL = SQL & "ON [Union Asset Line Query].[Asset ID] = [Asset List].[Asset ID])INNER JOIN AssetTracking ON [Asset List].[Asset ID] = AssetTracking.[Asset ID] "
+SQL = SQL & "WHERE [Union Asset Line Query].[Bill Date] <=GetEndDate() "
+SQL = SQL & "GROUP BY [Union Asset Line Query].[Asset ID],[Union Asset Line Query].[SrCode] "
+SQL = SQL & "ORDER BY [Union Asset Line Query].[Asset ID];"
+
+DoCmd.RunSQL SQL
+Me![Depreciation SubForm].Form.Requery
+End Function
+
+RecordsetClone -> SELECT DISTINCTROW [Asset List].[Asset ID], [Depreciation Table].SrCode, [Asset List].[Asset Name], [Depreciation Table].RestQty, [Depreciation Table].flag, [Depreciation Table].Rest, [Depreciation Table].Amount AS AMount, AssetTrackingDep.[AsAccount ID], AssetTrackingDep.[ExAccount ID], AssetTrackingDep.[ExObject ID]
+FROM ([Asset List] RIGHT JOIN [Depreciation Table] ON [Asset List].[Asset ID] = [Depreciation Table].[Asset ID]) LEFT JOIN AssetTrackingDep ON [Asset List].[Asset ID] = AssetTrackingDep.[Asset ID];
+
+Để ý RecordsetClone chính là lấy từ query trên
+Hàm tạo  chứng từ khấu hao
+Public Function ExTransfer()
+Dim msg
+Dim CounterID As Long
+Dim MyDB As DAO.Database
+Dim MyRecord As DAO.Recordset
+Dim Thecondition As Integer
+Dim BillRecord As DAO.Recordset
+Dim AssetRecord As DAO.Recordset
+Dim UndoRecord As DAO.Recordset
+Dim Amount
+Dim AllAmount
+Thecondition = IsNull(Me![SrAccountID])
+Thecondition = (TheCondtion Or IsNull(Me![ExAtribute ID]))
+Thecondition = TheCondtion Or IsNull(Me![SrCode]) Or IsNull(Me![ReasonID])
+If Thecondition Then
+ msgboxOK (getmessage("017"))
+ 'msgbox "H·y ®iÒn ®Çy ®ñ c¸c d÷ kiÖn tr­íc khi khÊu hao!", 33, gApplicationName
+ Exit Function
+End If
+DoCmd.RunCommand acCmdSaveRecord
+Set MyDB = CurrentDb()
+Set MyRecord = Me![Depreciation SubForm].Form.RecordsetClone
+'Calculating Amount for Asset Account
+
+If MyRecord.RecordCount = 0 Then
+ Exit Function
+Else
+ ValidRecordNo = 0
+ AllAmount = 0
+ MyRecord.MoveFirst
+  Do While Not MyRecord.EOF
+  If MyRecord("Flag") = True Then
+   ValidRecordNo = ValidRecordNo + 1
+   AllAmount = AllAmount + MyRecord("Amount") * MyRecord("RestQty")
+  End If
+  MyRecord.MoveNext
+Loop
+
+End If
+MyRecord.Close
+
+If ValidRecordNo = 0 Then
+ Exit Function
+End If
+DoCmd.Hourglass True
+
+'Fill Bill Data
+ Set MyRecord = MyDB.OpenRecordset("Bills")
+ MyRecord.AddNew
+ MyRecord("Bill No") = DMax("[Bill ID]", "[Bills]") + 1
+ If Me![Contents] = "" Or IsNull(Me![Contents]) Then
+  MyRecord("Contents") = Me![ExAtribute ID].Column(1)
+ Else
+  MyRecord("Contents") = Me![Contents]
+ End If
+ MyRecord("Bill Date") = GetEndDate()
+ MyRecord("BookFlag") = True
+ MyRecord.Update
+ MyRecord.Close
+ gBillID = DMax("[Bill ID]", "[Bills]")
+
+
+ 'Fill Credit  Site of Transaction List (Asset Account)
+ 
+ Set MyRecord = MyDB.OpenRecordset("Transaction List")
+ MyRecord.AddNew
+ MyRecord("Bill ID") = gBillID
+ MyRecord("Amount") = AllAmount
+ MyRecord("DBCR") = -1
+ MyRecord("Account ID") = Me![SrAccountID]
+ 'them code thinhpv
+ MyRecord("CreateDate") = Now
+ MyRecord("CreateUser") = CurrentUser
+ 'end code thinhpv
+ MyRecord.Update
+ gID = DMax("ID", "[Transaction List]")
+ 
+ Set MyRecord = Me![Depreciation SubForm].Form.RecordsetClone
+ Set AssetRecord = MyDB.OpenRecordset("Asset Input Line")
+ MyRecord.MoveFirst
+  Do While Not MyRecord.EOF
+           Amount = MyRecord("Amount")
+           If MyRecord("Flag") = True Then
+                AssetRecord.AddNew
+                AssetRecord("ID") = gID
+                AssetRecord("Asset ID") = MyRecord("Asset ID")
+                AssetRecord("Quantity") = MyRecord("RestQty")
+                AssetRecord("Price") = MyRecord("Amount")
+                AssetRecord("SrCode") = MyRecord("SrCode")
+                AssetRecord("ReasonID") = Me![ReasonID]
+                AssetRecord.Update
+                MyRecord.Edit
+                MyRecord("Rest") = MyRecord("Rest") - MyRecord("AMount") * MyRecord("RestQty")
+              ' MyRecord("Rest") = MyRecord("Rest") - (MyRecord("Amount") - MyRecord("RemainValue")) * MyRecord("RestQty")
+                MyRecord.Update
+           Call AddingExAccountID(MyRecord("ExAccount ID"), MyRecord("ExObject ID"), MyRecord("Amount") * MyRecord("RestQty"))
+        End If
+          MyRecord.MoveNext
+Loop
+   
+Set MyDB = Nothing
+DoCmd.Hourglass False
+msgboxOK (getmessage("018") & " " & Me!SrAccountID)
+'msgbox "Qu¸ tr×nh tù ®éng tÝnh khÊu hao vµ sinh chøng tõ kÕ to¸n ®· ®­îc thùc hiÖn cho c¸c tµi kho¶n " & Me!SrAccountID, , gApplicationName
+UndoFlag = True
+Me![Undo].Enabled = UndoFlag
+Me![Depreciation SubForm].Form.Requery
+End Function
+Tạo JournalEntry đối ứng chứa tài khoản chi phí
+Public Function AddingExAccountID(ExAccountID As String, ExObjectID As String, Amount As Double)
+'Adding Expense Account and its details
+Dim MyDB As DAO.Database
+Dim ExID As Long
+Dim TransRecord As DAO.Recordset
+Dim ExRecord As DAO.Recordset
+Set MyDB = CurrentDb()
+ Set TransRecord = MyDB.OpenRecordset("Transaction List")
+ Set ExRecord = MyDB.OpenRecordset("Expense Object Input Line")
+TransRecord.AddNew
+TransRecord("Account ID") = ExAccountID
+TransRecord("DBCR") = 1
+TransRecord("Bill ID") = gBillID
+TransRecord("Amount") = Amount
+TransRecord("ParrentID") = gID
+'them code thinhpv
+ TransRecord("CreateDate") = Now
+ TransRecord("CreateUser") = CurrentUser
+ 'end code thinhpv
+TransRecord.Update
+ExID = DMax("ID", "Transaction List")
+
+ExRecord.AddNew
+ExRecord("ID") = ExID
+ExRecord("ExObject ID") = ExObjectID
+ExRecord("Expense Atribute ID") = Me.ExAtribute_ID
+ExRecord("Amount") = Amount
+ExRecord.Update
+
+ExRecord.Close
+TransRecord.Close
+MyDB.Close
+End Function
+

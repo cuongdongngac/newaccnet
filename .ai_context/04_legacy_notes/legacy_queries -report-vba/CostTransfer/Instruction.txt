@@ -1,0 +1,194 @@
+Nguyên tắc bắt đầu từ một tài khoản chi phí  - >  Tính tóm số dư và gom nhóm -> Tạo chứng từ
+Tạo dữ liệu phẳng giao dịch chi phí
+SELECT DISTINCTROW [Counter Accounts Query].[Bill ID], [Counter Accounts Query].[Bill No], [Counter Accounts Query].[Bill Date], [Counter Accounts Query].Contents, [Counter Accounts Query].[Account ID], [Expense Object Input Line].[ExObject ID], [Expense Object Input Line].Amount, [Expense Object Input Line].[Expense Atribute ID], [Counter Accounts Query].DBCR, [Expense Object Input Line].TransFlag
+FROM [Expense Object Input Line] LEFT JOIN [Counter Accounts Query] ON [Expense Object Input Line].ID = [Counter Accounts Query].ID;
+
+Nhóm lại từ dữ liệu phẳng để tính số tiền còn lại, Tiêu chí ngày giao dịch  < endate trên form - Query name: Expense Transfer Basic Query
+SELECT DISTINCTROW [Union Expense Object Line Query].[Account ID], [Union Expense Object Line Query].[ExObject ID], [Union Expense Object Line Query].[Expense Atribute ID], Sum([Union Expense Object Line Query]![DBCR]*[Union Expense Object Line Query]![Amount]) AS Rest, -1 AS Flag
+FROM [Union Expense Object Line Query]
+WHERE ((([Union Expense Object Line Query].[Bill Date])<=GetEnddate()))
+GROUP BY [Union Expense Object Line Query].[Account ID], [Union Expense Object Line Query].[ExObject ID], [Union Expense Object Line Query].[Expense Atribute ID]
+HAVING (((Sum([Union Expense Object Line Query]![DBCR]*[Union Expense Object Line Query]![Amount]))<>0));
+
+Trên cơ sở của Expense Transfer Basic Query tạo bảng tạm
+
+Private Function Refreshing()
+Dim SQL
+Dim MyDB As DAO.Database
+Set MyDB = CurrentDb()
+DoCmd.SetWarnings False
+DoCmd.RunSQL "DELETE DISTINCTROW [Expence Transfer Basic Table].* FROM [Expence Transfer Basic Table];"
+SQL = "INSERT INTO [Expence Transfer Basic Table] ( [Account ID], "
+SQL = SQL & "[ExObject ID],[Expense Atribute ID], Rest, flag ) "
+SQL = SQL & "SELECT  [Expense Transfer Basic Query].[Account ID],"
+SQL = SQL & "[Expense Transfer Basic Query].[ExObject ID] , "
+SQL = SQL & "[Expense Transfer Basic Query].[Expense Atribute ID], "
+SQL = SQL & "[Expense Transfer Basic Query].Rest , "
+SQL = SQL & "[Expense Transfer Basic Query].Flag "
+SQL = SQL & "FROM [Expense Transfer Basic Query];"
+DoCmd.RunSQL SQL
+End Function
+
+Query: Expense Transfer Query - dùng để bind vào UI
+SELECT DISTINCTROW [Expence Transfer Basic Table].[Account ID], [Expence Transfer Basic Table].[ExObject ID], [Expence Transfer Basic Table].[Expense Atribute ID], [Expence Transfer Basic Table].Rest, [Expence Transfer Basic Table].Flag, [Expence Transfer Basic Table].UndoValue, [Expence Transfer Basic Table]![Amount ] AS Amount
+FROM [Expence Transfer Basic Table]
+WHERE ((([Expence Transfer Basic Table].Rest)<>0));
+
+Expense Transfer Query
+Hàm tạo chứng từ dự trên dữ liệu query bind vào bảng
+Private Function ExTransfer()
+Dim msg
+Dim MyDB As DAO.Database
+Dim MyRecord As DAO.Recordset
+Dim BillRecord As DAO.Recordset
+Dim ExRecord As DAO.Recordset
+Dim Amount  As Variant
+Dim isTurnover As Integer
+ If Me.Turnoverflag Then
+     isTurnover = -1
+ Else
+    isTurnover = 1
+ End If
+m = SaveRecord()
+Set MyDB = CurrentDb()
+Set MyRecord = Me![Expence Transfer Subform].Form.RecordsetClone
+If MyRecord.RecordCount = 0 Then
+     Exit Function
+Else
+     ValidRecordNo = 0
+     Amount = 0
+     MyRecord.MoveFirst
+      Do While Not MyRecord.EOF
+      If MyRecord("Flag") = True Then
+       ValidRecordNo = ValidRecordNo + 1
+   Amount = Amount + (EvalDefault(MyRecord("Rest"), 0) - EvalDefault(MyRecord("Amount"), 0))
+      End If
+      MyRecord.Edit
+      MyRecord.MoveNext
+    Loop
+
+End If
+MyRecord.Close
+
+If ValidRecordNo = 0 Then
+ Exit Function
+End If
+
+DoCmd.Hourglass True
+ 
+ ' Creating new bill
+ Set MyRecord = MyDB.OpenRecordset("Bills")
+MyRecord.AddNew
+ MyRecord("Bill No") = DMax("[Bill ID]", "[Bills]") + 1
+ If Me![Contents] = "" Or IsNull(Me![Contents]) Then
+  MyRecord("Contents") = getmessage("054") '"Ket chuyen chi phi"
+ Else
+  MyRecord("Contents") = Me![Contents]
+ End If
+ MyRecord("Bill Date") = GetEndDate()
+ MyRecord("BookFlag") = True '
+ MyRecord.Update
+ MyRecord.Close
+
+ gBillID = DMax("[Bill ID]", "[Bills]")
+
+'Create Credit Transaction - if transaction is turnover, so create Debit Transaction
+ 
+ Set MyRecord = MyDB.OpenRecordset("Transaction List")
+ 
+ MyRecord.AddNew
+ MyRecord("Bill ID") = gBillID
+ MyRecord("Amount") = Amount * isTurnover
+ MyRecord("Account ID") = Me![SrAccountID]
+ MyRecord("DBCR") = -1 * isTurnover
+ 'them code thinhpv
+ MyRecord("CreateDate") = Now
+ MyRecord("CreateUser") = CurrentUser
+ 'end code thinhpv
+ MyRecord.Update
+ 
+ gID = DMax("[ID]", "[Transaction List]")
+ 
+ 'Create Debit Transaction - if transaction is turnover, so create Credit Transaction
+ 
+MyRecord.AddNew
+ MyRecord("Bill ID") = gBillID
+ MyRecord("Amount") = Amount * isTurnover
+ MyRecord("Account ID") = Me![DesAccountID]
+ MyRecord("DBCR") = 1 * isTurnover
+ MyRecord("ParrentID") = gID
+ 'them code thinhpv
+ MyRecord("CreateDate") = Now
+ MyRecord("CreateUser") = CurrentUser
+ 'end code thinhpv
+ MyRecord.Update
+ MyRecord.Close
+ 
+ 
+ 'Details of Debit Expense  Account (Source Account)
+ 
+ Set MyRecord = Me![Expence Transfer Subform].Form.RecordsetClone
+ Set ExRecord = MyDB.OpenRecordset("Expense Object Input Line")
+ MyRecord.MoveFirst
+ Do While Not MyRecord.EOF
+   If MyRecord("Flag") = True Then
+        ExRecord.AddNew
+        ExRecord("ID") = gID
+        ExRecord("ExObject ID") = MyRecord("ExObject ID")
+        ExRecord("Expense Atribute ID") = MyRecord("Expense Atribute ID")
+        ExRecord("Amount") = (EvalDefault(MyRecord("Rest"), 0) - EvalDefault(MyRecord("Amount"), 0)) * isTurnover
+        ExRecord("TransFlag") = True
+        ExRecord.Update
+                     
+    End If
+     MyRecord.MoveNext
+  Loop
+MyRecord.Close
+ExRecord.Close
+ 
+ 'If Des Account is Expense Account
+
+If Me![DesAccountID].Column(2) = "E" Then
+   
+             Set MyRecord = Me![Expence Transfer Subform].Form.RecordsetClone
+             Set ExRecord = MyDB.OpenRecordset("Expense Object Input Line")
+             MyRecord.MoveFirst
+              Do While Not MyRecord.EOF
+               
+               If MyRecord("Flag") = True Then
+                    ExRecord.AddNew
+                    ExRecord("ID") = gID + 1
+                    ExRecord("ExObject ID") = MyRecord("ExObject ID")
+                    ExRecord("Expense Atribute ID") = MyRecord("Expense Atribute ID")
+                    ExRecord("Amount") = (EvalDefault(MyRecord("Rest"), 0) - EvalDefault(MyRecord("Amount"), 0)) * isTurnover
+                   ExRecord.Update
+                                                      
+                End If
+                   MyRecord.MoveNext
+                   
+                 Loop
+            MyRecord.Close
+            ExRecord.Close
+   End If
+
+         Set MyRecord = Me![Expence Transfer Subform].Form.RecordsetClone
+        
+             MyRecord.MoveFirst
+             Do While Not MyRecord.EOF
+               If MyRecord("Flag") = True Then
+              MyRecord.Edit
+              MyRecord("UndoValue") = MyRecord("Rest")
+              MyRecord("Rest") = MyRecord("Amount")
+               MyRecord("AMount") = Null
+               MyRecord.Update
+               End If
+               MyRecord.MoveNext
+            Loop
+            
+DoCmd.Hourglass False
+msgboxOK (getmessage("026") & Me!SrAccountID & getmessage("027") & Me!DesAccountID)
+'msgbox "Qu¸ tr×nh kÕt chuyÓn ®· ®­îc thùc hiÖn cho c¸c tµi kho¶n " & Me!SrAccountID & " vµ " & Me!DesAccountID, 64, gApplicationName
+UndoFlag = True
+Me![Undo].Enabled = UndoFlag
+End Function
+

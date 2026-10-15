@@ -12,6 +12,8 @@ public partial class MainWindow : ThemedWindow {
     private bool _isExiting = false;
     private void BtnVoucherTest_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e) { new NewaccNet.Wpf.AppSystem.Voucher.VoucherListView().Show(); }
     private void BtnOpeningBalance_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e) { new NewaccNet.Wpf.AppSystem.Voucher.OpeningBalanceWindow().Show(); }
+    private void BtnCostAllocation_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e) { new NewaccNet.Wpf.AppSystem.CostAllocation.CostAllocationWindow().Show(); }
+    private void BtnCostTransfer_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e) { new NewaccNet.Wpf.AppSystem.CostTransfer.CostTransferWindow().Show(); }
     public MainWindow(string username, string fullName, int roleMask)
     {
         InitializeComponent();
@@ -273,8 +275,12 @@ public partial class MainWindow : ThemedWindow {
         }
     }
 
+    public static bool SuppressExitPrompt { get; set; } = false;
+
     private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
+        if (SuppressExitPrompt) return;
+
         if (!_isExiting)
         {
             if (MessageBox.Show("Bạn có chắc chắn muốn thoát ứng dụng không?", "Xác nhận", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)

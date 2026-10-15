@@ -142,7 +142,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Taxrateid property of the Entity TaxRate<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "TaxRate"."Taxrateid".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "TaxRate"."Taxrateid".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
 		public virtual System.Int32 Taxrateid
 		{
 			get { return (System.Int32)GetValue((int)TaxRateFieldIndex.Taxrateid, true); }

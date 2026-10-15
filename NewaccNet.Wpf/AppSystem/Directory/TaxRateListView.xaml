@@ -35,7 +35,11 @@
                 </dxg:TableView>
             </dxg:GridControl.View>
             <dxg:GridControl.Columns>
-                <dxg:GridColumn FieldName="Taxrateid" Header="Mã thuế suất (Auto)" Width="150" FixedWidth="True" AllowEditing="False" />
+                <dxg:GridColumn FieldName="Taxrateid" Header="Mã thuế suất (ID)" Width="140" FixedWidth="True">
+                    <dxg:GridColumn.EditSettings>
+                        <dxe:TextEditSettings MaskType="Numeric" Mask="d" MaskUseAsDisplayFormat="True"/>
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
                 <dxg:GridColumn FieldName="Taxratedes" Header="Mô tả thuế suất" Width="*" />
                 <dxg:GridColumn FieldName="Rate" Header="Tỷ lệ (%)" Width="150" FixedWidth="True">
                     <dxg:GridColumn.EditSettings>

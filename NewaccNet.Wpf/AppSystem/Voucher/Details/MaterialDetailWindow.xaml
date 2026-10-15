@@ -21,12 +21,20 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- TOOLBAR CHUẨN DEVEXPRESS: LƯU, THÊM DÒNG, XÓA DÒNG, IN PHIẾU, ĐÓNG -->
+        <!-- TOOLBAR CHUẨN DEVEXPRESS: LƯU, THÊM DÒNG, XÓA DÒNG, QUẢN LÝ & ĐIỀU HƯỚNG PHIẾU KHO, IN PHIẾU, ĐÓNG -->
         <dxb:BarContainerControl Grid.Row="0">
             <dxb:ToolBarControl ShowDragWidget="False" AllowCustomizationMenu="False" AllowHide="False" AllowQuickCustomization="False" GlyphSize="Small">
                 <dxb:BarButtonItem Name="btnAccept" Content="Chấp nhận (Ctrl+S)" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_save.svg'}" ItemClick="BtnAccept_Click" BarItemDisplayMode="ContentAndGlyph"/>
                 <dxb:BarButtonItem Name="btnAddRow" Content="Thêm dòng (Insert)" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_new.svg'}" ItemClick="BtnAddRow_Click" BarItemDisplayMode="ContentAndGlyph"/>
                 <dxb:BarButtonItem Name="btnDeleteRow" Content="Xóa dòng (Delete)" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_delete.svg'}" ItemClick="BtnDeleteRow_Click" BarItemDisplayMode="ContentAndGlyph"/>
+                <dxb:BarItemSeparator/>
+                <dxb:BarButtonItem Name="btnAddVoucher" Content="Thêm phiếu kho" ToolTip="Thêm phiếu kho mới (kho khác) vào cùng tài khoản" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/outlook%20inspired/addfile.svg'}" ItemClick="BtnAddVoucher_Click" BarItemDisplayMode="ContentAndGlyph"/>
+                <dxb:BarButtonItem Name="btnDeleteVoucher" Content="Xóa phiếu kho" ToolTip="Xóa phiếu kho đang hiển thị" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_clear.svg'}" ItemClick="BtnDeleteVoucher_Click" BarItemDisplayMode="ContentAndGlyph"/>
+                <dxb:BarButtonItem Name="btnFirstVoucher" ToolTip="Phiếu kho đầu tiên" IsEnabled="{Binding CanNavigatePrev}" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/arrows/doublefirst.svg'}" ItemClick="BtnFirstVoucher_Click"/>
+                <dxb:BarButtonItem Name="btnPrevVoucher" ToolTip="Phiếu kho trước" IsEnabled="{Binding CanNavigatePrev}" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/arrows/prev.svg'}" ItemClick="BtnPrevVoucher_Click"/>
+                <dxb:BarStaticItem Name="lblVoucherNav" Content="{Binding NavigationPositionText}" ShowBorder="True"/>
+                <dxb:BarButtonItem Name="btnNextVoucher" ToolTip="Phiếu kho tiếp theo" IsEnabled="{Binding CanNavigateNext}" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/arrows/next.svg'}" ItemClick="BtnNextVoucher_Click"/>
+                <dxb:BarButtonItem Name="btnLastVoucher" ToolTip="Phiếu kho cuối cùng" IsEnabled="{Binding CanNavigateNext}" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/arrows/doublelast.svg'}" ItemClick="BtnLastVoucher_Click"/>
                 <dxb:BarItemSeparator/>
                 <dxb:BarButtonItem Name="btnPrint" Content="In phiếu (Ctrl+P)" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/print/print.svg'}" ItemClick="BtnPrint_Click" BarItemDisplayMode="ContentAndGlyph"/>
                 <dxb:BarItemSeparator/>
@@ -135,7 +143,7 @@
         </dxlc:LayoutControl>
 
         <!-- DETAILS GRID -->
-        <dxg:GridControl x:Name="GridMaterialDetails" Grid.Row="2" Margin="10,0" ItemsSource="{Binding InventoryVoucher.InventoryVoucherLines}" CustomUnboundColumnData="GridMaterialDetails_CustomUnboundColumnData" AutoGenerateColumns="None">
+        <dxg:GridControl x:Name="GridMaterialDetails" Grid.Row="2" Margin="10,0" ItemsSource="{Binding CurrentLines}" CustomUnboundColumnData="GridMaterialDetails_CustomUnboundColumnData" AutoGenerateColumns="None">
             <dxg:GridControl.View>
                 <base:AppDetailTableView x:Name="viewDetails" ShowGroupPanel="False" NewItemRowPosition="Bottom" 
                                EditorButtonShowMode="ShowForFocusedRow"
@@ -225,13 +233,22 @@
         <!-- FOOTER ĐỊNH KHOẢN & TỔNG TIỀN (3 DÒNG: TIÊU ĐỀ -> TÀI KHOẢN -> SỐ TIỀN) -->
         <Border Grid.Row="3" Background="#F8F9FA" BorderBrush="#E0E0E0" BorderThickness="0,1,0,0" Padding="15,8,15,8">
             <StackPanel Orientation="Vertical">
-                <!-- Footer khi Nhập/Xuất nội bộ (Không mua bán): Chỉ hiện tổng tiền hàng -->
-                <StackPanel Orientation="Vertical" Visibility="{Binding NonTradeFooterVisibility}" HorizontalAlignment="Left" Width="220">
-                    <TextBlock Text="Tổng tiền vật tư" FontWeight="SemiBold" Foreground="#555" Margin="0,0,0,4"/>
-                    <dxe:TextEdit EditValue="{Binding TotalCostAmount, Mode=OneWay}" 
-                                  IsReadOnly="True" ShowBorder="False" Focusable="False"
-                                  MaskType="Numeric" Mask="n0" MaskUseAsDisplayFormat="True" 
-                                  FontWeight="Bold" FontSize="15" Foreground="#1565C0" HorizontalContentAlignment="Left"/>
+                <!-- Footer khi Nhập/Xuất nội bộ (Không mua bán): Hiện tiền phiếu hiện tại & tổng tiền toàn bộ các phiếu kho thuộc TK -->
+                <StackPanel Orientation="Horizontal" Visibility="{Binding NonTradeFooterVisibility}" HorizontalAlignment="Left">
+                    <StackPanel Orientation="Vertical" Width="210">
+                        <TextBlock Text="Tiền phiếu kho đang xem" FontWeight="SemiBold" Foreground="#555" Margin="0,0,0,4"/>
+                        <dxe:TextEdit EditValue="{Binding CurrentVoucherCostAmount, Mode=OneWay}" 
+                                      IsReadOnly="True" ShowBorder="False" Focusable="False"
+                                      MaskType="Numeric" Mask="n0" MaskUseAsDisplayFormat="True" 
+                                      FontWeight="Bold" FontSize="15" Foreground="#2E7D32" HorizontalContentAlignment="Left"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" Width="260" Margin="30,0,0,0">
+                        <TextBlock Text="Tổng cộng tài khoản (Tất cả phiếu kho)" FontWeight="SemiBold" Foreground="#555" Margin="0,0,0,4"/>
+                        <dxe:TextEdit EditValue="{Binding TotalCostAmount, Mode=OneWay}" 
+                                      IsReadOnly="True" ShowBorder="False" Focusable="False"
+                                      MaskType="Numeric" Mask="n0" MaskUseAsDisplayFormat="True" 
+                                      FontWeight="Bold" FontSize="15" Foreground="#1565C0" HorizontalContentAlignment="Left"/>
+                    </StackPanel>
                 </StackPanel>
 
                 <!-- Footer khi Mua bán (NM / XB): Hiện 4 cột khi XB, 3 cột khi NM (Tiêu đề -> Tài khoản -> Số tiền) -->

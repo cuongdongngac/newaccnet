@@ -25,7 +25,7 @@
             <dxr:RibbonDefaultPageCategory>
                 <!-- ==================== Tab 1: NGHIỆP VỤ (ƯU TIÊN) ==================== -->
                 <dxr:RibbonPage Caption="Nghiệp vụ" IsSelected="True">
-                    <dxr:RibbonPageGroup Caption=" ">
+                    <dxr:RibbonPageGroup Caption="Chứng từ &amp; Phân bổ">
                         <dxb:BarButtonItem Content="Chứng từ" Hint="Chứng từ" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_invoice.svg'}" ItemClick="BtnVoucherTest_ItemClick" auth:AuthHelper.RequiredMask="8">
                             <dxb:BarButtonItem.SuperTip>
                                 <dx:SuperTip>
@@ -42,6 +42,15 @@
                                 </dx:SuperTip>
                             </dxb:BarButtonItem.SuperTip>
                         </dxb:BarButtonItem>
+                        <dxb:BarButtonItem Content="Phân bổ CP" Hint="Phân bổ chi phí theo tiêu thức" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_pivotchart.svg'}" ItemClick="BtnCostAllocation_ItemClick" auth:AuthHelper.RequiredMask="64">
+                            <dxb:BarButtonItem.SuperTip>
+                                <dx:SuperTip>
+                                    <dx:SuperTipHeaderItem Content="Bảng Phân bổ Chi phí (Cost Allocation)"/>
+                                    <dx:SuperTipItem Content="Tập hợp chi phí chung (TK 1541, 627...) và tự động phân bổ theo tỷ lệ tiêu thức sang từng công trình/đối tượng chi phí."/>
+                                </dx:SuperTip>
+                            </dxb:BarButtonItem.SuperTip>
+                        </dxb:BarButtonItem>
+                        <dxb:BarButtonItem Content="Kết chuyển CP" Hint="Kết chuyển chi phí" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_transition.svg'}" ItemClick="BtnCostTransfer_ItemClick" auth:AuthHelper.RequiredMask="64"/>
                     </dxr:RibbonPageGroup>
                 </dxr:RibbonPage>
 

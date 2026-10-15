@@ -1,16 +1,108 @@
 using System;
+using System.ComponentModel;
 
 namespace DataAccess.EntityClasses
 {
     public partial class InventoryVoucherLineEntity
     {
+        private MaterialTaxLineEntity _subscribedTaxLine;
+
+        protected override void OnInitClassMembersComplete()
+        {
+            base.OnInitClassMembersComplete();
+            SyncTaxLineSubscription();
+        }
+
+        private void SyncTaxLineSubscription()
+        {
+            var currentTaxLine = this.MaterialTaxLine;
+            if (ReferenceEquals(_subscribedTaxLine, currentTaxLine))
+                return;
+
+            if (_subscribedTaxLine != null)
+            {
+                _subscribedTaxLine.PropertyChanged -= MaterialTaxLine_PropertyChanged;
+            }
+
+            _subscribedTaxLine = currentTaxLine;
+
+            if (_subscribedTaxLine != null)
+            {
+                _subscribedTaxLine.PropertyChanged += MaterialTaxLine_PropertyChanged;
+            }
+        }
+
+        private void MaterialTaxLine_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(MaterialTaxLineEntity.SellPrice))
+            {
+                OnPropertyChanged(nameof(SellPrice));
+                OnPropertyChanged(nameof(SellAmount));
+                OnPropertyChanged(nameof(TaxAmount));
+                this.InventoryVoucher?.NotifyLinesChanged();
+            }
+            else if (e.PropertyName == nameof(MaterialTaxLineEntity.Rate))
+            {
+                OnPropertyChanged(nameof(Rate));
+                OnPropertyChanged(nameof(TaxAmount));
+                this.InventoryVoucher?.NotifyLinesChanged();
+            }
+            else if (e.PropertyName == nameof(MaterialTaxLineEntity.Taxrateid))
+            {
+                OnPropertyChanged(nameof(Taxrateid));
+                OnPropertyChanged(nameof(TaxAmount));
+                this.InventoryVoucher?.NotifyLinesChanged();
+            }
+        }
+
+        protected override void OnPropertyChanged(string propertyName)
+        {
+            base.OnPropertyChanged(propertyName);
+
+            if (propertyName == nameof(MaterialTaxLine))
+            {
+                SyncTaxLineSubscription();
+                OnPropertyChanged(nameof(SellPrice));
+                OnPropertyChanged(nameof(Rate));
+                OnPropertyChanged(nameof(Taxrateid));
+                OnPropertyChanged(nameof(SellAmount));
+                OnPropertyChanged(nameof(TaxAmount));
+                this.InventoryVoucher?.NotifyLinesChanged();
+            }
+            else if (propertyName == nameof(Quantity) || propertyName == nameof(Price))
+            {
+                OnPropertyChanged(nameof(Amount));
+                OnPropertyChanged(nameof(SellAmount));
+                OnPropertyChanged(nameof(TaxAmount));
+                this.InventoryVoucher?.NotifyLinesChanged();
+            }
+        }
+
         private MaterialTaxLineEntity EnsureTaxLine(bool createIfMissing)
         {
             if (this.MaterialTaxLine == null && createIfMissing)
             {
                 this.MaterialTaxLine = new MaterialTaxLineEntity();
             }
+            SyncTaxLineSubscription();
             return this.MaterialTaxLine;
+        }
+
+        public double Amount => Math.Round((this.Quantity ?? 0) * (this.Price ?? 0), 0);
+
+        public double SellAmount => Math.Round((this.Quantity ?? 0) * (this.SellPrice ?? 0), 0);
+
+        public double TaxAmount
+        {
+            get
+            {
+                bool isSales = (this.InventoryVoucher?.VoucherType == "XB")
+                    || (string.IsNullOrEmpty(this.InventoryVoucher?.VoucherType)
+                        && this.InventoryVoucher?.JournalEntry?.Dbcr == -1
+                        && (this.InventoryVoucher?.Taxflag ?? false));
+                double baseAmount = isSales ? this.SellAmount : this.Amount;
+                return Math.Round(baseAmount * (this.Rate ?? 0), 0);
+            }
         }
 
         public double? SellPrice

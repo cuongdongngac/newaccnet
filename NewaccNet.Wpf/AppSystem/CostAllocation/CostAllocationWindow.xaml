@@ -1,0 +1,240 @@
+<base:BaseWindow x:Class="NewaccNet.Wpf.AppSystem.CostAllocation.CostAllocationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+        xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+        xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+        xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+        xmlns:dxs="clr-namespace:NewaccNet.Wpf.Controls.Search"
+        xmlns:base="clr-namespace:NewaccNet.Wpf.Views.Base"
+        Title="Bảng phân bổ chi phí (Expense Distribution)" 
+        Height="780" Width="1160" MinHeight="650" MinWidth="950"
+        WindowStartupLocation="CenterOwner">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="1.2*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- KHỐI 1: THIẾT LẬP THAM SỐ PHÂN BỔ (TÀI KHOẢN & THỜI GIAN) -->
+        <dxlc:LayoutControl Grid.Row="0" Orientation="Vertical" Padding="12,10,12,6">
+            <dxlc:LayoutGroup Orientation="Horizontal">
+                <dxlc:LayoutItem Label="Tài khoản nguồn (có):" HorizontalAlignment="Stretch">
+                    <dxg:LookUpEdit x:Name="lueSourceAccount" 
+                                    ValueMember="AccountId"
+                                    AutoComplete="False" ImmediatePopup="True" IsTextEditable="True"
+                                    EditValueChanged="FilterParam_Changed">
+                        <dxmvvm:Interaction.Behaviors>
+                            <dxs:SearchLookUpBehavior Display="Code" SearchMode="All"/>
+                        </dxmvvm:Interaction.Behaviors>
+                    </dxg:LookUpEdit>
+                </dxlc:LayoutItem>
+
+                <dxlc:LayoutItem Label="Tài khoản đích (nợ):" HorizontalAlignment="Stretch" Margin="15,0,0,0">
+                    <dxg:LookUpEdit x:Name="lueDestAccount" 
+                                    ValueMember="AccountId"
+                                    AutoComplete="False" ImmediatePopup="True" IsTextEditable="True"
+                                    EditValueChanged="FilterParam_Changed">
+                        <dxmvvm:Interaction.Behaviors>
+                            <dxs:SearchLookUpBehavior Display="Code" SearchMode="All"/>
+                        </dxmvvm:Interaction.Behaviors>
+                    </dxg:LookUpEdit>
+                </dxlc:LayoutItem>
+
+                <dxlc:LayoutItem Label="Yếu tố đích:" HorizontalAlignment="Stretch" Margin="15,0,0,0">
+                    <dxg:LookUpEdit x:Name="lueDestCostElement" 
+                                    ValueMember="Id"
+                                    AutoComplete="False" ImmediatePopup="True" IsTextEditable="True"
+                                    NullText="Chọn yếu tố chi phí ghi nhận..."
+                                    EditValueChanged="FilterParam_Changed">
+                        <dxmvvm:Interaction.Behaviors>
+                            <dxs:SearchLookUpBehavior Display="Name" SearchMode="All"/>
+                        </dxmvvm:Interaction.Behaviors>
+                    </dxg:LookUpEdit>
+                </dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+
+            <dxlc:LayoutGroup Orientation="Horizontal" Margin="0,6,0,0">
+                <dxlc:LayoutItem Label="Từ ngày:" Width="280">
+                    <dxe:DateEdit x:Name="dtFromDate" Mask="dd/MM/yyyy" MaskUseAsDisplayFormat="True" EditValueChanged="FilterParam_Changed"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Đến ngày:" Width="280" Margin="15,0,0,0">
+                    <dxe:DateEdit x:Name="dtToDate" Mask="dd/MM/yyyy" MaskUseAsDisplayFormat="True" EditValueChanged="FilterParam_Changed"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem HorizontalAlignment="Right">
+                    <dx:SimpleButton Content="Tải dữ liệu nguồn" 
+                                     Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_transition.svg'}"
+                                     Width="145" Height="26" Click="BtnRefreshPool_Click"/>
+                </dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+        </dxlc:LayoutControl>
+
+        <!-- KHỐI 2: LƯỚI TẬP HỢP CHI PHÍ CẦN PHÂN BỔ (TỬ SỐ CHUNG) -->
+        <GroupBox Grid.Row="1" Header="Chi tiết chi phí nguồn cần phân bổ (Tài khoản nguồn)" Margin="10,2,10,2">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <dxg:GridControl x:Name="gridSourcePool" Grid.Row="0">
+                    <dxg:GridControl.Columns>
+                        <dxg:GridColumn FieldName="CostObjectId" Header="Mã ĐTCP" Width="100" FixedWidth="True" HorizontalHeaderContentAlignment="Center"/>
+                        <dxg:GridColumn FieldName="CostObjectName" Header="Đối tượng chi phí (Công trình/Sản phẩm)" Width="*" MinWidth="260" HorizontalHeaderContentAlignment="Center"/>
+                        <dxg:GridColumn FieldName="CostElementId" Header="Mã Yếu tố" Width="90" FixedWidth="True" HorizontalHeaderContentAlignment="Center"/>
+                        <dxg:GridColumn FieldName="CostElementName" Header="Tên yếu tố chi phí" Width="200" FixedWidth="True" HorizontalHeaderContentAlignment="Center"/>
+                        <dxg:GridColumn FieldName="Amount" Header="Số tiền" Width="170" FixedWidth="True" HorizontalHeaderContentAlignment="Center">
+                            <dxg:GridColumn.EditSettings>
+                                <dxe:TextEditSettings DisplayFormat="#,##0" HorizontalContentAlignment="Right"/>
+                            </dxg:GridColumn.EditSettings>
+                        </dxg:GridColumn>
+                    </dxg:GridControl.Columns>
+                    <dxg:GridControl.View>
+                        <dxg:TableView ShowGroupPanel="False" AllowEditing="False" AutoWidth="False" ShowTotalSummary="True"/>
+                    </dxg:GridControl.View>
+                    <dxg:GridControl.TotalSummary>
+                        <dxg:GridSummaryItem FieldName="Amount" SummaryType="Sum" DisplayFormat="Tổng chi phí: {0:#,##0}"/>
+                    </dxg:GridControl.TotalSummary>
+                </dxg:GridControl>
+
+                <!-- DÒNG TỔNG SỐ NỔI BẬT ĐÚNG THEO FORM GỐC -->
+                <Border Grid.Row="1" Background="#FFFDF7E7" BorderBrush="#FFE0C080" BorderThickness="0,1,0,0" Padding="10,6">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Text="Tổng số:" FontWeight="Bold" FontSize="14" Foreground="#FFD32F2F" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="lblTotalPool" Text="0 đ" FontWeight="Bold" FontSize="15" Foreground="#FFD32F2F" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </GroupBox>
+
+        <!-- THANH PHÂN CÁCH TIÊU THỨC -->
+        <Border Grid.Row="2" Background="#FFF0F4F8" Padding="12,5" Margin="10,4,10,2" CornerRadius="3">
+            <TextBlock Text="Phương thức tính tiêu thức phân bổ" FontWeight="Bold" FontStyle="Italic" Foreground="#FF1565C0" FontSize="13"/>
+        </Border>
+
+        <!-- KHỐI 3: TIÊU THỨC PHÂN BỔ (BÊN TRÁI: CHỌN TK TIÊU THỨC, BÊN PHẢI: LƯỚI TÍNH TỶ LỆ VÀ SỐ TIỀN) -->
+        <Grid Grid.Row="3" Margin="10,2,10,6">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="280" MinWidth="200" MaxWidth="420"/>
+                <ColumnDefinition Width="6"/>
+                <ColumnDefinition Width="*" MinWidth="450"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Cột trái: Bộ chọn tài khoản tiêu thức cấp dưới cùng -->
+            <GroupBox Grid.Column="0" Header="Tài khoản tiêu thức (Cấp chi tiết)" Margin="0,0,0,0">
+                <Grid Margin="4">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Chọn TK để thêm (dùng LookUpEdit với SearchLookUpBehavior 2 cột Số TK | Tên TK) -->
+                    <dxg:LookUpEdit x:Name="lueAddCriteriaAccount" Grid.Row="0"
+                                    ValueMember="AccountId"
+                                    AutoComplete="False" ImmediatePopup="True" IsTextEditable="True"
+                                    NullText="Chọn tài khoản tiêu thức cấp dưới cùng...">
+                        <dxmvvm:Interaction.Behaviors>
+                            <dxs:SearchLookUpBehavior Display="Code" SearchMode="All"/>
+                        </dxmvvm:Interaction.Behaviors>
+                    </dxg:LookUpEdit>
+
+                    <!-- Các nút thêm / bớt tài khoản -->
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,6,0,6">
+                        <dx:SimpleButton x:Name="btnAddAccount" Content="Thêm &gt;" Width="65" Height="24" Click="BtnAddAccount_Click"/>
+                        <dx:SimpleButton x:Name="btnRemoveAccount" Content="&lt; Bớt" Width="65" Height="24" Margin="4,0,0,0" Click="BtnRemoveAccount_Click"/>
+                        <dx:SimpleButton x:Name="btnClearAccounts" Content="Xóa hết" Width="65" Height="24" Margin="4,0,0,0" Click="BtnClearAccounts_Click"/>
+                    </StackPanel>
+
+                    <!-- Danh sách các tài khoản tiêu thức đã chọn (hiển thị Mã TK và Tên TK rõ ràng) -->
+                    <ListBox x:Name="lstCriteriaAccounts" Grid.Row="2" BorderBrush="#FFCCCCCC" FontSize="12"
+                             SelectionMode="Extended" KeyDown="LstCriteriaAccounts_KeyDown" MouseDoubleClick="LstCriteriaAccounts_MouseDoubleClick">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="3,2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="65"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="{Binding AccountId}" FontWeight="Bold" Foreground="#FF1565C0" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding AccountName}" Foreground="#FF424242" Margin="6,0,0,0" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </GroupBox>
+
+            <!-- THANH CO GIÃN GRID SPLITTER TIỆN DỤNG -->
+            <GridSplitter Grid.Column="1" Width="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#FFE0E0E0" Cursor="SizeWE" ShowsPreview="True"/>
+
+            <!-- Cột phải: Lưới tiêu thức tính toán % và số tiền phân bổ -->
+            <GroupBox Grid.Column="2" Header="Bảng tính toán phân bổ theo đối tượng chi phí" Margin="0,0,0,0">
+                <dxg:GridControl x:Name="gridCriteria">
+                    <dxg:GridControl.Columns>
+                        <dxg:GridColumn FieldName="CostObjectId" Header="Mã ĐTCP" Width="100" FixedWidth="True" HorizontalHeaderContentAlignment="Center"/>
+                        <dxg:GridColumn FieldName="CostObjectName" Header="Đối tượng chi phí (Công trình/Sản phẩm)" Width="*" MinWidth="260" HorizontalHeaderContentAlignment="Center"/>
+                        <dxg:GridColumn FieldName="BaseAmount" Header="Chi phí tiêu thức" Width="160" FixedWidth="True" HorizontalHeaderContentAlignment="Center">
+                            <dxg:GridColumn.EditSettings>
+                                <dxe:TextEditSettings DisplayFormat="#,##0" HorizontalContentAlignment="Right"/>
+                            </dxg:GridColumn.EditSettings>
+                        </dxg:GridColumn>
+                        <dxg:GridColumn FieldName="RatioPercent" Header="%" Width="85" FixedWidth="True" HorizontalHeaderContentAlignment="Center">
+                            <dxg:GridColumn.EditSettings>
+                                <dxe:TextEditSettings DisplayFormat="0.00%" HorizontalContentAlignment="Right"/>
+                            </dxg:GridColumn.EditSettings>
+                        </dxg:GridColumn>
+                        <dxg:GridColumn FieldName="AllocatedAmount" Header="Phân bổ" Width="170" FixedWidth="True" HorizontalHeaderContentAlignment="Center">
+                            <dxg:GridColumn.EditSettings>
+                                <dxe:TextEditSettings DisplayFormat="#,##0" HorizontalContentAlignment="Right"/>
+                            </dxg:GridColumn.EditSettings>
+                        </dxg:GridColumn>
+                    </dxg:GridControl.Columns>
+                    <dxg:GridControl.View>
+                        <dxg:TableView ShowGroupPanel="False" AllowEditing="False" AutoWidth="False" ShowTotalSummary="True"/>
+                    </dxg:GridControl.View>
+                    <dxg:GridControl.TotalSummary>
+                        <dxg:GridSummaryItem FieldName="BaseAmount" SummaryType="Sum" DisplayFormat="Tổng tiêu thức: {0:#,##0}"/>
+                        <dxg:GridSummaryItem FieldName="RatioPercent" SummaryType="Sum" DisplayFormat="100%"/>
+                        <dxg:GridSummaryItem FieldName="AllocatedAmount" SummaryType="Sum" DisplayFormat="Tổng phân bổ: {0:#,##0}"/>
+                    </dxg:GridControl.TotalSummary>
+                </dxg:GridControl>
+            </GroupBox>
+        </Grid>
+
+        <!-- KHỐI 4: THANH NÚT HÀNH ĐỘNG & TRẠNG THÁI -->
+        <Border Grid.Row="4" Background="#FFF5F5F5" BorderBrush="#FFE0E0E0" BorderThickness="0,1,0,0" Padding="14,8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock x:Name="lblStatus" Text="Vui lòng bấm 'Tính toán' để tổng hợp chi phí phân bổ." 
+                               FontSize="13" FontWeight="SemiBold" Foreground="#FF616161" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <dx:SimpleButton x:Name="btnCalculate" Content="Tính toán" Width="120" Height="32" 
+                                     Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_validation.svg'}"
+                                     Click="BtnCalculate_Click"/>
+                    <dx:SimpleButton x:Name="btnDistribute" Content="Phân bổ" Width="130" Height="32" Margin="10,0,0,0"
+                                     FontWeight="Bold" Background="#FF1565C0" Foreground="White" IsEnabled="False"
+                                     Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_transition.svg'}"
+                                     Click="BtnDistribute_Click"/>
+                    <dx:SimpleButton x:Name="btnPrint" Content="In bảng kê" Width="110" Height="32" Margin="10,0,0,0"
+                                     Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_report.svg'}"
+                                     Click="BtnPrint_Click"/>
+                    <dx:SimpleButton x:Name="btnClose" Content="Kết thúc" Width="100" Height="32" Margin="10,0,0,0"
+                                     Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_close.svg'}"
+                                     Click="BtnClose_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</base:BaseWindow>

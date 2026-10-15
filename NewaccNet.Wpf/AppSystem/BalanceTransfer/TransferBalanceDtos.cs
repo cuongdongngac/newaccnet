@@ -62,6 +62,7 @@ namespace NewaccNet.Wpf.AppSystem.BalanceTransfer
         public double Quantity { get; set; }
         public double Price { get; set; }
         public double Amount { get; set; }
+        public short Dbcr { get; set; } = 1;
     }
 
     /// <summary>

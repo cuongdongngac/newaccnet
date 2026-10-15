@@ -39,7 +39,11 @@ namespace NewaccNet.Wpf.AppSystem.Directory
         private void TableView_RowUpdated(object sender, RowEventArgs e)
         {
             var entity = e.Row as TaxRateEntity;
-            if (entity == null) return;
+            if (entity.Taxrateid < 0)
+            {
+                MessageBox.Show("Mã thuế suất (ID) phải là số không âm (>= 0)!", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
 
             if (string.IsNullOrWhiteSpace(entity.Taxratedes))
             {
@@ -51,13 +55,12 @@ namespace NewaccNet.Wpf.AppSystem.Directory
             {
                 using (var adapter = AppDataAccessAdapter.Create())
                 {
-                    // Note: Taxrateid is usually auto-increment in LLBLGen, so we just save.
-                    adapter.SaveEntity(entity, true, false);
+                    adapter.SaveEntity(entity, false, false);
                 }
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show("Lỗi lưu dữ liệu: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Lỗi lưu dữ liệu thuế suất: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                 LoadData(); 
             }
         }

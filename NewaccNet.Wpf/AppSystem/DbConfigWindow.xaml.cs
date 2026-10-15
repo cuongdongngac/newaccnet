@@ -159,7 +159,8 @@ namespace NewaccNet.Wpf.AppSystem
                 "Đã lưu cấu hình kết nối CSDL thành công. Hệ thống sẽ tự động khởi động lại để áp dụng thay đổi.",
                 "Thông báo", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
             
-            // Tự khởi động lại ứng dụng
+            // Tự khởi động lại ứng dụng mà không hiển thị hộp thoại hỏi thoát
+            MainWindow.SuppressExitPrompt = true;
             System.Diagnostics.Process.Start(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
             System.Windows.Application.Current.Shutdown();
         }

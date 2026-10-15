@@ -33,6 +33,10 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
             DependencyProperty.Register(nameof(ExcludeMaterialAccounts), typeof(bool), typeof(AccountLookUpEdit),
                 new FrameworkPropertyMetadata(false, OnExcludeMaterialAccountsChanged));
 
+        public static readonly DependencyProperty ShowDetailButtonProperty =
+            DependencyProperty.Register(nameof(ShowDetailButton), typeof(bool), typeof(AccountLookUpEdit),
+                new FrameworkPropertyMetadata(true, OnShowDetailButtonChanged));
+
         public JournalEntryEntity JournalEntry
         {
             get => (JournalEntryEntity)GetValue(JournalEntryProperty);
@@ -43,6 +47,20 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
         {
             get => (bool)GetValue(ExcludeMaterialAccountsProperty);
             set => SetValue(ExcludeMaterialAccountsProperty, value);
+        }
+
+        public bool ShowDetailButton
+        {
+            get => (bool)GetValue(ShowDetailButtonProperty);
+            set => SetValue(ShowDetailButtonProperty, value);
+        }
+
+        private static void OnShowDetailButtonChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is AccountLookUpEdit editor && editor._detailButton != null)
+            {
+                editor._detailButton.Visibility = (bool)e.NewValue ? Visibility.Visible : Visibility.Collapsed;
+            }
         }
         #endregion
 
@@ -155,6 +173,7 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
             _detailButton.ToolTip = "Chi tiết tài khoản (Mở form phụ)";
             _detailButton.GlyphKind = GlyphKind.Regular;
             _detailButton.Click += Btn_Click;
+            _detailButton.Visibility = ShowDetailButton ? Visibility.Visible : Visibility.Collapsed;
             this.Buttons.Add(_detailButton);
 
             this.PopupOpened += (s, e) => _wasPopupOpened = true;
@@ -165,6 +184,11 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
 
         private void AccountLookUpEdit_Loaded(object sender, RoutedEventArgs e)
         {
+            if (_detailButton != null)
+            {
+                _detailButton.Visibility = ShowDetailButton ? Visibility.Visible : Visibility.Collapsed;
+            }
+
             if (this.ItemsSource == null)
             {
                 RefreshItemsSource();
@@ -275,15 +299,18 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
 
         public static string ResolveCategory(string accountId, string categoryId)
         {
-            if (!string.IsNullOrEmpty(categoryId)) return categoryId;
+            string cat = categoryId?.Trim() ?? string.Empty;
+            if (!string.IsNullOrEmpty(cat)) return cat;
             if (string.IsNullOrEmpty(accountId)) return string.Empty;
-            if (accountId.StartsWith("131") || accountId.StartsWith("331")) return "A";
-            if (accountId.StartsWith("15")) return "B";
+            if (accountId.StartsWith("131") || accountId.StartsWith("331") || accountId.StartsWith("138") || accountId.StartsWith("338")) return "A";
+            if (accountId.StartsWith("152") || accountId.StartsWith("153") || accountId.StartsWith("155") || accountId.StartsWith("156") || accountId.StartsWith("157")) return "B";
+            if (accountId.StartsWith("211") || accountId.StartsWith("213") || accountId.StartsWith("214") || accountId.StartsWith("242")) return "D";
             if (accountId.StartsWith("6") || accountId.StartsWith("154")) return "E";
+            if (accountId.StartsWith("121") || accountId.StartsWith("221") || accountId.StartsWith("222") || accountId.StartsWith("228")) return "S";
             return string.Empty;
         }
 
-        private static string GetCategoryForAccount(string accountId)
+        public static string GetCategoryForAccount(string accountId)
         {
             if (string.IsNullOrEmpty(accountId)) return string.Empty;
 
@@ -423,8 +450,22 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
             }
 
             currentEntry.AccountId = accountId;
-
             var owner = Window.GetWindow(this);
+            OpenDetailWindow(currentEntry, owner, this.ExcludeMaterialAccounts, false);
+        }
+
+        public static bool OpenDetailWindow(JournalEntryEntity currentEntry, Window owner, bool excludeMaterialAccounts = false, bool showNotSupportedMessage = false)
+        {
+            if (currentEntry == null || string.IsNullOrEmpty(currentEntry.AccountId))
+            {
+                if (showNotSupportedMessage)
+                {
+                    MessageBox.Show("Vui lòng chọn tài khoản trước khi nhập chi tiết.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                return false;
+            }
+
+            string accountId = currentEntry.AccountId;
             var voucherWindow = owner as VoucherEntryWindow;
             var master = (voucherWindow?.gridLeft?.SelectedItem ?? voucherWindow?.gridLeft?.CurrentItem ?? voucherWindow?.MasterEntries?.FirstOrDefault()) as JournalEntryEntity;
 
@@ -449,75 +490,63 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
             using (var adapter = AppDataAccessAdapter.Create())
             {
                 var account = new ChartOfAccountEntity(accountId);
-                if (adapter.FetchEntity(account))
+                if (!adapter.FetchEntity(account)) return false;
+
+                account.CategoryId = ResolveCategory(accountId, account.CategoryId);
+                string cat = account.CategoryId;
+
+                bool isDetailCategory = cat == "A" || cat == "B" || cat == "C" || cat == "D" || cat == "E" || cat == "S";
+                if (!isDetailCategory)
                 {
-                    account.CategoryId = ResolveCategory(accountId, account.CategoryId);
-
-                    // Nếu tài khoản thông thường không có form phụ (A: Công nợ, B: Kho, E: Chi phí...)
-                    if (account.CategoryId != "A" && account.CategoryId != "B" && account.CategoryId != "E")
+                    if (showNotSupportedMessage)
                     {
-                        return;
+                        MessageBox.Show($"Tài khoản {accountId} ({account.AccountName}) là tài khoản hạch toán thông thường, không có bảng chi tiết phụ.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
-
-                    // Nếu là tài khoản Vật tư (B) nhưng đang ở form vật tư (ExcludeMaterialAccounts == true, UpdateFilter == true hoặc owner is MaterialDetailWindow)
-                    // thì tuyệt đối KHÔNG mở form lồng đệ quy!
-                    if (account.CategoryId == "B" && (this.ExcludeMaterialAccounts || currentEntry.UpdateFilter || owner is Details.MaterialDetailWindow))
-                    {
-                        return;
-                    }
-
-                    // Chỉ khi tài khoản THỰC SỰ có Form phụ con thì mới yêu cầu Dbcr:
-                    if (!currentEntry.Dbcr.HasValue || currentEntry.Dbcr == 0)
-                    {
-                        if (currentEntry.UpdateFilter || this.ExcludeMaterialAccounts)
-                        {
-                            // Ở form vật tư, Dbcr đã được gán sẵn theo ngữ cảnh NM/XB
-                        }
-                        else
-                        {
-                            MessageBox.Show("Vui lòng chọn Nợ hoặc Có ở dòng chính trước khi mở chi tiết.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
-                            return;
-                        }
-                    }
-
-                    RouteToDetailForm(account, currentEntry);
+                    return false;
                 }
+
+                // Nếu là tài khoản Vật tư (B) nhưng đang ở form vật tư (ExcludeMaterialAccounts == true, UpdateFilter == true hoặc owner is MaterialDetailWindow)
+                // thì tuyệt đối KHÔNG mở form lồng đệ quy!
+                if (cat == "B" && (excludeMaterialAccounts || currentEntry.UpdateFilter || owner is Details.MaterialDetailWindow))
+                {
+                    return false;
+                }
+
+                // Chỉ khi tài khoản THỰC SỰ có Form phụ con thì mới yêu cầu Dbcr:
+                if (!currentEntry.Dbcr.HasValue || currentEntry.Dbcr == 0)
+                {
+                    if (!currentEntry.UpdateFilter && !excludeMaterialAccounts)
+                    {
+                        MessageBox.Show("Vui lòng chọn Nợ hoặc Có trước khi mở chi tiết.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return false;
+                    }
+                }
+
+                return RouteToDetailForm(account, currentEntry, owner, excludeMaterialAccounts);
             }
         }
 
-        private void RouteToDetailForm(ChartOfAccountEntity account, JournalEntryEntity entry)
+        private static bool RouteToDetailForm(ChartOfAccountEntity account, JournalEntryEntity entry, Window owner, bool excludeMaterialAccounts)
         {
-            var owner = Window.GetWindow(this);
             var voucherWindow = owner as VoucherEntryWindow;
+            string cat = account.CategoryId;
+            bool? result = false;
 
-            if (account.CategoryId == "A")
+            if (cat == "A")
             {
                 var debtForm = new Details.DebtDetailWindow(entry);
                 if (owner != null) debtForm.Owner = owner;
-
-                bool? result = debtForm.ShowDialog();
-                if (result == true)
-                {
-                    if (voucherWindow != null)
-                    {
-                        voucherWindow.CalculateBalance();
-                    }
-                    else if (owner is OpeningBalanceWindow obWin)
-                    {
-                        obWin.SaveDataSilently();
-                    }
-                }
+                result = debtForm.ShowDialog();
             }
-            else if (account.CategoryId == "B")
+            else if (cat == "B")
             {
-                if (owner is Details.MaterialDetailWindow || this.ExcludeMaterialAccounts || entry.UpdateFilter)
+                if (owner is Details.MaterialDetailWindow || excludeMaterialAccounts || entry.UpdateFilter)
                 {
-                    return;
+                    return false;
                 }
 
                 var voucher = voucherWindow?.CurrentVoucher;
 
-                // Kiểm tra xem dòng này hoặc cụm liên quan trong chứng từ đã có con chi tiết vật tư chưa
                 bool hasExistingDetails = (entry.InventoryVouchers != null && entry.InventoryVouchers.Count > 0)
                     || (entry.SubEntries != null && entry.SubEntries.Any(s => s.InventoryVouchers != null && s.InventoryVouchers.Count > 0));
 
@@ -528,62 +557,63 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
                 }
 
                 bool isNewMaterial = !hasExistingDetails;
-                Details.MaterialTransactionContext context;
-                if (isNewMaterial)
-                {
-                    context = Details.MaterialTransactionContext.CreateNew(entry, voucher);
-                }
-                else
-                {
-                    context = Details.MaterialTransactionContext.FromExisting(entry, voucher);
-                }
+                var context = isNewMaterial
+                    ? Details.MaterialTransactionContext.CreateNew(entry, voucher)
+                    : Details.MaterialTransactionContext.FromExisting(entry, voucher);
 
                 var materialForm = new Details.MaterialDetailWindow(context);
                 if (owner != null) materialForm.Owner = owner;
-                bool? result = materialForm.ShowDialog();
+                result = materialForm.ShowDialog();
 
-                if (result == true && voucherWindow != null)
+                if (result == true)
                 {
-                    (voucherWindow.gridLeft?.View as DevExpress.Xpf.Grid.TableView)?.HideEditor();
-                    (voucherWindow.gridRight?.View as DevExpress.Xpf.Grid.TableView)?.HideEditor();
                     context.Apply();
-                    voucherWindow.RefreshVoucherUI();
-                    voucherWindow.CalculateBalance();
+                    if (voucherWindow != null)
+                    {
+                        voucherWindow.RefreshVoucherUI();
+                    }
                 }
-                else if (result != true && isNewMaterial)
+                else if (isNewMaterial)
                 {
                     context.Discard();
                     if (voucherWindow != null)
                     {
                         voucherWindow.RefreshVoucherUI();
-                        voucherWindow.CalculateBalance();
                     }
                 }
             }
-            else if (account.CategoryId == "E")
+            else if (cat == "C")
             {
-                bool hasTax = account.Taxflag;
+                var currencyForm = new Details.CurrencyDetailWindow(entry);
+                if (owner != null) currencyForm.Owner = owner;
+                result = currencyForm.ShowDialog();
+            }
+            else if (cat == "D")
+            {
+                var assetForm = new Details.AssetDetailWindow(entry);
+                if (owner != null) assetForm.Owner = owner;
+                result = assetForm.ShowDialog();
+            }
+            else if (cat == "E")
+            {
+                bool hasTax = account.Taxflag && voucherWindow != null;
                 var costForm = new Details.CostDetailWindow(entry, hasTax);
                 if (owner != null) costForm.Owner = owner;
-                bool? result = costForm.ShowDialog();
-                if (result == true)
-                {
-                    if (voucherWindow != null)
-                    {
-                        voucherWindow.CalculateBalance();
-                        var view = voucherWindow.gridLeft.View as DevExpress.Xpf.Grid.TableView;
-                        if (view != null)
-                        {
-                            view.CloseEditor();
-                            voucherWindow.gridLeft.RefreshRow(view.FocusedRowHandle);
-                        }
-                    }
-                    else if (owner is OpeningBalanceWindow obWin)
-                    {
-                        obWin.SaveDataSilently();
-                    }
-                }
+                result = costForm.ShowDialog();
             }
+            else if (cat == "S")
+            {
+                var stockForm = new Details.StockDetailWindow(entry);
+                if (owner != null) stockForm.Owner = owner;
+                result = stockForm.ShowDialog();
+            }
+
+            if (voucherWindow != null)
+            {
+                voucherWindow.CalculateBalance();
+            }
+
+            return result == true;
         }
     }
 }

@@ -459,3 +459,46 @@ Credit = raw <= 0 ? -raw : 0         // CreditValue() Access
   - Ngoại tệ (`Category = 'C'`): Tự động tính ngược tỷ giá ghi sổ bình quân đầu kỳ: $\text{ExchangeRate} = \frac{\text{Tổng VND}}{\text{Tổng ngoại tệ}}$.
   - Tách bạch từng bước thực thi trong `ExecuteTransferAsync` kèm try-catch để ghi log chi tiết và phát hiện ngay vị trí phát sinh lỗi.
 - **Trạng thái**: **ĐÃ HOÀN THÀNH TOÀN DIỆN, BUILD SUCCEEDED (0 LỖI)**.
+
+---
+
+### 16. Phân Hệ Phân Bổ Chi Phí (Cost Allocation / Expense Distribution)
+- **Tài liệu tham khảo**: `.ai_context/04_legacy_notes/legacy_queries -report-vba/expenseDistribution/`
+- **Mô hình DTOs & Service (`ICostAllocationService`, `CostAllocationService`)**:
+  - Kiến trúc thuần ORM/LINQ với LLBLGen Pro, triệt tiêu câu lệnh SQL tĩnh.
+  - Lọc giao dịch gốc (`Transflag == false`) trong kỳ `[FromDate, ToDate]`.
+  - Tập hợp Tử số chung (`TotalPoolAmount`) theo Tài khoản nguồn (`SourceAccountId`, khớp tiền tố).
+  - Tập hợp Mẫu số tiêu thức (`TotalBaseAmount`) theo Danh sách tài khoản tiêu thức cấp lá (`AllocationBaseAccountIds`).
+  - Tính tỷ lệ gia quyền bình quân: $\text{Ratio} = \frac{\text{BaseAmount}}{\text{TotalBaseAmount}}$; $\text{Allocated} = \text{Ratio} \times \text{TotalPoolAmount}$.
+  - Xử lý làm tròn nguyên đồng, tự động bù lệch vào đối tượng có giá trị lớn nhất.
+  - Sinh chứng từ phân bổ tự động (`JournalVoucher` với `Transflag = true`).
+- **Giao diện Phân bổ Chi phí (`CostAllocationWindow`)**:
+  - Chuẩn hóa toàn bộ ComboBox/LookUp sang `LookUpEdit` tích hợp `SearchLookUpBehavior` 2 cột `[Số TK | Tên TK]` và `[Mã YTCP | Tên yếu tố CP]`, tìm kiếm không phân biệt dấu tiếng Việt.
+  - Tự động lưu và phục hồi tất cả tham số (`FromDate`, `ToDate`, `SourceAccount`, `DestAccount`, `DestCostElement`, danh sách tiêu thức) vào `UserSettings.json` qua `UserPreferencesHelper`.
+  - Bộ chọn tài khoản tiêu thức chỉ hiển thị các tài khoản cấp dưới cùng (lá). Tự động bung tài khoản tổng hợp thành tài khoản lá.
+  - Hỗ trợ xóa nhiều tài khoản tiêu thức (phím Delete, Backspace, Double-click).
+  - Tối ưu lưới dữ liệu: Cột Đối tượng chi phí chiếm toàn bộ độ rộng còn lại (`Width="*" MinWidth="260"`), cột số liệu cố định (`FixedWidth="True"`), bổ sung thanh trượt `GridSplitter`.
+  - Bẫy bảo vệ nghiêm ngặt: Tự động khóa nút Phân bổ và cảnh báo khi Dòng tổng = 0.
+- **Trạng thái**: **ĐÃ HOÀN THÀNH VÀ BUILD THÀNH CÔNG (0 LỖI)**.
+
+---
+
+### 17. Định Hướng Phân Hệ Khấu Hao Tài Sản Cố Định & Kết Chuyển Chi Phí (Kế hoạch ngày mai)
+- **Triết lý thiết kế tinh gọn**:
+  - Đối với phần mềm kế toán vừa và nhỏ, module Tài sản tập trung vào các nghiệp vụ cốt lõi: Danh mục thông tin chính, Tính khấu hao định kỳ, In bảng kê và Tự động sinh chứng từ kế toán.
+  - Bỏ các tính năng rườm rà (như nút Undo riêng biệt), thay bằng việc mở trực tiếp chứng từ vừa sinh ra để xem/xóa tự nhiên trong hệ thống chứng từ.
+- **Thuật toán Khấu hao theo ngày thực tế (`AssetDepreciationHelper.cs`)**:
+  - Đã đóng gói thành công hàm tính toán tổng quát trong `NewaccNet.Wpf.AppSystem.Helpers.AssetDepreciationHelper`.
+  - Tự động kẹp biên xử lý lệch pha mốc thời gian: tài sản mua giữa kỳ (tính từ ngày mua), hết hạn giữa kỳ (dừng đúng ngày hết hạn), hoặc nằm ngoài kỳ (khấu hao = 0).
+  - Công thức chuẩn: $\text{Tiền KH} = \text{Amount} \times \frac{\text{DepRate} \times \text{Days}}{365}$.
+- **Hai nhiệm vụ trọng tâm chuẩn bị triển khai**:
+  1. **Khấu hao Tài sản Cố định (`AssetDepreciationWindow`)**:
+     - Lấy bản ghi theo dõi mới nhất (`AssetTracking`) bằng LINQ (thay thế bảng tạm `AssetTrackingDep`).
+     - Lưới hiển thị danh sách tài sản trích khấu hao (Checkbox chọn, Tên TS, Đơn vị, Còn lại, Tiền KH kỳ này).
+     - Cho phép In bảng kê phân bổ khấu hao.
+     - Sinh 1 chứng từ duy nhất: Ghi Có TK 214 (Hao mòn) / Ghi Nợ các TK Chi phí (642, 627, 154...) gắn với Đối tượng CP và Yếu tố CP.
+  2. **Kết Chuyển Chi Phí (`ExpenseTransferWindow`)**:
+     - Căn cứ theo mẫu màn hình `ExpenseTrasfer.png` (`.ai_context/04_legacy_notes/legacy_queries -report-vba/expenseDistribution/`).
+     - Chọn Đến ngày, Tài khoản nguồn (2211, 621, 622, 627, 154...), Tài khoản đích (154, 911...), Checkbox Kết chuyển doanh thu.
+     - Lưới chi tiết: Đối tượng chi phí, Yếu tố chi phí, Checkbox KC, Số dư chi phí, Chi phí để lại.
+

@@ -36,8 +36,34 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
             InitializeComponent();
             this.DataContext = this;
             this.PreviewKeyDown += OpeningBalanceWindow_PreviewKeyDown;
+            this.Entries.CollectionChanged += Entries_CollectionChanged;
 
             LoadData();
+        }
+
+        private void Entries_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.OldItems != null)
+            {
+                foreach (JournalEntryEntity item in e.OldItems)
+                {
+                    item.PropertyChanged -= Entry_PropertyChanged;
+                }
+            }
+            if (e.NewItems != null)
+            {
+                foreach (JournalEntryEntity item in e.NewItems)
+                {
+                    item.PropertyChanged -= Entry_PropertyChanged;
+                    item.PropertyChanged += Entry_PropertyChanged;
+                }
+            }
+        }
+
+        private void Entry_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (sender is JournalEntryEntity je && je.IsDominoSuspended) return;
+            _isDirty = true;
         }
 
         private void LoadData()
@@ -55,6 +81,10 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
                     prefetch.Add(JournalEntryEntity.PrefetchPathDebtDetails);
                     prefetch.Add(JournalEntryEntity.PrefetchPathCostDetails);
                     prefetch.Add(JournalEntryEntity.PrefetchPathAssetDetails);
+                    var pInv = prefetch.Add(JournalEntryEntity.PrefetchPathInventoryVouchers);
+                    pInv.SubPath.Add(InventoryVoucherEntity.PrefetchPathInventoryVoucherLines);
+                    prefetch.Add(JournalEntryEntity.PrefetchPathInvestmentDetails);
+                    prefetch.Add(JournalEntryEntity.PrefetchPathCurrencyDetails);
 
                     var loaded = new EntityCollection<JournalEntryEntity>();
                     adapter.FetchEntityCollection(loaded, filter, prefetch);
@@ -81,6 +111,55 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
             }
         }
 
+        private void ViewEntries_ShowingEditor(object sender, DevExpress.Xpf.Grid.ShowingEditorEventArgs e)
+        {
+            if (e.Column != null && e.Column.FieldName == "Amount")
+            {
+                var row = e.Row as JournalEntryEntity ?? gridEntries.GetRow(e.RowHandle) as JournalEntryEntity;
+                if (row != null && (row.IsMaterialBound || row.HasSubLedgerDetails()))
+                {
+                    e.Cancel = true; // Khóa sửa tay: Số tiền do bảng chi tiết quản lý và tự động đổ về từ ORM
+                    return;
+                }
+            }
+
+            if (e.Column != null && e.Column.FieldName == "AccountId")
+            {
+                short? dbcr = null;
+                if (e.Row is JournalEntryEntity entry)
+                {
+                    dbcr = entry.Dbcr;
+                }
+                else
+                {
+                    var cellVal = gridEntries.GetCellValue(e.RowHandle, "Dbcr");
+                    if (cellVal != null && short.TryParse(cellVal.ToString(), out short val))
+                    {
+                        dbcr = val;
+                    }
+                }
+
+                if (!dbcr.HasValue || dbcr.Value == 0)
+                {
+                    e.Cancel = true;
+                    if (gridEntries.Columns["Dbcr"] != null)
+                    {
+                        Dispatcher.BeginInvoke(new Action(() =>
+                        {
+                            gridEntries.CurrentColumn = gridEntries.Columns["Dbcr"];
+                            viewEntries.ShowEditor();
+                        }));
+                    }
+                    MessageBox.Show("Vui lòng chọn Nợ hoặc Có trước khi chọn tài khoản.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+        }
+
+        private void ViewEntries_CellValueChanged(object sender, DevExpress.Xpf.Grid.CellValueChangedEventArgs e)
+        {
+            _isDirty = true;
+        }
+
         private void ViewEntries_InitNewRow(object sender, DevExpress.Xpf.Grid.InitNewRowEventArgs e)
         {
             _isDirty = true;
@@ -98,47 +177,9 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
 
         public void OpenDetailFormIfRequired(JournalEntryEntity entry)
         {
-            if (entry == null) return;
-            if (string.IsNullOrEmpty(entry.AccountId))
+            if (AccountLookUpEdit.OpenDetailWindow(entry, this, false, true))
             {
-                MessageBox.Show("Vui lòng chọn tài khoản trước khi nhập chi tiết.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
-            }
-
-            using (var adapter = AppDataAccessAdapter.Create())
-            {
-                var account = new ChartOfAccountEntity(entry.AccountId);
-                if (!adapter.FetchEntity(account)) return;
-
-                string category = account.CategoryId;
-                if (string.IsNullOrEmpty(category))
-                {
-                    if (entry.AccountId.StartsWith("131") || entry.AccountId.StartsWith("331") || entry.AccountId.StartsWith("138") || entry.AccountId.StartsWith("338")) category = "A";
-                    else if (entry.AccountId.StartsWith("6") || entry.AccountId.StartsWith("154")) category = "E";
-                }
-
-                if (category == "A")
-                {
-                    var debtForm = new Details.DebtDetailWindow(entry);
-                    debtForm.Owner = this;
-                    if (debtForm.ShowDialog() == true)
-                    {
-                        _isDirty = true;
-                    }
-                }
-                else if (category == "E")
-                {
-                    var costForm = new Details.CostDetailWindow(entry, false);
-                    costForm.Owner = this;
-                    if (costForm.ShowDialog() == true)
-                    {
-                        _isDirty = true;
-                    }
-                }
-                else
-                {
-                    MessageBox.Show($"Tài khoản {entry.AccountId} ({account.AccountName}) không theo dõi sổ chi tiết công nợ hoặc chi phí.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
+                _isDirty = true;
             }
         }
 
@@ -218,18 +259,34 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
                     adapter.StartTransaction(System.Data.IsolationLevel.ReadCommitted, "SaveOpeningBalances");
                     try
                     {
-                        // 1. Xóa các dòng đã đánh dấu xóa
+                        // 1. Xóa các dòng đã đánh dấu xóa (bao gồm toàn bộ chi tiết con 1-nhiều)
                         foreach (var del in _deletedEntries)
                         {
                             if (del.Id > 0)
                             {
+                                var dbDel = new JournalEntryEntity(del.Id);
+                                var prefetchDel = new PrefetchPath2(EntityType.JournalEntryEntity);
+                                var ivDel = prefetchDel.Add(JournalEntryEntity.PrefetchPathInventoryVouchers);
+                                ivDel.SubPath.Add(InventoryVoucherEntity.PrefetchPathInventoryVoucherLines);
+                                if (adapter.FetchEntity(dbDel, prefetchDel))
+                                {
+                                    foreach (var iv in dbDel.InventoryVouchers)
+                                    {
+                                        adapter.DeleteEntitiesDirectly(typeof(InventoryVoucherLineEntity), new RelationPredicateBucket(InventoryVoucherLineFields.InventoryVoucherId == iv.Id));
+                                    }
+                                    adapter.DeleteEntitiesDirectly(typeof(InventoryVoucherEntity), new RelationPredicateBucket(InventoryVoucherFields.JournalEntryId == del.Id));
+                                }
+
                                 adapter.DeleteEntitiesDirectly(typeof(DebtDetailEntity), new RelationPredicateBucket(DebtDetailFields.JournalEntryId == del.Id));
                                 adapter.DeleteEntitiesDirectly(typeof(CostDetailEntity), new RelationPredicateBucket(CostDetailFields.JournalEntryId == del.Id));
+                                adapter.DeleteEntitiesDirectly(typeof(AssetDetailEntity), new RelationPredicateBucket(AssetDetailFields.JournalEntryId == del.Id));
+                                adapter.DeleteEntitiesDirectly(typeof(InvestmentDetailEntity), new RelationPredicateBucket(InvestmentDetailFields.JournalEntryId == del.Id));
+                                adapter.DeleteEntitiesDirectly(typeof(CurrencyDetailEntity), new RelationPredicateBucket(CurrencyDetailFields.JournalEntryId == del.Id));
                                 adapter.DeleteEntity(del);
                             }
                         }
 
-                        // 2. Lưu các dòng hợp lệ
+                        // 2. Lưu các dòng hợp lệ (đồng bộ xóa các phiếu kho / dòng chi tiết con đã bị gỡ khỏi bộ nhớ)
                         foreach (var entry in validEntries)
                         {
                             entry.JournalVoucherId = null;
@@ -241,6 +298,66 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
                             else
                             {
                                 entry.Modifydate = DateTime.Now;
+
+                                if (entry.Id > 0)
+                                {
+                                    var dbJe = new JournalEntryEntity(entry.Id);
+                                    var prefetchJe = new PrefetchPath2(EntityType.JournalEntryEntity);
+                                    prefetchJe.Add(JournalEntryEntity.PrefetchPathDebtDetails);
+                                    prefetchJe.Add(JournalEntryEntity.PrefetchPathCostDetails);
+                                    prefetchJe.Add(JournalEntryEntity.PrefetchPathAssetDetails);
+                                    prefetchJe.Add(JournalEntryEntity.PrefetchPathInvestmentDetails);
+                                    prefetchJe.Add(JournalEntryEntity.PrefetchPathCurrencyDetails);
+                                    var ivNode = prefetchJe.Add(JournalEntryEntity.PrefetchPathInventoryVouchers);
+                                    ivNode.SubPath.Add(InventoryVoucherEntity.PrefetchPathInventoryVoucherLines);
+
+                                    if (adapter.FetchEntity(dbJe, prefetchJe))
+                                    {
+                                        foreach (var dbDebt in dbJe.DebtDetails)
+                                        {
+                                            if (!entry.DebtDetails.Any(x => x.Id == dbDebt.Id && !x.IsNew))
+                                                adapter.DeleteEntity(dbDebt);
+                                        }
+                                        foreach (var dbCost in dbJe.CostDetails)
+                                        {
+                                            if (!entry.CostDetails.Any(x => x.Id == dbCost.Id && !x.IsNew))
+                                                adapter.DeleteEntity(dbCost);
+                                        }
+                                        foreach (var dbAsset in dbJe.AssetDetails)
+                                        {
+                                            if (!entry.AssetDetails.Any(x => x.Id == dbAsset.Id && !x.IsNew))
+                                                adapter.DeleteEntity(dbAsset);
+                                        }
+                                        foreach (var dbInv in dbJe.InvestmentDetails)
+                                        {
+                                            if (!entry.InvestmentDetails.Any(x => x.Lineid == dbInv.Lineid && !x.IsNew))
+                                                adapter.DeleteEntity(dbInv);
+                                        }
+                                        foreach (var dbCurr in dbJe.CurrencyDetails)
+                                        {
+                                            if (!entry.CurrencyDetails.Any(x => x.Id == dbCurr.Id && !x.IsNew))
+                                                adapter.DeleteEntity(dbCurr);
+                                        }
+                                        foreach (var dbIv in dbJe.InventoryVouchers)
+                                        {
+                                            var ramIv = entry.InventoryVouchers.FirstOrDefault(x => x.Id == dbIv.Id && !x.IsNew);
+                                            if (ramIv == null)
+                                            {
+                                                foreach (var dbLine in dbIv.InventoryVoucherLines)
+                                                    adapter.DeleteEntity(dbLine);
+                                                adapter.DeleteEntity(dbIv);
+                                            }
+                                            else
+                                            {
+                                                foreach (var dbLine in dbIv.InventoryVoucherLines)
+                                                {
+                                                    if (!ramIv.InventoryVoucherLines.Any(x => x.Id == dbLine.Id && !x.IsNew))
+                                                        adapter.DeleteEntity(dbLine);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
 
                             adapter.SaveEntity(entry, true, true);
@@ -268,17 +385,20 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
             }
         }
 
-        internal void SaveDataSilently()
-        {
-            SaveData(false);
-        }
-
         private void OpeningBalanceWindow_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.S)
             {
                 SaveData(true);
                 e.Handled = true;
+            }
+            else if (e.Key == Key.F4)
+            {
+                if (viewEntries.FocusedRow is JournalEntryEntity entry)
+                {
+                    OpenDetailFormIfRequired(entry);
+                    e.Handled = true;
+                }
             }
             else if (e.Key == Key.Escape)
             {

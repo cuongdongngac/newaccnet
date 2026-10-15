@@ -25,5 +25,16 @@ namespace NewaccNet.Wpf.AppSystem.BalanceTransfer
         public int SourceYear { get; set; } = DateTime.Now.Year;
         public int DestinationYear { get; set; } = DateTime.Now.Year + 1;
         public DateTime OpeningDate { get; set; } = new DateTime(DateTime.Now.Year + 1, 1, 1);
+
+        // Các cờ tùy chọn phân hệ chuyển đổi (Modular Transfer)
+        public bool TransferLibrary { get; set; } = true;
+        public bool TransferDesign { get; set; } = true;
+        public bool TransferNormal { get; set; } = true;
+        public bool TransferDebt { get; set; } = true;
+        public bool TransferMaterial { get; set; } = true;
+        public bool TransferCost { get; set; } = true;
+        public bool TransferAsset { get; set; } = true;
+        public bool TransferStock { get; set; } = true;
+        public bool TransferCurrency { get; set; } = true;
     }
 }

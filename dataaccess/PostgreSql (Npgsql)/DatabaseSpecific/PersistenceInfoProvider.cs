@@ -1057,7 +1057,7 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 			this.AddElementMapping("TaxRateEntity", @"Default", @"Newacc", "TaxRate", 3, 0);
 			this.AddElementFieldMapping("TaxRateEntity", "Rate", "Rate", true, "Double", 0, 15, 0, false, "", null, typeof(System.Double), 0);
 			this.AddElementFieldMapping("TaxRateEntity", "Taxratedes", "Taxratedes", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 1);
-			this.AddElementFieldMapping("TaxRateEntity", "Taxrateid", "Taxrateid", false, "Integer", 0, 10, 0, true, "SystemIdentity", null, typeof(System.Int32), 2);
+			this.AddElementFieldMapping("TaxRateEntity", "Taxrateid", "Taxrateid", false, "Integer", 0, 10, 0, true, "", null, typeof(System.Int32), 2);
 		}
 
 		/// <summary>Inits TrialBalanceEntity's mappings</summary>

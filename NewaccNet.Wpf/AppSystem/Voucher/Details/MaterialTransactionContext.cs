@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using DataAccess.EntityClasses;
+using DataAccess.HelperClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace NewaccNet.Wpf.AppSystem.Voucher.Details
@@ -224,6 +225,13 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             set { if (_totalCostAmount != value) { _totalCostAmount = value; OnPropertyChanged(); } }
         }
 
+        private double _currentVoucherCostAmount = 0;
+        public double CurrentVoucherCostAmount
+        {
+            get => _currentVoucherCostAmount;
+            set { if (_currentVoucherCostAmount != value) { _currentVoucherCostAmount = value; OnPropertyChanged(); } }
+        }
+
         public double TotalSellAmount
         {
             get => _totalSellAmount;
@@ -241,6 +249,13 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             get => _totalAllAmount;
             set { if (_totalAllAmount != value) { _totalAllAmount = value; OnPropertyChanged(); } }
         }
+
+        private int _currentVoucherIndex = 0;
+        public int CurrentVoucherIndex => _currentVoucherIndex;
+        public int VoucherCount => MaterialEntry?.InventoryVouchers?.Count ?? 0;
+        public string NavigationPositionText => $"Phiếu: {(VoucherCount > 0 ? _currentVoucherIndex + 1 : 0)} / {VoucherCount}";
+        public bool CanNavigatePrev => _currentVoucherIndex > 0;
+        public bool CanNavigateNext => _currentVoucherIndex < VoucherCount - 1;
         #endregion
 
         #region Underlying Entities
@@ -249,13 +264,42 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
         /// </summary>
         public JournalVoucherEntity Voucher { get; private set; }
 
+        private JournalEntryEntity _materialEntry;
         /// <summary>
-        /// Dòng JournalEntry mang InventoryVoucher (luôn luôn có)
+        /// Dòng JournalEntry mang tập hợp InventoryVouchers (quan hệ 1-nhiều)
         /// </summary>
-        public JournalEntryEntity MaterialEntry { get; private set; }
+        public JournalEntryEntity MaterialEntry
+        {
+            get => _materialEntry;
+            private set
+            {
+                if (!ReferenceEquals(_materialEntry, value))
+                {
+                    if (_materialEntry != null)
+                    {
+                        _materialEntry.PropertyChanged -= MaterialEntry_PropertyChanged;
+                    }
+                    _materialEntry = value;
+                    if (_materialEntry != null)
+                    {
+                        _materialEntry.PropertyChanged += MaterialEntry_PropertyChanged;
+                    }
+                }
+            }
+        }
+
+        private bool _isRecalculatingTotals = false;
+        private void MaterialEntry_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (_isRecalculatingTotals) return;
+            if (e.PropertyName == "ChildDetailsChanged")
+            {
+                RecalculateTotals();
+            }
+        }
 
         /// <summary>
-        /// InventoryVoucher chứa các dòng InventoryVoucherLines
+        /// InventoryVoucher hiện hành đang hiển thị trên form (nằm trong MaterialEntry.InventoryVouchers)
         /// </summary>
         public InventoryVoucherEntity InventoryVoucher { get; private set; }
 
@@ -278,6 +322,90 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
         public JournalEntryEntity TotalEntry => (VoucherType == "XB") ? RevMasterEntry : PayMasterEntry;
 
         public bool IsNew { get; private set; }
+
+        /// <summary>
+        /// Chuyển đổi phiếu kho (InventoryVoucher) đang hiển thị trong danh sách MaterialEntry.InventoryVouchers
+        /// </summary>
+        public void SetActiveInventoryVoucher(int index)
+        {
+            if (MaterialEntry?.InventoryVouchers == null || MaterialEntry.InventoryVouchers.Count == 0)
+                return;
+
+            if (index < 0) index = 0;
+            if (index >= MaterialEntry.InventoryVouchers.Count)
+                index = MaterialEntry.InventoryVouchers.Count - 1;
+
+            _currentVoucherIndex = index;
+            InventoryVoucher = MaterialEntry.InventoryVouchers[_currentVoucherIndex];
+            _warehouseId = InventoryVoucher.WarehouseId ?? "";
+            _hasTax = InventoryVoucher.Taxflag;
+
+            OnPropertyChanged(nameof(InventoryVoucher));
+            OnPropertyChanged(nameof(CurrentLines));
+            OnPropertyChanged(nameof(WarehouseId));
+            OnPropertyChanged(nameof(Taxflag));
+            OnPropertyChanged(nameof(HasTax));
+            OnPropertyChanged(nameof(Printflag));
+            OnPropertyChanged(nameof(TaxInfoVisibility));
+            OnPropertyChanged(nameof(VoucherType));
+            OnPropertyChanged(nameof(CurrentVoucherIndex));
+            OnPropertyChanged(nameof(VoucherCount));
+            OnPropertyChanged(nameof(NavigationPositionText));
+            OnPropertyChanged(nameof(CanNavigatePrev));
+            OnPropertyChanged(nameof(CanNavigateNext));
+
+            RecalculateTotals();
+        }
+
+        public EntityCollection<InventoryVoucherLineEntity> CurrentLines => InventoryVoucher?.InventoryVoucherLines;
+
+        public void NavigateTo(int index)
+        {
+            if (index < 0 || index >= VoucherCount || index == _currentVoucherIndex)
+                return;
+            SetActiveInventoryVoucher(index);
+        }
+
+        public void MoveFirst() => NavigateTo(0);
+        public void MovePrev() => NavigateTo(_currentVoucherIndex - 1);
+        public void MoveNext() => NavigateTo(_currentVoucherIndex + 1);
+        public void MoveLast() => NavigateTo(VoucherCount - 1);
+
+        public InventoryVoucherEntity AddNewInventoryVoucher(string defaultWarehouseId = "")
+        {
+            var newIv = new InventoryVoucherEntity
+            {
+                Taxflag = this.Taxflag,
+                Printflag = false,
+                WarehouseId = defaultWarehouseId
+            };
+            MaterialEntry.InventoryVouchers.Add(newIv);
+            SetActiveInventoryVoucher(MaterialEntry.InventoryVouchers.Count - 1);
+            return newIv;
+        }
+
+        public void RemoveCurrentInventoryVoucher(string defaultWarehouseId = "")
+        {
+            if (MaterialEntry?.InventoryVouchers == null || InventoryVoucher == null)
+                return;
+
+            int removeIdx = _currentVoucherIndex;
+            MaterialEntry.InventoryVouchers.Remove(InventoryVoucher);
+
+            if (MaterialEntry.InventoryVouchers.Count == 0)
+            {
+                var freshIv = new InventoryVoucherEntity
+                {
+                    Taxflag = this.Taxflag,
+                    Printflag = false,
+                    WarehouseId = defaultWarehouseId
+                };
+                MaterialEntry.InventoryVouchers.Add(freshIv);
+            }
+
+            int nextIdx = Math.Min(removeIdx, MaterialEntry.InventoryVouchers.Count - 1);
+            SetActiveInventoryVoucher(nextIdx);
+        }
         #endregion
 
         /// <summary>
@@ -765,99 +893,116 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
         }
 
         /// <summary>
-        /// Tính toán tổng tiền từ danh sách chi tiết VÀ DOMINO CẬP NHẬT VÀO CÁC ENTITY
+        /// Tính toán tổng tiền từ danh sách chi tiết của TOÀN BỘ các phiếu kho trong MaterialEntry.InventoryVouchers
+        /// VÀ DOMINO CẬP NHẬT VÀO CÁC ENTITY
         /// </summary>
         public void RecalculateTotals()
         {
-            double cost = 0;
-            double sell = 0;
-            double tax = 0;
-
-            if (InventoryVoucher != null && InventoryVoucher.InventoryVoucherLines != null)
+            if (_isRecalculatingTotals) return;
+            try
             {
-                foreach (var line in InventoryVoucher.InventoryVoucherLines)
-                {
-                    double lineCost = Math.Round((line.Quantity ?? 0) * (line.Price ?? 0), 0);
-                    cost += lineCost;
+                _isRecalculatingTotals = true;
 
-                    if (line.MaterialTaxLine != null && HasTax)
+                CurrentVoucherCostAmount = InventoryVoucher?.TotalCostAmount ?? 0;
+
+                var allVouchers = (MaterialEntry?.InventoryVouchers != null && MaterialEntry.InventoryVouchers.Count > 0)
+                    ? MaterialEntry.InventoryVouchers.ToList()
+                    : (InventoryVoucher != null ? new List<InventoryVoucherEntity> { InventoryVoucher } : new List<InventoryVoucherEntity>());
+
+                double cost = 0;
+                double sell = 0;
+                double tax = 0;
+
+                foreach (var iv in allVouchers)
+                {
+                    if (iv == null) continue;
+                    cost += iv.TotalCostAmount;
+
+                    bool ivHasTax = iv.Taxflag || HasTax;
+                    if (ivHasTax)
                     {
                         if (VoucherType == "XB")
                         {
-                            double lineSell = Math.Round((line.Quantity ?? 0) * (line.SellPrice ?? 0), 0);
-                            sell += lineSell;
-                            tax += Math.Round(lineSell * (line.Rate ?? 0), 0);
+                            sell += iv.TotalSellAmount;
+                            tax += iv.TotalTaxAmount;
                         }
                         else if (VoucherType == "NM")
                         {
-                            tax += Math.Round(lineCost * (line.Rate ?? 0), 0);
+                            tax += iv.TotalTaxAmount;
+                        }
+                    }
+                }
+
+                cost = Math.Round(cost, 0);
+                sell = Math.Round(sell, 0);
+                tax = Math.Round(tax, 0);
+
+                TotalCostAmount = cost;
+                TotalSellAmount = sell;
+                TotalTaxAmount = tax;
+
+                if (VoucherType == "XB")
+                    TotalAllAmount = sell + tax;
+                else if (VoucherType == "NM")
+                    TotalAllAmount = cost + tax;
+                else
+                    TotalAllAmount = cost;
+
+                // ==================== DOMINO CASCADING ====================
+                // 1. Dòng vật tư nhận tổng tiền hàng của tất cả các phiếu kho thuộc nó (đồng bộ từ ORM)
+                if (MaterialEntry != null && (!MaterialEntry.Amount.HasValue || Math.Abs(MaterialEntry.Amount.Value - cost) > 0.001))
+                {
+                    MaterialEntry.Amount = cost;
+                }
+
+                // 2. Nếu là Mua bán, domino gọi đến các Entity con và cha
+                if (IsTrade)
+                {
+                    if (VoucherType == "NM")
+                    {
+                        if (TaxEntry != null)
+                        {
+                            TaxEntry.AccountId = TaxAccountId;
+                            TaxEntry.Amount = tax;
+                        }
+
+                        if (PayMasterEntry != null)
+                        {
+                            PayMasterEntry.AccountId = TotalAccountId;
+                            PayMasterEntry.Amount = cost + (HasTax ? tax : 0);
+                        }
+                    }
+                    else if (VoucherType == "XB")
+                    {
+                        if (CostMasterEntry != null)
+                        {
+                            CostMasterEntry.AccountId = CostAccountId;
+                            CostMasterEntry.Amount = cost;
+                        }
+
+                        if (RevEntry != null)
+                        {
+                            RevEntry.AccountId = RevenueAccountId;
+                            RevEntry.Amount = sell;
+                        }
+
+                        if (TaxEntry != null)
+                        {
+                            TaxEntry.AccountId = TaxAccountId;
+                            TaxEntry.Amount = tax;
+                        }
+
+                        if (RevMasterEntry != null)
+                        {
+                            RevMasterEntry.AccountId = TotalAccountId;
+                            RevMasterEntry.Amount = sell + (HasTax ? tax : 0);
                         }
                     }
                 }
             }
-
-            cost = Math.Round(cost, 0);
-            sell = Math.Round(sell, 0);
-            tax = Math.Round(tax, 0);
-
-            TotalCostAmount = cost;
-            TotalSellAmount = sell;
-            TotalTaxAmount = tax;
-
-            if (VoucherType == "XB")
-                TotalAllAmount = sell + tax;
-            else if (VoucherType == "NM")
-                TotalAllAmount = cost + tax;
-            else
-                TotalAllAmount = cost;
-
-            // ==================== DOMINO CASCADING ====================
-            // 1. Dòng con vật tư nhận số tiền hàng
-            MaterialEntry.Amount = cost;
-
-            // 2. Nếu là Mua bán, domino gọi đến các Entity con và cha
-            if (IsTrade)
+            finally
             {
-                if (VoucherType == "NM")
-                {
-                    if (TaxEntry != null)
-                    {
-                        TaxEntry.AccountId = TaxAccountId;
-                        TaxEntry.Amount = tax;
-                    }
-
-                    if (PayMasterEntry != null)
-                    {
-                        PayMasterEntry.AccountId = TotalAccountId;
-                        PayMasterEntry.Amount = cost + (HasTax ? tax : 0);
-                    }
-                }
-                else if (VoucherType == "XB")
-                {
-                    if (CostMasterEntry != null)
-                    {
-                        CostMasterEntry.AccountId = CostAccountId;
-                        CostMasterEntry.Amount = cost;
-                    }
-
-                    if (RevEntry != null)
-                    {
-                        RevEntry.AccountId = RevenueAccountId;
-                        RevEntry.Amount = sell;
-                    }
-
-                    if (TaxEntry != null)
-                    {
-                        TaxEntry.AccountId = TaxAccountId;
-                        TaxEntry.Amount = tax;
-                    }
-
-                    if (RevMasterEntry != null)
-                    {
-                        RevMasterEntry.AccountId = TotalAccountId;
-                        RevMasterEntry.Amount = sell + (HasTax ? tax : 0);
-                    }
-                }
+                _isRecalculatingTotals = false;
             }
         }
 

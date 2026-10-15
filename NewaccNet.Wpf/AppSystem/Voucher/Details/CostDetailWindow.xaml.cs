@@ -28,6 +28,7 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             this.DataContext = _parentEntry;
 
             _originalList = _parentEntry.CostDetails.ToList();
+            _parentEntry.SaveFields("undo_parent");
             foreach (var item in _originalList) 
             {
                 item.SaveFields("undo");
@@ -271,17 +272,7 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             TableViewCost.FocusedRowHandle = DevExpress.Xpf.Grid.GridControl.InvalidRowHandle;
             TableViewCost.CommitEditing();
 
-            // Dùng Reflection kiểm tra UpdateFilter: Nếu UpdateFilter = true thì chỉ cập nhật từ con vật tư
-            if (_parentEntry.CanUpdateFromChild(this))
-            {
-                double totalAmount = 0;
-                foreach (var item in _parentEntry.CostDetails)
-                {
-                    totalAmount += item.Amount ?? 0;
-                }
-
-                _parentEntry.Amount = Math.Round(totalAmount > 0 ? totalAmount : 0, 0);
-            }
+            _parentEntry.NotifyChildCollectionChanged();
 
             _isSaved = true;
             this.DialogResult = true;
@@ -298,13 +289,22 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
         {
             if (!_isSaved)
             {
-                foreach (var item in _originalList) 
+                _parentEntry.IsDominoSuspended = true;
+                try
                 {
-                    item.RollbackFields("undo");
-                    if (item.ExpenseTaxLine != null) item.ExpenseTaxLine.RollbackFields("undo");
+                    foreach (var item in _originalList) 
+                    {
+                        item.RollbackFields("undo");
+                        if (item.ExpenseTaxLine != null) item.ExpenseTaxLine.RollbackFields("undo");
+                    }
+                    _parentEntry.CostDetails.Clear();
+                    foreach (var item in _originalList) _parentEntry.CostDetails.Add(item);
+                    _parentEntry.RollbackFields("undo_parent");
                 }
-                _parentEntry.CostDetails.Clear();
-                foreach (var item in _originalList) _parentEntry.CostDetails.Add(item);
+                finally
+                {
+                    _parentEntry.IsDominoSuspended = false;
+                }
             }
             base.OnClosing(e);
         }

@@ -266,18 +266,11 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
 
                 if (row != null)
                 {
-                    // Chỉ đặt ReadOnly khi tài khoản/dòng này CÓ CHI TIẾT (Vật tư, Công nợ, Chi phí, Tài sản...)
+                    // Chỉ đặt ReadOnly khi tài khoản/dòng này CÓ CHI TIẾT (Vật tư, Công nợ, Chi phí, Tài sản, Cổ phiếu, Ngoại tệ...)
                     // Các tài khoản không có chi tiết (tiền mặt, tài khoản thường) thì người dùng vẫn gõ tiền bình thường.
-                    bool hasDetails = row.IsMaterialBound
-                        || (row.InventoryVouchers != null && row.InventoryVouchers.Count > 0)
-                        || (row.DebtDetails != null && row.DebtDetails.Count > 0)
-                        || (row.CostDetails != null && row.CostDetails.Count > 0)
-                        || (row.AssetDetails != null && row.AssetDetails.Count > 0)
-                        || (row.InvestmentDetails != null && row.InvestmentDetails.Count > 0);
-
-                    if (hasDetails)
+                    if (row.IsMaterialBound || row.HasSubLedgerDetails())
                     {
-                        e.Cancel = true; // Khóa sửa tay: Số tiền do bảng chi tiết quản lý và tự động đổ về
+                        e.Cancel = true; // Khóa sửa tay: Số tiền do bảng chi tiết quản lý và tự động đổ về từ ORM
                         return;
                     }
                 }
@@ -422,101 +415,9 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
 
         public void OpenDetailFormIfRequired(JournalEntryEntity entry, bool autoPrompt)
         {
-            if (entry == null || string.IsNullOrEmpty(entry.AccountId)) return;
-
-            string accountId = entry.AccountId;
-            using (var adapter = AppDataAccessAdapter.Create())
+            if (AccountLookUpEdit.OpenDetailWindow(entry, this, false, !autoPrompt))
             {
-                var account = new ChartOfAccountEntity(accountId);
-                if (!adapter.FetchEntity(account)) return;
-
-                if (string.IsNullOrEmpty(account.CategoryId))
-                {
-                    if (accountId.StartsWith("131") || accountId.StartsWith("331"))
-                        account.CategoryId = "A";
-                    else if (accountId.StartsWith("15"))
-                        account.CategoryId = "B";
-                    else if (accountId.StartsWith("6") || accountId.StartsWith("154"))
-                        account.CategoryId = "E";
-                }
-
-                // Nếu là tài khoản thông thường (không có form phụ A, B, E)
-                if (account.CategoryId != "A" && account.CategoryId != "B" && account.CategoryId != "E")
-                {
-                    if (!autoPrompt)
-                    {
-                        MessageBox.Show($"Tài khoản {accountId} là tài khoản hạch toán thông thường, không có bảng chi tiết phụ.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
-                    return;
-                }
-
-                // Đảm bảo có Dbcr
-                if (!entry.Dbcr.HasValue || entry.Dbcr == 0)
-                {
-                    var master = (gridLeft.SelectedItem ?? gridLeft.CurrentItem ?? _masterEntries.FirstOrDefault()) as JournalEntryEntity;
-                    if (master != null && master.Dbcr.HasValue && master.Dbcr != 0 && entry != master)
-                    {
-                        entry.Dbcr = (short)-master.Dbcr.Value;
-                    }
-                    else
-                    {
-                        MessageBox.Show("Vui lòng chọn Nợ hoặc Có trước khi mở chi tiết.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
-                        return;
-                    }
-                }
-
-                if (account.CategoryId == "A")
-                {
-                    var debtForm = new Details.DebtDetailWindow(entry);
-                    debtForm.Owner = this;
-                    if (debtForm.ShowDialog() == true)
-                    {
-                        CalculateBalance();
-                    }
-                }
-                else if (account.CategoryId == "B")
-                {
-                    bool hasExistingDetails = (entry.InventoryVouchers != null && entry.InventoryVouchers.Count > 0)
-                        || (entry.SubEntries != null && entry.SubEntries.Any(s => s.InventoryVouchers != null && s.InventoryVouchers.Count > 0));
-
-                    if (!hasExistingDetails && _currentVoucher != null)
-                    {
-                        hasExistingDetails = _currentVoucher.JournalEntries.Any(j => j.InventoryVouchers != null && j.InventoryVouchers.Count > 0 
-                            && (j == entry || j.ParentEntry == entry || (j.ParentId.HasValue && entry.Id != 0 && j.ParentId == entry.Id) || entry.ParentEntry == j));
-                    }
-
-                    bool isNewMaterial = !hasExistingDetails;
-                    Details.MaterialTransactionContext context = isNewMaterial
-                        ? Details.MaterialTransactionContext.CreateNew(entry, _currentVoucher)
-                        : Details.MaterialTransactionContext.FromExisting(entry, _currentVoucher);
-
-                    var materialForm = new Details.MaterialDetailWindow(context);
-                    materialForm.Owner = this;
-                    bool? result = materialForm.ShowDialog();
-
-                    if (result == true)
-                    {
-                        context.Apply();
-                        RefreshVoucherUI();
-                        CalculateBalance();
-                    }
-                    else if (result != true && isNewMaterial)
-                    {
-                        context.Discard();
-                        RefreshVoucherUI();
-                        CalculateBalance();
-                    }
-                }
-                else if (account.CategoryId == "E")
-                {
-                    bool hasTax = account.Taxflag;
-                    var costForm = new Details.CostDetailWindow(entry, hasTax);
-                    costForm.Owner = this;
-                    if (costForm.ShowDialog() == true)
-                    {
-                        CalculateBalance();
-                    }
-                }
+                _isDirty = true;
             }
         }
 

@@ -20,7 +20,7 @@ class Program
             
             var parentIds = cols.Select(a => a.ParentId).Where(id => !string.IsNullOrEmpty(id)).Distinct().ToList();
 
-            string[] prefixes = new[] { "632", "511", "331", "131", "133", "333" };
+            string[] prefixes = new[] { "154", "621", "622", "627" };
             foreach(var p in prefixes)
             {
                 var matches = cols.Where(x => x.AccountId.StartsWith(p)).ToList();
