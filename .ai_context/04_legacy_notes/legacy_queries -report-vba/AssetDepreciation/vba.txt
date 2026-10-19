@@ -1,3 +1,10 @@
+
+AssetTrackingQuery
+
+SELECT [Department List].[Dept Name], [Department List].DeptID, [Asset List].[Asset ID], AssetTracking.AssetTrackingID
+FROM [Asset List] INNER JOIN ([Department List] INNER JOIN AssetTracking ON [Department List].DeptID = AssetTracking.DeptID) ON [Asset List].[Asset ID] = AssetTracking.[Asset ID];
+
+
 Tạo dữ liệu phẳng AssetTrackingDep từ bảng AccessTraking (chỉ  lấy thông tin bản ghi cuối cùng 
 SQL = "Delete * from AssetTrackingDep"
 INSERT INTO AssetTrackingDep ( [Asset ID], DeptID, Qty, DepPrice, RemainValue, DepRate, [AsAccount ID], [ExAccount ID], [ExObject ID], EndDate )
@@ -5,7 +12,11 @@ SELECT AssetTracking.[Asset ID], Last(AssetTracking.DeptID) AS LastOfDeptID, Las
 FROM AssetTracking
 GROUP BY AssetTracking.[Asset ID];
 
+
 Tạo dữ liệu phẳng của  AccessDetail, có kết nối với dữ liệu phẳng ở trên để lấy thêm một số trường
+Union Asset Line Query - bang phang cua giao dich tai san
+SELECT DISTINCTROW [Counter Accounts Query].[Bill ID] AS [Bill ID], [Counter Accounts Query].[Bill No], [Counter Accounts Query].[Bill Date], [Counter Accounts Query].Contents, IIf(IsNull(AssetTrackingDep.RemainValue),0,AssetTrackingDep.RemainValue) AS RemainValue, [Counter Accounts Query].[Account ID], [Asset Input Line].[Asset ID], [Asset Input Line].Quantity, [Asset Input Line].Price, [Counter Accounts Query].DBCR, [Source List].SrCode, [Reason List].ReasonID, [Reason List].Flag
+FROM ([Source List] INNER JOIN ([Reason List] INNER JOIN ([Asset Input Line] INNER JOIN [Counter Accounts Query] ON [Asset Input Line].ID = [Counter Accounts Query].ID) ON [Reason List].ReasonID = [Asset Input Line].ReasonID) ON [Source List].SrCode = [Asset Input Line].SrCode) INNER JOIN AssetTrackingDep ON [Asset Input Line].[Asset ID] = AssetTrackingDep.[Asset ID];
 
 Tính toán bảng khấu hao từ dữ liệu phẳng ở trên
 

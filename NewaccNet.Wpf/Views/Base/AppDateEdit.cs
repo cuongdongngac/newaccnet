@@ -14,6 +14,7 @@ namespace NewaccNet.Wpf.Views.Base
     public class AppDateEdit : DateEdit
     {
         public const string DefaultDateFormat = "dd/MM/yyyy";
+        public const double DefaultDateWidth = 125;
 
         public AppDateEdit()
         {
@@ -27,9 +28,14 @@ namespace NewaccNet.Wpf.Views.Base
             editor.MaskType = MaskType.DateTimeAdvancingCaret;
             editor.MaskUseAsDisplayFormat = true;
             editor.DisplayFormatString = DefaultDateFormat;
-            if (double.IsNaN(editor.MinWidth) || editor.MinWidth < 115)
+            if (double.IsNaN(editor.MinWidth) || editor.MinWidth < DefaultDateWidth)
             {
-                editor.MinWidth = 115;
+                editor.MinWidth = DefaultDateWidth;
+            }
+            if (double.IsNaN(editor.Width))
+            {
+                editor.Width = DefaultDateWidth;
+                editor.HorizontalAlignment = HorizontalAlignment.Left;
             }
         }
     }

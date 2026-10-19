@@ -72,6 +72,31 @@ namespace NewaccNet.Wpf.Controls.Search
                 defaultMode: SearchMode.All,
                 codeHeader: "Mã lý do", nameHeader: "Lý do công nợ");
 
+            // 7. Nguồn vốn, Lý do tăng/giảm TSCĐ, Tài sản cố định, Bộ phận
+            SearchProfiles.Register<SourceEntity>(
+                x => x.Srcode, x => x.Srname,
+                display: SearchDisplay.Name,
+                defaultMode: SearchMode.All,
+                codeHeader: "Mã nguồn", nameHeader: "Tên nguồn");
+
+            SearchProfiles.Register<ReasonEntity>(
+                x => x.Reasonid, x => x.ReasonName,
+                display: SearchDisplay.Name,
+                defaultMode: SearchMode.All,
+                codeHeader: "Mã lý do", nameHeader: "Tên lý do");
+
+            SearchProfiles.Register<AssetEntity>(
+                x => x.AssetId, x => x.AssetName,
+                display: SearchDisplay.Name,
+                defaultMode: SearchMode.All,
+                codeHeader: "Mã TS", nameHeader: "Tên tài sản");
+
+            SearchProfiles.Register<DepartmentEntity>(
+                x => x.Deptid, x => x.DeptName,
+                display: SearchDisplay.Name,
+                defaultMode: SearchMode.All,
+                codeHeader: "Mã bộ phận", nameHeader: "Tên bộ phận");
+
             _initialized = true;
         }
     }

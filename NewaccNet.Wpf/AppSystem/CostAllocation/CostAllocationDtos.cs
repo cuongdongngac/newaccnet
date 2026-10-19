@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace NewaccNet.Wpf.AppSystem.CostAllocation
 {
     /// <summary>
-    /// DTO hiển thị dòng chi phí nguồn cần phân bổ (Lưới trên)
+    /// DTO hiển thị dòng chi phí nguồn cần phân bổ (Lưới trên - [Distribute Expense SubForm])
     /// </summary>
     public class CostSourceItemDto
     {
@@ -16,7 +16,7 @@ namespace NewaccNet.Wpf.AppSystem.CostAllocation
     }
 
     /// <summary>
-    /// DTO hiển thị dòng tiêu thức và kết quả phân bổ theo từng đối tượng chi phí (Lưới dưới)
+    /// DTO hiển thị dòng tiêu thức và kết quả phân bổ theo từng đối tượng chi phí (Lưới dưới - [Distribute Criteria Form])
     /// </summary>
     public class CostCriteriaItemDto
     {

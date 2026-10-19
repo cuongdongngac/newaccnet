@@ -27,7 +27,7 @@
                     <dxg:LookUpEdit x:Name="lueSourceAccount" 
                                     ValueMember="AccountId"
                                     AutoComplete="False" ImmediatePopup="True" IsTextEditable="True"
-                                    EditValueChanged="FilterParam_Changed">
+                                    EditValueChanged="SourceAccount_Changed">
                         <dxmvvm:Interaction.Behaviors>
                             <dxs:SearchLookUpBehavior Display="Code" SearchMode="All"/>
                         </dxmvvm:Interaction.Behaviors>
@@ -59,11 +59,11 @@
             </dxlc:LayoutGroup>
 
             <dxlc:LayoutGroup Orientation="Horizontal" Margin="0,6,0,0">
-                <dxlc:LayoutItem Label="Từ ngày:" Width="280">
-                    <dxe:DateEdit x:Name="dtFromDate" Mask="dd/MM/yyyy" MaskUseAsDisplayFormat="True" EditValueChanged="FilterParam_Changed"/>
+                <dxlc:LayoutItem Label="Từ ngày:" Width="260">
+                    <base:AppDateEdit x:Name="dtFromDate" EditValueChanged="FilterParam_Changed"/>
                 </dxlc:LayoutItem>
-                <dxlc:LayoutItem Label="Đến ngày:" Width="280" Margin="15,0,0,0">
-                    <dxe:DateEdit x:Name="dtToDate" Mask="dd/MM/yyyy" MaskUseAsDisplayFormat="True" EditValueChanged="FilterParam_Changed"/>
+                <dxlc:LayoutItem Label="Đến ngày:" Width="260" Margin="15,0,0,0">
+                    <base:AppDateEdit x:Name="dtToDate" EditValueChanged="FilterParam_Changed"/>
                 </dxlc:LayoutItem>
                 <dxlc:LayoutItem HorizontalAlignment="Right">
                     <dx:SimpleButton Content="Tải dữ liệu nguồn" 
@@ -83,18 +83,18 @@
 
                 <dxg:GridControl x:Name="gridSourcePool" Grid.Row="0">
                     <dxg:GridControl.Columns>
-                        <dxg:GridColumn FieldName="CostObjectId" Header="Mã ĐTCP" Width="100" FixedWidth="True" HorizontalHeaderContentAlignment="Center"/>
-                        <dxg:GridColumn FieldName="CostObjectName" Header="Đối tượng chi phí (Công trình/Sản phẩm)" Width="*" MinWidth="260" HorizontalHeaderContentAlignment="Center"/>
-                        <dxg:GridColumn FieldName="CostElementId" Header="Mã Yếu tố" Width="90" FixedWidth="True" HorizontalHeaderContentAlignment="Center"/>
-                        <dxg:GridColumn FieldName="CostElementName" Header="Tên yếu tố chi phí" Width="200" FixedWidth="True" HorizontalHeaderContentAlignment="Center"/>
-                        <dxg:GridColumn FieldName="Amount" Header="Số tiền" Width="170" FixedWidth="True" HorizontalHeaderContentAlignment="Center">
+                        <dxg:GridColumn FieldName="CostObjectId" Header="Mã ĐTCP" Width="100" FixedWidth="True" HorizontalHeaderContentAlignment="Center" ReadOnly="True"/>
+                        <dxg:GridColumn FieldName="CostObjectName" Header="Đối tượng chi phí (Công trình/Sản phẩm)" Width="*" MinWidth="260" HorizontalHeaderContentAlignment="Center" ReadOnly="True"/>
+                        <dxg:GridColumn FieldName="CostElementId" Header="Mã Yếu tố" Width="90" FixedWidth="True" HorizontalHeaderContentAlignment="Center" ReadOnly="True"/>
+                        <dxg:GridColumn FieldName="CostElementName" Header="Tên yếu tố chi phí" Width="200" FixedWidth="True" HorizontalHeaderContentAlignment="Center" ReadOnly="True"/>
+                        <dxg:GridColumn FieldName="Amount" Header="Số tiền" Width="170" FixedWidth="True" HorizontalHeaderContentAlignment="Center" ReadOnly="True">
                             <dxg:GridColumn.EditSettings>
                                 <dxe:TextEditSettings DisplayFormat="#,##0" HorizontalContentAlignment="Right"/>
                             </dxg:GridColumn.EditSettings>
                         </dxg:GridColumn>
                     </dxg:GridControl.Columns>
                     <dxg:GridControl.View>
-                        <dxg:TableView ShowGroupPanel="False" AllowEditing="False" AutoWidth="False" ShowTotalSummary="True"/>
+                        <base:AppDetailTableView ShowGroupPanel="False" AllowEditing="False" AutoWidth="False" ShowTotalSummary="True"/>
                     </dxg:GridControl.View>
                     <dxg:GridControl.TotalSummary>
                         <dxg:GridSummaryItem FieldName="Amount" SummaryType="Sum" DisplayFormat="Tổng chi phí: {0:#,##0}"/>
@@ -124,8 +124,8 @@
                 <ColumnDefinition Width="*" MinWidth="450"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Cột trái: Bộ chọn tài khoản tiêu thức cấp dưới cùng -->
-            <GroupBox Grid.Column="0" Header="Tài khoản tiêu thức (Cấp chi tiết)" Margin="0,0,0,0">
+            <!-- Cột trái: Bộ chọn tài khoản tiêu thức -->
+            <GroupBox Grid.Column="0" Header="Tài khoản tiêu thức (Temp Account List)" Margin="0,0,0,0">
                 <Grid Margin="4">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -137,7 +137,7 @@
                     <dxg:LookUpEdit x:Name="lueAddCriteriaAccount" Grid.Row="0"
                                     ValueMember="AccountId"
                                     AutoComplete="False" ImmediatePopup="True" IsTextEditable="True"
-                                    NullText="Chọn tài khoản tiêu thức cấp dưới cùng...">
+                                    NullText="Chọn tài khoản tiêu thức...">
                         <dxmvvm:Interaction.Behaviors>
                             <dxs:SearchLookUpBehavior Display="Code" SearchMode="All"/>
                         </dxmvvm:Interaction.Behaviors>
@@ -176,30 +176,30 @@
             <GroupBox Grid.Column="2" Header="Bảng tính toán phân bổ theo đối tượng chi phí" Margin="0,0,0,0">
                 <dxg:GridControl x:Name="gridCriteria">
                     <dxg:GridControl.Columns>
-                        <dxg:GridColumn FieldName="CostObjectId" Header="Mã ĐTCP" Width="100" FixedWidth="True" HorizontalHeaderContentAlignment="Center"/>
-                        <dxg:GridColumn FieldName="CostObjectName" Header="Đối tượng chi phí (Công trình/Sản phẩm)" Width="*" MinWidth="260" HorizontalHeaderContentAlignment="Center"/>
-                        <dxg:GridColumn FieldName="BaseAmount" Header="Chi phí tiêu thức" Width="160" FixedWidth="True" HorizontalHeaderContentAlignment="Center">
+                        <dxg:GridColumn FieldName="CostObjectId" Header="Mã ĐTCP" Width="100" FixedWidth="True" HorizontalHeaderContentAlignment="Center" ReadOnly="True"/>
+                        <dxg:GridColumn FieldName="CostObjectName" Header="Đối tượng chi phí (Công trình/Sản phẩm)" Width="*" MinWidth="260" HorizontalHeaderContentAlignment="Center" ReadOnly="True"/>
+                        <dxg:GridColumn FieldName="BaseAmount" Header="Chi phí tiêu thức" Width="160" FixedWidth="True" HorizontalHeaderContentAlignment="Center" ReadOnly="True">
                             <dxg:GridColumn.EditSettings>
                                 <dxe:TextEditSettings DisplayFormat="#,##0" HorizontalContentAlignment="Right"/>
                             </dxg:GridColumn.EditSettings>
                         </dxg:GridColumn>
-                        <dxg:GridColumn FieldName="RatioPercent" Header="%" Width="85" FixedWidth="True" HorizontalHeaderContentAlignment="Center">
+                        <dxg:GridColumn FieldName="RatioPercent" Header="%" Width="90" FixedWidth="True" HorizontalHeaderContentAlignment="Center" ReadOnly="True">
                             <dxg:GridColumn.EditSettings>
                                 <dxe:TextEditSettings DisplayFormat="0.00%" HorizontalContentAlignment="Right"/>
                             </dxg:GridColumn.EditSettings>
                         </dxg:GridColumn>
-                        <dxg:GridColumn FieldName="AllocatedAmount" Header="Phân bổ" Width="170" FixedWidth="True" HorizontalHeaderContentAlignment="Center">
+                        <dxg:GridColumn FieldName="AllocatedAmount" Header="Phân bổ" Width="170" FixedWidth="True" HorizontalHeaderContentAlignment="Center" ReadOnly="True">
                             <dxg:GridColumn.EditSettings>
                                 <dxe:TextEditSettings DisplayFormat="#,##0" HorizontalContentAlignment="Right"/>
                             </dxg:GridColumn.EditSettings>
                         </dxg:GridColumn>
                     </dxg:GridControl.Columns>
                     <dxg:GridControl.View>
-                        <dxg:TableView ShowGroupPanel="False" AllowEditing="False" AutoWidth="False" ShowTotalSummary="True"/>
+                        <base:AppDetailTableView ShowGroupPanel="False" AllowEditing="False" AutoWidth="False" ShowTotalSummary="True"/>
                     </dxg:GridControl.View>
                     <dxg:GridControl.TotalSummary>
                         <dxg:GridSummaryItem FieldName="BaseAmount" SummaryType="Sum" DisplayFormat="Tổng tiêu thức: {0:#,##0}"/>
-                        <dxg:GridSummaryItem FieldName="RatioPercent" SummaryType="Sum" DisplayFormat="100%"/>
+                        <dxg:GridSummaryItem FieldName="RatioPercent" SummaryType="Sum" DisplayFormat="{}{0:0.00%}"/>
                         <dxg:GridSummaryItem FieldName="AllocatedAmount" SummaryType="Sum" DisplayFormat="Tổng phân bổ: {0:#,##0}"/>
                     </dxg:GridControl.TotalSummary>
                 </dxg:GridControl>

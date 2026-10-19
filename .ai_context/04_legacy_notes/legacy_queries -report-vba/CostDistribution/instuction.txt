@@ -1,50 +1,41 @@
 # Yêu cầu hệ thống: Xây dựng Module Phân bổ Chi phí Kế toán (Cost Allocation)
 
-Bạn là một chuyên gia phát triển phần mềm .NET C# am hiểu sâu về hệ thống kế toán và kiến trúc Domain-Driven Design. Hãy viết mã C# cho module phân bổ chi phí dựa trên phương pháp tỷ lệ bình quân gia quyền.
+Tài liệu đặc tả nghiệp vụ và kiến trúc chuẩn của module **Phân bổ chi phí (`CostAllocation`)**, đối chiếu trực tiếp từ form gốc Access `[Distribute Ground Form]`, `[Distribute Expense SubForm]`, `[Distribute Criteria Form]` và `vba-reference.cls`.
 
 ## 1. Kiến trúc & Ràng buộc kỹ thuật
-- Sử dụng **C# .NET**, thiết kế theo hướng đối tượng (OOP) hoàn toàn.
-- Sử dụng **LINQ to Entities (ORM)**, tuyệt đối không dùng raw SQL hoặc Stored Procedures.
-- Áp dụng mẫu **Unit of Work** và **Repository Pattern** để xử lý transaction.
-- Dữ liệu giao dịch được thiết kế theo dạng phẳng (flat schema): một bảng `TransactionLine` chứa tất cả các bút toán chi tiết (gồm tài khoản, đối tượng tập hợp chi phí, số tiền, cờ đánh dấu bút toán tự động).
+- Sử dụng **C# .NET**, thiết kế theo hướng đối tượng (OOP) và kiến trúc phân mảnh ("Mảnh ghép").
+- Sử dụng **LLBLGen Pro ORM + LINQ trên bộ nhớ**, tuân thủ nghiêm ngặt quy tắc dựng bảng phẳng 3 tầng ([FlatTableRules.md](file:///d:/NewaccNet/.ai_context/FlatTableRules.md)), tuyệt đối không dùng raw SQL, View hay Stored Procedures.
+- Dữ liệu giao dịch chi phí được làm phẳng ở Tầng 2 (`CostFlatRow`): nối `CostDetailEntity -> JournalEntryEntity -> JournalVoucherEntity` (gồm `AccountId`, `CostObjectId`, `CostElementId`, `Dbcr`, `Amount`, `VoucherDate`, `IsOpening`, `Transflag`).
 
-## 2. Mô hình Dữ liệu (Domain Models)
-Giả định chúng ta có các entity cơ bản sau (hãy tự tạo các class này):
-- `TransactionLine`: Id, VoucherDate, AccountId, CostObjectId (Đối tượng chi phí), Amount (Số tiền thuần), IsAllocationGenerated (Cờ đánh dấu bút toán do hệ thống tự động phân bổ sinh ra - tương đương TransFlag).
-- `CostObject`: Id, Name.
+## 2. Quy trình thực thi 4 mảnh ghép nghiệp vụ
 
-## 3. Logic Nghiệp vụ cần triển khai (CostAllocationService)
-Tạo một service class `CostAllocationService` với method `DistributeCosts(...)` nhận vào các tham số:
-- `DateTime fromDate`, `DateTime toDate`: Kỳ phân bổ.
-- `string sourceAccountId`: Tài khoản nguồn chứa tổng chi phí cần phân bổ.
-- `string destinationAccountId`: Tài khoản đích để ghi nhận chi phí sau phân bổ.
-- `List<string> allocationBaseAccountIds`: Danh sách các tài khoản dùng làm tiêu thức (mẫu số) để tính tỷ lệ.
+### Mảnh ghép 1: Tập hợp Chi phí nguồn cần phân bổ (Lưới trên — Tử số chung `TotalPoolAmount`)
+- Dựa trên bảng phẳng `CostFlatRow`, lọc các dòng có:
+  - `AccountId` khớp với `SourceAccountId` (Tài khoản nguồn).
+  - `VoucherDate == null || VoucherDate.Value.Date <= ToDate.Date` (tính toàn bộ số dư chi phí còn lại tính đến ngày cuối kỳ `ToDate`, bao gồm cả số dư đầu kỳ `VoucherDate == null`).
+- **Quy tắc `Transflag`**: **KHÔNG lọc `Transflag`** ở lưới trên!
+  - Lý do: Số dư tài khoản chi phí được tính bằng `Sum(Dbcr * Amount)` (`Dbcr = +1` cho Nợ, `-1` cho Có). Khi đã chạy phân bổ hoặc kết chuyển, hệ thống sinh dòng Ghi Có (`Dbcr = -1`). Nhờ cộng gộp tất cả các dòng (cả gốc lẫn dòng phân bổ), số dư nguồn sẽ tự động triệt tiêu về `0`.
+- Gom nhóm theo `(CostObjectId, CostElementId)`, tính `Amount = Sum(Dbcr * Amount)`, chỉ giữ các dòng có `Math.Abs(Amount) > 0.0001`.
+- Tổng cộng `TotalPoolAmount = Sum(Amount)`.
 
-**Quy trình thực thi trong method:**
+### Mảnh ghép 2: Tập hợp Tiêu thức phân bổ (Lưới dưới — Mẫu số `TotalBaseAmount`)
+- Dựa trên bảng phẳng `CostFlatRow`, lọc các dòng có:
+  - `AccountId` nằm trong danh sách `AllocationBaseAccountIds` (`[Temp Account List]`).
+  - `VoucherDate` nằm trong kỳ `[FromDate.Date .. ToDate.Date]` (`WHERE [Bill Date] Between GetBeginDate() And GetEndDate()`).
+  - `CostObjectId` khác rỗng (`INNER JOIN [Expense Object List]`).
+  - **`Transflag == false`** (`HAVING TransFlag = False`): Chỉ lấy các giao dịch chi phí phát sinh gốc trong kỳ của từng đối tượng để làm mẫu số chia tỷ lệ (không cộng các dòng Ghi Có tự động kết chuyển/phân bổ làm mất tiêu thức phát sinh trong kỳ).
+- Gom nhóm theo `CostObjectId`, tính `BaseAmount = Sum(Dbcr * Amount)`, chỉ giữ các dòng có `BaseAmount > 0.0001`.
+- Tổng cộng `TotalBaseAmount = Sum(BaseAmount)`. Bẫy lỗi nếu `TotalBaseAmount <= 0`.
 
-**Bước 1: Tính Tổng chi phí cần phân bổ (Tử số chung - TotalPoolAmount)**
-- Dùng LINQ truy vấn bảng `TransactionLine` để tính tổng `Amount` của `sourceAccountId` trong khoảng thời gian `fromDate` đến `toDate`. (Lưu ý: bỏ qua các dòng có `IsAllocationGenerated == true`).
+### Mảnh ghép 3: Tính toán Tỷ trọng (%) và Số tiền phân bổ (`CostAllocationCalculator`)
+- Duyệt qua từng đối tượng ở Mảnh ghép 2:
+  - `RatioPercent = BaseAmount / TotalBaseAmount`
+  - `AllocatedAmount = Math.Round(RatioPercent * TotalPoolAmount, 0)`
+- Điều chỉnh chênh lệch làm tròn đồng lẻ (`TotalPoolAmount - Sum(AllocatedAmount)`) vào đối tượng có giá trị phân bổ lớn nhất để đảm bảo tổng phân bổ bằng đúng 100% `TotalPoolAmount`.
 
-**Bước 2: Tập hợp Tiêu thức phân bổ (Mẫu số - AllocationBase)**
-- Dùng LINQ truy vấn bảng `TransactionLine` trong cùng kỳ.
-- Lọc những dòng có `AccountId` nằm trong danh sách `allocationBaseAccountIds`.
-- ĐK Bắt buộc: `IsAllocationGenerated == false` (chỉ lấy giao dịch gốc).
-- Group by theo `CostObjectId` và tính tổng `Amount` cho từng đối tượng.
-- Tính tổng cộng toàn bộ tiêu thức (`TotalBaseAmount`). Bẫy lỗi `DivideByZeroException` nếu `TotalBaseAmount == 0`.
-
-**Bước 3: Tính toán tỷ lệ và số tiền phân bổ**
-- Duyệt qua từng `CostObjectId` lấy được ở Bước 2.
-- Tính Tỷ lệ % = `Amount của đối tượng` / `TotalBaseAmount`.
-- Tính Số tiền phân bổ = `Tỷ lệ %` * `TotalPoolAmount`. (Làm tròn số theo chuẩn kế toán).
-
-**Bước 4: Sinh bút toán phân bổ (Journal Entry Generation)**
-- Tạo một tập hợp các `TransactionLine` mới cho bút toán phân bổ:
-  + 1 dòng Ghi Có (hoặc giảm trừ) cho Tài khoản nguồn (`sourceAccountId`) với tổng số tiền `TotalPoolAmount`.
-  + N dòng Ghi Nợ (hoặc tăng) cho Tài khoản đích (`destinationAccountId`), mỗi dòng gắn với một `CostObjectId` tương ứng và số tiền đã tính ở Bước 3.
-- Tất cả các dòng này phải được gán cờ `IsAllocationGenerated = true`.
-- Lưu toàn bộ tập hợp này vào database thông qua `UnitOfWork.CommitAsync()` trong một transaction thống nhất.
-
-## 4. Output yêu cầu
-- Viết interface `ICostAllocationService`.
-- Viết class `CostAllocationService` triển khai toàn bộ logic LINQ/ORM một cách tối ưu nhất (tránh N+1 query).
-- Bố cục code sạch, có comment tóm tắt tại các bước tính toán công thức: Tỷ trọng = (Amount / Total) và Số tiền = Tỷ trọng * Nguồn.
+### Mảnh ghép 4: Sinh bút toán phân bổ (`CostAllocationVoucherBuilder`)
+- Tạo 1 chứng từ `JournalVoucherEntity` (`VoucherDate = ToDate`, `Bookflag = true`).
+- **Bút toán 1 — Ghi Có TK Nguồn (`Dbcr = -1`, `AccountId = SourceAccountId`, `Amount = TotalPoolAmount`)**:
+  - Tạo các dòng `CostDetailEntity` tương ứng với từng dòng trên Lưới trên (`SourcePoolItems`), gán **`Transflag = true`** (đánh dấu giao dịch tự động phân bổ).
+- **Bút toán 2 — Ghi Nợ TK Đích (`Dbcr = 1`, `AccountId = DestinationAccountId`, `Amount = TotalPoolAmount`, `ParentEntry = creditEntry`)**:
+  - Tạo các dòng `CostDetailEntity` tương ứng với từng đối tượng trên Lưới dưới (`CriteriaItems`), với `CostObjectId = item.CostObjectId`, `CostElementId = DestinationCostElementId` (Yếu tố đích), `Amount = item.AllocatedAmount`, và **`Transflag = false`** (chi phí thực tế được ghi nhận vào đối tượng đích, đúng theo `vba-reference.cls` dòng 94-99).

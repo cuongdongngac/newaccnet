@@ -115,7 +115,7 @@
                                     <dxe:ComboBoxEditSettings x:Name="cboAsAcct" ValueMember="AccountId" DisplayMember="AccountName" AutoComplete="True" ImmediatePopup="True"/>
                                 </dxg:GridColumn.EditSettings>
                             </dxg:GridColumn>
-                            <dxg:GridColumn FieldName="ExaccountId" Header="TK Hao Mòn" Width="140">
+                            <dxg:GridColumn FieldName="ExaccountId" Header="TK Chi Phí" Width="140">
                                 <dxg:GridColumn.EditSettings>
                                     <dxe:ComboBoxEditSettings x:Name="cboExAcct" ValueMember="AccountId" DisplayMember="AccountName" AutoComplete="True" ImmediatePopup="True"/>
                                 </dxg:GridColumn.EditSettings>
@@ -125,7 +125,7 @@
                                     <dxe:TextEditSettings MaskType="Numeric" Mask="N2" MaskUseAsDisplayFormat="True"/>
                                 </dxg:GridColumn.EditSettings>
                             </dxg:GridColumn>
-                            <dxg:GridColumn FieldName="Depprice" Header="Giá Thực Tế" Width="140" FixedWidth="True">
+                            <dxg:GridColumn FieldName="Depprice" Header="Giá Tính KH" Width="140" FixedWidth="True">
                                 <dxg:GridColumn.EditSettings>
                                     <dxe:TextEditSettings MaskType="Numeric" Mask="N0" MaskUseAsDisplayFormat="True"/>
                                 </dxg:GridColumn.EditSettings>
@@ -135,7 +135,7 @@
                                     <dxe:TextEditSettings MaskType="Numeric" Mask="P2" MaskUseAsDisplayFormat="True"/>
                                 </dxg:GridColumn.EditSettings>
                             </dxg:GridColumn>
-                            <dxg:GridColumn FieldName="Remainvalue" Header="Giá Còn Lại" Width="140" FixedWidth="True">
+                            <dxg:GridColumn FieldName="Remainvalue" Header="Hao Mòn Lũy Kế" Width="140" FixedWidth="True">
                                 <dxg:GridColumn.EditSettings>
                                     <dxe:TextEditSettings MaskType="Numeric" Mask="N0" MaskUseAsDisplayFormat="True"/>
                                 </dxg:GridColumn.EditSettings>

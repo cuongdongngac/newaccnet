@@ -51,6 +51,7 @@
                             </dxb:BarButtonItem.SuperTip>
                         </dxb:BarButtonItem>
                         <dxb:BarButtonItem Content="Kết chuyển CP" Hint="Kết chuyển chi phí" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_transition.svg'}" ItemClick="BtnCostTransfer_ItemClick" auth:AuthHelper.RequiredMask="64"/>
+                        <dxb:BarButtonItem Content="Khấu hao TSCĐ" Hint="Khấu hao tài sản cố định" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_transition.svg'}" ItemClick="BtnAssetDepreciation_ItemClick" auth:AuthHelper.RequiredMask="64"/>
                     </dxr:RibbonPageGroup>
                 </dxr:RibbonPage>
 
@@ -396,11 +397,17 @@ Bao gồm liên kết tới loại hình tương ứng."/>
                     </dxr:RibbonPageGroup>
                     <dxr:RibbonPageGroup Caption="Công nợ">
                         <dxb:BarButtonItem Content="Tổng hợp CN" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_customer.svg'}" auth:AuthHelper.RequiredMask="16" ItemClick="BtnOpenDebtBalanceFilter_ItemClick"/>
-                        <dxb:BarButtonItem Content="Chi tiết CN" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_appearance.svg'}" auth:AuthHelper.RequiredMask="16"/>
+                        <dxb:BarButtonItem Content="Chi tiết CN" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_appearance.svg'}" auth:AuthHelper.RequiredMask="16" ItemClick="BtnReportDebtDetail_ItemClick"/>
                     </dxr:RibbonPageGroup>
                     <dxr:RibbonPageGroup Caption="Kho">
-                        <dxb:BarButtonItem Content="Tồn kho" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_localization.svg'}" auth:AuthHelper.RequiredMask="4"/>
-                        <dxb:BarButtonItem Content="Nhập xuất" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_transition.svg'}" auth:AuthHelper.RequiredMask="4"/>
+                        <dxb:BarButtonItem Content="Tồn kho" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_localization.svg'}" auth:AuthHelper.RequiredMask="4" ItemClick="BtnReportInventoryStock_ItemClick"/>
+                        <dxb:BarButtonItem Content="Nhập xuất" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_transition.svg'}" auth:AuthHelper.RequiredMask="4" ItemClick="BtnReportInventoryInOut_ItemClick"/>
+                    </dxr:RibbonPageGroup>
+                    <dxr:RibbonPageGroup Caption="Chi tiết khác">
+                        <dxb:BarButtonItem Content="Chi tiết CP" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_invoice.svg'}" auth:AuthHelper.RequiredMask="8" ItemClick="BtnReportCostDetail_ItemClick"/>
+                        <dxb:BarButtonItem Content="Chi tiết TSCĐ" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_product.svg'}" auth:AuthHelper.RequiredMask="8" ItemClick="BtnReportAssetDetail_ItemClick"/>
+                        <dxb:BarButtonItem Content="Chi tiết Ngoại tệ" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_price_item.svg'}" auth:AuthHelper.RequiredMask="8" ItemClick="BtnReportCurrencyDetail_ItemClick"/>
+                        <dxb:BarButtonItem Content="Chi tiết CK" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_contract.svg'}" auth:AuthHelper.RequiredMask="8" ItemClick="BtnReportInvestmentDetail_ItemClick"/>
                     </dxr:RibbonPageGroup>
                 </dxr:RibbonPage>
             </dxr:RibbonDefaultPageCategory>

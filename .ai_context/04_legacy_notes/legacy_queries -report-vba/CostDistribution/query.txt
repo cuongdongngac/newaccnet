@@ -1,0 +1,76 @@
+-- =============================================================================
+-- TÀI LIỆU TRUY VẤN GỐC ACCESS: PHÂN BỔ CHI PHÍ (COST DISTRIBUTION)
+-- Form gốc: [Distribute Ground Form]
+-- Subform trên (Nguồn): [Distribute Expense SubForm]
+-- Subform dưới (Tiêu thức): [Distribute Criteria Form]
+-- =============================================================================
+
+-- 1. TẦNG DỮ LIỆU PHẲNG CHI PHÍ: [Union Expense Object Line Query]
+-- Nối bảng chi tiết chi phí [Expense Object Input Line] (CostDetail)
+-- với bút toán [Counter Accounts Query] (JournalEntry + JournalVoucher)
+SELECT DISTINCTROW 
+    [Counter Accounts Query].[Bill ID],
+    [Counter Accounts Query].[Bill No],
+    [Counter Accounts Query].[Bill Date],
+    [Counter Accounts Query].Contents,
+    [Counter Accounts Query].[Account ID],
+    [Expense Object Input Line].[ExObject ID],
+    [Expense Object Input Line].Amount,
+    [Expense Object Input Line].[Expense Atribute ID],
+    [Counter Accounts Query].DBCR,
+    [Expense Object Input Line].TransFlag
+FROM [Expense Object Input Line] 
+LEFT JOIN [Counter Accounts Query] 
+    ON [Expense Object Input Line].ID = [Counter Accounts Query].ID;
+
+-- 2. TRUY VẤN LƯỚI TRÊN (CHI PHÍ NGUỒN CẦN PHÂN BỔ): [Distribute Expense SubForm]
+-- Tính số dư chi phí còn lại (Rest = Sum(DBCR * Amount)) của Tài khoản nguồn (SrAccountID)
+-- tính đến ngày Đến ngày (End Date).
+-- LƯU Ý QUAN TRỌNG:
+--   - KHÔNG lọc theo TransFlag ở lưới trên!
+--   - Vì khi chạy Phân bổ, hệ thống sinh bút toán Ghi Có (DBCR = -1) trên SrAccountID.
+--   - Nhờ cộng gộp tất cả (cả phát sinh Nợ +1 lẫn bút toán phân bổ Có -1),
+--     số dư còn lại Sum(DBCR * Amount) tự động triệt tiêu về 0 sau khi phân bổ.
+SELECT DISTINCTROW 
+    [Union Expense Object Line Query].[Account ID],
+    [Union Expense Object Line Query].[ExObject ID],
+    [Union Expense Object Line Query].[Expense Atribute ID],
+    Sum([Union Expense Object Line Query]![DBCR] * [Union Expense Object Line Query]![Amount]) AS Amount
+FROM [Union Expense Object Line Query]
+WHERE [Union Expense Object Line Query].[Bill Date] <= GetEndDate()
+  AND [Union Expense Object Line Query].[Account ID] = Forms![Distribute Ground Form]![SrAccountID]
+GROUP BY 
+    [Union Expense Object Line Query].[Account ID],
+    [Union Expense Object Line Query].[ExObject ID],
+    [Union Expense Object Line Query].[Expense Atribute ID]
+HAVING Sum([Union Expense Object Line Query]![DBCR] * [Union Expense Object Line Query]![Amount]) <> 0;
+
+-- 3. TRUY VẤN LƯỚI DƯỚI (TIÊU THỨC PHÂN BỔ): [Distribute Criteria Form]
+-- Tập hợp chi phí phát sinh gốc trong kỳ [BeginDate .. EndDate] của các tài khoản
+-- nằm trong danh sách tiêu thức [Temp Account List] theo từng Đối tượng chi phí [ExObject ID].
+-- LƯU Ý QUAN TRỌNG:
+--   - Lọc HAVING TransFlag = False để chỉ lấy giao dịch phát sinh gốc trong kỳ làm mẫu số,
+--     không cộng các bút toán tự động kết chuyển/phân bổ (tránh trường hợp TK tiêu thức
+--     đã kết chuyển làm số phát sinh trong kỳ bị trừ về 0).
+SELECT 
+    [Union Expense Object Line Query].[ExObject ID],
+    Sum([Union Expense Object Line Query]!DBCR * [Union Expense Object Line Query]!Amount) AS AMount,
+    [Expense Object List].[ExObject Name]
+FROM ([Union Expense Object Line Query] 
+    INNER JOIN [Temp Account List] 
+        ON [Union Expense Object Line Query].[Account ID] = [Temp Account List].[Account ID])
+    INNER JOIN [Expense Object List] 
+        ON [Union Expense Object Line Query].[ExObject ID] = [Expense Object List].[ExObject ID]
+WHERE ([Union Expense Object Line Query].[Bill Date] Between GetBeginDate() And GetEndDate())
+GROUP BY 
+    [Union Expense Object Line Query].[ExObject ID],
+    [Expense Object List].[ExObject Name],
+    [Union Expense Object Line Query].TransFlag
+HAVING [Union Expense Object Line Query].TransFlag = False
+   AND Sum([Union Expense Object Line Query]![DBCR] * [Union Expense Object Line Query]![Amount]) <> 0;
+
+-- 4. CÔNG THỨC TÍNH TRÊN [Distribute Criteria Form]
+-- Tỷ trọng % (cột %):
+--   Ratio = [Amount] / [Total]
+-- Số tiền phân bổ (cột Phân bổ):
+--   Allocated = ([Amount] / [Total]) * Forms![Distribute Ground Form]![Total]

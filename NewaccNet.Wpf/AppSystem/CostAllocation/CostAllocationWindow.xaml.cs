@@ -7,7 +7,6 @@ using System.Windows.Media;
 using DataAccess;
 using DataAccess.EntityClasses;
 using DataAccess.HelperClasses;
-using DevExpress.Xpf.Core;
 using NewaccNet.Wpf.AppSystem.Helpers;
 
 namespace NewaccNet.Wpf.AppSystem.CostAllocation
@@ -22,9 +21,17 @@ namespace NewaccNet.Wpf.AppSystem.CostAllocation
 
     public partial class CostAllocationWindow : NewaccNet.Wpf.Views.Base.BaseWindow
     {
+        private const string KeyFromDate = "CostAllocation_FromDate";
+        private const string KeyToDate = "CostAllocation_ToDate";
+        private const string KeySourceAccount = "CostAllocation_SourceAccount";
+        private const string KeyDestPrefix = "CostAllocation_Dest_";
+        private const string KeyElemPrefix = "CostAllocation_Elem_";
+        private const string KeyCriteriaPrefix = "CostAllocation_Criteria_";
+
         private readonly ICostAllocationService _allocationService = new CostAllocationService();
         private readonly ObservableCollection<AccountFilterItem> _criteriaAccounts = new ObservableCollection<AccountFilterItem>();
         private Dictionary<string, string> _accountDict = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        private List<ChartOfAccountEntity> _allAccounts = new List<ChartOfAccountEntity>();
         private List<ChartOfAccountEntity> _leafAccounts = new List<ChartOfAccountEntity>();
         private CostAllocationCalculationResult _currentCalculation;
         private bool _isInitializing = true;
@@ -66,30 +73,31 @@ namespace NewaccNet.Wpf.AppSystem.CostAllocation
                     // 1. Tải toàn bộ danh mục tài khoản
                     var accounts = new EntityCollection<ChartOfAccountEntity>();
                     adapter.FetchEntityCollection(accounts, null);
-                    var allAccounts = accounts.OrderBy(a => a.AccountId).ToList();
+                    _allAccounts = accounts
+                        .Where(a => !string.IsNullOrWhiteSpace(a.AccountId))
+                        .OrderBy(a => a.AccountId)
+                        .ToList();
 
-                    _accountDict = allAccounts.ToDictionary(
-                        a => a.AccountId.Trim(), 
-                        a => a.AccountName ?? a.AccountId, 
+                    _accountDict = _allAccounts.ToDictionary(
+                        a => a.AccountId.Trim(),
+                        a => a.AccountName ?? a.AccountId,
                         StringComparer.OrdinalIgnoreCase);
 
                     // Xác định danh sách tài khoản lá (cấp dưới cùng / không có tài khoản con)
-                    var parentIds = accounts
+                    var parentIds = _allAccounts
                         .Select(a => a.ParentId)
                         .Where(id => !string.IsNullOrEmpty(id))
-                        .Distinct()
+                        .Select(id => id.Trim())
                         .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
-                    _leafAccounts = allAccounts
-                        .Where(a => !parentIds.Contains(a.AccountId))
+                    _leafAccounts = _allAccounts
+                        .Where(a => !parentIds.Contains(a.AccountId.Trim()))
                         .ToList();
 
-                    // Tài khoản nguồn và đích: cho phép chọn đầy đủ
-                    lueSourceAccount.ItemsSource = allAccounts;
-                    lueDestAccount.ItemsSource = allAccounts;
-
-                    // Tài khoản tiêu thức: Người dùng lọc trên danh sách tài khoản cấp dưới cùng
-                    lueAddCriteriaAccount.ItemsSource = _leafAccounts;
+                    // Tài khoản nguồn, đích và bộ chọn tài khoản tiêu thức (cho phép chọn cả TK tổng hợp như 154, 627 để bung ra TK con giống VBA)
+                    lueSourceAccount.ItemsSource = _allAccounts;
+                    lueDestAccount.ItemsSource = _allAccounts;
+                    lueAddCriteriaAccount.ItemsSource = _allAccounts;
 
                     // 2. Nạp danh mục Yếu tố chi phí
                     var costElements = new EntityCollection<CostElementEntity>();
@@ -104,101 +112,81 @@ namespace NewaccNet.Wpf.AppSystem.CostAllocation
             }
         }
 
+        // ---- Lưu & Nạp quy tắc (Rule Persistence) theo từng Tài khoản nguồn ----
+
         private void LoadFormSettings()
         {
             try
             {
                 // 1. Khoảng thời gian
-                string fromStr = UserPreferencesHelper.GetSetting("CostAllocation_FromDate");
-                if (!string.IsNullOrEmpty(fromStr) && DateTime.TryParse(fromStr, out DateTime fromDt))
-                {
-                    dtFromDate.DateTime = fromDt;
-                }
-                else
-                {
-                    dtFromDate.DateTime = new DateTime(DateTime.Today.Year, 1, 1);
-                }
+                string fromStr = UserPreferencesHelper.GetSetting(KeyFromDate);
+                dtFromDate.DateTime = !string.IsNullOrEmpty(fromStr) && DateTime.TryParse(fromStr, out DateTime fromDt)
+                    ? fromDt
+                    : new DateTime(DateTime.Today.Year, 1, 1);
 
-                string toStr = UserPreferencesHelper.GetSetting("CostAllocation_ToDate");
-                if (!string.IsNullOrEmpty(toStr) && DateTime.TryParse(toStr, out DateTime toDt))
-                {
-                    dtToDate.DateTime = toDt;
-                }
-                else
-                {
-                    dtToDate.DateTime = DateTime.Today;
-                }
+                string toStr = UserPreferencesHelper.GetSetting(KeyToDate);
+                dtToDate.DateTime = !string.IsNullOrEmpty(toStr) && DateTime.TryParse(toStr, out DateTime toDt)
+                    ? toDt
+                    : DateTime.Today;
 
-                // 2. Tài khoản nguồn & đích
-                string srcAcc = UserPreferencesHelper.GetSetting("CostAllocation_SourceAccount");
-                if (!string.IsNullOrEmpty(srcAcc))
+                // 2. Tài khoản nguồn
+                string srcAcc = UserPreferencesHelper.GetSetting(KeySourceAccount);
+                if (string.IsNullOrWhiteSpace(srcAcc))
                 {
-                    lueSourceAccount.EditValue = srcAcc;
+                    srcAcc = "1541";
                 }
-                else
-                {
-                    lueSourceAccount.EditValue = "1541";
-                }
+                lueSourceAccount.EditValue = srcAcc;
 
-                string destAcc = UserPreferencesHelper.GetSetting("CostAllocation_DestAccount");
-                if (!string.IsNullOrEmpty(destAcc))
-                {
-                    lueDestAccount.EditValue = destAcc;
-                }
-                else
-                {
-                    lueDestAccount.EditValue = "1541";
-                }
-
-                // 3. Yếu tố chi phí đích
-                string destElem = UserPreferencesHelper.GetSetting("CostAllocation_DestCostElement");
-                if (!string.IsNullOrEmpty(destElem))
-                {
-                    lueDestCostElement.EditValue = destElem;
-                }
-                else if (lueDestCostElement.ItemsSource is IList<CostElementEntity> elemList && elemList.Count > 0)
-                {
-                    lueDestCostElement.EditValue = elemList[0].Id;
-                }
-
-                // 4. Danh sách tài khoản tiêu thức cấp dưới cùng
-                string savedCriteria = UserPreferencesHelper.GetSetting("CostAllocation_CriteriaAccounts");
-                _criteriaAccounts.Clear();
-                if (!string.IsNullOrWhiteSpace(savedCriteria))
-                {
-                    var accs = savedCriteria.Split(new[] { ';', ',' }, StringSplitOptions.RemoveEmptyEntries);
-                    foreach (var acc in accs)
-                    {
-                        string trimmed = acc.Trim();
-                        if (string.IsNullOrEmpty(trimmed)) continue;
-
-                        // Nếu tài khoản được lưu là tài khoản cha (ví dụ 627), tự động bung ra các tài khoản con cấp dưới cùng (lá)
-                        var childLeaves = _leafAccounts.Where(l => l.AccountId.StartsWith(trimmed, StringComparison.OrdinalIgnoreCase)).ToList();
-                        if (childLeaves.Count > 1)
-                        {
-                            foreach (var child in childLeaves)
-                            {
-                                if (!_criteriaAccounts.Any(x => x.AccountId.Equals(child.AccountId, StringComparison.OrdinalIgnoreCase)))
-                                {
-                                    _criteriaAccounts.Add(new AccountFilterItem { AccountId = child.AccountId, AccountName = child.AccountName });
-                                }
-                            }
-                        }
-                        else if (!_criteriaAccounts.Any(x => x.AccountId.Equals(trimmed, StringComparison.OrdinalIgnoreCase)))
-                        {
-                            string accName = _accountDict.TryGetValue(trimmed, out var name) ? name : trimmed;
-                            _criteriaAccounts.Add(new AccountFilterItem { AccountId = trimmed, AccountName = accName });
-                        }
-                    }
-                }
-
-                // Nếu chưa có cấu hình tiêu thức nào được lưu, gán danh sách tài khoản lá mặc định
-                if (_criteriaAccounts.Count == 0)
-                {
-                    SetDefaultCriteria();
-                }
+                // 3. Áp dụng Rule của Tài khoản nguồn đang chọn
+                ApplyRuleForSourceAccount(srcAcc);
             }
             catch { }
+        }
+
+        private void ApplyRuleForSourceAccount(string sourceAccountId)
+        {
+            if (string.IsNullOrWhiteSpace(sourceAccountId)) return;
+            string key = sourceAccountId.Trim();
+
+            // 1. Tài khoản đích (ưu tiên theo TK nguồn, fallback về cài đặt chung)
+            string destAcc = UserPreferencesHelper.GetSetting(KeyDestPrefix + key);
+            if (string.IsNullOrWhiteSpace(destAcc))
+                destAcc = UserPreferencesHelper.GetSetting("CostAllocation_DestAccount");
+            lueDestAccount.EditValue = !string.IsNullOrWhiteSpace(destAcc) ? destAcc : key;
+
+            // 2. Yếu tố chi phí đích
+            string destElem = UserPreferencesHelper.GetSetting(KeyElemPrefix + key);
+            if (string.IsNullOrWhiteSpace(destElem))
+                destElem = UserPreferencesHelper.GetSetting("CostAllocation_DestCostElement");
+
+            if (!string.IsNullOrWhiteSpace(destElem))
+            {
+                lueDestCostElement.EditValue = destElem;
+            }
+            else if (lueDestCostElement.ItemsSource is IList<CostElementEntity> elemList && elemList.Count > 0)
+            {
+                lueDestCostElement.EditValue = elemList[0].Id;
+            }
+
+            // 3. Danh sách tài khoản tiêu thức
+            string savedCriteria = UserPreferencesHelper.GetSetting(KeyCriteriaPrefix + key);
+            if (string.IsNullOrWhiteSpace(savedCriteria))
+                savedCriteria = UserPreferencesHelper.GetSetting("CostAllocation_CriteriaAccounts");
+
+            _criteriaAccounts.Clear();
+            if (!string.IsNullOrWhiteSpace(savedCriteria))
+            {
+                var accs = savedCriteria.Split(new[] { ';', ',' }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (var acc in accs)
+                {
+                    AddAccountsByPrefix(acc.Trim());
+                }
+            }
+
+            if (_criteriaAccounts.Count == 0)
+            {
+                SetDefaultCriteria();
+            }
         }
 
         private void SaveFormSettings()
@@ -208,51 +196,81 @@ namespace NewaccNet.Wpf.AppSystem.CostAllocation
             try
             {
                 if (dtFromDate.DateTime != DateTime.MinValue)
-                    UserPreferencesHelper.SetSetting("CostAllocation_FromDate", dtFromDate.DateTime.ToString("yyyy-MM-dd"));
+                    UserPreferencesHelper.SetSetting(KeyFromDate, dtFromDate.DateTime.ToString("yyyy-MM-dd"));
 
                 if (dtToDate.DateTime != DateTime.MinValue)
-                    UserPreferencesHelper.SetSetting("CostAllocation_ToDate", dtToDate.DateTime.ToString("yyyy-MM-dd"));
+                    UserPreferencesHelper.SetSetting(KeyToDate, dtToDate.DateTime.ToString("yyyy-MM-dd"));
 
-                if (lueSourceAccount.EditValue != null)
-                    UserPreferencesHelper.SetSetting("CostAllocation_SourceAccount", lueSourceAccount.EditValue.ToString());
+                string src = lueSourceAccount.EditValue?.ToString()?.Trim();
+                if (string.IsNullOrEmpty(src)) return;
 
-                if (lueDestAccount.EditValue != null)
-                    UserPreferencesHelper.SetSetting("CostAllocation_DestAccount", lueDestAccount.EditValue.ToString());
+                UserPreferencesHelper.SetSetting(KeySourceAccount, src);
 
-                if (lueDestCostElement.EditValue != null)
-                    UserPreferencesHelper.SetSetting("CostAllocation_DestCostElement", lueDestCostElement.EditValue.ToString());
+                string dest = lueDestAccount.EditValue?.ToString()?.Trim();
+                if (!string.IsNullOrEmpty(dest))
+                {
+                    UserPreferencesHelper.SetSetting(KeyDestPrefix + src, dest);
+                    UserPreferencesHelper.SetSetting("CostAllocation_DestAccount", dest);
+                }
+
+                string elem = lueDestCostElement.EditValue?.ToString()?.Trim();
+                if (!string.IsNullOrEmpty(elem))
+                {
+                    UserPreferencesHelper.SetSetting(KeyElemPrefix + src, elem);
+                    UserPreferencesHelper.SetSetting("CostAllocation_DestCostElement", elem);
+                }
 
                 if (_criteriaAccounts != null)
                 {
                     string joined = string.Join(";", _criteriaAccounts.Select(x => x.AccountId));
+                    UserPreferencesHelper.SetSetting(KeyCriteriaPrefix + src, joined);
                     UserPreferencesHelper.SetSetting("CostAllocation_CriteriaAccounts", joined);
                 }
             }
             catch { }
         }
 
+        /// <summary>
+        /// Thêm tài khoản vào danh sách tiêu thức theo đúng cơ chế VBA (AddAccount_AfterUpdate):
+        /// INSERT INTO [Temp Account List] SELECT [Account ID] FROM [Account List] WHERE [Account ID] Like 'AddAccount*'
+        /// </summary>
+        private void AddAccountsByPrefix(string prefix)
+        {
+            if (string.IsNullOrWhiteSpace(prefix)) return;
+
+            var matchingLeaves = _leafAccounts
+                .Where(l => l.AccountId.Trim().StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            if (matchingLeaves.Count > 0)
+            {
+                foreach (var leaf in matchingLeaves)
+                {
+                    string id = leaf.AccountId.Trim();
+                    if (!_criteriaAccounts.Any(x => x.AccountId.Equals(id, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        _criteriaAccounts.Add(new AccountFilterItem
+                        {
+                            AccountId = id,
+                            AccountName = leaf.AccountName ?? id
+                        });
+                    }
+                }
+            }
+            else if (!_criteriaAccounts.Any(x => x.AccountId.Equals(prefix, StringComparison.OrdinalIgnoreCase)))
+            {
+                string accName = _accountDict.TryGetValue(prefix, out var name) ? name : prefix;
+                _criteriaAccounts.Add(new AccountFilterItem { AccountId = prefix, AccountName = accName });
+            }
+        }
+
         private void SetDefaultCriteria()
         {
             _criteriaAccounts.Clear();
-            // Tiêu thức mặc định chỉ gồm các tài khoản cấp dưới cùng (lá)
-            var defaultCandidates = new[] { "1541", "1542", "1543", "621", "622" };
+            var defaultCandidates = new[] { "1541", "1542", "1543", "621", "622", "627" };
             foreach (var acc in defaultCandidates)
             {
-                if (_leafAccounts.Any(l => l.AccountId.Equals(acc, StringComparison.OrdinalIgnoreCase)))
-                {
-                    string accName = _accountDict.TryGetValue(acc, out var name) ? name : acc;
-                    _criteriaAccounts.Add(new AccountFilterItem { AccountId = acc, AccountName = accName });
-                }
-            }
-
-            // Tự động thêm các tài khoản chi phí sản xuất chung cấp lá (6271, 6272...)
-            var leaf627 = _leafAccounts.Where(l => l.AccountId.StartsWith("627")).ToList();
-            foreach (var leaf in leaf627)
-            {
-                if (!_criteriaAccounts.Any(x => x.AccountId.Equals(leaf.AccountId, StringComparison.OrdinalIgnoreCase)))
-                {
-                    _criteriaAccounts.Add(new AccountFilterItem { AccountId = leaf.AccountId, AccountName = leaf.AccountName });
-                }
+                AddAccountsByPrefix(acc);
             }
         }
 
@@ -267,6 +285,28 @@ namespace NewaccNet.Wpf.AppSystem.CostAllocation
             }
         }
 
+        private void SourceAccount_Changed(object sender, EventArgs e)
+        {
+            if (_isInitializing) return;
+
+            string src = lueSourceAccount.EditValue?.ToString()?.Trim();
+            _isInitializing = true;
+            try
+            {
+                if (!string.IsNullOrEmpty(src))
+                {
+                    ApplyRuleForSourceAccount(src);
+                }
+            }
+            finally
+            {
+                _isInitializing = false;
+            }
+
+            SaveFormSettings();
+            ResetCalculationState();
+        }
+
         private void BtnAddAccount_Click(object sender, RoutedEventArgs e)
         {
             string accId = lueAddCriteriaAccount.EditValue?.ToString()?.Trim();
@@ -276,13 +316,9 @@ namespace NewaccNet.Wpf.AppSystem.CostAllocation
                 return;
             }
 
-            if (!_criteriaAccounts.Any(x => x.AccountId.Equals(accId, StringComparison.OrdinalIgnoreCase)))
-            {
-                string accName = _accountDict.TryGetValue(accId, out var name) ? name : accId;
-                _criteriaAccounts.Add(new AccountFilterItem { AccountId = accId, AccountName = accName });
-                SaveFormSettings();
-                ResetCalculationState();
-            }
+            AddAccountsByPrefix(accId);
+            SaveFormSettings();
+            ResetCalculationState();
         }
 
         private void BtnRemoveAccount_Click(object sender, RoutedEventArgs e)
@@ -378,7 +414,6 @@ namespace NewaccNet.Wpf.AppSystem.CostAllocation
                 gridSourcePool.ItemsSource = result.SourcePoolItems;
                 lblTotalPool.Text = $"{result.TotalPoolAmount:#,##0} đ";
 
-                // Lưu lại các tham số người dùng vừa tính toán
                 SaveFormSettings();
 
                 // 1. KIỂM TRA DÒNG TỔNG CHI PHÍ NGUỒN = 0: HẾT CHI PHÍ ĐỂ PHÂN BỔ
@@ -387,7 +422,7 @@ namespace NewaccNet.Wpf.AppSystem.CostAllocation
                     gridCriteria.ItemsSource = null;
                     btnDistribute.IsEnabled = false;
                     lblTotalPool.Text = "0 đ";
-                    lblStatus.Text = "⚠️ Dòng tổng chi phí nguồn bằng 0 (đã kết chuyển hết hoặc không có chi phí) - Không có chi phí để phân bổ!";
+                    lblStatus.Text = "⚠️ Dòng tổng chi phí nguồn bằng 0 (đã kết chuyển/phân bổ hết hoặc không có chi phí) - Không có chi phí để phân bổ!";
                     lblStatus.Foreground = new SolidColorBrush(Color.FromRgb(211, 47, 47));
                     return false;
                 }
@@ -448,7 +483,6 @@ namespace NewaccNet.Wpf.AppSystem.CostAllocation
                     if (!ok) return;
                 }
 
-                // Kiểm tra nghiêm ngặt dòng tổng trước khi thực hiện
                 if (_currentCalculation == null || Math.Abs(_currentCalculation.TotalPoolAmount) < 0.0001)
                 {
                     MessageBox.Show("Dòng tổng chi phí bằng 0 (đã kết chuyển hết hoặc không có chi phí). Không còn chi phí để phân bổ!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -483,7 +517,7 @@ namespace NewaccNet.Wpf.AppSystem.CostAllocation
                 MessageBox.Show($"Phân bổ chi phí thành công!\n\nSố chứng từ tự động: {voucher.VoucherNo}\nTổng số tiền: {_currentCalculation.TotalPoolAmount:#,##0} đ",
                                 "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                // Tính toán lại: số dư chi phí nguồn sẽ tự động trở về 0 và khóa nút Phân bổ
+                // Tính toán lại: số dư chi phí nguồn sẽ tự động trở về 0 (do bút toán Ghi Có DBCR = -1 bù trừ) và khóa nút Phân bổ
                 await RunCalculationAsync();
             }
             catch (Exception ex)
@@ -493,9 +527,9 @@ namespace NewaccNet.Wpf.AppSystem.CostAllocation
             finally
             {
                 btnCalculate.IsEnabled = true;
-                btnDistribute.IsEnabled = (_currentCalculation != null 
-                                           && _currentCalculation.TotalPoolAmount > 0.0001 
-                                           && _currentCalculation.TotalBaseAmount > 0.0001 
+                btnDistribute.IsEnabled = (_currentCalculation != null
+                                           && _currentCalculation.TotalPoolAmount > 0.0001
+                                           && _currentCalculation.TotalBaseAmount > 0.0001
                                            && !_currentCalculation.HasError);
             }
         }

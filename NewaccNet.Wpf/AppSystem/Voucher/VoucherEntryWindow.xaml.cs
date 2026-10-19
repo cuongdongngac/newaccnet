@@ -834,13 +834,82 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
 
         private void ExecutePrint()
         {
-            if (cboPrintType.EditValue is VoucherPrintType selectedType && selectedType != VoucherPrintType.Normal)
+            UnbindHeader();
+            var selectedType = (cboPrintType.EditValue is VoucherPrintType pt) ? pt : VoucherPrintType.Normal;
+
+            switch (selectedType)
             {
-                var printItem = PrintTypeList.FirstOrDefault(x => x.Type == selectedType);
-                string printName = printItem?.Name ?? "chứng từ";
-                string voucherNo = txtVoucherNo.Text?.Trim() ?? "";
-                MessageBox.Show($"In {printName} (Số chứng từ: {voucherNo}).", "In chứng từ", MessageBoxButton.OK, MessageBoxImage.Information);
+                case VoucherPrintType.CashReceipt:
+                    PrintCashReceipt(_currentVoucher);
+                    break;
+                case VoucherPrintType.CashPayment:
+                    PrintCashPayment(_currentVoucher);
+                    break;
+                case VoucherPrintType.BankPaymentOrder:
+                    PrintBankPaymentOrder(_currentVoucher);
+                    break;
+                case VoucherPrintType.BankDeposit:
+                    PrintBankDeposit(_currentVoucher);
+                    break;
+                case VoucherPrintType.Normal:
+                default:
+                    PrintNormalVoucher(_currentVoucher);
+                    break;
             }
+        }
+
+        // =========================================================================
+        // KHUNG HÀM IN CHỨNG TỪ (STUB METHODS - SẼ TRIỂN KHAI CHI TIẾT SAU)
+        // =========================================================================
+
+        private void PrintNormalVoucher(JournalVoucherEntity voucher)
+        {
+            string voucherNo = voucher?.VoucherNo ?? "";
+            MessageBox.Show(
+                $"[Khung chờ triển khai] In Phiếu kế toán thông thường\n- Số chứng từ: {voucherNo}\n- Ngày: {voucher?.VoucherDate:dd/MM/yyyy}",
+                "In Phiếu thông thường",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+        }
+
+        private void PrintCashReceipt(JournalVoucherEntity voucher)
+        {
+            string voucherNo = voucher?.VoucherNo ?? "";
+            MessageBox.Show(
+                $"[Khung chờ triển khai] In Phiếu thu (Mẫu 01-TT)\n- Số chứng từ: {voucherNo}\n- Người nộp: {voucher?.Personname}\n- Địa chỉ: {voucher?.Personaddress}",
+                "In Phiếu thu",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+        }
+
+        private void PrintCashPayment(JournalVoucherEntity voucher)
+        {
+            string voucherNo = voucher?.VoucherNo ?? "";
+            MessageBox.Show(
+                $"[Khung chờ triển khai] In Phiếu chi (Mẫu 02-TT)\n- Số chứng từ: {voucherNo}\n- Người nhận: {voucher?.Personname}\n- Địa chỉ: {voucher?.Personaddress}",
+                "In Phiếu chi",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+        }
+
+        private void PrintBankPaymentOrder(JournalVoucherEntity voucher)
+        {
+            string voucherNo = voucher?.VoucherNo ?? "";
+            MessageBox.Show(
+                $"[Khung chờ triển khai] In Ủy nhiệm chi ngân hàng\n- Số chứng từ: {voucherNo}\n- TK trả: {voucher?.Paymentacc} ({voucher?.Paymentbank})\n- Đơn vị nhận: {voucher?.Recievedcorp} - TK: {voucher?.Recievedacc} ({voucher?.Recievedbank})",
+                "In Ủy nhiệm chi",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+        }
+
+        private void PrintBankDeposit(JournalVoucherEntity voucher)
+        {
+            string voucherNo = voucher?.VoucherNo ?? "";
+            MessageBox.Show(
+                $"[Khung chờ triển khai] In Giấy nộp tiền ngân hàng\n- Số chứng từ: {voucherNo}\n- Người nộp: {voucher?.Personname}\n- Đơn vị nhận: {voucher?.Recievedcorp} - TK: {voucher?.Recievedacc} ({voucher?.Recievedbank})",
+                "In Giấy nộp tiền",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
         }
 
         private void BtnSave_Click(object sender, RoutedEventArgs e)

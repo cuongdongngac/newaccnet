@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using DataAccess;
 using DataAccess.EntityClasses;
+using DataAccess.HelperClasses;
 using NewaccNet.Wpf.AppSystem.Helpers;
 
 namespace NewaccNet.Wpf.AppSystem.CostTransfer

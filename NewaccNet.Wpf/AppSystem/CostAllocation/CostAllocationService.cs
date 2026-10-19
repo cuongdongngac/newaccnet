@@ -1,19 +1,27 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DataAccess;
 using DataAccess.EntityClasses;
 using DataAccess.HelperClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace NewaccNet.Wpf.AppSystem.CostAllocation
 {
     /// <summary>
-    /// Triển khai dịch vụ Phân bổ / Kết chuyển Chi phí theo tỷ lệ bình quân gia quyền
+    /// Nhạc trưởng (Orchestrator) điều phối 4 mảnh ghép của nghiệp vụ Phân bổ Chi phí:
+    ///   1. CostAllocationSnapshotLoader (Dựng bảng phẳng Tầng 2 & Lọc Chi phí nguồn + Tiêu thức)
+    ///   2. CostAllocationCalculator (Tính tỷ trọng bình quân gia quyền & Làm tròn đồng lẻ)
+    ///   3. CostAllocationVoucherBuilder (Sinh chứng từ kế toán phân bổ Nợ TK Đích / Có TK Nguồn)
+    /// Xem chi tiết tại: .ai_context/CostAllocationArchitecture.md
     /// </summary>
     public class CostAllocationService : ICostAllocationService
     {
+        private const double Epsilon = 0.0001;
+
+        private readonly CostAllocationSnapshotLoader _snapshotLoader = new CostAllocationSnapshotLoader();
+        private readonly CostAllocationCalculator _calculator = new CostAllocationCalculator();
+        private readonly CostAllocationVoucherBuilder _voucherBuilder = new CostAllocationVoucherBuilder();
+
         public async Task<CostAllocationCalculationResult> CalculateAllocationAsync(CostAllocationParams param)
         {
             return await Task.Run(() =>
@@ -48,7 +56,7 @@ namespace NewaccNet.Wpf.AppSystem.CostAllocation
                     return result;
                 }
 
-                if (param.FromDate > param.ToDate)
+                if (param.FromDate.Date > param.ToDate.Date)
                 {
                     result.HasError = true;
                     result.ErrorMessage = "Khoảng thời gian không hợp lệ (Từ ngày phải nhỏ hơn hoặc bằng Đến ngày).";
@@ -59,7 +67,7 @@ namespace NewaccNet.Wpf.AppSystem.CostAllocation
                 {
                     using (var adapter = AppDataAccessAdapter.Create())
                     {
-                        // 1. Tải danh mục tra cứu Tên Đối tượng & Yếu tố chi phí
+                        // 1. Nạp danh mục Đối tượng chi phí & Yếu tố chi phí để hiển thị tên
                         var costObjects = new EntityCollection<CostObjectEntity>();
                         adapter.FetchEntityCollection(costObjects, null);
                         var costObjDict = costObjects
@@ -72,142 +80,48 @@ namespace NewaccNet.Wpf.AppSystem.CostAllocation
                             .Where(e => !string.IsNullOrWhiteSpace(e.Id))
                             .ToDictionary(e => e.Id.Trim(), e => e.ElementName ?? e.Id, StringComparer.OrdinalIgnoreCase);
 
-                        // 2. Tải toàn bộ CostDetail trong kỳ phân bổ kèm JournalEntry và JournalVoucher
-                        var prefetch = new PrefetchPath2(EntityType.CostDetailEntity);
-                        var pJe = prefetch.Add(CostDetailEntity.PrefetchPathJournalEntry);
-                        pJe.SubPath.Add(JournalEntryEntity.PrefetchPathJournalVoucher);
+                        // 2. Dựng bảng phẳng chi phí Tầng 2 (CostFlatRow)
+                        var flatRows = _snapshotLoader.LoadCostFlatRows(adapter);
 
-                        var allCostDetails = new EntityCollection<CostDetailEntity>();
-                        adapter.FetchEntityCollection(allCostDetails, null, prefetch);
+                        // 3. MẢNH GHÉP 1: Tập hợp Chi phí nguồn cần phân bổ (Lưới trên - Tử số chung)
+                        result.SourcePoolItems = _snapshotLoader.LoadSourcePool(
+                            flatRows,
+                            param.SourceAccountId,
+                            param.ToDate,
+                            costObjDict,
+                            costElemDict);
 
-                        DateTime start = param.FromDate.Date;
-                        DateTime end = param.ToDate.Date.AddDays(1).AddSeconds(-1);
+                        result.TotalPoolAmount = result.SourcePoolItems.Sum(x => x.Amount);
 
-                        // LỌC GIAO DỊCH GỐC (Transflag == false) TRONG KỲ [FromDate, ToDate]
-                        var validDetails = allCostDetails
-                            .Where(d => d.Transflag == false)
-                            .Where(d => d.JournalEntry != null)
-                            .Where(d =>
-                            {
-                                DateTime entryDate = d.JournalEntry.JournalVoucher?.VoucherDate 
-                                                  ?? d.JournalEntry.Createdate 
-                                                  ?? DateTime.MinValue;
-                                return entryDate >= start && entryDate <= end;
-                            })
-                            .ToList();
-
-                        // 3. BƯỚC 1: TÍNH TỔNG CHI PHÍ NGUỒN CẦN PHÂN BỔ (TỬ SỐ CHUNG - TotalPoolAmount)
-                        string srcAcc = param.SourceAccountId.Trim();
-                        var sourceLines = validDetails
-                            .Where(d => !string.IsNullOrWhiteSpace(d.JournalEntry.AccountId) 
-                                     && d.JournalEntry.AccountId.Trim().StartsWith(srcAcc, StringComparison.OrdinalIgnoreCase))
-                            .ToList();
-
-                        var poolGrouped = sourceLines
-                            .GroupBy(d => new
-                            {
-                                CostObjectId = d.CostObjectId?.Trim() ?? string.Empty,
-                                CostElementId = d.CostElementId?.Trim() ?? string.Empty
-                            })
-                            .Select(g =>
-                            {
-                                double netAmt = g.Sum(x => (x.Amount ?? 0.0) * (x.JournalEntry.Dbcr.GetValueOrDefault(1) == -1 ? -1 : 1));
-                                string objId = g.Key.CostObjectId;
-                                string objName = string.IsNullOrEmpty(objId) 
-                                    ? "(Chi phí dùng chung)" 
-                                    : (costObjDict.TryGetValue(objId, out var oName) ? oName : objId);
-
-                                return new CostSourceItemDto
-                                {
-                                    CostObjectId = objId,
-                                    CostObjectName = objName,
-                                    CostElementId = g.Key.CostElementId,
-                                    CostElementName = costElemDict.TryGetValue(g.Key.CostElementId, out var eName) ? eName : g.Key.CostElementId,
-                                    Amount = netAmt
-                                };
-                            })
-                            .Where(x => Math.Abs(x.Amount) > 0.0001)
-                            .OrderBy(x => x.CostObjectId)
-                            .ThenBy(x => x.CostElementId)
-                            .ToList();
-
-                        result.SourcePoolItems = poolGrouped;
-                        result.TotalPoolAmount = poolGrouped.Sum(x => x.Amount);
-
-                        if (Math.Abs(result.TotalPoolAmount) < 0.0001)
+                        if (Math.Abs(result.TotalPoolAmount) < Epsilon)
                         {
                             result.HasError = true;
-                            result.ErrorMessage = $"Tổng chi phí nguồn bằng 0 (đã kết chuyển/phân bổ hết hoặc không có chi phí phát sinh tại tài khoản {param.SourceAccountId}). Không còn chi phí để phân bổ.";
+                            result.ErrorMessage = $"Tổng chi phí nguồn bằng 0 (đã kết chuyển/phân bổ hết hoặc không có chi phí còn lại tại tài khoản {param.SourceAccountId} đến ngày {param.ToDate:dd/MM/yyyy}).";
                             return result;
                         }
 
-                        // 4. BƯỚC 2: TẬP HỢP TIÊU THỨC PHÂN BỔ (MẪU SỐ - AllocationBase)
-                        var baseAccSet = param.AllocationBaseAccountIds
-                            .Where(a => !string.IsNullOrWhiteSpace(a))
-                            .Select(a => a.Trim())
-                            .ToList();
+                        // 4. MẢNH GHÉP 2: Tập hợp Tiêu thức phân bổ (Lưới dưới - Mẫu số)
+                        result.CriteriaItems = _snapshotLoader.LoadCriteriaBase(
+                            flatRows,
+                            param.AllocationBaseAccountIds,
+                            param.FromDate,
+                            param.ToDate,
+                            costObjDict);
 
-                        var criteriaLines = validDetails
-                            .Where(d => !string.IsNullOrWhiteSpace(d.JournalEntry.AccountId)
-                                     && baseAccSet.Any(crit => d.JournalEntry.AccountId.Trim().StartsWith(crit, StringComparison.OrdinalIgnoreCase)))
-                            .Where(d => !string.IsNullOrWhiteSpace(d.CostObjectId))
-                            .ToList();
+                        result.TotalBaseAmount = result.CriteriaItems.Sum(x => x.BaseAmount);
 
-                        var criteriaGrouped = criteriaLines
-                            .GroupBy(d => d.CostObjectId.Trim())
-                            .Select(g =>
-                            {
-                                string objId = g.Key;
-                                double baseAmt = g.Sum(x => (x.Amount ?? 0.0) * (x.JournalEntry.Dbcr.GetValueOrDefault(1) == -1 ? -1 : 1));
-                                return new CostCriteriaItemDto
-                                {
-                                    CostObjectId = objId,
-                                    CostObjectName = costObjDict.TryGetValue(objId, out var oName) ? oName : objId,
-                                    BaseAmount = baseAmt,
-                                    RatioPercent = 0,
-                                    AllocatedAmount = 0
-                                };
-                            })
-                            .Where(x => x.BaseAmount > 0.0001)
-                            .OrderBy(x => x.CostObjectId)
-                            .ToList();
-
-                        result.CriteriaItems = criteriaGrouped;
-                        result.TotalBaseAmount = criteriaGrouped.Sum(x => x.BaseAmount);
-
-                        // BẪY LỖI DIVIDE BY ZERO: Mẫu số = 0
-                        if (result.TotalBaseAmount <= 0.0001 || result.CriteriaItems.Count == 0)
+                        if (result.TotalBaseAmount <= Epsilon || result.CriteriaItems.Count == 0)
                         {
                             result.HasError = true;
-                            result.ErrorMessage = "Tổng tiêu thức phân bổ bằng 0 (các đối tượng chi phí không có phát sinh chi phí tiêu thức trong kỳ). Vui lòng chọn lại danh sách tài khoản tiêu thức hoặc mở rộng khoảng thời gian.";
+                            result.ErrorMessage = "Tổng tiêu thức phân bổ bằng 0 (các đối tượng chi phí không có phát sinh chi phí gốc tại các tài khoản tiêu thức trong kỳ). Vui lòng chọn lại danh sách tài khoản tiêu thức hoặc mở rộng khoảng thời gian.";
                             return result;
                         }
 
-                        // 5. BƯỚC 3: TÍNH TOÁN TỶ LỆ (%) VÀ SỐ TIỀN PHÂN BỔ
-                        // Công thức: Tỷ trọng % = Base / TotalBase; Số tiền = Tỷ trọng % * TotalPool
-                        double pool = result.TotalPoolAmount;
-                        double totalBase = result.TotalBaseAmount;
-                        double runningAllocated = 0;
-
-                        for (int i = 0; i < result.CriteriaItems.Count; i++)
-                        {
-                            var item = result.CriteriaItems[i];
-                            item.RatioPercent = item.BaseAmount / totalBase;
-                            item.AllocatedAmount = Math.Round(item.RatioPercent * pool, 0);
-                            runningAllocated += item.AllocatedAmount;
-                        }
-
-                        // XỬ LÝ LÀM TRÒN CHÊNH LỆCH ĐỒNG LẺ (Rounding Adjustment):
-                        // Đảm bảo tổng số tiền phân bổ vừa khít 100% bằng TotalPoolAmount
-                        double diff = pool - runningAllocated;
-                        if (Math.Abs(diff) > 0.0001 && result.CriteriaItems.Count > 0)
-                        {
-                            // Điều chỉnh vào đối tượng có giá trị phân bổ lớn nhất
-                            var largestItem = result.CriteriaItems.OrderByDescending(x => x.AllocatedAmount).First();
-                            largestItem.AllocatedAmount += diff;
-                        }
-
-                        result.TotalAllocatedAmount = result.CriteriaItems.Sum(x => x.AllocatedAmount);
+                        // 5. MẢNH GHÉP 3: Tính toán Tỷ trọng (%) và Số tiền phân bổ
+                        result.TotalAllocatedAmount = _calculator.ApplyWeightedAllocation(
+                            result.CriteriaItems,
+                            result.TotalPoolAmount,
+                            result.TotalBaseAmount);
                     }
                 }
                 catch (Exception ex)
@@ -220,7 +134,9 @@ namespace NewaccNet.Wpf.AppSystem.CostAllocation
             });
         }
 
-        public async Task<JournalVoucherEntity> ExecuteAllocationAsync(CostAllocationParams param, CostAllocationCalculationResult calculation)
+        public async Task<JournalVoucherEntity> ExecuteAllocationAsync(
+            CostAllocationParams param,
+            CostAllocationCalculationResult calculation)
         {
             return await Task.Run(() =>
             {
@@ -229,104 +145,18 @@ namespace NewaccNet.Wpf.AppSystem.CostAllocation
                     throw new ArgumentException("Tham số hoặc dữ liệu tính toán phân bổ không hợp lệ.");
                 }
 
-                if (calculation.HasError || calculation.CriteriaItems.Count == 0 
-                    || Math.Abs(calculation.TotalPoolAmount) < 0.0001 
-                    || Math.Abs(calculation.TotalBaseAmount) < 0.0001)
+                if (calculation.HasError || calculation.CriteriaItems.Count == 0
+                    || Math.Abs(calculation.TotalPoolAmount) < Epsilon
+                    || Math.Abs(calculation.TotalBaseAmount) < Epsilon)
                 {
-                    throw new InvalidOperationException(string.IsNullOrWhiteSpace(calculation.ErrorMessage) 
-                        ? "Dòng tổng chi phí nguồn hoặc tổng tiêu thức bằng 0. Không có chi phí để phân bổ." 
+                    throw new InvalidOperationException(string.IsNullOrWhiteSpace(calculation.ErrorMessage)
+                        ? "Dòng tổng chi phí nguồn hoặc tổng tiêu thức bằng 0. Không có chi phí để phân bổ."
                         : calculation.ErrorMessage);
                 }
 
-                using (var adapter = AppDataAccessAdapter.Create())
-                {
-                    // 1. TẠO CHỨNG TỪ PHÂN BỔ (JournalVoucher)
-                    var voucher = new JournalVoucherEntity();
-                    voucher.VoucherDate = param.ToDate;
-                    voucher.VoucherNo = GenerateNextAllocationVoucherNo(adapter, param.ToDate);
-                    voucher.Contents = $"Phân bổ chi phí từ TK {param.SourceAccountId.Trim()} sang TK {param.DestinationAccountId.Trim()}";
-                    voucher.Bookflag = true;
-
-                    // 2. BÚT TOÁN GHI CÓ (GIẢM TRỪ TÀI KHOẢN NGUỒN)
-                    var creditEntry = new JournalEntryEntity();
-                    creditEntry.AccountId = param.SourceAccountId.Trim();
-                    creditEntry.Dbcr = -1; // Có
-                    creditEntry.Amount = calculation.TotalPoolAmount;
-                    creditEntry.Createdate = DateTime.Now;
-
-                    foreach (var srcItem in calculation.SourcePoolItems)
-                    {
-                        var cd = new CostDetailEntity
-                        {
-                            CostObjectId = srcItem.CostObjectId,
-                            CostElementId = srcItem.CostElementId,
-                            Amount = srcItem.Amount,
-                            Transflag = true // ĐÁNH DẤU BÚT TOÁN TỰ ĐỘNG PHÂN BỔ
-                        };
-                        creditEntry.CostDetails.Add(cd);
-                    }
-                    voucher.JournalEntries.Add(creditEntry);
-
-                    // 3. BÚT TOÁN GHI NỢ (TẬP HỢP TÀI KHOẢN ĐÍCH THEO TỪNG ĐỐI TƯỢNG)
-                    var debitEntry = new JournalEntryEntity();
-                    debitEntry.AccountId = param.DestinationAccountId.Trim();
-                    debitEntry.Dbcr = 1; // Nợ
-                    debitEntry.Amount = calculation.TotalPoolAmount;
-                    debitEntry.ParentEntry = creditEntry;
-                    debitEntry.Createdate = DateTime.Now;
-
-                    string desCostElem = param.DestinationCostElementId?.Trim() ?? string.Empty;
-                    foreach (var critItem in calculation.CriteriaItems)
-                    {
-                        if (Math.Abs(critItem.AllocatedAmount) < 0.0001) continue;
-
-                        var cd = new CostDetailEntity
-                        {
-                            CostObjectId = critItem.CostObjectId,
-                            CostElementId = desCostElem,
-                            Amount = critItem.AllocatedAmount,
-                            Transflag = true // ĐÁNH DẤU BÚT TOÁN TỰ ĐỘNG PHÂN BỔ
-                        };
-                        debitEntry.CostDetails.Add(cd);
-                    }
-                    voucher.JournalEntries.Add(debitEntry);
-
-                    // 4. LƯU TOÀN BỘ TRONG TRANSACTION THỐNG NHẤT
-                    adapter.SaveEntity(voucher, true, recurse: true);
-
-                    return voucher;
-                }
+                // MẢNH GHÉP 4: Sinh chứng từ kế toán phân bổ
+                return _voucherBuilder.CreateAllocationVoucher(param, calculation);
             });
-        }
-
-        private string GenerateNextAllocationVoucherNo(IDataAccessAdapter adapter, DateTime voucherDate)
-        {
-            try
-            {
-                string prefix = "PB" + voucherDate.ToString("yyMM");
-                var bucket = new RelationPredicateBucket(JournalVoucherFields.VoucherNo % (prefix + "%"));
-                var existingVouchers = new EntityCollection<JournalVoucherEntity>();
-                adapter.FetchEntityCollection(existingVouchers, bucket);
-
-                int maxNum = 0;
-                foreach (var v in existingVouchers)
-                {
-                    string no = v.VoucherNo ?? "";
-                    if (no.StartsWith(prefix) && no.Length > prefix.Length)
-                    {
-                        string suffix = no.Substring(prefix.Length);
-                        if (int.TryParse(suffix, out int n) && n > maxNum)
-                        {
-                            maxNum = n;
-                        }
-                    }
-                }
-                return $"{prefix}{(maxNum + 1):D3}";
-            }
-            catch
-            {
-                return $"PB{voucherDate:yyMMdd}01";
-            }
         }
     }
 }

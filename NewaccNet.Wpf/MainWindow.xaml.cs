@@ -14,6 +14,7 @@ public partial class MainWindow : ThemedWindow {
     private void BtnOpeningBalance_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e) { new NewaccNet.Wpf.AppSystem.Voucher.OpeningBalanceWindow().Show(); }
     private void BtnCostAllocation_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e) { new NewaccNet.Wpf.AppSystem.CostAllocation.CostAllocationWindow().Show(); }
     private void BtnCostTransfer_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e) { new NewaccNet.Wpf.AppSystem.CostTransfer.CostTransferWindow().Show(); }
+        private void BtnAssetDepreciation_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e) { new NewaccNet.Wpf.AppSystem.AssetDepreciation.AssetDepreciationWindow().Show(); }
     public MainWindow(string username, string fullName, int roleMask)
     {
         InitializeComponent();
@@ -343,5 +344,108 @@ public partial class MainWindow : ThemedWindow {
         var win = new NewaccNet.Wpf.AppSystem.Reports.Fincance.DebtBalanceFilterWindow();
         win.Owner = this;
         win.ShowDialog();
+    }
+
+    // =========================================================================
+    // KHUNG HÀM BÁO CÁO CHI TIẾT (STUB METHODS - SẼ TRIỂN KHAI CHI TIẾT SAU)
+    // Dữ liệu nguồn: NewaccNet.Reports.FlattenedDetails.FlattenedDetailService
+    // =========================================================================
+
+    private void BtnReportDebtDetail_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        ShowDebtDetailReportStub();
+    }
+
+    private void BtnReportInventoryStock_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        ShowInventoryStockReportStub();
+    }
+
+    private void BtnReportInventoryInOut_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        ShowInventoryInOutReportStub();
+    }
+
+    private void BtnReportCostDetail_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        ShowCostDetailReportStub();
+    }
+
+    private void BtnReportAssetDetail_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        ShowAssetDetailReportStub();
+    }
+
+    private void BtnReportCurrencyDetail_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        ShowCurrencyDetailReportStub();
+    }
+
+    private void BtnReportInvestmentDetail_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        ShowInvestmentDetailReportStub();
+    }
+
+    private void ShowDebtDetailReportStub()
+    {
+        MessageBox.Show(
+            "[Khung chờ triển khai] Báo cáo Chi tiết Công nợ theo khoảng thời gian & đối tượng.\n(Nguồn dữ liệu: FlattenedDetailService.LoadDebtFlatRows / DebtFlatRow)",
+            "Báo cáo Chi tiết Công nợ",
+            MessageBoxButton.OK,
+            MessageBoxImage.Information);
+    }
+
+    private void ShowInventoryStockReportStub()
+    {
+        MessageBox.Show(
+            "[Khung chờ triển khai] Báo cáo Tồn kho Vật tư - Hàng hóa.\n(Nguồn dữ liệu: FlattenedDetailService.LoadInventoryFlatRows / InventoryFlatRow)",
+            "Báo cáo Tồn kho",
+            MessageBoxButton.OK,
+            MessageBoxImage.Information);
+    }
+
+    private void ShowInventoryInOutReportStub()
+    {
+        MessageBox.Show(
+            "[Khung chờ triển khai] Báo cáo Chi tiết Nhập - Xuất Vật tư - Hàng hóa theo khoảng thời gian.\n(Nguồn dữ liệu: FlattenedDetailService.LoadInventoryFlatRows / InventoryFlatRow)",
+            "Báo cáo Nhập - Xuất Kho",
+            MessageBoxButton.OK,
+            MessageBoxImage.Information);
+    }
+
+    private void ShowCostDetailReportStub()
+    {
+        MessageBox.Show(
+            "[Khung chờ triển khai] Báo cáo Chi tiết Chi phí theo Đối tượng & Yếu tố chi phí.\n(Nguồn dữ liệu: FlattenedDetailService.LoadCostFlatRows / CostFlatRow)",
+            "Báo cáo Chi tiết Chi phí",
+            MessageBoxButton.OK,
+            MessageBoxImage.Information);
+    }
+
+    private void ShowAssetDetailReportStub()
+    {
+        MessageBox.Show(
+            "[Khung chờ triển khai] Báo cáo Chi tiết Tài sản cố định & Khấu hao.\n(Nguồn dữ liệu: FlattenedDetailService.LoadAssetFlatRows / AssetFlatRow)",
+            "Báo cáo Chi tiết TSCĐ",
+            MessageBoxButton.OK,
+            MessageBoxImage.Information);
+    }
+
+    private void ShowCurrencyDetailReportStub()
+    {
+        MessageBox.Show(
+            "[Khung chờ triển khai] Báo cáo Chi tiết Ngoại tệ & Tỷ giá.\n(Nguồn dữ liệu: FlattenedDetailService.LoadCurrencyFlatRows / CurrencyFlatRow)",
+            "Báo cáo Chi tiết Ngoại tệ",
+            MessageBoxButton.OK,
+            MessageBoxImage.Information);
+    }
+
+    private void ShowInvestmentDetailReportStub()
+    {
+        MessageBox.Show(
+            "[Khung chờ triển khai] Báo cáo Chi tiết Chứng khoán & Đầu tư.\n(Nguồn dữ liệu: FlattenedDetailService.LoadInvestmentFlatRows / InvestmentFlatRow)",
+            "Báo cáo Chi tiết Chứng khoán",
+            MessageBoxButton.OK,
+            MessageBoxImage.Information);
     }
 }

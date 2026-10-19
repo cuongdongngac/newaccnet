@@ -602,11 +602,57 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
 
         private void ExecutePrint()
         {
+            CommitCurrentEditing();
             string voucherTypeDesc = (cboVoucherType.SelectedItem as MaterialBillTypeItem)?.Description ?? "Phiếu kho";
-            string billNo = _context?.InventoryVoucher?.Vatbillno ?? "";
-            string title = (_context?.MaterialEntry?.Dbcr == 1) ? "Phiếu Nhập Kho" : "Phiếu Xuất Kho";
-            string info = string.IsNullOrEmpty(billNo) ? "" : $" (Số HĐ/CT: {billNo})";
-            MessageBox.Show($"Xem trước và In: {title} - {voucherTypeDesc}{info}.", "In phiếu kho", MessageBoxButton.OK, MessageBoxImage.Information);
+            var invVoucher = _context?.InventoryVoucher;
+            bool isReceipt = (_context?.MaterialEntry?.Dbcr == 1);
+            bool printVatInvoice = (invVoucher?.Printflag == true);
+
+            if (isReceipt)
+            {
+                PrintInventoryReceipt(invVoucher, voucherTypeDesc);
+            }
+            else
+            {
+                PrintInventoryIssue(invVoucher, voucherTypeDesc);
+                if (printVatInvoice)
+                {
+                    PrintVatInvoice(invVoucher, voucherTypeDesc);
+                }
+            }
+        }
+
+        // =========================================================================
+        // KHUNG HÀM IN PHIẾU KHO & HÓA ĐƠN (STUB METHODS - SẼ TRIỂN KHAI CHI TIẾT SAU)
+        // =========================================================================
+
+        private void PrintInventoryReceipt(InventoryVoucherEntity invVoucher, string voucherTypeDesc)
+        {
+            string billNo = invVoucher?.Vatbillno ?? "";
+            MessageBox.Show(
+                $"[Khung chờ triển khai] In Phiếu Nhập Kho (Mẫu 01-VT)\n- Loại phiếu: {voucherTypeDesc}\n- Kho: {invVoucher?.WarehouseId}\n- Người giao: {invVoucher?.Carrier}\n- Số HĐ/CT: {billNo}",
+                "In Phiếu Nhập Kho",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+        }
+
+        private void PrintInventoryIssue(InventoryVoucherEntity invVoucher, string voucherTypeDesc)
+        {
+            string billNo = invVoucher?.Vatbillno ?? "";
+            MessageBox.Show(
+                $"[Khung chờ triển khai] In Phiếu Xuất Kho (Mẫu 02-VT)\n- Loại phiếu: {voucherTypeDesc}\n- Kho: {invVoucher?.WarehouseId}\n- Người nhận: {invVoucher?.Carrier}\n- Số HĐ/CT: {billNo}",
+                "In Phiếu Xuất Kho",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+        }
+
+        private void PrintVatInvoice(InventoryVoucherEntity invVoucher, string voucherTypeDesc)
+        {
+            MessageBox.Show(
+                $"[Khung chờ triển khai] In Hóa Đơn GTGT / Bán Hàng\n- Số HĐ: {invVoucher?.Vatbillno} (Seria: {invVoucher?.Serialno})\n- Khách hàng: {invVoucher?.Vatobjectname} ({invVoucher?.Vatobjectid})\n- MST: {invVoucher?.Taxno}",
+                "In Hóa Đơn",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
         }
 
         private void BtnAccept_Click(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
