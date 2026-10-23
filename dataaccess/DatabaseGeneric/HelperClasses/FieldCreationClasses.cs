@@ -1334,6 +1334,132 @@ namespace DataAccess.HelperClasses
 		public static EntityField2 Username { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(SystemUserFieldIndex.Username); }}
 	}
 
+	/// <summary>Field Creation Class for entity TaxAccountConfigEntity</summary>
+	public partial class TaxAccountConfigFields
+	{
+		/// <summary>Creates a new TaxAccountConfigEntity.CompanyName field instance</summary>
+		public static EntityField2 CompanyName { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxAccountConfigFieldIndex.CompanyName); }}
+		/// <summary>Creates a new TaxAccountConfigEntity.CreatedAt field instance</summary>
+		public static EntityField2 CreatedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxAccountConfigFieldIndex.CreatedAt); }}
+		/// <summary>Creates a new TaxAccountConfigEntity.EncryptedPassword field instance</summary>
+		public static EntityField2 EncryptedPassword { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxAccountConfigFieldIndex.EncryptedPassword); }}
+		/// <summary>Creates a new TaxAccountConfigEntity.Id field instance</summary>
+		public static EntityField2 Id { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxAccountConfigFieldIndex.Id); }}
+		/// <summary>Creates a new TaxAccountConfigEntity.LastSyncDate field instance</summary>
+		public static EntityField2 LastSyncDate { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxAccountConfigFieldIndex.LastSyncDate); }}
+		/// <summary>Creates a new TaxAccountConfigEntity.TaxCode field instance</summary>
+		public static EntityField2 TaxCode { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxAccountConfigFieldIndex.TaxCode); }}
+		/// <summary>Creates a new TaxAccountConfigEntity.Token field instance</summary>
+		public static EntityField2 Token { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxAccountConfigFieldIndex.Token); }}
+		/// <summary>Creates a new TaxAccountConfigEntity.TokenExpiresAt field instance</summary>
+		public static EntityField2 TokenExpiresAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxAccountConfigFieldIndex.TokenExpiresAt); }}
+		/// <summary>Creates a new TaxAccountConfigEntity.UpdatedAt field instance</summary>
+		public static EntityField2 UpdatedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxAccountConfigFieldIndex.UpdatedAt); }}
+	}
+
+	/// <summary>Field Creation Class for entity TaxInvoiceEntity</summary>
+	public partial class TaxInvoiceFields
+	{
+		/// <summary>Creates a new TaxInvoiceEntity.BuyerAddress field instance</summary>
+		public static EntityField2 BuyerAddress { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceFieldIndex.BuyerAddress); }}
+		/// <summary>Creates a new TaxInvoiceEntity.BuyerName field instance</summary>
+		public static EntityField2 BuyerName { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceFieldIndex.BuyerName); }}
+		/// <summary>Creates a new TaxInvoiceEntity.BuyerTaxCode field instance</summary>
+		public static EntityField2 BuyerTaxCode { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceFieldIndex.BuyerTaxCode); }}
+		/// <summary>Creates a new TaxInvoiceEntity.CurrencyId field instance</summary>
+		public static EntityField2 CurrencyId { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceFieldIndex.CurrencyId); }}
+		/// <summary>Creates a new TaxInvoiceEntity.Direction field instance</summary>
+		public static EntityField2 Direction { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceFieldIndex.Direction); }}
+		/// <summary>Creates a new TaxInvoiceEntity.DownloadedAt field instance</summary>
+		public static EntityField2 DownloadedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceFieldIndex.DownloadedAt); }}
+		/// <summary>Creates a new TaxInvoiceEntity.ExchangeRate field instance</summary>
+		public static EntityField2 ExchangeRate { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceFieldIndex.ExchangeRate); }}
+		/// <summary>Creates a new TaxInvoiceEntity.Id field instance</summary>
+		public static EntityField2 Id { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceFieldIndex.Id); }}
+		/// <summary>Creates a new TaxInvoiceEntity.InvoiceDate field instance</summary>
+		public static EntityField2 InvoiceDate { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceFieldIndex.InvoiceDate); }}
+		/// <summary>Creates a new TaxInvoiceEntity.InvoiceNo field instance</summary>
+		public static EntityField2 InvoiceNo { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceFieldIndex.InvoiceNo); }}
+		/// <summary>Creates a new TaxInvoiceEntity.InvoiceSeries field instance</summary>
+		public static EntityField2 InvoiceSeries { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceFieldIndex.InvoiceSeries); }}
+		/// <summary>Creates a new TaxInvoiceEntity.InvoiceSource field instance</summary>
+		public static EntityField2 InvoiceSource { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceFieldIndex.InvoiceSource); }}
+		/// <summary>Creates a new TaxInvoiceEntity.InvoiceStatus field instance</summary>
+		public static EntityField2 InvoiceStatus { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceFieldIndex.InvoiceStatus); }}
+		/// <summary>Creates a new TaxInvoiceEntity.InvoiceTemplate field instance</summary>
+		public static EntityField2 InvoiceTemplate { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceFieldIndex.InvoiceTemplate); }}
+		/// <summary>Creates a new TaxInvoiceEntity.ProcessStatus field instance</summary>
+		public static EntityField2 ProcessStatus { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceFieldIndex.ProcessStatus); }}
+		/// <summary>Creates a new TaxInvoiceEntity.RawJsonPath field instance</summary>
+		public static EntityField2 RawJsonPath { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceFieldIndex.RawJsonPath); }}
+		/// <summary>Creates a new TaxInvoiceEntity.ReconcileNote field instance</summary>
+		public static EntityField2 ReconcileNote { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceFieldIndex.ReconcileNote); }}
+		/// <summary>Creates a new TaxInvoiceEntity.SellerAddress field instance</summary>
+		public static EntityField2 SellerAddress { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceFieldIndex.SellerAddress); }}
+		/// <summary>Creates a new TaxInvoiceEntity.SellerName field instance</summary>
+		public static EntityField2 SellerName { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceFieldIndex.SellerName); }}
+		/// <summary>Creates a new TaxInvoiceEntity.SellerTaxCode field instance</summary>
+		public static EntityField2 SellerTaxCode { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceFieldIndex.SellerTaxCode); }}
+		/// <summary>Creates a new TaxInvoiceEntity.SignedDate field instance</summary>
+		public static EntityField2 SignedDate { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceFieldIndex.SignedDate); }}
+		/// <summary>Creates a new TaxInvoiceEntity.TaxAuthorityCode field instance</summary>
+		public static EntityField2 TaxAuthorityCode { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceFieldIndex.TaxAuthorityCode); }}
+		/// <summary>Creates a new TaxInvoiceEntity.TotalAmount field instance</summary>
+		public static EntityField2 TotalAmount { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceFieldIndex.TotalAmount); }}
+		/// <summary>Creates a new TaxInvoiceEntity.TotalAmountWithoutTax field instance</summary>
+		public static EntityField2 TotalAmountWithoutTax { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceFieldIndex.TotalAmountWithoutTax); }}
+		/// <summary>Creates a new TaxInvoiceEntity.TotalDiscountAmount field instance</summary>
+		public static EntityField2 TotalDiscountAmount { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceFieldIndex.TotalDiscountAmount); }}
+		/// <summary>Creates a new TaxInvoiceEntity.TotalTaxAmount field instance</summary>
+		public static EntityField2 TotalTaxAmount { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceFieldIndex.TotalTaxAmount); }}
+		/// <summary>Creates a new TaxInvoiceEntity.VoucherId field instance</summary>
+		public static EntityField2 VoucherId { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceFieldIndex.VoucherId); }}
+		/// <summary>Creates a new TaxInvoiceEntity.XmlFilePath field instance</summary>
+		public static EntityField2 XmlFilePath { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceFieldIndex.XmlFilePath); }}
+	}
+
+	/// <summary>Field Creation Class for entity TaxInvoiceDetailEntity</summary>
+	public partial class TaxInvoiceDetailFields
+	{
+		/// <summary>Creates a new TaxInvoiceDetailEntity.Amount field instance</summary>
+		public static EntityField2 Amount { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceDetailFieldIndex.Amount); }}
+		/// <summary>Creates a new TaxInvoiceDetailEntity.Id field instance</summary>
+		public static EntityField2 Id { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceDetailFieldIndex.Id); }}
+		/// <summary>Creates a new TaxInvoiceDetailEntity.ItemCode field instance</summary>
+		public static EntityField2 ItemCode { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceDetailFieldIndex.ItemCode); }}
+		/// <summary>Creates a new TaxInvoiceDetailEntity.ItemName field instance</summary>
+		public static EntityField2 ItemName { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceDetailFieldIndex.ItemName); }}
+		/// <summary>Creates a new TaxInvoiceDetailEntity.LineNo field instance</summary>
+		public static EntityField2 LineNo { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceDetailFieldIndex.LineNo); }}
+		/// <summary>Creates a new TaxInvoiceDetailEntity.Quantity field instance</summary>
+		public static EntityField2 Quantity { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceDetailFieldIndex.Quantity); }}
+		/// <summary>Creates a new TaxInvoiceDetailEntity.TaxAmount field instance</summary>
+		public static EntityField2 TaxAmount { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceDetailFieldIndex.TaxAmount); }}
+		/// <summary>Creates a new TaxInvoiceDetailEntity.TaxInvoiceId field instance</summary>
+		public static EntityField2 TaxInvoiceId { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceDetailFieldIndex.TaxInvoiceId); }}
+		/// <summary>Creates a new TaxInvoiceDetailEntity.TaxRate field instance</summary>
+		public static EntityField2 TaxRate { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceDetailFieldIndex.TaxRate); }}
+		/// <summary>Creates a new TaxInvoiceDetailEntity.UnitName field instance</summary>
+		public static EntityField2 UnitName { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceDetailFieldIndex.UnitName); }}
+		/// <summary>Creates a new TaxInvoiceDetailEntity.UnitPrice field instance</summary>
+		public static EntityField2 UnitPrice { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceDetailFieldIndex.UnitPrice); }}
+	}
+
+	/// <summary>Field Creation Class for entity TaxInvoiceTaxRateEntity</summary>
+	public partial class TaxInvoiceTaxRateFields
+	{
+		/// <summary>Creates a new TaxInvoiceTaxRateEntity.AmountWithoutTax field instance</summary>
+		public static EntityField2 AmountWithoutTax { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceTaxRateFieldIndex.AmountWithoutTax); }}
+		/// <summary>Creates a new TaxInvoiceTaxRateEntity.Id field instance</summary>
+		public static EntityField2 Id { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceTaxRateFieldIndex.Id); }}
+		/// <summary>Creates a new TaxInvoiceTaxRateEntity.TaxAmount field instance</summary>
+		public static EntityField2 TaxAmount { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceTaxRateFieldIndex.TaxAmount); }}
+		/// <summary>Creates a new TaxInvoiceTaxRateEntity.TaxInvoiceId field instance</summary>
+		public static EntityField2 TaxInvoiceId { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceTaxRateFieldIndex.TaxInvoiceId); }}
+		/// <summary>Creates a new TaxInvoiceTaxRateEntity.TaxRate field instance</summary>
+		public static EntityField2 TaxRate { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TaxInvoiceTaxRateFieldIndex.TaxRate); }}
+	}
+
 	/// <summary>Field Creation Class for entity TaxObligationEntity</summary>
 	public partial class TaxObligationFields
 	{

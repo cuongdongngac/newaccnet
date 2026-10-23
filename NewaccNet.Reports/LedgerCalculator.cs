@@ -57,7 +57,10 @@ namespace NewaccNet.Reports
             var periodEntries = targetEntries.Where(x => 
                 !x.IsOpeningBalance(beginDate) && 
                 x.VoucherDate <= endDate &&
-                (!onlyBooked || (x.JournalVoucher != null && x.JournalVoucher.Bookflag == true))).ToList();
+                (!onlyBooked || (x.JournalVoucher != null && x.JournalVoucher.Bookflag == true)))
+                .OrderBy(x => x.VoucherDate)
+                .ThenBy(x => x.EntryId)
+                .ToList();
 
             decimal totalPeriodDebit = 0;
             decimal totalPeriodCredit = 0;
@@ -69,22 +72,6 @@ namespace NewaccNet.Reports
 
             // Sắp xếp lại theo thời gian và journalentryid
             result = result.OrderBy(x => x.RowType).ThenBy(x => x.VoucherDate).ThenBy(x => x.JournalEntryId).ToList();
-
-            // Thêm dòng Cộng phát sinh
-            result.Add(new LedgerReportDTO
-            {
-                RowType = 2,
-                VoucherDate = endDate,
-                VoucherNo = "",
-                Contents = "Cộng phát sinh",
-                AccountId = "",
-                CounterAccountId = "",
-                DebitAmount = totalPeriodDebit,
-                CreditAmount = totalPeriodCredit,
-                Balance = currentBalance,
-                JournalVoucherId = null,
-                JournalEntryId = null
-            });
 
             return result;
         }

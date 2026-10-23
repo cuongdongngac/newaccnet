@@ -4,7 +4,7 @@
         xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
         xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
         xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
-        Title="Cấu hình Kết nối CSDL" Height="560" Width="540" WindowStartupLocation="CenterOwner">
+        Title="Cấu hình Kết nối CSDL" Height="660" Width="540" WindowStartupLocation="CenterOwner">
     <Grid>
         <dxlc:LayoutControl Orientation="Vertical" Padding="15">
 
@@ -74,6 +74,17 @@
                 </dxlc:LayoutItem>
             </dxlc:LayoutGroup>
 
+            <!-- Khung Thông tin phụ trợ (Lưu tại User Settings, không lưu vào DB) -->
+            <dxlc:LayoutGroup Header="Thông tin phụ trợ (Lưu tại User Settings máy trạm)"
+                              View="GroupBox" Orientation="Vertical" Margin="0,8,0,0">
+                <dxlc:LayoutItem Label="Tên cơ quan / đơn vị:">
+                    <dxe:TextEdit x:Name="txtCompanyName" NullText="Ví dụ: TỔNG CÔNG TY XÂY DỰNG HÀ NỘI"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Năm kế toán:">
+                    <dxe:SpinEdit x:Name="spnAccountingYear" IsFloatValue="False" Mask="d" MinValue="1900" MaxValue="2100"/>
+                </dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+
             <!-- Preview Connection String -->
             <dxlc:LayoutGroup Header="Connection String (xem trước)" View="GroupBox"
                               Margin="0,10,0,0">
@@ -96,5 +107,3 @@
         </dxlc:LayoutControl>
     </Grid>
 </base:BaseWindow>
-
-

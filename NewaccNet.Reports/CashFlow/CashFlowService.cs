@@ -5,8 +5,11 @@ using System.Linq;
 using System.Text.Json;
 using DataAccess;
 using DataAccess.EntityClasses;
+using DataAccess.FactoryClasses;
 using DataAccess.HelperClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using SD.LLBLGen.Pro.QuerySpec;
+using SD.LLBLGen.Pro.QuerySpec.Adapter;
 
 namespace NewaccNet.Reports.CashFlow
 {
@@ -15,80 +18,123 @@ namespace NewaccNet.Reports.CashFlow
         public List<CashFlowReportDTO> Calculate(IDataAccessAdapter adapter, DateTime fromDate, DateTime toDate, string prevDataJsonPath = null)
         {
             var result = new List<CashFlowReportDTO>();
+            var qf = new QueryFactory();
 
-            // 1. Fetch Categories, Items, and Configured Accounts
+            // 1. Tải cấu hình danh mục LCTT (Nhóm -> Chỉ tiêu -> Cấu hình tài khoản) qua ORM
             var categories = FetchConfiguration(adapter);
 
-                // 2. Fetch JournalEntries for the period
-                // To properly capture double-entry, we fetch all Child entries (which have a Parent)
-                var bucket = new RelationPredicateBucket();
-                bucket.Relations.Add(JournalEntryEntity.Relations.JournalVoucherEntityUsingJournalVoucherId);
-                bucket.PredicateExpression.Add(JournalVoucherFields.VoucherDate >= fromDate.Date);
-                bucket.PredicateExpression.Add(JournalVoucherFields.VoucherDate <= toDate.Date);
-                bucket.PredicateExpression.Add(JournalEntryFields.ParentId != DBNull.Value);
+            // 2. Lấy toàn bộ chứng từ phát sinh trong kỳ báo cáo qua ORM (Prefetch đầy đủ bút toán)
+            DateTime fromDt = fromDate.Date;
+            DateTime toDt = toDate.Date.AddDays(1).AddTicks(-1);
 
-                var prefetch = new PrefetchPath2(EntityType.JournalEntryEntity);
-                prefetch.Add(JournalEntryEntity.PrefetchPathParentEntry);
+            var voucherQuery = qf.JournalVoucher
+                .Where(JournalVoucherFields.VoucherDate.GreaterEqual(fromDt)
+                    .And(JournalVoucherFields.VoucherDate.LesserEqual(toDt)))
+                .WithPath(
+                    JournalVoucherEntity.PrefetchPathJournalEntries.WithSubPath(
+                        JournalEntryEntity.PrefetchPathParentEntry,
+                        JournalEntryEntity.PrefetchPathSubEntries
+                    )
+                );
 
-                var children = new EntityCollection<JournalEntryEntity>();
-                adapter.FetchEntityCollection(children, bucket, prefetch);
+            var vouchers = adapter.FetchQuery(voucherQuery).Cast<JournalVoucherEntity>().ToList();
 
-                // Flatten the double-entries into a list of generic pairs for easier matching
-                var pairs = new List<AccountPair>();
-                foreach (var child in children)
+            // 3. Thu thập các dòng bút toán và làm phẳng theo chuẩn FlattenedLedgerService (Flat Table)
+            var rawEntries = new List<JournalEntryEntity>();
+            var seenEntryIds = new HashSet<int>();
+
+            foreach (var voucher in vouchers)
+            {
+                var voucherEntries = voucher.JournalEntries.ToList();
+                foreach (var entry in voucherEntries)
                 {
-                    if (child.ParentEntry == null) continue;
-                    var amount = (decimal)(child.Amount ?? 0);
-                    
-                    // Pair 1: Child is the primary account
-                    pairs.Add(new AccountPair(child.AccountId, child.ParentEntry.AccountId, child.Dbcr, amount));
-                    // Pair 2: Parent is the primary account
-                    pairs.Add(new AccountPair(child.ParentEntry.AccountId, child.AccountId, child.ParentEntry.Dbcr, amount));
-                }
-
-                // 3. Process each configured Item
-                foreach (var category in categories)
-                {
-                    foreach (var item in category.CashFlowItems)
+                    if (entry.JournalVoucher == null)
                     {
-                        decimal itemAmount = 0;
-                        
-                        // item.Dbcr in DB is boolean. True = Thu (Inflow), False = Chi (Outflow)
-                        bool isThu = item.Dbcr;
-                        int multiplier = isThu ? 1 : -1;
+                        entry.JournalVoucher = voucher;
+                    }
 
+                    if (seenEntryIds.Add(entry.Id))
+                    {
+                        rawEntries.Add(entry);
+                    }
+
+                    if (entry.SubEntries != null && entry.SubEntries.Count > 0)
+                    {
+                        var subEntries = entry.SubEntries.ToList();
+                        foreach (var sub in subEntries)
+                        {
+                            if (sub.JournalVoucher == null)
+                            {
+                                sub.JournalVoucher = voucher;
+                            }
+
+                            if (seenEntryIds.Add(sub.Id))
+                            {
+                                rawEntries.Add(sub);
+                            }
+                        }
+                    }
+                }
+            }
+
+            var flattened = FlattenedLedgerService.Flatten(rawEntries, fromDate);
+
+            // Lọc các giao dịch phát sinh trong kỳ (bỏ số dư đầu kỳ)
+            var periodEntries = flattened.Where(x =>
+                x.JournalVoucher != null &&
+                x.VoucherDate.HasValue &&
+                x.VoucherDate.Value >= fromDt &&
+                x.VoucherDate.Value <= toDt
+            ).ToList();
+
+            // 4. Tính toán cho từng chỉ tiêu LCTT
+            foreach (var category in categories.OrderBy(c => c.Id))
+            {
+                foreach (var item in category.CashFlowItems.OrderBy(i => i.Code))
+                {
+                    decimal itemAmount = 0;
+                    bool isThu = item.Dbcr; // True: Thu, False: Chi
+
+                    if (item.AccountCashFlowItems != null && item.AccountCashFlowItems.Count > 0)
+                    {
                         foreach (var accConf in item.AccountCashFlowItems)
                         {
                             var targetAccountId = accConf.AccountId?.Trim();
                             var targetCorAccountId = accConf.CounterAccountId?.Trim();
 
-                            // Find all pairs matching this configuration
-                            var matchingPairs = pairs.Where(p => 
-                                (string.IsNullOrEmpty(targetAccountId) || p.AccountId.StartsWith(targetAccountId)) &&
-                                (string.IsNullOrEmpty(targetCorAccountId) || p.CorAccountId.StartsWith(targetCorAccountId)) &&
-                                (isThu ? p.Dbcr == 1 : p.Dbcr != 1) // Thu = Nợ (1), Chi = Có (khác 1)
+                            var matching = periodEntries.Where(p =>
+                                (string.IsNullOrEmpty(targetAccountId) || (p.AccountId != null && p.AccountId.StartsWith(targetAccountId))) &&
+                                (string.IsNullOrEmpty(targetCorAccountId) || (p.CounterAccountId != null && p.CounterAccountId.StartsWith(targetCorAccountId)))
                             );
 
-                            itemAmount += matchingPairs.Sum(p => p.Amount) * multiplier;
+                            // Lọc theo chiều Thu/Chi: Thu = Nợ tiền (Dbcr == 1), Chi = Có tiền (Dbcr != 1)
+                            if (isThu)
+                                matching = matching.Where(p => p.Dbcr == 1);
+                            else
+                                matching = matching.Where(p => p.Dbcr != 1);
+
+                            itemAmount += matching.Sum(p => p.Amount);
                         }
-
-                        result.Add(new CashFlowReportDTO
-                        {
-                            CashFlowCategoryId = category.Id,
-                            CashFlowName = category.CashFlowName,
-                            CashFlowNameRepeate = category.CashFlowNameRepeate,
-                            Code = item.Code,
-                            Illustration = item.Illustration,
-                            IsBold = item.IsBold,
-                            IsItalic = item.IsItalic,
-                            ItemName = item.ItemName,
-                            Amount = itemAmount,
-                            PrevAmount = 0 // Will be populated from JSON
-                        });
                     }
-                }
 
-            // 4. Merge with JSON if provided
+                    result.Add(new CashFlowReportDTO
+                    {
+                        CashFlowCategoryId = category.Id,
+                        CashFlowName = category.CashFlowName,
+                        CashFlowNameRepeate = category.CashFlowNameRepeate,
+                        Code = item.Code?.Trim(),
+                        Illustration = item.Illustration,
+                        IsBold = item.IsBold,
+                        IsItalic = item.IsItalic,
+                        ItemName = item.ItemName,
+                        Dbcr = isThu,
+                        Amount = Math.Abs(itemAmount),
+                        PrevAmount = 0
+                    });
+                }
+            }
+
+            // 5. Trộn dữ liệu kỳ trước từ file JSON (nếu có)
             MergeWithPreviousPeriod(result, prevDataJsonPath);
 
             return result;
@@ -119,7 +165,6 @@ namespace NewaccNet.Reports.CashFlow
             }
             catch (Exception ex)
             {
-                // In real world, log the exception
                 Console.WriteLine("Error merging JSON: " + ex.Message);
             }
         }
@@ -133,22 +178,6 @@ namespace NewaccNet.Reports.CashFlow
 
             adapter.FetchEntityCollection(categories, null, prefetch);
             return categories;
-        }
-
-        private class AccountPair
-        {
-            public string AccountId { get; }
-            public string CorAccountId { get; }
-            public int Dbcr { get; }
-            public decimal Amount { get; }
-
-            public AccountPair(string accountId, string corAccountId, short? dbcr, decimal amount)
-            {
-                AccountId = accountId?.Trim() ?? "";
-                CorAccountId = corAccountId?.Trim() ?? "";
-                Dbcr = dbcr ?? 0;
-                Amount = amount;
-            }
         }
     }
 }

@@ -138,7 +138,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathJournalEntry { get { return _staticMetaData.GetPrefetchPathElement("JournalEntry", CommonEntityBase.CreateEntityCollection<JournalEntryEntity>()); } }
 
 		/// <summary>The Amount property of the Entity VatEntry<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "VatEntry"."Amount".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "VatEntry"."Amount".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Amount
 		{
 			get { return (Nullable<System.Double>)GetValue((int)VatEntryFieldIndex.Amount, false); }
@@ -146,7 +146,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Beforetaxamount property of the Entity VatEntry<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "VatEntry"."Beforetaxamount".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "VatEntry"."Beforetaxamount".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Beforetaxamount
 		{
 			get { return (Nullable<System.Double>)GetValue((int)VatEntryFieldIndex.Beforetaxamount, false); }
@@ -162,7 +162,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Id property of the Entity VatEntry<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "VatEntry"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "VatEntry"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> Id
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)VatEntryFieldIndex.Id, false); }
@@ -170,7 +170,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Lineid property of the Entity VatEntry<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "VatEntry"."Lineid".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "VatEntry"."Lineid".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Lineid
 		{
 			get { return (System.Int32)GetValue((int)VatEntryFieldIndex.Lineid, true); }
@@ -178,7 +178,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Rate property of the Entity VatEntry<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "VatEntry"."Rate".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "VatEntry"."Rate".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Rate
 		{
 			get { return (Nullable<System.Double>)GetValue((int)VatEntryFieldIndex.Rate, false); }
@@ -186,7 +186,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Remark property of the Entity VatEntry<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "VatEntry"."Remark".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "VatEntry"."Remark".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Remark
 		{
 			get { return (System.String)GetValue((int)VatEntryFieldIndex.Remark, true); }
@@ -194,7 +194,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Serialno property of the Entity VatEntry<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "VatEntry"."Serialno".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 30.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "VatEntry"."Serialno".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Serialno
 		{
 			get { return (System.String)GetValue((int)VatEntryFieldIndex.Serialno, true); }
@@ -202,7 +202,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Taxno property of the Entity VatEntry<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "VatEntry"."Taxno".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "VatEntry"."Taxno".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Taxno
 		{
 			get { return (System.String)GetValue((int)VatEntryFieldIndex.Taxno, true); }
@@ -226,7 +226,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Vatbilldate property of the Entity VatEntry<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "VatEntry"."Vatbilldate".<br/>Table field type characteristics (type, precision, scale, length): Date, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "VatEntry"."Vatbilldate".<br/>Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.DateTime> Vatbilldate
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)VatEntryFieldIndex.Vatbilldate, false); }
@@ -234,7 +234,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Vatbillno property of the Entity VatEntry<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "VatEntry"."Vatbillno".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 30.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "VatEntry"."Vatbillno".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Vatbillno
 		{
 			get { return (System.String)GetValue((int)VatEntryFieldIndex.Vatbillno, true); }
@@ -242,7 +242,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Vatdescription property of the Entity VatEntry<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "VatEntry"."Vatdescription".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "VatEntry"."Vatdescription".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Vatdescription
 		{
 			get { return (System.String)GetValue((int)VatEntryFieldIndex.Vatdescription, true); }
@@ -250,7 +250,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Vatobjectid property of the Entity VatEntry<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "VatEntry"."Vatobjectid".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "VatEntry"."Vatobjectid".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Vatobjectid
 		{
 			get { return (System.String)GetValue((int)VatEntryFieldIndex.Vatobjectid, true); }
@@ -258,7 +258,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Vatobjectname property of the Entity VatEntry<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "VatEntry"."Vatobjectname".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "VatEntry"."Vatobjectname".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Vatobjectname
 		{
 			get { return (System.String)GetValue((int)VatEntryFieldIndex.Vatobjectname, true); }

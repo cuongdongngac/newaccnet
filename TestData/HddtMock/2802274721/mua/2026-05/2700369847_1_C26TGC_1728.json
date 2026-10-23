@@ -1,0 +1,41 @@
+{
+  "nbmst": "2700369847",
+  "khmshdon": "1",
+  "khhdon": "C26TGC",
+  "shdon": "1728",
+  "tdlap": "2026-05-06T00:00:00",
+  "nbten": "CÔNG TY TNHH CHÍNH GẤM",
+  "nbdchi": "Số nhà 8, tổ 1, Phường Tam Điệp , Tỉnh Ninh Bình, Việt Nam",
+  "nmmst": "2802274721",
+  "nmten": "CÔNG TY TNHH DỊCH VỤ THƯƠNG MẠI THỦY HIỀN",
+  "nmdchi": "Số nhà 62, đường Lê Thánh Tông, Phường Quang Trung, Tỉnh Thanh Hóa, Việt Nam.",
+  "dvtte": "VND",
+  "tgia": 1.0,
+  "tgtcthue": 273000000.0,
+  "tgtthue": 27300000.0,
+  "ttcktmai": 0.0,
+  "tgtttbso": 300300000.0,
+  "tthai": 1,
+  "ttxly": 5,
+  "thttltsuat": [
+    {
+      "tsuat": "0.1",
+      "thtien": 273000000.0,
+      "tthue": 27300000.0
+    }
+  ],
+  "hdhhdvu": [
+    {
+      "stt": 1,
+      "tchat": 1,
+      "mhhdvu": null,
+      "ten": "Nước tăng lực Redbull 250ml x 24",
+      "dvtinh": "Thùng",
+      "sluong": 1050.0,
+      "dgia": 260000.0,
+      "thtien": 273000000.0,
+      "tsuat": "0.1",
+      "tthue": 27300000.0
+    }
+  ]
+}

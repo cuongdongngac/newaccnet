@@ -31,8 +31,12 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
                 using (var adapter = AppDataAccessAdapter.Create())
                 {
                     var qf = new QueryFactory();
-                    var accounts = adapter.FetchQuery(qf.ChartOfAccount).Cast<ChartOfAccountEntity>().ToList();
-                    cboSelectedAccounts.ItemsSource = accounts.OrderBy(a => a.AccountId).ToList();
+                    // Lấy danh sách tài khoản độc lập, chỉ lấy trường AccountId
+                    var accountIds = adapter.FetchQuery(
+                        qf.Create().Select(() => ChartOfAccountFields.AccountId.ToValue<string>()).From(qf.ChartOfAccount)
+                    ).OrderBy(id => id).ToList();
+
+                    cboSelectedAccounts.ItemsSource = accountIds;
                     cboSelectedAccounts.SelectAll();
                 }
             }
@@ -85,7 +89,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
                     }
                 }
 
-                int allAccountsCount = ((List<ChartOfAccountEntity>)cboSelectedAccounts.ItemsSource)?.Count ?? 0;
+                int allAccountsCount = (cboSelectedAccounts.ItemsSource as System.Collections.ICollection)?.Count ?? 0;
 
                 var dtoList = await Task.Run(() =>
                 {
@@ -101,13 +105,23 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
                         adapter.SaveEntityCollection(new DataAccess.HelperClasses.EntityCollection<DataAccess.EntityClasses.TrialBalanceEntity>(newBalances));
                     }
 
-                    var q = qf.TrialBalance.WithPath(DataAccess.EntityClasses.TrialBalanceEntity.PrefetchPathChartOfAccount);
-                    var entities = adapter.FetchQuery(q).Cast<DataAccess.EntityClasses.TrialBalanceEntity>().ToList();
+                    // Không join / prefetch ChartOfAccount từ DB
+                    var entities = adapter.FetchQuery(qf.TrialBalance).Cast<DataAccess.EntityClasses.TrialBalanceEntity>().ToList();
+
+                    // Lấy mapping AccountName thuần túy từ bảng tài khoản độc lập
+                    var accountNameDict = adapter.FetchQuery(
+                        qf.Create()
+                          .Select(() => new {
+                              AccountId = ChartOfAccountFields.AccountId.ToValue<string>(),
+                              AccountName = ChartOfAccountFields.AccountName.ToValue<string>()
+                          })
+                          .From(qf.ChartOfAccount)
+                    ).ToDictionary(x => x.AccountId, x => x.AccountName);
 
                     var calculatedList = entities.Select(en => new TrialBalanceDTO
                     {
                         AccountId = en.AccountId,
-                        AccountName = en.ChartOfAccount?.AccountName,
+                        AccountName = accountNameDict.TryGetValue(en.AccountId ?? "", out var name) ? name : "",
                         BeginDebit = (decimal)(en.Begindebit ?? 0),
                         BeginCredit = (decimal)(en.Begincredit ?? 0),
                         IntDebit = (decimal)(en.Intdebit ?? 0),

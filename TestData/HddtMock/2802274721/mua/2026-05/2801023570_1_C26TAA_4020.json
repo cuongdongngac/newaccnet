@@ -1,0 +1,65 @@
+{
+  "nbmst": "2801023570",
+  "khmshdon": "1",
+  "khhdon": "C26TAA",
+  "shdon": "4020",
+  "tdlap": "2026-05-25T00:00:00",
+  "nbten": "CÔNG TY TNHH MTV THƯƠNG MẠI HABECO MIỀN TRUNG",
+  "nbdchi": "Số 152 Quang Trung, Phường Hạc Thành, Tỉnh Thanh Hóa, Việt Nam",
+  "nmmst": "2802274721",
+  "nmten": "CÔNG TY TNHH DỊCH VỤ THƯƠNG MẠI THỦY HIỀN",
+  "nmdchi": "Số nhà 62, Đường Lê Thánh Tông, Phường Quang Trung, Thanh Hóa.",
+  "dvtte": "VND",
+  "tgia": 1.0,
+  "tgtcthue": 31453292.0,
+  "tgtthue": 3145329.0,
+  "ttcktmai": 31453292.0,
+  "tgtttbso": 34598621.0,
+  "tthai": 1,
+  "ttxly": 5,
+  "thttltsuat": [
+    {
+      "tsuat": "0.1",
+      "thtien": 31453292.0,
+      "tthue": 3145329.0
+    }
+  ],
+  "hdhhdvu": [
+    {
+      "stt": 1,
+      "tchat": 3,
+      "mhhdvu": null,
+      "ten": "Chiết khấu bia chai Hà Nội 1890 T4.2026",
+      "dvtinh": "két",
+      "sluong": 140.0,
+      "dgia": 1157.75714,
+      "thtien": 162086.0,
+      "tsuat": "0.1",
+      "tthue": 16209.0
+    },
+    {
+      "stt": 1,
+      "tchat": 3,
+      "mhhdvu": null,
+      "ten": "Chiết khấu bia lon Hà Nội 330 ml  T4/2026",
+      "dvtinh": "Thùng",
+      "sluong": 21600.0,
+      "dgia": 1415.46,
+      "thtien": 30573936.0,
+      "tsuat": "0.1",
+      "tthue": 3057394.0
+    },
+    {
+      "stt": 1,
+      "tchat": 3,
+      "mhhdvu": null,
+      "ten": "Chiết khấu bia Bia lon Hà Nội Sleek 330 ml GNTT (giật nắp, thẻ cào) T4.2026",
+      "dvtinh": "Thùng",
+      "sluong": 500.0,
+      "dgia": 1434.54,
+      "thtien": 717270.0,
+      "tsuat": "0.1",
+      "tthue": 71726.0
+    }
+  ]
+}

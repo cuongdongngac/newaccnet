@@ -1,0 +1,41 @@
+{
+  "nbmst": "2801023570",
+  "khmshdon": "1",
+  "khhdon": "C26TAA",
+  "shdon": "4194",
+  "tdlap": "2026-05-28T00:00:00",
+  "nbten": "CÔNG TY TNHH MTV THƯƠNG MẠI HABECO MIỀN TRUNG",
+  "nbdchi": "Số 152 Quang Trung, Phường Hạc Thành, Tỉnh Thanh Hóa, Việt Nam",
+  "nmmst": "2802274721",
+  "nmten": "CÔNG TY TNHH DỊCH VỤ THƯƠNG MẠI THỦY HIỀN",
+  "nmdchi": "Số nhà 62, Đường Lê Thánh Tông, Phường Quang Trung, Thanh Hóa.",
+  "dvtte": "VND",
+  "tgia": 1.0,
+  "tgtcthue": 377456000.0,
+  "tgtthue": 37745600.0,
+  "ttcktmai": 0.0,
+  "tgtttbso": 415201600.0,
+  "tthai": 1,
+  "ttxly": 5,
+  "thttltsuat": [
+    {
+      "tsuat": "0.1",
+      "thtien": 377456000.0,
+      "tthue": 37745600.0
+    }
+  ],
+  "hdhhdvu": [
+    {
+      "stt": 1,
+      "tchat": 1,
+      "mhhdvu": null,
+      "ten": "Bia lon Hà Nội 330ml",
+      "dvtinh": "Thùng",
+      "sluong": 1600.0,
+      "dgia": 235910.0,
+      "thtien": 377456000.0,
+      "tsuat": "0.1",
+      "tthue": 37745600.0
+    }
+  ]
+}

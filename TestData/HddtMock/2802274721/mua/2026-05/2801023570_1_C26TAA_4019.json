@@ -1,0 +1,41 @@
+{
+  "nbmst": "2801023570",
+  "khmshdon": "1",
+  "khhdon": "C26TAA",
+  "shdon": "4019",
+  "tdlap": "2026-05-25T00:00:00",
+  "nbten": "CÔNG TY TNHH MTV THƯƠNG MẠI HABECO MIỀN TRUNG",
+  "nbdchi": "Số 152 Quang Trung, Phường Hạc Thành, Tỉnh Thanh Hóa, Việt Nam",
+  "nmmst": "2802274721",
+  "nmten": "CÔNG TY TNHH DỊCH VỤ THƯƠNG MẠI THỦY HIỀN",
+  "nmdchi": "Số nhà 62, Đường Lê Thánh Tông, Phường Quang Trung, Thanh Hóa.",
+  "dvtte": "VND",
+  "tgia": 1.0,
+  "tgtcthue": 12273000.0,
+  "tgtthue": 1227300.0,
+  "ttcktmai": 12273000.0,
+  "tgtttbso": 13500300.0,
+  "tthai": 1,
+  "ttxly": 5,
+  "thttltsuat": [
+    {
+      "tsuat": "0.1",
+      "thtien": 12273000.0,
+      "tthue": 1227300.0
+    }
+  ],
+  "hdhhdvu": [
+    {
+      "stt": 1,
+      "tchat": 3,
+      "mhhdvu": null,
+      "ten": "Chiết khấu bia chai Hà Nội 450ml T4.2026",
+      "dvtinh": "két",
+      "sluong": 750.0,
+      "dgia": 16364.0,
+      "thtien": 12273000.0,
+      "tsuat": "0.1",
+      "tthue": 1227300.0
+    }
+  ]
+}

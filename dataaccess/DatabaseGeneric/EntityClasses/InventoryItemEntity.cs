@@ -162,7 +162,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathCategory { get { return _staticMetaData.GetPrefetchPathElement("Category", CommonEntityBase.CreateEntityCollection<CategoryEntity>()); } }
 
 		/// <summary>The Categoryid property of the Entity InventoryItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryItem"."Categoryid".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InventoryItem"."Categoryid".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Categoryid
 		{
 			get { return (System.String)GetValue((int)InventoryItemFieldIndex.Categoryid, true); }
@@ -170,7 +170,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The MaterialId property of the Entity InventoryItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryItem"."MaterialId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 20.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		/// <remarks>Mapped on  table field: "InventoryItem"."MaterialId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
 		public virtual System.String MaterialId
 		{
 			get { return (System.String)GetValue((int)InventoryItemFieldIndex.MaterialId, true); }
@@ -178,7 +178,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The MaterialName property of the Entity InventoryItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryItem"."MaterialName".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InventoryItem"."MaterialName".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String MaterialName
 		{
 			get { return (System.String)GetValue((int)InventoryItemFieldIndex.MaterialName, true); }
@@ -186,7 +186,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Unit property of the Entity InventoryItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryItem"."Unit".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InventoryItem"."Unit".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Unit
 		{
 			get { return (System.String)GetValue((int)InventoryItemFieldIndex.Unit, true); }

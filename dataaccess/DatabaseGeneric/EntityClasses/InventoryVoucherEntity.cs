@@ -174,7 +174,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathWarehouse { get { return _staticMetaData.GetPrefetchPathElement("Warehouse", CommonEntityBase.CreateEntityCollection<WarehouseEntity>()); } }
 
 		/// <summary>The Carrier property of the Entity InventoryVoucher<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryVoucher"."Carrier".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 100.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InventoryVoucher"."Carrier".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Carrier
 		{
 			get { return (System.String)GetValue((int)InventoryVoucherFieldIndex.Carrier, true); }
@@ -182,7 +182,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The ExobjectId property of the Entity InventoryVoucher<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryVoucher"."ExobjectId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InventoryVoucher"."ExobjectId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String ExobjectId
 		{
 			get { return (System.String)GetValue((int)InventoryVoucherFieldIndex.ExobjectId, true); }
@@ -190,7 +190,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Id property of the Entity InventoryVoucher<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryVoucher"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "InventoryVoucher"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)InventoryVoucherFieldIndex.Id, true); }
@@ -198,7 +198,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Inoutnumber property of the Entity InventoryVoucher<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryVoucher"."Inoutnumber".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InventoryVoucher"."Inoutnumber".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Inoutnumber
 		{
 			get { return (System.String)GetValue((int)InventoryVoucherFieldIndex.Inoutnumber, true); }
@@ -206,7 +206,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The JournalEntryId property of the Entity InventoryVoucher<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryVoucher"."JournalEntryId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InventoryVoucher"."JournalEntryId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> JournalEntryId
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)InventoryVoucherFieldIndex.JournalEntryId, false); }
@@ -214,7 +214,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Printflag property of the Entity InventoryVoucher<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryVoucher"."Printflag".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InventoryVoucher"."Printflag".<br/>Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Boolean Printflag
 		{
 			get { return (System.Boolean)GetValue((int)InventoryVoucherFieldIndex.Printflag, true); }
@@ -222,7 +222,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Serialno property of the Entity InventoryVoucher<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryVoucher"."Serialno".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InventoryVoucher"."Serialno".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Serialno
 		{
 			get { return (System.String)GetValue((int)InventoryVoucherFieldIndex.Serialno, true); }
@@ -230,7 +230,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Taxflag property of the Entity InventoryVoucher<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryVoucher"."Taxflag".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InventoryVoucher"."Taxflag".<br/>Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Boolean Taxflag
 		{
 			get { return (System.Boolean)GetValue((int)InventoryVoucherFieldIndex.Taxflag, true); }
@@ -238,7 +238,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Taxno property of the Entity InventoryVoucher<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryVoucher"."Taxno".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 20.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InventoryVoucher"."Taxno".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Taxno
 		{
 			get { return (System.String)GetValue((int)InventoryVoucherFieldIndex.Taxno, true); }
@@ -246,7 +246,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Vataddress property of the Entity InventoryVoucher<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryVoucher"."Vataddress".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InventoryVoucher"."Vataddress".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Vataddress
 		{
 			get { return (System.String)GetValue((int)InventoryVoucherFieldIndex.Vataddress, true); }
@@ -254,7 +254,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Vatbilldate property of the Entity InventoryVoucher<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryVoucher"."Vatbilldate".<br/>Table field type characteristics (type, precision, scale, length): Date, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InventoryVoucher"."Vatbilldate".<br/>Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.DateTime> Vatbilldate
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)InventoryVoucherFieldIndex.Vatbilldate, false); }
@@ -262,7 +262,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Vatbillno property of the Entity InventoryVoucher<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryVoucher"."Vatbillno".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InventoryVoucher"."Vatbillno".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Vatbillno
 		{
 			get { return (System.String)GetValue((int)InventoryVoucherFieldIndex.Vatbillno, true); }
@@ -270,7 +270,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Vatmaterialdes property of the Entity InventoryVoucher<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryVoucher"."Vatmaterialdes".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InventoryVoucher"."Vatmaterialdes".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Vatmaterialdes
 		{
 			get { return (System.String)GetValue((int)InventoryVoucherFieldIndex.Vatmaterialdes, true); }
@@ -278,7 +278,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Vatobjectid property of the Entity InventoryVoucher<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryVoucher"."Vatobjectid".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InventoryVoucher"."Vatobjectid".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Vatobjectid
 		{
 			get { return (System.String)GetValue((int)InventoryVoucherFieldIndex.Vatobjectid, true); }
@@ -286,7 +286,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Vatobjectname property of the Entity InventoryVoucher<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryVoucher"."Vatobjectname".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InventoryVoucher"."Vatobjectname".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Vatobjectname
 		{
 			get { return (System.String)GetValue((int)InventoryVoucherFieldIndex.Vatobjectname, true); }
@@ -294,7 +294,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The WarehouseId property of the Entity InventoryVoucher<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryVoucher"."WarehouseId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InventoryVoucher"."WarehouseId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String WarehouseId
 		{
 			get { return (System.String)GetValue((int)InventoryVoucherFieldIndex.WarehouseId, true); }

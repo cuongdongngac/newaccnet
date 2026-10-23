@@ -186,7 +186,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathCostDetail { get { return _staticMetaData.GetPrefetchPathElement("CostDetail", CommonEntityBase.CreateEntityCollection<CostDetailEntity>()); } }
 
 		/// <summary>The CustomerId property of the Entity CustomerExportLine<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CustomerExportLine"."CustomerId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CustomerExportLine"."CustomerId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String CustomerId
 		{
 			get { return (System.String)GetValue((int)CustomerExportLineFieldIndex.CustomerId, true); }
@@ -194,7 +194,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The DebtReasonId property of the Entity CustomerExportLine<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CustomerExportLine"."DebtReasonId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CustomerExportLine"."DebtReasonId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> DebtReasonId
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)CustomerExportLineFieldIndex.DebtReasonId, false); }
@@ -202,7 +202,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The DebtTypeId property of the Entity CustomerExportLine<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CustomerExportLine"."DebtTypeId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CustomerExportLine"."DebtTypeId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String DebtTypeId
 		{
 			get { return (System.String)GetValue((int)CustomerExportLineFieldIndex.DebtTypeId, true); }
@@ -210,7 +210,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Interestflag property of the Entity CustomerExportLine<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CustomerExportLine"."Interestflag".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CustomerExportLine"."Interestflag".<br/>Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Boolean Interestflag
 		{
 			get { return (System.Boolean)GetValue((int)CustomerExportLineFieldIndex.Interestflag, true); }
@@ -218,7 +218,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Liabilitydate property of the Entity CustomerExportLine<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CustomerExportLine"."Liabilitydate".<br/>Table field type characteristics (type, precision, scale, length): Date, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CustomerExportLine"."Liabilitydate".<br/>Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.DateTime> Liabilitydate
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)CustomerExportLineFieldIndex.Liabilitydate, false); }
@@ -226,7 +226,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The LiabilityDuesId property of the Entity CustomerExportLine<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CustomerExportLine"."LiabilityDuesId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CustomerExportLine"."LiabilityDuesId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> LiabilityDuesId
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)CustomerExportLineFieldIndex.LiabilityDuesId, false); }
@@ -234,7 +234,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The LineId property of the Entity CustomerExportLine<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CustomerExportLine"."LineId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		/// <remarks>Mapped on  table field: "CustomerExportLine"."LineId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
 		public virtual System.Int32 LineId
 		{
 			get { return (System.Int32)GetValue((int)CustomerExportLineFieldIndex.LineId, true); }

@@ -138,7 +138,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathCustomCostReportAccounts { get { return _staticMetaData.GetPrefetchPathElement("CustomCostReportAccounts", CommonEntityBase.CreateEntityCollection<CustomCostReportAccountEntity>()); } }
 
 		/// <summary>The BookName property of the Entity CustomCostReport<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CustomCostReport"."BookName".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CustomCostReport"."BookName".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String BookName
 		{
 			get { return (System.String)GetValue((int)CustomCostReportFieldIndex.BookName, true); }
@@ -154,7 +154,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Dbcr property of the Entity CustomCostReport<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CustomCostReport"."DBCR".<br/>Table field type characteristics (type, precision, scale, length): SmallInt, 5, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CustomCostReport"."Dbcr".<br/>Table field type characteristics (type, precision, scale, length): SmallInt, 5, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int16> Dbcr
 		{
 			get { return (Nullable<System.Int16>)GetValue((int)CustomCostReportFieldIndex.Dbcr, false); }
@@ -162,7 +162,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Id property of the Entity CustomCostReport<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CustomCostReport"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "CustomCostReport"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)CustomCostReportFieldIndex.Id, true); }

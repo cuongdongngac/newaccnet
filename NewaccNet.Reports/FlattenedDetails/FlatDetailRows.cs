@@ -113,9 +113,11 @@ namespace NewaccNet.Reports.FlattenedDetails
     }
 
     /// <summary>
-    /// 1. Bảng phẳng Chi tiết Công nợ (Tầng 2 - nối từ DebtDetailEntity).
-    /// Phục vụ: Báo cáo công nợ chi tiết / tổng hợp (lọc theo Tài khoản, Đối tượng PartnerId, Nội dung DebtTypeId, Lý do, Hạn nợ),
-    /// Kiểm tra công nợ, và Tính lãi công nợ.
+    /// 1. Bảng phẳng Chi tiết Công nợ (Tầng 2).
+    /// Hỗ trợ cả 3 luồng nạp dữ liệu phẳng:
+    ///   - Công nợ thuần túy: DebtDetail -> JournalEntry -> JournalVoucher
+    ///   - Công nợ theo thời hạn: LiabilityDue -> DebtDetail -> JournalEntry -> JournalVoucher
+    ///   - Công nợ theo ngoại tệ: CurrencyLiabilityLine -> DebtDetail -> JournalEntry -> JournalVoucher
     /// </summary>
     public class DebtFlatRow : FlatDetailRowBase
     {
@@ -125,9 +127,19 @@ namespace NewaccNet.Reports.FlattenedDetails
         public string PartnerId { get; set; } = string.Empty;
 
         /// <summary>
-        /// Mã nội dung công nợ (DebtDetail.DebtTypeId).
+        /// Tên đối tượng công nợ (Partner.CustomerName).
+        /// </summary>
+        public string PartnerName { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Mã nội dung / loại hình công nợ (DebtDetail.DebtTypeId).
         /// </summary>
         public string DebtTypeId { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Tên nội dung / loại hình công nợ (DebtType.TypeName).
+        /// </summary>
+        public string DebtTypeName { get; set; } = string.Empty;
 
         /// <summary>
         /// Mã lý do công nợ (DebtDetail.DebtReasonId).
@@ -135,12 +147,7 @@ namespace NewaccNet.Reports.FlattenedDetails
         public int? DebtReasonId { get; set; }
 
         /// <summary>
-        /// Mã hạn nợ / Khế ước (DebtDetail.LiabilityDuesId).
-        /// </summary>
-        public int? LiabilityDuesId { get; set; }
-
-        /// <summary>
-        /// Ngày hạn thanh toán (DebtDetail.Liabilitydate).
+        /// Ngày hạn thanh toán trên dòng chi tiết (DebtDetail.Liabilitydate).
         /// </summary>
         public DateTime? LiabilityDate { get; set; }
 
@@ -154,20 +161,79 @@ namespace NewaccNet.Reports.FlattenedDetails
         /// </summary>
         public bool InterestFlag { get; set; }
 
+        // --- Thông tin từ LiabilityDue (Công nợ theo thời hạn) ---
+
         /// <summary>
-        /// Mã ngoại tệ (nếu có liên kết CurrencyLiabilityLine).
+        /// Mã hạn nợ / Khế ước (LiabilityDue.Id / DebtDetail.LiabilityDuesId).
+        /// </summary>
+        public int? LiabilityDuesId { get; set; }
+
+        /// <summary>
+        /// Ngày bắt đầu tính hạn nợ (LiabilityDue.BeginDate).
+        /// </summary>
+        public DateTime? DueBeginDate { get; set; }
+
+        /// <summary>
+        /// Ngày đáo hạn / Hạn thanh toán (LiabilityDue.EndDate).
+        /// </summary>
+        public DateTime? DueEndDate { get; set; }
+
+        /// <summary>
+        /// Lãi suất trong hạn (LiabilityDue.Interestrate).
+        /// </summary>
+        public double? DueInterestRate { get; set; }
+
+        /// <summary>
+        /// Lãi suất quá hạn / phạt (LiabilityDue.Feedbackrate).
+        /// </summary>
+        public double? DueFeedbackRate { get; set; }
+
+        /// <summary>
+        /// Thuế suất / Tỷ lệ khác (LiabilityDue.Outvatrate).
+        /// </summary>
+        public double? DueOutVatRate { get; set; }
+
+        /// <summary>
+        /// Ghi chú hạn thanh toán / Hợp đồng (LiabilityDue.Remark).
+        /// </summary>
+        public string DueRemark { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Cờ đã tất toán hạn nợ (LiabilityDue.Settledflag).
+        /// </summary>
+        public bool DueSettledFlag { get; set; }
+
+        // --- Thông tin từ CurrencyLiabilityLine (Công nợ ngoại tệ) ---
+
+        /// <summary>
+        /// Mã ngoại tệ (CurrencyLiabilityLine.CurrencyId).
         /// </summary>
         public string CurrencyId { get; set; } = string.Empty;
 
         /// <summary>
-        /// Tỷ giá ngoại tệ (nếu có liên kết CurrencyLiabilityLine).
+        /// Tỷ giá ngoại tệ (CurrencyLiabilityLine.ExchangeRate).
         /// </summary>
         public double ExchangeRate { get; set; }
 
         /// <summary>
-        /// Số lượng nguyên tệ (nếu có liên kết CurrencyLiabilityLine).
+        /// Số lượng nguyên tệ (CurrencyLiabilityLine.Quantity).
         /// </summary>
         public double ForeignQuantity { get; set; }
+
+        /// <summary>
+        /// Số phát sinh Nợ nguyên tệ (Dbcr == +1 ? ForeignQuantity : 0).
+        /// </summary>
+        public double DebitCurrency => Dbcr == 1 ? ForeignQuantity : 0.0;
+
+        /// <summary>
+        /// Số phát sinh Có nguyên tệ (Dbcr == -1 ? ForeignQuantity : 0).
+        /// </summary>
+        public double CreditCurrency => Dbcr == -1 ? ForeignQuantity : 0.0;
+
+        /// <summary>
+        /// Số lượng nguyên tệ có dấu theo chiều Nợ/Có (Dbcr * ForeignQuantity).
+        /// </summary>
+        public double SignedForeignQuantity => Dbcr * ForeignQuantity;
     }
 
     /// <summary>

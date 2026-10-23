@@ -100,10 +100,10 @@ namespace NewaccNet.Reports.ObligationTax
             MergeJson(result, accDataJsonPath, (dto, endTaxVal) => dto.AccTax = endTaxVal);
 
             // 6. Calculate EndTax
-            // As discussed: EndTax = BeginTax + DebitTax - CreditTax
+            // As per instruction: EndTax = BeginTax + CreditTax - DebitTax
             foreach (var r in result)
             {
-                r.EndTax = r.BeginTax + r.DebitTax - r.CreditTax;
+                r.EndTax = r.BeginTax + r.CreditTax - r.DebitTax;
             }
 
             return result;

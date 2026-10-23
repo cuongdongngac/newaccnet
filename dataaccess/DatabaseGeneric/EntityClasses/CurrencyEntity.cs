@@ -162,7 +162,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathExchangeRates { get { return _staticMetaData.GetPrefetchPathElement("ExchangeRates", CommonEntityBase.CreateEntityCollection<ExchangeRateEntity>()); } }
 
 		/// <summary>The CurrencyId property of the Entity Currency<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Currency"."CurrencyId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		/// <remarks>Mapped on  table field: "Currency"."CurrencyId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
 		public virtual System.String CurrencyId
 		{
 			get { return (System.String)GetValue((int)CurrencyFieldIndex.CurrencyId, true); }
@@ -170,7 +170,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The CurrencyName property of the Entity Currency<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Currency"."CurrencyName".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 20.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "Currency"."CurrencyName".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String CurrencyName
 		{
 			get { return (System.String)GetValue((int)CurrencyFieldIndex.CurrencyName, true); }

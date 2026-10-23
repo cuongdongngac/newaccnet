@@ -1,0 +1,35 @@
+{
+  "nbmst": "2800242097",
+  "khmshdon": "1",
+  "khhdon": "K26TKA",
+  "shdon": "152680",
+  "tdlap": "2026-05-31T00:00:00",
+  "nbten": "VIỄN THÔNG THANH HÓA",
+  "nbdchi": "",
+  "nmmst": "2802274721",
+  "nmten": "Cty TNHH Thủy Hiền",
+  "nmdchi": "",
+  "dvtte": "VND",
+  "tgia": 1.0,
+  "tgtcthue": -1717818.0,
+  "tgtthue": -171782.0,
+  "ttcktmai": 0.0,
+  "tgtttbso": -1889600.0,
+  "tthai": 3,
+  "ttxly": 1,
+  "thttltsuat": [],
+  "hdhhdvu": [
+    {
+      "stt": 6,
+      "tchat": null,
+      "mhhdvu": null,
+      "ten": "Đóng trước cước Fiberthuyhien.fb.tha 13 tháng từ 01/03/2027 đến 31/03/2028",
+      "dvtinh": "Gói",
+      "sluong": -1.0,
+      "dgia": 0,
+      "thtien": -1717818.0,
+      "tsuat": "0.1",
+      "tthue": -171782.0
+    }
+  ]
+}

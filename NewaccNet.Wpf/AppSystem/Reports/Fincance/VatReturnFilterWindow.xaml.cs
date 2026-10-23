@@ -93,6 +93,12 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
                 if (report.Parameters["prmTitle"] != null) report.Parameters["prmTitle"].Value = txtReportTitle.Text;
                 if (report.Parameters["prmOtherAmount"] != null) report.Parameters["prmOtherAmount"].Value = txtOtherAmountTitle.Text;
                 
+                var companyName = NewaccNet.Wpf.AppSystem.Helpers.UserPreferencesHelper.GetSetting("CompanyName");
+                if (!string.IsNullOrEmpty(companyName) && report.Parameters["prmCompanyName"] != null)
+                {
+                    report.Parameters["prmCompanyName"].Value = companyName;
+                }
+                
                 report.RequestParameters = false;
                 report.CreateDocument(false);
 

@@ -150,7 +150,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathMaterialPrices { get { return _staticMetaData.GetPrefetchPathElement("MaterialPrices", CommonEntityBase.CreateEntityCollection<MaterialPriceEntity>()); } }
 
 		/// <summary>The Place property of the Entity Warehouse<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Warehouse"."Place".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "Warehouse"."Place".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Place
 		{
 			get { return (System.String)GetValue((int)WarehouseFieldIndex.Place, true); }
@@ -158,7 +158,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The WarehouseId property of the Entity Warehouse<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Warehouse"."WarehouseId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		/// <remarks>Mapped on  table field: "Warehouse"."WarehouseId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
 		public virtual System.String WarehouseId
 		{
 			get { return (System.String)GetValue((int)WarehouseFieldIndex.WarehouseId, true); }
@@ -166,7 +166,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The WarehouseName property of the Entity Warehouse<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Warehouse"."WarehouseName".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "Warehouse"."WarehouseName".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String WarehouseName
 		{
 			get { return (System.String)GetValue((int)WarehouseFieldIndex.WarehouseName, true); }

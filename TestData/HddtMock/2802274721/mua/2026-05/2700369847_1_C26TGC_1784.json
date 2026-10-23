@@ -1,0 +1,53 @@
+{
+  "nbmst": "2700369847",
+  "khmshdon": "1",
+  "khhdon": "C26TGC",
+  "shdon": "1784",
+  "tdlap": "2026-05-09T00:00:00",
+  "nbten": "CÔNG TY TNHH CHÍNH GẤM",
+  "nbdchi": "Số nhà 8, tổ 1, Phường Tam Điệp , Tỉnh Ninh Bình, Việt Nam",
+  "nmmst": "2802274721",
+  "nmten": "CÔNG TY TNHH DỊCH VỤ THƯƠNG MẠI THỦY HIỀN",
+  "nmdchi": "Số nhà 62, đường Lê Thánh Tông, Phường Quang Trung, Tỉnh Thanh Hóa, Việt Nam.",
+  "dvtte": "VND",
+  "tgia": 1.0,
+  "tgtcthue": 178159091.0,
+  "tgtthue": 17815909.0,
+  "ttcktmai": 0.0,
+  "tgtttbso": 195975000.0,
+  "tthai": 1,
+  "ttxly": 5,
+  "thttltsuat": [
+    {
+      "tsuat": "0.1",
+      "thtien": 178159091.0,
+      "tthue": 17815909.0
+    }
+  ],
+  "hdhhdvu": [
+    {
+      "stt": 1,
+      "tchat": 1,
+      "mhhdvu": null,
+      "ten": "Nước tăng lực Redbull 250ml x 24",
+      "dvtinh": "Thùng",
+      "sluong": 600.0,
+      "dgia": 258181.818,
+      "thtien": 154909091.0,
+      "tsuat": "0.1",
+      "tthue": 15490909.0
+    },
+    {
+      "stt": 2,
+      "tchat": 1,
+      "mhhdvu": null,
+      "ten": "Đồ uống COKE LESS SUGAR 1.5L 6 PET SF",
+      "dvtinh": "KÉT",
+      "sluong": 330.0,
+      "dgia": 70454.545,
+      "thtien": 23250000.0,
+      "tsuat": "0.1",
+      "tthue": 2325000.0
+    }
+  ]
+}

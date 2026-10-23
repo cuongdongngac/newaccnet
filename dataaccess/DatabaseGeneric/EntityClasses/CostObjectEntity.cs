@@ -210,7 +210,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathInventoryVouchers { get { return _staticMetaData.GetPrefetchPathElement("InventoryVouchers", CommonEntityBase.CreateEntityCollection<InventoryVoucherEntity>()); } }
 
 		/// <summary>The Id property of the Entity CostObject<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CostObject"."Id".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		/// <remarks>Mapped on  table field: "CostObject"."Id".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
 		public virtual System.String Id
 		{
 			get { return (System.String)GetValue((int)CostObjectFieldIndex.Id, true); }
@@ -218,7 +218,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The ObjectName property of the Entity CostObject<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CostObject"."ObjectName".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CostObject"."ObjectName".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String ObjectName
 		{
 			get { return (System.String)GetValue((int)CostObjectFieldIndex.ObjectName, true); }
@@ -226,7 +226,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Syncronizeflag property of the Entity CostObject<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CostObject"."Syncronizeflag".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CostObject"."Syncronizeflag".<br/>Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Boolean Syncronizeflag
 		{
 			get { return (System.Boolean)GetValue((int)CostObjectFieldIndex.Syncronizeflag, true); }

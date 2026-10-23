@@ -208,7 +208,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathPartner { get { return _staticMetaData.GetPrefetchPathElement("Partner", CommonEntityBase.CreateEntityCollection<PartnerEntity>()); } }
 
 		/// <summary>The BeginDate property of the Entity LiabilityDue<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "LiabilityDue"."BeginDate".<br/>Table field type characteristics (type, precision, scale, length): Date, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "LiabilityDue"."BeginDate".<br/>Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.DateTime> BeginDate
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)LiabilityDueFieldIndex.BeginDate, false); }
@@ -216,7 +216,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The CustomerId property of the Entity LiabilityDue<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "LiabilityDue"."CustomerId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "LiabilityDue"."CustomerId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String CustomerId
 		{
 			get { return (System.String)GetValue((int)LiabilityDueFieldIndex.CustomerId, true); }
@@ -224,7 +224,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The DebtTypeId property of the Entity LiabilityDue<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "LiabilityDue"."DebtTypeId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "LiabilityDue"."DebtTypeId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String DebtTypeId
 		{
 			get { return (System.String)GetValue((int)LiabilityDueFieldIndex.DebtTypeId, true); }
@@ -232,7 +232,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The EndDate property of the Entity LiabilityDue<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "LiabilityDue"."EndDate".<br/>Table field type characteristics (type, precision, scale, length): Date, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "LiabilityDue"."EndDate".<br/>Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.DateTime> EndDate
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)LiabilityDueFieldIndex.EndDate, false); }
@@ -240,7 +240,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Feedbackrate property of the Entity LiabilityDue<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "LiabilityDue"."Feedbackrate".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "LiabilityDue"."Feedbackrate".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Feedbackrate
 		{
 			get { return (Nullable<System.Double>)GetValue((int)LiabilityDueFieldIndex.Feedbackrate, false); }
@@ -248,7 +248,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Id property of the Entity LiabilityDue<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "LiabilityDue"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "LiabilityDue"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)LiabilityDueFieldIndex.Id, true); }
@@ -256,7 +256,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Interestrate property of the Entity LiabilityDue<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "LiabilityDue"."Interestrate".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "LiabilityDue"."Interestrate".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Interestrate
 		{
 			get { return (Nullable<System.Double>)GetValue((int)LiabilityDueFieldIndex.Interestrate, false); }
@@ -264,7 +264,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Outvatrate property of the Entity LiabilityDue<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "LiabilityDue"."Outvatrate".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "LiabilityDue"."Outvatrate".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Outvatrate
 		{
 			get { return (Nullable<System.Double>)GetValue((int)LiabilityDueFieldIndex.Outvatrate, false); }
@@ -272,7 +272,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Remark property of the Entity LiabilityDue<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "LiabilityDue"."Remark".<br/>Table field type characteristics (type, precision, scale, length): LongVarWChar, 0, 0, 536870911.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "LiabilityDue"."Remark".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Remark
 		{
 			get { return (System.String)GetValue((int)LiabilityDueFieldIndex.Remark, true); }
@@ -280,7 +280,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Settledflag property of the Entity LiabilityDue<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "LiabilityDue"."Settledflag".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "LiabilityDue"."Settledflag".<br/>Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Boolean Settledflag
 		{
 			get { return (System.Boolean)GetValue((int)LiabilityDueFieldIndex.Settledflag, true); }

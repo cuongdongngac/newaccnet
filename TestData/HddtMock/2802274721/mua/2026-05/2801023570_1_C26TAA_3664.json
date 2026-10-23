@@ -1,0 +1,41 @@
+{
+  "nbmst": "2801023570",
+  "khmshdon": "1",
+  "khhdon": "C26TAA",
+  "shdon": "3664",
+  "tdlap": "2026-05-09T00:00:00",
+  "nbten": "CÔNG TY TNHH MTV THƯƠNG MẠI HABECO MIỀN TRUNG",
+  "nbdchi": "Số 152 Quang Trung, Phường Hạc Thành, Tỉnh Thanh Hóa, Việt Nam",
+  "nmmst": "2802274721",
+  "nmten": "CÔNG TY TNHH DỊCH VỤ THƯƠNG MẠI THỦY HIỀN",
+  "nmdchi": "Số nhà 62, Đường Lê Thánh Tông, Phường Quang Trung, Thanh Hóa.",
+  "dvtte": "VND",
+  "tgia": 1.0,
+  "tgtcthue": 95636000.0,
+  "tgtthue": 9563600.0,
+  "ttcktmai": 0.0,
+  "tgtttbso": 105199600.0,
+  "tthai": 1,
+  "ttxly": 5,
+  "thttltsuat": [
+    {
+      "tsuat": "0.1",
+      "thtien": 95636000.0,
+      "tthue": 9563600.0
+    }
+  ],
+  "hdhhdvu": [
+    {
+      "stt": 1,
+      "tchat": 1,
+      "mhhdvu": null,
+      "ten": "Bia lon Hà Nội Sleek 330 ml GNTT  ( giật nắp, thẻ cào) (24 lon/ thùng)",
+      "dvtinh": "Thùng",
+      "sluong": 400.0,
+      "dgia": 239090.0,
+      "thtien": 95636000.0,
+      "tsuat": "0.1",
+      "tthue": 9563600.0
+    }
+  ]
+}

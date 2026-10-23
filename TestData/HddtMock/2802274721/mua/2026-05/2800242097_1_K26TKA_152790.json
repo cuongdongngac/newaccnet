@@ -1,0 +1,35 @@
+{
+  "nbmst": "2800242097",
+  "khmshdon": "1",
+  "khhdon": "K26TKA",
+  "shdon": "152790",
+  "tdlap": "2026-05-31T00:00:00",
+  "nbten": "VIỄN THÔNG THANH HÓA",
+  "nbdchi": "",
+  "nmmst": "2802274721",
+  "nmten": "Cty TNHH Thủy Hiền",
+  "nmdchi": "",
+  "dvtte": "VND",
+  "tgia": 1.0,
+  "tgtcthue": 490909.0,
+  "tgtthue": 49091.0,
+  "ttcktmai": 0.0,
+  "tgtttbso": 540000.0,
+  "tthai": 1,
+  "ttxly": 1,
+  "thttltsuat": [],
+  "hdhhdvu": [
+    {
+      "stt": 149,
+      "tchat": null,
+      "mhhdvu": null,
+      "ten": "Trả trước thuyhien.fb.tha 3 tháng, từ 01/12/2026 đến 28/02/2027",
+      "dvtinh": "Gói",
+      "sluong": 1.0,
+      "dgia": 0,
+      "thtien": 490909.0,
+      "tsuat": "0.1",
+      "tthue": 49091.0
+    }
+  ]
+}

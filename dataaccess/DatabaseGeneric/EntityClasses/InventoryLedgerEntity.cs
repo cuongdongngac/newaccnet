@@ -126,7 +126,7 @@ namespace DataAccess.EntityClasses
 		public static InventoryLedgerRelations Relations { get { return _relationsFactory; } }
 
 		/// <summary>The Camount property of the Entity InventoryLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryLedger"."Camount".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InventoryLedger"."Camount".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Camount
 		{
 			get { return (Nullable<System.Double>)GetValue((int)InventoryLedgerFieldIndex.Camount, false); }
@@ -134,7 +134,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Contents property of the Entity InventoryLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryLedger"."Contents".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 100.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InventoryLedger"."Contents".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Contents
 		{
 			get { return (System.String)GetValue((int)InventoryLedgerFieldIndex.Contents, true); }
@@ -142,7 +142,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Cprice property of the Entity InventoryLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryLedger"."Cprice".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InventoryLedger"."Cprice".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Cprice
 		{
 			get { return (Nullable<System.Double>)GetValue((int)InventoryLedgerFieldIndex.Cprice, false); }
@@ -150,7 +150,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Cquantity property of the Entity InventoryLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryLedger"."Cquantity".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InventoryLedger"."Cquantity".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Cquantity
 		{
 			get { return (Nullable<System.Double>)GetValue((int)InventoryLedgerFieldIndex.Cquantity, false); }
@@ -158,7 +158,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Damount property of the Entity InventoryLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryLedger"."Damount".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InventoryLedger"."Damount".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Damount
 		{
 			get { return (Nullable<System.Double>)GetValue((int)InventoryLedgerFieldIndex.Damount, false); }
@@ -166,7 +166,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Dprice property of the Entity InventoryLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryLedger"."Dprice".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InventoryLedger"."Dprice".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Dprice
 		{
 			get { return (Nullable<System.Double>)GetValue((int)InventoryLedgerFieldIndex.Dprice, false); }
@@ -174,7 +174,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Dquantity property of the Entity InventoryLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryLedger"."Dquantity".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InventoryLedger"."Dquantity".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Dquantity
 		{
 			get { return (Nullable<System.Double>)GetValue((int)InventoryLedgerFieldIndex.Dquantity, false); }
@@ -182,7 +182,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Endamount property of the Entity InventoryLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryLedger"."Endamount".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InventoryLedger"."Endamount".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Endamount
 		{
 			get { return (Nullable<System.Double>)GetValue((int)InventoryLedgerFieldIndex.Endamount, false); }
@@ -190,7 +190,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Endqty property of the Entity InventoryLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryLedger"."Endqty".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InventoryLedger"."Endqty".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Endqty
 		{
 			get { return (Nullable<System.Double>)GetValue((int)InventoryLedgerFieldIndex.Endqty, false); }
@@ -198,7 +198,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Id property of the Entity InventoryLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryLedger"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "InventoryLedger"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)InventoryLedgerFieldIndex.Id, true); }
@@ -206,7 +206,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The JournalVoucherId property of the Entity InventoryLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryLedger"."JournalVoucherId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InventoryLedger"."JournalVoucherId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> JournalVoucherId
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)InventoryLedgerFieldIndex.JournalVoucherId, false); }
@@ -214,7 +214,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The VoucherDate property of the Entity InventoryLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryLedger"."VoucherDate".<br/>Table field type characteristics (type, precision, scale, length): Date, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InventoryLedger"."VoucherDate".<br/>Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.DateTime> VoucherDate
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)InventoryLedgerFieldIndex.VoucherDate, false); }
@@ -222,7 +222,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The VoucherNo property of the Entity InventoryLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryLedger"."VoucherNo".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InventoryLedger"."VoucherNo".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String VoucherNo
 		{
 			get { return (System.String)GetValue((int)InventoryLedgerFieldIndex.VoucherNo, true); }

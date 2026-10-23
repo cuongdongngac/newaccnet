@@ -1,0 +1,53 @@
+{
+  "nbmst": "2801023570",
+  "khmshdon": "1",
+  "khhdon": "C26TAA",
+  "shdon": "3671",
+  "tdlap": "2026-05-09T00:00:00",
+  "nbten": "CÔNG TY TNHH MTV THƯƠNG MẠI HABECO MIỀN TRUNG",
+  "nbdchi": "Số 152 Quang Trung, Phường Hạc Thành, Tỉnh Thanh Hóa, Việt Nam",
+  "nmmst": "2802274721",
+  "nmten": "CÔNG TY TNHH DỊCH VỤ THƯƠNG MẠI THỦY HIỀN",
+  "nmdchi": "Số nhà 62, Đường Lê Thánh Tông, Phường Quang Trung, Thanh Hóa.",
+  "dvtte": "VND",
+  "tgia": 1.0,
+  "tgtcthue": 344444.0,
+  "tgtthue": 27556.0,
+  "ttcktmai": 0.0,
+  "tgtttbso": 372000.0,
+  "tthai": 1,
+  "ttxly": 5,
+  "thttltsuat": [
+    {
+      "tsuat": "0.08",
+      "thtien": 344444.0,
+      "tthue": 27556.0
+    }
+  ],
+  "hdhhdvu": [
+    {
+      "stt": 1,
+      "tchat": 1,
+      "mhhdvu": null,
+      "ten": "Nước tinh lọc Uniaqua chai 350ml(Hỗ trợ theo SL mua hàng NTL T4.2026)",
+      "dvtinh": "Thùng",
+      "sluong": 3.0,
+      "dgia": 52777.66667,
+      "thtien": 158333.0,
+      "tsuat": "0.08",
+      "tthue": 12667.0
+    },
+    {
+      "stt": 2,
+      "tchat": 1,
+      "mhhdvu": null,
+      "ten": "Nước tinh lọc Uniaqua chai 500ml(Hỗ trợ theo SL mua hàng NTL T4.2026)",
+      "dvtinh": "Thùng",
+      "sluong": 3.0,
+      "dgia": 62037.0,
+      "thtien": 186111.0,
+      "tsuat": "0.08",
+      "tthue": 14889.0
+    }
+  ]
+}

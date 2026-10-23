@@ -9,6 +9,7 @@ using DevExpress.Xpf.Editors;
 using DataAccess.EntityClasses;
 using DataAccess.HelperClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using NewaccNet.Wpf.AppSystem.Voucher.Reports;
 
 namespace NewaccNet.Wpf.AppSystem.Voucher.Details
 {
@@ -626,24 +627,185 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
         // KHUNG HÀM IN PHIẾU KHO & HÓA ĐƠN (STUB METHODS - SẼ TRIỂN KHAI CHI TIẾT SAU)
         // =========================================================================
 
+        private InventoryVoucherPrintModel BuildInventoryPrintModel(InventoryVoucherEntity invVoucher, string voucherTypeDesc, bool isReceipt)
+        {
+            var model = new InventoryVoucherPrintModel();
+            if (invVoucher == null) return model;
+
+            bool isSales = (!isReceipt && (invVoucher.Taxflag || voucherTypeDesc.Contains("bán") || _context?.VoucherType == "XB"));
+            bool hasTax = invVoucher.Taxflag;
+            model.HasTax = hasTax;
+
+            // 1. Tại chính InventoryVoucher
+            model.WarehouseId = invVoucher.WarehouseId ?? _context?.WarehouseId ?? "";
+            var whList = lueWarehouse.ItemsSource as IEnumerable<WarehouseEntity>;
+            model.WarehouseName = whList?.FirstOrDefault(w => w.WarehouseId == model.WarehouseId)?.WarehouseName ?? model.WarehouseId;
+
+            model.DelivererOrReceiverName = invVoucher.Carrier ?? "";
+            model.PartnerName = invVoucher.Vatobjectname ?? "";
+            model.PartnerAddress = invVoucher.Vataddress ?? "";
+            model.PartnerTaxCode = invVoucher.Taxno ?? "";
+
+            if (!string.IsNullOrWhiteSpace(invVoucher.Vatbillno))
+            {
+                string dateStr = invVoucher.Vatbilldate.HasValue ? $" ngày {invVoucher.Vatbilldate.Value:dd/MM/yyyy}" : "";
+                model.BillNoAndDate = $"Theo hóa đơn số: {invVoucher.Vatbillno}{dateStr}";
+            }
+
+            // 2. Truy lên JournalEntry & JournalVoucher
+            var entry = _context?.MaterialEntry;
+            var jVoucher = entry?.JournalVoucher;
+
+            model.VoucherNo = jVoucher?.VoucherNo ?? "";
+            model.VoucherDate = jVoucher?.VoucherDate ?? DateTime.Today;
+            model.OriginalVouchersCount = jVoucher?.Invoicesnumber ?? "";
+
+            string matAcc = entry?.AccountId ?? "";
+            string offsetAcc = entry?.ParentEntry?.AccountId ?? (isReceipt ? _context?.TotalAccountId : _context?.CostAccountId) ?? "";
+
+            if (isReceipt)
+            {
+                model.DebitAccount = hasTax ? $"{matAcc}, {_context?.TaxAccountId ?? "1331"}" : matAcc;
+                model.CreditAccount = offsetAcc;
+
+                model.ReportTitle = "PHIẾU NHẬP KHO";
+                model.SubTitle = $"({voucherTypeDesc})";
+                model.CircularNote = "Mẫu số 01-VT\n(Ban hành theo Thông tư số 200/2014/TT-BTC\nNgày 22/12/2014 của BTC)";
+                model.DelivererOrReceiverLabel = "Họ và tên người giao:";
+                model.SignTitle2 = "Người giao hàng";
+            }
+            else
+            {
+                model.DebitAccount = offsetAcc;
+                model.CreditAccount = hasTax ? $"{matAcc}, {_context?.TaxAccountId ?? "33311"}" : matAcc;
+
+                model.ReportTitle = "PHIẾU XUẤT KHO";
+                model.SubTitle = $"({voucherTypeDesc})";
+                model.CircularNote = "Mẫu số 02-VT\n(Ban hành theo Thông tư số 200/2014/TT-BTC\nNgày 22/12/2014 của BTC)";
+                model.DelivererOrReceiverLabel = "Họ và tên người nhận:";
+                model.SignTitle2 = "Người nhận hàng";
+            }
+
+            // 3. Truy xuống danh sách dòng vật tư (Lines)
+            // Lưu ý: Đối với phiếu Xuất bán, giá in trên phiếu là GIÁ BÁN (SellPrice) chứ không phải giá gốc
+            var lines = _context?.CurrentLines ?? invVoucher.InventoryVoucherLines;
+            int stt = 1;
+            if (lines != null)
+            {
+                foreach (var line in lines)
+                {
+                    if (string.IsNullOrWhiteSpace(line.MaterialId)) continue;
+
+                    var mat = _materials.FirstOrDefault(m => m.MaterialId == line.MaterialId);
+                    double qty = line.Quantity ?? 0.0;
+                    
+                    double price;
+                    double amt;
+                    if (isSales)
+                    {
+                        price = line.SellPrice ?? line.Price ?? 0.0;
+                        amt = line.SellAmount > 0 ? line.SellAmount : (qty * price);
+                    }
+                    else
+                    {
+                        price = line.Price ?? 0.0;
+                        amt = line.Amount > 0 ? line.Amount : (qty * price);
+                    }
+
+                    model.Lines.Add(new InventoryVoucherPrintLine
+                    {
+                        Stt = stt++,
+                        MaterialId = line.MaterialId,
+                        MaterialName = mat?.MaterialName ?? line.MaterialId,
+                        Unit = mat?.Unit ?? "",
+                        Quantity = qty,
+                        Price = price,
+                        Amount = amt
+                    });
+                }
+            }
+
+            model.TotalGoodsAmount = model.Lines.Sum(l => l.Amount);
+
+            if (hasTax)
+            {
+                double sumTax = lines?.Sum(l => l.TaxAmount) ?? 0.0;
+                if (sumTax == 0 && _context != null && _context.TotalTaxAmount > 0)
+                {
+                    sumTax = _context.TotalTaxAmount;
+                }
+                model.TotalTaxAmount = sumTax;
+                model.TotalPaymentAmount = model.TotalGoodsAmount + model.TotalTaxAmount;
+
+                var firstRate = lines?.FirstOrDefault(l => l.Rate.HasValue && l.Rate.Value > 0)?.Rate;
+                if (firstRate.HasValue)
+                {
+                    model.TaxRateText = firstRate.Value > 1 ? $"{firstRate.Value}%" : $"{firstRate.Value * 100}%";
+                }
+                else
+                {
+                    model.TaxRateText = "Thuế GTGT";
+                }
+            }
+            else
+            {
+                model.TotalTaxAmount = 0;
+                model.TotalPaymentAmount = model.TotalGoodsAmount;
+            }
+
+            model.AmountInWords = Helpers.NumberToWordsConverter.ConvertToWords((decimal)model.TotalPaymentAmount, "đồng");
+
+            return model;
+        }
+
         private void PrintInventoryReceipt(InventoryVoucherEntity invVoucher, string voucherTypeDesc)
         {
-            string billNo = invVoucher?.Vatbillno ?? "";
-            MessageBox.Show(
-                $"[Khung chờ triển khai] In Phiếu Nhập Kho (Mẫu 01-VT)\n- Loại phiếu: {voucherTypeDesc}\n- Kho: {invVoucher?.WarehouseId}\n- Người giao: {invVoucher?.Carrier}\n- Số HĐ/CT: {billNo}",
-                "In Phiếu Nhập Kho",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information);
+            try
+            {
+                var model = BuildInventoryPrintModel(invVoucher, voucherTypeDesc, isReceipt: true);
+
+                var report = new InventoryVoucherReport();
+                report.SetModel(model);
+                report.CreateDocument(false);
+
+                var previewWindow = new DevExpress.Xpf.Printing.DocumentPreviewWindow
+                {
+                    Owner = this,
+                    Title = $"In Phiếu Nhập Kho - {model.VoucherNo}"
+                };
+                previewWindow.PreviewControl.CommandBarStyle = DevExpress.Xpf.DocumentViewer.CommandBarStyle.Ribbon;
+                previewWindow.PreviewControl.DocumentSource = report;
+                previewWindow.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi in Phiếu nhập kho: {ex.Message}", "Lỗi In ấn", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void PrintInventoryIssue(InventoryVoucherEntity invVoucher, string voucherTypeDesc)
         {
-            string billNo = invVoucher?.Vatbillno ?? "";
-            MessageBox.Show(
-                $"[Khung chờ triển khai] In Phiếu Xuất Kho (Mẫu 02-VT)\n- Loại phiếu: {voucherTypeDesc}\n- Kho: {invVoucher?.WarehouseId}\n- Người nhận: {invVoucher?.Carrier}\n- Số HĐ/CT: {billNo}",
-                "In Phiếu Xuất Kho",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information);
+            try
+            {
+                var model = BuildInventoryPrintModel(invVoucher, voucherTypeDesc, isReceipt: false);
+
+                var report = new InventoryVoucherReport();
+                report.SetModel(model);
+                report.CreateDocument(false);
+
+                var previewWindow = new DevExpress.Xpf.Printing.DocumentPreviewWindow
+                {
+                    Owner = this,
+                    Title = $"In Phiếu Xuất Kho - {model.VoucherNo}"
+                };
+                previewWindow.PreviewControl.CommandBarStyle = DevExpress.Xpf.DocumentViewer.CommandBarStyle.Ribbon;
+                previewWindow.PreviewControl.DocumentSource = report;
+                previewWindow.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi in Phiếu xuất kho: {ex.Message}", "Lỗi In ấn", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void PrintVatInvoice(InventoryVoucherEntity invVoucher, string voucherTypeDesc)

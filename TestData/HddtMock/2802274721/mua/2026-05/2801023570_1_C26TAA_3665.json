@@ -1,0 +1,41 @@
+{
+  "nbmst": "2801023570",
+  "khmshdon": "1",
+  "khhdon": "C26TAA",
+  "shdon": "3665",
+  "tdlap": "2026-05-09T00:00:00",
+  "nbten": "CÔNG TY TNHH MTV THƯƠNG MẠI HABECO MIỀN TRUNG",
+  "nbdchi": "Số 152 Quang Trung, Phường Hạc Thành, Tỉnh Thanh Hóa, Việt Nam",
+  "nmmst": "2802274721",
+  "nmten": "CÔNG TY TNHH DỊCH VỤ THƯƠNG MẠI THỦY HIỀN",
+  "nmdchi": "Số nhà 62, Đường Lê Thánh Tông, Phường Quang Trung, Thanh Hóa.",
+  "dvtte": "VND",
+  "tgia": 1.0,
+  "tgtcthue": 54588000.0,
+  "tgtthue": 5458800.0,
+  "ttcktmai": 0.0,
+  "tgtttbso": 60046800.0,
+  "tthai": 1,
+  "ttxly": 5,
+  "thttltsuat": [
+    {
+      "tsuat": "0.1",
+      "thtien": 54588000.0,
+      "tthue": 5458800.0
+    }
+  ],
+  "hdhhdvu": [
+    {
+      "stt": 1,
+      "tchat": 1,
+      "mhhdvu": null,
+      "ten": "Bia lon Hanoi Premium Sleek 330ml (24 lon/hộp)",
+      "dvtinh": "Hộp",
+      "sluong": 200.0,
+      "dgia": 272940.0,
+      "thtien": 54588000.0,
+      "tsuat": "0.1",
+      "tthue": 5458800.0
+    }
+  ]
+}

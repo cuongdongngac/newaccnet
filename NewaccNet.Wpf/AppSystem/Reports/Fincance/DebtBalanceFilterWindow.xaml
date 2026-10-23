@@ -58,7 +58,8 @@
 
         <!-- Nút OK / Cancel -->
         <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button x:Name="btnDesign" Content="Thiết kế CĐKT" Width="130" Height="32" Margin="0,0,8,0" Background="#FFFF8F00" Foreground="White" FontWeight="Bold" Click="BtnDesign_Click"/>`n            <Button x:Name="btnCancel" Content="Hủy bỏ (Esc)" Width="110" Height="32" Margin="0,0,8,0"
+            <Button x:Name="btnDesign" Content="Thiết kế CĐKT" Width="130" Height="32" Margin="0,0,8,0" Background="#FFFF8F00" Foreground="White" FontWeight="Bold" Click="BtnDesign_Click"/>
+            <Button x:Name="btnCancel" Content="Hủy bỏ (Esc)" Width="110" Height="32" Margin="0,0,8,0"
                     IsCancel="True" Click="BtnCancel_Click"/>
             <Button x:Name="btnOK" Content="OK — Thực hiện (Enter)" Width="180" Height="32"
                     Background="#FF1565C0" Foreground="White" FontWeight="Bold"

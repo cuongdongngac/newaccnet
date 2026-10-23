@@ -1,0 +1,34 @@
+<UserControl x:Class="NewaccNet.Wpf.AppSystem.Reports.DetailTrialBalance.DebtFilterContainer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ctrl="clr-namespace:NewaccNet.Wpf.Controls"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignWidth="360" d:DesignHeight="80">
+    <StackPanel Orientation="Vertical">
+        <!-- Đối tượng công nợ -->
+        <Grid Margin="0,3,0,3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Đối tượng:" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#333"/>
+            <ctrl:MultiSelectComboBox Grid.Column="1" x:Name="cboPartner" Height="26"
+                                      KeyMemberPath="Id" DisplayMemberPath="DisplayText"
+                                      Placeholder="* (Tất cả đối tượng)"/>
+        </Grid>
+
+        <!-- Nội dung công nợ -->
+        <Grid Margin="0,3,0,3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Nội dung:" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#333"/>
+            <ctrl:MultiSelectComboBox Grid.Column="1" x:Name="cboDebtReason" Height="26"
+                                      KeyMemberPath="Id" DisplayMemberPath="ReasonName"
+                                      Placeholder="* (Tất cả nội dung)"/>
+        </Grid>
+    </StackPanel>
+</UserControl>

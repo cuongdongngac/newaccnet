@@ -10,6 +10,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.diary
         public DiaryReport()
         {
             InitializeComponent();
+            this.ApplySubtleBorders();
         }
 
         public DiaryReport(IEnumerable<NewaccNet.Reports.DiaryReportDTO> rows) : this()

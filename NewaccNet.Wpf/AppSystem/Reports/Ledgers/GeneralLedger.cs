@@ -12,7 +12,59 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Ledgers
         public GeneralLedger()
         {
             InitializeComponent();
+            this.ApplySubtleBorders();
             WireDrillDown();
+            WireFooterBalance();
+        }
+
+        private decimal? _lastBalance;
+
+        private void WireFooterBalance()
+        {
+            this.Detail.BeforePrint += (s, e) =>
+            {
+                var val = GetCurrentColumnValue("Balance");
+                if (val != null && decimal.TryParse(val.ToString(), out decimal b))
+                {
+                    _lastBalance = b;
+                }
+            };
+
+            this.tableFooter.BeforePrint += (s, e) =>
+            {
+                if (!_lastBalance.HasValue && this.DataSource is IEnumerable enumerable)
+                {
+                    foreach (var item in enumerable)
+                    {
+                        if (item is NewaccNet.Reports.LedgerReportDTO dto)
+                        {
+                            _lastBalance = dto.Balance;
+                        }
+                    }
+                }
+            };
+
+            this.tfCellBalanceDebit.PrintOnPage += (s, e) =>
+            {
+                if (_lastBalance.HasValue && string.IsNullOrWhiteSpace(this.tfCellBalanceDebit.Text))
+                {
+                    if (_lastBalance.Value > 0)
+                    {
+                        this.tfCellBalanceDebit.Text = string.Format("{0:#,##0;(#,##0);\"\"}", _lastBalance.Value);
+                    }
+                }
+            };
+
+            this.tfCellBalanceCredit.PrintOnPage += (s, e) =>
+            {
+                if (_lastBalance.HasValue && string.IsNullOrWhiteSpace(this.tfCellBalanceCredit.Text))
+                {
+                    if (_lastBalance.Value < 0)
+                    {
+                        this.tfCellBalanceCredit.Text = string.Format("{0:#,##0;(#,##0);\"\"}", Math.Abs(_lastBalance.Value));
+                    }
+                }
+            };
         }
 
         private void WireDrillDown()

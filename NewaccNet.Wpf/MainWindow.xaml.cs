@@ -351,6 +351,12 @@ public partial class MainWindow : ThemedWindow {
     // Dữ liệu nguồn: NewaccNet.Reports.FlattenedDetails.FlattenedDetailService
     // =========================================================================
 
+    private void BtnReportDetailTrialBalance_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var filter = new NewaccNet.Wpf.AppSystem.Reports.DetailTrialBalance.DetailTrialBalanceFilterWindow { Owner = this };
+        filter.ShowDialog();
+    }
+
     private void BtnReportDebtDetail_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
     {
         ShowDebtDetailReportStub();
@@ -388,56 +394,56 @@ public partial class MainWindow : ThemedWindow {
 
     private void ShowDebtDetailReportStub()
     {
-        MessageBox.Show(
-            "[Khung chờ triển khai] Báo cáo Chi tiết Công nợ theo khoảng thời gian & đối tượng.\n(Nguồn dữ liệu: FlattenedDetailService.LoadDebtFlatRows / DebtFlatRow)",
-            "Báo cáo Chi tiết Công nợ",
-            MessageBoxButton.OK,
-            MessageBoxImage.Information);
+        var filter = new NewaccNet.Wpf.AppSystem.Reports.Debt.DebtReportFilterWindow
+        {
+            Owner = this
+        };
+        filter.ShowDialog();
     }
 
     private void ShowInventoryStockReportStub()
     {
-        MessageBox.Show(
-            "[Khung chờ triển khai] Báo cáo Tồn kho Vật tư - Hàng hóa.\n(Nguồn dữ liệu: FlattenedDetailService.LoadInventoryFlatRows / InventoryFlatRow)",
-            "Báo cáo Tồn kho",
-            MessageBoxButton.OK,
-            MessageBoxImage.Information);
+        var filter = new NewaccNet.Wpf.AppSystem.Reports.DetailTrialBalance.DetailTrialBalanceFilterWindow(initialAccountPrefix: "152", initialCategory: "MATERIAL")
+        {
+            Owner = this
+        };
+        filter.ShowDialog();
     }
 
     private void ShowInventoryInOutReportStub()
     {
-        MessageBox.Show(
-            "[Khung chờ triển khai] Báo cáo Chi tiết Nhập - Xuất Vật tư - Hàng hóa theo khoảng thời gian.\n(Nguồn dữ liệu: FlattenedDetailService.LoadInventoryFlatRows / InventoryFlatRow)",
-            "Báo cáo Nhập - Xuất Kho",
-            MessageBoxButton.OK,
-            MessageBoxImage.Information);
+        var filter = new NewaccNet.Wpf.AppSystem.Reports.DetailTrialBalance.DetailTrialBalanceFilterWindow(initialAccountPrefix: "152", initialCategory: "MATERIAL")
+        {
+            Owner = this
+        };
+        filter.ShowDialog();
     }
 
     private void ShowCostDetailReportStub()
     {
-        MessageBox.Show(
-            "[Khung chờ triển khai] Báo cáo Chi tiết Chi phí theo Đối tượng & Yếu tố chi phí.\n(Nguồn dữ liệu: FlattenedDetailService.LoadCostFlatRows / CostFlatRow)",
-            "Báo cáo Chi tiết Chi phí",
-            MessageBoxButton.OK,
-            MessageBoxImage.Information);
+        var filter = new NewaccNet.Wpf.AppSystem.Reports.DetailTrialBalance.DetailTrialBalanceFilterWindow(initialAccountPrefix: "154", initialCategory: "COST")
+        {
+            Owner = this
+        };
+        filter.ShowDialog();
     }
 
     private void ShowAssetDetailReportStub()
     {
-        MessageBox.Show(
-            "[Khung chờ triển khai] Báo cáo Chi tiết Tài sản cố định & Khấu hao.\n(Nguồn dữ liệu: FlattenedDetailService.LoadAssetFlatRows / AssetFlatRow)",
-            "Báo cáo Chi tiết TSCĐ",
-            MessageBoxButton.OK,
-            MessageBoxImage.Information);
+        var filter = new NewaccNet.Wpf.AppSystem.Reports.DetailTrialBalance.DetailTrialBalanceFilterWindow(initialAccountPrefix: "211", initialCategory: "ASSET")
+        {
+            Owner = this
+        };
+        filter.ShowDialog();
     }
 
     private void ShowCurrencyDetailReportStub()
     {
-        MessageBox.Show(
-            "[Khung chờ triển khai] Báo cáo Chi tiết Ngoại tệ & Tỷ giá.\n(Nguồn dữ liệu: FlattenedDetailService.LoadCurrencyFlatRows / CurrencyFlatRow)",
-            "Báo cáo Chi tiết Ngoại tệ",
-            MessageBoxButton.OK,
-            MessageBoxImage.Information);
+        var filter = new NewaccNet.Wpf.AppSystem.Reports.DetailTrialBalance.DetailTrialBalanceFilterWindow(initialAccountPrefix: "1122", initialCategory: "CURRENCY")
+        {
+            Owner = this
+        };
+        filter.ShowDialog();
     }
 
     private void ShowInvestmentDetailReportStub()
@@ -447,5 +453,19 @@ public partial class MainWindow : ThemedWindow {
             "Báo cáo Chi tiết Chứng khoán",
             MessageBoxButton.OK,
             MessageBoxImage.Information);
+    }
+
+    private void BtnHddtDownload_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.TaxInvoice.TaxInvoiceDownloadWindow();
+        win.Owner = this;
+        win.ShowDialog();
+    }
+
+    private void BtnHddtReview_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.TaxInvoice.TaxInvoiceReviewWindow();
+        win.Owner = this;
+        win.Show();
     }
 }

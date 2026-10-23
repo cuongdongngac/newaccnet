@@ -8,3 +8,4 @@
 - **Kiến trúc:** MVVM nghiêm ngặt. Không viết logic nghiệp vụ/dữ liệu vào Code-Behind (`.xaml.cs`). Toàn bộ sự kiện từ DevExpress phải chuyển sang ViewModel qua EventToCommand hoặc Binding.
 
 - **Kiến trúc DB-Agnostic (CORE DIRECTIVE):** Ứng dụng đa nền tảng, lớp giao tiếp không biết DB là gì. BẮT BUỘC sử dụng ORM và Lập trình Hướng đối tượng (OOP) cho toàn bộ logic/tính toán. TUYỆT ĐỐI KHÔNG dùng bất kỳ thủ tục (Stored Procedure) hay hàm cơ sở dữ liệu nào để xử lý nghiệp vụ.
+- **Nguyên tắc Đơn nhiệm & Hiệu năng dữ liệu (Single Responsibility & Performance):** Nguồn dữ liệu danh mục cho LookUp/Combobox/Bộ lọc phải độc lập hoàn toàn, dùng đối tượng/DTO riêng (POCO), chỉ query đúng bảng danh mục, TUYỆT ĐỐI KHÔNG JOIN lồng ghép dữ liệu giao dịch hay các bảng không cần thiết làm ảnh hưởng hiệu năng và gây phức tạp hóa mô hình dữ liệu.

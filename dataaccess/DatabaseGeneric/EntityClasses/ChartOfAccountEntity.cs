@@ -186,7 +186,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathUserAccounts { get { return _staticMetaData.GetPrefetchPathElement("UserAccounts", CommonEntityBase.CreateEntityCollection<UserAccountEntity>()); } }
 
 		/// <summary>The AccountId property of the Entity ChartOfAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ChartOfAccount"."AccountId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		/// <remarks>Mapped on  table field: "ChartOfAccount"."AccountId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
 		public virtual System.String AccountId
 		{
 			get { return (System.String)GetValue((int)ChartOfAccountFieldIndex.AccountId, true); }
@@ -194,7 +194,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The AccountName property of the Entity ChartOfAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ChartOfAccount"."AccountName".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "ChartOfAccount"."AccountName".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String AccountName
 		{
 			get { return (System.String)GetValue((int)ChartOfAccountFieldIndex.AccountName, true); }
@@ -202,7 +202,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The CategoryId property of the Entity ChartOfAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ChartOfAccount"."CategoryId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "ChartOfAccount"."CategoryId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String CategoryId
 		{
 			get { return (System.String)GetValue((int)ChartOfAccountFieldIndex.CategoryId, true); }
@@ -210,7 +210,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Dispflag property of the Entity ChartOfAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ChartOfAccount"."Dispflag".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "ChartOfAccount"."Dispflag".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> Dispflag
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)ChartOfAccountFieldIndex.Dispflag, false); }
@@ -218,7 +218,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Outtableflag property of the Entity ChartOfAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ChartOfAccount"."Outtableflag".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "ChartOfAccount"."Outtableflag".<br/>Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Boolean Outtableflag
 		{
 			get { return (System.Boolean)GetValue((int)ChartOfAccountFieldIndex.Outtableflag, true); }
@@ -226,7 +226,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The ParentId property of the Entity ChartOfAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ChartOfAccount"."ParentId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "ChartOfAccount"."ParentId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String ParentId
 		{
 			get { return (System.String)GetValue((int)ChartOfAccountFieldIndex.ParentId, true); }
@@ -234,7 +234,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Splite property of the Entity ChartOfAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ChartOfAccount"."Splite".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "ChartOfAccount"."Splite".<br/>Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Boolean Splite
 		{
 			get { return (System.Boolean)GetValue((int)ChartOfAccountFieldIndex.Splite, true); }
@@ -242,7 +242,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Taxflag property of the Entity ChartOfAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ChartOfAccount"."Taxflag".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "ChartOfAccount"."Taxflag".<br/>Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Boolean Taxflag
 		{
 			get { return (System.Boolean)GetValue((int)ChartOfAccountFieldIndex.Taxflag, true); }

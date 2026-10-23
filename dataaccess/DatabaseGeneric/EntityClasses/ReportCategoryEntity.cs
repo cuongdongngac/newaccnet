@@ -150,7 +150,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathReportSection { get { return _staticMetaData.GetPrefetchPathElement("ReportSection", CommonEntityBase.CreateEntityCollection<ReportSectionEntity>()); } }
 
 		/// <summary>The CategoryName property of the Entity ReportCategory<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ReportCategory"."CategoryName".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "ReportCategory"."CategoryName".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String CategoryName
 		{
 			get { return (System.String)GetValue((int)ReportCategoryFieldIndex.CategoryName, true); }
@@ -158,7 +158,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Code property of the Entity ReportCategory<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ReportCategory"."Code".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "ReportCategory"."Code".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Code
 		{
 			get { return (System.String)GetValue((int)ReportCategoryFieldIndex.Code, true); }
@@ -166,7 +166,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Id property of the Entity ReportCategory<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ReportCategory"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "ReportCategory"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)ReportCategoryFieldIndex.Id, true); }
@@ -174,7 +174,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The ReportSectionId property of the Entity ReportCategory<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ReportCategory"."ReportSectionId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "ReportCategory"."ReportSectionId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> ReportSectionId
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)ReportCategoryFieldIndex.ReportSectionId, false); }

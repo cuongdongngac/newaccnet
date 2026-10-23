@@ -138,7 +138,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathInterestRate { get { return _staticMetaData.GetPrefetchPathElement("InterestRate", CommonEntityBase.CreateEntityCollection<InterestRateEntity>()); } }
 
 		/// <summary>The Amount property of the Entity InterestDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InterestDetail"."Amount".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InterestDetail"."Amount".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Amount
 		{
 			get { return (Nullable<System.Double>)GetValue((int)InterestDetailFieldIndex.Amount, false); }
@@ -146,7 +146,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Begindate property of the Entity InterestDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InterestDetail"."Begindate".<br/>Table field type characteristics (type, precision, scale, length): Date, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InterestDetail"."Begindate".<br/>Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.DateTime> Begindate
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)InterestDetailFieldIndex.Begindate, false); }
@@ -154,7 +154,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Enddate property of the Entity InterestDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InterestDetail"."Enddate".<br/>Table field type characteristics (type, precision, scale, length): Date, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InterestDetail"."Enddate".<br/>Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.DateTime> Enddate
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)InterestDetailFieldIndex.Enddate, false); }
@@ -162,7 +162,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Id property of the Entity InterestDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InterestDetail"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "InterestDetail"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)InterestDetailFieldIndex.Id, true); }
@@ -170,7 +170,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Interest property of the Entity InterestDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InterestDetail"."Interest".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InterestDetail"."Interest".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Interest
 		{
 			get { return (Nullable<System.Double>)GetValue((int)InterestDetailFieldIndex.Interest, false); }
@@ -178,7 +178,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The LineId property of the Entity InterestDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InterestDetail"."LineId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InterestDetail"."LineId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> LineId
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)InterestDetailFieldIndex.LineId, false); }
@@ -186,7 +186,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Rate property of the Entity InterestDetail<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InterestDetail"."Rate".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InterestDetail"."Rate".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Rate
 		{
 			get { return (Nullable<System.Double>)GetValue((int)InterestDetailFieldIndex.Rate, false); }

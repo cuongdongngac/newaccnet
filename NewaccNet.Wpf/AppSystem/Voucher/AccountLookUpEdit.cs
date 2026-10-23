@@ -304,6 +304,7 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
             if (string.IsNullOrEmpty(accountId)) return string.Empty;
             if (accountId.StartsWith("131") || accountId.StartsWith("331") || accountId.StartsWith("138") || accountId.StartsWith("338")) return "A";
             if (accountId.StartsWith("152") || accountId.StartsWith("153") || accountId.StartsWith("155") || accountId.StartsWith("156") || accountId.StartsWith("157")) return "B";
+            if (accountId.StartsWith("1112") || accountId.StartsWith("1122")) return "C";
             if (accountId.StartsWith("211") || accountId.StartsWith("213") || accountId.StartsWith("214") || accountId.StartsWith("242")) return "D";
             if (accountId.StartsWith("6") || accountId.StartsWith("154")) return "E";
             if (accountId.StartsWith("121") || accountId.StartsWith("221") || accountId.StartsWith("222") || accountId.StartsWith("228")) return "S";
@@ -440,6 +441,7 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
 
         private void TriggerDetailForm()
         {
+            if (!ShowDetailButton) return;
             if (this.EditValue == null) return;
             string accountId = this.EditValue.ToString();
 

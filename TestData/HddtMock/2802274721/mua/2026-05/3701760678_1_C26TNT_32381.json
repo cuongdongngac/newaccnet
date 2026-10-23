@@ -1,0 +1,94 @@
+{
+  "nbmst": "3701760678",
+  "khmshdon": "1",
+  "khhdon": "C26TNT",
+  "shdon": "32381",
+  "tdlap": "2026-05-16T00:00:00",
+  "nbten": "CÔNG TY TNHH SẢN XUẤT THƯƠNG MẠI DỊCH VỤ NUM BER ONE",
+  "nbdchi": "219 Đại lộ Bình Dương, Phường Lái Thiêu, Thành phố Hồ Chí Minh, Việt Nam",
+  "nmmst": "2802274721",
+  "nmten": "CÔNG TY TNHH DỊCH VỤ THƯƠNG MẠI THỦY HIỀN",
+  "nmdchi": "Số Nhà 62, Đường Lê Thánh Tông, Xã Quang Trung, Thị Xã Bím Sơn, Tình Thanh Hóa, Việt Nam",
+  "dvtte": "VND",
+  "tgia": 1.0,
+  "tgtcthue": 139269000.0,
+  "tgtthue": 13926900.0,
+  "ttcktmai": 0.0,
+  "tgtttbso": 153195900.0,
+  "tthai": 1,
+  "ttxly": 5,
+  "thttltsuat": [
+    {
+      "tsuat": "0.1",
+      "thtien": 139269000.0,
+      "tthue": 13926900.0
+    },
+    {
+      "tsuat": "0.08",
+      "thtien": 0.0,
+      "tthue": 0.0
+    }
+  ],
+  "hdhhdvu": [
+    {
+      "stt": 1,
+      "tchat": 1,
+      "mhhdvu": null,
+      "ten": "Tang Luc Thuong PET 24x330ml",
+      "dvtinh": "THÙNG",
+      "sluong": 200.0,
+      "dgia": 179545.0,
+      "thtien": 35909000.0,
+      "tsuat": "0.1",
+      "tthue": 0.0
+    },
+    {
+      "stt": 2,
+      "tchat": 1,
+      "mhhdvu": null,
+      "ten": "Tra Xanh Chanh PET 24x455ml",
+      "dvtinh": "THÙNG",
+      "sluong": 608.0,
+      "dgia": 170000.0,
+      "thtien": 103360000.0,
+      "tsuat": "0.1",
+      "tthue": 0.0
+    },
+    {
+      "stt": 3,
+      "tchat": 4,
+      "mhhdvu": null,
+      "ten": "KHUYẾN MÃI",
+      "dvtinh": "",
+      "sluong": 0.0,
+      "dgia": 0.0,
+      "thtien": 0.0,
+      "tsuat": "",
+      "tthue": 0.0
+    },
+    {
+      "stt": 4,
+      "tchat": 2,
+      "mhhdvu": null,
+      "ten": "Nuoc Tinh Khiet PET 12x500ml new",
+      "dvtinh": "LỐC",
+      "sluong": 200.0,
+      "dgia": 0.0,
+      "thtien": 0.0,
+      "tsuat": "0.08",
+      "tthue": 0.0
+    },
+    {
+      "stt": 5,
+      "tchat": 2,
+      "mhhdvu": null,
+      "ten": "Nuoc Tinh Khiet PET 12x500ml new",
+      "dvtinh": "LỐC",
+      "sluong": 608.0,
+      "dgia": 0.0,
+      "thtien": 0.0,
+      "tsuat": "0.08",
+      "tthue": 0.0
+    }
+  ]
+}

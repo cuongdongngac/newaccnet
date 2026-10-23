@@ -234,6 +234,18 @@ namespace DataAccess.FactoryClasses
 		/// <summary>Creates and returns a new EntityQuery for the SystemUser entity</summary>
 		public EntityQuery<SystemUserEntity> SystemUser { get { return Create<SystemUserEntity>(); } }
 
+		/// <summary>Creates and returns a new EntityQuery for the TaxAccountConfig entity</summary>
+		public EntityQuery<TaxAccountConfigEntity> TaxAccountConfig { get { return Create<TaxAccountConfigEntity>(); } }
+
+		/// <summary>Creates and returns a new EntityQuery for the TaxInvoice entity</summary>
+		public EntityQuery<TaxInvoiceEntity> TaxInvoice { get { return Create<TaxInvoiceEntity>(); } }
+
+		/// <summary>Creates and returns a new EntityQuery for the TaxInvoiceDetail entity</summary>
+		public EntityQuery<TaxInvoiceDetailEntity> TaxInvoiceDetail { get { return Create<TaxInvoiceDetailEntity>(); } }
+
+		/// <summary>Creates and returns a new EntityQuery for the TaxInvoiceTaxRate entity</summary>
+		public EntityQuery<TaxInvoiceTaxRateEntity> TaxInvoiceTaxRate { get { return Create<TaxInvoiceTaxRateEntity>(); } }
+
 		/// <summary>Creates and returns a new EntityQuery for the TaxObligation entity</summary>
 		public EntityQuery<TaxObligationEntity> TaxObligation { get { return Create<TaxObligationEntity>(); } }
 

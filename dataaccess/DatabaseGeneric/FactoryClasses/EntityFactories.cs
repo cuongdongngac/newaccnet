@@ -784,6 +784,46 @@ namespace DataAccess.FactoryClasses
 		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new SystemUserEntity(fields); }
 	}
 
+	/// <summary>Factory to create new, empty TaxAccountConfigEntity objects.</summary>
+	[Serializable]
+	public partial class TaxAccountConfigEntityFactory : EntityFactoryBase2<TaxAccountConfigEntity> 
+	{
+		/// <summary>CTor</summary>
+		public TaxAccountConfigEntityFactory() : base("TaxAccountConfigEntity", DataAccess.EntityType.TaxAccountConfigEntity, false) { }
+		/// <inheritdoc/>
+		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new TaxAccountConfigEntity(fields); }
+	}
+
+	/// <summary>Factory to create new, empty TaxInvoiceEntity objects.</summary>
+	[Serializable]
+	public partial class TaxInvoiceEntityFactory : EntityFactoryBase2<TaxInvoiceEntity> 
+	{
+		/// <summary>CTor</summary>
+		public TaxInvoiceEntityFactory() : base("TaxInvoiceEntity", DataAccess.EntityType.TaxInvoiceEntity, false) { }
+		/// <inheritdoc/>
+		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new TaxInvoiceEntity(fields); }
+	}
+
+	/// <summary>Factory to create new, empty TaxInvoiceDetailEntity objects.</summary>
+	[Serializable]
+	public partial class TaxInvoiceDetailEntityFactory : EntityFactoryBase2<TaxInvoiceDetailEntity> 
+	{
+		/// <summary>CTor</summary>
+		public TaxInvoiceDetailEntityFactory() : base("TaxInvoiceDetailEntity", DataAccess.EntityType.TaxInvoiceDetailEntity, false) { }
+		/// <inheritdoc/>
+		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new TaxInvoiceDetailEntity(fields); }
+	}
+
+	/// <summary>Factory to create new, empty TaxInvoiceTaxRateEntity objects.</summary>
+	[Serializable]
+	public partial class TaxInvoiceTaxRateEntityFactory : EntityFactoryBase2<TaxInvoiceTaxRateEntity> 
+	{
+		/// <summary>CTor</summary>
+		public TaxInvoiceTaxRateEntityFactory() : base("TaxInvoiceTaxRateEntity", DataAccess.EntityType.TaxInvoiceTaxRateEntity, false) { }
+		/// <inheritdoc/>
+		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new TaxInvoiceTaxRateEntity(fields); }
+	}
+
 	/// <summary>Factory to create new, empty TaxObligationEntity objects.</summary>
 	[Serializable]
 	public partial class TaxObligationEntityFactory : EntityFactoryBase2<TaxObligationEntity> 
@@ -1065,6 +1105,14 @@ namespace DataAccess.FactoryClasses
 					return new StockTypeEntityFactory();
 				case DataAccess.EntityType.SystemUserEntity:
 					return new SystemUserEntityFactory();
+				case DataAccess.EntityType.TaxAccountConfigEntity:
+					return new TaxAccountConfigEntityFactory();
+				case DataAccess.EntityType.TaxInvoiceEntity:
+					return new TaxInvoiceEntityFactory();
+				case DataAccess.EntityType.TaxInvoiceDetailEntity:
+					return new TaxInvoiceDetailEntityFactory();
+				case DataAccess.EntityType.TaxInvoiceTaxRateEntity:
+					return new TaxInvoiceTaxRateEntityFactory();
 				case DataAccess.EntityType.TaxObligationEntity:
 					return new TaxObligationEntityFactory();
 				case DataAccess.EntityType.TaxObligationItemEntity:

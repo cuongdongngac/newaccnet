@@ -174,7 +174,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathReportItem { get { return _staticMetaData.GetPrefetchPathElement("ReportItem", CommonEntityBase.CreateEntityCollection<ReportItemEntity>()); } }
 
 		/// <summary>The Calculate property of the Entity ReportFormula<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ReportFormula"."Calculate".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "ReportFormula"."Calculate".<br/>Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Boolean Calculate
 		{
 			get { return (System.Boolean)GetValue((int)ReportFormulaFieldIndex.Calculate, true); }
@@ -182,7 +182,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Code property of the Entity ReportFormula<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ReportFormula"."Code".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "ReportFormula"."Code".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Code
 		{
 			get { return (System.String)GetValue((int)ReportFormulaFieldIndex.Code, true); }
@@ -190,7 +190,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Formula property of the Entity ReportFormula<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ReportFormula"."Formula".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "ReportFormula"."Formula".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Formula
 		{
 			get { return (System.String)GetValue((int)ReportFormulaFieldIndex.Formula, true); }
@@ -198,7 +198,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Id property of the Entity ReportFormula<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ReportFormula"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "ReportFormula"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)ReportFormulaFieldIndex.Id, true); }
@@ -206,7 +206,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Illu property of the Entity ReportFormula<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ReportFormula"."Illu".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "ReportFormula"."Illu".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Illu
 		{
 			get { return (System.String)GetValue((int)ReportFormulaFieldIndex.Illu, true); }
@@ -214,7 +214,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The ItemsName property of the Entity ReportFormula<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ReportFormula"."ItemsName".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "ReportFormula"."ItemsName".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String ItemsName
 		{
 			get { return (System.String)GetValue((int)ReportFormulaFieldIndex.ItemsName, true); }
@@ -222,7 +222,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Longorshortterm property of the Entity ReportFormula<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ReportFormula"."Longorshortterm".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "ReportFormula"."Longorshortterm".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> Longorshortterm
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)ReportFormulaFieldIndex.Longorshortterm, false); }
@@ -230,7 +230,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Order property of the Entity ReportFormula<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ReportFormula"."Order".<br/>Table field type characteristics (type, precision, scale, length): UnsignedTinyInt, 3, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "ReportFormula"."Order".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Int32 Order
 		{
 			get { return (System.Int32)GetValue((int)ReportFormulaFieldIndex.Order, true); }
@@ -238,7 +238,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Print property of the Entity ReportFormula<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ReportFormula"."Print".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "ReportFormula"."Print".<br/>Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Boolean Print
 		{
 			get { return (System.Boolean)GetValue((int)ReportFormulaFieldIndex.Print, true); }
@@ -246,7 +246,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The ReportItemId property of the Entity ReportFormula<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ReportFormula"."ReportItemId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "ReportFormula"."ReportItemId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> ReportItemId
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)ReportFormulaFieldIndex.ReportItemId, false); }

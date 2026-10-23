@@ -51,32 +51,6 @@ namespace NewaccNet.Reports
                     CreditAmount = 2000000m,
                     Balance = 198000000m,
                     JournalVoucherId = 2
-                },
-                new LedgerReportDTO
-                {
-                    RowType = 2, // Cộng phát sinh
-                    VoucherDate = new DateTime(2023, 1, 31),
-                    VoucherNo = "",
-                    Contents = "Cộng phát sinh",
-                    AccountId = "1111",
-                    CounterAccountId = "",
-                    DebitAmount = 50000000m,
-                    CreditAmount = 2000000m,
-                    Balance = 198000000m,
-                    JournalVoucherId = null
-                },
-                new LedgerReportDTO
-                {
-                    RowType = 3, // Dư cuối kỳ
-                    VoucherDate = new DateTime(2023, 1, 31),
-                    VoucherNo = "",
-                    Contents = "Số dư cuối kỳ",
-                    AccountId = "1111",
-                    CounterAccountId = "",
-                    DebitAmount = 0,
-                    CreditAmount = 0,
-                    Balance = 198000000m,
-                    JournalVoucherId = null
                 }
             };
         }

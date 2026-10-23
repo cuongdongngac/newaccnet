@@ -126,7 +126,7 @@ namespace DataAccess.EntityClasses
 		public static AssetLedgerRelations Relations { get { return _relationsFactory; } }
 
 		/// <summary>The Camount property of the Entity AssetLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AssetLedger"."Camount".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AssetLedger"."Camount".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Camount
 		{
 			get { return (Nullable<System.Double>)GetValue((int)AssetLedgerFieldIndex.Camount, false); }
@@ -134,7 +134,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Contents property of the Entity AssetLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AssetLedger"."Contents".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 100.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AssetLedger"."Contents".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Contents
 		{
 			get { return (System.String)GetValue((int)AssetLedgerFieldIndex.Contents, true); }
@@ -142,7 +142,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Cprice property of the Entity AssetLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AssetLedger"."Cprice".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AssetLedger"."Cprice".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Cprice
 		{
 			get { return (Nullable<System.Double>)GetValue((int)AssetLedgerFieldIndex.Cprice, false); }
@@ -150,7 +150,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Cquantity property of the Entity AssetLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AssetLedger"."Cquantity".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AssetLedger"."Cquantity".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Cquantity
 		{
 			get { return (Nullable<System.Double>)GetValue((int)AssetLedgerFieldIndex.Cquantity, false); }
@@ -158,7 +158,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Damount property of the Entity AssetLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AssetLedger"."Damount".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AssetLedger"."Damount".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Damount
 		{
 			get { return (Nullable<System.Double>)GetValue((int)AssetLedgerFieldIndex.Damount, false); }
@@ -166,7 +166,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Dprice property of the Entity AssetLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AssetLedger"."Dprice".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AssetLedger"."Dprice".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Dprice
 		{
 			get { return (Nullable<System.Double>)GetValue((int)AssetLedgerFieldIndex.Dprice, false); }
@@ -174,7 +174,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Dquantity property of the Entity AssetLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AssetLedger"."Dquantity".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AssetLedger"."Dquantity".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Dquantity
 		{
 			get { return (Nullable<System.Double>)GetValue((int)AssetLedgerFieldIndex.Dquantity, false); }
@@ -182,7 +182,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Endamount property of the Entity AssetLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AssetLedger"."Endamount".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AssetLedger"."Endamount".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Endamount
 		{
 			get { return (Nullable<System.Double>)GetValue((int)AssetLedgerFieldIndex.Endamount, false); }
@@ -190,7 +190,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Endqty property of the Entity AssetLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AssetLedger"."Endqty".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AssetLedger"."Endqty".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Endqty
 		{
 			get { return (Nullable<System.Double>)GetValue((int)AssetLedgerFieldIndex.Endqty, false); }
@@ -198,7 +198,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Flag property of the Entity AssetLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AssetLedger"."Flag".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AssetLedger"."Flag".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> Flag
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)AssetLedgerFieldIndex.Flag, false); }
@@ -206,7 +206,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Id property of the Entity AssetLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AssetLedger"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "AssetLedger"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)AssetLedgerFieldIndex.Id, true); }
@@ -214,7 +214,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The JournalVoucherId property of the Entity AssetLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AssetLedger"."JournalVoucherId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AssetLedger"."JournalVoucherId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> JournalVoucherId
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)AssetLedgerFieldIndex.JournalVoucherId, false); }
@@ -222,7 +222,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The VoucherDate property of the Entity AssetLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AssetLedger"."VoucherDate".<br/>Table field type characteristics (type, precision, scale, length): Date, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AssetLedger"."VoucherDate".<br/>Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.DateTime> VoucherDate
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)AssetLedgerFieldIndex.VoucherDate, false); }
@@ -230,7 +230,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The VoucherNo property of the Entity AssetLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AssetLedger"."VoucherNo".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AssetLedger"."VoucherNo".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String VoucherNo
 		{
 			get { return (System.String)GetValue((int)AssetLedgerFieldIndex.VoucherNo, true); }

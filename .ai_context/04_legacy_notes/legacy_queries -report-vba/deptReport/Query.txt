@@ -1,0 +1,57 @@
+Tổng quan về báo cáo công nợ
+Báo cáo công nợ bao gồm các báo cáo sau
+Báo cáo tổng quan 
+Báo cáo chi  tiết
+
+Các  báo cáo trên lại chia ra thành hạng mục
+Báo cáo thông thường
+Báo cáo theo thời hạn nợ
+Báo cáo công nợ theo ngoại tệ
+
+Cơ chết sắp xếp
+Đối tượng công nợ - loại hình công nợ
+Loại hình công nợ -> Đối tượng công nợ
+
+
+Báo cáo tổng hợp
+Flat Data- Union Customer Line Query
+
+SELECT DISTINCT [Customer Input Line].[Line ID], [Counter Accounts Query].[Bill ID], [Counter Accounts Query].[Bill No], [Counter Accounts Query].[Bill Date], [Counter Accounts Query].Contents, [Counter Accounts Query].[Account ID], [Customer Input Line].[Customer ID], [Customer Input Line]!Amount AS Amount, [Customer Input Line].[Liability Things ID], [Counter Accounts Query].DBCR, [Customer Input Line].LiabilityReasonID, [Customer Input Line].InterestFlag
+FROM [Customer Input Line] INNER JOIN [Counter Accounts Query] ON [Customer Input Line].ID = [Counter Accounts Query].ID;
+
+Flat Filter - Option Customer Summary Query
+SELECT DISTINCTROW [Customer List].[Customer ID], [Customer List].[Customer Name], [Union Customer Line Query].[Liability Things ID], [Liability Things].[Liability Thing Name], DebitValue(Sum(IIf([Union Customer Line Query]![Bill Date]<GetBeginDate(),[Union Customer Line Query]!DBCR*[Union Customer Line Query]!Amount,0))) AS BeginDebit, CreditValue(Sum(IIf([Union Customer Line Query]![Bill Date]<GetBeginDate(),[Union Customer Line Query]!DBCR*[Union Customer Line Query]!Amount,0))) AS BeginCredit, Sum(IIf([Union Customer Line Query]![Bill Date]>=GetBeginDate() And [Union Customer Line Query]![Bill Date]<=GetEndDate() And [Union Customer Line Query]!DBCR=1,[Union Customer Line Query]!Amount,0)) AS IntDebit, Sum(IIf([Union Customer Line Query]![Bill Date]>=GetBeginDate() And [Union Customer Line Query]![Bill Date]<=GetEndDate() And [Union Customer Line Query]!DBCR=-1,[Union Customer Line Query]!Amount,0)) AS IntCredit, DebitValue([BeginDebit]-[BeginCredit]+[IntDebit]-[IntCredit]) AS EndDebit, CreditValue([BeginDebit]-[BeginCredit]+[IntDebit]-[IntCredit]) AS EndCredit
+FROM [Liability Things] INNER JOIN ([Customer List] INNER JOIN ([Temp Liability Thing List] INNER JOIN ([Union Customer Line Query] INNER JOIN [Temp Customer List] ON [Union Customer Line Query].[Customer ID] = [Temp Customer List].[Customer ID]) ON [Temp Liability Thing List].[Liability Things ID] = [Union Customer Line Query].[Liability Things ID]) ON [Customer List].[Customer ID] = [Temp Customer List].[Customer ID]) ON [Liability Things].[Liability Things ID] = [Temp Liability Thing List].[Liability Things ID]
+WHERE ((([Union Customer Line Query].[Bill Date])<=GetEndDate()) AND (([Union Customer Line Query].[Account ID]) Like GetAccountID() & "*"))
+GROUP BY [Customer List].[Customer ID], [Customer List].[Customer Name], [Union Customer Line Query].[Liability Things ID], [Liability Things].[Liability Thing Name]
+ORDER BY [Customer List].[Customer ID];
+flat số dư công nợ
+SELECT DISTINCTROW [Union Customer Line Query]![Amount]*[Union Customer Line Query]![DBCR] AS Amount
+FROM ([Union Customer Line Query] INNER JOIN [Temp Customer List] ON [Union Customer Line Query].[Customer ID] = [Temp Customer List].[Customer ID]) INNER JOIN [Temp Liability Thing List] ON [Union Customer Line Query].[Liability Things ID] = [Temp Liability Thing List].[Liability Things ID]
+WHERE ((([Union Customer Line Query].[Bill Date])<GetBeginDate()) AND (([Union Customer Line Query].[Account ID]) Like GetAccountID() & "*"));
+
+
+Báo cáo chi tiết sắp xếp theo đối tượng công nợ 
+SELECT DISTINCTROW [Union Customer Line Query].[Bill ID], [Union Customer Line Query].[Bill No], [Union Customer Line Query].[Bill Date], [Union Customer Line Query].Contents, [Union Customer Line Query].[Account ID], DebitValue([Union Customer Line Query]!Amount*[Union Customer Line Query]!DBCR) AS Debit, CreditValue([Union Customer Line Query]!Amount*[Union Customer Line Query]!DBCR) AS Credit, [Union Customer Line Query].[Customer ID], [Union Customer Line Query].[Liability Things ID], [Customer List].[Customer Name], [Liability Things].[Liability Thing Name]
+FROM ([Temp Liability Thing List] INNER JOIN (([Customer List] INNER JOIN [Temp Customer List] ON [Customer List].[Customer ID] = [Temp Customer List].[Customer ID]) INNER JOIN [Union Customer Line Query] ON [Temp Customer List].[Customer ID] = [Union Customer Line Query].[Customer ID]) ON [Temp Liability Thing List].[Liability Things ID] = [Union Customer Line Query].[Liability Things ID]) INNER JOIN [Liability Things] ON [Temp Liability Thing List].[Liability Things ID] = [Liability Things].[Liability Things ID]
+WHERE ((([Union Customer Line Query].[Bill Date]) Between GetBeginDate() And GetEndDate()) AND (([Union Customer Line Query].[Account ID]) Like GetAccountID() & "*"))
+ORDER BY [Union Customer Line Query].[Bill Date];
+
+Báo cáo theo thời hạn công nọ
+SELECT DISTINCTROW [Union Customer Line Query].[Bill ID], [Union Customer Line Query].[Bill No], [Union Customer Line Query].[Bill Date], [Union Customer Line Query].Contents, [Union Customer Line Query].[Account ID], DebitValue([Union Customer Line Query]![Amount]*[Union Customer Line Query]![DBCR]) AS Debit, CreditValue([Union Customer Line Query]![Amount]*[Union Customer Line Query]![DBCR]) AS Credit, [Union Customer Line Query].[Customer ID], [Union Customer Line Query].[Liability Things ID], [Liability Due].[Begin Date], [Liability Due].[End Date], [Liability Due].Remark, [Customer List].[Customer Name], [Liability Things].[Liability Thing Name], [Currency Liability Line].[Currency ID], [Currency Liability Line].Quantity, [Union Customer Line Query].[Account ID]
+FROM ([Temp Liability Thing List] INNER JOIN (([Customer List] INNER JOIN [Temp Customer List] ON [Customer List].[Customer ID] = [Temp Customer List].[Customer ID]) INNER JOIN (([Union Customer Line Query] LEFT JOIN [Liability Due] ON ([Union Customer Line Query].[Customer ID] = [Liability Due].[Customer ID]) AND ([Union Customer Line Query].[Liability Things ID] = [Liability Due].[Liability Things ID])) LEFT JOIN [Currency Liability Line] ON [Union Customer Line Query].[Line ID] = [Currency Liability Line].[Line ID]) ON [Temp Customer List].[Customer ID] = [Union Customer Line Query].[Customer ID]) ON [Temp Liability Thing List].[Liability Things ID] = [Union Customer Line Query].[Liability Things ID]) INNER JOIN [Liability Things] ON [Temp Liability Thing List].[Liability Things ID] = [Liability Things].[Liability Things ID]
+WHERE ((([Union Customer Line Query].[Bill Date]) Between GetBeginDate() And GetEndDate()) AND (([Union Customer Line Query].[Account ID]) Like GetAccountID() & "*"))
+ORDER BY [Union Customer Line Query].[Bill Date];
+
+Báo cáo công nợ theo thời hạn
+
+Flat debt data
+SELECT DISTINCT [Customer Input Line].[Line ID], [Counter Accounts Query].[Bill ID], [Counter Accounts Query].[Bill No], [Counter Accounts Query].[Bill Date], [Counter Accounts Query].Contents, [Counter Accounts Query].[Account ID], [Customer Input Line].[Customer ID], [Customer Input Line]!Amount AS Amount, [Customer Input Line].[Liability Things ID], [Counter Accounts Query].DBCR, [Customer Input Line].LiabilityReasonID, [Customer Input Line].InterestFlag, [Currency Liability Line].[Currency ID], [Currency Liability Line].Quantity, [Currency Liability Line].[Exchange Rate]
+FROM ([Customer Input Line] INNER JOIN [Counter Accounts Query] ON [Customer Input Line].ID = [Counter Accounts Query].ID) INNER JOIN [Currency Liability Line] ON [Customer Input Line].[Line ID] = [Currency Liability Line].[Line ID];
+
+
+OptionCurrencyLiabilityLedgerQuery
+SELECT DISTINCTROW UnionCurencyCustomerLineQuery.[Bill ID], UnionCurencyCustomerLineQuery.[Bill No], UnionCurencyCustomerLineQuery.[Bill Date], UnionCurencyCustomerLineQuery.Contents, UnionCurencyCustomerLineQuery.[Account ID], DebitValue(UnionCurencyCustomerLineQuery!Amount*UnionCurencyCustomerLineQuery!DBCR) AS Debit, CreditValue(UnionCurencyCustomerLineQuery!Amount*UnionCurencyCustomerLineQuery!DBCR) AS Credit, UnionCurencyCustomerLineQuery.[Customer ID], UnionCurencyCustomerLineQuery.[Liability Things ID], [Customer List].[Customer Name], [Liability Things].[Liability Thing Name], UnionCurencyCustomerLineQuery.[Currency ID], DebitValue(UnionCurencyCustomerLineQuery!Quantity) AS DebitCurrency, CreditValue(UnionCurencyCustomerLineQuery!Quantity) AS CreditCurrency
+FROM ([Temp Liability Thing List] INNER JOIN (([Customer List] INNER JOIN [Temp Customer List] ON [Customer List].[Customer ID] = [Temp Customer List].[Customer ID]) INNER JOIN UnionCurencyCustomerLineQuery ON [Temp Customer List].[Customer ID] = UnionCurencyCustomerLineQuery.[Customer ID]) ON [Temp Liability Thing List].[Liability Things ID] = UnionCurencyCustomerLineQuery.[Liability Things ID]) INNER JOIN [Liability Things] ON [Temp Liability Thing List].[Liability Things ID] = [Liability Things].[Liability Things ID]
+WHERE (((UnionCurencyCustomerLineQuery.[Bill Date]) Between GetBeginDate() And GetEndDate()) AND ((UnionCurencyCustomerLineQuery.[Account ID]) Like GetAccountID() & "*") AND ((UnionCurencyCustomerLineQuery.[Currency ID])=getCurrencyID()))
+ORDER BY UnionCurencyCustomerLineQuery.[Bill Date];

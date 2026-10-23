@@ -150,7 +150,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathReportFormula { get { return _staticMetaData.GetPrefetchPathElement("ReportFormula", CommonEntityBase.CreateEntityCollection<ReportFormulaEntity>()); } }
 
 		/// <summary>The Amount property of the Entity CashFlowPreviousPeriod<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CashFlowPreviousPeriod"."Amount".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CashFlowPreviousPeriod"."Amount".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Amount
 		{
 			get { return (Nullable<System.Double>)GetValue((int)CashFlowPreviousPeriodFieldIndex.Amount, false); }
@@ -158,7 +158,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Bold property of the Entity CashFlowPreviousPeriod<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CashFlowPreviousPeriod"."Bold".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CashFlowPreviousPeriod"."Bold".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Bold
 		{
 			get { return (System.String)GetValue((int)CashFlowPreviousPeriodFieldIndex.Bold, true); }
@@ -166,7 +166,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The CashFlowId property of the Entity CashFlowPreviousPeriod<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CashFlowPreviousPeriod"."CashFlowId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CashFlowPreviousPeriod"."CashFlowId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> CashFlowId
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)CashFlowPreviousPeriodFieldIndex.CashFlowId, false); }
@@ -174,7 +174,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The CashFlowName property of the Entity CashFlowPreviousPeriod<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CashFlowPreviousPeriod"."CashFlowName".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CashFlowPreviousPeriod"."CashFlowName".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String CashFlowName
 		{
 			get { return (System.String)GetValue((int)CashFlowPreviousPeriodFieldIndex.CashFlowName, true); }
@@ -182,7 +182,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The CashFlowNameRepeate property of the Entity CashFlowPreviousPeriod<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CashFlowPreviousPeriod"."CashFlowNameRepeate".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CashFlowPreviousPeriod"."CashFlowNameRepeate".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String CashFlowNameRepeate
 		{
 			get { return (System.String)GetValue((int)CashFlowPreviousPeriodFieldIndex.CashFlowNameRepeate, true); }
@@ -190,7 +190,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Code property of the Entity CashFlowPreviousPeriod<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CashFlowPreviousPeriod"."Code".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		/// <remarks>Mapped on  table field: "CashFlowPreviousPeriod"."Code".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
 		public virtual System.String Code
 		{
 			get { return (System.String)GetValue((int)CashFlowPreviousPeriodFieldIndex.Code, true); }
@@ -198,7 +198,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Italic property of the Entity CashFlowPreviousPeriod<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CashFlowPreviousPeriod"."Italic".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CashFlowPreviousPeriod"."Italic".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Italic
 		{
 			get { return (System.String)GetValue((int)CashFlowPreviousPeriodFieldIndex.Italic, true); }
@@ -206,7 +206,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The ItemsId property of the Entity CashFlowPreviousPeriod<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CashFlowPreviousPeriod"."ItemsId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CashFlowPreviousPeriod"."ItemsId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> ItemsId
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)CashFlowPreviousPeriodFieldIndex.ItemsId, false); }
@@ -214,7 +214,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The ItemsName property of the Entity CashFlowPreviousPeriod<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CashFlowPreviousPeriod"."ItemsName".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CashFlowPreviousPeriod"."ItemsName".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String ItemsName
 		{
 			get { return (System.String)GetValue((int)CashFlowPreviousPeriodFieldIndex.ItemsName, true); }

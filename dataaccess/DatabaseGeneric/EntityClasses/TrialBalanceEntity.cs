@@ -138,7 +138,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathChartOfAccount { get { return _staticMetaData.GetPrefetchPathElement("ChartOfAccount", CommonEntityBase.CreateEntityCollection<ChartOfAccountEntity>()); } }
 
 		/// <summary>The AccountId property of the Entity TrialBalance<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "TrialBalance"."AccountId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "TrialBalance"."AccountId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String AccountId
 		{
 			get { return (System.String)GetValue((int)TrialBalanceFieldIndex.AccountId, true); }
@@ -146,7 +146,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Begincredit property of the Entity TrialBalance<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "TrialBalance"."Begincredit".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "TrialBalance"."Begincredit".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Begincredit
 		{
 			get { return (Nullable<System.Double>)GetValue((int)TrialBalanceFieldIndex.Begincredit, false); }
@@ -154,7 +154,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Begindebit property of the Entity TrialBalance<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "TrialBalance"."Begindebit".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "TrialBalance"."Begindebit".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Begindebit
 		{
 			get { return (Nullable<System.Double>)GetValue((int)TrialBalanceFieldIndex.Begindebit, false); }
@@ -162,7 +162,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The CategoryId property of the Entity TrialBalance<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "TrialBalance"."CategoryId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 1.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "TrialBalance"."CategoryId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 1.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String CategoryId
 		{
 			get { return (System.String)GetValue((int)TrialBalanceFieldIndex.CategoryId, true); }
@@ -170,7 +170,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Endcredit property of the Entity TrialBalance<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "TrialBalance"."Endcredit".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "TrialBalance"."Endcredit".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Endcredit
 		{
 			get { return (Nullable<System.Double>)GetValue((int)TrialBalanceFieldIndex.Endcredit, false); }
@@ -178,7 +178,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Enddebit property of the Entity TrialBalance<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "TrialBalance"."Enddebit".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "TrialBalance"."Enddebit".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Enddebit
 		{
 			get { return (Nullable<System.Double>)GetValue((int)TrialBalanceFieldIndex.Enddebit, false); }
@@ -186,7 +186,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Id property of the Entity TrialBalance<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "TrialBalance"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "TrialBalance"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)TrialBalanceFieldIndex.Id, true); }
@@ -194,7 +194,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Intcredit property of the Entity TrialBalance<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "TrialBalance"."Intcredit".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "TrialBalance"."Intcredit".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Intcredit
 		{
 			get { return (Nullable<System.Double>)GetValue((int)TrialBalanceFieldIndex.Intcredit, false); }
@@ -202,7 +202,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Intdebit property of the Entity TrialBalance<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "TrialBalance"."Intdebit".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "TrialBalance"."Intdebit".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Intdebit
 		{
 			get { return (Nullable<System.Double>)GetValue((int)TrialBalanceFieldIndex.Intdebit, false); }
@@ -210,7 +210,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Splite property of the Entity TrialBalance<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "TrialBalance"."Splite".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "TrialBalance"."Splite".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> Splite
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)TrialBalanceFieldIndex.Splite, false); }

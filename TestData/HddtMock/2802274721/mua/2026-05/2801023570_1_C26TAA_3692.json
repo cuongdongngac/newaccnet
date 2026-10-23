@@ -1,0 +1,41 @@
+{
+  "nbmst": "2801023570",
+  "khmshdon": "1",
+  "khhdon": "C26TAA",
+  "shdon": "3692",
+  "tdlap": "2026-05-11T00:00:00",
+  "nbten": "CÔNG TY TNHH MTV THƯƠNG MẠI HABECO MIỀN TRUNG",
+  "nbdchi": "Số 152 Quang Trung, Phường Hạc Thành, Tỉnh Thanh Hóa, Việt Nam",
+  "nmmst": "2802274721",
+  "nmten": "CÔNG TY TNHH DỊCH VỤ THƯƠNG MẠI THỦY HIỀN",
+  "nmdchi": "Số nhà 62, Đường Lê Thánh Tông, Phường Quang Trung, Thanh Hóa.",
+  "dvtte": "VND",
+  "tgia": 1.0,
+  "tgtcthue": 52364800.0,
+  "tgtthue": 5236480.0,
+  "ttcktmai": 0.0,
+  "tgtttbso": 57601280.0,
+  "tthai": 1,
+  "ttxly": 5,
+  "thttltsuat": [
+    {
+      "tsuat": "0.1",
+      "thtien": 52364800.0,
+      "tthue": 5236480.0
+    }
+  ],
+  "hdhhdvu": [
+    {
+      "stt": 1,
+      "tchat": 1,
+      "mhhdvu": null,
+      "ten": "Bia chai Hà Nội 450ml",
+      "dvtinh": "Két",
+      "sluong": 320.0,
+      "dgia": 163640.0,
+      "thtien": 52364800.0,
+      "tsuat": "0.1",
+      "tthue": 5236480.0
+    }
+  ]
+}

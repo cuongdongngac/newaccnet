@@ -1,0 +1,41 @@
+{
+  "nbmst": "2800652199",
+  "khmshdon": "1",
+  "khhdon": "C26MYY",
+  "shdon": "11276",
+  "tdlap": "2026-05-30T00:00:00",
+  "nbten": "CÔNG TY TNHH HỒNG PHƯỢNG",
+  "nbdchi": "HH22-15, Dự án số 1, Khu đô thị Trung tâm Thành phố Thanh Hóa, Phường Hạc Thành, Tỉnh Thanh Hóa, Việt Nam",
+  "nmmst": "2802274721",
+  "nmten": "CÔNG TY TNHH DỊCH VỤ THƯƠNG MẠI THỦY HIỀN",
+  "nmdchi": "Số nhà 62, đường Lê Thánh Tông,, Phường Quang Trung, Tỉnh Thanh Hóa, Việt Nam.",
+  "dvtte": "VND",
+  "tgia": 1.0,
+  "tgtcthue": 1790000.0,
+  "tgtthue": 0.0,
+  "ttcktmai": 0.0,
+  "tgtttbso": 1790000.0,
+  "tthai": 1,
+  "ttxly": 1,
+  "thttltsuat": [
+    {
+      "tsuat": "KKKNT",
+      "thtien": 1790000.0,
+      "tthue": 0.0
+    }
+  ],
+  "hdhhdvu": [
+    {
+      "stt": 1,
+      "tchat": 1,
+      "mhhdvu": null,
+      "ten": "Dầu Điêzen 0,05S mức 2",
+      "dvtinh": "Lít",
+      "sluong": 63.4752,
+      "dgia": 28200.0,
+      "thtien": 1790000.0,
+      "tsuat": "KKKNT",
+      "tthue": 0.0
+    }
+  ]
+}

@@ -150,7 +150,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathInterestDetails { get { return _staticMetaData.GetPrefetchPathElement("InterestDetails", CommonEntityBase.CreateEntityCollection<InterestDetailEntity>()); } }
 
 		/// <summary>The Enddate property of the Entity InterestRate<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InterestRate"."Enddate".<br/>Table field type characteristics (type, precision, scale, length): Date, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		/// <remarks>Mapped on  table field: "InterestRate"."Enddate".<br/>Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
 		public virtual System.DateTime Enddate
 		{
 			get { return (System.DateTime)GetValue((int)InterestRateFieldIndex.Enddate, true); }
@@ -158,7 +158,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Rate property of the Entity InterestRate<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InterestRate"."Rate".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InterestRate"."Rate".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Rate
 		{
 			get { return (Nullable<System.Double>)GetValue((int)InterestRateFieldIndex.Rate, false); }

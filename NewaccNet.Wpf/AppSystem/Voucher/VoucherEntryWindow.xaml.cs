@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using NewaccNet.Wpf.AppSystem;
 using System.ComponentModel;
 using System.Windows.Media;
+using NewaccNet.Wpf.AppSystem.Voucher.Reports;
 
 namespace NewaccNet.Wpf.AppSystem.Voucher
 {
@@ -872,24 +873,123 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
                 MessageBoxImage.Information);
         }
 
+        private CashVoucherPrintModel BuildCashPrintModel(JournalVoucherEntity voucher, bool isReceipt)
+        {
+            var model = new CashVoucherPrintModel();
+            if (voucher == null) return model;
+
+            model.VoucherNo = voucher.VoucherNo ?? "";
+            model.VoucherDate = voucher.VoucherDate ?? DateTime.Today;
+            model.PersonName = voucher.Personname ?? "";
+            model.PersonAddress = voucher.Personaddress ?? "";
+            model.Contents = voucher.Contents ?? "";
+            model.OriginalVouchersCount = voucher.Invoicesnumber ?? "";
+
+            // Căn cứ vào Journal Entry (Master) đang được định vị trên gridLeft
+            var selectedMaster = gridLeft.SelectedItem as JournalEntryEntity
+                                 ?? _masterEntries.FirstOrDefault(m => !string.IsNullOrEmpty(m.AccountId));
+
+            if (selectedMaster != null)
+            {
+                // Danh sách toàn bộ định khoản trong cụm giao dịch đang chọn (gồm Master và các Detail con của nó)
+                var clusterEntries = new List<JournalEntryEntity> { selectedMaster };
+                if (selectedMaster.SubEntries != null && selectedMaster.SubEntries.Count > 0)
+                {
+                    clusterEntries.AddRange(selectedMaster.SubEntries.Where(d => !string.IsNullOrEmpty(d.AccountId)));
+                }
+
+                var debitEntries = clusterEntries.Where(e => e.Dbcr == 1).ToList();
+                var creditEntries = clusterEntries.Where(e => e.Dbcr == -1).ToList();
+
+                // Định dạng hiển thị các dòng Nợ
+                if (debitEntries.Count > 0)
+                {
+                    model.DebitAccountsText = string.Join("\n", debitEntries.Select(d => $"Nợ {d.AccountId} : {d.Amount:N0} đ"));
+                }
+                else
+                {
+                    model.DebitAccountsText = "Nợ:";
+                }
+
+                // Định dạng hiển thị các dòng Có
+                if (creditEntries.Count > 0)
+                {
+                    model.CreditAccountsText = string.Join("\n", creditEntries.Select(c => $"Có {c.AccountId} : {c.Amount:N0} đ"));
+                }
+                else
+                {
+                    model.CreditAccountsText = "Có:";
+                }
+
+                // Tính tổng tiền theo định khoản phát sinh của cụm giao dịch
+                decimal sumDebit = (decimal)debitEntries.Sum(d => d.Amount ?? 0.0);
+                decimal sumCredit = (decimal)creditEntries.Sum(c => c.Amount ?? 0.0);
+                model.Amount = isReceipt
+                    ? (sumDebit > 0 ? sumDebit : sumCredit)
+                    : (sumCredit > 0 ? sumCredit : sumDebit);
+
+                if (model.Amount == 0 && selectedMaster.Amount.HasValue)
+                {
+                    model.Amount = (decimal)selectedMaster.Amount.Value;
+                }
+            }
+            else
+            {
+                model.Amount = 0;
+            }
+
+            model.AmountInWords = Helpers.NumberToWordsConverter.ConvertToWords(model.Amount, "đồng");
+            return model;
+        }
+
         private void PrintCashReceipt(JournalVoucherEntity voucher)
         {
-            string voucherNo = voucher?.VoucherNo ?? "";
-            MessageBox.Show(
-                $"[Khung chờ triển khai] In Phiếu thu (Mẫu 01-TT)\n- Số chứng từ: {voucherNo}\n- Người nộp: {voucher?.Personname}\n- Địa chỉ: {voucher?.Personaddress}",
-                "In Phiếu thu",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information);
+            try
+            {
+                var model = BuildCashPrintModel(voucher, isReceipt: true);
+
+                var report = new Reports.CashReceiptReport();
+                report.SetModel(model);
+                report.CreateDocument(false);
+
+                var previewWindow = new DevExpress.Xpf.Printing.DocumentPreviewWindow
+                {
+                    Owner = this,
+                    Title = $"In Phiếu Thu - Số: {model.VoucherNo}"
+                };
+                previewWindow.PreviewControl.CommandBarStyle = DevExpress.Xpf.DocumentViewer.CommandBarStyle.Ribbon;
+                previewWindow.PreviewControl.DocumentSource = report;
+                previewWindow.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi in Phiếu thu: {ex.Message}", "Lỗi In ấn", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void PrintCashPayment(JournalVoucherEntity voucher)
         {
-            string voucherNo = voucher?.VoucherNo ?? "";
-            MessageBox.Show(
-                $"[Khung chờ triển khai] In Phiếu chi (Mẫu 02-TT)\n- Số chứng từ: {voucherNo}\n- Người nhận: {voucher?.Personname}\n- Địa chỉ: {voucher?.Personaddress}",
-                "In Phiếu chi",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information);
+            try
+            {
+                var model = BuildCashPrintModel(voucher, isReceipt: false);
+
+                var report = new Reports.CashPaymentReport();
+                report.SetModel(model);
+                report.CreateDocument(false);
+
+                var previewWindow = new DevExpress.Xpf.Printing.DocumentPreviewWindow
+                {
+                    Owner = this,
+                    Title = $"In Phiếu Chi - Số: {model.VoucherNo}"
+                };
+                previewWindow.PreviewControl.CommandBarStyle = DevExpress.Xpf.DocumentViewer.CommandBarStyle.Ribbon;
+                previewWindow.PreviewControl.DocumentSource = report;
+                previewWindow.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi in Phiếu chi: {ex.Message}", "Lỗi In ấn", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void PrintBankPaymentOrder(JournalVoucherEntity voucher)

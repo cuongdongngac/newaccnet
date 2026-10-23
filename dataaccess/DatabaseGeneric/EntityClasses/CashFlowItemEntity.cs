@@ -150,7 +150,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathCashFlowCategory { get { return _staticMetaData.GetPrefetchPathElement("CashFlowCategory", CommonEntityBase.CreateEntityCollection<CashFlowCategoryEntity>()); } }
 
 		/// <summary>The CashFlowCategoryId property of the Entity CashFlowItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CashFlowItem"."CashFlowCategoryId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CashFlowItem"."CashFlowCategoryId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> CashFlowCategoryId
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)CashFlowItemFieldIndex.CashFlowCategoryId, false); }
@@ -158,7 +158,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Code property of the Entity CashFlowItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CashFlowItem"."Code".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CashFlowItem"."Code".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Code
 		{
 			get { return (System.String)GetValue((int)CashFlowItemFieldIndex.Code, true); }
@@ -166,7 +166,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Dbcr property of the Entity CashFlowItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CashFlowItem"."DBCR".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CashFlowItem"."Dbcr".<br/>Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Boolean Dbcr
 		{
 			get { return (System.Boolean)GetValue((int)CashFlowItemFieldIndex.Dbcr, true); }
@@ -174,7 +174,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Id property of the Entity CashFlowItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CashFlowItem"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "CashFlowItem"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)CashFlowItemFieldIndex.Id, true); }
@@ -182,7 +182,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Illustration property of the Entity CashFlowItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CashFlowItem"."Illustration".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CashFlowItem"."Illustration".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Illustration
 		{
 			get { return (System.String)GetValue((int)CashFlowItemFieldIndex.Illustration, true); }
@@ -190,7 +190,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The IsBold property of the Entity CashFlowItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CashFlowItem"."IsBold".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CashFlowItem"."IsBold".<br/>Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Boolean IsBold
 		{
 			get { return (System.Boolean)GetValue((int)CashFlowItemFieldIndex.IsBold, true); }
@@ -198,7 +198,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The IsItalic property of the Entity CashFlowItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CashFlowItem"."IsItalic".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CashFlowItem"."IsItalic".<br/>Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Boolean IsItalic
 		{
 			get { return (System.Boolean)GetValue((int)CashFlowItemFieldIndex.IsItalic, true); }
@@ -206,7 +206,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The ItemName property of the Entity CashFlowItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CashFlowItem"."ItemName".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CashFlowItem"."ItemName".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String ItemName
 		{
 			get { return (System.String)GetValue((int)CashFlowItemFieldIndex.ItemName, true); }

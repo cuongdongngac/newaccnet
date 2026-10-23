@@ -138,7 +138,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathReportFormula { get { return _staticMetaData.GetPrefetchPathElement("ReportFormula", CommonEntityBase.CreateEntityCollection<ReportFormulaEntity>()); } }
 
 		/// <summary>The AccountId property of the Entity ReportFormulaAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ReportFormulaAccount"."AccountID".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "ReportFormulaAccount"."AccountId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String AccountId
 		{
 			get { return (System.String)GetValue((int)ReportFormulaAccountFieldIndex.AccountId, true); }
@@ -146,7 +146,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Id property of the Entity ReportFormulaAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ReportFormulaAccount"."ID".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "ReportFormulaAccount"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)ReportFormulaAccountFieldIndex.Id, true); }
@@ -154,7 +154,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The ItemsId property of the Entity ReportFormulaAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ReportFormulaAccount"."ItemsId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "ReportFormulaAccount"."ItemsId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> ItemsId
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)ReportFormulaAccountFieldIndex.ItemsId, false); }

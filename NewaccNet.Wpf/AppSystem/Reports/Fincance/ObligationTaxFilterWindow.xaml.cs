@@ -111,6 +111,12 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
                 if (report.Parameters["prmFromDate"] != null) report.Parameters["prmFromDate"].Value = fromDate;
                 if (report.Parameters["prmToDate"] != null) report.Parameters["prmToDate"].Value = toDate;
                 
+                var companyName = NewaccNet.Wpf.AppSystem.Helpers.UserPreferencesHelper.GetSetting("CompanyName");
+                if (!string.IsNullOrEmpty(companyName) && report.Parameters["prmCompanyName"] != null)
+                {
+                    report.Parameters["prmCompanyName"].Value = companyName;
+                }
+                
                 report.RequestParameters = false;
                 report.CreateDocument(false);
 

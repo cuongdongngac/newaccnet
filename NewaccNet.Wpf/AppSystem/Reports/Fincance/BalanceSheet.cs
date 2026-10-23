@@ -11,6 +11,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
         public BalanceSheet()
         {
             InitializeComponent();
+            this.ApplySubtleBorders();
             WireDrillDown();
         }
 
@@ -26,8 +27,8 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
                 }
             };
 
-            this.AccountId.ExpressionBindings.Add(new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Tag", "[AccountId]"));
-            this.AccountId.PreviewDoubleClick += (s, e) =>
+            this.detCellAccount.ExpressionBindings.Add(new DevExpress.XtraReports.UI.ExpressionBinding("BeforePrint", "Tag", "[AccountId]"));
+            this.detCellAccount.PreviewDoubleClick += (s, e) =>
             {
                 string accountId = e.Brick?.Value?.ToString();
                 if (!string.IsNullOrEmpty(accountId))
@@ -72,3 +73,4 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
         }
     }
 }
+

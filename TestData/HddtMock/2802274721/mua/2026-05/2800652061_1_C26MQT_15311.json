@@ -1,0 +1,41 @@
+{
+  "nbmst": "2800652061",
+  "khmshdon": "1",
+  "khhdon": "C26MQT",
+  "shdon": "15311",
+  "tdlap": "2026-05-07T00:00:00",
+  "nbten": "CÔNG TY TNHH THƯƠNG MẠI XĂNG DẦU QUANG TRUNG",
+  "nbdchi": "SN 313 Đường 1A, Khu 5, Phường Quang Trung, Tỉnh Thanh Hóa, Việt Nam",
+  "nmmst": "2802274721",
+  "nmten": "CÔNG TY TNHH DỊCH VỤ THƯƠNG MẠI THỦY HIỀN",
+  "nmdchi": "Số nhà 62, đường Lê Thánh Tông, Xã Quang Trung, Tỉnh Thanh Hoá, Việt Nam",
+  "dvtte": "VND",
+  "tgia": 1.0,
+  "tgtcthue": 1000043.0,
+  "tgtthue": 0.0,
+  "ttcktmai": 0.0,
+  "tgtttbso": 1000043.0,
+  "tthai": 1,
+  "ttxly": 1,
+  "thttltsuat": [
+    {
+      "tsuat": "KKKNT",
+      "thtien": 1000043.0,
+      "tthue": 0.0
+    }
+  ],
+  "hdhhdvu": [
+    {
+      "stt": 1,
+      "tchat": 1,
+      "mhhdvu": "201032",
+      "ten": "Xăng RON95 Mức 3",
+      "dvtinh": "Lít",
+      "sluong": 41.29,
+      "dgia": 24220.0,
+      "thtien": 1000043.0,
+      "tsuat": "KKKNT",
+      "tthue": 0.0
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "nbmst": "2800242097",
+  "khmshdon": "1",
+  "khhdon": "K26THA",
+  "shdon": "1652750",
+  "tdlap": "2026-05-02T00:00:00",
+  "nbten": "VIỄN THÔNG THANH HÓA",
+  "nbdchi": "",
+  "nmmst": "2802274721",
+  "nmten": "Công Ty TNHH Dịch Vụ Thương Mại Thủy Hiền",
+  "nmdchi": "",
+  "dvtte": "VND",
+  "tgia": 1.0,
+  "tgtcthue": 24438.0,
+  "tgtthue": 2444.0,
+  "ttcktmai": 0.0,
+  "tgtttbso": 26882.0,
+  "tthai": 1,
+  "ttxly": 1,
+  "thttltsuat": [],
+  "hdhhdvu": [
+    {
+      "stt": 78,
+      "tchat": null,
+      "mhhdvu": null,
+      "ten": "Cước dịch vụ Viễn thông-Công nghệ thông tin tháng 04 năm 2026",
+      "dvtinh": "Tháng",
+      "sluong": 1.0,
+      "dgia": 0,
+      "thtien": 24438.0,
+      "tsuat": "0.1",
+      "tthue": 2444.0
+    }
+  ]
+}

@@ -74,12 +74,12 @@ namespace NewaccNet.Wpf.AppSystem.Reports
                 SetParameter(summaryReport, "prmEndDate", endDate);
                 summaryReport.RequestParameters = false;
 
-                // Lấy đích danh Band và Cell theo tên bạn đã đặt
-                var groupBand = summaryReport.Bands["CounterAccountBand"] as DevExpress.XtraReports.UI.GroupHeaderBand;
-                if (groupBand != null)
+                // Lấy đích danh Band và Cell theo tên để gán Tag drill-down
+                var dataBand = summaryReport.Bands["Detail"] ?? summaryReport.Bands["CounterAccountBand"];
+                if (dataBand != null)
                 {
                     // Quét các Table/Cell bên trong Band này để gán Tag, giúp click vào BẤT KỲ ô nào trên dòng này cũng nhận được ID
-                    foreach (XRControl control in groupBand.Controls)
+                    foreach (XRControl control in dataBand.Controls)
                     {
                         if (control is XRTable table)
                         {

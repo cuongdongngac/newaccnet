@@ -150,7 +150,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathCashFlowPreviousPeriods { get { return _staticMetaData.GetPrefetchPathElement("CashFlowPreviousPeriods", CommonEntityBase.CreateEntityCollection<CashFlowPreviousPeriodEntity>()); } }
 
 		/// <summary>The CashFlowName property of the Entity CashFlowCategory<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CashFlowCategory"."CashFlowName".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 100.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CashFlowCategory"."CashFlowName".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String CashFlowName
 		{
 			get { return (System.String)GetValue((int)CashFlowCategoryFieldIndex.CashFlowName, true); }
@@ -158,7 +158,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The CashFlowNameRepeate property of the Entity CashFlowCategory<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CashFlowCategory"."CashFlowNameRepeate".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 100.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CashFlowCategory"."CashFlowNameRepeate".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String CashFlowNameRepeate
 		{
 			get { return (System.String)GetValue((int)CashFlowCategoryFieldIndex.CashFlowNameRepeate, true); }
@@ -166,7 +166,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Id property of the Entity CashFlowCategory<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CashFlowCategory"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "CashFlowCategory"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)CashFlowCategoryFieldIndex.Id, true); }

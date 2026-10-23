@@ -26,7 +26,15 @@ namespace NewaccNet.Wpf.AppSystem.Reports
                 }
 
                 var dtoList = new NewaccNet.Reports.DiaryCalculator().Calculate(rows);
-                var report = new NewaccNet.Wpf.AppSystem.Reports.diary.DiaryReport(dtoList);
+                var report = new NewaccNet.Wpf.AppSystem.Reports.diary.DiaryReport(dtoList)
+                {
+                    RequestParameters = false
+                };
+
+                if (report.Parameters["pPeriodTitle"] != null)
+                {
+                    report.Parameters["pPeriodTitle"].Value = $"Từ ngày: {fromDate:dd/MM/yyyy} Đến ngày: {toDate:dd/MM/yyyy}";
+                }
                 Mouse.OverrideCursor = null;
                 DevExpress.Xpf.Printing.PrintHelper.ShowPrintPreview(owner, report);
             }

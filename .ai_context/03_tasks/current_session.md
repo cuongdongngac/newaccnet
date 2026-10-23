@@ -52,3 +52,7 @@ Quy trình giảm Token: Cuối mỗi phiên làm việc, Lập trình viên s�
 
 ## 7. Trạng thái Build hiện tại:
 - **Build succeeded** – 0 Error(s), 10 Warning(s) (chủ yếu là cảnh báo obsolete SqlClientFactory và nullable).
+
+## 8. Quy tắc tối ưu LookUp & Nguồn danh mục (Mới cập nhật):
+- Mọi LookUp/Filter chỉ phục vụ mục đích chọn danh mục phải tách biệt hoàn toàn: dùng object riêng (POCO/DTO), query độc lập một bảng danh mục, tuyệt đối không JOIN lồng ghép dữ liệu giao dịch làm ảnh hưởng tốc độ load và hiệu năng.
+- **Tối ưu Asynchronous & Progress UI:** Mọi thao tác tính toán, join số liệu chi tiết hoặc load dữ liệu ban đầu phải chạy bất đồng bộ (`Task.Run` / `async/await`), hiển thị `WaitIndicator` trên UI và ngắt kết nối (`Dispose` Adapter) ngay khi hoàn thành để giải phóng tài nguyên CSDL dứt điểm.

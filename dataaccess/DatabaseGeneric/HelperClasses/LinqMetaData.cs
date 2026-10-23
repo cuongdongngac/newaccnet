@@ -188,6 +188,14 @@ namespace DataAccess.Linq
 					return this.StockType;
 				case DataAccess.EntityType.SystemUserEntity:
 					return this.SystemUser;
+				case DataAccess.EntityType.TaxAccountConfigEntity:
+					return this.TaxAccountConfig;
+				case DataAccess.EntityType.TaxInvoiceEntity:
+					return this.TaxInvoice;
+				case DataAccess.EntityType.TaxInvoiceDetailEntity:
+					return this.TaxInvoiceDetail;
+				case DataAccess.EntityType.TaxInvoiceTaxRateEntity:
+					return this.TaxInvoiceTaxRate;
 				case DataAccess.EntityType.TaxObligationEntity:
 					return this.TaxObligation;
 				case DataAccess.EntityType.TaxObligationItemEntity:
@@ -447,6 +455,18 @@ namespace DataAccess.Linq
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting SystemUserEntity instances in the database.</summary>
 		public DataSource2<SystemUserEntity> SystemUser {	get { return new DataSource2<SystemUserEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting TaxAccountConfigEntity instances in the database.</summary>
+		public DataSource2<TaxAccountConfigEntity> TaxAccountConfig {	get { return new DataSource2<TaxAccountConfigEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting TaxInvoiceEntity instances in the database.</summary>
+		public DataSource2<TaxInvoiceEntity> TaxInvoice {	get { return new DataSource2<TaxInvoiceEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting TaxInvoiceDetailEntity instances in the database.</summary>
+		public DataSource2<TaxInvoiceDetailEntity> TaxInvoiceDetail {	get { return new DataSource2<TaxInvoiceDetailEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting TaxInvoiceTaxRateEntity instances in the database.</summary>
+		public DataSource2<TaxInvoiceTaxRateEntity> TaxInvoiceTaxRate {	get { return new DataSource2<TaxInvoiceTaxRateEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting TaxObligationEntity instances in the database.</summary>
 		public DataSource2<TaxObligationEntity> TaxObligation {	get { return new DataSource2<TaxObligationEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }

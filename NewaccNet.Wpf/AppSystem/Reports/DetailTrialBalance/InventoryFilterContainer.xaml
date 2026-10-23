@@ -1,0 +1,34 @@
+<UserControl x:Class="NewaccNet.Wpf.AppSystem.Reports.DetailTrialBalance.InventoryFilterContainer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ctrl="clr-namespace:NewaccNet.Wpf.Controls"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignWidth="360" d:DesignHeight="80">
+    <StackPanel Orientation="Vertical">
+        <!-- Kho hàng -->
+        <Grid Margin="0,3,0,3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Kho hàng:" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#333"/>
+            <ctrl:MultiSelectComboBox Grid.Column="1" x:Name="cboWarehouse" Height="26"
+                                      KeyMemberPath="WarehouseId" DisplayMemberPath="WarehouseName"
+                                      Placeholder="* (Tất cả kho)"/>
+        </Grid>
+
+        <!-- Vật tư -->
+        <Grid Margin="0,3,0,3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Vật tư:" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#333"/>
+            <ctrl:MultiSelectComboBox Grid.Column="1" x:Name="cboMaterial" Height="26"
+                                      KeyMemberPath="MaterialId" DisplayMemberPath="DisplayText"
+                                      Placeholder="* (Tất cả vật tư)"/>
+        </Grid>
+    </StackPanel>
+</UserControl>

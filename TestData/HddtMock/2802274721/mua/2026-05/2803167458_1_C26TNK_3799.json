@@ -1,0 +1,41 @@
+{
+  "nbmst": "2803167458",
+  "khmshdon": "1",
+  "khhdon": "C26TNK",
+  "shdon": "3799",
+  "tdlap": "2026-05-08T00:00:00",
+  "nbten": "CÔNG TY TNHH MTV NGỌC KHƯƠNG NGUYỄN",
+  "nbdchi": "SN 283, đường Lê Thánh Tông, Thôn 5, Phường Quang Trung, Thị Xã Bỉm Sơn, Thanh Hoá",
+  "nmmst": "2802274721",
+  "nmten": "CÔNG TY TNHH DỊCH VỤ THƯƠNG MẠI THỦY HIỀN",
+  "nmdchi": "Số Nhà 62,Đường Lê Thánh Tông ,Phường Quang Trung,Tỉnh Thanh Hóa ,Việt Nam",
+  "dvtte": "VND",
+  "tgia": 1.0,
+  "tgtcthue": 121759832.0,
+  "tgtthue": 9740787.0,
+  "ttcktmai": 0.0,
+  "tgtttbso": 131500619.0,
+  "tthai": 1,
+  "ttxly": 5,
+  "thttltsuat": [
+    {
+      "tsuat": "0.08",
+      "thtien": 121759832.0,
+      "tthue": 9740787.0
+    }
+  ],
+  "hdhhdvu": [
+    {
+      "stt": 1,
+      "tchat": 1,
+      "mhhdvu": null,
+      "ten": "Bột ngọt 453,6gr(L)x50 gói (Malaysia)",
+      "dvtinh": "Thùng",
+      "sluong": 97.0,
+      "dgia": 1255256.0,
+      "thtien": 121759832.0,
+      "tsuat": "0.08",
+      "tthue": 9740786.56
+    }
+  ]
+}

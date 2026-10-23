@@ -1,0 +1,34 @@
+<UserControl x:Class="NewaccNet.Wpf.AppSystem.Reports.DetailTrialBalance.AssetFilterContainer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ctrl="clr-namespace:NewaccNet.Wpf.Controls"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignWidth="360" d:DesignHeight="80">
+    <StackPanel Orientation="Vertical">
+        <!-- Mã TSCĐ -->
+        <Grid Margin="0,3,0,3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Tài sản:" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#333"/>
+            <ctrl:MultiSelectComboBox Grid.Column="1" x:Name="cboAsset" Height="26"
+                                      KeyMemberPath="AssetId" DisplayMemberPath="DisplayText"
+                                      Placeholder="* (Tất cả tài sản)"/>
+        </Grid>
+
+        <!-- Lý do tăng giảm -->
+        <Grid Margin="0,3,0,3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Lý do T/G:" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#333"/>
+            <ctrl:MultiSelectComboBox Grid.Column="1" x:Name="cboReason" Height="26"
+                                      KeyMemberPath="Reasonid" DisplayMemberPath="DisplayText"
+                                      Placeholder="* (Tất cả lý do tăng/giảm)"/>
+        </Grid>
+    </StackPanel>
+</UserControl>

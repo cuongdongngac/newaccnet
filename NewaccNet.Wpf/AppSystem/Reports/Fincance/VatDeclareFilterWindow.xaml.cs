@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.Win32;
+using NewaccNet.Wpf.AppSystem.Helpers;
 
 namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
 {
@@ -81,11 +82,29 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
                 var report = new VatAdded();
                 report.DataSource = data;
 
-                if (report.FindControl("label1", true) is DevExpress.XtraReports.UI.XRLabel lblTitle)
+                if (report.Parameters["prmFromDate"] != null) report.Parameters["prmFromDate"].Value = fromDate;
+                if (report.Parameters["prmToDate"] != null) report.Parameters["prmToDate"].Value = toDate;
+                if (report.Parameters["prmReportTitle"] != null) report.Parameters["prmReportTitle"].Value = reportTitle;
+
+                var companyName = UserPreferencesHelper.GetSetting("CompanyName");
+                if (!string.IsNullOrEmpty(companyName) && report.Parameters["prmCompanyName"] != null)
                 {
-                    lblTitle.Text = reportTitle;
+                    report.Parameters["prmCompanyName"].Value = companyName;
                 }
 
+                var taxCode = UserPreferencesHelper.GetSetting("TaxCode");
+                if (!string.IsNullOrEmpty(taxCode) && report.Parameters["prmTaxCode"] != null)
+                {
+                    report.Parameters["prmTaxCode"].Value = taxCode;
+                }
+
+                var address = UserPreferencesHelper.GetSetting("CompanyAddress");
+                if (!string.IsNullOrEmpty(address) && report.Parameters["prmAddress"] != null)
+                {
+                    report.Parameters["prmAddress"].Value = address;
+                }
+
+                report.RequestParameters = false;
                 report.CreateDocument(false);
 
                 var previewWindow = new DevExpress.Xpf.Printing.DocumentPreviewWindow

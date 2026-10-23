@@ -118,6 +118,36 @@ namespace NewaccNet.Wpf.AppSystem.Helpers
                 return de.DateTime;
             }
 
+            if (element is DevExpress.Xpf.Editors.CheckEdit ce)
+            {
+                return ce.IsChecked;
+            }
+
+            if (element is RadioButton rb)
+            {
+                return rb.IsChecked;
+            }
+
+            if (element is DevExpress.Xpf.Editors.ComboBoxEdit cbe
+                && cbe.StyleSettings is DevExpress.Xpf.Editors.CheckedComboBoxStyleSettings)
+            {
+                if (cbe.EditValue is System.Collections.IEnumerable list and not string)
+                {
+                    var items = new List<string>();
+                    foreach (var item in list)
+                    {
+                        string? code = item?.ToString()?.Trim();
+                        if (!string.IsNullOrWhiteSpace(code))
+                            items.Add(code);
+                    }
+                    int totalCount = (cbe.ItemsSource as System.Collections.ICollection)?.Count ?? 0;
+                    if (totalCount > 0 && items.Count >= totalCount)
+                        return "*";
+                    return string.Join(",", items);
+                }
+                return string.Empty;
+            }
+
             // Ưu tiên controls của DevExpress (LookUpEdit, ComboBoxEdit, TextEdit...)
             PropertyInfo editValueProp = element.GetType().GetProperty("EditValue");
             if (editValueProp != null)
@@ -145,11 +175,59 @@ namespace NewaccNet.Wpf.AppSystem.Helpers
                 return;
             }
 
+            if (element is DevExpress.Xpf.Editors.CheckEdit ce)
+            {
+                if (bool.TryParse(strVal, out bool b))
+                {
+                    ce.IsChecked = b;
+                }
+                return;
+            }
+
+            if (element is RadioButton rb)
+            {
+                if (bool.TryParse(strVal, out bool b))
+                {
+                    rb.IsChecked = b;
+                }
+                return;
+            }
+
+            if (element is DevExpress.Xpf.Editors.ComboBoxEdit cbe
+                && cbe.StyleSettings is DevExpress.Xpf.Editors.CheckedComboBoxStyleSettings)
+            {
+                if (strVal == "*")
+                {
+                    cbe.SelectAll();
+                }
+                else
+                {
+                    var parts = strVal.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries)
+                                      .Select(x => (object)x.Trim())
+                                      .ToList();
+                    if (parts.Count > 0)
+                        cbe.EditValue = parts;
+                    else
+                        cbe.SelectAll();
+                }
+                return;
+            }
+
             PropertyInfo editValueProp = element.GetType().GetProperty("EditValue");
             if (editValueProp != null)
             {
                 Type targetType = editValueProp.PropertyType;
                 Type underlyingType = Nullable.GetUnderlyingType(targetType) ?? targetType;
+
+                // Nếu EditValue có kiểu object nhưng đang có giá trị cụ thể (VD: Enum trong ComboBoxEdit), ưu tiên convert theo kiểu của giá trị hiện tại
+                if (underlyingType == typeof(object))
+                {
+                    object? currentVal = editValueProp.GetValue(element);
+                    if (currentVal != null)
+                    {
+                        underlyingType = currentVal.GetType();
+                    }
+                }
 
                 object convertedValue = ConvertString(strVal, underlyingType);
                 editValueProp.SetValue(element, convertedValue);
@@ -163,12 +241,16 @@ namespace NewaccNet.Wpf.AppSystem.Helpers
 
         private static object ConvertString(string strVal, Type targetType)
         {
-            if (targetType == typeof(string)) return strVal;
+            if (targetType == typeof(string) || targetType == typeof(object)) return strVal;
             if (targetType == typeof(DateTime)) return DateTime.Parse(strVal);
             if (targetType == typeof(int)) return int.Parse(strVal);
             if (targetType == typeof(double)) return double.Parse(strVal);
             if (targetType == typeof(decimal)) return decimal.Parse(strVal);
             if (targetType == typeof(bool)) return bool.Parse(strVal);
+            if (targetType.IsEnum && Enum.TryParse(targetType, strVal, true, out object? enumVal))
+            {
+                return enumVal!;
+            }
 
             var converter = TypeDescriptor.GetConverter(targetType);
             if (converter != null && converter.CanConvertFrom(typeof(string)))

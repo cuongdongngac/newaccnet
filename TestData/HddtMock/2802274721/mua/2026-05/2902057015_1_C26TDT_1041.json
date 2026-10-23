@@ -1,0 +1,65 @@
+{
+  "nbmst": "2902057015",
+  "khmshdon": "1",
+  "khhdon": "C26TDT",
+  "shdon": "1041",
+  "tdlap": "2026-05-07T00:00:00",
+  "nbten": "CÔNG TY TNHH THƯƠNG MẠI TỔNG HỢP TÂN DƯƠNG",
+  "nbdchi": "Xóm 7, Xã Lương Sơn, Tỉnh Nghệ An, Việt Nam",
+  "nmmst": "2802274721",
+  "nmten": "CÔNG TY TNHH DỊCH VỤ THƯƠNG MẠI THỦY HIỀN",
+  "nmdchi": "Số nhà 62, đường Lê Thánh Tông,, Phường Quang Trung, Tỉnh Thanh Hóa, Việt Nam",
+  "dvtte": "VND",
+  "tgia": 1.0,
+  "tgtcthue": 287685184.0,
+  "tgtthue": 23014816.0,
+  "ttcktmai": 0.0,
+  "tgtttbso": 310700000.0,
+  "tthai": 1,
+  "ttxly": 5,
+  "thttltsuat": [
+    {
+      "tsuat": "0.08",
+      "thtien": 287685184.0,
+      "tthue": 23014816.0
+    }
+  ],
+  "hdhhdvu": [
+    {
+      "stt": 1,
+      "tchat": 1,
+      "mhhdvu": null,
+      "ten": "Bột ngọt 1kg (L) x 25gói (Thái Lan)",
+      "dvtinh": "bao",
+      "sluong": 200.0,
+      "dgia": 1305555.55,
+      "thtien": 261111110.0,
+      "tsuat": "0.08",
+      "tthue": 20888889.0
+    },
+    {
+      "stt": 2,
+      "tchat": 1,
+      "mhhdvu": null,
+      "ten": "Bột ngọt 453,6gr (L) x 50gói (Thái Lan)",
+      "dvtinh": "thùng",
+      "sluong": 12.0,
+      "dgia": 1212962.96,
+      "thtien": 14555556.0,
+      "tsuat": "0.08",
+      "tthue": 1164446.0
+    },
+    {
+      "stt": 3,
+      "tchat": 1,
+      "mhhdvu": null,
+      "ten": "Bột ngọt 400gr (L) x 50gói (Thái Lan)",
+      "dvtinh": "thùng",
+      "sluong": 11.0,
+      "dgia": 1092592.59,
+      "thtien": 12018518.0,
+      "tsuat": "0.08",
+      "tthue": 961481.0
+    }
+  ]
+}

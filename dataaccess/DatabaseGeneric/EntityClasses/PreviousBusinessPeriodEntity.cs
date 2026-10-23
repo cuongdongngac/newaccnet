@@ -138,7 +138,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathReportFormula { get { return _staticMetaData.GetPrefetchPathElement("ReportFormula", CommonEntityBase.CreateEntityCollection<ReportFormulaEntity>()); } }
 
 		/// <summary>The Bold property of the Entity PreviousBusinessPeriod<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "PreviousBusinessPeriod"."Bold".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "PreviousBusinessPeriod"."Bold".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Bold
 		{
 			get { return (System.String)GetValue((int)PreviousBusinessPeriodFieldIndex.Bold, true); }
@@ -146,7 +146,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Code property of the Entity PreviousBusinessPeriod<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "PreviousBusinessPeriod"."Code".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		/// <remarks>Mapped on  table field: "PreviousBusinessPeriod"."Code".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
 		public virtual System.String Code
 		{
 			get { return (System.String)GetValue((int)PreviousBusinessPeriodFieldIndex.Code, true); }
@@ -154,7 +154,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Illu property of the Entity PreviousBusinessPeriod<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "PreviousBusinessPeriod"."Illu".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "PreviousBusinessPeriod"."Illu".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Illu
 		{
 			get { return (System.String)GetValue((int)PreviousBusinessPeriodFieldIndex.Illu, true); }
@@ -162,7 +162,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Italic property of the Entity PreviousBusinessPeriod<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "PreviousBusinessPeriod"."Italic".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "PreviousBusinessPeriod"."Italic".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Italic
 		{
 			get { return (System.String)GetValue((int)PreviousBusinessPeriodFieldIndex.Italic, true); }
@@ -170,7 +170,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The ItemsId property of the Entity PreviousBusinessPeriod<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "PreviousBusinessPeriod"."ItemsId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "PreviousBusinessPeriod"."ItemsId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> ItemsId
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)PreviousBusinessPeriodFieldIndex.ItemsId, false); }
@@ -178,7 +178,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The ItemsName property of the Entity PreviousBusinessPeriod<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "PreviousBusinessPeriod"."ItemsName".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "PreviousBusinessPeriod"."ItemsName".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String ItemsName
 		{
 			get { return (System.String)GetValue((int)PreviousBusinessPeriodFieldIndex.ItemsName, true); }
@@ -186,7 +186,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Prevyearamount property of the Entity PreviousBusinessPeriod<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "PreviousBusinessPeriod"."Prevyearamount".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "PreviousBusinessPeriod"."Prevyearamount".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Prevyearamount
 		{
 			get { return (Nullable<System.Double>)GetValue((int)PreviousBusinessPeriodFieldIndex.Prevyearamount, false); }

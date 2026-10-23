@@ -126,7 +126,7 @@ namespace DataAccess.EntityClasses
 		public static TaxRateRelations Relations { get { return _relationsFactory; } }
 
 		/// <summary>The Rate property of the Entity TaxRate<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "TaxRate"."Rate".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "TaxRate"."Rate".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Rate
 		{
 			get { return (Nullable<System.Double>)GetValue((int)TaxRateFieldIndex.Rate, false); }
@@ -134,7 +134,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Taxratedes property of the Entity TaxRate<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "TaxRate"."Taxratedes".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "TaxRate"."Taxratedes".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Taxratedes
 		{
 			get { return (System.String)GetValue((int)TaxRateFieldIndex.Taxratedes, true); }
@@ -142,7 +142,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Taxrateid property of the Entity TaxRate<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "TaxRate"."Taxrateid".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		/// <remarks>Mapped on  table field: "TaxRate"."Taxrateid".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
 		public virtual System.Int32 Taxrateid
 		{
 			get { return (System.Int32)GetValue((int)TaxRateFieldIndex.Taxrateid, true); }

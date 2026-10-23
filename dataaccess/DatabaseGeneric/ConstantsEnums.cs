@@ -188,6 +188,14 @@ namespace DataAccess
 		StockTypeEntity,
 		///<summary>SystemUser</summary>
 		SystemUserEntity,
+		///<summary>TaxAccountConfig</summary>
+		TaxAccountConfigEntity,
+		///<summary>TaxInvoice</summary>
+		TaxInvoiceEntity,
+		///<summary>TaxInvoiceDetail</summary>
+		TaxInvoiceDetailEntity,
+		///<summary>TaxInvoiceTaxRate</summary>
+		TaxInvoiceTaxRateEntity,
 		///<summary>TaxObligation</summary>
 		TaxObligationEntity,
 		///<summary>TaxObligationItem</summary>

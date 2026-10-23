@@ -1,5 +1,7 @@
+using System;
 using System.Windows;
 using DevExpress.Xpf.Core;
+using NewaccNet.Wpf.AppSystem.Helpers;
 
 namespace NewaccNet.Wpf.AppSystem
 {
@@ -34,6 +36,20 @@ namespace NewaccNet.Wpf.AppSystem
             txtPgDatabase.Text      = config.PgDatabase;
             txtPgUsername.Text      = config.PgUsername;
             txtPgPassword.EditValue = config.PgPassword;
+
+            // Thông tin phụ trợ (User Settings)
+            string companyName = UserPreferencesHelper.GetSetting("CompanyName");
+            txtCompanyName.Text = companyName ?? "";
+
+            string yearStr = UserPreferencesHelper.GetSetting("AccountingYear");
+            if (int.TryParse(yearStr, out int year) && year >= 1900 && year <= 2100)
+            {
+                spnAccountingYear.Value = year;
+            }
+            else
+            {
+                spnAccountingYear.Value = DateTime.Today.Year;
+            }
 
             UpdateVisibility();
         }
@@ -152,11 +168,15 @@ namespace NewaccNet.Wpf.AppSystem
             config.PgUsername = txtPgUsername.Text;
             config.PgPassword = txtPgPassword.EditValue as string ?? "";
 
+            // Lưu thông tin phụ trợ vào User Settings (lưu tại máy trạm, hoàn toàn không lưu vào DB)
+            UserPreferencesHelper.SetSetting("CompanyName", txtCompanyName.Text?.Trim() ?? "");
+            UserPreferencesHelper.SetSetting("AccountingYear", spnAccountingYear.Value.ToString());
+
             ConfigManager.BuildConnectionString();
             ConfigManager.SaveConfig();
 
             System.Windows.MessageBox.Show(
-                "Đã lưu cấu hình kết nối CSDL thành công. Hệ thống sẽ tự động khởi động lại để áp dụng thay đổi.",
+                "Đã lưu cấu hình kết nối CSDL và thông tin phụ trợ thành công. Hệ thống sẽ tự động khởi động lại để áp dụng thay đổi.",
                 "Thông báo", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
             
             // Tự khởi động lại ứng dụng mà không hiển thị hộp thoại hỏi thoát
@@ -166,4 +186,3 @@ namespace NewaccNet.Wpf.AppSystem
         }
     }
 }
-

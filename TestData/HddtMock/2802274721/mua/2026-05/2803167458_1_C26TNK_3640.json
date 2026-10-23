@@ -1,0 +1,53 @@
+{
+  "nbmst": "2803167458",
+  "khmshdon": "1",
+  "khhdon": "C26TNK",
+  "shdon": "3640",
+  "tdlap": "2026-05-05T00:00:00",
+  "nbten": "CÔNG TY TNHH MTV NGỌC KHƯƠNG NGUYỄN",
+  "nbdchi": "SN 283, đường Lê Thánh Tông, Thôn 5, Phường Quang Trung, Thị Xã Bỉm Sơn, Thanh Hoá",
+  "nmmst": "2802274721",
+  "nmten": "CÔNG TY TNHH DỊCH VỤ THƯƠNG MẠI THỦY HIỀN",
+  "nmdchi": "Số Nhà 62,Đường Lê Thánh Tông ,Phường Quang Trung ,Tỉnh Thanh Hóa,Việt Nam",
+  "dvtte": "VND",
+  "tgia": 1.0,
+  "tgtcthue": 10046880.0,
+  "tgtthue": 803750.0,
+  "ttcktmai": 0.0,
+  "tgtttbso": 10850630.0,
+  "tthai": 1,
+  "ttxly": 5,
+  "thttltsuat": [
+    {
+      "tsuat": "0.08",
+      "thtien": 10046880.0,
+      "tthue": 803750.0
+    }
+  ],
+  "hdhhdvu": [
+    {
+      "stt": 1,
+      "tchat": 1,
+      "mhhdvu": null,
+      "ten": "Bột súp 200 gr x 50gói Tôm",
+      "dvtinh": "Thùng",
+      "sluong": 30.0,
+      "dgia": 169083.0,
+      "thtien": 5072490.0,
+      "tsuat": "0.08",
+      "tthue": 405799.2
+    },
+    {
+      "stt": 2,
+      "tchat": 1,
+      "mhhdvu": null,
+      "ten": "Bột canh 900g x 10gói Gà",
+      "dvtinh": "Thùng",
+      "sluong": 38.0,
+      "dgia": 130905.0,
+      "thtien": 4974390.0,
+      "tsuat": "0.08",
+      "tthue": 397951.2
+    }
+  ]
+}

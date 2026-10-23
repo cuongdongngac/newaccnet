@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Windows;
+using System.Windows.Input;
 using Microsoft.Win32;
 
 namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
@@ -66,11 +67,13 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
 
             try
             {
+                Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
+
                 var fromDate = dtFromDate.DateTime.Date;
                 var toDate = dtToDate.DateTime.Date;
                 var jsonPath = txtPrevJsonPath.Text;
-                var currentTitle = txtCurrentColumnName.Text;
-                var prevTitle = txtPrevColumnName.Text;
+                var currentTitle = txtCurrentColumnName.Text.Replace("\\n", Environment.NewLine);
+                var prevTitle = txtPrevColumnName.Text.Replace("\\n", Environment.NewLine);
                 
                 var service = new NewaccNet.Reports.CashFlow.CashFlowService();
                 using (var adapter = NewaccNet.Wpf.AppSystem.AppDataAccessAdapter.Create())
@@ -84,8 +87,17 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
                     if (report.Parameters["prmToDate"] != null) report.Parameters["prmToDate"].Value = toDate;
                     if (report.Parameters["prmCurrentTitle"] != null) report.Parameters["prmCurrentTitle"].Value = currentTitle;
                     if (report.Parameters["prmPrevTitle"] != null) report.Parameters["prmPrevTitle"].Value = prevTitle;
+
+                    var companyName = NewaccNet.Wpf.AppSystem.Helpers.UserPreferencesHelper.GetSetting("CompanyName");
+                    if (!string.IsNullOrEmpty(companyName) && report.Parameters["prmCompanyName"] != null)
+                    {
+                        report.Parameters["prmCompanyName"].Value = companyName;
+                    }
+
                     report.RequestParameters = false;
                     report.CreateDocument(false);
+
+                    Mouse.OverrideCursor = null;
 
                     var previewWindow = new DevExpress.Xpf.Printing.DocumentPreviewWindow();
                     previewWindow.Owner = this.Owner ?? this;
@@ -97,6 +109,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
             }
             catch (Exception ex)
             {
+                Mouse.OverrideCursor = null;
                 MessageBox.Show(this, "Lỗi khi tính toán: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }

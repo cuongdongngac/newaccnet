@@ -138,7 +138,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathAccountBusinessResults { get { return _staticMetaData.GetPrefetchPathElement("AccountBusinessResults", CommonEntityBase.CreateEntityCollection<AccountBusinessResultEntity>()); } }
 
 		/// <summary>The Code property of the Entity BusinessResultItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "BusinessResultItem"."Code".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "BusinessResultItem"."Code".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Code
 		{
 			get { return (System.String)GetValue((int)BusinessResultItemFieldIndex.Code, true); }
@@ -146,7 +146,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Id property of the Entity BusinessResultItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "BusinessResultItem"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "BusinessResultItem"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)BusinessResultItemFieldIndex.Id, true); }
@@ -154,7 +154,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Illustration property of the Entity BusinessResultItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "BusinessResultItem"."Illustration".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "BusinessResultItem"."Illustration".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Illustration
 		{
 			get { return (System.String)GetValue((int)BusinessResultItemFieldIndex.Illustration, true); }
@@ -162,7 +162,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The IsBold property of the Entity BusinessResultItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "BusinessResultItem"."IsBold".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "BusinessResultItem"."IsBold".<br/>Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Boolean IsBold
 		{
 			get { return (System.Boolean)GetValue((int)BusinessResultItemFieldIndex.IsBold, true); }
@@ -170,7 +170,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The IsDecrease property of the Entity BusinessResultItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "BusinessResultItem"."IsDecrease".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "BusinessResultItem"."IsDecrease".<br/>Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Boolean IsDecrease
 		{
 			get { return (System.Boolean)GetValue((int)BusinessResultItemFieldIndex.IsDecrease, true); }
@@ -178,7 +178,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The IsItalic property of the Entity BusinessResultItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "BusinessResultItem"."IsItalic".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "BusinessResultItem"."IsItalic".<br/>Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Boolean IsItalic
 		{
 			get { return (System.Boolean)GetValue((int)BusinessResultItemFieldIndex.IsItalic, true); }
@@ -186,7 +186,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The ItemName property of the Entity BusinessResultItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "BusinessResultItem"."ItemName".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "BusinessResultItem"."ItemName".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String ItemName
 		{
 			get { return (System.String)GetValue((int)BusinessResultItemFieldIndex.ItemName, true); }

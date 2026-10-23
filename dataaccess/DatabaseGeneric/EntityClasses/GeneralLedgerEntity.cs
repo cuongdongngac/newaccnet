@@ -126,7 +126,7 @@ namespace DataAccess.EntityClasses
 		public static GeneralLedgerRelations Relations { get { return _relationsFactory; } }
 
 		/// <summary>The Contents property of the Entity GeneralLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "GeneralLedger"."Contents".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 100.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "GeneralLedger"."Contents".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Contents
 		{
 			get { return (System.String)GetValue((int)GeneralLedgerFieldIndex.Contents, true); }
@@ -134,7 +134,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The CounterAccountId property of the Entity GeneralLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "GeneralLedger"."CounterAccountId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "GeneralLedger"."CounterAccountId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String CounterAccountId
 		{
 			get { return (System.String)GetValue((int)GeneralLedgerFieldIndex.CounterAccountId, true); }
@@ -142,7 +142,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Credit property of the Entity GeneralLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "GeneralLedger"."Credit".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "GeneralLedger"."Credit".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Credit
 		{
 			get { return (Nullable<System.Double>)GetValue((int)GeneralLedgerFieldIndex.Credit, false); }
@@ -150,7 +150,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Debit property of the Entity GeneralLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "GeneralLedger"."Debit".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "GeneralLedger"."Debit".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Debit
 		{
 			get { return (Nullable<System.Double>)GetValue((int)GeneralLedgerFieldIndex.Debit, false); }
@@ -158,7 +158,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Endbalance property of the Entity GeneralLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "GeneralLedger"."Endbalance".<br/>Table field type characteristics (type, precision, scale, length): Double, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "GeneralLedger"."Endbalance".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Double> Endbalance
 		{
 			get { return (Nullable<System.Double>)GetValue((int)GeneralLedgerFieldIndex.Endbalance, false); }
@@ -166,7 +166,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Id property of the Entity GeneralLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "GeneralLedger"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "GeneralLedger"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)GeneralLedgerFieldIndex.Id, true); }
@@ -174,7 +174,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The JournalVoucherId property of the Entity GeneralLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "GeneralLedger"."JournalVoucherId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "GeneralLedger"."JournalVoucherId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> JournalVoucherId
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)GeneralLedgerFieldIndex.JournalVoucherId, false); }
@@ -182,7 +182,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The VoucherDate property of the Entity GeneralLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "GeneralLedger"."VoucherDate".<br/>Table field type characteristics (type, precision, scale, length): Date, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "GeneralLedger"."VoucherDate".<br/>Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.DateTime> VoucherDate
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)GeneralLedgerFieldIndex.VoucherDate, false); }
@@ -190,7 +190,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The VoucherNo property of the Entity GeneralLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "GeneralLedger"."VoucherNo".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "GeneralLedger"."VoucherNo".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String VoucherNo
 		{
 			get { return (System.String)GetValue((int)GeneralLedgerFieldIndex.VoucherNo, true); }

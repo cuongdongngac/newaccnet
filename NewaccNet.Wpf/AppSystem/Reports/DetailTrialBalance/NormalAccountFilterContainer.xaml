@@ -1,0 +1,12 @@
+<UserControl x:Class="NewaccNet.Wpf.AppSystem.Reports.DetailTrialBalance.NormalAccountFilterContainer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignWidth="360" d:DesignHeight="40">
+    <Border Background="#F9F9F9" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="3" Padding="8,6" Margin="0,4,0,4">
+        <TextBlock Text="ℹ Tài khoản thông thường (không quản lý theo đối tượng chi tiết)" 
+                   Foreground="#757575" FontStyle="Italic" VerticalAlignment="Center"/>
+    </Border>
+</UserControl>

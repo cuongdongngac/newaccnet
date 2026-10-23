@@ -6,6 +6,7 @@
     <ProjectReference Include="..\dataaccess\SQL Server (SqlClient)\DatabaseSpecific\DataAccess.SqlServerDBSpecific.csproj" />
     <ProjectReference Include="..\dataaccess\PostgreSql (Npgsql)\DatabaseSpecific\DataAccess.PostgreSqlDBSpecific.csproj" />
     <ProjectReference Include="..\NewaccNet.Reports\NewaccNet.Reports.csproj" />
+    <ProjectReference Include="..\NewaccNet.TaxInvoice\NewaccNet.TaxInvoice.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -17,6 +18,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="DevExpress.Images" Version="25.2.3" />
     <PackageReference Include="DevExpress.Reporting.Core" Version="25.2.3" />
     <PackageReference Include="DevExpress.Wpf.Core" Version="25.2.3" />
@@ -37,6 +39,48 @@
     <None Update="Template\template.accdb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="AppSystem\Reports\DetailTrialBalance\Reports\Material\MaterialSummaryReport.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="AppSystem\Reports\DetailTrialBalance\Reports\Material\MaterialSummaryReport.Designer.cs">
+      <DependentUpon>MaterialSummaryReport.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="AppSystem\Reports\DetailTrialBalance\Reports\Material\MaterialSummaryReport.resx">
+      <DependentUpon>MaterialSummaryReport.cs</DependentUpon>
+    </EmbeddedResource>
+
+    <Compile Update="AppSystem\Reports\DetailTrialBalance\Reports\Material\MaterialDetailReport.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="AppSystem\Reports\DetailTrialBalance\Reports\Material\MaterialDetailReport.Designer.cs">
+      <DependentUpon>MaterialDetailReport.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="AppSystem\Reports\DetailTrialBalance\Reports\Material\MaterialDetailReport.resx">
+      <DependentUpon>MaterialDetailReport.cs</DependentUpon>
+    </EmbeddedResource>
+
+    <Compile Update="AppSystem\Reports\DetailTrialBalance\Reports\Cost\CostSummaryReport.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="AppSystem\Reports\DetailTrialBalance\Reports\Cost\CostSummaryReport.Designer.cs">
+      <DependentUpon>CostSummaryReport.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="AppSystem\Reports\DetailTrialBalance\Reports\Cost\CostSummaryReport.resx">
+      <DependentUpon>CostSummaryReport.cs</DependentUpon>
+    </EmbeddedResource>
+
+    <Compile Update="AppSystem\Reports\DetailTrialBalance\Reports\Cost\CostDetailReport.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="AppSystem\Reports\DetailTrialBalance\Reports\Cost\CostDetailReport.Designer.cs">
+      <DependentUpon>CostDetailReport.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="AppSystem\Reports\DetailTrialBalance\Reports\Cost\CostDetailReport.resx">
+      <DependentUpon>CostDetailReport.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>
 

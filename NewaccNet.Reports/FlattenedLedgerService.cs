@@ -28,8 +28,13 @@ namespace NewaccNet.Reports
             var result = new List<FlattenedLedgerEntry>();
 
             var parentIdsWithChildren = new HashSet<long>();
+            var entryMap = new Dictionary<int, JournalEntryEntity>();
             foreach (var e in rawEntries)
             {
+                if (e.Id > 0 && !entryMap.ContainsKey(e.Id))
+                {
+                    entryMap[e.Id] = e;
+                }
                 if (e.ParentId.HasValue) parentIdsWithChildren.Add(e.ParentId.Value);
             }
 
@@ -38,7 +43,7 @@ namespace NewaccNet.Reports
                 decimal amount = (decimal)(entry.Amount ?? 0);
                 short dbcr = entry.Dbcr ?? -1;
 
-                if (entry.JournalVoucherId == null)
+                if (entry.JournalVoucherId == null && !entry.ParentId.HasValue)
                 {
                     // ĐÂY LÀ SỐ DƯ ĐẦU KỲ: Không cần tìm đối ứng, gán ngày lập tức!
                     result.Add(new FlattenedLedgerEntry
@@ -57,28 +62,34 @@ namespace NewaccNet.Reports
                 else
                 {
                     // ĐÂY LÀ PHÁT SINH TRONG KỲ: Tìm ngày ở Voucher và tìm đối ứng
-                    if (entry.ParentEntry != null)
+                    JournalEntryEntity parent = entry.ParentEntry;
+                    if (parent == null && entry.ParentId.HasValue && entryMap.TryGetValue(entry.ParentId.Value, out var p))
                     {
-                        var parentVoucher = entry.ParentEntry.JournalVoucher ?? entry.JournalVoucher;
+                        parent = p;
+                    }
+
+                    if (parent != null)
+                    {
+                        var parentVoucher = parent.JournalVoucher ?? entry.JournalVoucher;
                         
                         // Cặp 1: Phía của tài khoản con
                         result.Add(new FlattenedLedgerEntry
                         {
                             EntryId = entry.Id,
                             AccountId = entry.AccountId,
-                            CounterAccountId = entry.ParentEntry.AccountId,
+                            CounterAccountId = parent.AccountId,
                             Dbcr = dbcr,
                             Amount = amount,
-                            JournalVoucher = entry.JournalVoucher
+                            JournalVoucher = parentVoucher
                         });
 
                         // Cặp 2: Phía của tài khoản cha
                         result.Add(new FlattenedLedgerEntry
                         {
-                            EntryId = entry.ParentEntry.Id,
-                            AccountId = entry.ParentEntry.AccountId,
+                            EntryId = parent.Id,
+                            AccountId = parent.AccountId,
                             CounterAccountId = entry.AccountId,
-                            Dbcr = entry.ParentEntry.Dbcr ?? -1,
+                            Dbcr = parent.Dbcr ?? -1,
                             Amount = amount,
                             JournalVoucher = parentVoucher
                         });
