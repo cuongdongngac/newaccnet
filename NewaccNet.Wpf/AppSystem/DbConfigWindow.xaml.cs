@@ -39,7 +39,7 @@ namespace NewaccNet.Wpf.AppSystem
 
             // Thông tin phụ trợ (User Settings)
             string companyName = UserPreferencesHelper.GetSetting("CompanyName");
-            txtCompanyName.Text = companyName ?? "";
+            txtCompanyName.Text = string.IsNullOrWhiteSpace(companyName) ? "Tên công ty của bạn" : companyName;
 
             string yearStr = UserPreferencesHelper.GetSetting("AccountingYear");
             if (int.TryParse(yearStr, out int year) && year >= 1900 && year <= 2100)
