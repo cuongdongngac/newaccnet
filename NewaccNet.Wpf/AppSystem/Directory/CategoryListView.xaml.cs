@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Windows;
 using DevExpress.Xpf.Core;
 using DevExpress.Xpf.Grid;
@@ -24,7 +25,7 @@ namespace NewaccNet.Wpf.AppSystem.Directory
                     // 1. Tải danh mục Thuế suất để nạp vào ComboBoxEditSettings
                     var taxRates = new EntityCollection<TaxRateEntity>();
                     adapter.FetchEntityCollection(taxRates, null);
-                    cboTaxRate.ItemsSource = taxRates;
+                    cboTaxRate.ItemsSource = taxRates.ToList();
 
                     // 2. Tải danh mục Nhóm vật tư
                     var items = new EntityCollection<CategoryEntity>();

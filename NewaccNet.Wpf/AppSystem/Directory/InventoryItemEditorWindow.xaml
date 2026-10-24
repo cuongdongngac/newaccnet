@@ -4,8 +4,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
     xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
     xmlns:base="clr-namespace:NewaccNet.Wpf.Views.Base"
-    Title="Cập nhật Danh mục Vật tư" SizeToContent="Height" Width="450" WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+    Title="Cập nhật Danh mục Vật tư" SizeToContent="Height" Width="480" WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
     
     <Grid Margin="15">
         <Grid.RowDefinitions>
@@ -35,8 +36,24 @@
 
         <!-- Nhóm Vật Tư -->
         <TextBlock Text="Nhóm vật tư:" Grid.Row="3" Grid.Column="0" Margin="0,5,5,5" VerticalAlignment="Center"/>
-        <dxe:ComboBoxEdit x:Name="cboCategory" Grid.Row="3" Grid.Column="1" Margin="0,0,0,15" Height="25" 
-                          ValueMember="Categoryid" DisplayMember="Categoryname" AutoComplete="True" ImmediatePopup="True"/>
+        <dxg:LookUpEdit x:Name="cboCategory" Grid.Row="3" Grid.Column="1" Margin="0,0,0,15" Height="25" 
+                        ValueMember="Categoryid" DisplayMember="Categoryname" 
+                        AutoComplete="True" ImmediatePopup="True" AutoPopulateColumns="False"
+                        NullText="-- Chọn nhóm vật tư --" FilterCondition="Contains">
+            <dxg:LookUpEdit.PopupContentTemplate>
+                <ControlTemplate>
+                    <dxg:GridControl x:Name="PART_GridControl">
+                        <dxg:GridControl.Columns>
+                            <dxg:GridColumn FieldName="Categoryid" Header="Mã Nhóm" Width="90"/>
+                            <dxg:GridColumn FieldName="Categoryname" Header="Tên Nhóm Vật Tư" Width="220"/>
+                        </dxg:GridControl.Columns>
+                        <dxg:GridControl.View>
+                            <dxg:TableView AutoWidth="True" ShowSearchPanelMode="Never" ShowGroupPanel="False"/>
+                        </dxg:GridControl.View>
+                    </dxg:GridControl>
+                </ControlTemplate>
+            </dxg:LookUpEdit.PopupContentTemplate>
+        </dxg:LookUpEdit>
 
         <!-- Nút bấm -->
         <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">

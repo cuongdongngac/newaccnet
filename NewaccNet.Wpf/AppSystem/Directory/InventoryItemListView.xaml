@@ -21,11 +21,13 @@
             <dxb:BarButtonItem Content="Xóa" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_delete.svg'}" ItemClick="MenuDelete_ItemClick"/>
             <dxb:BarButtonItem Content="In" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_report_showdesigner.svg'}" ItemClick="MenuPrint_ItemClick"/>
             <dxb:BarButtonItem Content="Làm mới" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_refresh.svg'}" ItemClick="MenuRefresh_ItemClick"/>
+            <dxb:BarItemSeparator/>
+            <dxb:BarButtonItem Content="Nhập từ Excel" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/export/exporttoxlsx.svg'}" ItemClick="MenuExcelImport_ItemClick"/>
         </dxb:ToolBarControl>
 
         <dxg:GridControl x:Name="gridControl" Grid.Row="1" AutoGenerateColumns="None" SelectionMode="Row">
             <dxg:GridControl.View>
-                <dxg:TableView ShowGroupPanel="True" ShowSearchPanelMode="Always" ShowAutoFilterRow="False" AllowEditing="False" RowDoubleClick="TableView_RowDoubleClick">
+                <dxg:TableView ShowGroupPanel="True" ShowSearchPanelMode="Always" ShowAutoFilterRow="True" AllowEditing="False" RowDoubleClick="TableView_RowDoubleClick">
                     <dxg:TableView.RowCellMenuCustomizations>
                         <dxb:BarButtonItem Content="Thêm mới" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_new.svg'}" ItemClick="MenuAdd_ItemClick"/>
                         <dxb:BarButtonItem Content="Sửa" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_edit.svg'}" ItemClick="MenuEdit_ItemClick"/>
@@ -39,11 +41,25 @@
                 <dxg:GridColumn FieldName="MaterialName" Header="Tên Vật Tư / Hàng Hóa" Width="*" />
                 <dxg:GridColumn FieldName="Unit" Header="Đơn Vị Tính" Width="100" FixedWidth="True" />
                 
-                <!-- Categoryid (Mã Nhóm Vật Tư) -->
-                <!-- Có thể thay bằng DisplayMember="Categoryname" nếu bind bằng ComboBoxEditSettings -->
-                <dxg:GridColumn FieldName="Categoryid" Header="Nhóm Vật Tư" Width="150" FixedWidth="True">
+                <!-- Categoryid (Mã Nhóm Vật Tư) - Hiển thị Tên Nhóm Vật Tư -->
+                <dxg:GridColumn FieldName="Categoryid" Header="Nhóm Vật Tư" Width="180">
                     <dxg:GridColumn.EditSettings>
-                        <dxe:ComboBoxEditSettings x:Name="cboCategory" ValueMember="Categoryid" DisplayMember="Categoryname" AutoComplete="True" ImmediatePopup="True" />
+                        <dxg:LookUpEditSettings x:Name="cboCategory" ValueMember="Categoryid" DisplayMember="Categoryname"
+                                                AutoPopulateColumns="False" AutoComplete="True" ImmediatePopup="True">
+                            <dxg:LookUpEditSettings.PopupContentTemplate>
+                                <ControlTemplate>
+                                    <dxg:GridControl x:Name="PART_GridControl">
+                                        <dxg:GridControl.Columns>
+                                            <dxg:GridColumn FieldName="Categoryid" Header="Mã Nhóm" Width="80"/>
+                                            <dxg:GridColumn FieldName="Categoryname" Header="Tên Nhóm" Width="180"/>
+                                        </dxg:GridControl.Columns>
+                                        <dxg:GridControl.View>
+                                            <dxg:TableView AutoWidth="True" ShowSearchPanelMode="Never" ShowGroupPanel="False"/>
+                                        </dxg:GridControl.View>
+                                    </dxg:GridControl>
+                                </ControlTemplate>
+                            </dxg:LookUpEditSettings.PopupContentTemplate>
+                        </dxg:LookUpEditSettings>
                     </dxg:GridColumn.EditSettings>
                 </dxg:GridColumn>
             </dxg:GridControl.Columns>

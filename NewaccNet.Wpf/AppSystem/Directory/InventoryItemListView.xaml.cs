@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Windows;
 using DevExpress.Xpf.Core;
 using DevExpress.Xpf.Grid;
@@ -24,7 +25,7 @@ namespace NewaccNet.Wpf.AppSystem.Directory
                     // Tải danh mục Category để hiển thị tên thay vì mã trên lưới
                     var categories = new EntityCollection<CategoryEntity>();
                     adapter.FetchEntityCollection(categories, null);
-                    cboCategory.ItemsSource = categories;
+                    cboCategory.ItemsSource = categories.ToList();
 
                     var items = new EntityCollection<InventoryItemEntity>();
                     adapter.FetchEntityCollection(items, null);
@@ -39,6 +40,14 @@ namespace NewaccNet.Wpf.AppSystem.Directory
             {
                 HideLoading();
             }
+        }
+
+        private void MenuExcelImport_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+        {
+            var win = new CategoryExcelImportWindow(CategoryImportType.Stock);
+            win.Owner = this;
+            win.ShowDialog();
+            LoadData();
         }
 
         private void MenuAdd_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e) => OpenEditor(new InventoryItemEntity(), true);

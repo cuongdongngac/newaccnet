@@ -196,17 +196,17 @@ namespace NewaccNet.Wpf.AppSystem.Directory
                     break;
 
                 case CategoryImportType.Stock:
-                    lblTarget1.Text = "* Mã vật tư (Stockid):";
-                    lblTarget2.Text = "* Tên vật tư (Description):";
-                    lblTarget3.Text = "Mã loại VT (Stocktypeid):";
-                    lblTarget4.Text = "(Không dùng):";
+                    lblTarget1.Text = "* Mã vật tư (MaterialId):";
+                    lblTarget2.Text = "* Tên vật tư (MaterialName):";
+                    lblTarget3.Text = "Đơn vị tính (Unit):";
+                    lblTarget4.Text = "Nhóm vật tư (Categoryid):";
                     lblTarget5.Text = "(Không dùng):";
                     lblTarget6.Text = "(Không dùng):";
 
                     colCode.Header = "Mã vật tư";
                     colName.Header = "Tên vật tư, hàng hóa";
-                    colField1.Header = "Mã loại VT";
-                    colField2.Header = "Trường phụ 2";
+                    colField1.Header = "Đơn vị tính";
+                    colField2.Header = "Mã nhóm VT";
                     colField3.Header = "Trường phụ 3";
                     break;
 
@@ -358,9 +358,10 @@ namespace NewaccNet.Wpf.AppSystem.Directory
                     break;
 
                 case CategoryImportType.Stock:
-                    MatchCombo(cboMap1, "mã|stockid|code|vật tư|hàng hóa");
-                    MatchCombo(cboMap2, "tên|description|name|vật tư|hàng hóa|diễn giải");
-                    MatchCombo(cboMap3, "loại|stocktypeid|loại vt");
+                    MatchCombo(cboMap1, "mã|materialid|code|stockid|vật tư|hàng hóa");
+                    MatchCombo(cboMap2, "tên|materialname|name|vật tư|hàng hóa|diễn giải|description");
+                    MatchCombo(cboMap3, "đvt|đơn vị|unit");
+                    MatchCombo(cboMap4, "nhóm|category|categoryid|loại");
                     break;
 
                 case CategoryImportType.CostObject:
@@ -513,7 +514,7 @@ namespace NewaccNet.Wpf.AppSystem.Directory
                 {
                     CategoryImportType.Partner => "Partner",
                     CategoryImportType.DebtType => "DebtType",
-                    CategoryImportType.Stock => "Stock",
+                    CategoryImportType.Stock => "InventoryItem",
                     CategoryImportType.CostObject => "CostObject",
                     CategoryImportType.CostElement => "CostElement",
                     _ => "Partner"
@@ -521,7 +522,7 @@ namespace NewaccNet.Wpf.AppSystem.Directory
 
                 string idColumn = CurrentCategory switch
                 {
-                    CategoryImportType.Stock => "Stockid",
+                    CategoryImportType.Stock => "MaterialId",
                     _ => "Id"
                 };
 
@@ -631,9 +632,9 @@ namespace NewaccNet.Wpf.AppSystem.Directory
             inserted = 0;
             updated = 0;
 
-            const string checkSql = "SELECT Id FROM Partner WHERE Id = ?";
-            const string insertSql = "INSERT INTO Partner (Id, CustomerName, Taxno, Address, Phonenumber, Faxnumber, Note, Isemployee) VALUES (?, ?, ?, ?, ?, '', ?, false)";
-            const string updateSql = "UPDATE Partner SET CustomerName = ?, Taxno = ?, Address = ?, Phonenumber = ?, Note = ? WHERE Id = ?";
+            const string checkSql = "SELECT [Id] FROM [Partner] WHERE [Id] = ?";
+            const string insertSql = "INSERT INTO [Partner] ([Id], [CustomerName], [Taxno], [Address], [Phonenumber], [Faxnumber], [Note], [Isemployee]) VALUES (?, ?, ?, ?, ?, '', ?, false)";
+            const string updateSql = "UPDATE [Partner] SET [CustomerName] = ?, [Taxno] = ?, [Address] = ?, [Phonenumber] = ?, [Note] = ? WHERE [Id] = ?";
 
             foreach (var r in rows)
             {
@@ -688,9 +689,9 @@ namespace NewaccNet.Wpf.AppSystem.Directory
             inserted = 0;
             updated = 0;
 
-            const string checkSql = "SELECT Id FROM DebtType WHERE Id = ?";
-            const string insertSql = "INSERT INTO DebtType (Id, TypeName, Syncronizeflag) VALUES (?, ?, false)";
-            const string updateSql = "UPDATE DebtType SET TypeName = ? WHERE Id = ?";
+            const string checkSql = "SELECT [Id] FROM [DebtType] WHERE [Id] = ?";
+            const string insertSql = "INSERT INTO [DebtType] ([Id], [TypeName], [Syncronizeflag]) VALUES (?, ?, false)";
+            const string updateSql = "UPDATE [DebtType] SET [TypeName] = ? WHERE [Id] = ?";
 
             foreach (var r in rows)
             {
@@ -728,38 +729,43 @@ namespace NewaccNet.Wpf.AppSystem.Directory
             inserted = 0;
             updated = 0;
 
-            const string checkSql = "SELECT Stockid FROM Stock WHERE Stockid = ?";
-            const string insertSql = "INSERT INTO Stock (Stockid, Description, Stocktypeid) VALUES (?, ?, ?)";
-            const string updateSql = "UPDATE Stock SET Description = ?, Stocktypeid = ? WHERE Stockid = ?";
+            const string checkSql = "SELECT [MaterialId] FROM [InventoryItem] WHERE [MaterialId] = ?";
+            const string insertSql = "INSERT INTO [InventoryItem] ([MaterialId], [MaterialName], [Unit], [Categoryid]) VALUES (?, ?, ?, ?)";
+            const string updateSql = "UPDATE [InventoryItem] SET [MaterialName] = ?, [Unit] = ?, [Categoryid] = ? WHERE [MaterialId] = ?";
 
             foreach (var r in rows)
             {
-                var id = r.Code.Length > 10 ? r.Code.Substring(0, 10) : r.Code;
-                var desc = r.Name.Length > 50 ? r.Name.Substring(0, 50) : r.Name;
-                short typeId = short.TryParse(r.Field1, out var t) ? t : (short)1;
+                var id = r.Code.Length > 20 ? r.Code.Substring(0, 20) : r.Code;
+                var name = r.Name.Length > 255 ? r.Name.Substring(0, 255) : r.Name;
+                var unit = (r.Field1?.Trim() ?? "");
+                if (unit.Length > 10) unit = unit.Substring(0, 10);
+                var catId = (r.Field2?.Trim() ?? "");
+                if (catId.Length > 10) catId = catId.Substring(0, 10);
 
                 bool exists = false;
                 using (var cmd = new OleDbCommand(checkSql, conn))
                 {
-                    cmd.Parameters.Add("?", OleDbType.VarWChar, 10).Value = id;
+                    cmd.Parameters.Add("?", OleDbType.VarWChar, 20).Value = id;
                     exists = cmd.ExecuteScalar() != null;
                 }
 
                 if (!exists)
                 {
                     using var ins = new OleDbCommand(insertSql, conn);
-                    ins.Parameters.Add("?", OleDbType.VarWChar, 10).Value = id;
-                    ins.Parameters.Add("?", OleDbType.VarWChar, 50).Value = desc;
-                    ins.Parameters.Add("?", OleDbType.SmallInt).Value = typeId;
+                    ins.Parameters.Add("?", OleDbType.VarWChar, 20).Value = id;
+                    ins.Parameters.Add("?", OleDbType.VarWChar, 255).Value = name;
+                    ins.Parameters.Add("?", OleDbType.VarWChar, 10).Value = string.IsNullOrEmpty(unit) ? (object)DBNull.Value : unit;
+                    ins.Parameters.Add("?", OleDbType.VarWChar, 10).Value = string.IsNullOrEmpty(catId) ? (object)DBNull.Value : catId;
                     ins.ExecuteNonQuery();
                     inserted++;
                 }
                 else if (chkUpdateExisting.IsChecked == true)
                 {
                     using var upd = new OleDbCommand(updateSql, conn);
-                    upd.Parameters.Add("?", OleDbType.VarWChar, 50).Value = desc;
-                    upd.Parameters.Add("?", OleDbType.SmallInt).Value = typeId;
-                    upd.Parameters.Add("?", OleDbType.VarWChar, 10).Value = id;
+                    upd.Parameters.Add("?", OleDbType.VarWChar, 255).Value = name;
+                    upd.Parameters.Add("?", OleDbType.VarWChar, 10).Value = string.IsNullOrEmpty(unit) ? (object)DBNull.Value : unit;
+                    upd.Parameters.Add("?", OleDbType.VarWChar, 10).Value = string.IsNullOrEmpty(catId) ? (object)DBNull.Value : catId;
+                    upd.Parameters.Add("?", OleDbType.VarWChar, 20).Value = id;
                     upd.ExecuteNonQuery();
                     updated++;
                 }
@@ -771,9 +777,9 @@ namespace NewaccNet.Wpf.AppSystem.Directory
             inserted = 0;
             updated = 0;
 
-            const string checkSql = "SELECT Id FROM CostObject WHERE Id = ?";
-            const string insertSql = "INSERT INTO CostObject (Id, ObjectName, Syncronizeflag) VALUES (?, ?, false)";
-            const string updateSql = "UPDATE CostObject SET ObjectName = ? WHERE Id = ?";
+            const string checkSql = "SELECT [Id] FROM [CostObject] WHERE [Id] = ?";
+            const string insertSql = "INSERT INTO [CostObject] ([Id], [ObjectName], [Syncronizeflag]) VALUES (?, ?, false)";
+            const string updateSql = "UPDATE [CostObject] SET [ObjectName] = ? WHERE [Id] = ?";
 
             foreach (var r in rows)
             {
@@ -811,9 +817,9 @@ namespace NewaccNet.Wpf.AppSystem.Directory
             inserted = 0;
             updated = 0;
 
-            const string checkSql = "SELECT Id FROM CostElement WHERE Id = ?";
-            const string insertSql = "INSERT INTO CostElement (Id, ElementName, Taxflag) VALUES (?, ?, false)";
-            const string updateSql = "UPDATE CostElement SET ElementName = ? WHERE Id = ?";
+            const string checkSql = "SELECT [Id] FROM [CostElement] WHERE [Id] = ?";
+            const string insertSql = "INSERT INTO [CostElement] ([Id], [ElementName], [Taxflag]) VALUES (?, ?, false)";
+            const string updateSql = "UPDATE [CostElement] SET [ElementName] = ? WHERE [Id] = ?";
 
             foreach (var r in rows)
             {
@@ -882,8 +888,8 @@ namespace NewaccNet.Wpf.AppSystem.Directory
                         case CategoryImportType.Stock:
                             var sampleStocks = new[]
                             {
-                                new { Ma_Vat_Tu = "VT001", Ten_Vat_Tu = "Nước ngọt lon 330ml", Ma_Loai_VT = 1 },
-                                new { Ma_Vat_Tu = "VT002", Ten_Vat_Tu = "Bia lon Heineken", Ma_Loai_VT = 1 }
+                                new { Ma_Vat_Tu = "VT001", Ten_Vat_Tu = "Thép cuộn phi 6", Don_Vi_Tinh = "Kg", Nhom_Vat_Tu = "NVL" },
+                                new { Ma_Vat_Tu = "VT002", Ten_Vat_Tu = "Xi măng PCB40", Don_Vi_Tinh = "Tấn", Nhom_Vat_Tu = "NVL" }
                             };
                             MiniExcel.SaveAs(dialog.FileName, sampleStocks, overwriteFile: true);
                             break;

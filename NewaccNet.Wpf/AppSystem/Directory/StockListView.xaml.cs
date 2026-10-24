@@ -1,4 +1,4 @@
-﻿using System.Windows;
+using System.Windows;
 using DevExpress.Xpf.Core;
 using DevExpress.Xpf.Grid;
 using DataAccess.EntityClasses;
@@ -24,7 +24,7 @@ namespace NewaccNet.Wpf.AppSystem.Directory
                     // Tải danh mục loại hình cổ phiếu để đổ vào ComboBoxEditSettings
                     var stockTypes = new EntityCollection<StockTypeEntity>();
                     adapter.FetchEntityCollection(stockTypes, null);
-                    cboStockType.ItemsSource = stockTypes;
+                    cboStockType.ItemsSource = System.Linq.Enumerable.ToList(stockTypes);
 
                     // Tải danh mục cổ phiếu
                     var items = new EntityCollection<StockEntity>();

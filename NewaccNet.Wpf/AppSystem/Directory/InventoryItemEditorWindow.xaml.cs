@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Windows;
 using DataAccess.EntityClasses;
 using DataAccess.HelperClasses;
@@ -29,7 +30,7 @@ namespace NewaccNet.Wpf.AppSystem.Directory
                 {
                     var categories = new EntityCollection<CategoryEntity>();
                     adapter.FetchEntityCollection(categories, null);
-                    cboCategory.ItemsSource = categories;
+                    cboCategory.ItemsSource = categories.ToList();
                 }
             }
             catch (System.Exception ex)

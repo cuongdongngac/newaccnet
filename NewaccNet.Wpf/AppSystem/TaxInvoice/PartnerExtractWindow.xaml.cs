@@ -153,13 +153,18 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
                         using var conn = new OleDbConnection(connStr);
                         conn.Open();
 
-                        using var cmd = new OleDbCommand("SELECT Id FROM Partner", conn);
+                        using var cmd = new OleDbCommand("SELECT [Id], [Taxno] FROM [Partner]", conn);
                         using var reader = cmd.ExecuteReader();
                         while (reader.Read())
                         {
                             if (!reader.IsDBNull(0))
                             {
                                 existingIds.Add(reader.GetString(0).Trim());
+                            }
+                            if (!reader.IsDBNull(1))
+                            {
+                                var tax = reader.GetString(1)?.Trim();
+                                if (!string.IsNullOrEmpty(tax)) existingIds.Add(tax);
                             }
                         }
                     }
@@ -242,13 +247,13 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
                     using var conn = new OleDbConnection(connStr);
                     conn.Open();
 
-                    const string checkSql = "SELECT Id FROM Partner WHERE Id = ?";
-                    const string insertSql = @"INSERT INTO Partner 
-                        (Id, CustomerName, Address, Phonenumber, Faxnumber, Note, Taxno, Isemployee) 
+                    const string checkSql = "SELECT [Id] FROM [Partner] WHERE [Id] = ?";
+                    const string insertSql = @"INSERT INTO [Partner] 
+                        ([Id], [CustomerName], [Address], [Phonenumber], [Faxnumber], [Note], [Taxno], [Isemployee]) 
                         VALUES (?, ?, ?, '', '', ?, ?, false)";
-                    const string updateSql = @"UPDATE Partner SET 
-                        CustomerName = ?, Address = ?, Note = ?, Taxno = ? 
-                        WHERE Id = ?";
+                    const string updateSql = @"UPDATE [Partner] SET 
+                        [CustomerName] = ?, [Address] = ?, [Note] = ?, [Taxno] = ? 
+                        WHERE [Id] = ?";
 
                     foreach (var item in selected)
                     {
