@@ -1,0 +1,41 @@
+﻿{
+  "dvtte": "VND",
+  "shdon": "1001",
+  "tgia": 1.0,
+  "ttcktmai": 0.0,
+  "khhdon": "C26TTH",
+  "hdhhdvu": [
+    {
+      "thtien": 36000000,
+      "dgia": 180000,
+      "tthue": 3600000.0,
+      "dvtinh": "Thùng",
+      "tsuat": "0.1",
+      "tchat": 1,
+      "sluong": 200,
+      "ten": "Nước ngọt Pepsi 330ml",
+      "mhhdvu": "HH01",
+      "stt": 1
+    }
+  ],
+  "khmshdon": "1",
+  "ttxly": 5,
+  "tdlap": "2026-05-15T00:00:00",
+  "nmmst": "0101234567",
+  "thttltsuat": [
+    {
+      "tthue": 3600000.0,
+      "tsuat": "0.1",
+      "thtien": 36000000
+    }
+  ],
+  "tgtthue": 3600000.0,
+  "tgtcthue": 36000000,
+  "nbten": "CÔNG TY TNHH DỊCH VỤ THƯƠNG MẠI THỦY HIỀN",
+  "nmten": "CÔNG TY CỔ PHẦN ĐẦU TƯ NAM AN",
+  "nbdchi": "Số nhà 62, đường Lê Thánh Tông, Phường Quang Trung, Tỉnh Thanh Hóa, Việt Nam.",
+  "nbmst": "2802274721",
+  "nmdchi": "Số 15 Phố Huế, Q. Hoàn Kiếm, Hà Nội",
+  "tthai": 1,
+  "tgtttbso": 39600000.0
+}

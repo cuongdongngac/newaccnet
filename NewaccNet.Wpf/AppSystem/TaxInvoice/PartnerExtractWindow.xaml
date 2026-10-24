@@ -1,0 +1,83 @@
+<base:BaseWindow
+    x:Class="NewaccNet.Wpf.AppSystem.TaxInvoice.PartnerExtractWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:base="clr-namespace:NewaccNet.Wpf.Views.Base"
+    Title="Trích Xuất Đối Tác Vào Danh Mục (Partner)"
+    Width="1050" Height="620"
+    WindowStartupLocation="CenterOwner"
+    ShowInTaskbar="False">
+
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header Info -->
+        <Border Grid.Row="0" Background="#FFE8EAF6" BorderBrush="#FFC5CAE9" BorderThickness="1" CornerRadius="4" Padding="12,10" Margin="0,0,0,10">
+            <StackPanel>
+                <TextBlock Text="👥 Tự động trích xuất Nhà cung cấp &amp; Khách hàng từ Hóa đơn điện tử" FontWeight="Bold" FontSize="14" Foreground="#FF1A237E"/>
+                <TextBlock Text="Hệ thống tự động gom nhóm theo Mã số thuế (làm PartnerId), lấy Tên và Địa chỉ để nạp trực tiếp vào Bảng Danh mục Đối tác (Partner)." 
+                           Foreground="#FF3949AB" Margin="0,3,0,0" TextWrapping="Wrap"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Action Bar -->
+        <Grid Grid.Row="1" Margin="0,0,0,8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="btnSelectNew" Grid.Column="0" Content="✔ Chọn các đối tác MỚI" Height="28" Width="160" Margin="0,0,8,0" Click="BtnSelectNew_Click"/>
+            <Button x:Name="btnUnselectAll" Grid.Column="1" Content="✖ Bỏ chọn" Height="28" Width="90" Margin="0,0,8,0" Click="BtnUnselectAll_Click"/>
+
+            <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock x:Name="lblStats" Text="Đang phân tích..." FontWeight="SemiBold" Foreground="#FF0D47A1" Margin="12,0,0,0"/>
+            </StackPanel>
+
+            <Button x:Name="btnSaveToDb" Grid.Column="3" Content="💾 Lưu vào Danh mục Đối tác" Height="30" Width="210" 
+                    FontWeight="Bold" Background="#FF2E7D32" Foreground="White" Click="BtnSaveToDb_Click"/>
+        </Grid>
+
+        <!-- Master Grid -->
+        <dxg:GridControl x:Name="gridPartners" Grid.Row="2" AutoGenerateColumns="None" SelectionMode="Row">
+            <dxg:GridControl.View>
+                <dxg:TableView x:Name="viewPartners" ShowGroupPanel="True" ShowSearchPanelMode="Always" 
+                               ShowAutoFilterRow="True" AllowEditing="True"/>
+            </dxg:GridControl.View>
+            <dxg:GridControl.Columns>
+                <dxg:GridColumn FieldName="IsSelected" Header="Chọn" Width="55" FixedWidth="True" AllowEditing="True">
+                    <dxg:GridColumn.EditSettings>
+                        <dxe:CheckEditSettings/>
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
+                <dxg:GridColumn FieldName="PartnerId" Header="Mã Đối tác (MST)" Width="120" FixedWidth="True" AllowEditing="False"/>
+                <dxg:GridColumn FieldName="Taxno" Header="Mã Số Thuế" Width="120" FixedWidth="True" AllowEditing="False"/>
+                <dxg:GridColumn FieldName="CustomerName" Header="Tên Đối tác (Tên hiển thị)" Width="280" AllowEditing="True"/>
+                <dxg:GridColumn FieldName="Address" Header="Địa Chỉ" Width="*" AllowEditing="True"/>
+                <dxg:GridColumn FieldName="RoleDisplay" Header="Phân loại" Width="110" FixedWidth="True" AllowEditing="False"/>
+                <dxg:GridColumn FieldName="DbStatus" Header="Trạng thái CSDL" Width="120" FixedWidth="True" AllowEditing="False"/>
+            </dxg:GridControl.Columns>
+        </dxg:GridControl>
+
+        <!-- Footer -->
+        <Grid Grid.Row="3" Margin="0,8,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock x:Name="lblFooter" Grid.Column="0" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#FF616161"/>
+            <Button x:Name="btnClose" Grid.Column="1" Content="Đóng" Width="90" Height="28" Click="BtnClose_Click"/>
+        </Grid>
+    </Grid>
+</base:BaseWindow>

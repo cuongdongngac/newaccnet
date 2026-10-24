@@ -28,6 +28,7 @@
     <PackageReference Include="DevExpress.Wpf.Reporting" Version="25.2.3" />
     <PackageReference Include="DevExpress.Wpf.Ribbon" Version="25.2.3" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.2" />
+    <PackageReference Include="MiniExcel" Version="1.46.0" />
     <PackageReference Include="Npgsql" Version="9.0.3" />
     <PackageReference Include="System.Management" Version="10.0.12" />
   </ItemGroup>

@@ -58,18 +58,32 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <Button x:Name="btnSelectAll" Grid.Column="0" Content="✔ Chọn tất cả" Height="28" Width="100" Margin="0,0,8,0" Click="BtnSelectAll_Click"/>
-                        <Button x:Name="btnUnselectAll" Grid.Column="1" Content="✖ Bỏ chọn" Height="28" Width="90" Margin="0,0,8,0" Click="BtnUnselectAll_Click"/>
+                        <Button x:Name="btnSelectAll" Grid.Column="0" Content="✔ Chọn tất cả" Height="28" Width="100" Margin="0,0,6,0" Click="BtnSelectAll_Click"/>
+                        <Button x:Name="btnUnselectAll" Grid.Column="1" Content="✖ Bỏ chọn" Height="28" Width="85" Margin="0,0,12,0" Click="BtnUnselectAll_Click"/>
 
-                        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock x:Name="lblSelectedStats" Text="Đã chọn: 0/0 hóa đơn" FontWeight="SemiBold" Foreground="#FF0D47A1" Margin="12,0,0,0"/>
+                        <TextBlock Grid.Column="2" Text="Lọc chiều:" VerticalAlignment="Center" FontWeight="SemiBold" Margin="0,0,6,0"/>
+                        <dxe:ComboBoxEdit x:Name="cboJsonDirection" Grid.Column="3" Height="28" Width="110" Margin="0,0,8,0" IsTextEditable="False"
+                                          SelectedIndexChanged="CboJsonDirection_SelectedIndexChanged">
+                            <dxe:ComboBoxEditItem Content="Tất cả chiều" Tag="" IsSelected="True"/>
+                            <dxe:ComboBoxEditItem Content="Mua vào" Tag="purchase"/>
+                            <dxe:ComboBoxEditItem Content="Bán ra" Tag="sold"/>
+                        </dxe:ComboBoxEdit>
+
+                        <StackPanel Grid.Column="4" Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock x:Name="lblSelectedStats" Text="Đã chọn: 0/0 hóa đơn" FontWeight="SemiBold" Foreground="#FF0D47A1" Margin="8,0,0,0"/>
                         </StackPanel>
 
-                        <Button x:Name="btnImportToDb" Grid.Column="3" Content="💾 Nhập vào CSDL hiện hành" Height="32" Width="200" 
+                        <Button x:Name="btnExtractPartners" Grid.Column="5" Content="👥 Trích xuất Đối tác" Height="30" Width="160" Margin="0,0,8,0" 
+                                FontWeight="SemiBold" Background="#FF37474F" Foreground="White" Click="BtnExtractPartners_Click"/>
+
+                        <Button x:Name="btnImportToDb" Grid.Column="6" Content="💾 Nhập vào CSDL hiện hành" Height="30" Width="190" 
                                 FontWeight="Bold" Background="#FF2E7D32" Foreground="White" Click="BtnImportToDb_Click"/>
                     </Grid>
 
@@ -217,26 +231,35 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
                             <TextBlock Grid.Column="0" Text="Chiều:" VerticalAlignment="Center" FontWeight="SemiBold" Margin="0,0,6,0"/>
-                            <dxe:ComboBoxEdit x:Name="cboDbDirection" Grid.Column="1" Height="28" Margin="0,0,10,0" IsTextEditable="False">
+                            <dxe:ComboBoxEdit x:Name="cboDbDirection" Grid.Column="1" Height="28" Margin="0,0,10,0" IsTextEditable="False"
+                                              SelectedIndexChanged="FilterDbInvoices_Changed">
                                 <dxe:ComboBoxEditItem Content="Tất cả" Tag="" IsSelected="True"/>
                                 <dxe:ComboBoxEditItem Content="Mua vào" Tag="purchase"/>
                                 <dxe:ComboBoxEditItem Content="Bán ra" Tag="sold"/>
                             </dxe:ComboBoxEdit>
 
                             <TextBlock Grid.Column="2" Text="Từ ngày:" VerticalAlignment="Center" FontWeight="SemiBold" Margin="0,0,6,0"/>
-                            <dxe:DateEdit x:Name="dtDbFrom" Grid.Column="3" Height="28" Margin="0,0,10,0" Mask="dd/MM/yyyy" MaskUseAsDisplayFormat="True"/>
+                            <dxe:DateEdit x:Name="dtDbFrom" Grid.Column="3" Height="28" Margin="0,0,10,0" 
+                                          Mask="dd/MM/yyyy" MaskUseAsDisplayFormat="True" MaskType="DateTime" AllowNullInput="False"
+                                          EditValueChanged="FilterDbInvoices_Changed"/>
 
                             <TextBlock Grid.Column="4" Text="Đến ngày:" VerticalAlignment="Center" FontWeight="SemiBold" Margin="0,0,6,0"/>
-                            <dxe:DateEdit x:Name="dtDbTo" Grid.Column="5" Height="28" Margin="0,0,10,0" Mask="dd/MM/yyyy" MaskUseAsDisplayFormat="True"/>
+                            <dxe:DateEdit x:Name="dtDbTo" Grid.Column="5" Height="28" Margin="0,0,10,0" 
+                                          Mask="dd/MM/yyyy" MaskUseAsDisplayFormat="True" MaskType="DateTime" AllowNullInput="False"
+                                          EditValueChanged="FilterDbInvoices_Changed"/>
 
                             <TextBlock Grid.Column="6" Text="Tìm kiếm:" VerticalAlignment="Center" FontWeight="SemiBold" Margin="0,0,6,0"/>
-                            <dxe:TextEdit x:Name="txtDbKeyword" Grid.Column="7" Height="28" Margin="0,0,10,0" NullText="MST, Tên đối tác, Ký hiệu, Số HĐ..."/>
+                            <dxe:TextEdit x:Name="txtDbKeyword" Grid.Column="7" Height="28" Margin="0,0,8,0" NullText="MST, Tên đối tác, Ký hiệu, Số HĐ..."
+                                          KeyDown="TxtDbKeyword_KeyDown"/>
 
                             <Button x:Name="btnDbSearch" Grid.Column="8" Content="🔍 Tìm kiếm" Height="28" Width="95" Margin="0,0,6,0" Click="BtnDbSearch_Click"/>
-                            <Button x:Name="btnDbRefresh" Grid.Column="9" Content="🔄 Làm mới" Height="28" Width="85" Click="BtnDbRefresh_Click"/>
+                            <Button x:Name="btnDbRefresh" Grid.Column="9" Content="🔄 Làm mới" Height="28" Width="85" Margin="0,0,6,0" Click="BtnDbRefresh_Click"/>
+                            <Button x:Name="btnDbExtractPartners" Grid.Column="10" Content="👥 Trích xuất Đối tác" Height="28" Width="150" 
+                                    FontWeight="SemiBold" Background="#FF37474F" Foreground="White" Click="BtnDbExtractPartners_Click"/>
                         </Grid>
                     </Border>
 

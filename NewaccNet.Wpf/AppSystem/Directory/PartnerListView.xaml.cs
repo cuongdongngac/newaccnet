@@ -1,4 +1,4 @@
-﻿using System.Windows;
+using System.Windows;
 using DevExpress.Xpf.Core;
 using DataAccess.EntityClasses;
 using DataAccess.HelperClasses;
@@ -38,7 +38,38 @@ namespace NewaccNet.Wpf.AppSystem.Directory
         private void MenuAdd_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e) => OpenEditor(new PartnerEntity(), true);
         private void MenuEdit_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e) => EditSelected();
         private void MenuDelete_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e) => DeleteSelected();
-                private void MenuRefresh_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e) => LoadData();
+        private void MenuRefresh_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e) => LoadData();
+
+        private async void MenuExtractHddt_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+        {
+            var curPath = ConfigManager.Current.AccessFilePath;
+            if (string.IsNullOrEmpty(curPath) || !System.IO.File.Exists(curPath))
+            {
+                MessageBox.Show("Chưa kết nối CSDL Access.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var dbService = new NewaccNet.TaxInvoice.TaxInvoiceDbService(curPath);
+            var invoices = await dbService.GetInvoicesAsync();
+            if (invoices.Count == 0)
+            {
+                MessageBox.Show("CSDL hiện chưa có hóa đơn điện tử nào để trích xuất đối tác.\nVui lòng vào phân hệ 'Hóa đơn điện tử' tải hoặc nạp hóa đơn trước.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            var win = new TaxInvoice.PartnerExtractWindow(invoices, curPath);
+            win.Owner = this;
+            win.ShowDialog();
+            LoadData();
+        }
+
+        private void MenuImportExcel_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+        {
+            var win = new CategoryExcelImportWindow(CategoryImportType.Partner);
+            win.Owner = this;
+            win.ShowDialog();
+            LoadData();
+        }
 
         private void MenuPrint_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e) => PrintRecord();
 

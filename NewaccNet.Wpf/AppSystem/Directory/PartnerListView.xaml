@@ -21,6 +21,10 @@
             <dxb:BarButtonItem Content="Sửa" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_edit.svg'}" ItemClick="MenuEdit_ItemClick"/>
             <dxb:BarButtonItem Content="Xóa" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_delete.svg'}" ItemClick="MenuDelete_ItemClick"/>
             <dxb:BarButtonItem Content="In" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_report_showdesigner.svg'}" ItemClick="MenuPrint_ItemClick"/>
+            <dxb:BarItemSeparator/>
+            <dxb:BarButtonItem Content="Trích xuất từ HĐĐT" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_invoice.svg'}" ItemClick="MenuExtractHddt_ItemClick"/>
+            <dxb:BarButtonItem Content="Nhập từ Excel" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/export/exporttoxlsx.svg'}" ItemClick="MenuImportExcel_ItemClick"/>
+            <dxb:BarItemSeparator/>
             <dxb:BarButtonItem Content="Làm mới" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_refresh.svg'}" ItemClick="MenuRefresh_ItemClick"/>
         </dxb:ToolBarControl>
 

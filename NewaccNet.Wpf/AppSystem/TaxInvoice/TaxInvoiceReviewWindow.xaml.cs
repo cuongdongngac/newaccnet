@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using DevExpress.Xpf.Editors;
 using Microsoft.Win32;
 using NewaccNet.TaxInvoice;
@@ -60,11 +61,14 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
         private readonly string? _databasePath;
         private readonly TaxInvoiceDbService? _dbService;
 
-        // Tab 1 (JSON) items
+        // Tab 1 (JSON) in-memory cache and display items
+        private readonly List<ReviewInvoiceItemViewModel> _rawItems = new List<ReviewInvoiceItemViewModel>();
         private readonly ObservableCollection<ReviewInvoiceItemViewModel> _items = new ObservableCollection<ReviewInvoiceItemViewModel>();
 
-        // Tab 2 (DB) items
+        // Tab 2 (DB) display items
         private readonly ObservableCollection<TaxInvoiceDto> _dbItems = new ObservableCollection<TaxInvoiceDto>();
+
+        private bool _isLoaded;
 
         public TaxInvoiceReviewWindow(string? initialFolder = null, string? databasePath = null)
         {
@@ -114,6 +118,8 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
 
         private async void TaxInvoiceReviewWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            _isLoaded = true;
+
             var folder = txtSourceFolder.Text.Trim();
             if (!string.IsNullOrEmpty(folder) && System.IO.Directory.Exists(folder))
             {
@@ -163,6 +169,7 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
 
         private async Task LoadJsonFilesAsync(string folder)
         {
+            _rawItems.Clear();
             _items.Clear();
             gridDetails.ItemsSource = null;
             gridTaxRates.ItemsSource = null;
@@ -187,7 +194,10 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
                     try
                     {
                         var json = System.IO.File.ReadAllText(file);
-                        var direction = folder.Contains("ban") || folder.Contains("sold") ? "sold" : "purchase";
+                        // Check file path and content to determine direction correctly:
+                        var normPath = file.Replace('\\', '/').ToLowerInvariant();
+                        var direction = normPath.Contains("/ban/") || normPath.Contains("sold") ? "sold" : "purchase";
+                        
                         var dto = TaxInvoiceParser.ParseFromJson(json, direction, file);
                         if (dto != null)
                         {
@@ -205,11 +215,7 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
 
             parsedList.Sort((a, b) => b.InvoiceDate.CompareTo(a.InvoiceDate));
 
-            foreach (var item in parsedList)
-            {
-                _items.Add(item);
-            }
-
+            // Check against existing database
             if (_dbService != null)
             {
                 try
@@ -219,7 +225,7 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
                         existingInvoices.Select(x => $"{x.SellerTaxCode}_{x.InvoiceTemplate}_{x.InvoiceSeries}_{x.InvoiceNo}_{x.Direction}".ToUpperInvariant())
                     );
 
-                    foreach (var item in _items)
+                    foreach (var item in parsedList)
                     {
                         var key = $"{item.SellerTaxCode}_{item.Invoice.InvoiceTemplate}_{item.InvoiceSeries}_{item.InvoiceNo}_{item.Invoice.Direction}".ToUpperInvariant();
                         if (existingKeys.Contains(key))
@@ -233,6 +239,30 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
                     }
                 }
                 catch { }
+            }
+
+            _rawItems.AddRange(parsedList);
+            ApplyJsonFilter();
+        }
+
+        private void CboJsonDirection_SelectedIndexChanged(object sender, RoutedEventArgs e)
+        {
+            ApplyJsonFilter();
+        }
+
+        private void ApplyJsonFilter()
+        {
+            _items.Clear();
+            gridDetails.ItemsSource = null;
+            gridTaxRates.ItemsSource = null;
+
+            int dirIndex = cboJsonDirection.SelectedIndex; // 0 = Tất cả, 1 = Mua vào, 2 = Bán ra
+            foreach (var item in _rawItems)
+            {
+                if (dirIndex == 1 && item.Invoice.Direction != "purchase") continue;
+                if (dirIndex == 2 && item.Invoice.Direction != "sold") continue;
+
+                _items.Add(item);
             }
 
             UpdateStats();
@@ -330,6 +360,22 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
             }
         }
 
+        private void BtnExtractPartners_Click(object sender, RoutedEventArgs e)
+        {
+            var invoices = _items.Where(x => x.IsSelected).Select(x => x.Invoice).ToList();
+            if (invoices.Count == 0) invoices = _items.Select(x => x.Invoice).ToList();
+
+            if (invoices.Count == 0)
+            {
+                MessageBox.Show("Chưa có hóa đơn nào để trích xuất đối tác.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            var win = new PartnerExtractWindow(invoices, _databasePath);
+            win.Owner = this;
+            win.ShowDialog();
+        }
+
         private void BtnOpenDownloader_Click(object sender, RoutedEventArgs e)
         {
             var win = new TaxInvoiceDownloadWindow(_databasePath);
@@ -345,6 +391,20 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
         // ==============================================================
         // TAB 2: DATABASE VIEW LOGIC
         // ==============================================================
+
+        private async void FilterDbInvoices_Changed(object sender, RoutedEventArgs e)
+        {
+            if (!_isLoaded) return;
+            await LoadDbInvoicesAsync();
+        }
+
+        private async void TxtDbKeyword_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                await LoadDbInvoicesAsync();
+            }
+        }
 
         private async void BtnDbSearch_Click(object sender, RoutedEventArgs e)
         {
@@ -375,10 +435,8 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
             gridDbTaxRates.ItemsSource = null;
 
             string? direction = null;
-            if (cboDbDirection.SelectedItem is ComboBoxEditItem item && item.Tag is string tag && !string.IsNullOrEmpty(tag))
-            {
-                direction = tag;
-            }
+            if (cboDbDirection.SelectedIndex == 1) direction = "purchase";
+            else if (cboDbDirection.SelectedIndex == 2) direction = "sold";
 
             DateTime? fromDate = dtDbFrom.DateTime > DateTime.MinValue ? dtDbFrom.DateTime : null;
             DateTime? toDate = dtDbTo.DateTime > DateTime.MinValue ? dtDbTo.DateTime : null;
@@ -424,6 +482,19 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
                 gridDbDetails.ItemsSource = null;
                 gridDbTaxRates.ItemsSource = null;
             }
+        }
+
+        private void BtnDbExtractPartners_Click(object sender, RoutedEventArgs e)
+        {
+            if (_dbItems.Count == 0)
+            {
+                MessageBox.Show("Chưa có hóa đơn nào trong CSDL để trích xuất đối tác.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            var win = new PartnerExtractWindow(_dbItems, _databasePath);
+            win.Owner = this;
+            win.ShowDialog();
         }
 
         private void BtnClose_Click(object sender, RoutedEventArgs e)

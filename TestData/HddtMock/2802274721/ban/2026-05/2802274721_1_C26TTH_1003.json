@@ -1,0 +1,41 @@
+﻿{
+  "dvtte": "VND",
+  "shdon": "1003",
+  "tgia": 1.0,
+  "ttcktmai": 0.0,
+  "khhdon": "C26TTH",
+  "hdhhdvu": [
+    {
+      "thtien": 48000000,
+      "dgia": 160000,
+      "tthue": 4800000.0,
+      "dvtinh": "Thùng",
+      "tsuat": "0.1",
+      "tchat": 1,
+      "sluong": 300,
+      "ten": "Trà xanh không độ 455ml",
+      "mhhdvu": "HH01",
+      "stt": 1
+    }
+  ],
+  "khmshdon": "1",
+  "ttxly": 5,
+  "tdlap": "2026-05-15T00:00:00",
+  "nmmst": "2801998877",
+  "thttltsuat": [
+    {
+      "tthue": 4800000.0,
+      "tsuat": "0.1",
+      "thtien": 48000000
+    }
+  ],
+  "tgtthue": 4800000.0,
+  "tgtcthue": 48000000,
+  "nbten": "CÔNG TY TNHH DỊCH VỤ THƯƠNG MẠI THỦY HIỀN",
+  "nmten": "DOANH NGHIỆP TƯ NHÂN VÂN ANH",
+  "nbdchi": "Số nhà 62, đường Lê Thánh Tông, Phường Quang Trung, Tỉnh Thanh Hóa, Việt Nam.",
+  "nbmst": "2802274721",
+  "nmdchi": "Đường Lê Hoàn, TP. Thanh Hóa",
+  "tthai": 1,
+  "tgtttbso": 52800000.0
+}

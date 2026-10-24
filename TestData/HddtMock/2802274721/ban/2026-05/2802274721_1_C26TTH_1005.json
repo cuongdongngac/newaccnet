@@ -1,0 +1,41 @@
+﻿{
+  "dvtte": "VND",
+  "shdon": "1005",
+  "tgia": 1.0,
+  "ttcktmai": 0.0,
+  "khhdon": "C26TTH",
+  "hdhhdvu": [
+    {
+      "thtien": 47500000,
+      "dgia": 95000,
+      "tthue": 4750000.0,
+      "dvtinh": "Thùng",
+      "tsuat": "0.1",
+      "tchat": 1,
+      "sluong": 500,
+      "ten": "Nước khoáng Lavie 500ml",
+      "mhhdvu": "HH01",
+      "stt": 1
+    }
+  ],
+  "khmshdon": "1",
+  "ttxly": 5,
+  "tdlap": "2026-05-15T00:00:00",
+  "nmmst": "2900456123",
+  "thttltsuat": [
+    {
+      "tthue": 4750000.0,
+      "tsuat": "0.1",
+      "thtien": 47500000
+    }
+  ],
+  "tgtthue": 4750000.0,
+  "tgtcthue": 47500000,
+  "nbten": "CÔNG TY TNHH DỊCH VỤ THƯƠNG MẠI THỦY HIỀN",
+  "nmten": "CÔNG TY TNHH VIỆT THẮNG",
+  "nbdchi": "Số nhà 62, đường Lê Thánh Tông, Phường Quang Trung, Tỉnh Thanh Hóa, Việt Nam.",
+  "nbmst": "2802274721",
+  "nmdchi": "TP. Vinh, Nghệ An",
+  "tthai": 1,
+  "tgtttbso": 52250000.0
+}

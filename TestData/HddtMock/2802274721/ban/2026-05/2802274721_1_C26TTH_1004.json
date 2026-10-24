@@ -1,0 +1,41 @@
+﻿{
+  "dvtte": "VND",
+  "shdon": "1004",
+  "tgia": 1.0,
+  "ttcktmai": 0.0,
+  "khhdon": "C26TTH",
+  "hdhhdvu": [
+    {
+      "thtien": 35000000,
+      "dgia": 350000,
+      "tthue": 3500000.0,
+      "dvtinh": "Thùng",
+      "tsuat": "0.1",
+      "tchat": 1,
+      "sluong": 100,
+      "ten": "Sữa tươi chua TH True Milk",
+      "mhhdvu": "HH01",
+      "stt": 1
+    }
+  ],
+  "khmshdon": "1",
+  "ttxly": 5,
+  "tdlap": "2026-05-15T00:00:00",
+  "nmmst": "0315678901",
+  "thttltsuat": [
+    {
+      "tthue": 3500000.0,
+      "tsuat": "0.1",
+      "thtien": 35000000
+    }
+  ],
+  "tgtthue": 3500000.0,
+  "tgtcthue": 35000000,
+  "nbten": "CÔNG TY TNHH DỊCH VỤ THƯƠNG MẠI THỦY HIỀN",
+  "nmten": "CÔNG TY CỔ PHẦN BÁCH HÓA MIỀN TRUNG",
+  "nbdchi": "Số nhà 62, đường Lê Thánh Tông, Phường Quang Trung, Tỉnh Thanh Hóa, Việt Nam.",
+  "nbmst": "2802274721",
+  "nmdchi": "Phường Ba Đình, TP. Thanh Hóa",
+  "tthai": 1,
+  "tgtttbso": 38500000.0
+}

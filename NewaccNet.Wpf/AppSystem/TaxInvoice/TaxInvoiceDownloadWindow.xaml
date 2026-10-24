@@ -77,10 +77,12 @@
                 </StackPanel>
 
                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Từ ngày:" VerticalAlignment="Center"/>
-                <dxe:DateEdit x:Name="dtFrom" Grid.Row="1" Grid.Column="1" Height="28" Margin="0,0,8,6"/>
+                <dxe:DateEdit x:Name="dtFrom" Grid.Row="1" Grid.Column="1" Height="28" Margin="0,0,8,6" 
+                              Mask="dd/MM/yyyy" MaskUseAsDisplayFormat="True" MaskType="DateTime" AllowNullInput="False"/>
 
                 <TextBlock Grid.Row="1" Grid.Column="2" Text="Đến ngày:" VerticalAlignment="Center"/>
-                <dxe:DateEdit x:Name="dtTo" Grid.Row="1" Grid.Column="3" Height="28" Margin="0,0,0,6"/>
+                <dxe:DateEdit x:Name="dtTo" Grid.Row="1" Grid.Column="3" Height="28" Margin="0,0,0,6" 
+                              Mask="dd/MM/yyyy" MaskUseAsDisplayFormat="True" MaskType="DateTime" AllowNullInput="False"/>
 
                 <StackPanel Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Orientation="Horizontal" Margin="0,4,0,0">
                     <dxe:CheckEdit x:Name="chkDetail" Content="Tải chi tiết hàng hóa (hdhhdvu)" IsChecked="True" Margin="0,0,16,0"/>

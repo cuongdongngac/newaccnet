@@ -1,0 +1,41 @@
+﻿{
+  "dvtte": "VND",
+  "shdon": "1002",
+  "tgia": 1.0,
+  "ttcktmai": 0.0,
+  "khhdon": "C26TTH",
+  "hdhhdvu": [
+    {
+      "thtien": 63000000,
+      "dgia": 420000,
+      "tthue": 6300000.0,
+      "dvtinh": "Thùng",
+      "tsuat": "0.1",
+      "tchat": 1,
+      "sluong": 150,
+      "ten": "Bia Heineken lon 330ml",
+      "mhhdvu": "HH01",
+      "stt": 1
+    }
+  ],
+  "khmshdon": "1",
+  "ttxly": 5,
+  "tdlap": "2026-05-15T00:00:00",
+  "nmmst": "0108765432",
+  "thttltsuat": [
+    {
+      "tthue": 6300000.0,
+      "tsuat": "0.1",
+      "thtien": 63000000
+    }
+  ],
+  "tgtthue": 6300000.0,
+  "tgtcthue": 63000000,
+  "nbten": "CÔNG TY TNHH DỊCH VỤ THƯƠNG MẠI THỦY HIỀN",
+  "nmten": "CÔNG TY TNHH PHÁT TRIỂN THƯƠNG MẠI MINH ĐỨC",
+  "nbdchi": "Số nhà 62, đường Lê Thánh Tông, Phường Quang Trung, Tỉnh Thanh Hóa, Việt Nam.",
+  "nbmst": "2802274721",
+  "nmdchi": "Số 42 Cầu Giấy, Q. Cầu Giấy, Hà Nội",
+  "tthai": 1,
+  "tgtttbso": 69300000.0
+}
