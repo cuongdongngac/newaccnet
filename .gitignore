@@ -48,4 +48,8 @@ _ReSharper*/
 
 # DevExpress specific (if any temp files)
 *.snk
+
+# Build publish output
+[Pp]ublish/
+
 *.licx
