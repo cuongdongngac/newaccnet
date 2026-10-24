@@ -18,9 +18,10 @@ namespace NewaccNet.Wpf.AppSystem.Directory
     public enum CategoryImportType
     {
         Partner,
-        Account,
+        DebtType,
         Stock,
-        Warehouse
+        CostObject,
+        CostElement
     }
 
     public class CategoryPreviewRowViewModel : INotifyPropertyChanged
@@ -124,9 +125,10 @@ namespace NewaccNet.Wpf.AppSystem.Directory
             int catIndex = initialType switch
             {
                 CategoryImportType.Partner => 0,
-                CategoryImportType.Account => 1,
+                CategoryImportType.DebtType => 1,
                 CategoryImportType.Stock => 2,
-                CategoryImportType.Warehouse => 3,
+                CategoryImportType.CostObject => 3,
+                CategoryImportType.CostElement => 4,
                 _ => 0
             };
             cboCategoryType.SelectedIndex = catIndex;
@@ -140,9 +142,10 @@ namespace NewaccNet.Wpf.AppSystem.Directory
                 return cboCategoryType.SelectedIndex switch
                 {
                     0 => CategoryImportType.Partner,
-                    1 => CategoryImportType.Account,
+                    1 => CategoryImportType.DebtType,
                     2 => CategoryImportType.Stock,
-                    3 => CategoryImportType.Warehouse,
+                    3 => CategoryImportType.CostObject,
+                    4 => CategoryImportType.CostElement,
                     _ => CategoryImportType.Partner
                 };
             }
@@ -163,61 +166,76 @@ namespace NewaccNet.Wpf.AppSystem.Directory
             switch (CurrentCategory)
             {
                 case CategoryImportType.Partner:
-                    lblTarget1.Text = "* Mã đối tác (Id):";
-                    lblTarget2.Text = "* Tên đối tác:";
-                    lblTarget3.Text = "Mã số thuế:";
-                    lblTarget4.Text = "Địa chỉ:";
-                    lblTarget5.Text = "Điện thoại:";
-                    lblTarget6.Text = "Ghi chú:";
+                    lblTarget1.Text = "* Mã đối tác (Id = MST):";
+                    lblTarget2.Text = "* Tên đối tác (Tên hiển thị):";
+                    lblTarget3.Text = "Mã số thuế (Taxno):";
+                    lblTarget4.Text = "Địa chỉ (Address):";
+                    lblTarget5.Text = "Điện thoại (Phonenumber):";
+                    lblTarget6.Text = "Ghi chú (Note):";
 
-                    colCode.Header = "Mã Đối tác (Id)";
+                    colCode.Header = "Mã Đối tác (MST)";
                     colName.Header = "Tên Đối tác";
                     colField1.Header = "Mã số thuế";
                     colField2.Header = "Địa chỉ";
                     colField3.Header = "Điện thoại";
                     break;
 
-                case CategoryImportType.Account:
-                    lblTarget1.Text = "* Số hiệu TK (Id):";
-                    lblTarget2.Text = "* Tên tài khoản:";
-                    lblTarget3.Text = "Tính chất (Nature):";
-                    lblTarget4.Text = "Loại TK (AccountType):";
-                    lblTarget5.Text = "Cấp TK (Level):";
-                    lblTarget6.Text = "Ghi chú:";
+                case CategoryImportType.DebtType:
+                    lblTarget1.Text = "* Mã loại công nợ (Id):";
+                    lblTarget2.Text = "* Tên loại công nợ (TypeName):";
+                    lblTarget3.Text = "Cờ đồng bộ (Syncronizeflag):";
+                    lblTarget4.Text = "(Không dùng):";
+                    lblTarget5.Text = "(Không dùng):";
+                    lblTarget6.Text = "(Không dùng):";
 
-                    colCode.Header = "Số hiệu TK";
-                    colName.Header = "Tên tài khoản";
-                    colField1.Header = "Tính chất";
-                    colField2.Header = "Loại TK";
-                    colField3.Header = "Cấp TK";
+                    colCode.Header = "Mã loại công nợ";
+                    colName.Header = "Tên loại công nợ";
+                    colField1.Header = "Đồng bộ";
+                    colField2.Header = "Trường phụ 2";
+                    colField3.Header = "Trường phụ 3";
                     break;
 
                 case CategoryImportType.Stock:
                     lblTarget1.Text = "* Mã vật tư (Stockid):";
                     lblTarget2.Text = "* Tên vật tư (Description):";
                     lblTarget3.Text = "Mã loại VT (Stocktypeid):";
-                    lblTarget4.Text = "Trường phụ 2:";
-                    lblTarget5.Text = "Trường phụ 3:";
-                    lblTarget6.Text = "Ghi chú:";
+                    lblTarget4.Text = "(Không dùng):";
+                    lblTarget5.Text = "(Không dùng):";
+                    lblTarget6.Text = "(Không dùng):";
 
                     colCode.Header = "Mã vật tư";
-                    colName.Header = "Tên vật tư";
+                    colName.Header = "Tên vật tư, hàng hóa";
                     colField1.Header = "Mã loại VT";
                     colField2.Header = "Trường phụ 2";
                     colField3.Header = "Trường phụ 3";
                     break;
 
-                case CategoryImportType.Warehouse:
-                    lblTarget1.Text = "* Mã kho (WarehouseId):";
-                    lblTarget2.Text = "* Tên kho (WarehouseName):";
-                    lblTarget3.Text = "Địa chỉ kho (Place):";
-                    lblTarget4.Text = "Trường phụ 2:";
-                    lblTarget5.Text = "Trường phụ 3:";
-                    lblTarget6.Text = "Ghi chú:";
+                case CategoryImportType.CostObject:
+                    lblTarget1.Text = "* Mã đối tượng CP (Id):";
+                    lblTarget2.Text = "* Tên đối tượng CP (ObjectName):";
+                    lblTarget3.Text = "Cờ đồng bộ (Syncronizeflag):";
+                    lblTarget4.Text = "(Không dùng):";
+                    lblTarget5.Text = "(Không dùng):";
+                    lblTarget6.Text = "(Không dùng):";
 
-                    colCode.Header = "Mã kho";
-                    colName.Header = "Tên kho";
-                    colField1.Header = "Địa chỉ kho";
+                    colCode.Header = "Mã đối tượng CP";
+                    colName.Header = "Tên đối tượng CP (Công trình/Sản phẩm)";
+                    colField1.Header = "Đồng bộ";
+                    colField2.Header = "Trường phụ 2";
+                    colField3.Header = "Trường phụ 3";
+                    break;
+
+                case CategoryImportType.CostElement:
+                    lblTarget1.Text = "* Mã yếu tố CP (Id):";
+                    lblTarget2.Text = "* Tên yếu tố CP (ElementName):";
+                    lblTarget3.Text = "Cờ tính thuế (Taxflag):";
+                    lblTarget4.Text = "(Không dùng):";
+                    lblTarget5.Text = "(Không dùng):";
+                    lblTarget6.Text = "(Không dùng):";
+
+                    colCode.Header = "Mã yếu tố CP";
+                    colName.Header = "Tên yếu tố CP (Khoản mục chi phí)";
+                    colField1.Header = "Tính thuế";
                     colField2.Header = "Trường phụ 2";
                     colField3.Header = "Trường phụ 3";
                     break;
@@ -325,7 +343,7 @@ namespace NewaccNet.Wpf.AppSystem.Directory
             switch (CurrentCategory)
             {
                 case CategoryImportType.Partner:
-                    MatchCombo(cboMap1, "mã|code|id|mst|số hiệu");
+                    MatchCombo(cboMap1, "mst|mã số thuế|mã|code|id|số hiệu");
                     MatchCombo(cboMap2, "tên|name|khách hàng|nhà cung cấp|đối tác");
                     MatchCombo(cboMap3, "mst|tax|thuế|mã số thuế");
                     MatchCombo(cboMap4, "địa chỉ|dchi|address");
@@ -333,26 +351,28 @@ namespace NewaccNet.Wpf.AppSystem.Directory
                     MatchCombo(cboMap6, "ghi chú|note|diễn giải");
                     break;
 
-                case CategoryImportType.Account:
-                    MatchCombo(cboMap1, "số hiệu|tài khoản|tk|code|id");
-                    MatchCombo(cboMap2, "tên|name|diễn giải");
-                    MatchCombo(cboMap3, "tính chất|nature|loại");
-                    MatchCombo(cboMap4, "loại tk|accounttype|loại");
-                    MatchCombo(cboMap5, "cấp|level");
-                    MatchCombo(cboMap6, "ghi chú|note");
+                case CategoryImportType.DebtType:
+                    MatchCombo(cboMap1, "mã|code|id");
+                    MatchCombo(cboMap2, "tên|typename|name|loại công nợ|nội dung");
+                    MatchCombo(cboMap3, "đồng bộ|sync");
                     break;
 
                 case CategoryImportType.Stock:
                     MatchCombo(cboMap1, "mã|stockid|code|vật tư|hàng hóa");
-                    MatchCombo(cboMap2, "tên|description|name|diễn giải");
+                    MatchCombo(cboMap2, "tên|description|name|vật tư|hàng hóa|diễn giải");
                     MatchCombo(cboMap3, "loại|stocktypeid|loại vt");
-                    MatchCombo(cboMap4, "đvt|unit|đơn vị");
                     break;
 
-                case CategoryImportType.Warehouse:
-                    MatchCombo(cboMap1, "mã kho|warehouseid|code|id");
-                    MatchCombo(cboMap2, "tên kho|warehousename|name");
-                    MatchCombo(cboMap3, "địa chỉ|place|address");
+                case CategoryImportType.CostObject:
+                    MatchCombo(cboMap1, "mã|code|id|đối tượng");
+                    MatchCombo(cboMap2, "tên|objectname|name|công trình|hạng mục|sản phẩm|đối tượng");
+                    MatchCombo(cboMap3, "đồng bộ|sync");
+                    break;
+
+                case CategoryImportType.CostElement:
+                    MatchCombo(cboMap1, "mã|code|id|yếu tố");
+                    MatchCombo(cboMap2, "tên|elementname|name|khoản mục|chi phí|yếu tố");
+                    MatchCombo(cboMap3, "thuế|taxflag");
                     break;
             }
 
@@ -407,6 +427,12 @@ namespace NewaccNet.Wpf.AppSystem.Directory
                 string f2 = GetVal(raw, col4);
                 string f3 = GetVal(raw, col5);
                 string f4 = GetVal(raw, col6);
+
+                // If Partner and Code is empty but f1 (Taxno) has value, use Taxno as Code!
+                if (CurrentCategory == CategoryImportType.Partner && string.IsNullOrWhiteSpace(code) && !string.IsNullOrWhiteSpace(f1))
+                {
+                    code = f1;
+                }
 
                 // Skip completely empty rows
                 if (string.IsNullOrWhiteSpace(code) && string.IsNullOrWhiteSpace(name))
@@ -486,16 +512,16 @@ namespace NewaccNet.Wpf.AppSystem.Directory
                 string tableName = CurrentCategory switch
                 {
                     CategoryImportType.Partner => "Partner",
-                    CategoryImportType.Account => "ChartOfAccount",
+                    CategoryImportType.DebtType => "DebtType",
                     CategoryImportType.Stock => "Stock",
-                    CategoryImportType.Warehouse => "Warehouse",
+                    CategoryImportType.CostObject => "CostObject",
+                    CategoryImportType.CostElement => "CostElement",
                     _ => "Partner"
                 };
 
                 string idColumn = CurrentCategory switch
                 {
                     CategoryImportType.Stock => "Stockid",
-                    CategoryImportType.Warehouse => "WarehouseId",
                     _ => "Id"
                 };
 
@@ -570,14 +596,17 @@ namespace NewaccNet.Wpf.AppSystem.Directory
                         case CategoryImportType.Partner:
                             ExecutePartnerImport(conn, selectedRows, out inserted, out updated);
                             break;
-                        case CategoryImportType.Account:
-                            ExecuteAccountImport(conn, selectedRows, out inserted, out updated);
+                        case CategoryImportType.DebtType:
+                            ExecuteDebtTypeImport(conn, selectedRows, out inserted, out updated);
                             break;
                         case CategoryImportType.Stock:
                             ExecuteStockImport(conn, selectedRows, out inserted, out updated);
                             break;
-                        case CategoryImportType.Warehouse:
-                            ExecuteWarehouseImport(conn, selectedRows, out inserted, out updated);
+                        case CategoryImportType.CostObject:
+                            ExecuteCostObjectImport(conn, selectedRows, out inserted, out updated);
+                            break;
+                        case CategoryImportType.CostElement:
+                            ExecuteCostElementImport(conn, selectedRows, out inserted, out updated);
                             break;
                     }
                 });
@@ -612,6 +641,7 @@ namespace NewaccNet.Wpf.AppSystem.Directory
                 var rawName = r.Name?.Trim() ?? "";
                 var shortName = rawName.Length > 50 ? rawName.Substring(0, 50) : rawName;
                 var taxno = (r.Field1?.Trim() ?? "");
+                if (string.IsNullOrEmpty(taxno)) taxno = id; // MST default to Id
                 if (taxno.Length > 50) taxno = taxno.Substring(0, 50);
                 var address = (r.Field2?.Trim() ?? "");
                 if (address.Length > 255) address = address.Substring(0, 255);
@@ -653,43 +683,40 @@ namespace NewaccNet.Wpf.AppSystem.Directory
             }
         }
 
-        private void ExecuteAccountImport(OleDbConnection conn, List<CategoryPreviewRowViewModel> rows, out int inserted, out int updated)
+        private void ExecuteDebtTypeImport(OleDbConnection conn, List<CategoryPreviewRowViewModel> rows, out int inserted, out int updated)
         {
             inserted = 0;
             updated = 0;
 
-            const string checkSql = "SELECT Id FROM ChartOfAccount WHERE Id = ?";
-            const string insertSql = "INSERT INTO ChartOfAccount (Id, AccountName, Nature) VALUES (?, ?, ?)";
-            const string updateSql = "UPDATE ChartOfAccount SET AccountName = ?, Nature = ? WHERE Id = ?";
+            const string checkSql = "SELECT Id FROM DebtType WHERE Id = ?";
+            const string insertSql = "INSERT INTO DebtType (Id, TypeName, Syncronizeflag) VALUES (?, ?, false)";
+            const string updateSql = "UPDATE DebtType SET TypeName = ? WHERE Id = ?";
 
             foreach (var r in rows)
             {
-                var id = r.Code.Length > 20 ? r.Code.Substring(0, 20) : r.Code;
-                var name = r.Name?.Trim() ?? "";
-                var nature = r.Field1?.Trim() ?? "";
+                var id = r.Code.Length > 10 ? r.Code.Substring(0, 10) : r.Code;
+                var name = r.Name.Length > 50 ? r.Name.Substring(0, 50) : r.Name;
 
                 bool exists = false;
                 using (var cmd = new OleDbCommand(checkSql, conn))
                 {
-                    cmd.Parameters.Add("?", OleDbType.VarWChar, 20).Value = id;
+                    cmd.Parameters.Add("?", OleDbType.VarWChar, 10).Value = id;
                     exists = cmd.ExecuteScalar() != null;
                 }
 
                 if (!exists)
                 {
                     using var ins = new OleDbCommand(insertSql, conn);
-                    ins.Parameters.Add("?", OleDbType.VarWChar, 20).Value = id;
-                    ins.Parameters.Add("?", OleDbType.VarWChar, 255).Value = name;
-                    ins.Parameters.Add("?", OleDbType.VarWChar, 50).Value = nature;
+                    ins.Parameters.Add("?", OleDbType.VarWChar, 10).Value = id;
+                    ins.Parameters.Add("?", OleDbType.VarWChar, 50).Value = name;
                     ins.ExecuteNonQuery();
                     inserted++;
                 }
                 else if (chkUpdateExisting.IsChecked == true)
                 {
                     using var upd = new OleDbCommand(updateSql, conn);
-                    upd.Parameters.Add("?", OleDbType.VarWChar, 255).Value = name;
-                    upd.Parameters.Add("?", OleDbType.VarWChar, 50).Value = nature;
-                    upd.Parameters.Add("?", OleDbType.VarWChar, 20).Value = id;
+                    upd.Parameters.Add("?", OleDbType.VarWChar, 50).Value = name;
+                    upd.Parameters.Add("?", OleDbType.VarWChar, 10).Value = id;
                     upd.ExecuteNonQuery();
                     updated++;
                 }
@@ -739,21 +766,19 @@ namespace NewaccNet.Wpf.AppSystem.Directory
             }
         }
 
-        private void ExecuteWarehouseImport(OleDbConnection conn, List<CategoryPreviewRowViewModel> rows, out int inserted, out int updated)
+        private void ExecuteCostObjectImport(OleDbConnection conn, List<CategoryPreviewRowViewModel> rows, out int inserted, out int updated)
         {
             inserted = 0;
             updated = 0;
 
-            const string checkSql = "SELECT WarehouseId FROM Warehouse WHERE WarehouseId = ?";
-            const string insertSql = "INSERT INTO Warehouse (WarehouseId, WarehouseName, Place) VALUES (?, ?, ?)";
-            const string updateSql = "UPDATE Warehouse SET WarehouseName = ?, Place = ? WHERE WarehouseId = ?";
+            const string checkSql = "SELECT Id FROM CostObject WHERE Id = ?";
+            const string insertSql = "INSERT INTO CostObject (Id, ObjectName, Syncronizeflag) VALUES (?, ?, false)";
+            const string updateSql = "UPDATE CostObject SET ObjectName = ? WHERE Id = ?";
 
             foreach (var r in rows)
             {
                 var id = r.Code.Length > 10 ? r.Code.Substring(0, 10) : r.Code;
                 var name = r.Name.Length > 50 ? r.Name.Substring(0, 50) : r.Name;
-                var place = (r.Field1?.Trim() ?? "");
-                if (place.Length > 255) place = place.Substring(0, 255);
 
                 bool exists = false;
                 using (var cmd = new OleDbCommand(checkSql, conn))
@@ -767,7 +792,6 @@ namespace NewaccNet.Wpf.AppSystem.Directory
                     using var ins = new OleDbCommand(insertSql, conn);
                     ins.Parameters.Add("?", OleDbType.VarWChar, 10).Value = id;
                     ins.Parameters.Add("?", OleDbType.VarWChar, 50).Value = name;
-                    ins.Parameters.Add("?", OleDbType.VarWChar, 255).Value = place;
                     ins.ExecuteNonQuery();
                     inserted++;
                 }
@@ -775,7 +799,46 @@ namespace NewaccNet.Wpf.AppSystem.Directory
                 {
                     using var upd = new OleDbCommand(updateSql, conn);
                     upd.Parameters.Add("?", OleDbType.VarWChar, 50).Value = name;
-                    upd.Parameters.Add("?", OleDbType.VarWChar, 255).Value = place;
+                    upd.Parameters.Add("?", OleDbType.VarWChar, 10).Value = id;
+                    upd.ExecuteNonQuery();
+                    updated++;
+                }
+            }
+        }
+
+        private void ExecuteCostElementImport(OleDbConnection conn, List<CategoryPreviewRowViewModel> rows, out int inserted, out int updated)
+        {
+            inserted = 0;
+            updated = 0;
+
+            const string checkSql = "SELECT Id FROM CostElement WHERE Id = ?";
+            const string insertSql = "INSERT INTO CostElement (Id, ElementName, Taxflag) VALUES (?, ?, false)";
+            const string updateSql = "UPDATE CostElement SET ElementName = ? WHERE Id = ?";
+
+            foreach (var r in rows)
+            {
+                var id = r.Code.Length > 10 ? r.Code.Substring(0, 10) : r.Code;
+                var name = r.Name.Length > 50 ? r.Name.Substring(0, 50) : r.Name;
+
+                bool exists = false;
+                using (var cmd = new OleDbCommand(checkSql, conn))
+                {
+                    cmd.Parameters.Add("?", OleDbType.VarWChar, 10).Value = id;
+                    exists = cmd.ExecuteScalar() != null;
+                }
+
+                if (!exists)
+                {
+                    using var ins = new OleDbCommand(insertSql, conn);
+                    ins.Parameters.Add("?", OleDbType.VarWChar, 10).Value = id;
+                    ins.Parameters.Add("?", OleDbType.VarWChar, 50).Value = name;
+                    ins.ExecuteNonQuery();
+                    inserted++;
+                }
+                else if (chkUpdateExisting.IsChecked == true)
+                {
+                    using var upd = new OleDbCommand(updateSql, conn);
+                    upd.Parameters.Add("?", OleDbType.VarWChar, 50).Value = name;
                     upd.Parameters.Add("?", OleDbType.VarWChar, 10).Value = id;
                     upd.ExecuteNonQuery();
                     updated++;
@@ -801,37 +864,46 @@ namespace NewaccNet.Wpf.AppSystem.Directory
                         case CategoryImportType.Partner:
                             var samplePartners = new[]
                             {
-                                new { Ma_Doi_Tac = "0101234567", Ten_Doi_Tac = "Công ty Cổ phần Mẫu A", Ma_So_Thue = "0101234567", Dia_Chi = "Hà Nội", Dien_Thoai = "0243123456" },
-                                new { Ma_Doi_Tac = "0209876543", Ten_Doi_Tac = "Công ty TNHH Mẫu B", Ma_So_Thue = "0209876543", Dia_Chi = "Hải Phòng", Dien_Thoai = "0225123456" }
+                                new { Ma_So_Thue = "0101234567", Ten_Doi_Tac = "Công ty Cổ phần Mẫu A", Dia_Chi = "Hà Nội", Dien_Thoai = "0243123456" },
+                                new { Ma_So_Thue = "0209876543", Ten_Doi_Tac = "Công ty TNHH Mẫu B", Dia_Chi = "Hải Phòng", Dien_Thoai = "0225123456" }
                             };
                             MiniExcel.SaveAs(dialog.FileName, samplePartners, overwriteFile: true);
                             break;
 
-                        case CategoryImportType.Account:
-                            var sampleAccounts = new[]
+                        case CategoryImportType.DebtType:
+                            var sampleDebtTypes = new[]
                             {
-                                new { So_Hieu_TK = "1111", Ten_Tai_Khoan = "Tiền Việt Nam", Tinh_Chat = "Dư Nợ" },
-                                new { So_Hieu_TK = "1121", Ten_Tai_Khoan = "Tiền gửi ngân hàng VND", Tinh_Chat = "Dư Nợ" }
+                                new { Ma_Loai_CN = "LCN01", Ten_Loai_Cong_No = "Công nợ khách hàng mua buôn" },
+                                new { Ma_Loai_CN = "LCN02", Ten_Loai_Cong_No = "Công nợ nhà cung cấp dịch vụ" }
                             };
-                            MiniExcel.SaveAs(dialog.FileName, sampleAccounts, overwriteFile: true);
+                            MiniExcel.SaveAs(dialog.FileName, sampleDebtTypes, overwriteFile: true);
                             break;
 
                         case CategoryImportType.Stock:
                             var sampleStocks = new[]
                             {
-                                new { Ma_Vat_Tu = "VT001", Ten_Vat_Tu = "Sắt thép xây dựng", Ma_Loai_VT = 1 },
-                                new { Ma_Vat_Tu = "VT002", Ten_Vat_Tu = "Xi măng Hoàng Thạch", Ma_Loai_VT = 1 }
+                                new { Ma_Vat_Tu = "VT001", Ten_Vat_Tu = "Nước ngọt lon 330ml", Ma_Loai_VT = 1 },
+                                new { Ma_Vat_Tu = "VT002", Ten_Vat_Tu = "Bia lon Heineken", Ma_Loai_VT = 1 }
                             };
                             MiniExcel.SaveAs(dialog.FileName, sampleStocks, overwriteFile: true);
                             break;
 
-                        case CategoryImportType.Warehouse:
-                            var sampleWarehouses = new[]
+                        case CategoryImportType.CostObject:
+                            var sampleCostObjects = new[]
                             {
-                                new { Ma_Kho = "KHO01", Ten_Kho = "Kho Tổng", Dia_Chi = "Kho số 1 Cảng" },
-                                new { Ma_Kho = "KHO02", Ten_Kho = "Kho Phụ", Dia_Chi = "Chi nhánh 2" }
+                                new { Ma_Doi_Tuong_CP = "DTCP01", Ten_Doi_Tuong_CP = "Công trình Nhà máy Xi măng" },
+                                new { Ma_Doi_Tuong_CP = "DTCP02", Ten_Doi_Tuong_CP = "Sản phẩm A - Lô 2026" }
                             };
-                            MiniExcel.SaveAs(dialog.FileName, sampleWarehouses, overwriteFile: true);
+                            MiniExcel.SaveAs(dialog.FileName, sampleCostObjects, overwriteFile: true);
+                            break;
+
+                        case CategoryImportType.CostElement:
+                            var sampleCostElements = new[]
+                            {
+                                new { Ma_Yeu_To_CP = "YTCP01", Ten_Yeu_To_CP = "Chi phí nhân công trực tiếp" },
+                                new { Ma_Yeu_To_CP = "YTCP02", Ten_Yeu_To_CP = "Chi phí nguyên vật liệu chính" }
+                            };
+                            MiniExcel.SaveAs(dialog.FileName, sampleCostElements, overwriteFile: true);
                             break;
                     }
 

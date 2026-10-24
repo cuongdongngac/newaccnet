@@ -39,10 +39,11 @@
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Chọn Danh mục:" VerticalAlignment="Center" FontWeight="SemiBold" Margin="0,0,8,0"/>
                 <dxe:ComboBoxEdit x:Name="cboCategoryType" Grid.Row="0" Grid.Column="1" Height="28" Margin="0,0,16,0" IsTextEditable="False"
                                   SelectedIndexChanged="CboCategoryType_SelectedIndexChanged">
-                    <dxe:ComboBoxEditItem Content="1. Đối tượng (Partner)" Tag="Partner" IsSelected="True"/>
-                    <dxe:ComboBoxEditItem Content="2. Tài khoản (ChartOfAccount)" Tag="Account"/>
+                    <dxe:ComboBoxEditItem Content="1. Đối tượng công nợ (Partner)" Tag="Partner" IsSelected="True"/>
+                    <dxe:ComboBoxEditItem Content="2. Loại công nợ (DebtType)" Tag="DebtType"/>
                     <dxe:ComboBoxEditItem Content="3. Vật tư, Hàng hóa (Stock)" Tag="Stock"/>
-                    <dxe:ComboBoxEditItem Content="4. Kho hàng (Warehouse)" Tag="Warehouse"/>
+                    <dxe:ComboBoxEditItem Content="4. Đối tượng chi phí (CostObject)" Tag="CostObject"/>
+                    <dxe:ComboBoxEditItem Content="5. Yếu tố chi phí (CostElement)" Tag="CostElement"/>
                 </dxe:ComboBoxEdit>
 
                 <Button x:Name="btnDownloadTemplate" Grid.Row="0" Grid.Column="4" Content="📥 Xuất tệp mẫu Excel" Height="28" Width="150" Margin="0,0,8,0"
