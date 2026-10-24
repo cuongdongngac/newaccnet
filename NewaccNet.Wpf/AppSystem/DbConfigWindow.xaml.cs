@@ -100,7 +100,7 @@ namespace NewaccNet.Wpf.AppSystem
             if (idx == 0) // Access
             {
                 string path = txtAccessPath?.Text ?? "";
-                preview = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={path}";
+                preview = $"Provider=Microsoft.ACE.OLEDB.16.0;Data Source={path};Persist Security Info=False;";
             }
             else if (idx == 1) // SQL Server
             {

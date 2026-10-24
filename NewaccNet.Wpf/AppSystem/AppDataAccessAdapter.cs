@@ -44,7 +44,7 @@ namespace NewaccNet.Wpf.AppSystem
                 }
                 else
                 {
-                    if (string.IsNullOrWhiteSpace(conn)) conn = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=d:\WpfDemo\data\Greeneast.accdb";
+                    if (string.IsNullOrWhiteSpace(conn)) conn = @"Provider=Microsoft.ACE.OLEDB.16.0;Data Source=d:\WpfDemo\data\Greeneast.accdb";
 
                     System.Data.Common.DbProviderFactories.RegisterFactory("System.Data.OleDb", System.Data.OleDb.OleDbFactory.Instance);
                     SD.LLBLGen.Pro.ORMSupportClasses.RuntimeConfiguration.ConfigureDQE<SD.LLBLGen.Pro.DQE.Access.AccessDQEConfiguration>(

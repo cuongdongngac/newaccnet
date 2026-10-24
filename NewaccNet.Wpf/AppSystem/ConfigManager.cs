@@ -53,7 +53,7 @@ namespace NewaccNet.Wpf.AppSystem
         {
             if (Current.DbType == DatabaseType.Access)
             {
-                Current.ConnectionString = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={Current.AccessFilePath}";
+                Current.ConnectionString = $"Provider=Microsoft.ACE.OLEDB.16.0;Data Source={Current.AccessFilePath};Persist Security Info=False;";
             }
             else if (Current.DbType == DatabaseType.SqlServer)
             {

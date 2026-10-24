@@ -20,7 +20,7 @@ namespace NewaccNet.Wpf.AppSystem.BalanceTransfer
 
             if (cfg.DbType == DatabaseType.Access)
             {
-                return $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={cfg.AccessFilePath}";
+                return $"Provider=Microsoft.ACE.OLEDB.16.0;Data Source={cfg.AccessFilePath};Persist Security Info=False;";
             }
             else if (cfg.DbType == DatabaseType.SqlServer)
             {
