@@ -473,6 +473,40 @@ namespace NewaccNet.TaxInvoice
             }
         }
 
+        public async Task EnsureDetailsLoadedAsync(IEnumerable<TaxInvoiceDto> invoices)
+        {
+            var needLoading = System.Linq.Enumerable.ToList(System.Linq.Enumerable.Where(invoices, i => i.Details == null || i.Details.Count == 0));
+            if (needLoading.Count == 0) return;
+
+            using var conn = CreateConnection();
+            await conn.OpenAsync().ConfigureAwait(false);
+
+            foreach (var invoice in needLoading)
+            {
+                if (invoice.Details == null) invoice.Details = new List<TaxInvoiceDetailDto>();
+                using var cmdDetail = new OleDbCommand("SELECT Id, LineNo, ItemCode, ItemName, UnitName, Quantity, UnitPrice, Amount, TaxRate, TaxAmount FROM TaxInvoiceDetail WHERE TaxInvoiceId = ? ORDER BY LineNo", conn);
+                AddLong(cmdDetail, invoice.Id);
+                using var r = await cmdDetail.ExecuteReaderAsync().ConfigureAwait(false);
+                while (await r.ReadAsync().ConfigureAwait(false))
+                {
+                    invoice.Details.Add(new TaxInvoiceDetailDto
+                    {
+                        Id = r.GetInt32(0),
+                        TaxInvoiceId = invoice.Id,
+                        LineNo = r.IsDBNull(1) ? 0 : r.GetInt32(1),
+                        ItemCode = r.IsDBNull(2) ? null : r.GetString(2),
+                        ItemName = r.IsDBNull(3) ? null : r.GetString(3),
+                        UnitName = r.IsDBNull(4) ? null : r.GetString(4),
+                        Quantity = r.IsDBNull(5) ? 0 : r.GetDouble(5),
+                        UnitPrice = r.IsDBNull(6) ? 0 : r.GetDecimal(6),
+                        Amount = r.IsDBNull(7) ? 0 : r.GetDecimal(7),
+                        TaxRate = r.IsDBNull(8) ? null : r.GetString(8),
+                        TaxAmount = r.IsDBNull(9) ? 0 : r.GetDecimal(9)
+                    });
+                }
+            }
+        }
+
         // ==========================================
         // 4. Import from JSON Directory
         // ==========================================

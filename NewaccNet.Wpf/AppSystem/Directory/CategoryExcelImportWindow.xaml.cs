@@ -99,7 +99,7 @@ namespace NewaccNet.Wpf.AppSystem.Directory
         private List<string> _excelColumns = new List<string>();
         private bool _isUpdatingMapping;
 
-        public CategoryExcelImportWindow(CategoryImportType initialType = CategoryImportType.Partner, string? databasePath = null)
+        public CategoryExcelImportWindow(CategoryImportType initialType = CategoryImportType.Partner, string? databasePath = null, string? initialExcelPath = null)
         {
             InitializeComponent();
 
@@ -133,6 +133,12 @@ namespace NewaccNet.Wpf.AppSystem.Directory
             };
             cboCategoryType.SelectedIndex = catIndex;
             UpdateCategorySchemaUI();
+
+            if (!string.IsNullOrEmpty(initialExcelPath) && File.Exists(initialExcelPath))
+            {
+                txtExcelPath.Text = initialExcelPath;
+                this.Loaded += (s, e) => _ = ReadExcelFileAsync(initialExcelPath);
+            }
         }
 
         private CategoryImportType CurrentCategory

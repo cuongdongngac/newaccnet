@@ -1,9 +1,12 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using DevExpress.Xpf.Core;
 using DevExpress.Xpf.Grid;
 using DataAccess.EntityClasses;
 using DataAccess.HelperClasses;
+using NewaccNet.TaxInvoice;
+using NewaccNet.Wpf.AppSystem;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace NewaccNet.Wpf.AppSystem.Directory
@@ -45,6 +48,93 @@ namespace NewaccNet.Wpf.AppSystem.Directory
         private void MenuExcelImport_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
         {
             var win = new CategoryExcelImportWindow(CategoryImportType.Stock);
+            win.Owner = this;
+            win.ShowDialog();
+            LoadData();
+        }
+
+        private async void MenuExtractFromHddt_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+        {
+            var dbPath = ConfigManager.Current.AccessFilePath;
+            if (string.IsNullOrEmpty(dbPath) || !System.IO.File.Exists(dbPath))
+            {
+                var template = System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "template.accdb");
+                if (System.IO.File.Exists(template)) dbPath = template;
+            }
+
+            List<TaxInvoiceDto> invoices = new();
+
+            if (!string.IsNullOrEmpty(dbPath) && System.IO.File.Exists(dbPath))
+            {
+                try
+                {
+                    var dbService = new TaxInvoiceDbService(dbPath);
+                    var dbInvoices = await dbService.GetInvoicesAsync();
+                    if (dbInvoices.Count > 0)
+                    {
+                        var choice = MessageBox.Show(
+                            $"CSDL hiện tại đang có {dbInvoices.Count} hóa đơn điện tử.\n\n" +
+                            "- Chọn [Yes] để trích xuất vật tư từ các hóa đơn trong CSDL\n" +
+                            "- Chọn [No] để chọn thư mục chứa tệp hóa đơn JSON khác\n" +
+                            "- Chọn [Cancel] để hủy thao tác",
+                            "Chọn nguồn hóa đơn điện tử",
+                            MessageBoxButton.YesNoCancel,
+                            MessageBoxImage.Question);
+
+                        if (choice == MessageBoxResult.Cancel) return;
+
+                        if (choice == MessageBoxResult.Yes)
+                        {
+                            await dbService.EnsureDetailsLoadedAsync(dbInvoices);
+                            invoices = dbInvoices;
+                        }
+                    }
+                }
+                catch { }
+            }
+
+            if (invoices.Count == 0)
+            {
+                var dialog = new Microsoft.Win32.OpenFolderDialog
+                {
+                    Title = "Chọn thư mục chứa tệp hóa đơn JSON"
+                };
+
+                if (dialog.ShowDialog() != true) return;
+
+                var folder = dialog.FolderName;
+                if (!System.IO.Directory.Exists(folder)) return;
+
+                var files = System.IO.Directory.GetFiles(folder, "*.json", System.IO.SearchOption.AllDirectories);
+                foreach (var file in files)
+                {
+                    var name = System.IO.Path.GetFileName(file);
+                    if (name.Equals("index.json", System.StringComparison.OrdinalIgnoreCase) ||
+                        name.Equals("_log.json", System.StringComparison.OrdinalIgnoreCase) ||
+                        name.StartsWith("list_", System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue;
+                    }
+
+                    try
+                    {
+                        var json = System.IO.File.ReadAllText(file);
+                        var normPath = file.Replace('\\', '/').ToLowerInvariant();
+                        var direction = normPath.Contains("/ban/") || normPath.Contains("sold") ? "sold" : "purchase";
+                        var dto = TaxInvoiceParser.ParseFromJson(json, direction, file);
+                        if (dto != null) invoices.Add(dto);
+                    }
+                    catch { }
+                }
+
+                if (invoices.Count == 0)
+                {
+                    MessageBox.Show("Không tìm thấy hóa đơn JSON hợp lệ nào trong thư mục đã chọn.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+            }
+
+            var win = new TaxInvoice.InventoryItemExtractWindow(invoices, dbPath);
             win.Owner = this;
             win.ShowDialog();
             LoadData();

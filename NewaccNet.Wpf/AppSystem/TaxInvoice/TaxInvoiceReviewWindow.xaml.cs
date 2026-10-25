@@ -376,6 +376,22 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
             win.ShowDialog();
         }
 
+        private void BtnExtractItems_Click(object sender, RoutedEventArgs e)
+        {
+            var invoices = _items.Where(x => x.IsSelected).Select(x => x.Invoice).ToList();
+            if (invoices.Count == 0) invoices = _items.Select(x => x.Invoice).ToList();
+
+            if (invoices.Count == 0)
+            {
+                MessageBox.Show("Chưa có hóa đơn nào để trích xuất vật tư.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            var win = new InventoryItemExtractWindow(invoices, _databasePath);
+            win.Owner = this;
+            win.ShowDialog();
+        }
+
         private void BtnOpenDownloader_Click(object sender, RoutedEventArgs e)
         {
             var win = new TaxInvoiceDownloadWindow(_databasePath);
@@ -493,6 +509,28 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
             }
 
             var win = new PartnerExtractWindow(_dbItems, _databasePath);
+            win.Owner = this;
+            win.ShowDialog();
+        }
+
+        private async void BtnDbExtractItems_Click(object sender, RoutedEventArgs e)
+        {
+            if (_dbItems.Count == 0)
+            {
+                MessageBox.Show("Chưa có hóa đơn nào trong CSDL để trích xuất vật tư.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            if (_dbService != null)
+            {
+                try
+                {
+                    await _dbService.EnsureDetailsLoadedAsync(_dbItems);
+                }
+                catch { }
+            }
+
+            var win = new InventoryItemExtractWindow(_dbItems, _databasePath);
             win.Owner = this;
             win.ShowDialog();
         }

@@ -23,6 +23,7 @@
             <dxb:BarButtonItem Content="Làm mới" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_refresh.svg'}" ItemClick="MenuRefresh_ItemClick"/>
             <dxb:BarItemSeparator/>
             <dxb:BarButtonItem Content="Nhập từ Excel" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/export/exporttoxlsx.svg'}" ItemClick="MenuExcelImport_ItemClick"/>
+            <dxb:BarButtonItem Content="Trích xuất từ HĐĐT" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_invoice.svg'}" ItemClick="MenuExtractFromHddt_ItemClick"/>
         </dxb:ToolBarControl>
 
         <dxg:GridControl x:Name="gridControl" Grid.Row="1" AutoGenerateColumns="None" SelectionMode="Row">
