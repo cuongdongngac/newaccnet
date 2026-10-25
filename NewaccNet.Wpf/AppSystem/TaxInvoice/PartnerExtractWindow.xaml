@@ -6,8 +6,8 @@
     xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
     xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
     xmlns:base="clr-namespace:NewaccNet.Wpf.Views.Base"
-    Title="Trích Xuất Đối Tác Vào Danh Mục (Partner)"
-    Width="1050" Height="620"
+    Title="Trích Xuất &amp; Sinh Mã Danh Mục Đối Tượng Công Nợ (Partner) Từ HĐĐT"
+    Width="1180" Height="680"
     WindowStartupLocation="CenterOwner"
     ShowInTaskbar="False">
 
@@ -15,62 +15,132 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Header Info -->
-        <Border Grid.Row="0" Background="#FFE8EAF6" BorderBrush="#FFC5CAE9" BorderThickness="1" CornerRadius="4" Padding="12,10" Margin="0,0,0,10">
+        <!-- 1. Header Banner -->
+        <Border Grid.Row="0" Background="#FFE8EAF6" BorderBrush="#FFC5CAE9" BorderThickness="1" CornerRadius="4" Padding="12,8" Margin="0,0,0,8">
             <StackPanel>
                 <TextBlock Text="👥 Tự động trích xuất Nhà cung cấp &amp; Khách hàng từ Hóa đơn điện tử" FontWeight="Bold" FontSize="14" Foreground="#FF1A237E"/>
-                <TextBlock Text="Hệ thống tự động gom nhóm theo Mã số thuế (làm PartnerId), lấy Tên và Địa chỉ để nạp trực tiếp vào Bảng Danh mục Đối tác (Partner)." 
+                <TextBlock Text="Hệ thống tự động gom nhóm theo Mã số thuế, gợi ý sinh Mã đối tượng công nợ, đối chiếu với CSDL hiện hành, xuất Excel hoặc nạp trực tiếp vào Danh mục Đối tác." 
                            Foreground="#FF3949AB" Margin="0,3,0,0" TextWrapping="Wrap"/>
             </StackPanel>
         </Border>
 
-        <!-- Action Bar -->
-        <Grid Grid.Row="1" Margin="0,0,0,8">
+        <!-- 2. Rule Configuration Bar -->
+        <Border Grid.Row="1" Background="#FFF5F5F5" BorderBrush="#FFE0E0E0" BorderThickness="1" CornerRadius="4" Padding="10,6" Margin="0,0,0,8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="320"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" Text="Quy tắc sinh mã:" VerticalAlignment="Center" FontWeight="SemiBold" Margin="0,0,8,0"/>
+                <dxe:ComboBoxEdit x:Name="cboNamingRule" Grid.Column="1" Height="28" Margin="0,0,12,0" IsTextEditable="False"
+                                  SelectedIndexChanged="CboNamingRule_SelectedIndexChanged">
+                    <dxe:ComboBoxEditItem Content="1. Sử dụng Mã số thuế (MST - Mặc định)" IsSelected="True"/>
+                    <dxe:ComboBoxEditItem Content="2. Phân loại theo vai trò (NCC0001 / KH0001)"/>
+                    <dxe:ComboBoxEditItem Content="3. Viết tắt tên đối tác (Bỏ Cty, TNHH, CP...)"/>
+                    <dxe:ComboBoxEditItem Content="4. Tùy chỉnh tiền tố + Số tự tăng"/>
+                </dxe:ComboBoxEdit>
+
+                <TextBlock Grid.Column="2" Text="Tiền tố:" VerticalAlignment="Center" FontWeight="SemiBold" Margin="0,0,6,0"/>
+                <dxe:TextEdit x:Name="txtPrefix" Grid.Column="3" Height="28" Text="DT" MaxLength="10" IsEnabled="False" Margin="0,0,12,0"/>
+
+                <dxe:CheckEdit x:Name="chkKeepExistingDbCodes" Grid.Column="4" Content="Giữ nguyên mã đối tác đã có trong CSDL" IsChecked="True" VerticalAlignment="Center" Margin="0,0,12,0"/>
+
+                <Button x:Name="btnApplyRule" Grid.Column="6" Content="⚡ Áp dụng quy tắc sinh mã" Height="28" Width="180" 
+                        FontWeight="SemiBold" Background="#FF455A64" Foreground="White" Click="BtnApplyRule_Click"/>
+            </Grid>
+        </Border>
+
+        <!-- 3. Action Toolbar -->
+        <Grid Grid.Row="2" Margin="0,0,0,8">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="150"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <Button x:Name="btnSelectNew" Grid.Column="0" Content="✔ Chọn các đối tác MỚI" Height="28" Width="160" Margin="0,0,8,0" Click="BtnSelectNew_Click"/>
-            <Button x:Name="btnUnselectAll" Grid.Column="1" Content="✖ Bỏ chọn" Height="28" Width="90" Margin="0,0,8,0" Click="BtnUnselectAll_Click"/>
+            <Button x:Name="btnSelectNew" Grid.Column="0" Content="✔ Chọn đối tác MỚI" Height="28" Width="140" Margin="0,0,6,0" Click="BtnSelectNew_Click"/>
+            <Button x:Name="btnSelectAll" Grid.Column="1" Content="✔ Chọn tất cả" Height="28" Width="95" Margin="0,0,6,0" Click="BtnSelectAll_Click"/>
+            <Button x:Name="btnUnselectAll" Grid.Column="2" Content="✖ Bỏ chọn" Height="28" Width="85" Margin="0,0,10,0" Click="BtnUnselectAll_Click"/>
 
-            <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-                <TextBlock x:Name="lblStats" Text="Đang phân tích..." FontWeight="SemiBold" Foreground="#FF0D47A1" Margin="12,0,0,0"/>
+            <TextBlock Grid.Column="3" Text="Lọc:" VerticalAlignment="Center" FontWeight="SemiBold" Margin="0,0,6,0"/>
+            <dxe:ComboBoxEdit x:Name="cboFilterStatus" Grid.Column="4" Height="28" Margin="0,0,10,0" IsTextEditable="False"
+                              SelectedIndexChanged="CboFilterStatus_SelectedIndexChanged">
+                <dxe:ComboBoxEditItem Content="Tất cả đối tác" IsSelected="True"/>
+                <dxe:ComboBoxEditItem Content="Chỉ đối tác MỚI"/>
+                <dxe:ComboBoxEditItem Content="Chỉ đối tác ĐÃ CÓ"/>
+            </dxe:ComboBoxEdit>
+
+            <StackPanel Grid.Column="5" Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock x:Name="lblStats" Text="Đang xử lý dữ liệu..." FontWeight="SemiBold" Foreground="#FF0D47A1" Margin="8,0,0,0"/>
             </StackPanel>
 
-            <Button x:Name="btnSaveToDb" Grid.Column="3" Content="💾 Lưu vào Danh mục Đối tác" Height="30" Width="210" 
+            <!-- Export to Excel Button -->
+            <Button x:Name="btnExportExcel" Grid.Column="6" Content="📥 Xuất tệp Excel" Height="30" Width="150" Margin="0,0,8,0"
+                    FontWeight="Bold" Background="#FF1976D2" Foreground="White" Click="BtnExportExcel_Click"/>
+
+            <!-- Direct DB Save Button -->
+            <Button x:Name="btnSaveToDb" Grid.Column="7" Content="💾 Lưu trực tiếp CSDL" Height="30" Width="160" 
                     FontWeight="Bold" Background="#FF2E7D32" Foreground="White" Click="BtnSaveToDb_Click"/>
         </Grid>
 
-        <!-- Master Grid -->
-        <dxg:GridControl x:Name="gridPartners" Grid.Row="2" AutoGenerateColumns="None" SelectionMode="Row">
+        <!-- 4. Master Grid -->
+        <dxg:GridControl x:Name="gridPartners" Grid.Row="3" AutoGenerateColumns="None" SelectionMode="Row">
             <dxg:GridControl.View>
                 <dxg:TableView x:Name="viewPartners" ShowGroupPanel="True" ShowSearchPanelMode="Always" 
-                               ShowAutoFilterRow="True" AllowEditing="True"/>
+                               ShowAutoFilterRow="True" AllowEditing="True" ShowTotalSummary="True"/>
             </dxg:GridControl.View>
+            <dxg:GridControl.TotalSummary>
+                <dxg:GridSummaryItem FieldName="PartnerId" SummaryType="Count" DisplayFormat="Số đối tác: {0:N0}"/>
+            </dxg:GridControl.TotalSummary>
             <dxg:GridControl.Columns>
                 <dxg:GridColumn FieldName="IsSelected" Header="Chọn" Width="55" FixedWidth="True" AllowEditing="True">
                     <dxg:GridColumn.EditSettings>
                         <dxe:CheckEditSettings/>
                     </dxg:GridColumn.EditSettings>
                 </dxg:GridColumn>
-                <dxg:GridColumn FieldName="PartnerId" Header="Mã Đối tác (MST)" Width="120" FixedWidth="True" AllowEditing="False"/>
-                <dxg:GridColumn FieldName="Taxno" Header="Mã Số Thuế" Width="120" FixedWidth="True" AllowEditing="False"/>
-                <dxg:GridColumn FieldName="CustomerName" Header="Tên Đối tác (Tên hiển thị)" Width="280" AllowEditing="True"/>
-                <dxg:GridColumn FieldName="Address" Header="Địa Chỉ" Width="*" AllowEditing="True"/>
+                <dxg:GridColumn FieldName="PartnerId" Header="Mã Đối Tượng (Đề xuất)" Width="150" FixedWidth="True" AllowEditing="True">
+                    <dxg:GridColumn.EditSettings>
+                        <dxe:TextEditSettings MaxLength="20"/>
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
+                <dxg:GridColumn FieldName="Taxno" Header="Mã Số Thuế" Width="125" FixedWidth="True" AllowEditing="True">
+                    <dxg:GridColumn.EditSettings>
+                        <dxe:TextEditSettings MaxLength="50"/>
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
+                <dxg:GridColumn FieldName="CustomerName" Header="Tên Đối Tượng (Tên hiển thị)" Width="300" AllowEditing="True">
+                    <dxg:GridColumn.EditSettings>
+                        <dxe:TextEditSettings MaxLength="255"/>
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
+                <dxg:GridColumn FieldName="Address" Header="Địa Chỉ" Width="*" AllowEditing="True">
+                    <dxg:GridColumn.EditSettings>
+                        <dxe:TextEditSettings MaxLength="255"/>
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
                 <dxg:GridColumn FieldName="RoleDisplay" Header="Phân loại" Width="110" FixedWidth="True" AllowEditing="False"/>
                 <dxg:GridColumn FieldName="DbStatus" Header="Trạng thái CSDL" Width="120" FixedWidth="True" AllowEditing="False"/>
             </dxg:GridControl.Columns>
         </dxg:GridControl>
 
-        <!-- Footer -->
-        <Grid Grid.Row="3" Margin="0,8,0,0">
+        <!-- 5. Footer -->
+        <Grid Grid.Row="4" Margin="0,8,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>

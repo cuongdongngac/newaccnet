@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using System.Windows;
 using DevExpress.Xpf.Core;
 using DataAccess.EntityClasses;
 using DataAccess.HelperClasses;
+using NewaccNet.TaxInvoice;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace NewaccNet.Wpf.AppSystem.Directory
@@ -45,16 +47,79 @@ namespace NewaccNet.Wpf.AppSystem.Directory
             var curPath = ConfigManager.Current.AccessFilePath;
             if (string.IsNullOrEmpty(curPath) || !System.IO.File.Exists(curPath))
             {
-                MessageBox.Show("Chưa kết nối CSDL Access.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
+                var template = System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "template.accdb");
+                if (System.IO.File.Exists(template)) curPath = template;
             }
 
-            var dbService = new NewaccNet.TaxInvoice.TaxInvoiceDbService(curPath);
-            var invoices = await dbService.GetInvoicesAsync();
+            List<TaxInvoiceDto> invoices = new();
+
+            if (!string.IsNullOrEmpty(curPath) && System.IO.File.Exists(curPath))
+            {
+                try
+                {
+                    var dbService = new NewaccNet.TaxInvoice.TaxInvoiceDbService(curPath);
+                    var dbInvoices = await dbService.GetInvoicesAsync();
+                    if (dbInvoices.Count > 0)
+                    {
+                        var choice = MessageBox.Show(
+                            $"CSDL hiện tại đang có {dbInvoices.Count} hóa đơn điện tử.\n\n" +
+                            "- Chọn [Yes] để trích xuất đối tác từ các hóa đơn trong CSDL\n" +
+                            "- Chọn [No] để chọn thư mục chứa tệp hóa đơn JSON khác\n" +
+                            "- Chọn [Cancel] để hủy thao tác",
+                            "Chọn nguồn hóa đơn điện tử",
+                            MessageBoxButton.YesNoCancel,
+                            MessageBoxImage.Question);
+
+                        if (choice == MessageBoxResult.Cancel) return;
+
+                        if (choice == MessageBoxResult.Yes)
+                        {
+                            invoices = dbInvoices;
+                        }
+                    }
+                }
+                catch { }
+            }
+
             if (invoices.Count == 0)
             {
-                MessageBox.Show("CSDL hiện chưa có hóa đơn điện tử nào để trích xuất đối tác.\nVui lòng vào phân hệ 'Hóa đơn điện tử' tải hoặc nạp hóa đơn trước.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
+                var dialog = new Microsoft.Win32.OpenFolderDialog
+                {
+                    Title = "Chọn thư mục chứa tệp hóa đơn JSON"
+                };
+
+                if (dialog.ShowDialog() != true) return;
+
+                var folder = dialog.FolderName;
+                if (!System.IO.Directory.Exists(folder)) return;
+
+                var files = System.IO.Directory.GetFiles(folder, "*.json", System.IO.SearchOption.AllDirectories);
+                foreach (var file in files)
+                {
+                    var name = System.IO.Path.GetFileName(file);
+                    if (name.Equals("index.json", System.StringComparison.OrdinalIgnoreCase) ||
+                        name.Equals("_log.json", System.StringComparison.OrdinalIgnoreCase) ||
+                        name.StartsWith("list_", System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue;
+                    }
+
+                    try
+                    {
+                        var json = System.IO.File.ReadAllText(file);
+                        var normPath = file.Replace('\\', '/').ToLowerInvariant();
+                        var direction = normPath.Contains("/ban/") || normPath.Contains("sold") ? "sold" : "purchase";
+                        var dto = TaxInvoiceParser.ParseFromJson(json, direction, file);
+                        if (dto != null) invoices.Add(dto);
+                    }
+                    catch { }
+                }
+
+                if (invoices.Count == 0)
+                {
+                    MessageBox.Show("Không tìm thấy hóa đơn JSON hợp lệ nào trong thư mục đã chọn.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
             }
 
             var win = new TaxInvoice.PartnerExtractWindow(invoices, curPath);
