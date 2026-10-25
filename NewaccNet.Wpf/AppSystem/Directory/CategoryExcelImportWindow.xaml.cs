@@ -349,25 +349,25 @@ namespace NewaccNet.Wpf.AppSystem.Directory
             switch (CurrentCategory)
             {
                 case CategoryImportType.Partner:
-                    MatchCombo(cboMap1, "mst|mã số thuế|mã|code|id|số hiệu");
-                    MatchCombo(cboMap2, "tên|name|khách hàng|nhà cung cấp|đối tác");
-                    MatchCombo(cboMap3, "mst|tax|thuế|mã số thuế");
-                    MatchCombo(cboMap4, "địa chỉ|dchi|address");
-                    MatchCombo(cboMap5, "điện thoại|phone|tel|sđt");
-                    MatchCombo(cboMap6, "ghi chú|note|diễn giải");
+                    MatchCombo(cboMap1, "^id$|^partnerid$|mã|mst|code|số hiệu");
+                    MatchCombo(cboMap2, "^customername$|tên|name|khách hàng|nhà cung cấp|đối tác");
+                    MatchCombo(cboMap3, "^taxno$|mst|tax|thuế|mã số thuế");
+                    MatchCombo(cboMap4, "^address$|địa chỉ|dchi");
+                    MatchCombo(cboMap5, "^phonenumber$|điện thoại|phone|tel|sđt");
+                    MatchCombo(cboMap6, "^note$|ghi chú|diễn giải");
                     break;
 
                 case CategoryImportType.DebtType:
-                    MatchCombo(cboMap1, "mã|code|id");
-                    MatchCombo(cboMap2, "tên|typename|name|loại công nợ|nội dung");
-                    MatchCombo(cboMap3, "đồng bộ|sync");
+                    MatchCombo(cboMap1, "^id$|mã|code");
+                    MatchCombo(cboMap2, "^typename$|tên|name|loại công nợ|nội dung");
+                    MatchCombo(cboMap3, "^syncronizeflag$|đồng bộ|sync");
                     break;
 
                 case CategoryImportType.Stock:
-                    MatchCombo(cboMap1, "mã|materialid|code|stockid|vật tư|hàng hóa");
-                    MatchCombo(cboMap2, "tên|materialname|name|vật tư|hàng hóa|diễn giải|description");
-                    MatchCombo(cboMap3, "đvt|đơn vị|unit");
-                    MatchCombo(cboMap4, "nhóm|category|categoryid|loại");
+                    MatchCombo(cboMap1, "^materialid$|mã|code|stockid|vật tư|hàng hóa");
+                    MatchCombo(cboMap2, "^materialname$|tên|name|vật tư|hàng hóa|diễn giải|description");
+                    MatchCombo(cboMap3, "^unit$|đvt|đơn vị");
+                    MatchCombo(cboMap4, "^categoryid$|^category$|nhóm|loại");
                     break;
 
                 case CategoryImportType.CostObject:
@@ -876,8 +876,8 @@ namespace NewaccNet.Wpf.AppSystem.Directory
                         case CategoryImportType.Partner:
                             var samplePartners = new[]
                             {
-                                new { Ma_So_Thue = "0101234567", Ten_Doi_Tac = "Công ty Cổ phần Mẫu A", Dia_Chi = "Hà Nội", Dien_Thoai = "0243123456" },
-                                new { Ma_So_Thue = "0209876543", Ten_Doi_Tac = "Công ty TNHH Mẫu B", Dia_Chi = "Hải Phòng", Dien_Thoai = "0225123456" }
+                                new { Id = "0101234567", CustomerName = "Công ty Cổ phần Mẫu A", Taxno = "0101234567", Address = "Hà Nội", Phonenumber = "0243123456", Note = "Nhà cung cấp" },
+                                new { Id = "0209876543", CustomerName = "Công ty TNHH Mẫu B", Taxno = "0209876543", Address = "Hải Phòng", Phonenumber = "0225123456", Note = "Khách hàng" }
                             };
                             MiniExcel.SaveAs(dialog.FileName, samplePartners, overwriteFile: true);
                             break;
@@ -885,8 +885,8 @@ namespace NewaccNet.Wpf.AppSystem.Directory
                         case CategoryImportType.DebtType:
                             var sampleDebtTypes = new[]
                             {
-                                new { Ma_Loai_CN = "LCN01", Ten_Loai_Cong_No = "Công nợ khách hàng mua buôn" },
-                                new { Ma_Loai_CN = "LCN02", Ten_Loai_Cong_No = "Công nợ nhà cung cấp dịch vụ" }
+                                new { Id = "LCN01", TypeName = "Công nợ khách hàng mua buôn", Syncronizeflag = "false" },
+                                new { Id = "LCN02", TypeName = "Công nợ nhà cung cấp dịch vụ", Syncronizeflag = "false" }
                             };
                             MiniExcel.SaveAs(dialog.FileName, sampleDebtTypes, overwriteFile: true);
                             break;
@@ -894,8 +894,8 @@ namespace NewaccNet.Wpf.AppSystem.Directory
                         case CategoryImportType.Stock:
                             var sampleStocks = new[]
                             {
-                                new { Ma_Vat_Tu = "VT001", Ten_Vat_Tu = "Thép cuộn phi 6", Don_Vi_Tinh = "Kg", Nhom_Vat_Tu = "NVL" },
-                                new { Ma_Vat_Tu = "VT002", Ten_Vat_Tu = "Xi măng PCB40", Don_Vi_Tinh = "Tấn", Nhom_Vat_Tu = "NVL" }
+                                new { MaterialId = "VT001", MaterialName = "Thép cuộn phi 6", Unit = "Kg", Categoryid = "NVL" },
+                                new { MaterialId = "VT002", MaterialName = "Xi măng PCB40", Unit = "Tấn", Categoryid = "NVL" }
                             };
                             MiniExcel.SaveAs(dialog.FileName, sampleStocks, overwriteFile: true);
                             break;

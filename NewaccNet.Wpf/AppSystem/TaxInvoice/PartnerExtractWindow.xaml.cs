@@ -392,11 +392,11 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
                 {
                     var exportRows = selected.Select(x => new
                     {
-                        Ma_Doi_Tuong = x.PartnerId,
-                        Ten_Doi_Tac = x.CustomerName,
-                        Ma_So_Thue = x.Taxno,
-                        Dia_Chi = x.Address,
-                        Phan_Loai = x.RoleDisplay
+                        Id = x.PartnerId,
+                        CustomerName = x.CustomerName,
+                        Taxno = x.Taxno,
+                        Address = x.Address,
+                        Note = x.RoleDisplay
                     }).ToList();
 
                     MiniExcel.SaveAs(dialog.FileName, exportRows, overwriteFile: true);

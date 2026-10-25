@@ -401,10 +401,10 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
                 {
                     var exportRows = selected.Select(x => new
                     {
-                        Ma_Vat_Tu = x.MaterialId,
-                        Ten_Vat_Tu = x.MaterialName,
-                        Don_Vi_Tinh = x.Unit,
-                        Nhom_Vat_Tu = x.CategoryId ?? ""
+                        MaterialId = x.MaterialId,
+                        MaterialName = x.MaterialName,
+                        Unit = x.Unit,
+                        Categoryid = x.CategoryId ?? ""
                     }).ToList();
 
                     MiniExcel.SaveAs(dialog.FileName, exportRows, overwriteFile: true);
