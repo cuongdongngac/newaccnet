@@ -188,6 +188,180 @@ namespace NewaccNet.AI.Services
             return ms;
         }
 
+        /// <summary>
+        /// Tạo bảng tính Excel động từ dữ liệu do AI Chatbot phân tích và đề xuất (Zero-Disk I/O).
+        /// </summary>
+        public MemoryStream GenerateDynamicSpreadsheetStream(DynamicSpreadsheetDto dto)
+        {
+            var ms = new MemoryStream();
+            using (var document = SpreadsheetDocument.Create(ms, SpreadsheetDocumentType.Workbook, true))
+            {
+                var workbookPart = document.AddWorkbookPart();
+                workbookPart.Workbook = new Workbook();
+
+                var worksheetPart = workbookPart.AddNewPart<WorksheetPart>();
+                var sheetData = new SheetData();
+                worksheetPart.Worksheet = new Worksheet(sheetData);
+
+                var sheets = workbookPart.Workbook.AppendChild(new Sheets());
+                sheets.Append(new Sheet
+                {
+                    Id = workbookPart.GetIdOfPart(worksheetPart),
+                    SheetId = 1,
+                    Name = string.IsNullOrWhiteSpace(dto.SheetName) ? "BaoCao" : dto.SheetName
+                });
+
+                var stylesPart = workbookPart.AddNewPart<WorkbookStylesPart>();
+                stylesPart.Stylesheet = CreateDefaultStylesheet();
+                stylesPart.Stylesheet.Save();
+
+                uint rowIdx = 1;
+
+                // 1. Tiêu đề chính
+                var titleRow = new Row { RowIndex = rowIdx++ };
+                titleRow.Append(CreateTextCell("A", titleRow.RowIndex.Value, (dto.Title ?? "BÁO CÁO KẾ TOÁN").ToUpperInvariant()));
+                sheetData.Append(titleRow);
+
+                // 2. Tiêu đề phụ (nếu có)
+                if (!string.IsNullOrWhiteSpace(dto.Subtitle))
+                {
+                    var subRow = new Row { RowIndex = rowIdx++ };
+                    subRow.Append(CreateTextCell("A", subRow.RowIndex.Value, dto.Subtitle));
+                    sheetData.Append(subRow);
+                }
+
+                // Dòng trống
+                sheetData.Append(new Row { RowIndex = rowIdx++ });
+
+                // 3. Header Cột
+                var headerRow = new Row { RowIndex = rowIdx++ };
+                for (int c = 0; c < dto.Columns.Count; c++)
+                {
+                    string colLetter = GetColumnLetter(c);
+                    headerRow.Append(CreateTextCell(colLetter, headerRow.RowIndex.Value, dto.Columns[c].Header));
+                }
+                sheetData.Append(headerRow);
+
+                // 4. Các dòng dữ liệu
+                foreach (var rowData in dto.Rows)
+                {
+                    var dataRow = new Row { RowIndex = rowIdx++ };
+                    for (int c = 0; c < rowData.Count && c < dto.Columns.Count; c++)
+                    {
+                        string colLetter = GetColumnLetter(c);
+                        string rawVal = rowData[c] ?? string.Empty;
+
+                        // Nếu là số thì ghi NumberCell
+                        if (decimal.TryParse(rawVal.Replace(",", "").Replace("%", "").Trim(), NumberStyles.Any, CultureInfo.InvariantCulture, out var numVal))
+                        {
+                            dataRow.Append(CreateNumberCell(colLetter, dataRow.RowIndex.Value, numVal));
+                        }
+                        else
+                        {
+                            dataRow.Append(CreateTextCell(colLetter, dataRow.RowIndex.Value, rawVal));
+                        }
+                    }
+                    sheetData.Append(dataRow);
+                }
+
+                // 5. Dòng tổng cộng (nếu có)
+                if (dto.SummaryRow != null && dto.SummaryRow.Count > 0)
+                {
+                    var sumRow = new Row { RowIndex = rowIdx++ };
+                    for (int c = 0; c < dto.SummaryRow.Count && c < dto.Columns.Count; c++)
+                    {
+                        string colLetter = GetColumnLetter(c);
+                        string rawVal = dto.SummaryRow[c] ?? string.Empty;
+                        if (decimal.TryParse(rawVal.Replace(",", "").Replace("%", "").Trim(), NumberStyles.Any, CultureInfo.InvariantCulture, out var numVal))
+                        {
+                            sumRow.Append(CreateNumberCell(colLetter, sumRow.RowIndex.Value, numVal));
+                        }
+                        else
+                        {
+                            sumRow.Append(CreateTextCell(colLetter, sumRow.RowIndex.Value, rawVal));
+                        }
+                    }
+                    sheetData.Append(sumRow);
+                }
+
+                workbookPart.Workbook.Save();
+            }
+
+            ms.Seek(0, SeekOrigin.Begin);
+            return ms;
+        }
+
+        /// <summary>
+        /// Tạo văn bản Word động từ dữ liệu do AI Chatbot phân tích hoặc soạn thảo (Zero-Disk I/O).
+        /// </summary>
+        public MemoryStream GenerateDynamicWordStream(DynamicWordDocumentDto dto)
+        {
+            var ms = new MemoryStream();
+            using (var document = WordprocessingDocument.Create(ms, WordprocessingDocumentType.Document, true))
+            {
+                var mainPart = document.AddMainDocumentPart();
+                mainPart.Document = new DocumentFormat.OpenXml.Wordprocessing.Document();
+                var body = mainPart.Document.AppendChild(new Body());
+
+                // Title
+                body.Append(CreateParagraph((dto.Title ?? "VĂN BẢN QUẢN TRỊ").ToUpperInvariant(), bold: true, fontSize: 32));
+
+                if (!string.IsNullOrWhiteSpace(dto.CompanyName))
+                {
+                    body.Append(CreateParagraph($"Đơn vị: {dto.CompanyName}", bold: true, fontSize: 22));
+                }
+
+                if (!string.IsNullOrWhiteSpace(dto.Subtitle))
+                {
+                    body.Append(CreateParagraph(dto.Subtitle, italic: true, fontSize: 20));
+                }
+
+                body.Append(CreateParagraph(""));
+
+                // Các Section
+                foreach (var sec in dto.Sections)
+                {
+                    if (!string.IsNullOrWhiteSpace(sec.Heading))
+                    {
+                        body.Append(CreateParagraph(sec.Heading, bold: true, fontSize: 24));
+                    }
+
+                    foreach (var p in sec.Paragraphs)
+                    {
+                        body.Append(CreateParagraph(p, fontSize: 22));
+                    }
+
+                    foreach (var b in sec.BulletPoints)
+                    {
+                        body.Append(CreateParagraph($"• {b}", fontSize: 22));
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(sec.HighlightNote))
+                    {
+                        body.Append(CreateParagraph($"[Lưu ý quan trọng]: {sec.HighlightNote}", italic: true, bold: true, fontSize: 22));
+                    }
+
+                    body.Append(CreateParagraph(""));
+                }
+
+                mainPart.Document.Save();
+            }
+
+            ms.Seek(0, SeekOrigin.Begin);
+            return ms;
+        }
+
+        private static string GetColumnLetter(int colIndex)
+        {
+            string colLetter = "";
+            while (colIndex >= 0)
+            {
+                colLetter = (char)('A' + (colIndex % 26)) + colLetter;
+                colIndex = (colIndex / 26) - 1;
+            }
+            return colLetter;
+        }
+
         // ==========================================================
         // HELPERS
         // ==========================================================

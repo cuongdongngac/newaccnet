@@ -1,13 +1,20 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
+using System.Windows.Media;
 using Microsoft.Win32;
 using DataAccess.EntityClasses;
 using DevExpress.Spreadsheet;
 using DevExpress.XtraRichEdit;
 using NewaccNet.AI.Configuration;
+using NewaccNet.AI.Contracts;
 using NewaccNet.AI.Gateway;
+using NewaccNet.AI.Services;
 using NewaccNet.Wpf.AppSystem;
 using NewaccNet.Wpf.AppSystem.Voucher;
 using NewaccNet.Wpf.Views.Base;
@@ -20,12 +27,44 @@ namespace NewaccNet.Wpf.AppSystem.AI
         Word
     }
 
+    public class OfficeChatMessageItem
+    {
+        public bool IsUser { get; set; }
+        public string SenderName => IsUser ? "Bạn" : "AI Copilot";
+        public string Message { get; set; } = string.Empty;
+        public string TimeText { get; set; } = DateTime.Now.ToString("HH:mm");
+        public string? BadgeText { get; set; }
+
+        public Visibility BadgeVisibility => string.IsNullOrWhiteSpace(BadgeText) ? Visibility.Collapsed : Visibility.Visible;
+
+        public Brush BackgroundBrush => IsUser 
+            ? new SolidColorBrush(Color.FromRgb(224, 242, 254)) // Light Blue
+            : new SolidColorBrush(Color.FromRgb(248, 250, 252)); // Light Slate
+
+        public Brush BadgeColor => BadgeText?.Contains("Excel") == true 
+            ? new SolidColorBrush(Color.FromRgb(22, 163, 74)) // Green
+            : new SolidColorBrush(Color.FromRgb(37, 99, 235)); // Blue
+
+        public HorizontalAlignment Alignment => IsUser ? HorizontalAlignment.Right : HorizontalAlignment.Left;
+    }
+
     public partial class OfficeStudioWindow : BaseWindow
     {
+        public ObservableCollection<OfficeChatMessageItem> ChatMessages { get; } = new();
+
         public OfficeStudioWindow()
         {
             InitializeComponent();
             officeTabControl.SelectedIndex = 0;
+            lstChatMessages.ItemsSource = ChatMessages;
+
+            // Welcome message
+            ChatMessages.Add(new OfficeChatMessageItem
+            {
+                IsUser = false,
+                Message = "Xin chào! Em là trợ lý AI tích hợp trong Office Studio. Anh/chị có thể yêu cầu em lập bảng tính Excel (có cột, số liệu, tính tổng) hoặc soạn thảo văn bản Word (thuyết minh BCTC, biên bản đối chiếu, tờ trình). Tùy câu hỏi, em sẽ tự động tạo bảng Excel hoặc tài liệu Word ở khung bên phải."
+            });
+
             lblOfficeStatus.Text = "Sẵn sàng làm việc với Excel và Word tích hợp AI.";
         }
 
@@ -91,6 +130,205 @@ namespace NewaccNet.Wpf.AppSystem.AI
             win.Show();
             return win;
         }
+
+        private void BtnToggleChat_Click(object sender, RoutedEventArgs e)
+        {
+            if (colChatPane.Width.Value > 0)
+            {
+                colChatPane.Width = new GridLength(0);
+            }
+            else
+            {
+                colChatPane.Width = new GridLength(380);
+            }
+        }
+
+        private void BtnClearChat_Click(object sender, RoutedEventArgs e)
+        {
+            ChatMessages.Clear();
+            ChatMessages.Add(new OfficeChatMessageItem
+            {
+                IsUser = false,
+                Message = "Đoạn chat đã được làm mới. Anh/chị cần em hỗ trợ bảng tính hay văn bản nào tiếp theo ạ?"
+            });
+        }
+
+        private void TxtChatInput_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+            {
+                BtnSendChat_Click(sender, e);
+                e.Handled = true;
+            }
+        }
+
+        private async void BtnSendChat_Click(object sender, RoutedEventArgs e)
+        {
+            string prompt = txtChatInput.Text?.Trim() ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(prompt)) return;
+
+            txtChatInput.Text = string.Empty;
+            await SendPromptToAiAsync(prompt);
+        }
+
+        private async Task SendPromptToAiAsync(string prompt)
+        {
+            var config = ConfigManager.Current;
+            if (string.IsNullOrWhiteSpace(config.OpenRouterApiKey))
+            {
+                MessageBox.Show("Vui lòng cấu hình OpenRouter API Key tại Cài đặt AI trước.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            // Thêm tin nhắn của User vào khung chat
+            ChatMessages.Add(new OfficeChatMessageItem
+            {
+                IsUser = true,
+                Message = prompt
+            });
+            ScrollChatToBottom();
+
+            try
+            {
+                btnSendChat.IsEnabled = false;
+                lblTyping.Visibility = Visibility.Visible;
+                lblOfficeStatus.Text = "⏳ AI Copilot đang phân tích yêu cầu và tự động chọn định dạng Excel/Word...";
+
+                var options = new OpenRouterOptions
+                {
+                    ApiKey = config.OpenRouterApiKey,
+                    BaseUrl = config.OpenRouterBaseUrl,
+                    Model = config.OpenRouterChatModel
+                };
+
+                using var gateway = new OpenRouterGateway(options);
+                var agent = new AccountingAgentService(gateway);
+                var openXmlService = new OpenXmlReportService();
+
+                // Lấy ngữ cảnh văn phòng hiện tại (nếu đang mở tài liệu)
+                string activeContext = GetActiveOfficeContext();
+
+                var response = await agent.ProcessOfficeChatAsync(prompt, activeContext);
+
+                if (response != null)
+                {
+                    string badge = null;
+
+                    if (response.OutputType == OfficeOutputType.Spreadsheet && response.Spreadsheet != null)
+                    {
+                        // Sinh file Excel OpenXML và nạp vào SpreadsheetControl
+                        badge = "📊 Đã tạo Bảng tính Excel";
+                        officeTabControl.SelectedIndex = 0;
+
+                        using var stream = openXmlService.GenerateDynamicSpreadsheetStream(response.Spreadsheet);
+                        LoadSpreadsheetStream(stream);
+                    }
+                    else if (response.OutputType == OfficeOutputType.WordDocument && response.WordDocument != null)
+                    {
+                        // Sinh file Word OpenXML và nạp vào RichEditControl
+                        badge = "📄 Đã tạo Văn bản Word";
+                        officeTabControl.SelectedIndex = 1;
+
+                        using var stream = openXmlService.GenerateDynamicWordStream(response.WordDocument);
+                        LoadWordStream(stream);
+                    }
+
+                    // Thêm phản hồi của AI vào Chat
+                    ChatMessages.Add(new OfficeChatMessageItem
+                    {
+                        IsUser = false,
+                        Message = string.IsNullOrWhiteSpace(response.ChatMessage) ? "Đã xử lý xong yêu cầu của anh/chị." : response.ChatMessage,
+                        BadgeText = badge
+                    });
+                }
+                else
+                {
+                    ChatMessages.Add(new OfficeChatMessageItem
+                    {
+                        IsUser = false,
+                        Message = "Xin lỗi, AI chưa thể xử lý yêu cầu lúc này. Vui lòng thử lại câu hỏi khác."
+                    });
+                }
+
+                lblOfficeStatus.Text = "✅ Hoàn tất xử lý yêu cầu.";
+            }
+            catch (Exception ex)
+            {
+                lblOfficeStatus.Text = "❌ Lỗi: " + ex.Message;
+                ChatMessages.Add(new OfficeChatMessageItem
+                {
+                    IsUser = false,
+                    Message = "Lỗi xử lý AI: " + ex.Message
+                });
+            }
+            finally
+            {
+                btnSendChat.IsEnabled = true;
+                lblTyping.Visibility = Visibility.Collapsed;
+                ScrollChatToBottom();
+            }
+        }
+
+        private string GetActiveOfficeContext()
+        {
+            try
+            {
+                if (officeTabControl.SelectedIndex == 0 && spreadsheetControl.ActiveWorksheet != null)
+                {
+                    var sheet = spreadsheetControl.ActiveWorksheet;
+                    string context = "BẢNG TÍNH EXCEL HIỆN TẠI:\n";
+                    for (int r = 0; r < Math.Min(15, sheet.Rows.LastUsedIndex + 1); r++)
+                    {
+                        var rowVals = Enumerable.Range(0, Math.Min(8, sheet.Columns.LastUsedIndex + 1))
+                            .Select(c => sheet.Cells[r, c]?.DisplayText ?? "");
+                        context += string.Join(" | ", rowVals) + "\n";
+                    }
+                    return context;
+                }
+                else if (officeTabControl.SelectedIndex == 1 && !string.IsNullOrWhiteSpace(richEditControl.Text))
+                {
+                    return "VĂN BẢN WORD HIỆN TẠI:\n" + richEditControl.Text.Substring(0, Math.Min(1000, richEditControl.Text.Length));
+                }
+            }
+            catch { }
+            return string.Empty;
+        }
+
+        private void ScrollChatToBottom()
+        {
+            if (ChatMessages.Count > 0)
+            {
+                lstChatMessages.ScrollIntoView(ChatMessages.Last());
+            }
+        }
+
+        // ==========================================
+        // QUICK PROMPT CHIPS
+        // ==========================================
+
+        private void BtnChipExpense_Click(object sender, RoutedEventArgs e)
+        {
+            _ = SendPromptToAiAsync("Lập bảng kê chi phí quý 1 năm 2026 chi tiết theo từng yếu tố (NVL, nhân công, chi phí chung, khấu hao, dịch vụ mua ngoài) có cột Kế hoạch, Thực hiện, Chênh lệch và Tỷ lệ hoàn thành %");
+        }
+
+        private void BtnChipDebt_Click(object sender, RoutedEventArgs e)
+        {
+            _ = SendPromptToAiAsync("Lập bảng theo dõi tuổi nợ nhà cung cấp quá hạn gồm các cột: STT, Mã NCC, Tên Nhà cung cấp, MST, Tổng dư nợ, Quá hạn dưới 30 ngày, 30-60 ngày, Trên 90 ngày và Đánh giá rủi ro");
+        }
+
+        private void BtnChipReconcile_Click(object sender, RoutedEventArgs e)
+        {
+            _ = SendPromptToAiAsync("Soạn thảo biên bản đối chiếu và xác nhận công nợ cuối năm tài chính 2026 giữa Công ty Kế toán NewaccNet và Công ty Cổ phần Thương mại Minh Trí MST 0312456789 số tiền còn nợ 35.000.000đ");
+        }
+
+        private void BtnChipNotes_Click(object sender, RoutedEventArgs e)
+        {
+            _ = SendPromptToAiAsync("Viết bản Thuyết minh Báo cáo Tài chính cho phần Hàng tồn kho năm 2026, giải trình biến động tăng giảm nguyên vật liệu, thành phẩm và căn cứ trích lập dự phòng giảm giá hàng tồn kho");
+        }
+
+        // ==========================================
+        // STANDARD OFFICE BUTTONS
+        // ==========================================
 
         private void BtnNewExcel_Click(object sender, RoutedEventArgs e)
         {
@@ -200,14 +438,11 @@ namespace NewaccNet.Wpf.AppSystem.AI
                     Bookflag = true
                 };
 
-                // Đọc các dòng được chọn trên sheet
                 for (int r = startRow; r <= endRow; r++)
                 {
-                    // Lấy cell Nợ/Có, Tài khoản, Tiền, Diễn giải
                     string cellVal0 = sheet.Cells[r, 0]?.DisplayText?.Trim() ?? "";
                     string cellVal1 = sheet.Cells[r, 1]?.DisplayText?.Trim() ?? "";
                     string cellVal2 = sheet.Cells[r, 2]?.DisplayText?.Trim() ?? "";
-                    string cellVal3 = sheet.Cells[r, 3]?.DisplayText?.Trim() ?? "";
 
                     short dbcr = cellVal0.Equals("Có", StringComparison.OrdinalIgnoreCase) || cellVal0 == "-1" ? (short)-1 : (short)1;
                     string accountId = !string.IsNullOrWhiteSpace(cellVal1) ? cellVal1 : "156";
@@ -232,7 +467,6 @@ namespace NewaccNet.Wpf.AppSystem.AI
                     return;
                 }
 
-                // Mở VoucherEntryWindow trên RAM
                 var win = VoucherEntryWindow.CreateForAi(voucher);
                 win.Owner = this;
                 win.ShowDialog();
@@ -240,87 +474,6 @@ namespace NewaccNet.Wpf.AppSystem.AI
             catch (Exception ex)
             {
                 MessageBox.Show("Lỗi tạo chứng từ từ Excel: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        private async void BtnAiOfficeAsk_Click(object sender, RoutedEventArgs e)
-        {
-            string prompt = txtAiOfficePrompt.Text?.Trim() ?? string.Empty;
-            if (string.IsNullOrWhiteSpace(prompt))
-            {
-                MessageBox.Show("Vui lòng nhập câu hỏi hoặc yêu cầu cho AI (ví dụ: 'Phân tích tổng hợp số liệu vùng chọn' hoặc 'Viết thuyết minh cho bảng tính này').",
-                    "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
-            }
-
-            var config = ConfigManager.Current;
-            if (string.IsNullOrWhiteSpace(config.OpenRouterApiKey))
-            {
-                MessageBox.Show("Vui lòng cấu hình OpenRouter API Key tại Cài đặt AI trước.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            try
-            {
-                btnAiOfficeAsk.IsEnabled = false;
-                lblOfficeStatus.Text = "⏳ AI Copilot đang xử lý nội dung văn phòng...";
-
-                var options = new OpenRouterOptions
-                {
-                    ApiKey = config.OpenRouterApiKey,
-                    BaseUrl = config.OpenRouterBaseUrl,
-                    Model = config.OpenRouterChatModel
-                };
-
-                using var gateway = new OpenRouterGateway(options);
-
-                if (officeTabControl.SelectedIndex == 0)
-                {
-                    // Lấy dữ liệu 20 dòng đầu của Active Sheet để làm ngữ cảnh
-                    var sheet = spreadsheetControl.ActiveWorksheet;
-                    string context = "";
-                    if (sheet != null)
-                    {
-                        for (int r = 0; r < Math.Min(30, sheet.Rows.LastUsedIndex + 1); r++)
-                        {
-                            var rowVals = Enumerable.Range(0, Math.Min(10, sheet.Columns.LastUsedIndex + 1))
-                                .Select(c => sheet.Cells[r, c]?.DisplayText ?? "");
-                            context += string.Join(" | ", rowVals) + "\n";
-                        }
-                    }
-
-                    string fullPrompt = $"Bạn là chuyên gia tài chính và Excel cấp cao. Dưới đây là dữ liệu bảng tính hiện tại:\n{context}\n\n[YÊU CẦU CỦA NGƯỜI DÙNG]:\n{prompt}";
-                    var resp = await gateway.SendChatAsync(fullPrompt);
-
-                    lblOfficeStatus.Text = "✅ AI đã hoàn tất phản hồi.";
-                    MessageBox.Show(resp.Content, "🤖 AI Trợ lý Bảng tính Phản hồi", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-                else
-                {
-                    // Lấy text của tài liệu Word
-                    string selectedText = richEditControl.Document.Selection != null
-                        ? richEditControl.Document.GetText(richEditControl.Document.Selection)
-                        : "";
-
-                    string docText = !string.IsNullOrWhiteSpace(selectedText)
-                        ? selectedText
-                        : richEditControl.Text;
-
-                    string fullPrompt = $"Bạn là trợ lý soạn thảo tài chính và pháp lý doanh nghiệp. Dưới đây là nội dung văn bản:\n{docText}\n\n[YÊU CẦU CỦA NGƯỜI DÙNG]:\n{prompt}\n\nHãy viết nội dung phản hồi sạch để có thể dán vào tài liệu Word.";
-                    var resp = await gateway.SendChatAsync(fullPrompt);
-
-                    richEditControl.Document.AppendText("\n\n" + resp.Content);
-                    lblOfficeStatus.Text = "✅ AI đã chèn nội dung vào cuối tài liệu Word.";
-                }
-            }
-            catch (Exception ex)
-            {
-                lblOfficeStatus.Text = "❌ Lỗi AI: " + ex.Message;
-                MessageBox.Show("Lỗi AI: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            finally
-            {
-                btnAiOfficeAsk.IsEnabled = true;
             }
         }
     }

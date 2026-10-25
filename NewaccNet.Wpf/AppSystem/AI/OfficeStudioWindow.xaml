@@ -8,8 +8,8 @@
     xmlns:dxre="http://schemas.devexpress.com/winfx/2008/xaml/richedit"
     xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
     xmlns:base="clr-namespace:NewaccNet.Wpf.Views.Base"
-    Title="Bàn Làm Việc Văn Phòng Kế Toán &amp; AI (Office Studio)"
-    Width="1360" Height="860"
+    Title="Bàn Làm Việc Văn Phòng Kế Toán &amp; AI (Office Studio &amp; Copilot)"
+    Width="1400" Height="880"
     WindowState="Maximized"
     WindowStartupLocation="CenterScreen">
 
@@ -32,10 +32,10 @@
                 <StackPanel Grid.Column="0" Orientation="Horizontal">
                     <TextBlock Text="🏢 OFFICE STUDIO &amp; AI" FontWeight="Bold" FontSize="14" Foreground="#FF1E3A8A" VerticalAlignment="Center" Margin="0,0,15,0"/>
 
-                    <dx:SimpleButton x:Name="btnNewExcel" Content="Tạo Bảng tính mới" Height="28" Margin="0,0,6,0"
+                    <dx:SimpleButton x:Name="btnNewExcel" Content="Tạo mới" Height="28" Margin="0,0,6,0"
                                      Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/actions/new.svg'}"
                                      Click="BtnNewExcel_Click"/>
-                    <dx:SimpleButton x:Name="btnOpenOfficeFile" Content="Mở tệp (Excel / Word)..." Height="28" Margin="0,0,6,0"
+                    <dx:SimpleButton x:Name="btnOpenOfficeFile" Content="Mở tệp..." Height="28" Margin="0,0,6,0"
                                      Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/actions/open.svg'}"
                                      Click="BtnOpenOfficeFile_Click"/>
                     <dx:SimpleButton x:Name="btnSaveOfficeFile" Content="Lưu tệp..." Height="28" Margin="0,0,15,0"
@@ -44,43 +44,143 @@
 
                     <Separator Margin="0,0,15,0"/>
 
-                    <!-- Cầu nối dữ liệu kế toán -->
                     <dx:SimpleButton x:Name="btnPushToVoucher" Content="📝 Đẩy dòng chọn vào Phiếu Kế toán" Height="28" Margin="0,0,6,0"
                                      FontWeight="SemiBold"
                                      Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_invoice.svg'}"
                                      Click="BtnPushToVoucher_Click"/>
                 </StackPanel>
 
-                <!-- AI Office Copilot Quick Bar -->
                 <StackPanel Grid.Column="2" Orientation="Horizontal">
-                    <dxe:TextEdit x:Name="txtAiOfficePrompt" Width="260" Height="28" Margin="0,0,6,0"
-                                  NullText="Hỏi AI phân tích bảng tính / văn bản..."/>
-                    <dx:SimpleButton x:Name="btnAiOfficeAsk" Content="🤖 AI Trợ lý" Height="28" Width="100" FontWeight="Bold"
-                                     Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/icon%20builder/actions_check.svg'}"
-                                     Click="BtnAiOfficeAsk_Click"/>
+                    <dx:SimpleButton x:Name="btnToggleChat" Content="Ẩn / Hiện Chatbot AI" Height="28" Margin="0,0,6,0"
+                                     Click="BtnToggleChat_Click"/>
                 </StackPanel>
             </Grid>
         </Border>
 
-        <!-- Main Office Tabs: Excel vs Word -->
-        <TabControl x:Name="officeTabControl" Grid.Row="1" Margin="0">
-            <!-- TAB 1: EXCEL SPREADSHEET -->
-            <TabItem Header="📊 Bảng tính Kế toán (Excel Spreadsheet)">
-                <Grid>
-                    <dxsps:SpreadsheetControl x:Name="spreadsheetControl"
-                                             ShowFormulaBar="True"
-                                             CommandBarStyle="Ribbon"/>
-                </Grid>
-            </TabItem>
+        <!-- Dual-Pane Workspace (Left: AI Chatbot, Right: Office Studio) -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="colChatPane" Width="380" MinWidth="260" MaxWidth="600"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-            <!-- TAB 2: WORD DOCUMENT -->
-            <TabItem Header="📄 Soạn thảo Văn bản (Word Document)">
-                <Grid>
-                    <dxre:RichEditControl x:Name="richEditControl"
-                                          CommandBarStyle="Ribbon"/>
+            <!-- LEFT PANE: AI CHATBOT COPILOT -->
+            <Border Grid.Column="0" Background="#FFFFFFFF" BorderBrush="#FFE5E7EB" BorderThickness="0,0,1,0">
+                <Grid Margin="8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Chat Header -->
+                    <Border Grid.Row="0" Background="#FFF8FAFC" Padding="8,6" CornerRadius="6" BorderBrush="#FFE2E8F0" BorderThickness="1" Margin="0,0,0,6">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Orientation="Vertical">
+                                <TextBlock Text="🤖 Trợ lý Kế toán &amp; Báo cáo AI" FontWeight="Bold" FontSize="12.5" Foreground="#FF0F172A"/>
+                                <TextBlock Text="Tự động sinh Excel / Word tùy câu hỏi" FontSize="10.5" Foreground="#FF64748B"/>
+                            </StackPanel>
+                            <dx:SimpleButton Grid.Column="1" Content="Xóa đoạn chat" Height="24" FontSize="11" Click="BtnClearChat_Click"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Chat Message List -->
+                    <ListBox Grid.Row="1" x:Name="lstChatMessages" BorderThickness="0" Background="Transparent"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Setter Property="Padding" Value="0,3"/>
+                                <Setter Property="Focusable" Value="False"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="{Binding BackgroundBrush}" CornerRadius="8" Padding="10,8" Margin="4,2"
+                                        HorizontalAlignment="{Binding Alignment}" MaxWidth="320" BorderBrush="#FFE2E8F0" BorderThickness="1">
+                                    <StackPanel Orientation="Vertical">
+                                        <Grid Margin="0,0,0,4">
+                                            <TextBlock Text="{Binding SenderName}" FontWeight="Bold" FontSize="11" Foreground="#FF334155"/>
+                                            <TextBlock Text="{Binding TimeText}" FontSize="9.5" Foreground="#FF94A3B8" HorizontalAlignment="Right"/>
+                                        </Grid>
+
+                                        <TextBlock Text="{Binding Message}" TextWrapping="Wrap" FontSize="12" Foreground="#FF0F172A" LineHeight="17"/>
+
+                                        <!-- Badge tag if document generated -->
+                                        <Border Visibility="{Binding BadgeVisibility}" Background="{Binding BadgeColor}" CornerRadius="4" Padding="6,2" Margin="0,6,0,0" HorizontalAlignment="Left">
+                                            <TextBlock Text="{Binding BadgeText}" Foreground="White" FontSize="10.5" FontWeight="SemiBold"/>
+                                        </Border>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <!-- Quick Prompt Chips -->
+                    <Border Grid.Row="2" Background="#FFF8FAFC" Padding="6" CornerRadius="6" Margin="0,4,0,6" BorderBrush="#FFE2E8F0" BorderThickness="1">
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Gợi ý câu lệnh nhanh:" FontSize="10.5" Foreground="#FF64748B" Margin="0,0,0,4" FontWeight="SemiBold"/>
+                            <WrapPanel Orientation="Horizontal">
+                                <dx:SimpleButton Content="📊 Bảng chi phí quý này (Excel)" Height="22" Margin="2" Click="BtnChipExpense_Click"/>
+                                <dx:SimpleButton Content="📋 Bảng tuổi nợ NCC (Excel)" Height="22" Margin="2" Click="BtnChipDebt_Click"/>
+                                <dx:SimpleButton Content="📝 Biên bản đối chiếu công nợ (Word)" Height="22" Margin="2" Click="BtnChipReconcile_Click"/>
+                                <dx:SimpleButton Content="📄 Thuyết minh BCTC Hàng tồn kho (Word)" Height="22" Margin="2" Click="BtnChipNotes_Click"/>
+                            </WrapPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Chat Input Area -->
+                    <Grid Grid.Row="3">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <dxe:TextEdit Grid.Row="0" x:Name="txtChatInput" Height="60" VerticalContentAlignment="Top"
+                                      AcceptsReturn="True" TextWrapping="Wrap"
+                                      NullText="Nhập câu hỏi hoặc yêu cầu báo cáo (Ctrl+Enter để gửi)..."
+                                      PreviewKeyDown="TxtChatInput_PreviewKeyDown"/>
+
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,6,0,0">
+                            <TextBlock x:Name="lblTyping" Text="⏳ AI đang suy nghĩ và sinh báo cáo..." Visibility="Collapsed" VerticalAlignment="Center" Foreground="#FF2563EB" FontSize="11" Margin="0,0,10,0"/>
+                            <dx:SimpleButton x:Name="btnSendChat" Content="Gửi yêu cầu ⚡" Height="28" Width="110" FontWeight="Bold"
+                                             Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/icon%20builder/actions_check.svg'}"
+                                             Click="BtnSendChat_Click"/>
+                        </StackPanel>
+                    </Grid>
                 </Grid>
-            </TabItem>
-        </TabControl>
+            </Border>
+
+            <!-- SPLITTER -->
+            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Background="#FFE5E7EB"/>
+
+            <!-- RIGHT PANE: OFFICE STUDIO (EXCEL & WORD) -->
+            <TabControl x:Name="officeTabControl" Grid.Column="2" Margin="0">
+                <!-- TAB 1: EXCEL SPREADSHEET -->
+                <TabItem Header="📊 Bảng tính Kế toán (Excel Spreadsheet)">
+                    <Grid>
+                        <dxsps:SpreadsheetControl x:Name="spreadsheetControl"
+                                                 ShowFormulaBar="True"
+                                                 CommandBarStyle="Ribbon"/>
+                    </Grid>
+                </TabItem>
+
+                <!-- TAB 2: WORD DOCUMENT -->
+                <TabItem Header="📄 Soạn thảo Văn bản (Word Document)">
+                    <Grid>
+                        <dxre:RichEditControl x:Name="richEditControl"
+                                              CommandBarStyle="Ribbon"/>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </Grid>
 
         <!-- Status Bar -->
         <StatusBar Grid.Row="2" Background="#FFF8F9FA">

@@ -141,6 +141,43 @@ Trả về JSON danh sách các phần tử khớp với ItemPostingSuggestionDt
 
             return result ?? new List<ItemPostingSuggestionDto>();
         }
+
+        /// <summary>
+        /// Phân tích yêu cầu tự nhiên của người dùng trong Office Studio.
+        /// Tự động xác định OutputType (ChatOnly, Spreadsheet, WordDocument) và tạo DTO tương ứng.
+        /// </summary>
+        public async Task<OfficeChatResponseDto?> ProcessOfficeChatAsync(
+            string userPrompt,
+            string? activeDocumentContext = null,
+            CancellationToken cancellationToken = default)
+        {
+            var systemPrompt = @"Bạn là trợ lý AI cao cấp tích hợp trong ứng dụng Kế toán Doanh nghiệp (Office Studio & AI).
+Nhiệm vụ của bạn là lắng nghe câu hỏi/yêu cầu của người dùng và quyết định dạng kết quả trả về phù hợp nhất:
+1. Nếu người dùng yêu cầu lập bảng biểu, số liệu, tính toán, báo cáo có cột, đối chiếu công nợ, bảng lương, chi phí, tồn kho:
+   - OutputType = 1 (Spreadsheet)
+   - Điền dữ liệu vào thuộc tính Spreadsheet (Title, Subtitle, SheetName, Columns, Rows, SummaryRow nếu có tính tổng).
+   - ChatMessage = lời giải thích ngắn gọn, thân thiện về bảng tính đã tạo.
+2. Nếu người dùng yêu cầu soạn thảo văn bản, tờ trình, thuyết minh BCTC, biên bản đối chiếu, hợp đồng, phân tích chiến lược dài:
+   - OutputType = 2 (WordDocument)
+   - Điền dữ liệu vào thuộc tính WordDocument (Title, Subtitle, CompanyName, Sections với Heading, Paragraphs, BulletPoints).
+   - ChatMessage = lời tóm tắt ngắn gọn về văn bản đã soạn thảo.
+3. Nếu chỉ là câu hỏi giải thích, định khoản, kiến thức thuế, trao đổi thông thường:
+   - OutputType = 0 (ChatOnly)
+   - ChatMessage = nội dung câu trả lời chi tiết.
+
+Hãy trả về JSON cấu trúc OfficeChatResponseDto.";
+
+            var fullPrompt = $"[YÊU CẦU CỦA NGƯỜI DÙNG]:\n{userPrompt.Trim()}";
+            if (!string.IsNullOrWhiteSpace(activeDocumentContext))
+            {
+                fullPrompt += $"\n\n[DỮ LIỆU ĐANG MỞ TRONG OFFICE STUDIO]:\n{activeDocumentContext}";
+            }
+
+            return await _gateway.SendStructuredRequestAsync<OfficeChatResponseDto>(
+                systemPrompt,
+                fullPrompt,
+                cancellationToken: cancellationToken);
+        }
     }
 
     public class ItemPostingSuggestionDto
