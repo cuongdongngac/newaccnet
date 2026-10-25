@@ -92,5 +92,24 @@ namespace NewaccNet.AI.Services
 
             return response.Content;
         }
+
+        public async Task<OcrInvoiceResultDto?> ExtractInvoiceFromImageOrPdfAsync(
+            string filePath,
+            string? userNote = null,
+            CancellationToken cancellationToken = default)
+        {
+            var uri = ConvertFileToDataUri(filePath);
+            return await ExtractInvoiceFromImagesAsync(new[] { uri }, userNote, cancellationToken);
+        }
+
+        public async Task<string> ExtractDocumentTextAsync(
+            string filePath,
+            string outputFormat = "markdown",
+            string? additionalPrompt = null,
+            CancellationToken cancellationToken = default)
+        {
+            var uri = ConvertFileToDataUri(filePath);
+            return await RecognizeDocumentTextAsync(new[] { uri }, outputFormat, additionalPrompt, cancellationToken);
+        }
     }
 }

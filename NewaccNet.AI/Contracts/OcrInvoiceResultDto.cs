@@ -37,5 +37,7 @@ namespace NewaccNet.AI.Contracts
         public decimal Amount { get; set; }
         public string TaxRate { get; set; } = string.Empty;
         public decimal TaxAmount { get; set; }
+        public string? SuggestedAccount { get; set; }
+        public string? SuggestedWarehouse { get; set; }
     }
 }

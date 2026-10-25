@@ -28,6 +28,13 @@ namespace NewaccNet.Wpf.AppSystem
         public string PgDatabase { get; set; } = "";
         public string PgUsername { get; set; } = "postgres";
         public string PgPassword { get; set; } = "";
+
+        // ── OpenRouter AI Configuration ──────────────────────
+        public string OpenRouterApiKey { get; set; } = "";
+        public string OpenRouterBaseUrl { get; set; } = "https://openrouter.ai/api/v1";
+        public string OpenRouterChatModel { get; set; } = "google/gemini-2.5-flash";
+        public string OpenRouterVisionModel { get; set; } = "google/gemini-2.5-flash";
+        public string OpenRouterAnalysisModel { get; set; } = "google/gemini-2.5-pro";
     }
 }
 

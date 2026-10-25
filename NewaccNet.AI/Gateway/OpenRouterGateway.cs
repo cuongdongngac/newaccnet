@@ -21,14 +21,16 @@ namespace NewaccNet.AI.Gateway
         public string ModelUsed { get; set; } = string.Empty;
     }
 
-    public class OpenRouterGateway
+    public class OpenRouterGateway : IDisposable
     {
         private readonly HttpClient _httpClient;
+        private readonly bool _ownsHttpClient;
         private readonly OpenRouterOptions _options;
 
         public OpenRouterGateway(OpenRouterOptions options, HttpClient? httpClient = null)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
+            _ownsHttpClient = httpClient == null;
             _httpClient = httpClient ?? new HttpClient();
 
             if (_httpClient.BaseAddress == null)
@@ -36,6 +38,14 @@ namespace NewaccNet.AI.Gateway
                 var baseUri = string.IsNullOrWhiteSpace(_options.BaseUrl) ? OpenRouterOptions.DefaultBaseUrl : _options.BaseUrl;
                 if (!baseUri.EndsWith("/")) baseUri += "/";
                 _httpClient.BaseAddress = new Uri(baseUri);
+            }
+        }
+
+        public void Dispose()
+        {
+            if (_ownsHttpClient)
+            {
+                _httpClient.Dispose();
             }
         }
 

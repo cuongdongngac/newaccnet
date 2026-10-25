@@ -447,6 +447,49 @@ Bao gồm liên kết tới loại hình tương ứng."/>
                         <dxb:BarButtonItem Content="Chi tiết CK" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_contract.svg'}" auth:AuthHelper.RequiredMask="8" ItemClick="BtnReportInvestmentDetail_ItemClick"/>
                     </dxr:RibbonPageGroup>
                 </dxr:RibbonPage>
+                <!-- ==================== Tab: Trí tuệ Nhân tạo (AI) ==================== -->
+                <dxr:RibbonPage Caption="Trí tuệ Nhân tạo (AI)">
+                    <dxr:RibbonPageGroup Caption="Cánh tay Kéo dài (Tác nghiệp)">
+                        <dxb:BarButtonItem Content="Trợ lý Kế toán AI" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_workflow_action.svg'}" ItemClick="BtnAiAssistant_ItemClick">
+                            <dxb:BarButtonItem.SuperTip>
+                                <dx:SuperTip>
+                                    <dx:SuperTipHeaderItem Content="Trợ lý Hạch toán Tự động bằng Ngôn ngữ Tự nhiên"/>
+                                    <dx:SuperTipItem Content="Nhập nghiệp vụ kế toán bằng tiếng Việt tự nhiên. AI tự động định khoản Nợ/Có theo Thông tư 200/133 và mở sẵn Phiếu kế toán trên RAM để kiểm tra và lưu."/>
+                                </dx:SuperTip>
+                            </dxb:BarButtonItem.SuperTip>
+                        </dxb:BarButtonItem>
+                        <dxb:BarButtonItem Content="OCR Hóa đơn giấy" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/pdf%20viewer/openfromweb.svg'}" ItemClick="BtnAiOcr_ItemClick">
+                            <dxb:BarButtonItem.SuperTip>
+                                <dx:SuperTip>
+                                    <dx:SuperTipHeaderItem Content="Nhận dạng &amp; Trích xuất Hóa đơn / Chứng từ (OCR Vision)"/>
+                                    <dx:SuperTipItem Content="Quét hóa đơn giấy, hóa đơn ảnh hoặc PDF bằng OpenRouter Vision đa phương thức. Tự động bóc tách mặt hàng, tiền thuế, nhà cung cấp và khởi tạo chứng từ kế toán."/>
+                                </dx:SuperTip>
+                            </dxb:BarButtonItem.SuperTip>
+                        </dxb:BarButtonItem>
+                    </dxr:RibbonPageGroup>
+
+                    <dxr:RibbonPageGroup Caption="Bộ não thứ hai (CFO Brain &amp; Lãnh đạo)">
+                        <dxb:BarButtonItem Content="Giám đốc TC Ảo" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_pivotchart.svg'}" ItemClick="BtnAiCfo_ItemClick">
+                            <dxb:BarButtonItem.SuperTip>
+                                <dx:SuperTip>
+                                    <dx:SuperTipHeaderItem Content="Giám đốc Tài chính Ảo (Virtual CFO Insights)"/>
+                                    <dx:SuperTipItem Content="Phân tích tình hình sức khỏe tài chính doanh nghiệp, cảnh báo rủi ro dòng tiền và xuất Báo cáo Quản trị Word/Excel OpenXML tức thì."/>
+                                </dx:SuperTip>
+                            </dxb:BarButtonItem.SuperTip>
+                        </dxb:BarButtonItem>
+                    </dxr:RibbonPageGroup>
+
+                    <dxr:RibbonPageGroup Caption="Cấu hình &amp; Kết nối">
+                        <dxb:BarButtonItem Content="Cài đặt AI" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/setup/properties.svg'}" ItemClick="BtnAiConfig_ItemClick">
+                            <dxb:BarButtonItem.SuperTip>
+                                <dx:SuperTip>
+                                    <dx:SuperTipHeaderItem Content="Cấu hình OpenRouter Gateway &amp; Models"/>
+                                    <dx:SuperTipItem Content="Thiết lập khóa API OpenRouter, lựa chọn model Claude, Gemini, GPT-4o và kiểm tra kết nối."/>
+                                </dx:SuperTip>
+                            </dxb:BarButtonItem.SuperTip>
+                        </dxb:BarButtonItem>
+                    </dxr:RibbonPageGroup>
+                </dxr:RibbonPage>
             </dxr:RibbonDefaultPageCategory>
         </dxr:RibbonControl>
 

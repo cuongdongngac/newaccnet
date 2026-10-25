@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -40,6 +41,17 @@ namespace NewaccNet.AI.Services
                 cancellationToken: cancellationToken);
         }
 
+        public async Task<JournalEntryAiDto?> ParseNaturalLanguageJournalAsync(
+            string userInput,
+            IEnumerable<(string AccountId, string AccountName)> availableAccounts,
+            IEnumerable<(string Srcode, string Srname)> availableSources,
+            CancellationToken cancellationToken = default)
+        {
+            var accStr = string.Join(", ", availableAccounts.Select(a => $"{a.AccountId}: {a.AccountName}"));
+            var srcStr = string.Join(", ", availableSources.Select(s => $"{s.Srcode}: {s.Srname}"));
+            return await ParseNaturalLanguageJournalAsync(userInput, $"{accStr}\nNguồn chứng từ: {srcStr}", cancellationToken);
+        }
+
         /// <summary>
         /// Phân tích số liệu tài chính tổng hợp dành cho Giám đốc / Lãnh đạo (CFO Ảo).
         /// </summary>
@@ -55,6 +67,50 @@ namespace NewaccNet.AI.Services
                 systemPrompt,
                 userPrompt,
                 cancellationToken: cancellationToken);
+        }
+
+        public async Task<ExecutiveInsightAiDto?> AnalyzeFinancialDataAsync(
+            string companyName,
+            string period,
+            string balanceSheetJson,
+            string incomeStatementJson,
+            string userQuestion,
+            CancellationToken cancellationToken = default)
+        {
+            var context = $"Doanh nghiệp: {companyName}\nKỳ phân tích: {period}\n\n[Bảng Cân đối Kế toán]:\n{balanceSheetJson}\n\n[Kết quả Hoạt động Kinh doanh]:\n{incomeStatementJson}";
+            var question = string.IsNullOrWhiteSpace(userQuestion)
+                ? "Phân tích toàn diện sức khỏe tài chính, dòng tiền và đưa ra khuyến nghị quản trị cho Ban Giám đốc."
+                : userQuestion;
+
+            return await AnalyzeFinancialDataAsync(question, context, cancellationToken);
+        }
+
+        public async Task SuggestInvoiceItemPostingAsync(
+            OcrInvoiceResultDto invoice,
+            IEnumerable<(string Code, string Name)> availableAccounts,
+            IEnumerable<(string Code, string Name)> availableWarehouses,
+            CancellationToken cancellationToken = default)
+        {
+            if (invoice?.Items == null || invoice.Items.Count == 0) return;
+
+            var accContext = string.Join(", ", availableAccounts.Select(a => $"{a.Code}: {a.Name}"));
+            var whContext = string.Join(", ", availableWarehouses.Select(w => $"{w.Code}: {w.Name}"));
+
+            var suggestions = await SuggestItemPostingsAsync(invoice.Items, $"{accContext}\nKho: {whContext}", cancellationToken);
+            foreach (var item in invoice.Items)
+            {
+                var match = suggestions.FirstOrDefault(s => s.LineNo == item.LineNo || s.ItemName == item.ItemName);
+                if (match != null)
+                {
+                    item.SuggestedAccount = match.DebitAccount;
+                    item.SuggestedWarehouse = match.WarehouseCode;
+                }
+                else
+                {
+                    item.SuggestedAccount = "156";
+                    item.SuggestedWarehouse = "KHO_HH";
+                }
+            }
         }
 
         /// <summary>

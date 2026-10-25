@@ -462,6 +462,34 @@ public partial class MainWindow : ThemedWindow {
         win.ShowDialog();
     }
 
+    private void BtnAiAssistant_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.AI.AiAssistantWindow(initialTab: 0);
+        win.Owner = this;
+        win.Show();
+    }
+
+    private void BtnAiOcr_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.AI.AiAssistantWindow(initialTab: 1);
+        win.Owner = this;
+        win.Show();
+    }
+
+    private void BtnAiCfo_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.AI.AiAssistantWindow(initialTab: 2);
+        win.Owner = this;
+        win.Show();
+    }
+
+    private void BtnAiConfig_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.AI.AiConfigWindow();
+        win.Owner = this;
+        win.ShowDialog();
+    }
+
     private void BtnHddtReview_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
     {
         var win = new NewaccNet.Wpf.AppSystem.TaxInvoice.TaxInvoiceReviewWindow();

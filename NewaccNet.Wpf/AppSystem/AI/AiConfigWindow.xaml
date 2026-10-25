@@ -1,0 +1,70 @@
+<base:BaseWindow xmlns:base="clr-namespace:NewaccNet.Wpf.Views.Base" 
+        x:Class="NewaccNet.Wpf.AppSystem.AI.AiConfigWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+        xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+        Title="Cấu hình Trí tuệ Nhân tạo (OpenRouter AI Gateway)" Height="480" Width="600" 
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+    <Grid>
+        <dxlc:LayoutControl Orientation="Vertical" Padding="15">
+            <dxlc:LayoutGroup Header="Thông tin Kết nối OpenRouter Gateway" View="GroupBox" Orientation="Vertical">
+                <dxlc:LayoutItem Label="OpenRouter API Key:">
+                    <dxe:PasswordBoxEdit x:Name="txtApiKey"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Endpoint Base URL:">
+                    <dxe:TextEdit x:Name="txtBaseUrl" NullText="https://openrouter.ai/api/v1"/>
+                </dxlc:LayoutItem>
+                <TextBlock Text="Đăng ký lấy khóa API tại https://openrouter.ai/keys để sử dụng Claude, Gemini, GPT-4o, DeepSeek."
+                           Foreground="Gray" FontSize="11" Margin="0,4,0,0"/>
+            </dxlc:LayoutGroup>
+
+            <dxlc:LayoutGroup Header="Mô hình Trí tuệ Nhân tạo (Models)" View="GroupBox" Orientation="Vertical" Margin="0,10,0,0">
+                <dxlc:LayoutItem Label="Mô hình Trợ lý &amp; Nhập liệu:">
+                    <dxe:ComboBoxEdit x:Name="cboChatModel" IsTextEditable="True">
+                        <dxe:ComboBoxEditItem Content="google/gemini-2.5-flash"/>
+                        <dxe:ComboBoxEditItem Content="google/gemini-2.5-pro"/>
+                        <dxe:ComboBoxEditItem Content="anthropic/claude-3.5-sonnet"/>
+                        <dxe:ComboBoxEditItem Content="deepseek/deepseek-chat"/>
+                        <dxe:ComboBoxEditItem Content="openai/gpt-4o-mini"/>
+                    </dxe:ComboBoxEdit>
+                </dxlc:LayoutItem>
+
+                <dxlc:LayoutItem Label="Mô hình Nhận dạng OCR &amp; Ảnh:">
+                    <dxe:ComboBoxEdit x:Name="cboVisionModel" IsTextEditable="True">
+                        <dxe:ComboBoxEditItem Content="google/gemini-2.5-flash"/>
+                        <dxe:ComboBoxEditItem Content="google/gemini-2.5-pro"/>
+                        <dxe:ComboBoxEditItem Content="anthropic/claude-3.5-sonnet"/>
+                        <dxe:ComboBoxEditItem Content="openai/gpt-4o"/>
+                    </dxe:ComboBoxEdit>
+                </dxlc:LayoutItem>
+
+                <dxlc:LayoutItem Label="Mô hình Phân tích &amp; CFO Brain:">
+                    <dxe:ComboBoxEdit x:Name="cboAnalysisModel" IsTextEditable="True">
+                        <dxe:ComboBoxEditItem Content="google/gemini-2.5-pro"/>
+                        <dxe:ComboBoxEditItem Content="anthropic/claude-3.5-sonnet"/>
+                        <dxe:ComboBoxEditItem Content="openai/gpt-4o"/>
+                        <dxe:ComboBoxEditItem Content="deepseek/deepseek-r1"/>
+                    </dxe:ComboBoxEdit>
+                </dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+
+            <!-- Trạng thái kiểm tra kết nối -->
+            <TextBlock x:Name="lblStatus" Text="" FontWeight="SemiBold" Margin="0,10,0,5" HorizontalAlignment="Center"/>
+
+            <!-- Buttons -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                <dx:SimpleButton x:Name="btnTest" Content="Kiểm tra kết nối" Width="130" Height="30" Margin="0,0,10,0"
+                                 Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/icon%20builder/actions_check.svg'}"
+                                 Click="BtnTest_Click"/>
+                <dx:SimpleButton x:Name="btnSave" Content="Lưu cấu hình" Width="120" Height="30" Margin="0,0,10,0"
+                                 Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/diagramicons/save.svg'}"
+                                 Click="BtnSave_Click"/>
+                <dx:SimpleButton x:Name="btnClose" Content="Đóng" Width="90" Height="30"
+                                 Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_close.svg'}"
+                                 Click="BtnClose_Click"/>
+            </StackPanel>
+        </dxlc:LayoutControl>
+    </Grid>
+</base:BaseWindow>

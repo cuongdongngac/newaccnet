@@ -32,6 +32,7 @@ namespace NewaccNet.AI.Contracts
     {
         public string MetricName { get; set; } = string.Empty;
         public string MetricValue { get; set; } = string.Empty;
+        public string Benchmark { get; set; } = string.Empty;
         public string Evaluation { get; set; } = string.Empty;
     }
 }

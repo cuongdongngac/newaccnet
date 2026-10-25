@@ -14,6 +14,12 @@ namespace NewaccNet.AI.Configuration
         public string BaseUrl { get; set; } = DefaultBaseUrl;
         public string Model { get; set; } = DefaultChatModel;
         public string VisionModel { get; set; } = DefaultVisionModel;
+        public string AnalysisModel { get; set; } = DefaultProModel;
+
+        public string DefaultChatModelProperty { get => Model; set => Model = value; }
+        public string DefaultVisionModelProperty { get => VisionModel; set => VisionModel = value; }
+        public string DefaultAnalysisModelProperty { get => AnalysisModel; set => AnalysisModel = value; }
+
         public string HttpReferer { get; set; } = "https://newaccnet.local";
         public string AppTitle { get; set; } = "NewaccNet Accounting AI";
 
