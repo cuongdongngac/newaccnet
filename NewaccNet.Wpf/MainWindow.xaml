@@ -450,7 +450,7 @@ Bao gồm liên kết tới loại hình tương ứng."/>
                 <!-- ==================== Tab: Trí tuệ Nhân tạo (AI) ==================== -->
                 <dxr:RibbonPage Caption="Trí tuệ Nhân tạo (AI)">
                     <dxr:RibbonPageGroup Caption="Cánh tay Kéo dài (Tác nghiệp)">
-                        <dxb:BarButtonItem Content="Trợ lý Kế toán AI" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_workflow_action.svg'}" ItemClick="BtnAiAssistant_ItemClick">
+                        <dxb:BarButtonItem Content="Trợ lý Kế toán AI" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_workflowdefinition.svg'}" ItemClick="BtnAiAssistant_ItemClick">
                             <dxb:BarButtonItem.SuperTip>
                                 <dx:SuperTip>
                                     <dx:SuperTipHeaderItem Content="Trợ lý Hạch toán Tự động bằng Ngôn ngữ Tự nhiên"/>
