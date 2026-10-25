@@ -44,10 +44,13 @@
 
                     <Separator Margin="0,0,15,0"/>
 
-                    <dx:SimpleButton x:Name="btnPushToVoucher" Content="📝 Đẩy dòng chọn vào Phiếu Kế toán" Height="28" Margin="0,0,6,0"
-                                     FontWeight="SemiBold"
+                    <dx:SimpleButton x:Name="btnPushToVoucher" Content="📥 Nhập liệu vào Phiếu Kế toán (Từ Excel)" Height="28" Margin="0,0,6,0"
+                                     FontWeight="Bold"
                                      Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_invoice.svg'}"
                                      Click="BtnPushToVoucher_Click"/>
+                    <dx:SimpleButton x:Name="btnPushToCatalog" Content="📦 Lưu vào Danh mục Vật tư" Height="28" Margin="0,0,6,0"
+                                     Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_product.svg'}"
+                                     Click="BtnPushToCatalog_Click"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="2" Orientation="Horizontal">
@@ -126,34 +129,62 @@
                     <!-- Quick Prompt Chips -->
                     <Border Grid.Row="2" Background="#FFF8FAFC" Padding="6" CornerRadius="6" Margin="0,4,0,6" BorderBrush="#FFE2E8F0" BorderThickness="1">
                         <StackPanel Orientation="Vertical">
-                            <TextBlock Text="Gợi ý câu lệnh nhanh:" FontSize="10.5" Foreground="#FF64748B" Margin="0,0,0,4" FontWeight="SemiBold"/>
+                            <TextBlock Text="Gợi ý câu lệnh nhanh (Click để chọn):" FontSize="10.5" Foreground="#FF64748B" Margin="0,0,0,4" FontWeight="SemiBold"/>
                             <WrapPanel Orientation="Horizontal">
-                                <dx:SimpleButton Content="📊 Bảng chi phí quý này (Excel)" Height="22" Margin="2" Click="BtnChipExpense_Click"/>
-                                <dx:SimpleButton Content="📋 Bảng tuổi nợ NCC (Excel)" Height="22" Margin="2" Click="BtnChipDebt_Click"/>
-                                <dx:SimpleButton Content="📝 Biên bản đối chiếu công nợ (Word)" Height="22" Margin="2" Click="BtnChipReconcile_Click"/>
-                                <dx:SimpleButton Content="📄 Thuyết minh BCTC Hàng tồn kho (Word)" Height="22" Margin="2" Click="BtnChipNotes_Click"/>
+                                <dx:SimpleButton Content="🧾 Quét Hóa đơn ➔ Excel" Height="22" Margin="2" Click="BtnChipOcrExcel_Click"/>
+                                <dx:SimpleButton Content="📝 Biên bản Giao nhận ➔ Word" Height="22" Margin="2" Click="BtnChipOcrWord_Click"/>
+                                <dx:SimpleButton Content="📊 Bảng nhập kho (Nợ 152/Có 331)" Height="22" Margin="2" Click="BtnChipExpense_Click"/>
+                                <dx:SimpleButton Content="📋 Bảng đối chiếu công nợ (Word)" Height="22" Margin="2" Click="BtnChipReconcile_Click"/>
                             </WrapPanel>
                         </StackPanel>
                     </Border>
 
-                    <!-- Chat Input Area -->
+                    <!-- Chat Input Area with Attachment -->
                     <Grid Grid.Row="3">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <dxe:TextEdit Grid.Row="0" x:Name="txtChatInput" Height="60" VerticalContentAlignment="Top"
-                                      AcceptsReturn="True" TextWrapping="Wrap"
-                                      NullText="Nhập câu hỏi hoặc yêu cầu báo cáo (Ctrl+Enter để gửi)..."
-                                      PreviewKeyDown="TxtChatInput_PreviewKeyDown"/>
+                        <!-- Attached File Banner Card -->
+                        <Border Grid.Row="0" x:Name="pnlAttachedFile" Visibility="Collapsed" Background="#EFF6FF" CornerRadius="6" BorderBrush="#BFDBFE" BorderThickness="1" Padding="8,5" Margin="0,0,0,6">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="📎" FontSize="14" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock x:Name="txtAttachedFileName" FontWeight="Bold" FontSize="11" Foreground="#1E3A8A" TextTrimming="CharacterEllipsis"/>
+                                    <TextBlock x:Name="txtAttachedFileSize" FontSize="9.5" Foreground="#6B7280"/>
+                                </StackPanel>
+                                <dx:SimpleButton Grid.Column="2" Content="✕" Width="22" Height="22" Padding="0"
+                                                 ToolTip="Gỡ tệp đính kèm" Click="BtnRemoveAttached_Click"/>
+                            </Grid>
+                        </Border>
 
-                        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,6,0,0">
-                            <TextBlock x:Name="lblTyping" Text="⏳ AI đang suy nghĩ và sinh báo cáo..." Visibility="Collapsed" VerticalAlignment="Center" Foreground="#FF2563EB" FontSize="11" Margin="0,0,10,0"/>
-                            <dx:SimpleButton x:Name="btnSendChat" Content="Gửi yêu cầu ⚡" Height="28" Width="110" FontWeight="Bold"
-                                             Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/icon%20builder/actions_check.svg'}"
-                                             Click="BtnSendChat_Click"/>
-                        </StackPanel>
+                        <dxe:TextEdit Grid.Row="1" x:Name="txtChatInput" Height="65" VerticalContentAlignment="Top"
+                                      AcceptsReturn="True" TextWrapping="Wrap"
+                                      NullText="Nhập yêu cầu (ví dụ: bóc tách hóa đơn thành bảng Excel, hoặc biên bản Word, Ctrl+Enter để gửi)..."
+                                      PreviewKeyDown="TxtChatInput_PreviewKeyDown"
+                                      AllowDrop="True" Drop="TxtChatInput_Drop"/>
+
+                        <Grid Grid.Row="2" Margin="0,6,0,0">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                <dx:SimpleButton x:Name="btnAttachFile" Content="📎 Đính kèm Tệp / Hóa đơn" Height="28"
+                                                 ToolTip="Đính kèm ảnh hóa đơn (.jpg, .png) hoặc tài liệu scan để AI bóc tách theo yêu cầu"
+                                                 Click="BtnAttachFile_Click"/>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <TextBlock x:Name="lblTyping" Text="⏳ AI đang phân tích và sinh tài liệu..." Visibility="Collapsed" VerticalAlignment="Center" Foreground="#FF2563EB" FontSize="11" Margin="0,0,10,0"/>
+                                <dx:SimpleButton x:Name="btnSendChat" Content="Gửi yêu cầu ⚡" Height="28" Width="115" FontWeight="Bold"
+                                                 Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/icon%20builder/actions_check.svg'}"
+                                                 Click="BtnSendChat_Click"/>
+                            </StackPanel>
+                        </Grid>
                     </Grid>
                 </Grid>
             </Border>

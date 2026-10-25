@@ -143,27 +143,41 @@ Trả về JSON danh sách các phần tử khớp với ItemPostingSuggestionDt
         }
 
         /// <summary>
-        /// Phân tích yêu cầu tự nhiên của người dùng trong Office Studio.
+        /// Phân tích yêu cầu tự nhiên của người dùng trong Office Studio (kèm đính kèm ảnh/PDF/hóa đơn nếu có).
         /// Tự động xác định OutputType (ChatOnly, Spreadsheet, WordDocument) và tạo DTO tương ứng.
         /// </summary>
         public async Task<OfficeChatResponseDto?> ProcessOfficeChatAsync(
             string userPrompt,
             string? activeDocumentContext = null,
+            string? fileDataUri = null,
             CancellationToken cancellationToken = default)
         {
-            var systemPrompt = @"Bạn là trợ lý AI cao cấp tích hợp trong ứng dụng Kế toán Doanh nghiệp (Office Studio & AI).
-Nhiệm vụ của bạn là lắng nghe câu hỏi/yêu cầu của người dùng và quyết định dạng kết quả trả về phù hợp nhất:
-1. Nếu người dùng yêu cầu lập bảng biểu, số liệu, tính toán, báo cáo có cột, đối chiếu công nợ, bảng lương, chi phí, tồn kho:
+            var systemPrompt = @"Bạn là trợ lý AI cao cấp tích hợp trong ứng dụng Kế toán Doanh nghiệp NewaccNet (Office Studio & AI).
+Nhiệm vụ của bạn là lắng nghe câu hỏi/yêu cầu của người dùng, phân tích tài liệu đính kèm (hóa đơn, chứng từ, ảnh chụp scan hoặc file PDF nếu có) và quyết định định dạng kết quả phù hợp nhất:
+
+1. NẾU NGƯỜI DÙNG YÊU CẦU DẠNG BẢNG BIỂU, HÓA ĐƠN MUA HÀNG, SỐ LIỆU TÍNH TOÁN, CỘT/DÒNG (HOẶC ĐÍNH KÈM HÓA ĐƠN CẦN BÓC TÁCH BẢNG):
    - OutputType = 1 (Spreadsheet)
-   - Điền dữ liệu vào thuộc tính Spreadsheet (Title, Subtitle, SheetName, Columns, Rows, SummaryRow nếu có tính tổng).
-   - ChatMessage = lời giải thích ngắn gọn, thân thiện về bảng tính đã tạo.
-2. Nếu người dùng yêu cầu soạn thảo văn bản, tờ trình, thuyết minh BCTC, biên bản đối chiếu, hợp đồng, phân tích chiến lược dài:
+   - Điền dữ liệu vào thuộc tính Spreadsheet:
+     + Title: Tiêu đề bảng tính (ví dụ: BẢNG KÊ HÓA ĐƠN ĐẦU VÀO, BẢNG TÍNH CHI PHÍ...)
+     + Subtitle: Thông tin người bán, số hóa đơn, ngày lập hoặc kỳ báo cáo.
+     + SheetName: Tên sheet (ví dụ: HoaDon, ChiPhi, TonKho).
+     + Columns: Danh sách các cột rõ ràng (ví dụ: STT, Mã hàng, Tên hàng hóa dịch vụ, ĐVT, Số lượng, Đơn giá, Thành tiền, Thuế %, Tiền thuế, TK Nợ gợi ý, TK Có gợi ý, Kho gợi ý).
+     + Rows: Dữ liệu từng dòng tương ứng với các cột.
+     + SummaryRow: Dòng tổng cộng (ví dụ: Cộng tiền hàng, Tổng thuế, Tổng thanh toán).
+   - ChatMessage = lời giải thích ngắn gọn, thân thiện bằng tiếng Việt về bảng tính đã tạo và hướng dẫn kế toán kiểm tra.
+
+2. NẾU NGƯỜI DÙNG YÊU CẦU DẠNG ĐOẠN VĂN, BIÊN BẢN GIAO NHẬN, THUYẾT MINH, HỢP ĐỒNG, PARAGRAPH NỐI TIẾP:
    - OutputType = 2 (WordDocument)
-   - Điền dữ liệu vào thuộc tính WordDocument (Title, Subtitle, CompanyName, Sections với Heading, Paragraphs, BulletPoints).
+   - Điền dữ liệu vào thuộc tính WordDocument:
+     + Title: Tiêu đề văn bản (in hoa, căn giữa).
+     + Subtitle: Số biên bản, ngày tháng năm.
+     + CompanyName: Tên doanh nghiệp / đơn vị phát hành.
+     + Sections: Các phần nội dung, mỗi phần gồm Heading, các Paragraphs dạng văn xuôi mạch lạc, và BulletPoints nếu có điều khoản liệt kê.
    - ChatMessage = lời tóm tắt ngắn gọn về văn bản đã soạn thảo.
-3. Nếu chỉ là câu hỏi giải thích, định khoản, kiến thức thuế, trao đổi thông thường:
+
+3. NẾU NGƯỜI DÙNG CHỈ TRAO ĐỔI, GIẢI THÍCH, TƯ VẤN KẾ TOÁN/THUẾ THÔNG THƯỜNG:
    - OutputType = 0 (ChatOnly)
-   - ChatMessage = nội dung câu trả lời chi tiết.
+   - ChatMessage = nội dung câu trả lời chi tiết, dễ hiểu.
 
 Hãy trả về JSON cấu trúc OfficeChatResponseDto.";
 
@@ -171,6 +185,16 @@ Hãy trả về JSON cấu trúc OfficeChatResponseDto.";
             if (!string.IsNullOrWhiteSpace(activeDocumentContext))
             {
                 fullPrompt += $"\n\n[DỮ LIỆU ĐANG MỞ TRONG OFFICE STUDIO]:\n{activeDocumentContext}";
+            }
+
+            if (!string.IsNullOrWhiteSpace(fileDataUri))
+            {
+                // Có đính kèm ảnh/tài liệu scan -> gửi qua vision multi-modal
+                return await _gateway.SendStructuredVisionRequestAsync<OfficeChatResponseDto>(
+                    systemPrompt,
+                    fullPrompt,
+                    new[] { fileDataUri },
+                    cancellationToken: cancellationToken);
             }
 
             return await _gateway.SendStructuredRequestAsync<OfficeChatResponseDto>(
