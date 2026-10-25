@@ -512,6 +512,31 @@ namespace NewaccNet.Wpf.AppSystem.AI
             win.ShowDialog();
         }
 
+        private void BtnOcrOpenInOffice_Click(object sender, RoutedEventArgs e)
+        {
+            if (_currentOcrInvoice == null || _currentOcrInvoice.Items.Count == 0)
+            {
+                MessageBox.Show("Không có dữ liệu mặt hàng để mở trong Office Studio.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            try
+            {
+                var openXmlService = new OpenXmlReportService();
+                var stream = openXmlService.GenerateInvoiceItemsSpreadsheet(
+                    $"BẢNG KÊ CHI TIẾT HÓA ĐƠN SỐ {_currentOcrInvoice.InvoiceNo}",
+                    _currentOcrInvoice.SellerName,
+                    $"MST: {_currentOcrInvoice.SellerTaxCode} - Ngày: {_currentOcrInvoice.InvoiceDate}",
+                    _currentOcrInvoice.Items);
+
+                OfficeStudioWindow.OpenExcel(stream, $"Hóa đơn {_currentOcrInvoice.InvoiceNo}");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi mở Office Studio: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
         private void BtnOcrExportExcel_Click(object sender, RoutedEventArgs e)
         {
             if (_currentOcrInvoice == null || _currentOcrInvoice.Items.Count == 0)
@@ -619,6 +644,26 @@ namespace NewaccNet.Wpf.AppSystem.AI
             finally
             {
                 btnRunCfo.IsEnabled = true;
+            }
+        }
+
+        private void BtnCfoOpenInOffice_Click(object sender, RoutedEventArgs e)
+        {
+            if (_currentCfoInsight == null)
+            {
+                MessageBox.Show("Chưa có kết quả phân tích CFO để xem trong Office Studio.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            try
+            {
+                var openXmlService = new OpenXmlReportService();
+                var stream = openXmlService.GenerateExecutiveWordReport(_currentCfoInsight, "CÔNG TY KẾ TOÁN NEWACCNET");
+                OfficeStudioWindow.OpenWord(stream, "Báo cáo Quản trị CFO");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi mở Office Studio: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

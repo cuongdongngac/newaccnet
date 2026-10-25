@@ -1,0 +1,92 @@
+<base:BaseWindow 
+    x:Class="NewaccNet.Wpf.AppSystem.AI.OfficeStudioWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+    xmlns:dxsps="http://schemas.devexpress.com/winfx/2008/xaml/spreadsheet"
+    xmlns:dxre="http://schemas.devexpress.com/winfx/2008/xaml/richedit"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:base="clr-namespace:NewaccNet.Wpf.Views.Base"
+    Title="Bàn Làm Việc Văn Phòng Kế Toán &amp; AI (Office Studio)"
+    Width="1360" Height="860"
+    WindowState="Maximized"
+    WindowStartupLocation="CenterScreen">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Top Office Studio Action Bar -->
+        <Border Grid.Row="0" Background="#FFF3F4F6" BorderBrush="#FFD1D5DB" BorderThickness="0,0,0,1" Padding="8,6">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <TextBlock Text="🏢 OFFICE STUDIO &amp; AI" FontWeight="Bold" FontSize="14" Foreground="#FF1E3A8A" VerticalAlignment="Center" Margin="0,0,15,0"/>
+
+                    <dx:SimpleButton x:Name="btnNewExcel" Content="Tạo Bảng tính mới" Height="28" Margin="0,0,6,0"
+                                     Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/actions/new.svg'}"
+                                     Click="BtnNewExcel_Click"/>
+                    <dx:SimpleButton x:Name="btnOpenOfficeFile" Content="Mở tệp (Excel / Word)..." Height="28" Margin="0,0,6,0"
+                                     Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/actions/open.svg'}"
+                                     Click="BtnOpenOfficeFile_Click"/>
+                    <dx:SimpleButton x:Name="btnSaveOfficeFile" Content="Lưu tệp..." Height="28" Margin="0,0,15,0"
+                                     Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/diagramicons/save.svg'}"
+                                     Click="BtnSaveOfficeFile_Click"/>
+
+                    <Separator Margin="0,0,15,0"/>
+
+                    <!-- Cầu nối dữ liệu kế toán -->
+                    <dx:SimpleButton x:Name="btnPushToVoucher" Content="📝 Đẩy dòng chọn vào Phiếu Kế toán" Height="28" Margin="0,0,6,0"
+                                     FontWeight="SemiBold"
+                                     Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_invoice.svg'}"
+                                     Click="BtnPushToVoucher_Click"/>
+                </StackPanel>
+
+                <!-- AI Office Copilot Quick Bar -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                    <dxe:TextEdit x:Name="txtAiOfficePrompt" Width="260" Height="28" Margin="0,0,6,0"
+                                  NullText="Hỏi AI phân tích bảng tính / văn bản..."/>
+                    <dx:SimpleButton x:Name="btnAiOfficeAsk" Content="🤖 AI Trợ lý" Height="28" Width="100" FontWeight="Bold"
+                                     Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/icon%20builder/actions_check.svg'}"
+                                     Click="BtnAiOfficeAsk_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Main Office Tabs: Excel vs Word -->
+        <TabControl x:Name="officeTabControl" Grid.Row="1" Margin="0">
+            <!-- TAB 1: EXCEL SPREADSHEET -->
+            <TabItem Header="📊 Bảng tính Kế toán (Excel Spreadsheet)">
+                <Grid>
+                    <dxsps:SpreadsheetControl x:Name="spreadsheetControl"
+                                             ShowFormulaBar="True"
+                                             CommandBarStyle="Ribbon"/>
+                </Grid>
+            </TabItem>
+
+            <!-- TAB 2: WORD DOCUMENT -->
+            <TabItem Header="📄 Soạn thảo Văn bản (Word Document)">
+                <Grid>
+                    <dxre:RichEditControl x:Name="richEditControl"
+                                          CommandBarStyle="Ribbon"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+        <!-- Status Bar -->
+        <StatusBar Grid.Row="2" Background="#FFF8F9FA">
+            <StatusBarItem>
+                <TextBlock x:Name="lblOfficeStatus" Text="Sẵn sàng làm việc với Excel và Word tích hợp AI." Foreground="#FF4B5563" FontSize="11.5"/>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</base:BaseWindow>

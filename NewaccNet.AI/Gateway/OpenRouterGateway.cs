@@ -70,6 +70,11 @@ namespace NewaccNet.AI.Gateway
             }
         }
 
+        public async Task<OpenRouterResponse> SendChatAsync(string userPrompt, CancellationToken cancellationToken = default)
+        {
+            return await SendChatRequestAsync("Bạn là trợ lý AI chuyên nghiệp về kế toán, tài chính và phân tích dữ liệu văn phòng.", userPrompt, cancellationToken: cancellationToken);
+        }
+
         public async Task<OpenRouterResponse> SendChatRequestAsync(
             string systemPrompt,
             string userPrompt,

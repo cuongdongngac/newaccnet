@@ -490,6 +490,13 @@ public partial class MainWindow : ThemedWindow {
         win.ShowDialog();
     }
 
+    private void BtnOfficeStudio_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.AI.OfficeStudioWindow();
+        win.Owner = this;
+        win.Show();
+    }
+
     private void BtnHddtReview_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
     {
         var win = new NewaccNet.Wpf.AppSystem.TaxInvoice.TaxInvoiceReviewWindow();

@@ -479,6 +479,17 @@ Bao gồm liên kết tới loại hình tương ứng."/>
                         </dxb:BarButtonItem>
                     </dxr:RibbonPageGroup>
 
+                    <dxr:RibbonPageGroup Caption="Văn phòng Kế toán &amp; AI">
+                        <dxb:BarButtonItem Content="Office Studio" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/export/exporttoxls.svg'}" ItemClick="BtnOfficeStudio_ItemClick">
+                            <dxb:BarButtonItem.SuperTip>
+                                <dx:SuperTip>
+                                    <dx:SuperTipHeaderItem Content="Bàn làm việc Văn phòng Kế toán &amp; AI (Office Studio)"/>
+                                    <dx:SuperTipItem Content="Soạn thảo, xem và xử lý bảng tính Excel &amp; tài liệu Word trực tiếp ngay trong phần mềm. Tích hợp AI giải thích số liệu, hỗ trợ công thức và đẩy dữ liệu vào chứng từ kế toán."/>
+                                </dx:SuperTip>
+                            </dxb:BarButtonItem.SuperTip>
+                        </dxb:BarButtonItem>
+                    </dxr:RibbonPageGroup>
+
                     <dxr:RibbonPageGroup Caption="Cấu hình &amp; Kết nối">
                         <dxb:BarButtonItem Content="Cài đặt AI" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/setup/properties.svg'}" ItemClick="BtnAiConfig_ItemClick">
                             <dxb:BarButtonItem.SuperTip>

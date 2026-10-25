@@ -287,6 +287,10 @@
                         <dx:SimpleButton x:Name="btnOcrExtractPartner" Content="👥 Trích xuất Đối tượng NCC" Height="34" Width="190" Margin="0,0,8,0"
                                          Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_contact.svg'}"
                                          Click="BtnOcrExtractPartner_Click"/>
+                        <dx:SimpleButton x:Name="btnOcrOpenInOffice" Content="🖥 Mở trong Office Studio" Height="34" Width="190" Margin="0,0,8,0"
+                                         FontWeight="SemiBold"
+                                         Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/export/exporttoxls.svg'}"
+                                         Click="BtnOcrOpenInOffice_Click"/>
                         <dx:SimpleButton x:Name="btnOcrExportExcel" Content="📊 Xuất Bảng tính Excel (OpenXML)" Height="34" Width="220"
                                          Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_export_toxlsx.svg'}"
                                          Click="BtnOcrExportExcel_Click"/>
@@ -421,6 +425,10 @@
 
                     <!-- Bottom CFO Actions -->
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                        <dx:SimpleButton x:Name="btnCfoOpenInOffice" Content="🖥 Xem trong Office Studio" Height="34" Width="200" Margin="0,0,10,0"
+                                         FontWeight="SemiBold"
+                                         Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/export/exporttodoc.svg'}"
+                                         Click="BtnCfoOpenInOffice_Click"/>
                         <dx:SimpleButton x:Name="btnExportWord" Content="📄 Xuất Báo cáo Quản trị (Word OpenXML)" Height="34" Width="260" Margin="0,0,10,0"
                                          FontWeight="Bold"
                                          Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_export_todocx.svg'}"
