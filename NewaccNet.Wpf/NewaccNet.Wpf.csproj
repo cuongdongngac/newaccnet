@@ -7,6 +7,7 @@
     <ProjectReference Include="..\dataaccess\PostgreSql (Npgsql)\DatabaseSpecific\DataAccess.PostgreSqlDBSpecific.csproj" />
     <ProjectReference Include="..\NewaccNet.Reports\NewaccNet.Reports.csproj" />
     <ProjectReference Include="..\NewaccNet.TaxInvoice\NewaccNet.TaxInvoice.csproj" />
+    <ProjectReference Include="..\NewaccNet.AI\NewaccNet.AI.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
