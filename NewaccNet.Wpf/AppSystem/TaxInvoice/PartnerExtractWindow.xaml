@@ -72,6 +72,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
             <Button x:Name="btnSelectNew" Grid.Column="0" Content="✔ Chọn đối tác MỚI" Height="28" Width="140" Margin="0,0,6,0" Click="BtnSelectNew_Click"/>
@@ -90,12 +91,16 @@
                 <TextBlock x:Name="lblStats" Text="Đang xử lý dữ liệu..." FontWeight="SemiBold" Foreground="#FF0D47A1" Margin="8,0,0,0"/>
             </StackPanel>
 
+            <!-- Open in Office Studio Button -->
+            <Button x:Name="btnOpenInOffice" Grid.Column="6" Content="🏢 Mở trong Office" Height="30" Width="140" Margin="0,0,8,0"
+                    FontWeight="Bold" Background="#FF0D9488" Foreground="White" Click="BtnOpenInOffice_Click"/>
+
             <!-- Export to Excel Button -->
-            <Button x:Name="btnExportExcel" Grid.Column="6" Content="📥 Xuất tệp Excel" Height="30" Width="150" Margin="0,0,8,0"
+            <Button x:Name="btnExportExcel" Grid.Column="7" Content="📥 Xuất tệp Excel" Height="30" Width="140" Margin="0,0,8,0"
                     FontWeight="Bold" Background="#FF1976D2" Foreground="White" Click="BtnExportExcel_Click"/>
 
             <!-- Direct DB Save Button -->
-            <Button x:Name="btnSaveToDb" Grid.Column="7" Content="💾 Lưu trực tiếp CSDL" Height="30" Width="160" 
+            <Button x:Name="btnSaveToDb" Grid.Column="8" Content="💾 Lưu trực tiếp CSDL" Height="30" Width="150" 
                     FontWeight="Bold" Background="#FF2E7D32" Foreground="White" Click="BtnSaveToDb_Click"/>
         </Grid>
 

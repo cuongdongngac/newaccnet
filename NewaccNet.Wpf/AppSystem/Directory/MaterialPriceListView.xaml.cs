@@ -4,7 +4,7 @@ using DevExpress.Xpf.Core;
 using DataAccess.EntityClasses;
 using DataAccess.HelperClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using NewaccNet.Wpf.AppSystem.Services; // Thêm refer đến Service đã tạo
+using NewaccNet.Core.Services;
 
 namespace NewaccNet.Wpf.AppSystem.Directory
 {

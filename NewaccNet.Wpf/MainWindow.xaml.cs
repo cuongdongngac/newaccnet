@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using DevExpress.Xpf.Core;
@@ -15,6 +16,43 @@ public partial class MainWindow : ThemedWindow {
     private void BtnCostAllocation_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e) { new NewaccNet.Wpf.AppSystem.CostAllocation.CostAllocationWindow().Show(); }
     private void BtnCostTransfer_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e) { new NewaccNet.Wpf.AppSystem.CostTransfer.CostTransferWindow().Show(); }
         private void BtnAssetDepreciation_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e) { new NewaccNet.Wpf.AppSystem.AssetDepreciation.AssetDepreciationWindow().Show(); }
+    private void BtnAbout_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e) { new NewaccNet.Wpf.AppSystem.AboutWindow { Owner = this }.ShowDialog(); }
+    private void BtnOnlineHelp_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e) { NewaccNet.Wpf.AppSystem.AboutWindow.OpenUrl("https://newacc.learning.io.vn"); }
+    private void BtnCompanyRegistration_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.CompanyRegistrationWindow { Owner = this };
+        win.ShowDialog();
+        UpdateAppTitle();
+    }
+    private void BtnVoucherPostingConfig_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.VoucherPostingConfigWindow { Owner = this };
+        win.ShowDialog();
+    }
+    private void BtnLicense_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new NewaccNet.Wpf.AppSystem.CompanyRegistrationWindow { Owner = this };
+        win.ShowDialog();
+        UpdateAppTitle();
+    }
+
+    public void UpdateAppTitle()
+    {
+        var cfg = DbConfigService.Current;
+        string machineCode = HardwareHelper.GetMachineCode();
+        bool isValid = DbConfigService.ValidateRegistrationCode(cfg, machineCode, out int maxRecords);
+
+        if (isValid)
+        {
+            string limitText = maxRecords >= 999999 ? "Vĩnh viễn - Không giới hạn" : $"Gói {maxRecords:N0} chứng từ";
+            string company = !string.IsNullOrWhiteSpace(cfg.CompanyName) ? $" - {cfg.CompanyName}" : "";
+            this.Title = $"Phần mềm Kế toán NewaccNet{company} [BẢN QUYỀN CHÍNH THỨC - {limitText}]";
+        }
+        else
+        {
+            this.Title = $"Phần mềm Kế toán NewaccNet [BẢN TRẢI NGHIỆM - Giới hạn {LicenseManager.TrialVoucherLimit} chứng từ]";
+        }
+    }
     public MainWindow(string username, string fullName, int roleMask)
     {
         InitializeComponent();
@@ -29,6 +67,8 @@ public partial class MainWindow : ThemedWindow {
         this.Closed += (_, _) => Application.Current.Shutdown();
 
         LoadBackground();
+        UpdateAppTitle();
+        InitPluginEcosystem();
     }
 
 
@@ -497,6 +537,85 @@ public partial class MainWindow : ThemedWindow {
         win.Show();
     }
 
+    private void BtnPluginManager_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var win = new AppSystem.Plugins.PluginManagerWindow { Owner = this };
+        win.ShowDialog();
+        ApplyPluginStates();
+    }
+
+    private void InitPluginEcosystem()
+    {
+        try
+        {
+            AppSystem.Plugins.PluginLoader.Instance.LoadAllPlugins();
+            AppSystem.Plugins.PluginLoader.Instance.PluginStateChanged += ApplyPluginStates;
+            ApplyPluginStates();
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"[Plugin] Lỗi nạp Plugin: {ex.Message}");
+        }
+    }
+
+    private void ApplyPluginStates()
+    {
+        try
+        {
+            if (defaultCategory != null)
+            {
+                // 1. Dọn dẹp các RibbonPage động do Plugin tạo trước đó
+                var dynamicPages = defaultCategory.Pages.OfType<DevExpress.Xpf.Ribbon.RibbonPage>()
+                    .Where(p => p.Tag is string tag && tag == "DYNAMIC_PLUGIN_PAGE").ToList();
+                foreach (var p in dynamicPages)
+                {
+                    defaultCategory.Pages.Remove(p);
+                }
+
+                // 2. Render các RibbonAction từ các Plugin ngoại vi đang kích hoạt
+                var actions = AppSystem.Plugins.PluginHost.Instance.RegisteredRibbonActions;
+                foreach (var grp in actions.GroupBy(a => a.Category))
+                {
+                    var page = new DevExpress.Xpf.Ribbon.RibbonPage
+                    {
+                        Caption = grp.Key,
+                        Tag = "DYNAMIC_PLUGIN_PAGE"
+                    };
+
+                    foreach (var subGrp in grp.GroupBy(a => a.GroupName))
+                    {
+                        var pageGroup = new DevExpress.Xpf.Ribbon.RibbonPageGroup
+                        {
+                            Caption = subGrp.Key
+                        };
+
+                        foreach (var act in subGrp)
+                        {
+                            var btn = new DevExpress.Xpf.Bars.BarButtonItem
+                            {
+                                Content = act.Title,
+                                Hint = act.ToolTip,
+                                RibbonStyle = DevExpress.Xpf.Bars.RibbonItemStyles.Large
+                            };
+
+                            var currentAct = act;
+                            btn.ItemClick += (_, _) => currentAct.ExecuteAction(this);
+                            pageGroup.Items.Add(btn);
+                        }
+
+                        page.Groups.Add(pageGroup);
+                    }
+
+                    defaultCategory.Pages.Add(page);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Lỗi ApplyPluginStates: {ex.Message}");
+        }
+    }
+
     private void BtnHddtReview_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
     {
         var win = new NewaccNet.Wpf.AppSystem.TaxInvoice.TaxInvoiceReviewWindow();
@@ -504,3 +623,4 @@ public partial class MainWindow : ThemedWindow {
         win.Show();
     }
 }
+

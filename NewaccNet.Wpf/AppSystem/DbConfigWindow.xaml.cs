@@ -37,14 +37,14 @@ namespace NewaccNet.Wpf.AppSystem
             txtPgUsername.Text      = config.PgUsername;
             txtPgPassword.EditValue = config.PgPassword;
 
-            // Thông tin phụ trợ (User Settings)
-            string companyName = UserPreferencesHelper.GetSetting("CompanyName");
-            txtCompanyName.Text = string.IsNullOrWhiteSpace(companyName) ? "Tên công ty của bạn" : companyName;
+            // Thông tin công ty (Lấy từ DbConfig trong CSDL)
+            string companyName = DbConfigService.Current.CompanyName;
+            txtCompanyName.Text = companyName ?? "";
 
-            string yearStr = UserPreferencesHelper.GetSetting("AccountingYear");
-            if (int.TryParse(yearStr, out int year) && year >= 1900 && year <= 2100)
+            int currentYear = DbConfigService.Current.AccountingYear;
+            if (currentYear >= 1900 && currentYear <= 2100)
             {
-                spnAccountingYear.Value = year;
+                spnAccountingYear.Value = currentYear;
             }
             else
             {
@@ -152,7 +152,18 @@ namespace NewaccNet.Wpf.AppSystem
                           : DatabaseType.PostgreSql;
 
             // Access
-            config.AccessFilePath = txtAccessPath.Text;
+            // Access
+            if (idx == 0)
+            {
+                if (string.IsNullOrWhiteSpace(txtAccessPath.Text) || !System.IO.File.Exists(txtAccessPath.Text.Trim()))
+                {
+                    System.Windows.MessageBox.Show(
+                        $"Tệp cơ sở dữ liệu Access không tồn tại:\n{txtAccessPath.Text}\n\nVui lòng kiểm tra hoặc chọn lại đúng đường dẫn tệp .accdb!",
+                        "Cảnh báo", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
+                    return;
+                }
+            }
+            config.AccessFilePath = txtAccessPath.Text.Trim();
 
             // SQL Server
             config.SqlServerName         = txtServer.Text;
@@ -168,15 +179,30 @@ namespace NewaccNet.Wpf.AppSystem
             config.PgUsername = txtPgUsername.Text;
             config.PgPassword = txtPgPassword.EditValue as string ?? "";
 
-            // Lưu thông tin phụ trợ vào User Settings (lưu tại máy trạm, hoàn toàn không lưu vào DB)
-            UserPreferencesHelper.SetSetting("CompanyName", txtCompanyName.Text?.Trim() ?? "");
-            UserPreferencesHelper.SetSetting("AccountingYear", spnAccountingYear.Value.ToString());
-
+            // 1. Áp dụng cấu hình kết nối CSDL trước
             ConfigManager.BuildConnectionString();
             ConfigManager.SaveConfig();
+            DbConfigService.ClearCache();
+
+            // 2. Lưu thông tin công ty vào DbConfig trong CSDL vừa kết nối
+            string newCompany = txtCompanyName.Text?.Trim() ?? "";
+            try
+            {
+                var dbCfg = DbConfigService.LoadDbConfig();
+                dbCfg.CompanyName = newCompany;
+                if (int.TryParse(spnAccountingYear.Value.ToString(), out int accYear))
+                {
+                    dbCfg.AccountingYear = accYear;
+                }
+                DbConfigService.SaveDbConfig(dbCfg);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("SaveDbConfig error in DbConfigWindow: " + ex.Message);
+            }
 
             System.Windows.MessageBox.Show(
-                "Đã lưu cấu hình kết nối CSDL và thông tin phụ trợ thành công. Hệ thống sẽ tự động khởi động lại để áp dụng thay đổi.",
+                "Đã lưu cấu hình kết nối CSDL và thông tin công ty thành công. Hệ thống sẽ tự động khởi động lại để áp dụng thay đổi.",
                 "Thông báo", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
             
             // Tự khởi động lại ứng dụng mà không hiển thị hộp thoại hỏi thoát

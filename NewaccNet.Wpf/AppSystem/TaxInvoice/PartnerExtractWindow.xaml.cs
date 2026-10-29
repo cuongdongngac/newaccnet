@@ -12,6 +12,7 @@ using Microsoft.Win32;
 using MiniExcelLibs;
 using NewaccNet.TaxInvoice;
 using NewaccNet.Wpf.AppSystem;
+using NewaccNet.Wpf.AppSystem.AI;
 using NewaccNet.Wpf.AppSystem.Directory;
 using NewaccNet.Wpf.Views.Base;
 
@@ -356,6 +357,46 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
             var existingCount = total - newCount;
 
             lblStats.Text = $"Tổng số: {total} đối tác (Mới: {newCount}, Đã có: {existingCount}) | Đã chọn: {selected} đối tác";
+        }
+
+        // ==============================================================
+        // ACTION 0.5: OPEN IN OFFICE STUDIO (DATA HUB)
+        // ==============================================================
+
+        private void BtnOpenInOffice_Click(object sender, RoutedEventArgs e)
+        {
+            var selected = _allPartners.Where(x => x.IsSelected).ToList();
+            if (selected.Count == 0) selected = _allPartners.ToList();
+            if (selected.Count == 0)
+            {
+                MessageBox.Show("Không có dữ liệu đối tác nào để mở trong Office Studio.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            try
+            {
+                var exportRows = selected.Select(x => new
+                {
+                    Id = x.PartnerId,
+                    CustomerName = x.CustomerName,
+                    Taxno = x.Taxno,
+                    Address = x.Address,
+                    Note = x.RoleDisplay,
+                    DbStatus = x.DbStatus
+                }).ToList();
+
+                var ms = new MemoryStream();
+                MiniExcel.SaveAs(ms, exportRows);
+                ms.Position = 0;
+
+                var officeWin = new OfficeStudioWindow(ms, OfficeDocumentType.Spreadsheet, "Danh mục Đối tác trích xuất từ HĐĐT", _databasePath);
+                officeWin.Owner = this.Owner ?? this;
+                officeWin.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi mở Office Studio: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         // ==============================================================

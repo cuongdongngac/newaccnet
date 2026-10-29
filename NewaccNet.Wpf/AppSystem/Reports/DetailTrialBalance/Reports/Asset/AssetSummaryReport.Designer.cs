@@ -103,7 +103,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.DetailTrialBalance.Reports.Asset
             this.lblCompany.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold);
             this.lblCompany.LocationFloat = new DevExpress.Utils.PointFloat(0F, 0F);
             this.lblCompany.SizeF = new System.Drawing.SizeF(400F, 20F);
-            this.lblCompany.Text = "TỔNG CÔNG TY XÂY DỰNG HÀ NỘI";
+            this.lblCompany.Text = "";
 
             this.lblTitle.Font = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Bold);
             this.lblTitle.LocationFloat = new DevExpress.Utils.PointFloat(0F, 25F);

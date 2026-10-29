@@ -20,9 +20,9 @@
         </Grid.RowDefinitions>
 
         <!-- Menu chính dạng Ribbon -->
-        <dxr:RibbonControl Grid.Row="0" RibbonStyle="Office2019" ShowApplicationButton="False">
+        <dxr:RibbonControl x:Name="mainRibbon" Grid.Row="0" RibbonStyle="Office2019" ShowApplicationButton="False">
             <!-- Tab: Hệ thống -->
-            <dxr:RibbonDefaultPageCategory>
+            <dxr:RibbonDefaultPageCategory x:Name="defaultCategory">
                 <!-- ==================== Tab 1: NGHIỆP VỤ (ƯU TIÊN) ==================== -->
                 <dxr:RibbonPage Caption="Nghiệp vụ" IsSelected="True">
                     <dxr:RibbonPageGroup Caption="Chứng từ &amp; Phân bổ">
@@ -102,7 +102,15 @@
                                 </dx:SuperTip>
                             </dxb:BarButtonItem.SuperTip>
                         </dxb:BarButtonItem>
-                        <dxb:BarButtonItem Content="Khai báo" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_organization.svg'}" auth:AuthHelper.RequiredMask="1">
+                        <dxb:BarButtonItem Content="Định khoản" ItemClick="BtnVoucherPostingConfig_ItemClick" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_rules.svg'}" auth:AuthHelper.RequiredMask="1">
+                            <dxb:BarButtonItem.SuperTip>
+                                <dx:SuperTip>
+                                    <dx:SuperTipHeaderItem Content="Cấu hình Định khoản &amp; Tài khoản ngầm định"/>
+                                    <dx:SuperTipItem Content="Thiết lập các tài khoản ngầm định (phải trả, phải thu, thuế, doanh thu, giá vốn) và tên cho từng loại phiếu."/>
+                                </dx:SuperTip>
+                            </dxb:BarButtonItem.SuperTip>
+                        </dxb:BarButtonItem>
+                        <dxb:BarButtonItem Content="Khai báo" ItemClick="BtnCompanyRegistration_ItemClick" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_organization.svg'}" auth:AuthHelper.RequiredMask="1">
                             <dxb:BarButtonItem.SuperTip>
                                 <dx:SuperTip>
                                     <dx:SuperTipHeaderItem Content="Khai báo Thông tin Doanh nghiệp"/>
@@ -117,6 +125,43 @@
                                 <dx:SuperTip>
                                     <dx:SuperTipHeaderItem Content="Chuyển đổi số dư sang Niên độ mới"/>
                                     <dx:SuperTipItem Content="Chốt sổ cuối kỳ và kết chuyển số dư tài khoản, công nợ, kho vật tư... sang cơ sở dữ liệu niên độ mới."/>
+                                </dx:SuperTip>
+                            </dxb:BarButtonItem.SuperTip>
+                        </dxb:BarButtonItem>
+                    </dxr:RibbonPageGroup>
+                    <dxr:RibbonPageGroup Caption="Tiện ích mở rộng">
+                        <dxb:BarButtonItem Content="Quản lý Plugin" ItemClick="BtnPluginManager_ItemClick" 
+                                           LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/setup/properties.svg'}">
+                            <dxb:BarButtonItem.SuperTip>
+                                <dx:SuperTip>
+                                    <dx:SuperTipHeaderItem Content="Quản lý Tiện ích Mở rộng &amp; Plugin"/>
+                                    <dx:SuperTipItem Content="Xem danh sách, cài đặt, bật/tắt hoặc gỡ bỏ các module mở rộng (AI, Xây lắp, Sản xuất...)."/>
+                                </dx:SuperTip>
+                            </dxb:BarButtonItem.SuperTip>
+                        </dxb:BarButtonItem>
+                    </dxr:RibbonPageGroup>
+                    <dxr:RibbonPageGroup Caption="Trợ giúp &amp; Thông tin">
+                        <dxb:BarButtonItem Content="Hướng dẫn" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/icon%20builder/actions_question.svg'}" ItemClick="BtnOnlineHelp_ItemClick">
+                            <dxb:BarButtonItem.SuperTip>
+                                <dx:SuperTip>
+                                    <dx:SuperTipHeaderItem Content="Hướng dẫn Sử dụng Trực tuyến (F1)"/>
+                                    <dx:SuperTipItem Content="Mở trang tài liệu trợ giúp trực tuyến trên trình duyệt web."/>
+                                </dx:SuperTip>
+                            </dxb:BarButtonItem.SuperTip>
+                        </dxb:BarButtonItem>
+                        <dxb:BarButtonItem Content="Giới thiệu" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/outlook%20inspired/about.svg'}" ItemClick="BtnAbout_ItemClick">
+                            <dxb:BarButtonItem.SuperTip>
+                                <dx:SuperTip>
+                                    <dx:SuperTipHeaderItem Content="Thông tin Phần mềm (About)"/>
+                                    <dx:SuperTipItem Content="Xem thông tin bản quyền tác giả Phạm Việt Cường, phiên bản và thông tin liên hệ."/>
+                                </dx:SuperTip>
+                            </dxb:BarButtonItem.SuperTip>
+                        </dxb:BarButtonItem>
+                        <dxb:BarButtonItem Content="Bản quyền" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/icon%20builder/security_key.svg'}" ItemClick="BtnLicense_ItemClick">
+                            <dxb:BarButtonItem.SuperTip>
+                                <dx:SuperTip>
+                                    <dx:SuperTipHeaderItem Content="Đăng ký &amp; Quản lý Bản quyền"/>
+                                    <dx:SuperTipItem Content="Xem mã máy tính, kiểm tra thời hạn sử dụng hoặc nhập mã kích hoạt bản quyền chính thức."/>
                                 </dx:SuperTip>
                             </dxb:BarButtonItem.SuperTip>
                         </dxb:BarButtonItem>
@@ -448,7 +493,7 @@ Bao gồm liên kết tới loại hình tương ứng."/>
                     </dxr:RibbonPageGroup>
                 </dxr:RibbonPage>
                 <!-- ==================== Tab: Trí tuệ Nhân tạo (AI) ==================== -->
-                <dxr:RibbonPage Caption="Trí tuệ Nhân tạo (AI)">
+                <dxr:RibbonPage x:Name="ribbonPageAi" Caption="Trí tuệ Nhân tạo (AI)">
                     <dxr:RibbonPageGroup Caption="Cánh tay Kéo dài (Tác nghiệp)">
                         <dxb:BarButtonItem Content="Trợ lý Kế toán AI" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_workflowdefinition.svg'}" ItemClick="BtnAiAssistant_ItemClick">
                             <dxb:BarButtonItem.SuperTip>

@@ -127,7 +127,7 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Reports
             this.lblCompany.LocationFloat = new DevExpress.Utils.PointFloat(0F, 0F);
             this.lblCompany.SizeF = new System.Drawing.SizeF(450F, 20F);
             this.lblCompany.Font = new DevExpress.Drawing.DXFont("Times New Roman", 10F, DevExpress.Drawing.DXFontStyle.Bold);
-            this.lblCompany.Text = "CÔNG TY BÌNH MINH";
+            this.lblCompany.Text = "";
 
             // lblAddress
             this.lblAddress.LocationFloat = new DevExpress.Utils.PointFloat(0F, 20F);

@@ -1,4 +1,4 @@
-﻿using System.Windows;
+using System.Windows;
 using DevExpress.Xpf.Core;
 using DataAccess.EntityClasses;
 using DataAccess.HelperClasses;
@@ -58,7 +58,7 @@ namespace NewaccNet.Wpf.AppSystem.Directory
             {
                 try
                 {
-                    using (var adapter = NewaccNet.Wpf.AppSystem.AppDataAccessAdapter.Create())
+                    using (var adapter = AppDataAccessAdapter.Create())
                     {
                         adapter.DeleteEntity(focusedAccount);
                         
@@ -80,7 +80,7 @@ namespace NewaccNet.Wpf.AppSystem.Directory
         {
             try
             {
-                using (var adapter = NewaccNet.Wpf.AppSystem.AppDataAccessAdapter.Create())
+                using (var adapter = AppDataAccessAdapter.Create())
                 {
                     adapter.SaveEntity(account, true, false);
                 }
@@ -116,10 +116,10 @@ namespace NewaccNet.Wpf.AppSystem.Directory
         public override void LoadData()
         {
             // Nếu chưa cấu hình, cảnh báo người dùng
-            NewaccNet.Wpf.AppSystem.ConfigManager.BuildConnectionString();
-            string connectionString = NewaccNet.Wpf.AppSystem.ConfigManager.Current.ConnectionString;
+            ConfigManager.BuildConnectionString();
+            string connectionString = ConfigManager.Current.ConnectionString;
             
-            if (string.IsNullOrWhiteSpace(connectionString) || (NewaccNet.Wpf.AppSystem.ConfigManager.Current.DbType == NewaccNet.Wpf.AppSystem.DatabaseType.Access && string.IsNullOrWhiteSpace(NewaccNet.Wpf.AppSystem.ConfigManager.Current.AccessFilePath)))
+            if (string.IsNullOrWhiteSpace(connectionString) || (ConfigManager.Current.DbType == DatabaseType.Access && string.IsNullOrWhiteSpace(ConfigManager.Current.AccessFilePath)))
             {
                 System.Windows.MessageBox.Show("Bạn chưa cấu hình cơ sở dữ liệu. Vui lòng bấm 'Cấu hình Kết nối' trước.", "Thông báo", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
                 return;
@@ -132,7 +132,7 @@ namespace NewaccNet.Wpf.AppSystem.Directory
 
                 // Sử dụng Lớp trung gian AppDataAccessAdapter.
                 // Lớp này tự động lấy chuỗi kết nối và xử lý Schema Routing ngầm bên dưới.
-                using (var adapter = NewaccNet.Wpf.AppSystem.AppDataAccessAdapter.Create())
+                using (var adapter = AppDataAccessAdapter.Create())
                 {
                     var accounts = new EntityCollection<ChartOfAccountEntity>();
                     adapter.FetchEntityCollection(accounts, null);
@@ -160,6 +160,7 @@ namespace NewaccNet.Wpf.AppSystem.Directory
         }
     }
 }
+
 
 
 

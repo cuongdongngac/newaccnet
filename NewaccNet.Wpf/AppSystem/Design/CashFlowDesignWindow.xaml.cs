@@ -318,6 +318,19 @@ namespace NewaccNet.Wpf.AppSystem.Design
             (gridItems.View as TableView)?.BestFitColumns();
         }
 
+        private void BtnExportJson_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+        {
+            DesignJsonService.ExportCashFlow(this);
+        }
+
+        private void BtnImportJson_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+        {
+            if (DesignJsonService.ImportCashFlow(this))
+            {
+                LoadData();
+            }
+        }
+
         private void BtnClose_Click(object sender, RoutedEventArgs e)
         {
             this.Close();

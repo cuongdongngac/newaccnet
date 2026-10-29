@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using DevExpress.Xpf.Grid;
+using DevExpress.Xpf.Core;
 using DevExpress.Xpf.Editors;
 using DevExpress.Xpf.Grid.LookUp;
 using DataAccess.EntityClasses;
@@ -13,6 +14,7 @@ using NewaccNet.Wpf.AppSystem;
 using System.ComponentModel;
 using System.Windows.Media;
 using NewaccNet.Wpf.AppSystem.Voucher.Reports;
+using LicenseManager = NewaccNet.Core.License.LicenseManager;
 
 namespace NewaccNet.Wpf.AppSystem.Voucher
 {
@@ -114,12 +116,26 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
                 }
                 else
                 {
-                    BtnNew_Click(null, null);
+                    if (EnsureCanAddNewVoucher())
+                    {
+                        BtnNew_Click(null, null);
+                    }
+                    else
+                    {
+                        this.Loaded += (s, e) => this.Close();
+                    }
                 }
             }
             else
             {
-                BtnNew_Click(null, null);
+                if (EnsureCanAddNewVoucher())
+                {
+                    BtnNew_Click(null, null);
+                }
+                else
+                {
+                    this.Loaded += (s, e) => this.Close();
+                }
             }
             
             AttachHeaderDirtyEvents();
@@ -740,8 +756,31 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
             return newVoucher;
         }
 
+        private bool EnsureCanAddNewVoucher()
+        {
+            if (!DbConfigService.CheckRecordLimit(out int count, out int maxLimit, out string warningMsg))
+            {
+                var result = ThemedMessageBox.Show(
+                    "Hạn mức Chứng từ",
+                    $"{warningMsg}\n\nBạn có muốn mở cửa sổ Đăng ký Bản quyền để gia tăng số lượng chứng từ không?",
+                    MessageBoxButton.YesNo, MessageBoxImage.Information);
+                if (result == MessageBoxResult.Yes)
+                {
+                    var regWin = new NewaccNet.Wpf.AppSystem.CompanyRegistrationWindow { Owner = this.Owner ?? this };
+                    regWin.ShowDialog();
+                }
+                return false;
+            }
+            return true;
+        }
+
         private void BtnNew_Click(object sender, RoutedEventArgs e)
         {
+            if (!EnsureCanAddNewVoucher())
+            {
+                return;
+            }
+
             CommitCurrentVoucherToBatch();
 
             var newVoucher = CreateNewVoucher();
@@ -876,6 +915,10 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
         private CashVoucherPrintModel BuildCashPrintModel(JournalVoucherEntity voucher, bool isReceipt)
         {
             var model = new CashVoucherPrintModel();
+            var dbCfg = DbConfigService.Current;
+            if (!string.IsNullOrWhiteSpace(dbCfg.CompanyName)) model.CompanyName = dbCfg.CompanyName;
+            if (!string.IsNullOrWhiteSpace(dbCfg.Address)) model.CompanyAddress = dbCfg.Address;
+            if (!string.IsNullOrWhiteSpace(dbCfg.TaxCode)) model.CompanyTaxCode = dbCfg.TaxCode;
             if (voucher == null) return model;
 
             model.VoucherNo = voucher.VoucherNo ?? "";
@@ -938,7 +981,7 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
                 model.Amount = 0;
             }
 
-            model.AmountInWords = Helpers.NumberToWordsConverter.ConvertToWords(model.Amount, "đồng");
+            model.AmountInWords = NumberToWordsConverter.ConvertToWords(model.Amount, "đồng");
             return model;
         }
 
@@ -1027,6 +1070,13 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
                     {
                         bal += (je.Amount ?? 0) * (je.Dbcr ?? 0);
                     }
+                    if (v.VoucherDate.HasValue && !DbConfigService.CanUpdateVoucher(v.VoucherDate.Value, out string warningMsg))
+                    {
+                        NavigateTo(i);
+                        MessageBox.Show(warningMsg, "Hết hạn sử dụng", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+
                     if (Math.Round(bal, 0) != 0)
                     {
                         NavigateTo(i);
@@ -1036,7 +1086,26 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
                     }
                 }
 
-                // 2. Lưu toàn bộ lô trong 1 Transaction
+                // 2. Kiểm tra giới hạn số lượng chứng từ thực tế (JournalVoucher) theo gói bản quyền
+                int newVouchersCount = _voucherBatch.Count(v => v.Id == 0);
+                if (newVouchersCount > 0)
+                {
+                    if (!DbConfigService.CheckRecordLimit(out int count, out int maxLimit, out string warningMsg, newVouchersCount))
+                    {
+                        var result = ThemedMessageBox.Show(
+                            "Hạn mức Chứng từ",
+                            $"{warningMsg}\n\nBạn có muốn mở cửa sổ Đăng ký Bản quyền để gia tăng số lượng chứng từ không?",
+                            MessageBoxButton.YesNo, MessageBoxImage.Information);
+                        if (result == MessageBoxResult.Yes)
+                        {
+                            var regWin = new NewaccNet.Wpf.AppSystem.CompanyRegistrationWindow { Owner = this };
+                            regWin.ShowDialog();
+                        }
+                        return;
+                    }
+                }
+
+                // 3. Lưu toàn bộ lô trong 1 Transaction
                 using (var adapter = AppDataAccessAdapter.Create())
                 {
                     adapter.StartTransaction(System.Data.IsolationLevel.ReadCommitted, "SaveVoucherBatch");
@@ -1268,6 +1337,7 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
         }
     }
 }
+
 
 
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -54,6 +55,8 @@ namespace NewaccNet.Wpf.AppSystem.AI
     {
         private string? _attachedFilePath = null;
         private string? _attachedFileDataUri = null;
+        private string? _databasePath = null;
+        private TaxInvoiceDbService? _dbService = null;
 
         public ObservableCollection<OfficeChatMessageItem> ChatMessages { get; } = new();
 
@@ -73,8 +76,14 @@ namespace NewaccNet.Wpf.AppSystem.AI
             lblOfficeStatus.Text = "Sẵn sàng làm việc với Excel và Word tích hợp AI.";
         }
 
-        public OfficeStudioWindow(MemoryStream stream, OfficeDocumentType docType, string title = "") : this()
+        public OfficeStudioWindow(MemoryStream stream, OfficeDocumentType docType, string title = "", string? databasePath = null) : this()
         {
+            _databasePath = databasePath;
+            if (!string.IsNullOrEmpty(_databasePath) && File.Exists(_databasePath))
+            {
+                _dbService = new TaxInvoiceDbService(_databasePath);
+            }
+
             if (!string.IsNullOrWhiteSpace(title))
             {
                 this.Title = $"Office Studio & AI - {title}";
@@ -607,11 +616,363 @@ namespace NewaccNet.Wpf.AppSystem.AI
             }
         }
 
-        private void BtnPushToCatalog_Click(object sender, RoutedEventArgs e)
+        public void LoadSpreadsheetFile(string filePath)
+        {
+            try
+            {
+                if (File.Exists(filePath))
+                {
+                    officeTabControl.SelectedIndex = 0;
+                    spreadsheetControl.LoadDocument(filePath);
+                    lblOfficeStatus.Text = $"✅ Đã mở bảng tính: {Path.GetFileName(filePath)}";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi mở tệp Excel: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private string GetEffectiveDbPath()
+        {
+            if (!string.IsNullOrEmpty(_databasePath) && File.Exists(_databasePath)) return _databasePath;
+            var cur = ConfigManager.Current.AccessFilePath;
+            if (!string.IsNullOrEmpty(cur) && File.Exists(cur)) return cur;
+            var template = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "template.accdb");
+            if (File.Exists(template)) return template;
+            return string.Empty;
+        }
+
+        private void BtnPushToInventoryItem_Click(object sender, RoutedEventArgs e)
         {
             if (officeTabControl.SelectedIndex != 0)
             {
-                MessageBox.Show("Vui lòng chuyển sang tab Bảng tính Excel để trích xuất danh mục vật tư.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Vui lòng chuyển sang tab Bảng tính Excel để nạp dữ liệu vật tư.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            var dbPath = GetEffectiveDbPath();
+            if (string.IsNullOrEmpty(dbPath) || !File.Exists(dbPath))
+            {
+                MessageBox.Show("Không tìm thấy đường dẫn CSDL Access hợp lệ để cập nhật danh mục vật tư.", "Lỗi CSDL", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            try
+            {
+                var sheet = spreadsheetControl.ActiveWorksheet;
+                if (sheet == null) return;
+
+                int maxRow = sheet.Rows.LastUsedIndex;
+                int maxCol = Math.Min(sheet.Columns.LastUsedIndex, 30);
+                if (maxRow < 0 || maxCol < 0)
+                {
+                    MessageBox.Show("Bảng tính hiện tại không có dữ liệu.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                // 1. Tìm dòng tiêu đề cột
+                int headerRow = -1;
+                int colCode = -1, colName = -1, colUnit = -1, colCat = -1;
+
+                for (int r = 0; r <= Math.Min(maxRow, 10); r++)
+                {
+                    for (int c = 0; c <= maxCol; c++)
+                    {
+                        string txt = sheet.Cells[r, c]?.DisplayText?.Trim().ToLowerInvariant() ?? "";
+                        if (string.IsNullOrWhiteSpace(txt)) continue;
+
+                        if (txt.Contains("mã") || txt.Contains("materialid") || txt.Contains("tên") || txt.Contains("vật tư") || txt.Contains("hàng hóa"))
+                        {
+                            headerRow = r;
+                            break;
+                        }
+                    }
+                    if (headerRow != -1) break;
+                }
+
+                if (headerRow == -1) headerRow = 0;
+
+                for (int c = 0; c <= maxCol; c++)
+                {
+                    string h = sheet.Cells[headerRow, c]?.DisplayText?.Trim().ToLowerInvariant() ?? "";
+                    if (string.IsNullOrWhiteSpace(h)) continue;
+
+                    if (colCode == -1 && (h.Contains("mã vt") || h.Contains("mã vật tư") || h.Contains("mã hàng") || h == "materialid" || h == "mã" || h == "code"))
+                        colCode = c;
+                    else if (colName == -1 && (h.Contains("tên vt") || h.Contains("tên vật tư") || h.Contains("tên hàng") || h.Contains("tên mặt hàng") || h == "materialname" || h == "tên"))
+                        colName = c;
+                    else if (colUnit == -1 && (h.Contains("đvt") || h.Contains("đơn vị") || h == "unit" || h == "dvt"))
+                        colUnit = c;
+                    else if (colCat == -1 && (h.Contains("nhóm") || h.Contains("category") || h == "categoryid" || h == "loại"))
+                        colCat = c;
+                }
+
+                if (colName == -1 && maxCol >= 1) colName = 1;
+                if (colCode == -1 && maxCol >= 0) colCode = 0;
+
+                // 2. Thu thập danh sách vật tư
+                var items = new List<(string Id, string Name, string Unit, string Cat)>();
+                for (int r = headerRow + 1; r <= maxRow; r++)
+                {
+                    string name = colName >= 0 ? sheet.Cells[r, colName]?.DisplayText?.Trim() ?? "" : "";
+                    string code = colCode >= 0 ? sheet.Cells[r, colCode]?.DisplayText?.Trim() ?? "" : "";
+                    string unit = colUnit >= 0 ? sheet.Cells[r, colUnit]?.DisplayText?.Trim() ?? "" : "";
+                    string cat = colCat >= 0 ? sheet.Cells[r, colCat]?.DisplayText?.Trim() ?? "" : "";
+
+                    if (string.IsNullOrWhiteSpace(name) && string.IsNullOrWhiteSpace(code)) continue;
+                    if (name.StartsWith("Tổng", StringComparison.OrdinalIgnoreCase) || name.StartsWith("Cộng", StringComparison.OrdinalIgnoreCase)) continue;
+
+                    if (string.IsNullOrWhiteSpace(name)) name = code;
+                    if (string.IsNullOrWhiteSpace(code)) code = MaterialCodeGenerator.GenerateAcronym(name);
+
+                    if (code.Length > 20) code = code.Substring(0, 20);
+                    if (name.Length > 255) name = name.Substring(0, 255);
+                    if (unit.Length > 10) unit = unit.Substring(0, 10);
+                    if (cat.Length > 10) cat = cat.Substring(0, 10);
+
+                    items.Add((code, name, unit, cat));
+                }
+
+                if (items.Count == 0)
+                {
+                    MessageBox.Show("Không tìm thấy dòng vật tư hợp lệ nào trên bảng tính để nạp vào CSDL.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                var confirm = MessageBox.Show(
+                    $"Tìm thấy {items.Count} vật tư trên bảng tính.\nBạn có chắc chắn muốn nạp/cập nhật vào CSDL:\n{dbPath}?",
+                    "Xác nhận nạp Danh mục Vật tư", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (confirm != MessageBoxResult.Yes) return;
+
+                int inserted = 0;
+                int updated = 0;
+                var connStr = $"Provider=Microsoft.ACE.OLEDB.16.0;Data Source={dbPath};Persist Security Info=False;";
+                using (var conn = new OleDbConnection(connStr))
+                {
+                    conn.Open();
+                    const string checkSql = "SELECT [MaterialId] FROM [InventoryItem] WHERE [MaterialId] = ?";
+                    const string insertSql = "INSERT INTO [InventoryItem] ([MaterialId], [MaterialName], [Unit], [Categoryid]) VALUES (?, ?, ?, ?)";
+                    const string updateSql = "UPDATE [InventoryItem] SET [MaterialName] = ?, [Unit] = ?, [Categoryid] = ? WHERE [MaterialId] = ?";
+
+                    foreach (var item in items)
+                    {
+                        bool exists = false;
+                        using (var cmd = new OleDbCommand(checkSql, conn))
+                        {
+                            cmd.Parameters.Add("?", OleDbType.VarWChar, 20).Value = item.Id;
+                            exists = cmd.ExecuteScalar() != null;
+                        }
+
+                        if (!exists)
+                        {
+                            using var ins = new OleDbCommand(insertSql, conn);
+                            ins.Parameters.Add("?", OleDbType.VarWChar, 20).Value = item.Id;
+                            ins.Parameters.Add("?", OleDbType.VarWChar, 255).Value = item.Name;
+                            ins.Parameters.Add("?", OleDbType.VarWChar, 10).Value = string.IsNullOrEmpty(item.Unit) ? (object)DBNull.Value : item.Unit;
+                            ins.Parameters.Add("?", OleDbType.VarWChar, 10).Value = string.IsNullOrEmpty(item.Cat) ? (object)DBNull.Value : item.Cat;
+                            ins.ExecuteNonQuery();
+                            inserted++;
+                        }
+                        else
+                        {
+                            using var upd = new OleDbCommand(updateSql, conn);
+                            upd.Parameters.Add("?", OleDbType.VarWChar, 255).Value = item.Name;
+                            upd.Parameters.Add("?", OleDbType.VarWChar, 10).Value = string.IsNullOrEmpty(item.Unit) ? (object)DBNull.Value : item.Unit;
+                            upd.Parameters.Add("?", OleDbType.VarWChar, 10).Value = string.IsNullOrEmpty(item.Cat) ? (object)DBNull.Value : item.Cat;
+                            upd.Parameters.Add("?", OleDbType.VarWChar, 20).Value = item.Id;
+                            upd.ExecuteNonQuery();
+                            updated++;
+                        }
+
+                        // Ghi nhớ vào Sổ tay ánh xạ (Tier 1)
+                        ItemMappingStore.Instance.SaveMapping("", item.Name, item.Unit, item.Id, item.Name);
+                    }
+                }
+
+                lblOfficeStatus.Text = $"✅ Đã nạp danh mục vật tư: Thêm mới {inserted}, Cập nhật {updated}.";
+                MessageBox.Show($"Đã nạp thành công vào CSDL Danh mục Vật tư:\n- Thêm mới: {inserted} mặt hàng\n- Cập nhật: {updated} mặt hàng", "Hoàn tất nạp CSDL", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi nạp Danh mục Vật tư: {ex.Message}", "Lỗi CSDL", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void BtnPushToPartner_Click(object sender, RoutedEventArgs e)
+        {
+            if (officeTabControl.SelectedIndex != 0)
+            {
+                MessageBox.Show("Vui lòng chuyển sang tab Bảng tính Excel để nạp dữ liệu đối tác.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            var dbPath = GetEffectiveDbPath();
+            if (string.IsNullOrEmpty(dbPath) || !File.Exists(dbPath))
+            {
+                MessageBox.Show("Không tìm thấy đường dẫn CSDL Access hợp lệ để cập nhật danh mục đối tác.", "Lỗi CSDL", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            try
+            {
+                var sheet = spreadsheetControl.ActiveWorksheet;
+                if (sheet == null) return;
+
+                int maxRow = sheet.Rows.LastUsedIndex;
+                int maxCol = Math.Min(sheet.Columns.LastUsedIndex, 30);
+                if (maxRow < 0 || maxCol < 0)
+                {
+                    MessageBox.Show("Bảng tính hiện tại không có dữ liệu.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                // 1. Tìm dòng tiêu đề cột
+                int headerRow = -1;
+                int colId = -1, colName = -1, colTax = -1, colAddress = -1, colNote = -1;
+
+                for (int r = 0; r <= Math.Min(maxRow, 10); r++)
+                {
+                    for (int c = 0; c <= maxCol; c++)
+                    {
+                        string txt = sheet.Cells[r, c]?.DisplayText?.Trim().ToLowerInvariant() ?? "";
+                        if (string.IsNullOrWhiteSpace(txt)) continue;
+
+                        if (txt.Contains("đối tác") || txt.Contains("đối tượng") || txt.Contains("khách hàng") || txt.Contains("nhà cung cấp") || txt.Contains("mst") || txt.Contains("mã số thuế") || txt.Contains("taxno"))
+                        {
+                            headerRow = r;
+                            break;
+                        }
+                    }
+                    if (headerRow != -1) break;
+                }
+
+                if (headerRow == -1) headerRow = 0;
+
+                for (int c = 0; c <= maxCol; c++)
+                {
+                    string h = sheet.Cells[headerRow, c]?.DisplayText?.Trim().ToLowerInvariant() ?? "";
+                    if (string.IsNullOrWhiteSpace(h)) continue;
+
+                    if (colId == -1 && (h.Contains("mã đt") || h.Contains("mã đối tác") || h.Contains("mã đối tượng") || h == "partnerid" || h == "id" || h == "mã"))
+                        colId = c;
+                    else if (colName == -1 && (h.Contains("tên đt") || h.Contains("tên đối tác") || h.Contains("tên đối tượng") || h.Contains("tên công ty") || h.Contains("khách hàng") || h.Contains("nhà cung cấp") || h == "customername" || h == "tên"))
+                        colName = c;
+                    else if (colTax == -1 && (h.Contains("mst") || h.Contains("mã số thuế") || h.Contains("tax") || h == "taxno"))
+                        colTax = c;
+                    else if (colAddress == -1 && (h.Contains("địa chỉ") || h.Contains("address")))
+                        colAddress = c;
+                    else if (colNote == -1 && (h.Contains("ghi chú") || h.Contains("note") || h.Contains("loại") || h.Contains("role")))
+                        colNote = c;
+                }
+
+                if (colName == -1 && maxCol >= 1) colName = 1;
+                if (colId == -1 && maxCol >= 0) colId = 0;
+
+                // 2. Thu thập danh sách đối tác
+                var partners = new List<(string Id, string Name, string TaxNo, string Address, string Note)>();
+                for (int r = headerRow + 1; r <= maxRow; r++)
+                {
+                    string name = colName >= 0 ? sheet.Cells[r, colName]?.DisplayText?.Trim() ?? "" : "";
+                    string id = colId >= 0 ? sheet.Cells[r, colId]?.DisplayText?.Trim() ?? "" : "";
+                    string tax = colTax >= 0 ? sheet.Cells[r, colTax]?.DisplayText?.Trim() ?? "" : "";
+                    string addr = colAddress >= 0 ? sheet.Cells[r, colAddress]?.DisplayText?.Trim() ?? "" : "";
+                    string note = colNote >= 0 ? sheet.Cells[r, colNote]?.DisplayText?.Trim() ?? "" : "";
+
+                    if (string.IsNullOrWhiteSpace(name) && string.IsNullOrWhiteSpace(id) && string.IsNullOrWhiteSpace(tax)) continue;
+                    if (name.StartsWith("Tổng", StringComparison.OrdinalIgnoreCase) || name.StartsWith("Cộng", StringComparison.OrdinalIgnoreCase)) continue;
+
+                    if (string.IsNullOrWhiteSpace(name)) name = !string.IsNullOrWhiteSpace(id) ? id : tax;
+                    if (string.IsNullOrWhiteSpace(id))
+                    {
+                        if (!string.IsNullOrWhiteSpace(tax))
+                            id = tax.Length <= 20 ? tax : tax.Substring(0, 20);
+                        else
+                            id = MaterialCodeGenerator.GenerateAcronym(name);
+                    }
+
+                    if (id.Length > 20) id = id.Substring(0, 20);
+                    var shortName = name.Length > 50 ? name.Substring(0, 50) : name;
+                    if (name.Length > 50 && string.IsNullOrEmpty(note)) note = $"Tên đầy đủ: {name}";
+                    if (addr.Length > 255) addr = addr.Substring(0, 255);
+                    if (tax.Length > 50) tax = tax.Substring(0, 50);
+
+                    partners.Add((id, shortName, tax, addr, note));
+                }
+
+                if (partners.Count == 0)
+                {
+                    MessageBox.Show("Không tìm thấy dòng đối tác hợp lệ nào trên bảng tính để nạp vào CSDL.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                var confirm = MessageBox.Show(
+                    $"Tìm thấy {partners.Count} đối tác trên bảng tính.\nBạn có chắc chắn muốn nạp/cập nhật vào CSDL:\n{dbPath}?",
+                    "Xác nhận nạp Danh mục Đối tác", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (confirm != MessageBoxResult.Yes) return;
+
+                int inserted = 0;
+                int updated = 0;
+                var connStr = $"Provider=Microsoft.ACE.OLEDB.16.0;Data Source={dbPath};Persist Security Info=False;";
+                using (var conn = new OleDbConnection(connStr))
+                {
+                    conn.Open();
+                    const string checkSql = "SELECT [Id] FROM [Partner] WHERE [Id] = ?";
+                    const string insertSql = @"INSERT INTO [Partner] 
+                        ([Id], [CustomerName], [Address], [Phonenumber], [Faxnumber], [Note], [Taxno], [Isemployee]) 
+                        VALUES (?, ?, ?, '', '', ?, ?, false)";
+                    const string updateSql = @"UPDATE [Partner] SET 
+                        [CustomerName] = ?, [Address] = ?, [Note] = ?, [Taxno] = ? 
+                        WHERE [Id] = ?";
+
+                    foreach (var p in partners)
+                    {
+                        bool exists = false;
+                        using (var cmd = new OleDbCommand(checkSql, conn))
+                        {
+                            cmd.Parameters.Add("?", OleDbType.VarWChar, 20).Value = p.Id;
+                            exists = cmd.ExecuteScalar() != null;
+                        }
+
+                        if (!exists)
+                        {
+                            using var ins = new OleDbCommand(insertSql, conn);
+                            ins.Parameters.Add("?", OleDbType.VarWChar, 20).Value = p.Id;
+                            ins.Parameters.Add("?", OleDbType.VarWChar, 50).Value = p.Name;
+                            ins.Parameters.Add("?", OleDbType.VarWChar, 255).Value = p.Address;
+                            ins.Parameters.Add("?", OleDbType.LongVarWChar).Value = p.Note;
+                            ins.Parameters.Add("?", OleDbType.VarWChar, 50).Value = p.TaxNo;
+                            ins.ExecuteNonQuery();
+                            inserted++;
+                        }
+                        else
+                        {
+                            using var upd = new OleDbCommand(updateSql, conn);
+                            upd.Parameters.Add("?", OleDbType.VarWChar, 50).Value = p.Name;
+                            upd.Parameters.Add("?", OleDbType.VarWChar, 255).Value = p.Address;
+                            upd.Parameters.Add("?", OleDbType.LongVarWChar).Value = p.Note;
+                            upd.Parameters.Add("?", OleDbType.VarWChar, 50).Value = p.TaxNo;
+                            upd.Parameters.Add("?", OleDbType.VarWChar, 20).Value = p.Id;
+                            upd.ExecuteNonQuery();
+                            updated++;
+                        }
+                    }
+                }
+
+                lblOfficeStatus.Text = $"✅ Đã nạp danh mục đối tác: Thêm mới {inserted}, Cập nhật {updated}.";
+                MessageBox.Show($"Đã nạp thành công vào CSDL Danh mục Đối tác:\n- Thêm mới: {inserted} đối tác\n- Cập nhật: {updated} đối tác", "Hoàn tất nạp CSDL", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi nạp Danh mục Đối tác: {ex.Message}", "Lỗi CSDL", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private async void BtnPushToDbInvoice_Click(object sender, RoutedEventArgs e)
+        {
+            if (officeTabControl.SelectedIndex != 0)
+            {
+                MessageBox.Show("Vui lòng chuyển sang tab Bảng tính Excel để lưu dữ liệu hóa đơn.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
@@ -623,17 +984,37 @@ namespace NewaccNet.Wpf.AppSystem.AI
                 var invoiceDto = ExtractInvoiceDtoFromSheet(sheet);
                 if (invoiceDto.Details == null || invoiceDto.Details.Count == 0)
                 {
-                    MessageBox.Show("Không tìm thấy dòng mặt hàng nào trong bảng tính Excel.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Không tìm thấy dòng dữ liệu mặt hàng nào trong bảng tính Excel.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
-                var win = new InventoryItemExtractWindow(new List<TaxInvoiceDto> { invoiceDto }, null);
-                win.Owner = this;
-                win.ShowDialog();
+                if (_dbService == null)
+                {
+                    var curPath = ConfigManager.Current.AccessFilePath;
+                    if (File.Exists(curPath))
+                    {
+                        _dbService = new TaxInvoiceDbService(curPath);
+                    }
+                }
+
+                if (_dbService == null)
+                {
+                    MessageBox.Show("Chưa xác định được Cơ sở dữ liệu kế toán để lưu trữ.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                btnPushToDbInvoice.IsEnabled = false;
+                await _dbService.UpsertInvoiceAsync(invoiceDto);
+                MessageBox.Show($"Đã lưu thành công Hóa đơn số {invoiceDto.InvoiceNo} ({invoiceDto.Details.Count} dòng hàng) vào CSDL!", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+                lblOfficeStatus.Text = $"✅ Đã lưu Hóa đơn số {invoiceDto.InvoiceNo} vào CSDL kế toán.";
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi trích xuất vật tư: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Lỗi khi lưu vào CSDL: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                btnPushToDbInvoice.IsEnabled = true;
             }
         }
 

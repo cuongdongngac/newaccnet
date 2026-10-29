@@ -74,6 +74,7 @@ namespace DataAccess.HelperClasses
 			InitCustomCostReportEntityInfo();
 			InitCustomCostReportAccountEntityInfo();
 			InitCustomerExportLineEntityInfo();
+			InitDbConfigEntityInfo();
 			InitDebtBalanceEntityInfo();
 			InitDebtDetailEntityInfo();
 			InitDebtLedgerEntityInfo();
@@ -537,6 +538,27 @@ namespace DataAccess.HelperClasses
 			this.AddElementFieldInfo("CustomerExportLineEntity", "Liabilitydate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)CustomerExportLineFieldIndex.Liabilitydate, 0, 0, 0);
 			this.AddElementFieldInfo("CustomerExportLineEntity", "LiabilityDuesId", typeof(Nullable<System.Int32>), false, true, false, true,  (int)CustomerExportLineFieldIndex.LiabilityDuesId, 0, 0, 10);
 			this.AddElementFieldInfo("CustomerExportLineEntity", "LineId", typeof(System.Int32), true, true, false, false,  (int)CustomerExportLineFieldIndex.LineId, 0, 0, 10);
+		}
+
+		/// <summary>Inits DbConfigEntity's info objects</summary>
+		private void InitDbConfigEntityInfo()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(DbConfigFieldIndex), "DbConfigEntity");
+			this.AddElementFieldInfo("DbConfigEntity", "AccountingYear", typeof(Nullable<System.Int32>), false, false, false, true,  (int)DbConfigFieldIndex.AccountingYear, 0, 0, 10);
+			this.AddElementFieldInfo("DbConfigEntity", "AccountMethod", typeof(Nullable<System.Int32>), false, false, false, true,  (int)DbConfigFieldIndex.AccountMethod, 0, 0, 3);
+			this.AddElementFieldInfo("DbConfigEntity", "Address", typeof(System.String), false, false, false, true,  (int)DbConfigFieldIndex.Address, 255, 0, 0);
+			this.AddElementFieldInfo("DbConfigEntity", "BankAccount", typeof(System.String), false, false, false, true,  (int)DbConfigFieldIndex.BankAccount, 50, 0, 0);
+			this.AddElementFieldInfo("DbConfigEntity", "CompanyName", typeof(System.String), false, false, false, true,  (int)DbConfigFieldIndex.CompanyName, 255, 0, 0);
+			this.AddElementFieldInfo("DbConfigEntity", "CreatedDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)DbConfigFieldIndex.CreatedDate, 0, 0, 0);
+			this.AddElementFieldInfo("DbConfigEntity", "DepartmentName", typeof(System.String), false, false, false, true,  (int)DbConfigFieldIndex.DepartmentName, 150, 0, 0);
+			this.AddElementFieldInfo("DbConfigEntity", "ExpiryDate", typeof(System.String), false, false, false, true,  (int)DbConfigFieldIndex.ExpiryDate, 10, 0, 0);
+			this.AddElementFieldInfo("DbConfigEntity", "Id", typeof(System.Int32), true, false, false, false,  (int)DbConfigFieldIndex.Id, 0, 0, 10);
+			this.AddElementFieldInfo("DbConfigEntity", "IsCompanyLicense", typeof(System.Boolean), false, false, false, false,  (int)DbConfigFieldIndex.IsCompanyLicense, 0, 0, 0);
+			this.AddElementFieldInfo("DbConfigEntity", "Material", typeof(Nullable<System.Int32>), false, false, false, true,  (int)DbConfigFieldIndex.Material, 0, 0, 3);
+			this.AddElementFieldInfo("DbConfigEntity", "RegistrationCode", typeof(System.String), false, false, false, true,  (int)DbConfigFieldIndex.RegistrationCode, 100, 0, 0);
+			this.AddElementFieldInfo("DbConfigEntity", "TaxCode", typeof(System.String), false, false, false, true,  (int)DbConfigFieldIndex.TaxCode, 50, 0, 0);
+			this.AddElementFieldInfo("DbConfigEntity", "UpdatedDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)DbConfigFieldIndex.UpdatedDate, 0, 0, 0);
+			this.AddElementFieldInfo("DbConfigEntity", "VoucherPostingConfig", typeof(System.String), false, false, false, true,  (int)DbConfigFieldIndex.VoucherPostingConfig, 2147483647, 0, 0);
 		}
 
 		/// <summary>Inits DebtBalanceEntity's info objects</summary>

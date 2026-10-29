@@ -30,6 +30,9 @@
             <dxb:BarButtonItem x:Name="btnDelete" Content="Xóa dòng đang chọn" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_delete.svg'}" ItemClick="BtnDelete_ItemClick"/>
             <dxb:BarItemLinkSeparator/>
             <dxb:BarButtonItem Content="Bù cột tự động" ItemClick="BtnBestFit_ItemClick"/>
+            <dxb:BarItemLinkSeparator/>
+            <dxb:BarButtonItem x:Name="btnExportJson" Content="Xuất JSON" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/export/exporttojson.svg'}" ItemClick="BtnExportJson_ItemClick"/>
+            <dxb:BarButtonItem x:Name="btnImportJson" Content="Nhập JSON" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_import.svg'}" ItemClick="BtnImportJson_ItemClick"/>
         </dxb:ToolBarControl>
 
         <!-- Top: CashFlowCategory (danh sách các nhóm LCTT) -->

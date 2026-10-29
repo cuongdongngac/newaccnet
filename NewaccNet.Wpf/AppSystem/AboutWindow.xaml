@@ -1,0 +1,129 @@
+<base:BaseWindow xmlns:base="clr-namespace:NewaccNet.Wpf.Views.Base" 
+                 x:Class="NewaccNet.Wpf.AppSystem.AboutWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+                 xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+                 xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+                 Title="Thông tin phần mềm NEWACCNET" 
+                 Height="520" Width="580" 
+                 WindowStartupLocation="CenterOwner" 
+                 ResizeMode="NoResize"
+                 ShowInTaskbar="False">
+    <Grid Background="#F8FAFC">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header Banner sang trọng -->
+        <Border Grid.Row="0" Background="#FF1976D2" Padding="20,18">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <!-- Logo / Icon -->
+                <Border Grid.Column="0" Width="64" Height="64" CornerRadius="12" Background="White" Margin="0,0,16,0" Padding="6">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="8" ShadowDepth="2" Direction="270" Opacity="0.2"/>
+                    </Border.Effect>
+                    <Image Source="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_report_showdesigner.svg'}" />
+                </Border>
+
+                <!-- Tên phần mềm & Tiêu đề -->
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="NEWACCNET" FontSize="24" FontWeight="Bold" Foreground="White"/>
+                        <Border Background="#E65100" CornerRadius="4" Margin="10,2,0,0" Padding="6,2" VerticalAlignment="Center">
+                            <TextBlock Text="AI INSIDE" FontSize="10" FontWeight="Bold" Foreground="White"/>
+                        </Border>
+                    </StackPanel>
+                    <TextBlock Text="Phần mềm Kế toán Doanh nghiệp Hiện đại &amp; Trí tuệ Nhân tạo" 
+                               FontSize="13" Foreground="#E3F2FD" Margin="0,3,0,0"/>
+                    <TextBlock x:Name="txtVersion" Text="Phiên bản 2026 (v1.0.0)" 
+                               FontSize="11" Foreground="#BBDEFB" Margin="0,2,0,0"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Thân thông tin chi tiết -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0">
+            <StackPanel Margin="20,15,20,10">
+                
+                <!-- Nhóm: Thông tin Tác giả & Bản quyền -->
+                <GroupBox Header="Thông tin Tác giả &amp; Liên hệ" Margin="0,0,0,12" Padding="12,10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="130"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Tác giả -->
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="👤 Tác giả:" FontWeight="SemiBold" Margin="0,4" Foreground="#374151"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="Phạm Việt Cường" FontWeight="Bold" FontSize="14" Foreground="#0F172A" Margin="0,4"/>
+
+                        <!-- Số điện thoại / Zalo -->
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="📞 Điện thoại / Zalo:" FontWeight="SemiBold" Margin="0,6" Foreground="#374151"/>
+                        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="0,4">
+                            <TextBlock Text="0903210335" FontWeight="Bold" FontSize="13" Foreground="#1E40AF" VerticalAlignment="Center"/>
+                            <dx:SimpleButton Content="Sao chép" Margin="12,0,0,0" Padding="8,2" Height="24"
+                                             Click="BtnCopyPhone_Click" ToolTip="Sao chép số điện thoại vào clipboard"/>
+                        </StackPanel>
+
+                        <!-- Email -->
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="✉ Email:" FontWeight="SemiBold" Margin="0,6" Foreground="#374151"/>
+                        <TextBlock Grid.Row="2" Grid.Column="1" Margin="0,6" VerticalAlignment="Center">
+                            <Hyperlink NavigateUri="mailto:Pvcuong1965@gmail.com" RequestNavigate="Hyperlink_RequestNavigate">
+                                <Run Text="Pvcuong1965@gmail.com" FontWeight="SemiBold"/>
+                            </Hyperlink>
+                        </TextBlock>
+
+                        <!-- Trang Web Trợ giúp / Hỗ trợ -->
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="🌐 Trợ giúp Online:" FontWeight="SemiBold" Margin="0,6" Foreground="#374151"/>
+                        <TextBlock Grid.Row="3" Grid.Column="1" Margin="0,6" VerticalAlignment="Center">
+                            <Hyperlink NavigateUri="https://newacc.learning.io.vn" RequestNavigate="Hyperlink_RequestNavigate">
+                                <Run Text="https://newacc.learning.io.vn" FontWeight="SemiBold"/>
+                            </Hyperlink>
+                        </TextBlock>
+                    </Grid>
+                </GroupBox>
+
+                <!-- Nhóm: Kiến trúc Kỹ thuật & Công nghệ -->
+                <GroupBox Header="Nền tảng Công nghệ" Margin="0,0,0,10" Padding="12,10">
+                    <StackPanel>
+                        <TextBlock Text="• Nền tảng: Microsoft .NET 10.0 (WPF) - Tối ưu hóa hiệu năng x86 &amp; x64." Margin="0,2" Foreground="#475569"/>
+                        <TextBlock Text="• Giao diện: DevExpress UI 25.2 với phong cách Ribbon Office hiện đại." Margin="0,2" Foreground="#475569"/>
+                        <TextBlock Text="• Cơ sở dữ liệu: Đa nền tảng (MS Access .accdb, SQL Server, PostgreSQL)." Margin="0,2" Foreground="#475569"/>
+                        <TextBlock Text="• Tích hợp AI: Trợ lý hạch toán tự động, OCR trích xuất hóa đơn, Giám đốc tài chính ảo (Virtual CFO)." Margin="0,2" Foreground="#475569"/>
+                    </StackPanel>
+                </GroupBox>
+
+                <!-- Bản quyền -->
+                <TextBlock Text="© 2026 Phạm Việt Cường. Toàn bộ bản quyền phần mềm đã được bảo hộ." 
+                           FontSize="11" Foreground="#94A3B8" HorizontalAlignment="Center" Margin="0,4,0,0"/>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Bottom Action Bar -->
+        <Border Grid.Row="2" Background="#F1F5F9" BorderBrush="#E2E8F0" BorderThickness="0,1,0,0" Padding="15,12">
+            <DockPanel LastChildFill="False">
+                <dx:SimpleButton DockPanel.Dock="Left" Content="Hướng dẫn trực tuyến (F1)" 
+                                 Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/icon%20builder/actions_question.svg'}"
+                                 GlyphToContentOffset="6" Height="32" Padding="12,0"
+                                 Click="BtnOnlineHelp_Click"/>
+
+                <dx:SimpleButton DockPanel.Dock="Right" Content="Đóng" Width="90" Height="32" 
+                                 Click="BtnClose_Click" IsDefault="True"/>
+            </DockPanel>
+        </Border>
+    </Grid>
+</base:BaseWindow>

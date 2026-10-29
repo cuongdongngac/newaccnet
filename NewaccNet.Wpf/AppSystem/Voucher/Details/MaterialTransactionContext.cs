@@ -7,6 +7,7 @@ using System.Windows;
 using DataAccess.EntityClasses;
 using DataAccess.HelperClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using NewaccNet.Core.Data;
 
 namespace NewaccNet.Wpf.AppSystem.Voucher.Details
 {
@@ -718,19 +719,30 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
 
         private void UpdateDefaultAccountsForType(string type)
         {
-            if (type == "NM")
+            var postingCfg = DbConfigService.Current.GetVoucherPostingConfig();
+            if (postingCfg != null && postingCfg.Inventory != null && postingCfg.Inventory.TryGetValue(type, out var item))
             {
-                _costAccountId = "6321";
-                _revenueAccountId = "5111";
-                _taxAccountId = "13311";
-                _totalAccountId = "3311";
+                if (!string.IsNullOrEmpty(item.CostAccountId)) _costAccountId = item.CostAccountId;
+                if (!string.IsNullOrEmpty(item.RevenueAccountId)) _revenueAccountId = item.RevenueAccountId;
+                if (!string.IsNullOrEmpty(item.TaxAccountId)) _taxAccountId = item.TaxAccountId;
+                if (!string.IsNullOrEmpty(item.TotalAccountId)) _totalAccountId = item.TotalAccountId;
             }
-            else if (type == "XB")
+            else
             {
-                _costAccountId = "6321";
-                _revenueAccountId = "5111";
-                _taxAccountId = "33311";
-                _totalAccountId = "131";
+                if (type == "NM")
+                {
+                    _costAccountId = "6321";
+                    _revenueAccountId = "5111";
+                    _taxAccountId = "13311";
+                    _totalAccountId = "3311";
+                }
+                else if (type == "XB")
+                {
+                    _costAccountId = "6321";
+                    _revenueAccountId = "5111";
+                    _taxAccountId = "33311";
+                    _totalAccountId = "131";
+                }
             }
 
             OnPropertyChanged(nameof(CostAccountId));

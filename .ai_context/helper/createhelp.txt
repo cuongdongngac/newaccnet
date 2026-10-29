@@ -1,0 +1,25 @@
+Context: You are Antigravity, my AI Coding Agent, assisting with the "NEWACC" project (C# .NET 9 WPF, DevExpress, LLBLGen Pro ORM). We are now building the Help Online documentation for this application.
+
+Task: Khởi tạo cấu trúc thư mục (đặt tên tiếng Anh), cấu hình và sinh nội dung ban đầu cho Help Online sử dụng VitePress (nội dung và tiêu đề hiển thị bằng tiếng Việt). Mục tiêu cuối cùng là deploy dự án này lên Vercel.
+
+Requirements:
+1. Tech Stack: VitePress. Khởi tạo cấu trúc trong thư mục `docs/`.
+2. Folder Structure (English naming):
+   - `docs/.vitepress/`: Chứa `config.mts`.
+   - `docs/public/images/`: Chứa ảnh minh họa.
+   - `docs/general-guide/`: Chứa các file như `installation.md`, `configuration.md`, `authorization.md` (hướng dẫn cài đặt, thiết lập ban đầu, và quản lý phân quyền - nhắc đến cơ chế Bitwise AND mask).
+   - `docs/accounting-operations/`: Chứa các file như `t-accounts.md`, `transactions.md`, `reports.md` (thiết lập tài khoản chữ T, hạch toán với flat transaction tables & ParentId, kết xuất báo cáo DevExpress XtraReports drill-down).
+3. VitePress Config (`config.mts`): 
+   - Site title: "NEWACC Help Center".
+   - Cấu hình Navbar và Sidebar tự động map tới các thư mục trên. *Lưu ý: Tên hiển thị (`text`) trên menu phải là tiếng Việt (VD: "Hướng dẫn chung", "Nghiệp vụ kế toán").*
+   - Bật local search.
+4. Content Generation:
+   - Tạo trang `docs/index.md` dạng Hero layout của VitePress bằng tiếng Việt.
+   - Tạo file `docs/general-guide/authorization.md` sử dụng cấu trúc chuẩn của VitePress: có frontmatter (`title: "Quản lý phân quyền"`, `outline: deep`), dùng custom containers (::: warning, ::: tip) để lưu ý người dùng về cơ chế tính toán phân quyền. Toàn bộ nội dung viết bằng tiếng Việt.
+5. Action: Viết script (PowerShell hoặc Bash) để tạo cấu trúc thư mục này, tạo file `package.json` với script khởi chạy VitePress, và xuất ra nội dung của file `config.mts` cùng file `authorization.md` mẫu.
+
+6. Image Placeholder Rule: 
+You cannot take screenshots, but you must anticipate where images are needed in the documentation. 
+Whenever you explain a UI interaction, a setting form, or a report layout, insert an image placeholder using this exact naming convention:
+`![[Vietnamese description]](/images/[folder-name]-[markdown-filename]-[logical-step-or-element].png)`
+Make sure the file extension is always `.png`. I will capture the actual screenshots and save them with these exact names in the `docs/public/images/` folder later.

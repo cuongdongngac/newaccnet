@@ -7,6 +7,7 @@ using DataAccess.EntityClasses;
 using DataAccess.HelperClasses;
 using NewaccNet.TaxInvoice;
 using NewaccNet.Wpf.AppSystem;
+using NewaccNet.Wpf.AppSystem.AI;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace NewaccNet.Wpf.AppSystem.Directory
@@ -47,10 +48,19 @@ namespace NewaccNet.Wpf.AppSystem.Directory
 
         private void MenuExcelImport_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
         {
-            var win = new CategoryExcelImportWindow(CategoryImportType.Stock);
-            win.Owner = this;
-            win.ShowDialog();
-            LoadData();
+            var dialog = new Microsoft.Win32.OpenFileDialog
+            {
+                Title = "Chọn tệp Excel Danh mục Vật tư để mở trong Office Studio",
+                Filter = "Excel Files (*.xlsx;*.xls)|*.xlsx;*.xls|All Files (*.*)|*.*"
+            };
+            if (dialog.ShowDialog() == true)
+            {
+                var officeWin = new OfficeStudioWindow();
+                officeWin.Owner = this;
+                officeWin.LoadSpreadsheetFile(dialog.FileName);
+                officeWin.ShowDialog();
+                LoadData();
+            }
         }
 
         private async void MenuExtractFromHddt_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)

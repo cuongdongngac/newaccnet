@@ -17,9 +17,9 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Reports
     public class InventoryVoucherPrintModel
     {
         // Thông tin công ty
-        public string CompanyName { get; set; } = "CÔNG TY BÌNH MINH";
-        public string CompanyAddress { get; set; } = "5/8 Đông Ngạc";
-        public string CompanyTaxCode { get; set; } = "010100101";
+        public string CompanyName { get; set; } = "";
+        public string CompanyAddress { get; set; } = "";
+        public string CompanyTaxCode { get; set; } = "";
 
         // Tiêu đề & Thông tư
         public string CircularNote { get; set; } = "Mẫu số 01-VT\n(Ban hành theo Thông tư số 200/2014/TT-BTC\nNgày 22/12/2014 của Bộ Tài chính)";

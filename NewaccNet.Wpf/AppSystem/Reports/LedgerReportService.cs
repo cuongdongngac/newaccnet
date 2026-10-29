@@ -52,12 +52,12 @@ namespace NewaccNet.Wpf.AppSystem.Reports
                 var acc = adapter.FetchFirst(qf.ChartOfAccount.Where(ChartOfAccountFields.AccountId.Equal(accountId)));
                 if (acc != null) mockAccountName = acc.AccountName;
 
-                string mockCompanyName = "Công ty Cổ phần MOCK - Chờ lấy từ Config";
+                string companyName = DbConfigService.Current.CompanyName ?? string.Empty;
 
                 Mouse.OverrideCursor = null;
 
                 // Gọi factory để show report
-                LedgerReportFactory.ShowPreview(owner, templatePath, dtoList, mockCompanyName, accountId, mockAccountName, fromDate, toDate, onlyBooked);
+                LedgerReportFactory.ShowPreview(owner, templatePath, dtoList, companyName, accountId, mockAccountName, fromDate, toDate, onlyBooked);
             }
             catch (Exception ex)
             {

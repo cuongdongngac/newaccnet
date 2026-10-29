@@ -64,6 +64,8 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
                         <Button x:Name="btnSelectAll" Grid.Column="0" Content="✔ Chọn tất cả" Height="28" Width="100" Margin="0,0,6,0" Click="BtnSelectAll_Click"/>
@@ -81,13 +83,19 @@
                             <TextBlock x:Name="lblSelectedStats" Text="Đã chọn: 0/0 hóa đơn" FontWeight="SemiBold" Foreground="#FF0D47A1" Margin="8,0,0,0"/>
                         </StackPanel>
 
-                        <Button x:Name="btnExtractPartners" Grid.Column="5" Content="👥 Trích xuất Đối tác" Height="30" Width="150" Margin="0,0,8,0" 
+                        <Button x:Name="btnExtractPartners" Grid.Column="5" Content="👥 Trích xuất Đối tác" Height="30" Width="145" Margin="0,0,6,0" 
                                 FontWeight="SemiBold" Background="#FF37474F" Foreground="White" Click="BtnExtractPartners_Click"/>
 
-                        <Button x:Name="btnExtractItems" Grid.Column="6" Content="📦 Trích xuất Vật tư" Height="30" Width="150" Margin="0,0,8,0" 
+                        <Button x:Name="btnExtractItems" Grid.Column="6" Content="📦 Trích xuất Vật tư" Height="30" Width="140" Margin="0,0,6,0" 
                                 FontWeight="SemiBold" Background="#FF00695C" Foreground="White" Click="BtnExtractItems_Click"/>
 
-                        <Button x:Name="btnImportToDb" Grid.Column="7" Content="💾 Nhập vào CSDL hiện hành" Height="30" Width="190" 
+                        <Button x:Name="btnExportExcelJson" Grid.Column="7" Content="📊 Xuất Excel" Height="30" Width="105" Margin="0,0,6,0" 
+                                FontWeight="SemiBold" Background="#FF0284C7" Foreground="White" Click="BtnExportExcelJson_Click"/>
+
+                        <Button x:Name="btnOpenInOffice" Grid.Column="8" Content="📝 Sửa trong Office" Height="30" Width="145" Margin="0,0,6,0" 
+                                FontWeight="Bold" Background="#FF6D28D9" Foreground="White" Click="BtnOpenInOffice_Click"/>
+
+                        <Button x:Name="btnImportToDb" Grid.Column="9" Content="💾 Nhập vào CSDL" Height="30" Width="140" 
                                 FontWeight="Bold" Background="#FF2E7D32" Foreground="White" Click="BtnImportToDb_Click"/>
                     </Grid>
 
@@ -237,6 +245,8 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
                             <TextBlock Grid.Column="0" Text="Chiều:" VerticalAlignment="Center" FontWeight="SemiBold" Margin="0,0,6,0"/>
@@ -267,6 +277,10 @@
                                     FontWeight="SemiBold" Background="#FF37474F" Foreground="White" Click="BtnDbExtractPartners_Click"/>
                             <Button x:Name="btnDbExtractItems" Grid.Column="11" Content="📦 Trích xuất Vật tư" Height="28" Width="140" 
                                     FontWeight="SemiBold" Background="#FF00695C" Foreground="White" Margin="6,0,0,0" Click="BtnDbExtractItems_Click"/>
+                            <Button x:Name="btnDbExportExcel" Grid.Column="12" Content="📊 Xuất Excel" Height="28" Width="105" 
+                                    FontWeight="SemiBold" Background="#FF0284C7" Foreground="White" Margin="6,0,0,0" Click="BtnDbExportExcel_Click"/>
+                            <Button x:Name="btnDbOpenInOffice" Grid.Column="13" Content="📝 Sửa trong Office" Height="28" Width="145" 
+                                    FontWeight="Bold" Background="#FF6D28D9" Foreground="White" Margin="6,0,0,0" Click="BtnDbOpenInOffice_Click"/>
                         </Grid>
                     </Border>
 

@@ -1,0 +1,254 @@
+{
+  "config_version": "3.1.1",
+  "connection": {
+    "base_url": "https://hoadondientu.gdt.gov.vn",
+    "timeout_seconds": 30,
+    "login_timeout_seconds": 30,
+    "invoice_timeout_seconds": 25,
+    "verify_ssl": true
+  },
+  "headers": {
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/155 Safari/537.36",
+    "accept": "application/json, text/plain, */*",
+    "accept_language": "vi",
+    "origin": "https://hoadondientu.gdt.gov.vn",
+    "referer": "https://hoadondientu.gdt.gov.vn/"
+  },
+  "bootstrap": {
+    "enabled": true,
+    "endpoint": "/"
+  },
+  "captcha": {
+    "endpoint": "/api/captcha",
+    "cache_bust": true,
+    "cache_bust_param": "_",
+    "open_image_after_fetch": true
+  },
+  "authentication": {
+    "endpoint": "/api/security-taxpayer/authenticate",
+    "request_id": {
+      "enabled": true,
+      "header": "request-id",
+      "regenerate_per_request": true,
+      "format": "uuid4",
+      "scope": "all_http_requests"
+    },
+    "token_header": "Authorization",
+    "token_prefix": "Bearer ",
+    "payload": {
+      "captcha_key_field": "ckey",
+      "captcha_value_field": "cvalue",
+      "username_field": "username",
+      "password_field": "password"
+    }
+  },
+  "profile": {
+    "enabled": true,
+    "endpoint": "/api/security-taxpayer/profile"
+  },
+  "invoice_query": {
+    "max_window_days": 31,
+    "page_start": 0,
+    "max_pages": 100,
+    "size": 15,
+    "send_page_zero": false,
+    "date": {
+      "format": "%d/%m/%YT%H:%M:%S"
+    },
+    "search_template": "tdlap=ge={from_date};tdlap=le={to_date}",
+    "sort": {
+      "purchase": "tdlap:desc",
+      "sold": "tdlap:desc"
+    },
+    "include_page": true,
+    "throttle_retry_seconds": 1.5,
+    "fixed_scan_range": {
+      "enabled": false,
+      "from": "2026-01-01",
+      "to": "2026-12-31"
+    },
+    "page_retries": 2,
+    "window_timeout_seconds": 90,
+    "config_version": "3.1.2",
+    "export_timeout_seconds": 25,
+    "detail_phase_timeout_seconds": 120
+  },
+  "invoice": {
+    "purchase": {
+      "hddt": {
+        "enabled": true,
+        "method": "GET",
+        "endpoint": "/api/query/invoices/purchase",
+        "detail": {
+          "enabled": true,
+          "endpoint": "/api/query/invoices/detail",
+          "retries": 2,
+          "delay_seconds": 0.35,
+          "backoff_seconds": 0.75,
+          "action": "Xem hóa đơn (hóa đơn điện tử mua vào)",
+          "recovery_retries": 1,
+          "recovery_delay_seconds": 1.0
+        },
+        "export": {
+          "enabled": true,
+          "endpoint": "/api/query/invoices/export-excel-sold",
+          "extra_query": "type=purchase",
+          "sort": "tdlap:desc",
+          "retries": 1,
+          "action": "Xuất hóa đơn (hóa đơn điện tử mua vào)",
+          "column_map": {
+            "stt": 0,
+            "khmshdon": 1,
+            "khhdon": 2,
+            "shdon": 3,
+            "tdlap": 4,
+            "nbmst": 5,
+            "nbten": 6,
+            "nmmst": 7,
+            "nmten": 8,
+            "nmdchi": 9,
+            "tgtcthue": 10,
+            "tgtthue": 11,
+            "ttcktmai": 12,
+            "tgtphi": 13,
+            "tgtttbso": 14,
+            "dvtte": 15,
+            "tgia": 16,
+            "tthai": 17,
+            "ttxly": 18
+          }
+        }
+      },
+      "pos": {
+        "enabled": true,
+        "method": "GET",
+        "endpoint": "/api/sco-query/invoices/purchase",
+        "detail": {
+          "enabled": true,
+          "endpoint": "/api/sco-query/invoices/detail",
+          "retries": 2,
+          "delay_seconds": 0.35,
+          "backoff_seconds": 0.75,
+          "action": "Xem hóa đơn (hóa đơn máy tính tiền mua vào)",
+          "recovery_retries": 1,
+          "recovery_delay_seconds": 1.0
+        },
+        "export": {
+          "enabled": true,
+          "endpoint": "/api/sco-query/invoices/export-excel",
+          "extra_query": "type=purchase",
+          "sort": "tdlap:desc",
+          "retries": 1,
+          "action": "Xuất hóa đơn (hóa đơn máy tính tiền mua vào)",
+          "column_map": {
+            "stt": 0,
+            "khmshdon": 1,
+            "khhdon": 2,
+            "shdon": 3,
+            "tdlap": 4,
+            "nbmst": 5,
+            "nbten": 6,
+            "nmmst": 7,
+            "nmten": 8,
+            "nmdchi": 9,
+            "nmcccd": 10,
+            "tgtcthue": 11,
+            "tgtthue": 12,
+            "ttcktmai": 13,
+            "tgtttbso": 14,
+            "tthai": 15,
+            "ttxly": 16
+          }
+        }
+      }
+    },
+    "sold": {
+      "hddt": {
+        "enabled": true,
+        "method": "GET",
+        "endpoint": "/api/query/invoices/sold",
+        "detail": {
+          "enabled": true,
+          "endpoint": "/api/query/invoices/detail",
+          "retries": 2,
+          "delay_seconds": 0.35,
+          "backoff_seconds": 0.75,
+          "action": "Xem hóa đơn (hóa đơn điện tử bán ra)",
+          "recovery_retries": 1,
+          "recovery_delay_seconds": 1.0
+        },
+        "export": {
+          "enabled": true,
+          "endpoint": "/api/query/invoices/export-excel",
+          "extra_query": "",
+          "sort": "tdlap:desc",
+          "retries": 1,
+          "action": "Xuất hóa đơn (hóa đơn điện tử bán ra)",
+          "column_map": {
+            "stt": 0,
+            "khmshdon": 1,
+            "khhdon": 2,
+            "shdon": 3,
+            "tdlap": 4,
+            "nbmst": 5,
+            "nbten": 6,
+            "nmmst": 7,
+            "nmten": 8,
+            "nmdchi": 9,
+            "tgtcthue": 10,
+            "tgtthue": 11,
+            "ttcktmai": 12,
+            "tgtphi": 13,
+            "tgtttbso": 14,
+            "dvtte": 15,
+            "tgia": 16,
+            "tthai": 17,
+            "ttxly": 18
+          }
+        }
+      },
+      "pos": {
+        "enabled": true,
+        "method": "GET",
+        "endpoint": "/api/sco-query/invoices/sold",
+        "detail": {
+          "enabled": true,
+          "endpoint": "/api/sco-query/invoices/detail",
+          "retries": 2,
+          "delay_seconds": 0.35,
+          "backoff_seconds": 0.75,
+          "action": "Xem hóa đơn (hóa đơn máy tính tiền bán ra)",
+          "recovery_retries": 1,
+          "recovery_delay_seconds": 1.0
+        },
+        "export": {
+          "enabled": true,
+          "endpoint": "/api/sco-query/invoices/export-excel",
+          "extra_query": "",
+          "sort": "tdlap:desc",
+          "retries": 1,
+          "action": "Xuất hóa đơn (hóa đơn máy tính tiền bán ra)",
+          "column_map": {
+            "stt": 0,
+            "khmshdon": 1,
+            "khhdon": 2,
+            "shdon": 3,
+            "tdlap": 4,
+            "nbmst": 5,
+            "nbten": 6,
+            "nmmst": 7,
+            "nmten": 8,
+            "nmdchi": 9,
+            "nmcccd": 10,
+            "tgtcthue": 11,
+            "tgtthue": 12,
+            "ttcktmai": 13,
+            "tgtttbso": 14,
+            "tthai": 15,
+            "ttxly": 16
+          }
+        }
+      }
+    }
+  }
+}

@@ -190,7 +190,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Debt
             this.lblCompanyName.StylePriority.UseFont = false;
             this.lblCompanyName.StylePriority.UsePadding = false;
             this.lblCompanyName.StylePriority.UseTextAlignment = false;
-            this.lblCompanyName.Text = "Công ty Bình Minh";
+            this.lblCompanyName.Text = "";
             this.lblCompanyName.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
             // 
             // label1
@@ -954,7 +954,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Debt
             // 
             this.pCompanyName.Description = "Tên công ty";
             this.pCompanyName.Name = "pCompanyName";
-            this.pCompanyName.ValueInfo = "Công ty Bình Minh";
+            this.pCompanyName.ValueInfo = "";
             this.pCompanyName.Visible = false;
             // 
             // pAccountTitle

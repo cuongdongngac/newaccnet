@@ -127,7 +127,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.DetailTrialBalance.Reports.Currency
             this.lblCompany.LocationFloat = new DevExpress.Utils.PointFloat(0F, 0F);
             this.lblCompany.Name = "lblCompany";
             this.lblCompany.SizeF = new System.Drawing.SizeF(1100F, 22F);
-            this.lblCompany.Text = "TỔNG CÔNG TY XÂY DỰNG HÀ NỘI";
+            this.lblCompany.Text = "";
             this.lblCompany.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
             // 
             // lblTitle
@@ -641,7 +641,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.DetailTrialBalance.Reports.Currency
             // 
             this.prmCompanyName.Description = "Tên công ty";
             this.prmCompanyName.Name = "prmCompanyName";
-            this.prmCompanyName.ValueInfo = "TỔNG CÔNG TY XÂY DỰNG HÀ NỘI";
+            this.prmCompanyName.ValueInfo = "";
             this.prmCompanyName.Visible = false;
             // 
             // CurrencyDetailReport

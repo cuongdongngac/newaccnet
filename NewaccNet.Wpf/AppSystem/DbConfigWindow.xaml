@@ -74,8 +74,8 @@
                 </dxlc:LayoutItem>
             </dxlc:LayoutGroup>
 
-            <!-- Khung Thông tin phụ trợ (Lưu tại User Settings, không lưu vào DB) -->
-            <dxlc:LayoutGroup Header="Thông tin phụ trợ (Lưu tại User Settings máy trạm)"
+            <!-- Khung Thông tin công ty (Lưu trực tiếp vào CSDL) -->
+            <dxlc:LayoutGroup Header="Thông tin đơn vị / công ty (Lưu trực tiếp vào CSDL)"
                               View="GroupBox" Orientation="Vertical" Margin="0,8,0,0">
                 <dxlc:LayoutItem Label="Tên cơ quan / đơn vị:">
                     <dxe:TextEdit x:Name="txtCompanyName" NullText="Nhập tên công ty / đơn vị của bạn"/>

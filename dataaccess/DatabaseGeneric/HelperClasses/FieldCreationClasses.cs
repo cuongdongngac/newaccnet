@@ -599,6 +599,41 @@ namespace DataAccess.HelperClasses
 		public static EntityField2 LineId { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(CustomerExportLineFieldIndex.LineId); }}
 	}
 
+	/// <summary>Field Creation Class for entity DbConfigEntity</summary>
+	public partial class DbConfigFields
+	{
+		/// <summary>Creates a new DbConfigEntity.AccountingYear field instance</summary>
+		public static EntityField2 AccountingYear { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(DbConfigFieldIndex.AccountingYear); }}
+		/// <summary>Creates a new DbConfigEntity.AccountMethod field instance</summary>
+		public static EntityField2 AccountMethod { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(DbConfigFieldIndex.AccountMethod); }}
+		/// <summary>Creates a new DbConfigEntity.Address field instance</summary>
+		public static EntityField2 Address { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(DbConfigFieldIndex.Address); }}
+		/// <summary>Creates a new DbConfigEntity.BankAccount field instance</summary>
+		public static EntityField2 BankAccount { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(DbConfigFieldIndex.BankAccount); }}
+		/// <summary>Creates a new DbConfigEntity.CompanyName field instance</summary>
+		public static EntityField2 CompanyName { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(DbConfigFieldIndex.CompanyName); }}
+		/// <summary>Creates a new DbConfigEntity.CreatedDate field instance</summary>
+		public static EntityField2 CreatedDate { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(DbConfigFieldIndex.CreatedDate); }}
+		/// <summary>Creates a new DbConfigEntity.DepartmentName field instance</summary>
+		public static EntityField2 DepartmentName { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(DbConfigFieldIndex.DepartmentName); }}
+		/// <summary>Creates a new DbConfigEntity.ExpiryDate field instance</summary>
+		public static EntityField2 ExpiryDate { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(DbConfigFieldIndex.ExpiryDate); }}
+		/// <summary>Creates a new DbConfigEntity.Id field instance</summary>
+		public static EntityField2 Id { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(DbConfigFieldIndex.Id); }}
+		/// <summary>Creates a new DbConfigEntity.IsCompanyLicense field instance</summary>
+		public static EntityField2 IsCompanyLicense { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(DbConfigFieldIndex.IsCompanyLicense); }}
+		/// <summary>Creates a new DbConfigEntity.Material field instance</summary>
+		public static EntityField2 Material { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(DbConfigFieldIndex.Material); }}
+		/// <summary>Creates a new DbConfigEntity.RegistrationCode field instance</summary>
+		public static EntityField2 RegistrationCode { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(DbConfigFieldIndex.RegistrationCode); }}
+		/// <summary>Creates a new DbConfigEntity.TaxCode field instance</summary>
+		public static EntityField2 TaxCode { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(DbConfigFieldIndex.TaxCode); }}
+		/// <summary>Creates a new DbConfigEntity.UpdatedDate field instance</summary>
+		public static EntityField2 UpdatedDate { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(DbConfigFieldIndex.UpdatedDate); }}
+		/// <summary>Creates a new DbConfigEntity.VoucherPostingConfig field instance</summary>
+		public static EntityField2 VoucherPostingConfig { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(DbConfigFieldIndex.VoucherPostingConfig); }}
+	}
+
 	/// <summary>Field Creation Class for entity DebtBalanceEntity</summary>
 	public partial class DebtBalanceFields
 	{

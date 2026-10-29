@@ -117,6 +117,9 @@ namespace DataAccess.FactoryClasses
 		/// <summary>Creates and returns a new EntityQuery for the CustomerExportLine entity</summary>
 		public EntityQuery<CustomerExportLineEntity> CustomerExportLine { get { return Create<CustomerExportLineEntity>(); } }
 
+		/// <summary>Creates and returns a new EntityQuery for the DbConfig entity</summary>
+		public EntityQuery<DbConfigEntity> DbConfig { get { return Create<DbConfigEntity>(); } }
+
 		/// <summary>Creates and returns a new EntityQuery for the DebtBalance entity</summary>
 		public EntityQuery<DebtBalanceEntity> DebtBalance { get { return Create<DebtBalanceEntity>(); } }
 

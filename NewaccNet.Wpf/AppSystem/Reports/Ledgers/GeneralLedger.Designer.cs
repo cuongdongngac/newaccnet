@@ -150,7 +150,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Ledgers
             this.xrLabel3.SizeF = new System.Drawing.SizeF(450F, 20F);
             this.xrLabel3.StylePriority.UseFont = false;
             this.xrLabel3.StylePriority.UseTextAlignment = false;
-            this.xrLabel3.Text = "TỔNG CÔNG TY XÂY DỰNG HÀ NỘI";
+            this.xrLabel3.Text = "";
             this.xrLabel3.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
             // 
             // xrLabel1
@@ -664,7 +664,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Ledgers
             // 
             this.prmCompanyName.Description = "Name of Company";
             this.prmCompanyName.Name = "prmCompanyName";
-            this.prmCompanyName.ValueInfo = "TỔNG CÔNG TY XÂY DỰNG HÀ NỘI";
+            this.prmCompanyName.ValueInfo = "";
             this.prmCompanyName.Visible = false;
             // 
             // prmAccountID

@@ -11,7 +11,9 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using DevExpress.Xpf.Editors;
 using Microsoft.Win32;
+using MiniExcelLibs;
 using NewaccNet.TaxInvoice;
+using NewaccNet.Wpf.AppSystem.AI;
 using NewaccNet.Wpf.Views.Base;
 
 namespace NewaccNet.Wpf.AppSystem.TaxInvoice
@@ -533,6 +535,182 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
             var win = new InventoryItemExtractWindow(_dbItems, _databasePath);
             win.Owner = this;
             win.ShowDialog();
+        }
+
+        private void BtnExportExcelJson_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (_items.Count == 0)
+                {
+                    MessageBox.Show("Chưa có hóa đơn nào trên bảng để xuất Excel.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+
+                var sfd = new SaveFileDialog
+                {
+                    Filter = "Excel Workbook (*.xlsx)|*.xlsx",
+                    FileName = $"BangKeHoaDon_JSON_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx"
+                };
+                if (sfd.ShowDialog() == true)
+                {
+                    viewMaster.ExportToXlsx(sfd.FileName);
+                    MessageBox.Show($"Đã xuất dữ liệu ra tệp Excel thành công:\n{sfd.FileName}", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi xuất Excel:\n{ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void BtnDbExportExcel_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (_dbItems.Count == 0)
+                {
+                    MessageBox.Show("Chưa có hóa đơn nào trong danh sách CSDL để xuất Excel.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+
+                var sfd = new SaveFileDialog
+                {
+                    Filter = "Excel Workbook (*.xlsx)|*.xlsx",
+                    FileName = $"BangKeHoaDon_CSDL_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx"
+                };
+                if (sfd.ShowDialog() == true)
+                {
+                    viewDbMaster.ExportToXlsx(sfd.FileName);
+                    MessageBox.Show($"Đã xuất dữ liệu ra tệp Excel thành công:\n{sfd.FileName}", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi xuất Excel:\n{ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void BtnOpenInOffice_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedInvoices = _items.Where(x => x.IsSelected).Select(x => x.Invoice).ToList();
+            if (selectedInvoices.Count == 0 && gridMaster.SelectedItem is ReviewInvoiceItemViewModel sel)
+            {
+                selectedInvoices = new List<TaxInvoiceDto> { sel.Invoice };
+            }
+
+            if (selectedInvoices.Count == 0)
+            {
+                MessageBox.Show("Vui lòng chọn hoặc tích chọn ít nhất một hóa đơn để mở trong Office Studio.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            OpenInOfficeStudio(selectedInvoices);
+        }
+
+        private async void BtnDbOpenInOffice_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedInvoice = gridDbMaster.SelectedItem as TaxInvoiceDto;
+            if (selectedInvoice == null)
+            {
+                MessageBox.Show("Vui lòng chọn một dòng hóa đơn trong bảng CSDL để mở trong Office Studio.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            if (_dbService != null)
+            {
+                try
+                {
+                    await _dbService.EnsureDetailsLoadedAsync(new List<TaxInvoiceDto> { selectedInvoice });
+                }
+                catch { }
+            }
+
+            OpenInOfficeStudio(new List<TaxInvoiceDto> { selectedInvoice });
+        }
+
+        private void OpenInOfficeStudio(List<TaxInvoiceDto> invoices)
+        {
+            try
+            {
+                var title = invoices.Count == 1 
+                    ? $"HĐ {invoices[0].InvoiceSeries}-{invoices[0].InvoiceNo}" 
+                    : $"Bảng kê {invoices.Count} Hóa đơn";
+
+                var ms = CreateExcelStreamFromInvoices(invoices);
+                var officeWin = new OfficeStudioWindow(ms, OfficeDocumentType.Spreadsheet, title, _databasePath);
+                officeWin.Owner = this;
+                officeWin.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi mở trong Office Studio: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private static MemoryStream CreateExcelStreamFromInvoices(List<TaxInvoiceDto> invoices)
+        {
+            var rows = new List<Dictionary<string, object?>>();
+            int stt = 1;
+
+            foreach (var inv in invoices)
+            {
+                string partnerMst = inv.Direction == "purchase" ? inv.SellerTaxCode : (inv.BuyerTaxCode ?? "");
+                string partnerName = inv.Direction == "purchase" ? (inv.SellerName ?? "") : (inv.BuyerName ?? "");
+
+                if (inv.Details != null && inv.Details.Count > 0)
+                {
+                    foreach (var d in inv.Details)
+                    {
+                        var row = new Dictionary<string, object?>
+                        {
+                            ["STT"] = stt++,
+                            ["Ký hiệu"] = inv.InvoiceSeries,
+                            ["Số HĐ"] = inv.InvoiceNo,
+                            ["Ngày lập"] = inv.InvoiceDate.ToString("dd/MM/yyyy"),
+                            ["MST Đối tác"] = partnerMst,
+                            ["Tên Đối tác"] = partnerName,
+                            ["Tên mặt hàng"] = d.ItemName,
+                            ["ĐVT"] = d.UnitName,
+                            ["Số lượng"] = d.Quantity,
+                            ["Đơn giá"] = (double)d.UnitPrice,
+                            ["Thành tiền"] = (double)d.Amount,
+                            ["Thuế %"] = d.TaxRate,
+                            ["Tiền thuế"] = (double)d.TaxAmount,
+                            ["TK Nợ"] = "156",
+                            ["TK Có"] = "331"
+                        };
+                        rows.Add(row);
+                    }
+                }
+                else
+                {
+                    var row = new Dictionary<string, object?>
+                    {
+                        ["STT"] = stt++,
+                        ["Ký hiệu"] = inv.InvoiceSeries,
+                        ["Số HĐ"] = inv.InvoiceNo,
+                        ["Ngày lập"] = inv.InvoiceDate.ToString("dd/MM/yyyy"),
+                        ["MST Đối tác"] = partnerMst,
+                        ["Tên Đối tác"] = partnerName,
+                        ["Tên mặt hàng"] = "Tổng tiền theo hóa đơn",
+                        ["ĐVT"] = "",
+                        ["Số lượng"] = 1,
+                        ["Đơn giá"] = (double)inv.TotalAmountWithoutTax,
+                        ["Thành tiền"] = (double)inv.TotalAmountWithoutTax,
+                        ["Thuế %"] = "",
+                        ["Tiền thuế"] = (double)inv.TotalTaxAmount,
+                        ["TK Nợ"] = "156",
+                        ["TK Có"] = "331"
+                    };
+                    rows.Add(row);
+                }
+            }
+
+            var ms = new MemoryStream();
+            MiniExcel.SaveAs(ms, rows);
+            ms.Seek(0, SeekOrigin.Begin);
+            return ms;
         }
 
         private void BtnClose_Click(object sender, RoutedEventArgs e)

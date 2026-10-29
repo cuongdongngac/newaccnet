@@ -44,13 +44,26 @@
 
                     <Separator Margin="0,0,15,0"/>
 
-                    <dx:SimpleButton x:Name="btnPushToVoucher" Content="📥 Nhập liệu vào Phiếu Kế toán (Từ Excel)" Height="28" Margin="0,0,6,0"
-                                     FontWeight="Bold"
+                    <dx:SimpleButton x:Name="btnPushToInventoryItem" Content="📦 Bắn vào Danh mục Vật tư" Height="28" Margin="0,0,6,0"
+                                     FontWeight="SemiBold"
+                                     Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_product.svg'}"
+                                     ToolTip="Đọc các cột (Mã, Tên, ĐVT, Nhóm) từ bảng tính hiện tại và lưu vào CSDL Danh mục Vật tư"
+                                     Click="BtnPushToInventoryItem_Click"/>
+
+                    <dx:SimpleButton x:Name="btnPushToPartner" Content="👥 Bắn vào Danh mục Đối tác" Height="28" Margin="0,0,6,0"
+                                     FontWeight="SemiBold"
+                                     Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_customer.svg'}"
+                                     ToolTip="Đọc các cột (Mã đối tác, Tên đối tác, MST, Địa chỉ) từ bảng tính hiện tại và lưu vào CSDL Danh mục Đối tác"
+                                     Click="BtnPushToPartner_Click"/>
+
+                    <dx:SimpleButton x:Name="btnPushToDbInvoice" Content="💾 Lưu vào CSDL Hóa đơn" Height="28" Margin="0,0,6,0"
+                                     FontWeight="Bold" Foreground="#FF15803D"
+                                     Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/diagramicons/save.svg'}"
+                                     Click="BtnPushToDbInvoice_Click"/>
+
+                    <dx:SimpleButton x:Name="btnPushToVoucher" Content="📥 Nhập vào Phiếu Kế toán" Height="28" Margin="0,0,6,0"
                                      Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_invoice.svg'}"
                                      Click="BtnPushToVoucher_Click"/>
-                    <dx:SimpleButton x:Name="btnPushToCatalog" Content="📦 Lưu vào Danh mục Vật tư" Height="28" Margin="0,0,6,0"
-                                     Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_product.svg'}"
-                                     Click="BtnPushToCatalog_Click"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="2" Orientation="Horizontal">

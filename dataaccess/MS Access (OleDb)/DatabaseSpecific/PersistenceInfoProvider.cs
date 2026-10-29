@@ -69,6 +69,7 @@ namespace DataAccess.MsAccess.DatabaseSpecific
 			InitCustomCostReportEntityMappings();
 			InitCustomCostReportAccountEntityMappings();
 			InitCustomerExportLineEntityMappings();
+			InitDbConfigEntityMappings();
 			InitDebtBalanceEntityMappings();
 			InitDebtDetailEntityMappings();
 			InitDebtLedgerEntityMappings();
@@ -531,6 +532,27 @@ namespace DataAccess.MsAccess.DatabaseSpecific
 			this.AddElementFieldMapping("CustomerExportLineEntity", "Liabilitydate", "Liabilitydate", true, "Date", 0, 0, 0, false, "", null, typeof(System.DateTime), 4);
 			this.AddElementFieldMapping("CustomerExportLineEntity", "LiabilityDuesId", "LiabilityDuesId", true, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 5);
 			this.AddElementFieldMapping("CustomerExportLineEntity", "LineId", "LineId", false, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 6);
+		}
+
+		/// <summary>Inits DbConfigEntity's mappings</summary>
+		private void InitDbConfigEntityMappings()
+		{
+			this.AddElementMapping("DbConfigEntity", @"template", @"Default", "DbConfig", 15, 0);
+			this.AddElementFieldMapping("DbConfigEntity", "AccountingYear", "AccountingYear", true, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 0);
+			this.AddElementFieldMapping("DbConfigEntity", "AccountMethod", "AccountMethod", true, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
+			this.AddElementFieldMapping("DbConfigEntity", "Address", "Address", true, "VarWChar", 255, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("DbConfigEntity", "BankAccount", "BankAccount", true, "VarWChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
+			this.AddElementFieldMapping("DbConfigEntity", "CompanyName", "CompanyName", true, "VarWChar", 255, 0, 0, false, "", null, typeof(System.String), 4);
+			this.AddElementFieldMapping("DbConfigEntity", "CreatedDate", "CreatedDate", true, "Date", 0, 0, 0, false, "", null, typeof(System.DateTime), 5);
+			this.AddElementFieldMapping("DbConfigEntity", "DepartmentName", "DepartmentName", true, "VarWChar", 150, 0, 0, false, "", null, typeof(System.String), 6);
+			this.AddElementFieldMapping("DbConfigEntity", "ExpiryDate", "ExpiryDate", true, "VarWChar", 10, 0, 0, false, "", null, typeof(System.String), 7);
+			this.AddElementFieldMapping("DbConfigEntity", "Id", "Id", false, "Integer", 0, 10, 0, false, "@@IDENTITY", null, typeof(System.Int32), 8);
+			this.AddElementFieldMapping("DbConfigEntity", "IsCompanyLicense", "IsCompanyLicense", false, "Boolean", 2, 0, 0, false, "", null, typeof(System.Boolean), 9);
+			this.AddElementFieldMapping("DbConfigEntity", "Material", "Material", true, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 10);
+			this.AddElementFieldMapping("DbConfigEntity", "RegistrationCode", "RegistrationCode", true, "VarWChar", 100, 0, 0, false, "", null, typeof(System.String), 11);
+			this.AddElementFieldMapping("DbConfigEntity", "TaxCode", "TaxCode", true, "VarWChar", 50, 0, 0, false, "", null, typeof(System.String), 12);
+			this.AddElementFieldMapping("DbConfigEntity", "UpdatedDate", "UpdatedDate", true, "Date", 0, 0, 0, false, "", null, typeof(System.DateTime), 13);
+			this.AddElementFieldMapping("DbConfigEntity", "VoucherPostingConfig", "VoucherPostingConfig", true, "LongVarWChar", 536870911, 0, 0, false, "", null, typeof(System.String), 14);
 		}
 
 		/// <summary>Inits DebtBalanceEntity's mappings</summary>

@@ -51,5 +51,14 @@ _ReSharper*/
 
 # Build publish output
 [Pp]ublish/
+[Ii]nstaller/[Oo]utput/
+[Pp]rerequisites/
+**/__pycache__/
+*.pyc
 
 *.licx
+codebase.md
+scratch/
+*.log
+*.bak
+*.tmp

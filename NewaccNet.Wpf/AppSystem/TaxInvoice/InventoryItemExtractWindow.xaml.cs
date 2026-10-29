@@ -13,6 +13,7 @@ using Microsoft.Win32;
 using MiniExcelLibs;
 using NewaccNet.TaxInvoice;
 using NewaccNet.Wpf.AppSystem;
+using NewaccNet.Wpf.AppSystem.AI;
 using NewaccNet.Wpf.AppSystem.Directory;
 using NewaccNet.Wpf.Views.Base;
 
@@ -27,6 +28,7 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
 
         private readonly Dictionary<string, (string MaterialId, string? CategoryId)> _dbItemsByName = new(StringComparer.OrdinalIgnoreCase);
         private readonly HashSet<string> _dbItemsById = new(StringComparer.OrdinalIgnoreCase);
+        private readonly List<(string Code, string Name, string? CategoryId)> _dbItemList = new();
         private readonly List<CategoryComboItem> _categories = new();
 
         public InventoryItemExtractWindow(IEnumerable<TaxInvoiceDto>? invoices, string? databasePath = null)
@@ -104,6 +106,7 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
                     {
                         grp = new ExtractedItemGroup
                         {
+                            SellerTaxCode = inv.Direction == "purchase" ? (inv.SellerTaxCode ?? "") : (inv.BuyerTaxCode ?? ""),
                             ItemName = rawName,
                             Unit = rawUnit,
                             OriginalItemCode = d.ItemCode?.Trim() ?? "",
@@ -124,7 +127,7 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
                 }
             }
 
-            // 4. Build ViewModels and match with DB
+            // 4. Build ViewModels and match with DB (4-Tier Smart Hybrid Matching)
             var usedCodes = new HashSet<string>(_dbItemsById, StringComparer.OrdinalIgnoreCase);
             int ruleIndex = cboNamingRule.SelectedIndex;
             var prefix = txtPrefix.Text.Trim();
@@ -138,29 +141,68 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
                 bool inDb = false;
                 string assignedCode = "";
                 string? assignedCat = null;
+                string dbStatus = "🔴 Vật tư mới";
+                string suggestedInternalName = "";
+                string matchReason = "";
 
+                // Tier 1A: Khớp chính xác tên trong CSDL (Exact DB Match)
                 if (_dbItemsByName.TryGetValue(normName, out var existing))
                 {
                     inDb = true;
                     assignedCode = existing.MaterialId;
                     assignedCat = existing.CategoryId;
+                    dbStatus = "🟢 Khớp CSDL 100%";
+                    suggestedInternalName = grp.ItemName;
+                    matchReason = "Tên trùng khớp hoàn toàn với CSDL";
                 }
+                // Tier 1B: Tra cứu Sổ tay ghi nhớ lịch sử (ItemMappingStore)
+                else if (ItemMappingStore.Instance.TryFindMapping(grp.SellerTaxCode, grp.ItemName, grp.Unit, out var mappedRec) && mappedRec != null)
+                {
+                    inDb = true;
+                    assignedCode = mappedRec.InternalMaterialId;
+                    assignedCat = GetCatForMaterialId(assignedCode);
+                    dbStatus = "🟢 Sổ tay ghi nhớ";
+                    suggestedInternalName = mappedRec.InternalMaterialName;
+                    matchReason = string.IsNullOrWhiteSpace(mappedRec.SellerTaxCode)
+                        ? "Đã từng ánh xạ trước đây"
+                        : $"Đã từng ánh xạ từ NCC {mappedRec.SellerTaxCode}";
+                }
+                // Tier 2: So khớp mờ cục bộ (Fuzzy Match Helper)
                 else
                 {
-                    // Generate new code based on rule
-                    assignedCode = GenerateCodeByRule(grp.ItemName, grp.OriginalItemCode, ruleIndex, prefix, ref counter);
-                    assignedCode = MaterialCodeGenerator.MakeUniqueCode(assignedCode, usedCodes);
+                    var fuzzy = FuzzyMatchHelper.FindBestMatch(grp.ItemName, _dbItemList, threshold: 0.72);
+                    if (fuzzy != null)
+                    {
+                        inDb = true;
+                        assignedCode = fuzzy.MaterialId;
+                        assignedCat = fuzzy.CategoryId;
+                        suggestedInternalName = fuzzy.MaterialName;
+                        int percent = (int)(fuzzy.SimilarityScore * 100);
+                        dbStatus = $"🔵 Gợi ý tương đồng ({percent}%)";
+                        matchReason = $"Độ tương đồng {percent}% với '{fuzzy.MaterialName}'";
+                    }
+                    else
+                    {
+                        // Tier 4 Default: Sinh mã mới theo quy tắc
+                        assignedCode = GenerateCodeByRule(grp.ItemName, grp.OriginalItemCode, ruleIndex, prefix, ref counter);
+                        assignedCode = MaterialCodeGenerator.MakeUniqueCode(assignedCode, usedCodes);
+                        dbStatus = "🔴 Vật tư mới";
+                        matchReason = "Mặt hàng mới chưa có trong kho";
+                    }
                 }
 
                 var vm = new ExtractedItemViewModel
                 {
-                    IsSelected = !inDb, // Mặc định chỉ chọn các mặt hàng mới
+                    IsSelected = !inDb, // Mặc định chỉ chọn các mặt hàng mới để tạo
+                    SellerTaxCode = grp.SellerTaxCode,
                     MaterialId = assignedCode,
                     OriginalItemCode = grp.OriginalItemCode,
                     MaterialName = grp.ItemName,
                     Unit = grp.Unit,
                     CategoryId = assignedCat,
-                    DbStatus = inDb ? "Đã có trong CSDL" : "Chưa có",
+                    DbStatus = dbStatus,
+                    SuggestedInternalName = suggestedInternalName,
+                    MatchReason = matchReason,
                     IsInDb = inDb,
                     OccurrenceCount = grp.Count,
                     SampleInvoice = grp.SampleInvoice,
@@ -178,6 +220,7 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
             _categories.Clear();
             _dbItemsByName.Clear();
             _dbItemsById.Clear();
+            _dbItemList.Clear();
 
             if (string.IsNullOrEmpty(_databasePath) || !File.Exists(_databasePath)) return;
 
@@ -215,6 +258,7 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
                         if (!string.IsNullOrEmpty(mid))
                         {
                             _dbItemsById.Add(mid);
+                            _dbItemList.Add((mid, mname, mcat));
                         }
                         if (!string.IsNullOrEmpty(mname))
                         {
@@ -232,6 +276,12 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
             {
                 System.Diagnostics.Debug.WriteLine($"Lỗi đọc CSDL vật tư: {ex.Message}");
             }
+        }
+
+        private string? GetCatForMaterialId(string materialId)
+        {
+            var match = _dbItemList.FirstOrDefault(x => string.Equals(x.Code, materialId, StringComparison.OrdinalIgnoreCase));
+            return match.CategoryId;
         }
 
         private string GenerateCodeByRule(string itemName, string itemCode, int ruleIndex, string prefix, ref int counter)
@@ -367,6 +417,118 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
         }
 
         // ==============================================================
+        // ACTION 0: AI SMART MAPPING (TIER 3)
+        // ==============================================================
+
+        private async void BtnAiSuggest_Click(object sender, RoutedEventArgs e)
+        {
+            if (_dbItemList.Count == 0)
+            {
+                MessageBox.Show("CSDL hiện chưa có danh mục vật tư nào để AI thực hiện so khớp và ghép nối.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            var candidates = _allItems.Where(x => !x.IsInDb || x.DbStatus.StartsWith("🔴") || x.DbStatus.StartsWith("🔵")).ToList();
+            if (candidates.Count == 0)
+            {
+                MessageBox.Show("Tất cả các mặt hàng đã được khớp chính xác với CSDL hoặc sổ tay ghi nhớ. Không còn mặt hàng nào cần AI xử lý.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            var originalText = btnAiSuggest.Content;
+            btnAiSuggest.IsEnabled = false;
+            btnAiSuggest.Content = "⏳ Đang gọi AI...";
+
+            try
+            {
+                var distinctNames = candidates.Select(x => x.MaterialName).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+                var dbPairs = _dbItemList.Select(x => (x.Code, x.Name)).ToList();
+
+                var suggestions = await AiItemMappingService.MapBatchAsync(distinctNames, dbPairs);
+
+                int matchedCount = 0;
+                foreach (var sug in suggestions)
+                {
+                    if (string.IsNullOrWhiteSpace(sug.MatchedInternalCode)) continue;
+
+                    var matchingItems = _allItems.Where(x => string.Equals(x.MaterialName, sug.InvoiceItemName, StringComparison.OrdinalIgnoreCase)).ToList();
+                    foreach (var item in matchingItems)
+                    {
+                        item.MaterialId = sug.MatchedInternalCode;
+                        item.SuggestedInternalName = sug.MatchedInternalName ?? "";
+                        item.DbStatus = $"🟡 AI Gợi ý ({sug.Confidence}%)";
+                        item.MatchReason = sug.Reason ?? "AI nhận diện tương đương";
+                        item.CategoryId = GetCatForMaterialId(sug.MatchedInternalCode);
+                        item.IsInDb = true;
+                        item.IsSelected = false; // Đã map vào mã nội bộ cũ nên không cần tạo mới
+                        matchedCount++;
+                    }
+                }
+
+                if (matchedCount > 0)
+                {
+                    MessageBox.Show($"AI đã phân tích và gợi ý ghép nối thành công {matchedCount} mặt hàng vào danh mục nội bộ hiện có!", "AI Mapping Hoàn tất", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    MessageBox.Show("AI đã phân tích nhưng không tìm thấy mặt hàng tương đương nào trong CSDL hiện tại. Tất cả đều là vật tư mới.", "Kết quả AI", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+
+                ApplyFilter();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi chạy AI gợi ý mapping:\n{ex.Message}", "Lỗi AI Mapping", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            finally
+            {
+                btnAiSuggest.Content = originalText;
+                btnAiSuggest.IsEnabled = true;
+                UpdateStats();
+            }
+        }
+
+        // ==============================================================
+        // ACTION 0.5: OPEN IN OFFICE STUDIO (DATA HUB)
+        // ==============================================================
+
+        private void BtnOpenInOffice_Click(object sender, RoutedEventArgs e)
+        {
+            var selected = _allItems.Where(x => x.IsSelected).ToList();
+            if (selected.Count == 0) selected = _allItems.ToList();
+            if (selected.Count == 0)
+            {
+                MessageBox.Show("Không có dữ liệu mặt hàng nào để mở trong Office Studio.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            try
+            {
+                var exportRows = selected.Select(x => new
+                {
+                    MaterialId = x.MaterialId,
+                    MaterialName = x.MaterialName,
+                    Unit = x.Unit,
+                    Categoryid = x.CategoryId ?? "",
+                    DbStatus = x.DbStatus,
+                    OccurrenceCount = x.OccurrenceCount
+                }).ToList();
+
+                var ms = new MemoryStream();
+                MiniExcel.SaveAs(ms, exportRows);
+                ms.Position = 0;
+
+                var officeWin = new OfficeStudioWindow(ms, OfficeDocumentType.Spreadsheet, "Danh mục Vật tư trích xuất từ HĐĐT", _databasePath);
+                officeWin.Owner = this.Owner ?? this;
+                officeWin.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi mở Office Studio: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        // ==============================================================
         // ACTION 1: EXPORT TO EXCEL
         // ==============================================================
 
@@ -408,6 +570,28 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
                     }).ToList();
 
                     MiniExcel.SaveAs(dialog.FileName, exportRows, overwriteFile: true);
+
+                    // Ghi nhớ ánh xạ vào Sổ tay ItemMappingStore (Tier 1)
+                    foreach (var item in selected)
+                    {
+                        ItemMappingStore.Instance.SaveMapping(
+                            item.SellerTaxCode,
+                            item.MaterialName,
+                            item.Unit,
+                            item.MaterialId,
+                            string.IsNullOrEmpty(item.SuggestedInternalName) ? item.MaterialName : item.SuggestedInternalName);
+                    }
+
+                    // Lưu cả các dòng đã ghép nối mã nội bộ
+                    foreach (var item in _allItems.Where(x => !string.IsNullOrEmpty(x.MaterialId) && !string.IsNullOrEmpty(x.SuggestedInternalName)))
+                    {
+                        ItemMappingStore.Instance.SaveMapping(
+                            item.SellerTaxCode,
+                            item.MaterialName,
+                            item.Unit,
+                            item.MaterialId,
+                            item.SuggestedInternalName);
+                    }
 
                     var result = MessageBox.Show(
                         $"Đã xuất thành công {selected.Count} vật tư ra tệp Excel:\n{dialog.FileName}\n\nBạn có muốn mở ngay chức năng 'Nhập từ Excel' của Danh mục vật tư để nạp vào CSDL không?",
@@ -513,6 +697,25 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
 
                     item.DbStatus = "Đã có trong CSDL";
                     item.IsInDb = true;
+
+                    // Ghi nhớ ánh xạ vào Sổ tay ItemMappingStore (Tier 1)
+                    ItemMappingStore.Instance.SaveMapping(
+                        item.SellerTaxCode,
+                        item.MaterialName,
+                        item.Unit,
+                        id,
+                        name);
+                }
+
+                // Lưu cả các dòng đã ghép nối mã nội bộ
+                foreach (var item in _allItems.Where(x => !string.IsNullOrEmpty(x.MaterialId) && !string.IsNullOrEmpty(x.SuggestedInternalName)))
+                {
+                    ItemMappingStore.Instance.SaveMapping(
+                        item.SellerTaxCode,
+                        item.MaterialName,
+                        item.Unit,
+                        item.MaterialId,
+                        item.SuggestedInternalName);
                 }
 
                 MessageBox.Show($"Đã lưu thành công vào CSDL:\n- Thêm mới: {inserted} vật tư\n- Cập nhật: {updated} vật tư", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -536,6 +739,7 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
 
         private class ExtractedItemGroup
         {
+            public string SellerTaxCode { get; set; } = string.Empty;
             public string ItemName { get; set; } = string.Empty;
             public string Unit { get; set; } = string.Empty;
             public string OriginalItemCode { get; set; } = string.Empty;
@@ -558,10 +762,15 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
         private string _materialName = string.Empty;
         private string _unit = string.Empty;
         private string? _categoryId;
+        private string _dbStatus = "🔴 Vật tư mới";
+        private string _suggestedInternalName = string.Empty;
+        private string _matchReason = string.Empty;
 
         public event PropertyChangedEventHandler? PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string? propName = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
+
+        public string SellerTaxCode { get; set; } = string.Empty;
 
         public bool IsSelected
         {
@@ -595,7 +804,24 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
             set { if (_categoryId != value) { _categoryId = value; OnPropertyChanged(); } }
         }
 
-        public string DbStatus { get; set; } = "Chưa có";
+        public string DbStatus
+        {
+            get => _dbStatus;
+            set { if (_dbStatus != value) { _dbStatus = value; OnPropertyChanged(); } }
+        }
+
+        public string SuggestedInternalName
+        {
+            get => _suggestedInternalName;
+            set { if (_suggestedInternalName != value) { _suggestedInternalName = value; OnPropertyChanged(); } }
+        }
+
+        public string MatchReason
+        {
+            get => _matchReason;
+            set { if (_matchReason != value) { _matchReason = value; OnPropertyChanged(); } }
+        }
+
         public bool IsInDb { get; set; }
         public int OccurrenceCount { get; set; }
         public string SampleInvoice { get; set; } = string.Empty;

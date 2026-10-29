@@ -148,7 +148,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.diary
             this.lblCompanyName.SizeF = new System.Drawing.SizeF(500F, 22F);
             this.lblCompanyName.StylePriority.UseFont = false;
             this.lblCompanyName.StylePriority.UseTextAlignment = false;
-            this.lblCompanyName.Text = "TỔNG CÔNG TY XÂY DỰNG HÀ NỘI";
+            this.lblCompanyName.Text = "";
             this.lblCompanyName.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
             // 
             // label1
@@ -611,7 +611,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.diary
             // 
             this.pCompanyName.Description = "Tên công ty";
             this.pCompanyName.Name = "pCompanyName";
-            this.pCompanyName.ValueInfo = "TỔNG CÔNG TY XÂY DỰNG HÀ NỘI";
+            this.pCompanyName.ValueInfo = "";
             this.pCompanyName.Visible = false;
             // 
             // pPeriodTitle

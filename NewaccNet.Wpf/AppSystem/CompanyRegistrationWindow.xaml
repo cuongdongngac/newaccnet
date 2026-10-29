@@ -1,0 +1,121 @@
+<base:BaseWindow xmlns:base="clr-namespace:NewaccNet.Wpf.Views.Base" 
+                 x:Class="NewaccNet.Wpf.AppSystem.CompanyRegistrationWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+                 xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+                 Title="Đăng ký sử dụng - NEWACCNET" 
+                 Height="620" Width="580" 
+                 WindowStartupLocation="CenterOwner" 
+                 ResizeMode="NoResize"
+                 ShowInTaskbar="False">
+    <Grid Background="#F8FAFC">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="#FF1976D2" Padding="20,14">
+            <StackPanel HorizontalAlignment="Center">
+                <TextBlock Text="NEW ACCOUNTING PROGRAM" FontSize="18" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
+                <TextBlock Text="Khai báo thông tin đơn vị &amp; Đăng ký bản quyền sử dụng" FontSize="12" Foreground="#E3F2FD" HorizontalAlignment="Center" Margin="0,3,0,0"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Body Form -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="30,16,30,10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="135"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Đơn vị -->
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Đơn vị:" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#334155" Margin="0,5"/>
+                    <dxe:TextEdit Grid.Row="0" Grid.Column="1" x:Name="txtCompanyName" Height="28" Margin="0,4"/>
+
+                    <!-- Phòng ban -->
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Phòng ban:" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#334155" Margin="0,5"/>
+                    <dxe:TextEdit Grid.Row="1" Grid.Column="1" x:Name="txtDepartmentName" Height="28" Margin="0,4"/>
+
+                    <!-- Địa chỉ -->
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Địa chỉ:" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#334155" Margin="0,5"/>
+                    <dxe:TextEdit Grid.Row="2" Grid.Column="1" x:Name="txtAddress" Height="28" Margin="0,4"/>
+
+                    <!-- Số tài khoản -->
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Số tài khoản:" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#334155" Margin="0,5"/>
+                    <dxe:TextEdit Grid.Row="3" Grid.Column="1" x:Name="txtBankAccount" Height="28" Margin="0,4"/>
+
+                    <!-- Mã số thuế -->
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="Mã số thuế:" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#334155" Margin="0,5"/>
+                    <dxe:TextEdit Grid.Row="4" Grid.Column="1" x:Name="txtTaxCode" Height="28" Margin="0,4"/>
+
+                    <!-- Hình thức kế toán -->
+                    <TextBlock Grid.Row="5" Grid.Column="0" Text="Hình thức sổ KT:" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#334155" Margin="0,5"/>
+                    <dxe:ComboBoxEdit Grid.Row="5" Grid.Column="1" x:Name="cboAccountMethod" Height="28" Margin="0,4" 
+                                      DisplayMember="Name" ValueMember="Value" IsTextEditable="False"/>
+
+                    <!-- Tính giá tồn kho / xuất kho -->
+                    <TextBlock Grid.Row="6" Grid.Column="0" Text="Tính giá xuất kho:" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#334155" Margin="0,5"/>
+                    <dxe:ComboBoxEdit Grid.Row="6" Grid.Column="1" x:Name="cboMaterial" Height="28" Margin="0,4" 
+                                      DisplayMember="Name" ValueMember="Value" IsTextEditable="False"/>
+
+                    <!-- Cấu hình định khoản chứng từ -->
+                    <TextBlock Grid.Row="7" Grid.Column="0" Text="Định khoản chứng từ:" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#334155" Margin="0,5"/>
+                    <dx:SimpleButton Grid.Row="7" Grid.Column="1" Content="Cấu hình tài khoản ngầm định chứng từ..." Height="28" Margin="0,4" HorizontalAlignment="Left" Padding="12,0" Click="BtnVoucherPostingConfig_Click"/>
+
+                    <!-- Mã cài đặt (Mã máy) -->
+                    <TextBlock Grid.Row="8" Grid.Column="0" Text="Mã máy tính:" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#334155" Margin="0,5"/>
+                    <Grid Grid.Row="8" Grid.Column="1" Margin="0,4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <dxe:TextEdit x:Name="txtInstallationCode" IsReadOnly="True" Background="#F1F5F9" FontWeight="Bold" Height="28"/>
+                        <dx:SimpleButton Grid.Column="1" Content="Sao chép" Margin="8,0,0,0" Height="28" Click="BtnCopyInstallationCode_Click" ToolTip="Sao chép Mã máy tính gửi tác giả"/>
+                    </Grid>
+
+                    <!-- Mã đăng ký -->
+                    <TextBlock Grid.Row="9" Grid.Column="0" Text="Mã đăng ký:" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#334155" Margin="0,5"/>
+                    <dxe:TextEdit Grid.Row="9" Grid.Column="1" x:Name="txtRegistrationCode" Height="28" Margin="0,4" 
+                                  FontWeight="Bold" Foreground="#0F172A" NullText="Ví dụ: A1B2-C3D4-E5F6 (Theo mã máy)"/>
+
+
+                </Grid>
+
+                <!-- Dòng thông báo màu xanh giống hệt bản 7.0 -->
+                <Border Background="#EFF6FF" BorderBrush="#BFDBFE" BorderThickness="1" CornerRadius="4" Padding="12,10" Margin="0,12,0,0">
+                    <TextBlock x:Name="txtExpiryNotice" 
+                               Text="Phiên bản có thời hạn sử dụng đến ngày 31/12/2099. Bạn không thể cập nhật các chứng từ có ngày lớn hơn thời điểm trên."
+                               TextWrapping="Wrap" Foreground="#1D4ED8" FontSize="12" HorizontalAlignment="Center" TextAlignment="Center" FontWeight="SemiBold"/>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Footer Buttons giống hệt bản 7.0 -->
+        <Border Grid.Row="2" Background="#F1F5F9" BorderBrush="#E2E8F0" BorderThickness="0,1,0,0" Padding="20,12">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <dx:SimpleButton Content="Đăng ký" Width="95" Height="30" Margin="0,0,12,0" 
+                                 Background="#FF1976D2" Foreground="White" FontWeight="Bold" Click="BtnRegister_Click"/>
+                <dx:SimpleButton Content="In" Width="85" Height="30" Margin="0,0,12,0" Click="BtnPrint_Click"/>
+                <dx:SimpleButton Content="Kết thúc" Width="85" Height="30" Margin="0,0,12,0" Click="BtnClose_Click"/>
+                <dx:SimpleButton Content="Trợ giúp" Width="85" Height="30" Click="BtnHelp_Click"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</base:BaseWindow>

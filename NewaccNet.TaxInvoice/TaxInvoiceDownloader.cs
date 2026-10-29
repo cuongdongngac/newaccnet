@@ -109,6 +109,18 @@ namespace NewaccNet.TaxInvoice
                 if (entry != null) entry.ErrorMessage = errorMsg;
             }
 
+            void ClearError(IndexEntry entry)
+            {
+                monthLog.Errors.RemoveAll(e => e.Contains(entry.FileStem));
+                var match = result.Errors.Find(e => e.Contains(entry.FileStem));
+                if (match != null)
+                {
+                    result.Errors.Remove(match);
+                    result.ErrorCount = Math.Max(0, result.ErrorCount - 1);
+                }
+                entry.ErrorMessage = null;
+            }
+
             try
             {
                 // 1. Fetch Invoices List
@@ -175,6 +187,7 @@ namespace NewaccNet.TaxInvoice
                 if (request.DownloadDetail)
                 {
                     var index = 0;
+                    var failedDetailEntries = new List<IndexEntry>();
                     foreach (var entry in entries)
                     {
                         cancellationToken.ThrowIfCancellationRequested();
@@ -197,9 +210,35 @@ namespace NewaccNet.TaxInvoice
                         {
                             entry.DetailStatus = "error";
                             RecordError($"Detail error for {key.FileStem}: {ex.Message}", entry);
+                            failedDetailEntries.Add(entry);
                         }
 
                         progress?.Report(new DownloadProgress("detail", $"{directionLabel} {monthRange.MonthLabel} {key.InvoiceSeries}-{key.InvoiceNo}", index, entries.Count));
+                    }
+
+                    // Recovery Pass: Tự động phục hồi các chi tiết bị gián đoạn do nghẽn mạng / HTTP 429
+                    if (failedDetailEntries.Count > 0)
+                    {
+                        progress?.Report(new DownloadProgress("recovery", $"Đang phục hồi chi tiết (Recovery Pass) cho {failedDetailEntries.Count} hóa đơn bị lỗi mạng..."));
+                        await Task.Delay(1500, cancellationToken).ConfigureAwait(false);
+
+                        foreach (var entry in failedDetailEntries)
+                        {
+                            cancellationToken.ThrowIfCancellationRequested();
+                            var key = ToInvoiceKey(entry);
+                            try
+                            {
+                                var detailJson = await _client.GetDetailJsonAsync(key, cancellationToken).ConfigureAwait(false);
+                                _store.SaveDetail(folder, key, detailJson);
+                                entry.DetailStatus = "ok";
+                                ClearError(entry);
+                                progress?.Report(new DownloadProgress("recovery", $"[Phục hồi chi tiết thành công] {directionLabel} {key.InvoiceSeries}-{key.InvoiceNo}"));
+                            }
+                            catch
+                            {
+                                // Giữ nguyên trạng thái nếu lần 2 vẫn không kết nối được
+                            }
+                        }
                     }
                 }
 
@@ -207,6 +246,7 @@ namespace NewaccNet.TaxInvoice
                 if (request.DownloadXml)
                 {
                     var index = 0;
+                    var failedXmlEntries = new List<IndexEntry>();
                     foreach (var entry in entries)
                     {
                         cancellationToken.ThrowIfCancellationRequested();
@@ -236,9 +276,38 @@ namespace NewaccNet.TaxInvoice
                         {
                             entry.XmlStatus = "error";
                             RecordError($"XML archive error for {key.FileStem}: {ex.Message}", entry);
+                            failedXmlEntries.Add(entry);
                         }
 
                         progress?.Report(new DownloadProgress("xml", $"{directionLabel} {monthRange.MonthLabel} {key.InvoiceSeries}-{key.InvoiceNo}", index, entries.Count));
+                    }
+
+                    // Recovery Pass: Tự động phục hồi tải XML
+                    if (failedXmlEntries.Count > 0)
+                    {
+                        progress?.Report(new DownloadProgress("recovery", $"Đang phục hồi tải XML (Recovery Pass) cho {failedXmlEntries.Count} hóa đơn..."));
+                        await Task.Delay(1500, cancellationToken).ConfigureAwait(false);
+
+                        foreach (var entry in failedXmlEntries)
+                        {
+                            cancellationToken.ThrowIfCancellationRequested();
+                            var key = ToInvoiceKey(entry);
+                            try
+                            {
+                                var zipBytes = await _client.ExportXmlZipAsync(key, cancellationToken).ConfigureAwait(false);
+                                if (zipBytes != null)
+                                {
+                                    _store.SaveXmlZip(folder, key, zipBytes, request.ExtractXml);
+                                    entry.XmlStatus = "ok";
+                                    ClearError(entry);
+                                    progress?.Report(new DownloadProgress("recovery", $"[Phục hồi XML thành công] {directionLabel} {key.InvoiceSeries}-{key.InvoiceNo}"));
+                                }
+                            }
+                            catch
+                            {
+                                // Giữ nguyên trạng thái
+                            }
+                        }
                     }
                 }
 

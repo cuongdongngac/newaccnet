@@ -1,0 +1,345 @@
+/**
+ * reg_all_appsscript.js
+ * Gom du 3 ham tuong duong voi file VBA cu, dung trong Google Sheets:
+ *   =REG60(A1)   -> giong reg60()  (HAVAL-128/3, co bien doi +10)
+ *   =REG61(A1)   -> giong reg61()  (MD5 chuan, 32 ky tu HOA)
+ *   =REG70(A1)   -> giong reg70()  (MD5 chuan, lay 8 ky tu tai vi tri 1,5,9,13,17,21,25,29)
+ *
+ * Cach cai dat:
+ * 1. Mo Google Sheet -> Extensions (Tien ich mo rong) -> Apps Script
+ * 2. Xoa het code cu trong Code.gs (neu ban da dan REG60 truoc do, xoa luon
+ *    de tranh trung ten ham), dan toan bo noi dung file nay vao.
+ * 3. Bam Save.
+ * 4. Quay lai Sheet, dung nhu ham co san:
+ *      =REG60(A1)
+ *      =REG61(A1)
+ *      =REG70(A1)
+ *
+ * LUU Y VE ENCODING:
+ * Code VBA goc dung StrConv(..., vbFromUnicode) truoc khi hash, nghia la
+ * chuyen chuoi ve bang ma ANSI cua Windows (thuong la CP1258/CP1252 o may
+ * Viet Nam) roi moi bam. Voi chuoi thuan so/chu khong dau (ASCII) thi
+ * KHONG co gi khac biet ca - UTF-8, ANSI, ASCII deu cho cung 1 ket qua.
+ * Chi khi chuoi co dau tieng Viet thi moi can luu y (bao minh biet neu gap
+ * truong hop do, minh se bo sung bang chuyen doi ANSI rieng).
+ */
+
+// ============================================================
+// PHAN 1: MD5 chuan (RFC 1321) - dung cho REG61 va REG70
+// ============================================================
+function md5_safeAdd(x, y) {
+  var lsw = (x & 0xffff) + (y & 0xffff);
+  var msw = (x >> 16) + (y >> 16) + (lsw >> 16);
+  return (msw << 16) | (lsw & 0xffff);
+}
+function md5_rotl(num, cnt) {
+  return (num << cnt) | (num >>> (32 - cnt));
+}
+function md5_cmn(q, a, b, x, s, t) {
+  return md5_safeAdd(md5_rotl(md5_safeAdd(md5_safeAdd(a, q), md5_safeAdd(x, t)), s), b);
+}
+function md5_ff(a, b, c, d, x, s, t) { return md5_cmn((b & c) | (~b & d), a, b, x, s, t); }
+function md5_gg(a, b, c, d, x, s, t) { return md5_cmn((b & d) | (c & ~d), a, b, x, s, t); }
+function md5_hh(a, b, c, d, x, s, t) { return md5_cmn(b ^ c ^ d, a, b, x, s, t); }
+function md5_ii(a, b, c, d, x, s, t) { return md5_cmn(c ^ (b | ~d), a, b, x, s, t); }
+
+function md5_binl(x, len) {
+  x[len >> 5] |= 0x80 << (len % 32);
+  x[(((len + 64) >>> 9) << 4) + 14] = len;
+
+  var i, olda, oldb, oldc, oldd;
+  var a = 1732584193, b = -271733879, c = -1732584194, d = 271733878;
+
+  for (i = 0; i < x.length; i += 16) {
+    olda = a; oldb = b; oldc = c; oldd = d;
+
+    a = md5_ff(a, b, c, d, x[i], 7, -680876936);
+    d = md5_ff(d, a, b, c, x[i + 1], 12, -389564586);
+    c = md5_ff(c, d, a, b, x[i + 2], 17, 606105819);
+    b = md5_ff(b, c, d, a, x[i + 3], 22, -1044525330);
+    a = md5_ff(a, b, c, d, x[i + 4], 7, -176418897);
+    d = md5_ff(d, a, b, c, x[i + 5], 12, 1200080426);
+    c = md5_ff(c, d, a, b, x[i + 6], 17, -1473231341);
+    b = md5_ff(b, c, d, a, x[i + 7], 22, -45705983);
+    a = md5_ff(a, b, c, d, x[i + 8], 7, 1770035416);
+    d = md5_ff(d, a, b, c, x[i + 9], 12, -1958414417);
+    c = md5_ff(c, d, a, b, x[i + 10], 17, -42063);
+    b = md5_ff(b, c, d, a, x[i + 11], 22, -1990404162);
+    a = md5_ff(a, b, c, d, x[i + 12], 7, 1804603682);
+    d = md5_ff(d, a, b, c, x[i + 13], 12, -40341101);
+    c = md5_ff(c, d, a, b, x[i + 14], 17, -1502002290);
+    b = md5_ff(b, c, d, a, x[i + 15], 22, 1236535329);
+
+    a = md5_gg(a, b, c, d, x[i + 1], 5, -165796510);
+    d = md5_gg(d, a, b, c, x[i + 6], 9, -1069501632);
+    c = md5_gg(c, d, a, b, x[i + 11], 14, 643717713);
+    b = md5_gg(b, c, d, a, x[i], 20, -373897302);
+    a = md5_gg(a, b, c, d, x[i + 5], 5, -701558691);
+    d = md5_gg(d, a, b, c, x[i + 10], 9, 38016083);
+    c = md5_gg(c, d, a, b, x[i + 15], 14, -660478335);
+    b = md5_gg(b, c, d, a, x[i + 4], 20, -405537848);
+    a = md5_gg(a, b, c, d, x[i + 9], 5, 568446438);
+    d = md5_gg(d, a, b, c, x[i + 14], 9, -1019803690);
+    c = md5_gg(c, d, a, b, x[i + 3], 14, -187363961);
+    b = md5_gg(b, c, d, a, x[i + 8], 20, 1163531501);
+    a = md5_gg(a, b, c, d, x[i + 13], 5, -1444681467);
+    d = md5_gg(d, a, b, c, x[i + 2], 9, -51403784);
+    c = md5_gg(c, d, a, b, x[i + 7], 14, 1735328473);
+    b = md5_gg(b, c, d, a, x[i + 12], 20, -1926607734);
+
+    a = md5_hh(a, b, c, d, x[i + 5], 4, -378558);
+    d = md5_hh(d, a, b, c, x[i + 8], 11, -2022574463);
+    c = md5_hh(c, d, a, b, x[i + 11], 16, 1839030562);
+    b = md5_hh(b, c, d, a, x[i + 14], 23, -35309556);
+    a = md5_hh(a, b, c, d, x[i + 1], 4, -1530992060);
+    d = md5_hh(d, a, b, c, x[i + 4], 11, 1272893353);
+    c = md5_hh(c, d, a, b, x[i + 7], 16, -155497632);
+    b = md5_hh(b, c, d, a, x[i + 10], 23, -1094730640);
+    a = md5_hh(a, b, c, d, x[i + 13], 4, 681279174);
+    d = md5_hh(d, a, b, c, x[i], 11, -358537222);
+    c = md5_hh(c, d, a, b, x[i + 3], 16, -722521979);
+    b = md5_hh(b, c, d, a, x[i + 6], 23, 76029189);
+    a = md5_hh(a, b, c, d, x[i + 9], 4, -640364487);
+    d = md5_hh(d, a, b, c, x[i + 12], 11, -421815835);
+    c = md5_hh(c, d, a, b, x[i + 15], 16, 530742520);
+    b = md5_hh(b, c, d, a, x[i + 2], 23, -995338651);
+
+    a = md5_ii(a, b, c, d, x[i], 6, -198630844);
+    d = md5_ii(d, a, b, c, x[i + 7], 10, 1126891415);
+    c = md5_ii(c, d, a, b, x[i + 14], 15, -1416354905);
+    b = md5_ii(b, c, d, a, x[i + 5], 21, -57434055);
+    a = md5_ii(a, b, c, d, x[i + 12], 6, 1700485571);
+    d = md5_ii(d, a, b, c, x[i + 3], 10, -1894986606);
+    c = md5_ii(c, d, a, b, x[i + 10], 15, -1051523);
+    b = md5_ii(b, c, d, a, x[i + 1], 21, -2054922799);
+    a = md5_ii(a, b, c, d, x[i + 8], 6, 1873313359);
+    d = md5_ii(d, a, b, c, x[i + 15], 10, -30611744);
+    c = md5_ii(c, d, a, b, x[i + 6], 15, -1560198380);
+    b = md5_ii(b, c, d, a, x[i + 13], 21, 1309151649);
+    a = md5_ii(a, b, c, d, x[i + 4], 6, -145523070);
+    d = md5_ii(d, a, b, c, x[i + 11], 10, -1120210379);
+    c = md5_ii(c, d, a, b, x[i + 2], 15, 718787259);
+    b = md5_ii(b, c, d, a, x[i + 9], 21, -343485551);
+
+    a = md5_safeAdd(a, olda);
+    b = md5_safeAdd(b, oldb);
+    c = md5_safeAdd(c, oldc);
+    d = md5_safeAdd(d, oldd);
+  }
+  return [a, b, c, d];
+}
+
+function md5_binlToRstr(input) {
+  var i, output = '';
+  var length32 = input.length * 32;
+  for (i = 0; i < length32; i += 8) {
+    output += String.fromCharCode((input[i >> 5] >>> (i % 32)) & 0xff);
+  }
+  return output;
+}
+function md5_rstrToBinl(input) {
+  var i, output = [];
+  output[(input.length >> 2) - 1] = undefined;
+  for (i = 0; i < output.length; i += 1) output[i] = 0;
+  var length8 = input.length * 8;
+  for (i = 0; i < length8; i += 8) {
+    output[i >> 5] |= (input.charCodeAt(i / 8) & 0xff) << (i % 32);
+  }
+  return output;
+}
+function md5_rstr(s) {
+  return md5_binlToRstr(md5_binl(md5_rstrToBinl(s), s.length * 8));
+}
+function md5_rstrToHex(input) {
+  var hexTab = '0123456789abcdef';
+  var output = '';
+  var x;
+  for (var i = 0; i < input.length; i += 1) {
+    x = input.charCodeAt(i);
+    output += hexTab.charAt((x >>> 4) & 0x0f) + hexTab.charAt(x & 0x0f);
+  }
+  return output;
+}
+function md5_toRawBytes(str) {
+  // Chuoi ASCII/khong dau -> 1 ky tu = 1 byte, giong StrConv(...,vbFromUnicode)
+  // voi chuoi ASCII thuan tuy.
+  var out = '';
+  for (var i = 0; i < str.length; i++) {
+    out += String.fromCharCode(str.charCodeAt(i) & 0xff);
+  }
+  return out;
+}
+function MD5_HEX(str) {
+  return md5_rstrToHex(md5_rstr(md5_toRawBytes(String(str))));
+}
+
+// ============================================================
+// PHAN 2: HAVAL-128/3 (cong khai) - dung cho REG60
+// ============================================================
+var HAVAL_D0 = [0x243F6A88, 0x85A308D3, 0x13198A2E, 0x03707344,
+  0xA4093822, 0x299F31D0, 0x082EFA98, 0xEC4E6C89];
+var HAVAL_K2 = [0x452821E6, 0x38D01377, 0xBE5466CF, 0x34E90C6C, 0xC0AC29B7, 0xC97C50DD, 0x3F84D5B5, 0xB5470917,
+  0x9216D5D9, 0x8979FB1B, 0xD1310BA6, 0x98DFB5AC, 0x2FFD72DB, 0xD01ADFB7, 0xB8E1AFED, 0x6A267E96,
+  0xBA7C9045, 0xF12C7F99, 0x24A19947, 0xB3916CF7, 0x0801F2E2, 0x858EFC16, 0x636920D8, 0x71574E69,
+  0xA458FEA3, 0xF4933D7E, 0x0D95748F, 0x728EB658, 0x718BCD58, 0x82154AEE, 0x7B54A41D, 0xC25A59B5];
+var HAVAL_K3 = [0x9C30D539, 0x2AF26013, 0xC5D1B023, 0x286085F0, 0xCA417918, 0xB8DB38EF, 0x8E79DCB0, 0x603A180E,
+  0x6C9E0E8B, 0xB01E8A3E, 0xD71577C1, 0xBD314B27, 0x78AF2FDA, 0x55605C60, 0xE65525F3, 0xAA55AB94,
+  0x57489862, 0x63E81440, 0x55CA396A, 0x2AAB10B6, 0xB4CC5C34, 0x1141E8CE, 0xA15486AF, 0x7C72E993,
+  0xB3EE1411, 0x636FBC2A, 0x2BA9C55D, 0x741831F6, 0xCE5C3E16, 0x9B87931E, 0xAFD6BA33, 0x6C24CF5C];
+var HAVAL_I2 = [5, 14, 26, 18, 11, 28, 7, 16, 0, 23, 20, 22, 1, 10, 4, 8,
+  30, 3, 21, 9, 17, 24, 29, 6, 19, 12, 15, 13, 2, 25, 31, 27];
+var HAVAL_I3 = [19, 9, 4, 20, 28, 17, 8, 22, 29, 14, 25, 12, 24, 30, 16, 26,
+  31, 15, 7, 3, 1, 0, 18, 27, 13, 6, 21, 10, 23, 11, 5, 2];
+
+function repeat8(arr) { return arr.concat(arr, arr, arr); }
+var HAVAL_M0 = repeat8([0, 7, 6, 5, 4, 3, 2, 1]);
+var HAVAL_M1 = repeat8([1, 0, 7, 6, 5, 4, 3, 2]);
+var HAVAL_M2 = repeat8([2, 1, 0, 7, 6, 5, 4, 3]);
+var HAVAL_M3 = repeat8([3, 2, 1, 0, 7, 6, 5, 4]);
+var HAVAL_M4 = repeat8([4, 3, 2, 1, 0, 7, 6, 5]);
+var HAVAL_M5 = repeat8([5, 4, 3, 2, 1, 0, 7, 6]);
+var HAVAL_M6 = repeat8([6, 5, 4, 3, 2, 1, 0, 7]);
+var HAVAL_M7 = repeat8([7, 6, 5, 4, 3, 2, 1, 0]);
+
+function rotr32(x, n) {
+  x = x >>> 0;
+  return ((x >>> n) | (x << (32 - n))) >>> 0;
+}
+function haval_f1(x6, x5, x4, x3, x2, x1, x0) {
+  return ((x1 & x4) ^ (x2 & x5) ^ (x3 & x6) ^ (x0 & x1) ^ x0) >>> 0;
+}
+function haval_f2(x6, x5, x4, x3, x2, x1, x0) {
+  return (((x1 & x2 & x3) ^ (x2 & x4 & x5) ^ (x1 & x2) ^ (x1 & x4) ^
+    (x2 & x6) ^ (x3 & x5) ^ (x4 & x5) ^ (x0 & x2) ^ x0)) >>> 0;
+}
+function haval_f3(x6, x5, x4, x3, x2, x1, x0) {
+  return ((x1 & x2 & x3) ^ (x1 & x4) ^ (x2 & x5) ^ (x3 & x6) ^ (x0 & x3) ^ x0) >>> 0;
+}
+function bytesToWordsLE(block) {
+  var x = new Array(32);
+  for (var i = 0; i < 32; i++) {
+    var j = i * 4;
+    x[i] = (block[j] | (block[j + 1] << 8) | (block[j + 2] << 16) | (block[j + 3] << 24)) >>> 0;
+  }
+  return x;
+}
+function havalTransform3(state, block) {
+  var x = bytesToWordsLE(block);
+  var E = state.slice();
+  var i, val;
+  for (i = 0; i < 32; i++) {
+    val = (rotr32(haval_f1(E[HAVAL_M1[i]], E[HAVAL_M0[i]], E[HAVAL_M3[i]], E[HAVAL_M5[i]], E[HAVAL_M6[i]], E[HAVAL_M2[i]], E[HAVAL_M4[i]]), 7)
+      + rotr32(E[HAVAL_M7[i]], 11) + x[i]) >>> 0;
+    E[7 - (i % 8)] = val;
+  }
+  for (i = 0; i < 32; i++) {
+    val = (rotr32(haval_f2(E[HAVAL_M4[i]], E[HAVAL_M2[i]], E[HAVAL_M1[i]], E[HAVAL_M0[i]], E[HAVAL_M5[i]], E[HAVAL_M3[i]], E[HAVAL_M6[i]]), 7)
+      + rotr32(E[HAVAL_M7[i]], 11) + x[HAVAL_I2[i]] + HAVAL_K2[i]) >>> 0;
+    E[7 - (i % 8)] = val;
+  }
+  for (i = 0; i < 32; i++) {
+    val = (rotr32(haval_f3(E[HAVAL_M6[i]], E[HAVAL_M1[i]], E[HAVAL_M2[i]], E[HAVAL_M3[i]], E[HAVAL_M4[i]], E[HAVAL_M5[i]], E[HAVAL_M0[i]]), 7)
+      + rotr32(E[HAVAL_M7[i]], 11) + x[HAVAL_I3[i]] + HAVAL_K3[i]) >>> 0;
+    E[7 - (i % 8)] = val;
+  }
+  for (i = 0; i < 8; i++) {
+    state[i] = (state[i] + E[i]) >>> 0;
+  }
+}
+function stringToAsciiBytes(str) {
+  var bytes = [];
+  for (var i = 0; i < str.length; i++) {
+    bytes.push(str.charCodeAt(i) & 0xff);
+  }
+  return bytes;
+}
+function haval128_3Hex(messageBytes) {
+  var state = HAVAL_D0.slice();
+  var msgLenBits = messageBytes.length * 8;
+  var data = messageBytes.slice();
+  data.push(0x01);
+  while (data.length % 128 !== 118) {
+    data.push(0x00);
+  }
+  var b0 = (1 & 0x07) | ((3 & 0x07) << 3) | ((128 & 0x03) << 6);
+  var b1 = (128 >> 2) & 0xFF;
+  var count0 = msgLenBits >>> 0;
+  var count1 = Math.floor(msgLenBits / 4294967296) >>> 0;
+  data.push(b0, b1);
+  data.push(count0 & 0xff, (count0 >>> 8) & 0xff, (count0 >>> 16) & 0xff, (count0 >>> 24) & 0xff);
+  data.push(count1 & 0xff, (count1 >>> 8) & 0xff, (count1 >>> 16) & 0xff, (count1 >>> 24) & 0xff);
+  for (var i = 0; i < data.length; i += 128) {
+    havalTransform3(state, data.slice(i, i + 128));
+  }
+  var s0 = state[0], s1 = state[1], s2 = state[2], s3 = state[3];
+  var s4 = state[4], s5 = state[5], s6 = state[6], s7 = state[7];
+  s3 = (s3 + ((s7 & 0xFF000000) | (s6 & 0x00FF0000) | (s5 & 0x0000FF00) | (s4 & 0x000000FF))) >>> 0;
+  s2 = (s2 + ((((s7 & 0x00FF0000) | (s6 & 0x0000FF00) | (s5 & 0x000000FF)) << 8) |
+    ((s4 & 0xFF000000) >>> 24))) >>> 0;
+  s1 = (s1 + ((((s7 & 0x0000FF00) | (s6 & 0x000000FF)) << 16) |
+    (((s5 & 0xFF000000) | (s4 & 0x00FF0000)) >>> 16))) >>> 0;
+  s0 = (s0 + (((s7 & 0x000000FF) << 24) |
+    (((s6 & 0xFF000000) | (s5 & 0x00FF0000) | (s4 & 0x0000FF00)) >>> 8))) >>> 0;
+  function toHexLE(w) {
+    var out = '';
+    for (var k = 0; k < 4; k++) {
+      var b = (w >>> (8 * k)) & 0xff;
+      out += ('0' + b.toString(16)).slice(-2);
+    }
+    return out;
+  }
+  return toHexLE(s0) + toHexLE(s1) + toHexLE(s2) + toHexLE(s3);
+}
+function reg60Core(message) {
+  var parts = String(message).split('-');
+  var transformed = parts[0] + '-' + (parseInt(parts[1], 10) + 10) + '-' + parts[2];
+  return haval128_3Hex(stringToAsciiBytes(transformed));
+}
+
+// ============================================================
+// PHAN 3: 3 HAM DUNG TRONG GOOGLE SHEETS
+// ============================================================
+
+/**
+ * Tuong duong reg60() trong VBA cu (dung HAVAL-128/3, co +10 vao phan giua).
+ * Vi du: =REG60(A1)  voi A1 = "591523-2147154943-1075053569"
+ * @param {string} input Chuoi dang "so1-so2-so3"
+ * @return {string} Ma HAVAL-128/3 dang hex chu HOA
+ * @customfunction
+ */
+function REG60(input) {
+  if (input === undefined || input === null || input === '') return '';
+  return reg60Core(input).toUpperCase();
+}
+
+/**
+ * Tuong duong reg61() trong VBA cu: MD5 chuan cua chuoi, 32 ky tu chu HOA.
+ * Vi du: =REG61(A1)
+ * @param {string} input Chuoi bat ky can hash
+ * @return {string} MD5 dang hex 32 ky tu chu HOA
+ * @customfunction
+ */
+function REG61(input) {
+  if (input === undefined || input === null || input === '') return '';
+  return MD5_HEX(input).toUpperCase();
+}
+
+/**
+ * Tuong duong reg70() trong VBA cu: MD5 chuan, sau do lay 8 ky tu
+ * tai vi tri 1,5,9,13,17,21,25,29 (dem tu 1) cua chuoi MD5 32 ky tu HOA.
+ * Vi du: =REG70(A1)
+ * @param {string} input Chuoi bat ky can hash
+ * @return {string} Chuoi 8 ky tu rut gon tu MD5
+ * @customfunction
+ */
+function REG70(input) {
+  if (input === undefined || input === null || input === '') return '';
+  var full = MD5_HEX(input).toUpperCase();
+  // vi tri 1-indexed: 1,5,9,13,17,21,25,29 -> 0-indexed: 0,4,8,12,16,20,24,28
+  var idxs = [0, 4, 8, 12, 16, 20, 24, 28];
+  var out = '';
+  for (var i = 0; i < idxs.length; i++) {
+    out += full.charAt(idxs[i]);
+  }
+  return out;
+}

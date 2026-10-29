@@ -204,6 +204,20 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
 
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
+            if (!DbConfigService.CheckRecordLimit(out int count, out int maxLimit, out string warningMsg))
+            {
+                var result = ThemedMessageBox.Show(
+                    "Hạn mức Chứng từ",
+                    $"{warningMsg}\n\nBạn có muốn mở cửa sổ Đăng ký Bản quyền để gia tăng số lượng chứng từ không?",
+                    MessageBoxButton.YesNo, MessageBoxImage.Information);
+                if (result == MessageBoxResult.Yes)
+                {
+                    var regWin = new NewaccNet.Wpf.AppSystem.CompanyRegistrationWindow { Owner = this };
+                    regWin.ShowDialog();
+                }
+                return;
+            }
+
             var frm = new VoucherEntryWindow(null);
             frm.ShowDialog();
         }
@@ -260,3 +274,4 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
         }
     }
 }
+

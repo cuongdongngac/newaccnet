@@ -179,7 +179,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
             this.lblCompanyName.SizeF = new System.Drawing.SizeF(480F, 18F);
             this.lblCompanyName.StylePriority.UseFont = false;
             this.lblCompanyName.StylePriority.UseTextAlignment = false;
-            this.lblCompanyName.Text = "Tên cơ sở kinh doanh: Tổng công ty xây dựng Hà Nội";
+            this.lblCompanyName.Text = "Tên cơ sở kinh doanh: ";
             this.lblCompanyName.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
             // 
             // lblTaxCode
@@ -457,7 +457,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
             // 
             this.prmCompanyName.Description = "Tên cơ sở kinh doanh";
             this.prmCompanyName.Name = "prmCompanyName";
-            this.prmCompanyName.ValueInfo = "Tổng công ty xây dựng Hà Nội";
+            this.prmCompanyName.ValueInfo = "";
             this.prmCompanyName.Visible = false;
             // 
             // prmTaxCode

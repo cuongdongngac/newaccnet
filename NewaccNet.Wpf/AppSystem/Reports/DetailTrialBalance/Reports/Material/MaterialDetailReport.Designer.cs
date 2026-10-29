@@ -1,4 +1,4 @@
-﻿namespace NewaccNet.Wpf.AppSystem.Reports.DetailTrialBalance.Reports.Material
+namespace NewaccNet.Wpf.AppSystem.Reports.DetailTrialBalance.Reports.Material
 {
     partial class MaterialDetailReport
     {
@@ -682,7 +682,7 @@
             // 
             this.prmCompanyName.Description = "Tên công ty";
             this.prmCompanyName.Name = "prmCompanyName";
-            this.prmCompanyName.ValueInfo = "TỔNG CÔNG TY XÂY DỰNG HÀ NỘI";
+            this.prmCompanyName.ValueInfo = "";
             this.prmCompanyName.Visible = false;
 
             // 

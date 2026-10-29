@@ -1,4 +1,4 @@
-﻿namespace NewaccNet.Wpf.AppSystem.Reports.Ledgers
+namespace NewaccNet.Wpf.AppSystem.Reports.Ledgers
 {
     partial class LedgerSummary
     {
@@ -132,7 +132,7 @@
             this.lblCompanyName.SizeF = new System.Drawing.SizeF(350F, 20F);
             this.lblCompanyName.StylePriority.UseFont = false;
             this.lblCompanyName.StylePriority.UseTextAlignment = false;
-            this.lblCompanyName.Text = "TỔNG CÔNG TY XÂY DỰNG HÀ NỘI";
+            this.lblCompanyName.Text = "";
             this.lblCompanyName.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
             // 
             // lblTitle
@@ -544,7 +544,7 @@
             // 
             this.prmCompanyName.Description = "Name of Company";
             this.prmCompanyName.Name = "prmCompanyName";
-            this.prmCompanyName.ValueInfo = "TỔNG CÔNG TY XÂY DỰNG HÀ NỘI";
+            this.prmCompanyName.ValueInfo = "";
             this.prmCompanyName.Visible = false;
             // 
             // prmAccountID

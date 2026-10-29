@@ -96,7 +96,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
                 // Chạy tính toán ở Background Thread để không treo UI
                 var data = await System.Threading.Tasks.Task.Run(() =>
                 {
-                    using (var adapter = NewaccNet.Wpf.AppSystem.AppDataAccessAdapter.Create())
+                    using (var adapter = AppDataAccessAdapter.Create())
                     {
                         return service.Calculate(adapter, fromDate, toDate, prevJsonPath, accJsonPath);
                     }
@@ -111,7 +111,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
                 if (report.Parameters["prmFromDate"] != null) report.Parameters["prmFromDate"].Value = fromDate;
                 if (report.Parameters["prmToDate"] != null) report.Parameters["prmToDate"].Value = toDate;
                 
-                var companyName = NewaccNet.Wpf.AppSystem.Helpers.UserPreferencesHelper.GetSetting("CompanyName");
+                var companyName = NewaccNet.Core.Helpers.UserPreferencesHelper.GetSetting("CompanyName");
                 if (!string.IsNullOrEmpty(companyName) && report.Parameters["prmCompanyName"] != null)
                 {
                     report.Parameters["prmCompanyName"].Value = companyName;
@@ -153,7 +153,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
                 
                 var data = await System.Threading.Tasks.Task.Run(() =>
                 {
-                    using (var adapter = NewaccNet.Wpf.AppSystem.AppDataAccessAdapter.Create())
+                    using (var adapter = AppDataAccessAdapter.Create())
                     {
                         // Lấy số liệu nhưng không cần jsonPath (không merge)
                         return service.Calculate(adapter, fromDate, toDate, null, null);
@@ -197,3 +197,4 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
         }
     }
 }
+

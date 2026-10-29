@@ -69,7 +69,9 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
@@ -83,19 +85,27 @@
                               SelectedIndexChanged="CboFilterStatus_SelectedIndexChanged">
                 <dxe:ComboBoxEditItem Content="Tất cả vật tư" IsSelected="True"/>
                 <dxe:ComboBoxEditItem Content="Chỉ vật tư MỚI"/>
-                <dxe:ComboBoxEditItem Content="Chỉ vật tư ĐÃ CÓ"/>
+                <dxe:ComboBoxEditItem Content="Chỉ vật tư ĐÃ CÓ / ĐÃ MAP"/>
             </dxe:ComboBoxEdit>
 
-            <StackPanel Grid.Column="5" Orientation="Horizontal" VerticalAlignment="Center">
+            <!-- 🤖 AI Smart Mapping Button -->
+            <Button x:Name="btnAiSuggest" Grid.Column="5" Content="🤖 AI Gợi ý Mapping" Height="28" Width="165" 
+                    FontWeight="Bold" Background="#FF6D28D9" Foreground="White" Margin="0,0,10,0" Click="BtnAiSuggest_Click"/>
+
+            <StackPanel Grid.Column="6" Orientation="Horizontal" VerticalAlignment="Center">
                 <TextBlock x:Name="lblStats" Text="Đang xử lý dữ liệu..." FontWeight="SemiBold" Foreground="#FF0D47A1" Margin="8,0,0,0"/>
             </StackPanel>
 
-            <!-- Export to Excel Button (Primary Action) -->
-            <Button x:Name="btnExportExcel" Grid.Column="6" Content="📥 Xuất tệp Excel" Height="30" Width="150" Margin="0,0,8,0"
+            <!-- Open in Office Studio Button (Primary Action) -->
+            <Button x:Name="btnOpenInOffice" Grid.Column="7" Content="🏢 Mở trong Office" Height="30" Width="140" Margin="0,0,8,0"
+                    FontWeight="Bold" Background="#FF0D9488" Foreground="White" Click="BtnOpenInOffice_Click"/>
+
+            <!-- Export to Excel Button -->
+            <Button x:Name="btnExportExcel" Grid.Column="8" Content="📥 Xuất tệp Excel" Height="30" Width="130" Margin="0,0,8,0"
                     FontWeight="Bold" Background="#FF1976D2" Foreground="White" Click="BtnExportExcel_Click"/>
 
-            <!-- Direct DB Insert Button (Optional Secondary Action) -->
-            <Button x:Name="btnSaveToDb" Grid.Column="7" Content="💾 Lưu trực tiếp CSDL" Height="30" Width="160" 
+            <!-- Direct DB Insert Button -->
+            <Button x:Name="btnSaveToDb" Grid.Column="9" Content="💾 Lưu trực tiếp CSDL" Height="30" Width="150" 
                     FontWeight="Bold" Background="#FF2E7D32" Foreground="White" Click="BtnSaveToDb_Click"/>
         </Grid>
 
@@ -115,13 +125,14 @@
                         <dxe:CheckEditSettings/>
                     </dxg:GridColumn.EditSettings>
                 </dxg:GridColumn>
-                <dxg:GridColumn FieldName="MaterialId" Header="Mã Vật Tư (Đề xuất)" Width="150" FixedWidth="True" AllowEditing="True">
+                <dxg:GridColumn FieldName="MaterialId" Header="Mã Nội Bộ (Đề xuất)" Width="150" FixedWidth="True" AllowEditing="True">
                     <dxg:GridColumn.EditSettings>
                         <dxe:TextEditSettings MaxLength="20"/>
                     </dxg:GridColumn.EditSettings>
                 </dxg:GridColumn>
-                <dxg:GridColumn FieldName="OriginalItemCode" Header="Mã trên HĐ" Width="105" FixedWidth="True" AllowEditing="False"/>
-                <dxg:GridColumn FieldName="MaterialName" Header="Tên Vật Tư / Hàng Hóa" Width="*" AllowEditing="True">
+                <dxg:GridColumn FieldName="DbStatus" Header="Trạng thái / Gợi ý" Width="170" FixedWidth="True" AllowEditing="False"/>
+                <dxg:GridColumn FieldName="SuggestedInternalName" Header="Vật tư nội bộ tương ứng" Width="200" AllowEditing="False"/>
+                <dxg:GridColumn FieldName="MaterialName" Header="Tên Mặt Hàng Trên HĐ" Width="*" AllowEditing="True">
                     <dxg:GridColumn.EditSettings>
                         <dxe:TextEditSettings MaxLength="255"/>
                     </dxg:GridColumn.EditSettings>
@@ -136,8 +147,9 @@
                         <dxe:ComboBoxEditSettings x:Name="cboCategories" ValueMember="Categoryid" DisplayMember="Categoryname" AutoComplete="True"/>
                     </dxg:GridColumn.EditSettings>
                 </dxg:GridColumn>
-                <dxg:GridColumn FieldName="DbStatus" Header="Trạng thái CSDL" Width="120" FixedWidth="True" AllowEditing="False"/>
-                <dxg:GridColumn FieldName="OccurrenceCount" Header="Số lần XH" Width="80" FixedWidth="True" AllowEditing="False">
+                <dxg:GridColumn FieldName="MatchReason" Header="Lý do AI / Ghi chú" Width="220" AllowEditing="False"/>
+                <dxg:GridColumn FieldName="OriginalItemCode" Header="Mã trên HĐ" Width="95" FixedWidth="True" AllowEditing="False"/>
+                <dxg:GridColumn FieldName="OccurrenceCount" Header="Số lần XH" Width="75" FixedWidth="True" AllowEditing="False">
                     <dxg:GridColumn.EditSettings>
                         <dxe:TextEditSettings MaskType="Numeric" Mask="d" MaskUseAsDisplayFormat="True"/>
                     </dxg:GridColumn.EditSettings>

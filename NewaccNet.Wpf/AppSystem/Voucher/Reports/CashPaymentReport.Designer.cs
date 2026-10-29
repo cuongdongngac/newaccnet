@@ -178,7 +178,7 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Reports
             comp.LocationFloat = new DevExpress.Utils.PointFloat(0F, 0F);
             comp.SizeF = new System.Drawing.SizeF(400F, 20F);
             comp.Font = new DevExpress.Drawing.DXFont("Times New Roman", 10F, DevExpress.Drawing.DXFontStyle.Bold);
-            comp.Text = "CÔNG TY BÌNH MINH";
+            comp.Text = "";
 
             addr.LocationFloat = new DevExpress.Utils.PointFloat(0F, 20F);
             addr.SizeF = new System.Drawing.SizeF(400F, 18F);

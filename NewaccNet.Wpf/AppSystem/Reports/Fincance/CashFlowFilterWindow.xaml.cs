@@ -76,7 +76,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
                 var prevTitle = txtPrevColumnName.Text.Replace("\\n", Environment.NewLine);
                 
                 var service = new NewaccNet.Reports.CashFlow.CashFlowService();
-                using (var adapter = NewaccNet.Wpf.AppSystem.AppDataAccessAdapter.Create())
+                using (var adapter = AppDataAccessAdapter.Create())
                 {
                     var data = service.Calculate(adapter, fromDate, toDate, jsonPath);
 
@@ -88,7 +88,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
                     if (report.Parameters["prmCurrentTitle"] != null) report.Parameters["prmCurrentTitle"].Value = currentTitle;
                     if (report.Parameters["prmPrevTitle"] != null) report.Parameters["prmPrevTitle"].Value = prevTitle;
 
-                    var companyName = NewaccNet.Wpf.AppSystem.Helpers.UserPreferencesHelper.GetSetting("CompanyName");
+                    var companyName = NewaccNet.Core.Helpers.UserPreferencesHelper.GetSetting("CompanyName");
                     if (!string.IsNullOrEmpty(companyName) && report.Parameters["prmCompanyName"] != null)
                     {
                         report.Parameters["prmCompanyName"].Value = companyName;
@@ -128,7 +128,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
                 var toDate = dtToDate.DateTime.Date;
                 
                 var service = new NewaccNet.Reports.CashFlow.CashFlowService();
-                using (var adapter = NewaccNet.Wpf.AppSystem.AppDataAccessAdapter.Create())
+                using (var adapter = AppDataAccessAdapter.Create())
                 {
                     // Lấy số liệu nhưng không cần jsonPath (không merge)
                     var data = service.Calculate(adapter, fromDate, toDate, null);
@@ -170,3 +170,4 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
         }
     }
 }
+

@@ -148,7 +148,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
             this.lblCompanyName.SizeF = new System.Drawing.SizeF(450F, 20F);
             this.lblCompanyName.StylePriority.UseFont = false;
             this.lblCompanyName.StylePriority.UseTextAlignment = false;
-            this.lblCompanyName.Text = "Công ty Bình Minh";
+            this.lblCompanyName.Text = "";
             this.lblCompanyName.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
             // 
             // lblTitle
@@ -695,7 +695,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
             // 
             this.prmCompanyName.Description = "Tên công ty";
             this.prmCompanyName.Name = "prmCompanyName";
-            this.prmCompanyName.ValueInfo = "Công ty Bình Minh";
+            this.prmCompanyName.ValueInfo = "";
             this.prmCompanyName.Visible = false;
             // 
             // prmFromDate

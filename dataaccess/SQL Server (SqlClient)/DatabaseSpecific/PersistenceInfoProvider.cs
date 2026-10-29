@@ -69,6 +69,7 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 			InitCustomCostReportEntityMappings();
 			InitCustomCostReportAccountEntityMappings();
 			InitCustomerExportLineEntityMappings();
+			InitDbConfigEntityMappings();
 			InitDebtBalanceEntityMappings();
 			InitDebtDetailEntityMappings();
 			InitDebtLedgerEntityMappings();
@@ -531,6 +532,27 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 			this.AddElementFieldMapping("CustomerExportLineEntity", "Liabilitydate", "Liabilitydate", true, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 4);
 			this.AddElementFieldMapping("CustomerExportLineEntity", "LiabilityDuesId", "LiabilityDuesId", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 5);
 			this.AddElementFieldMapping("CustomerExportLineEntity", "LineId", "LineId", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 6);
+		}
+
+		/// <summary>Inits DbConfigEntity's mappings</summary>
+		private void InitDbConfigEntityMappings()
+		{
+			this.AddElementMapping("DbConfigEntity", @"DataAccess", @"Newacc", "Dbconfig", 15, 0);
+			this.AddElementFieldMapping("DbConfigEntity", "AccountingYear", "AccountingYear", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 0);
+			this.AddElementFieldMapping("DbConfigEntity", "AccountMethod", "AccountMethod", true, "TinyInt", 0, 3, 0, false, "", new SD.LLBLGen.Pro.ORMSupportClasses.ChangeTypeConverter<System.Int32>(), typeof(System.Byte), 1);
+			this.AddElementFieldMapping("DbConfigEntity", "Address", "Version", true, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("DbConfigEntity", "BankAccount", "BankAccount", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
+			this.AddElementFieldMapping("DbConfigEntity", "CompanyName", "CompanyName", true, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 4);
+			this.AddElementFieldMapping("DbConfigEntity", "CreatedDate", "CreatedDate", true, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 5);
+			this.AddElementFieldMapping("DbConfigEntity", "DepartmentName", "DepartmentName", true, "NVarChar", 150, 0, 0, false, "", null, typeof(System.String), 6);
+			this.AddElementFieldMapping("DbConfigEntity", "ExpiryDate", "ExpiryDate", true, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 7);
+			this.AddElementFieldMapping("DbConfigEntity", "Id", "Id", false, "Int", 0, 10, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int32), 8);
+			this.AddElementFieldMapping("DbConfigEntity", "IsCompanyLicense", "AccountFlag", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 9);
+			this.AddElementFieldMapping("DbConfigEntity", "Material", "Material", true, "TinyInt", 0, 3, 0, false, "", new SD.LLBLGen.Pro.ORMSupportClasses.ChangeTypeConverter<System.Int32>(), typeof(System.Byte), 10);
+			this.AddElementFieldMapping("DbConfigEntity", "RegistrationCode", "RegistrationCode", true, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 11);
+			this.AddElementFieldMapping("DbConfigEntity", "TaxCode", "TaxCode", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 12);
+			this.AddElementFieldMapping("DbConfigEntity", "UpdatedDate", "UpdatedDate", true, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 13);
+			this.AddElementFieldMapping("DbConfigEntity", "VoucherPostingConfig", "VoucherPostingConfig", true, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 14);
 		}
 
 		/// <summary>Inits DebtBalanceEntity's mappings</summary>

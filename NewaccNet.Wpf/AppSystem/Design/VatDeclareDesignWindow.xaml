@@ -27,6 +27,9 @@
             <dxb:BarButtonItem x:Name="btnDelete" Content="Xóa chỉ tiêu" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_delete.svg'}" ItemClick="BtnDelete_ItemClick"/>
             <dxb:BarItemLinkSeparator/>
             <dxb:BarButtonItem Content="Bù cột tự động" ItemClick="BtnBestFit_ItemClick"/>
+            <dxb:BarItemLinkSeparator/>
+            <dxb:BarButtonItem x:Name="btnExportJson" Content="Xuất JSON" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/export/exporttojson.svg'}" ItemClick="BtnExportJson_ItemClick"/>
+            <dxb:BarButtonItem x:Name="btnImportJson" Content="Nhập JSON" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_import.svg'}" ItemClick="BtnImportJson_ItemClick"/>
         </dxb:ToolBarControl>
 
         <GroupBox Grid.Row="1" Header="📋 Cấu trúc Tờ khai thuế VAT Mẫu 01/GTGT (2 tầng): Chỉ tiêu VAT → Danh sách TK tham chiếu tính toán" Padding="8">

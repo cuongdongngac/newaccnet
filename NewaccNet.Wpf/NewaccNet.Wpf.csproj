@@ -1,6 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <Content Include="icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\dataaccess\DatabaseGeneric\DataAccess.csproj" />
     <ProjectReference Include="..\dataaccess\MS Access (OleDb)\DatabaseSpecific\DataAccess.MsAccessDBSpecific.csproj" />
     <ProjectReference Include="..\dataaccess\SQL Server (SqlClient)\DatabaseSpecific\DataAccess.SqlServerDBSpecific.csproj" />
@@ -8,6 +12,8 @@
     <ProjectReference Include="..\NewaccNet.Reports\NewaccNet.Reports.csproj" />
     <ProjectReference Include="..\NewaccNet.TaxInvoice\NewaccNet.TaxInvoice.csproj" />
     <ProjectReference Include="..\NewaccNet.AI\NewaccNet.AI.csproj" />
+    <ProjectReference Include="..\NewaccNet.Contracts\NewaccNet.Contracts.csproj" />
+    <ProjectReference Include="..\NewaccNet.Core\NewaccNet.Core.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -17,6 +23,9 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <Platforms>AnyCPU;x86;x64</Platforms>
+    <BaseOutputPath></BaseOutputPath>
+    <UseWindowsForms>True</UseWindowsForms>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <!-- Bản 32-bit (x86) -> D:\NewaccNet\Publish\x86\ -->

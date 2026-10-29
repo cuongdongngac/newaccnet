@@ -394,6 +394,16 @@ namespace DataAccess.FactoryClasses
 		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new CustomerExportLineEntity(fields); }
 	}
 
+	/// <summary>Factory to create new, empty DbConfigEntity objects.</summary>
+	[Serializable]
+	public partial class DbConfigEntityFactory : EntityFactoryBase2<DbConfigEntity> 
+	{
+		/// <summary>CTor</summary>
+		public DbConfigEntityFactory() : base("DbConfigEntity", DataAccess.EntityType.DbConfigEntity, false) { }
+		/// <inheritdoc/>
+		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new DbConfigEntity(fields); }
+	}
+
 	/// <summary>Factory to create new, empty DebtBalanceEntity objects.</summary>
 	[Serializable]
 	public partial class DebtBalanceEntityFactory : EntityFactoryBase2<DebtBalanceEntity> 
@@ -1027,6 +1037,8 @@ namespace DataAccess.FactoryClasses
 					return new CustomCostReportAccountEntityFactory();
 				case DataAccess.EntityType.CustomerExportLineEntity:
 					return new CustomerExportLineEntityFactory();
+				case DataAccess.EntityType.DbConfigEntity:
+					return new DbConfigEntityFactory();
 				case DataAccess.EntityType.DebtBalanceEntity:
 					return new DebtBalanceEntityFactory();
 				case DataAccess.EntityType.DebtDetailEntity:

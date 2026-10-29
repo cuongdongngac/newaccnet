@@ -531,7 +531,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.DetailTrialBalance.Reports.Cost
             // 
             this.prmCompanyName.Description = "Tên công ty";
             this.prmCompanyName.Name = "prmCompanyName";
-            this.prmCompanyName.ValueInfo = "TỔNG CÔNG TY XÂY DỰNG HÀ NỘI";
+            this.prmCompanyName.ValueInfo = "";
             this.prmCompanyName.Visible = false;
             // 
             // CostDetailReport

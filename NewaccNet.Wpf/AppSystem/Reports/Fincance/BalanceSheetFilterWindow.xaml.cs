@@ -127,6 +127,10 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
                 report.DataSource = dtoList;
                 if (report.Parameters["prmFromDate"] != null) report.Parameters["prmFromDate"].Value = fromDate;
                 if (report.Parameters["prmToDate"] != null) report.Parameters["prmToDate"].Value = toDate;
+                string companyName = DbConfigService.Current.CompanyName ?? string.Empty;
+                if (report.Parameters["prmCompanyName"] != null) report.Parameters["prmCompanyName"].Value = companyName;
+                var lblComp = report.FindControl("lblCompanyName", true) as DevExpress.XtraReports.UI.XRLabel;
+                if (lblComp != null) lblComp.Text = companyName;
                 report.RequestParameters = false;
 
                 report.CreateDocument(false);

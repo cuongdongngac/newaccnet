@@ -793,6 +793,12 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Debt
                 if (report.Parameters["pPeriodTitle"] != null)
                     report.Parameters["pPeriodTitle"].Value = periodTitle;
 
+                string companyName = DbConfigService.Current.CompanyName ?? string.Empty;
+                if (report.Parameters["pCompanyName"] != null)
+                    report.Parameters["pCompanyName"].Value = companyName;
+                var lblComp = report.FindControl("lblCompanyName", true) as DevExpress.XtraReports.UI.XRLabel;
+                if (lblComp != null) lblComp.Text = companyName;
+
                 // Gắn Tag = [Group1Id] cho các control trên GroupHeader / Detail để phục vụ click Drill-down xuống báo cáo chi tiết
                 AttachGroup1DrillDownTag(report);
 
@@ -868,6 +874,12 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Debt
                     detailReport.Parameters["pAccountTitle"].Value = accountTitle;
                 if (detailReport.Parameters["pPeriodTitle"] != null)
                     detailReport.Parameters["pPeriodTitle"].Value = periodTitle;
+
+                string companyName = DbConfigService.Current.CompanyName ?? string.Empty;
+                if (detailReport.Parameters["pCompanyName"] != null)
+                    detailReport.Parameters["pCompanyName"].Value = companyName;
+                var lblComp = detailReport.FindControl("lblCompanyName", true) as DevExpress.XtraReports.UI.XRLabel;
+                if (lblComp != null) lblComp.Text = companyName;
 
                 detailReport.CreateDocument(false);
 
@@ -971,6 +983,12 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Debt
                     dueReport.Parameters["pAccountTitle"].Value = accountTitle;
                 if (dueReport.Parameters["pPeriodTitle"] != null)
                     dueReport.Parameters["pPeriodTitle"].Value = periodTitle;
+
+                string companyName = DbConfigService.Current.CompanyName ?? string.Empty;
+                if (dueReport.Parameters["pCompanyName"] != null)
+                    dueReport.Parameters["pCompanyName"].Value = companyName;
+                var lblComp = dueReport.FindControl("lblCompanyName", true) as DevExpress.XtraReports.UI.XRLabel;
+                if (lblComp != null) lblComp.Text = companyName;
 
                 dueReport.CreateDocument(false);
 

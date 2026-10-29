@@ -4,9 +4,9 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Reports
 {
     public class CashVoucherPrintModel
     {
-        public string CompanyName { get; set; } = "CÔNG TY BÌNH MINH";
-        public string CompanyAddress { get; set; } = "5/8 Đông Ngạc";
-        public string CompanyTaxCode { get; set; } = "010100101";
+        public string CompanyName { get; set; } = "";
+        public string CompanyAddress { get; set; } = "";
+        public string CompanyTaxCode { get; set; } = "";
 
         public string CircularNote { get; set; } = "Mẫu số 01-TT\n(Ban hành theo TT số 200/2014/TT-BTC\nNgày 22/12/2014 của Bộ Tài chính)";
         public string BookNo { get; set; } = "";

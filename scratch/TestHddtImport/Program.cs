@@ -1,63 +1,78 @@
 using System;
+using System.Data;
+using System.Data.OleDb;
 using System.IO;
-using System.Threading.Tasks;
-using NewaccNet.TaxInvoice;
 
 namespace TestHddtImport
 {
     internal class Program
     {
-        static async Task Main(string[] args)
+        static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
-            Console.WriteLine("=== TAX INVOICE ACCESS DB IMPORT TEST ===");
-
-            var databasePath = @"D:\mdb-migration-project\mapping\template.accdb";
-            var mockDirectory = @"D:\NewaccNet\TestData\HddtMock\2802274721\mua\2026-05";
-
-            var dbService = new TaxInvoiceDbService(databasePath);
-
-            var config = new TaxAccountConfigDto
-            {
-                TaxCode = "2802274721",
-                CompanyName = "CÔNG TY TNHH DỊCH VỤ THƯƠNG MẠI THỦY HIỀN",
-                EncryptedPassword = DataEncryptionHelper.Encrypt("Hoadon@1"),
-                Token = "eyJhbGciOiJIUzUxMiJ9.mock_token_for_testing",
-                TokenExpiresAt = DateTime.Now.AddDays(1),
-                LastSyncDate = DateTime.Now
+            string[] paths = new[] {
+                @"D:\NewaccNet\Template\template.accdb",
+                @"D:\mdb-migration-project\output\DLNB2018.accdb",
+                @"D:\mdb-migration-project\mapping\template.accdb"
             };
-            await dbService.SaveAccountConfigAsync(config);
-            var savedConfig = await dbService.GetAccountConfigAsync("2802274721");
-            Console.WriteLine($"Config saved: TaxCode={savedConfig?.TaxCode}, Name={savedConfig?.CompanyName}");
 
-            var progress = new Progress<DownloadProgress>(p =>
+            foreach (var path in paths)
             {
-                if (p.ProcessedCount % 20 == 0 || p.ProcessedCount == p.TotalCount)
+                Console.WriteLine("====================================================");
+                Console.WriteLine("Checking: " + path);
+                if (!File.Exists(path))
                 {
-                    Console.WriteLine($"Progress: {p.ProcessedCount}/{p.TotalCount} processed. Succeeded: {p.SucceededCount}");
+                    Console.WriteLine("File DOES NOT EXIST!");
+                    continue;
                 }
-            });
 
-            var count = await dbService.ImportFromDirectoryAsync(mockDirectory, "purchase", progress);
-            Console.WriteLine($"Import completed: {count} invoices.");
+                try
+                {
+                    using var conn = new OleDbConnection($"Provider=Microsoft.ACE.OLEDB.16.0;Data Source={path};Persist Security Info=False;");
+                    conn.Open();
+                    var schema = conn.GetSchema("Tables");
+                    bool hasDbConfig = false;
+                    foreach (DataRow row in schema.Rows)
+                    {
+                        string tName = row["TABLE_NAME"]?.ToString() ?? "";
+                        string tType = row["TABLE_TYPE"]?.ToString() ?? "";
+                        if (tType == "TABLE")
+                        {
+                            if (string.Equals(tName, "DbConfig", StringComparison.OrdinalIgnoreCase)) hasDbConfig = true;
+                            if (tName.IndexOf("config", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                                tName.IndexOf("company", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                                tName.IndexOf("thongtin", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                                tName.IndexOf("donvi", StringComparison.OrdinalIgnoreCase) >= 0)
+                            {
+                                Console.WriteLine("  Candidate table: " + tName);
+                            }
+                        }
+                    }
 
-            var invoices = await dbService.GetInvoicesAsync(direction: "purchase");
-            Console.WriteLine($"Total invoices in database: {invoices.Count}");
-
-            // Clean up to keep template pristine
-            using var conn = new System.Data.OleDb.OleDbConnection($"Provider=Microsoft.ACE.OLEDB.16.0;Data Source={databasePath};");
-            conn.Open();
-            using var cmd1 = new System.Data.OleDb.OleDbCommand("DELETE FROM TaxInvoiceDetail", conn);
-            cmd1.ExecuteNonQuery();
-            using var cmd2 = new System.Data.OleDb.OleDbCommand("DELETE FROM TaxInvoiceTaxRate", conn);
-            cmd2.ExecuteNonQuery();
-            using var cmd3 = new System.Data.OleDb.OleDbCommand("DELETE FROM TaxInvoice", conn);
-            cmd3.ExecuteNonQuery();
-            using var cmd4 = new System.Data.OleDb.OleDbCommand("DELETE FROM TaxAccountConfig", conn);
-            cmd4.ExecuteNonQuery();
-
-            Console.WriteLine("Template database cleaned up back to pristine state.");
-            Console.WriteLine("=== TEST PASSED 100%! ===");
+                    Console.WriteLine("  Has DbConfig table? " + hasDbConfig);
+                    if (hasDbConfig)
+                    {
+                        using var cmd = conn.CreateCommand();
+                        cmd.CommandText = "SELECT * FROM DbConfig";
+                        using var reader = cmd.ExecuteReader();
+                        int rowIdx = 0;
+                        while (reader.Read())
+                        {
+                            rowIdx++;
+                            Console.WriteLine($"  --- Row #{rowIdx} ---");
+                            for (int i = 0; i < reader.FieldCount; i++)
+                            {
+                                Console.WriteLine($"    {reader.GetName(i)} = {reader[i]}");
+                            }
+                        }
+                        if (rowIdx == 0) Console.WriteLine("  DbConfig table is EMPTY (0 rows).");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("  Error checking: " + ex.Message);
+                }
+            }
         }
     }
 }

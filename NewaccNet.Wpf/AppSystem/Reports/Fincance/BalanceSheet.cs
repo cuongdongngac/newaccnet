@@ -54,7 +54,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
                 else
                 {
                     // Fallback lấy từ UserSettings.json nếu không có parameters
-                    string savedFrom = NewaccNet.Wpf.AppSystem.Helpers.UserPreferencesHelper.GetSetting("Shared_dtFromDate");
+                    string savedFrom = NewaccNet.Core.Helpers.UserPreferencesHelper.GetSetting("Shared_dtFromDate");
                     if (!string.IsNullOrEmpty(savedFrom) && DateTime.TryParse(savedFrom, out DateTime df))
                         fromDate = df;
                 }
@@ -63,7 +63,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
                     toDate = t;
                 else
                 {
-                    string savedTo = NewaccNet.Wpf.AppSystem.Helpers.UserPreferencesHelper.GetSetting("Shared_dtToDate");
+                    string savedTo = NewaccNet.Core.Helpers.UserPreferencesHelper.GetSetting("Shared_dtToDate");
                     if (!string.IsNullOrEmpty(savedTo) && DateTime.TryParse(savedTo, out DateTime dt))
                         toDate = dt;
                 }

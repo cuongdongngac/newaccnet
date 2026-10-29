@@ -110,6 +110,8 @@ namespace DataAccess.Linq
 					return this.CustomCostReportAccount;
 				case DataAccess.EntityType.CustomerExportLineEntity:
 					return this.CustomerExportLine;
+				case DataAccess.EntityType.DbConfigEntity:
+					return this.DbConfig;
 				case DataAccess.EntityType.DebtBalanceEntity:
 					return this.DebtBalance;
 				case DataAccess.EntityType.DebtDetailEntity:
@@ -338,6 +340,9 @@ namespace DataAccess.Linq
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting CustomerExportLineEntity instances in the database.</summary>
 		public DataSource2<CustomerExportLineEntity> CustomerExportLine {	get { return new DataSource2<CustomerExportLineEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting DbConfigEntity instances in the database.</summary>
+		public DataSource2<DbConfigEntity> DbConfig {	get { return new DataSource2<DbConfigEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting DebtBalanceEntity instances in the database.</summary>
 		public DataSource2<DebtBalanceEntity> DebtBalance {	get { return new DataSource2<DebtBalanceEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }

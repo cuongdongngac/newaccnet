@@ -77,7 +77,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
                 // Chạy tính toán ở Background Thread
                 var data = await System.Threading.Tasks.Task.Run(() =>
                 {
-                    using (var adapter = NewaccNet.Wpf.AppSystem.AppDataAccessAdapter.Create())
+                    using (var adapter = AppDataAccessAdapter.Create())
                     {
                         return service.Calculate(adapter, fromDate, toDate, accJsonPath);
                     }
@@ -93,7 +93,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
                 if (report.Parameters["prmTitle"] != null) report.Parameters["prmTitle"].Value = txtReportTitle.Text;
                 if (report.Parameters["prmOtherAmount"] != null) report.Parameters["prmOtherAmount"].Value = txtOtherAmountTitle.Text;
                 
-                var companyName = NewaccNet.Wpf.AppSystem.Helpers.UserPreferencesHelper.GetSetting("CompanyName");
+                var companyName = NewaccNet.Core.Helpers.UserPreferencesHelper.GetSetting("CompanyName");
                 if (!string.IsNullOrEmpty(companyName) && report.Parameters["prmCompanyName"] != null)
                 {
                     report.Parameters["prmCompanyName"].Value = companyName;
@@ -136,7 +136,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
                 
                 var data = await System.Threading.Tasks.Task.Run(() =>
                 {
-                    using (var adapter = NewaccNet.Wpf.AppSystem.AppDataAccessAdapter.Create())
+                    using (var adapter = AppDataAccessAdapter.Create())
                     {
                         return service.Calculate(adapter, fromDate, toDate, accJsonPath);
                     }
@@ -181,3 +181,4 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
         }
     }
 }
+

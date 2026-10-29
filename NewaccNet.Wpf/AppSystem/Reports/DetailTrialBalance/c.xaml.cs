@@ -454,7 +454,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.DetailTrialBalance
                 string companyName = UserPreferencesHelper.GetSetting("CompanyName");
                 if (string.IsNullOrWhiteSpace(companyName))
                 {
-                    companyName = "TỔNG CÔNG TY XÂY DỰNG HÀ NỘI";
+                    companyName = DbConfigService.Current.CompanyName ?? string.Empty;
                 }
 
                 var distinctWarehouses = dtoList.Select(d => d.WarehouseName).Where(w => !string.IsNullOrEmpty(w)).Distinct().ToList();
@@ -608,7 +608,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.DetailTrialBalance
                 string companyName = UserPreferencesHelper.GetSetting("CompanyName");
                 if (string.IsNullOrWhiteSpace(companyName))
                 {
-                    companyName = "TỔNG CÔNG TY XÂY DỰNG HÀ NỘI";
+                    companyName = DbConfigService.Current.CompanyName ?? string.Empty;
                 }
 
                 var report = new CostSummaryReport
@@ -805,7 +805,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.DetailTrialBalance
                 string companyName = UserPreferencesHelper.GetSetting("CompanyName");
                 if (string.IsNullOrWhiteSpace(companyName))
                 {
-                    companyName = "TỔNG CÔNG TY XÂY DỰNG HÀ NỘI";
+                    companyName = DbConfigService.Current.CompanyName ?? string.Empty;
                 }
 
                 var report = new SummaryDebtReport
@@ -881,7 +881,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.DetailTrialBalance
                 string companyName = UserPreferencesHelper.GetSetting("CompanyName");
                 if (string.IsNullOrWhiteSpace(companyName))
                 {
-                    companyName = "TỔNG CÔNG TY XÂY DỰNG HÀ NỘI";
+                    companyName = DbConfigService.Current.CompanyName ?? string.Empty;
                 }
 
                 var detailReport = new DeptDetailReport
@@ -981,7 +981,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.DetailTrialBalance
                 string companyName = UserPreferencesHelper.GetSetting("CompanyName");
                 if (string.IsNullOrWhiteSpace(companyName))
                 {
-                    companyName = "TỔNG CÔNG TY XÂY DỰNG HÀ NỘI";
+                    companyName = DbConfigService.Current.CompanyName ?? string.Empty;
                 }
 
                 var report = new CurrencySummaryReport
@@ -1153,7 +1153,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.DetailTrialBalance
                 string companyName = UserPreferencesHelper.GetSetting("CompanyName");
                 if (string.IsNullOrWhiteSpace(companyName))
                 {
-                    companyName = "TỔNG CÔNG TY XÂY DỰNG HÀ NỘI";
+                    companyName = DbConfigService.Current.CompanyName ?? string.Empty;
                 }
 
                 var report = new AssetMovementReport

@@ -81,6 +81,10 @@ namespace NewaccNet.Wpf.AppSystem.Reports.Fincance
 
                 var report = new BalanceSheet();
                 report.DataSource = dtos;
+                string companyName = DbConfigService.Current.CompanyName ?? string.Empty;
+                if (report.Parameters["prmCompanyName"] != null) report.Parameters["prmCompanyName"].Value = companyName;
+                var lblComp = report.FindControl("lblCompanyName", true) as DevExpress.XtraReports.UI.XRLabel;
+                if (lblComp != null) lblComp.Text = companyName;
                 report.CreateDocument(false);
 
                 var previewWindow = new DocumentPreviewWindow();

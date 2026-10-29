@@ -110,6 +110,8 @@ namespace DataAccess
 		CustomCostReportAccountEntity,
 		///<summary>CustomerExportLine</summary>
 		CustomerExportLineEntity,
+		///<summary>DbConfig</summary>
+		DbConfigEntity,
 		///<summary>DebtBalance</summary>
 		DebtBalanceEntity,
 		///<summary>DebtDetail</summary>

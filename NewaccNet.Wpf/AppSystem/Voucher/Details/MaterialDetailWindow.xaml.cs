@@ -10,6 +10,7 @@ using DataAccess.EntityClasses;
 using DataAccess.HelperClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using NewaccNet.Wpf.AppSystem.Voucher.Reports;
+using NewaccNet.Core.Data;
 
 namespace NewaccNet.Wpf.AppSystem.Voucher.Details
 {
@@ -83,16 +84,21 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
         {
             var voucherTypes = new List<MaterialBillTypeItem>();
             int dbcr = _context?.MaterialEntry?.Dbcr ?? 1;
+            var postingCfg = DbConfigService.Current.GetVoucherPostingConfig();
 
             if (dbcr == 1)
             {
-                voucherTypes.Add(new MaterialBillTypeItem { Taxflag = false, Description = "Nhập nội bộ" });
-                voucherTypes.Add(new MaterialBillTypeItem { Taxflag = true, Description = "Nhập mua" });
+                string nnbName = (postingCfg?.Inventory != null && postingCfg.Inventory.TryGetValue("NNB", out var nnb) && !string.IsNullOrWhiteSpace(nnb.Name)) ? nnb.Name : "Nhập nội bộ";
+                voucherTypes.Add(new MaterialBillTypeItem { Taxflag = false, Description = nnbName });
+                string nmName = (postingCfg?.Inventory != null && postingCfg.Inventory.TryGetValue("NM", out var nm) && !string.IsNullOrWhiteSpace(nm.Name)) ? nm.Name : "Nhập mua";
+                voucherTypes.Add(new MaterialBillTypeItem { Taxflag = true, Description = nmName });
             }
             else
             {
-                voucherTypes.Add(new MaterialBillTypeItem { Taxflag = false, Description = "Xuất nội bộ" });
-                voucherTypes.Add(new MaterialBillTypeItem { Taxflag = true, Description = "Xuất bán" });
+                string xnbName = (postingCfg?.Inventory != null && postingCfg.Inventory.TryGetValue("XNB", out var xnb) && !string.IsNullOrWhiteSpace(xnb.Name)) ? xnb.Name : "Xuất nội bộ";
+                voucherTypes.Add(new MaterialBillTypeItem { Taxflag = false, Description = xnbName });
+                string xbName = (postingCfg?.Inventory != null && postingCfg.Inventory.TryGetValue("XB", out var xb) && !string.IsNullOrWhiteSpace(xb.Name)) ? xb.Name : "Xuất bán";
+                voucherTypes.Add(new MaterialBillTypeItem { Taxflag = true, Description = xbName });
             }
             cboVoucherType.ItemsSource = voucherTypes;
 
@@ -630,6 +636,10 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
         private InventoryVoucherPrintModel BuildInventoryPrintModel(InventoryVoucherEntity invVoucher, string voucherTypeDesc, bool isReceipt)
         {
             var model = new InventoryVoucherPrintModel();
+            var dbCfg = DbConfigService.Current;
+            if (!string.IsNullOrWhiteSpace(dbCfg.CompanyName)) model.CompanyName = dbCfg.CompanyName;
+            if (!string.IsNullOrWhiteSpace(dbCfg.Address)) model.CompanyAddress = dbCfg.Address;
+            if (!string.IsNullOrWhiteSpace(dbCfg.TaxCode)) model.CompanyTaxCode = dbCfg.TaxCode;
             if (invVoucher == null) return model;
 
             bool isSales = (!isReceipt && (invVoucher.Taxflag || voucherTypeDesc.Contains("bán") || _context?.VoucherType == "XB"));
@@ -753,7 +763,7 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
                 model.TotalPaymentAmount = model.TotalGoodsAmount;
             }
 
-            model.AmountInWords = Helpers.NumberToWordsConverter.ConvertToWords((decimal)model.TotalPaymentAmount, "đồng");
+            model.AmountInWords = NumberToWordsConverter.ConvertToWords((decimal)model.TotalPaymentAmount, "đồng");
 
             return model;
         }

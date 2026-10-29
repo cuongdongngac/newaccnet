@@ -1,0 +1,161 @@
+<dx:ThemedWindow xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+                 xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+                 xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+                 x:Class="NewaccNet.Wpf.AppSystem.VoucherPostingConfigWindow"
+                 Title="Cấu hình tài khoản ngầm định chứng từ - NEWACCNET"
+                 Height="640" Width="820"
+                 WindowStartupLocation="CenterOwner"
+                 ShowInTaskbar="False">
+    <Grid Background="#F8FAFC">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="#FF1976D2" Padding="20,12">
+            <StackPanel>
+                <TextBlock Text="CẤU HÌNH TÀI KHOẢN NGẦM ĐỊNH CHỨNG TỪ" FontSize="16" FontWeight="Bold" Foreground="White"/>
+                <TextBlock Text="Thiết lập các tài khoản đối ứng, thuế, doanh thu, giá vốn ngầm định cho từng loại phiếu" FontSize="12" Foreground="#E3F2FD" Margin="0,3,0,0"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Main Content -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="16,12,16,12">
+            <StackPanel>
+                <!-- Group 1: Nhập mua (NM) -->
+                <GroupBox Header="1. Phiếu Nhập Mua (NM)" Margin="0,0,0,12" FontWeight="SemiBold" Foreground="#1E3A8A">
+                    <Grid Margin="12,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Tên hiển thị -->
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Tên phiếu:" VerticalAlignment="Center" Margin="0,5" FontWeight="Normal" Foreground="#334155"/>
+                        <dxe:TextEdit Grid.Row="0" Grid.Column="1" x:Name="txtNmName" Margin="0,4,12,4" Height="28"/>
+
+                        <!-- TK Phải trả người bán (TotalAccountId) -->
+                        <TextBlock Grid.Row="0" Grid.Column="2" Text="TK Phải trả (Tổng TT):" VerticalAlignment="Center" Margin="0,5" FontWeight="Normal" Foreground="#334155"/>
+                        <dxe:ComboBoxEdit Grid.Row="0" Grid.Column="3" x:Name="cboNmTotalAccount" Margin="0,4" Height="28"
+                                          DisplayMember="AccountId" ValueMember="AccountId" AutoComplete="True" ImmediatePopup="True"/>
+
+                        <!-- TK Thuế GTGT đầu vào (TaxAccountId) -->
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="TK Thuế GTGT mua vào:" VerticalAlignment="Center" Margin="0,5" FontWeight="Normal" Foreground="#334155"/>
+                        <dxe:ComboBoxEdit Grid.Row="1" Grid.Column="1" x:Name="cboNmTaxAccount" Margin="0,4,12,4" Height="28"
+                                          DisplayMember="AccountId" ValueMember="AccountId" AutoComplete="True" ImmediatePopup="True"/>
+
+                        <!-- Gợi ý đối tượng -->
+                        <TextBlock Grid.Row="1" Grid.Column="2" Text="Đối tượng liên quan:" VerticalAlignment="Center" Margin="0,5" FontWeight="Normal" Foreground="#334155"/>
+                        <dxe:TextEdit Grid.Row="1" Grid.Column="3" Text="Nhà cung cấp (Phải trả)" IsReadOnly="True" Background="#F1F5F9" Margin="0,4" Height="28"/>
+                    </Grid>
+                </GroupBox>
+
+                <!-- Group 2: Xuất bán (XB) -->
+                <GroupBox Header="2. Phiếu Xuất Bán (XB)" Margin="0,0,0,12" FontWeight="SemiBold" Foreground="#1E3A8A">
+                    <Grid Margin="12,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Tên hiển thị -->
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Tên phiếu:" VerticalAlignment="Center" Margin="0,5" FontWeight="Normal" Foreground="#334155"/>
+                        <dxe:TextEdit Grid.Row="0" Grid.Column="1" x:Name="txtXbName" Margin="0,4,12,4" Height="28"/>
+
+                        <!-- TK Phải thu khách hàng (TotalAccountId) -->
+                        <TextBlock Grid.Row="0" Grid.Column="2" Text="TK Phải thu (Tổng TT):" VerticalAlignment="Center" Margin="0,5" FontWeight="Normal" Foreground="#334155"/>
+                        <dxe:ComboBoxEdit Grid.Row="0" Grid.Column="3" x:Name="cboXbTotalAccount" Margin="0,4" Height="28"
+                                          DisplayMember="AccountId" ValueMember="AccountId" AutoComplete="True" ImmediatePopup="True"/>
+
+                        <!-- TK Doanh thu bán hàng (RevenueAccountId) -->
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="TK Doanh thu bán:" VerticalAlignment="Center" Margin="0,5" FontWeight="Normal" Foreground="#334155"/>
+                        <dxe:ComboBoxEdit Grid.Row="1" Grid.Column="1" x:Name="cboXbRevenueAccount" Margin="0,4,12,4" Height="28"
+                                          DisplayMember="AccountId" ValueMember="AccountId" AutoComplete="True" ImmediatePopup="True"/>
+
+                        <!-- TK Thuế GTGT đầu ra (TaxAccountId) -->
+                        <TextBlock Grid.Row="1" Grid.Column="2" Text="TK Thuế GTGT bán ra:" VerticalAlignment="Center" Margin="0,5" FontWeight="Normal" Foreground="#334155"/>
+                        <dxe:ComboBoxEdit Grid.Row="1" Grid.Column="3" x:Name="cboXbTaxAccount" Margin="0,4" Height="28"
+                                          DisplayMember="AccountId" ValueMember="AccountId" AutoComplete="True" ImmediatePopup="True"/>
+
+                        <!-- TK Giá vốn hàng bán (CostAccountId) -->
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="TK Giá vốn hàng bán:" VerticalAlignment="Center" Margin="0,5" FontWeight="Normal" Foreground="#334155"/>
+                        <dxe:ComboBoxEdit Grid.Row="2" Grid.Column="1" x:Name="cboXbCostAccount" Margin="0,4,12,4" Height="28"
+                                          DisplayMember="AccountId" ValueMember="AccountId" AutoComplete="True" ImmediatePopup="True"/>
+
+                        <!-- Gợi ý đối tượng -->
+                        <TextBlock Grid.Row="2" Grid.Column="2" Text="Đối tượng liên quan:" VerticalAlignment="Center" Margin="0,5" FontWeight="Normal" Foreground="#334155"/>
+                        <dxe:TextEdit Grid.Row="2" Grid.Column="3" Text="Khách hàng (Phải thu)" IsReadOnly="True" Background="#F1F5F9" Margin="0,4" Height="28"/>
+                    </Grid>
+                </GroupBox>
+
+                <!-- Group 3: Nhập nội bộ (NNB) & Xuất nội bộ (XNB) -->
+                <GroupBox Header="3. Phiếu Điều Chuyển / Nội Bộ (NNB - XNB)" Margin="0,0,0,12" FontWeight="SemiBold" Foreground="#1E3A8A">
+                    <Grid Margin="12,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Tên NNB -->
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Tên phiếu Nhập nội bộ:" VerticalAlignment="Center" Margin="0,5" FontWeight="Normal" Foreground="#334155"/>
+                        <dxe:TextEdit Grid.Row="0" Grid.Column="1" x:Name="txtNnbName" Margin="0,4,12,4" Height="28"/>
+
+                        <!-- TK Đối ứng NNB -->
+                        <TextBlock Grid.Row="0" Grid.Column="2" Text="TK Có đối ứng NNB:" VerticalAlignment="Center" Margin="0,5" FontWeight="Normal" Foreground="#334155"/>
+                        <dxe:ComboBoxEdit Grid.Row="0" Grid.Column="3" x:Name="cboNnbTotalAccount" Margin="0,4" Height="28"
+                                          DisplayMember="AccountId" ValueMember="AccountId" AutoComplete="True" ImmediatePopup="True"/>
+
+                        <!-- Tên XNB -->
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Tên phiếu Xuất nội bộ:" VerticalAlignment="Center" Margin="0,5" FontWeight="Normal" Foreground="#334155"/>
+                        <dxe:TextEdit Grid.Row="1" Grid.Column="1" x:Name="txtXnbName" Margin="0,4,12,4" Height="28"/>
+
+                        <!-- TK Đối ứng XNB -->
+                        <TextBlock Grid.Row="1" Grid.Column="2" Text="TK Nợ đối ứng XNB:" VerticalAlignment="Center" Margin="0,5" FontWeight="Normal" Foreground="#334155"/>
+                        <dxe:ComboBoxEdit Grid.Row="1" Grid.Column="3" x:Name="cboXnbTotalAccount" Margin="0,4" Height="28"
+                                          DisplayMember="AccountId" ValueMember="AccountId" AutoComplete="True" ImmediatePopup="True"/>
+                    </Grid>
+                </GroupBox>
+
+                <!-- Ghi chú giải thích -->
+                <Border Background="#EFF6FF" BorderBrush="#BFDBFE" BorderThickness="1" CornerRadius="4" Padding="12,8">
+                    <TextBlock Text="* Lưu ý: Các tài khoản ngầm định trên sẽ tự động điền khi chọn loại phiếu kho trong chứng từ. Kế toán vẫn có thể tự do thay đổi trực tiếp trên từng chứng từ nếu cần."
+                               TextWrapping="Wrap" Foreground="#1E40AF" FontSize="11.5"/>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Footer Buttons -->
+        <Border Grid.Row="2" Background="#F1F5F9" BorderBrush="#E2E8F0" BorderThickness="0,1,0,0" Padding="20,12">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <dx:SimpleButton Content="Mặc định chuẩn" Width="120" Height="30" Margin="0,0,10,0" Click="BtnResetDefault_Click"
+                                 ToolTip="Khôi phục lại các tài khoản ngầm định theo chế độ chuẩn"/>
+                <dx:SimpleButton Content="Lưu cấu hình" Width="110" Height="30" Margin="0,0,10,0" Click="BtnSave_Click"
+                                 Background="#FF1976D2" Foreground="White" FontWeight="Bold"/>
+                <dx:SimpleButton Content="Đóng" Width="85" Height="30" Click="BtnClose_Click"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</dx:ThemedWindow>

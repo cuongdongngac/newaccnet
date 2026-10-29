@@ -139,7 +139,7 @@ namespace NewaccNet.Wpf.AppSystem.Reports.DetailTrialBalance.Reports.Asset
             this.lblCompany.Name = "lblCompany";
             this.lblCompany.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
             this.lblCompany.SizeF = new System.Drawing.SizeF(500F, 22F);
-            this.lblCompany.Text = "TỔNG CÔNG TY XÂY DỰNG HÀ NỘI";
+            this.lblCompany.Text = "";
 
             // lblTitle
             this.lblTitle.Font = new DevExpress.Drawing.DXFont("Segoe UI", 15F, DevExpress.Drawing.DXFontStyle.Bold);

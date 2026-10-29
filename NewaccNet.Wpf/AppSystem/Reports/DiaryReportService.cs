@@ -1,7 +1,7 @@
 using System;
 using System.Windows;
 using System.Windows.Input;
-using NewaccNet.Wpf.AppSystem.Reports.Calculators;
+using NewaccNet.Core.Reports.Calculators;
 
 namespace NewaccNet.Wpf.AppSystem.Reports
 {
@@ -34,6 +34,17 @@ namespace NewaccNet.Wpf.AppSystem.Reports
                 if (report.Parameters["pPeriodTitle"] != null)
                 {
                     report.Parameters["pPeriodTitle"].Value = $"Từ ngày: {fromDate:dd/MM/yyyy} Đến ngày: {toDate:dd/MM/yyyy}";
+                }
+
+                string companyName = DbConfigService.Current.CompanyName ?? string.Empty;
+                if (report.Parameters["pCompanyName"] != null)
+                {
+                    report.Parameters["pCompanyName"].Value = companyName;
+                }
+                var lblComp = report.FindControl("lblCompanyName", true) as DevExpress.XtraReports.UI.XRLabel;
+                if (lblComp != null)
+                {
+                    lblComp.Text = companyName;
                 }
                 Mouse.OverrideCursor = null;
                 DevExpress.Xpf.Printing.PrintHelper.ShowPrintPreview(owner, report);

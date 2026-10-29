@@ -200,6 +200,19 @@ namespace NewaccNet.Wpf.AppSystem.Design
             (gridMain.View as TableView)?.BestFitColumns();
         }
 
+        private void BtnExportJson_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+        {
+            DesignJsonService.ExportBusinessResult(this);
+        }
+
+        private void BtnImportJson_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+        {
+            if (DesignJsonService.ImportBusinessResult(this))
+            {
+                LoadData();
+            }
+        }
+
         private void BtnClose_Click(object sender, RoutedEventArgs e)
         {
             this.Close();

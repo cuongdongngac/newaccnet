@@ -36,12 +36,13 @@ public partial class App : Application
         ConfigManager.LoadConfig();
 
         // 2. Kiểm tra xem file cấu hình đã tồn tại chưa (Lần chạy đầu tiên)
-        if (!File.Exists(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "appsettings.json")))
+        if (!ConfigManager.HasConfigFile())
         {
             // Gợi ý mặc định trỏ vào file mẫu template.accdb
             var config = ConfigManager.Current;
             config.DbType = DatabaseType.Access;
-            config.AccessFilePath = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "template.accdb");
+            string tPath = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Template", "template.accdb");
+            config.AccessFilePath = File.Exists(tPath) ? tPath : Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "template.accdb");
 
             // Mở cửa sổ cấu hình DB
             var configWindow = new DbConfigWindow();
@@ -61,6 +62,7 @@ public partial class App : Application
             {
                 try 
                 {
+                    DbConfigService.EnsureDbConfigTable();
                     var mainWindow = new MainWindow(
                         loginWindow.LoggedUsername,
                         loginWindow.LoggedFullName,

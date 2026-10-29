@@ -482,7 +482,7 @@ namespace NewaccNet.Wpf.AppSystem.Design
 
                 var dtos = await System.Threading.Tasks.Task.Run(() =>
                 {
-                    using var adapter = NewaccNet.Wpf.AppSystem.AppDataAccessAdapter.Create();
+                    using var adapter = AppDataAccessAdapter.Create();
                     var service = new NewaccNet.Reports.BalanceSheet.BalanceSheetService();
                     return service.GenerateReport(adapter);
                 });
@@ -540,12 +540,26 @@ namespace NewaccNet.Wpf.AppSystem.Design
             (gridItems.View as TableView)?.BestFitColumns();
         }
 
+        private void BtnExportJson_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+        {
+            DesignJsonService.ExportBalanceSheet(this);
+        }
+
+        private void BtnImportJson_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+        {
+            if (DesignJsonService.ImportBalanceSheet(this))
+            {
+                LoadData();
+            }
+        }
+
         private void BtnClose_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
     }
 }
+
 
 
 
