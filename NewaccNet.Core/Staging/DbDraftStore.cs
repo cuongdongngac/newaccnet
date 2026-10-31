@@ -112,19 +112,54 @@ CREATE TABLE StagingDraft (
             if (draft == null) throw new ArgumentNullException(nameof(draft));
 
             string json = JsonSerializer.Serialize(draft, JsonOptions);
+            var doc = new StagingDocument
+            {
+                DraftId = draft.DraftId,
+                DraftType = draft.DraftType.ToString(),
+                Status = draft.Status,
+                SourceKind = draft.Source.Kind,
+                SourceRef = draft.Source.Ref,
+                Title = draft.GetDisplayTitle(),
+                PayloadJson = json,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now,
+                PostedVoucherId = draft.PostedVoucherId
+            };
+
+            await SaveDocumentAsync(doc, ct);
+        }
+
+        public async Task<VoucherDraft?> GetAsync(string draftId, CancellationToken ct = default)
+        {
+            var doc = await GetDocumentAsync(draftId, ct);
+            if (doc == null || string.IsNullOrWhiteSpace(doc.PayloadJson)) return null;
+
+            try
+            {
+                return JsonSerializer.Deserialize<VoucherDraft>(doc.PayloadJson, JsonOptions);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task SaveDocumentAsync(StagingDocument doc, CancellationToken ct = default)
+        {
+            if (doc == null) throw new ArgumentNullException(nameof(doc));
+
             DateTime now = DateTime.Now;
 
             using var conn = AppDataAccessAdapter.CreateRawConnection();
             await conn.OpenAsync(ct);
 
-            // Kiểm tra xem đã tồn tại chưa
             bool exists = false;
             using (var checkCmd = conn.CreateCommand())
             {
                 checkCmd.CommandText = "SELECT COUNT(*) FROM StagingDraft WHERE DraftId = @DraftId";
                 var p = checkCmd.CreateParameter();
                 p.ParameterName = "@DraftId";
-                p.Value = draft.DraftId;
+                p.Value = doc.DraftId;
                 checkCmd.Parameters.Add(p);
 
                 var countObj = await checkCmd.ExecuteScalarAsync(ct);
@@ -149,24 +184,24 @@ VALUES (@DraftId, @DraftType, @Status, @SourceKind, @SourceRef, @PayloadJson, @C
 
                     var pCreated = cmd.CreateParameter();
                     pCreated.ParameterName = "@CreatedAt";
-                    pCreated.Value = now;
+                    pCreated.Value = doc.CreatedAt == default ? now : doc.CreatedAt;
                     cmd.Parameters.Add(pCreated);
                 }
 
-                AddParam(cmd, "@DraftId", draft.DraftId);
-                AddParam(cmd, "@DraftType", draft.DraftType.ToString());
-                AddParam(cmd, "@Status", draft.Status.ToString());
-                AddParam(cmd, "@SourceKind", draft.Source.Kind ?? string.Empty);
-                AddParam(cmd, "@SourceRef", draft.Source.Ref ?? string.Empty);
-                AddParam(cmd, "@PayloadJson", json);
+                AddParam(cmd, "@DraftId", doc.DraftId);
+                AddParam(cmd, "@DraftType", doc.DraftType ?? "PurchaseInvoice");
+                AddParam(cmd, "@Status", doc.Status.ToString());
+                AddParam(cmd, "@SourceKind", doc.SourceKind ?? string.Empty);
+                AddParam(cmd, "@SourceRef", doc.SourceRef ?? string.Empty);
+                AddParam(cmd, "@PayloadJson", doc.PayloadJson ?? "{}");
                 AddParam(cmd, "@UpdatedAt", now);
-                AddParam(cmd, "@PostedVoucherId", (object?)draft.PostedVoucherId ?? DBNull.Value);
+                AddParam(cmd, "@PostedVoucherId", (object?)doc.PostedVoucherId ?? DBNull.Value);
 
                 await cmd.ExecuteNonQueryAsync(ct);
             }
         }
 
-        public async Task<VoucherDraft?> GetAsync(string draftId, CancellationToken ct = default)
+        public async Task<StagingDocument?> GetDocumentAsync(string draftId, CancellationToken ct = default)
         {
             if (string.IsNullOrWhiteSpace(draftId)) return null;
 
@@ -174,17 +209,83 @@ VALUES (@DraftId, @DraftType, @Status, @SourceKind, @SourceRef, @PayloadJson, @C
             await conn.OpenAsync(ct);
 
             using var cmd = conn.CreateCommand();
-            cmd.CommandText = "SELECT PayloadJson FROM StagingDraft WHERE DraftId = @DraftId";
+            cmd.CommandText = "SELECT DraftId, DraftType, Status, SourceKind, SourceRef, PayloadJson, CreatedAt, UpdatedAt, PostedVoucherId FROM StagingDraft WHERE DraftId = @DraftId";
             AddParam(cmd, "@DraftId", draftId);
 
             using var reader = await cmd.ExecuteReaderAsync(ct);
             if (await reader.ReadAsync(ct))
             {
-                string json = reader.GetString(0);
-                return JsonSerializer.Deserialize<VoucherDraft>(json, JsonOptions);
+                return ReadDocument(reader);
             }
 
             return null;
+        }
+
+        public async Task<IReadOnlyList<StagingDocument>> QueryDocumentsAsync(DraftQueryFilter? filter = null, CancellationToken ct = default)
+        {
+            var list = new List<StagingDocument>();
+
+            using var conn = AppDataAccessAdapter.CreateRawConnection();
+            await conn.OpenAsync(ct);
+
+            using var cmd = conn.CreateCommand();
+            string sql = "SELECT DraftId, DraftType, Status, SourceKind, SourceRef, PayloadJson, CreatedAt, UpdatedAt, PostedVoucherId FROM StagingDraft WHERE 1=1";
+
+            if (filter != null)
+            {
+                if (filter.Status.HasValue)
+                {
+                    sql += " AND Status = @Status";
+                    AddParam(cmd, "@Status", filter.Status.Value.ToString());
+                }
+                if (!string.IsNullOrWhiteSpace(filter.DraftTypeString))
+                {
+                    sql += " AND DraftType = @DraftType";
+                    AddParam(cmd, "@DraftType", filter.DraftTypeString);
+                }
+                else if (filter.DraftType.HasValue)
+                {
+                    sql += " AND DraftType = @DraftType";
+                    AddParam(cmd, "@DraftType", filter.DraftType.Value.ToString());
+                }
+                if (!string.IsNullOrWhiteSpace(filter.SourceKind))
+                {
+                    sql += " AND SourceKind = @SourceKind";
+                    AddParam(cmd, "@SourceKind", filter.SourceKind);
+                }
+            }
+
+            sql += " ORDER BY UpdatedAt DESC";
+            cmd.CommandText = sql;
+
+            using var reader = await cmd.ExecuteReaderAsync(ct);
+            while (await reader.ReadAsync(ct))
+            {
+                list.Add(ReadDocument(reader));
+            }
+
+            return list;
+        }
+
+        private static StagingDocument ReadDocument(DbDataReader reader)
+        {
+            var doc = new StagingDocument
+            {
+                DraftId = reader.GetString(0),
+                DraftType = reader.GetString(1),
+                PayloadJson = reader.GetString(5),
+                CreatedAt = reader.GetDateTime(6),
+                UpdatedAt = reader.GetDateTime(7)
+            };
+
+            if (Enum.TryParse<DraftStatus>(reader.GetString(2), out var st))
+                doc.Status = st;
+
+            if (!reader.IsDBNull(3)) doc.SourceKind = reader.GetString(3);
+            if (!reader.IsDBNull(4)) doc.SourceRef = reader.GetString(4);
+            if (!reader.IsDBNull(8)) doc.PostedVoucherId = reader.GetInt32(8);
+
+            return doc;
         }
 
         public async Task<IReadOnlyList<VoucherDraft>> QueryAsync(DraftQueryFilter? filter = null, CancellationToken ct = default)

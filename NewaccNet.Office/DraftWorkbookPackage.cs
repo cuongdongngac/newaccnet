@@ -30,6 +30,18 @@ namespace NewaccNet.Office
             if (document == null) throw new ArgumentNullException(nameof(document));
             if (draft == null) throw new ArgumentNullException(nameof(draft));
 
+            string json = JsonSerializer.Serialize(draft, JsonOptions);
+            EmbedPayloadJson(document, json);
+        }
+
+        /// <summary>
+        /// Nhúng chuỗi Payload JSON bất kỳ vào CustomXmlPart của tệp Excel.
+        /// </summary>
+        public static void EmbedPayloadJson(SpreadsheetDocument document, string json)
+        {
+            if (document == null) throw new ArgumentNullException(nameof(document));
+            if (json == null) throw new ArgumentNullException(nameof(json));
+
             var mainPart = document.WorkbookPart;
             if (mainPart == null) return;
 
@@ -42,7 +54,6 @@ namespace NewaccNet.Office
 
             // Tạo CustomXmlPart mới
             var customXmlPart = mainPart.AddCustomXmlPart(CustomXmlPartType.CustomXml);
-            string json = JsonSerializer.Serialize(draft, JsonOptions);
             byte[] bytes = Encoding.UTF8.GetBytes(json);
 
             using var partStream = customXmlPart.GetStream(FileMode.Create, FileAccess.Write);
@@ -50,9 +61,9 @@ namespace NewaccNet.Office
         }
 
         /// <summary>
-        /// Bóc tách VoucherDraft từ CustomXmlPart của tệp Excel.
+        /// Trích xuất chuỗi Payload JSON thô từ CustomXmlPart của tệp Excel.
         /// </summary>
-        public static VoucherDraft? ExtractDraftJson(SpreadsheetDocument document)
+        public static string? ExtractRawPayloadJson(SpreadsheetDocument document)
         {
             if (document == null) return null;
 
@@ -69,14 +80,31 @@ namespace NewaccNet.Office
 
                     if (!string.IsNullOrWhiteSpace(content) && content.TrimStart().StartsWith("{"))
                     {
-                        var draft = JsonSerializer.Deserialize<VoucherDraft>(content, JsonOptions);
-                        if (draft != null) return draft;
+                        return content;
                     }
                 }
                 catch { }
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Bóc tách VoucherDraft từ CustomXmlPart của tệp Excel.
+        /// </summary>
+        public static VoucherDraft? ExtractDraftJson(SpreadsheetDocument document)
+        {
+            string? content = ExtractRawPayloadJson(document);
+            if (string.IsNullOrWhiteSpace(content)) return null;
+
+            try
+            {
+                return JsonSerializer.Deserialize<VoucherDraft>(content, JsonOptions);
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

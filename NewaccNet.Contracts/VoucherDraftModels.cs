@@ -165,8 +165,11 @@ namespace NewaccNet.Contracts
     /// Định dạng trung gian (Lớp đệm - Staging) cho mọi nguồn hóa đơn, chứng từ.
     /// Cho phép lưu trữ, hiển thị, chỉnh sửa, rà soát và đối chiếu trước khi ghi sổ.
     /// </summary>
-    public class VoucherDraft
+    public class VoucherDraft : IDraftPayload
     {
+        public string GetDraftType() => DraftType.ToString();
+        public string GetDisplayTitle() => $"{Header.VoucherSourceCode} - {Counterparty.Raw.Name} ({Invoice.Number})";
+
         public int SchemaVersion { get; set; } = 1;
         public string DraftId { get; set; } = Guid.NewGuid().ToString("N");
         public DraftType DraftType { get; set; } = DraftType.PurchaseInvoice;

@@ -32,6 +32,7 @@ namespace NewaccNet.Core.Staging
 
         /// <summary>
         /// Nạp toàn bộ chứng từ nháp từ các tệp JSON và lưu vào bảng StagingDraft trong CSDL.
+        /// Sử dụng StagingDocument để giữ nguyên vẹn mọi cấu trúc phân cấp trong PayloadJson.
         /// </summary>
         public async Task<MigrationResult> MigrateJsonToDbAsync(
             bool overwrite = false,
@@ -41,18 +42,18 @@ namespace NewaccNet.Core.Staging
             var result = new MigrationResult();
             progress?.Report("Đang quét các tệp JSON trong thư mục Staging...");
 
-            var jsonDrafts = await _jsonStore.QueryAsync(filter: null, ct).ConfigureAwait(false);
-            result.TotalFound = jsonDrafts.Count;
+            var jsonDocs = await _jsonStore.QueryDocumentsAsync(filter: null, ct).ConfigureAwait(false);
+            result.TotalFound = jsonDocs.Count;
             progress?.Report($"Tìm thấy {result.TotalFound} chứng từ nháp từ tệp JSON.");
 
-            foreach (var draft in jsonDrafts)
+            foreach (var doc in jsonDocs)
             {
                 ct.ThrowIfCancellationRequested();
                 try
                 {
                     if (!overwrite)
                     {
-                        var existing = await _dbStore.GetAsync(draft.DraftId, ct).ConfigureAwait(false);
+                        var existing = await _dbStore.GetDocumentAsync(doc.DraftId, ct).ConfigureAwait(false);
                         if (existing != null)
                         {
                             result.SkippedCount++;
@@ -60,14 +61,14 @@ namespace NewaccNet.Core.Staging
                         }
                     }
 
-                    await _dbStore.SaveAsync(draft, ct).ConfigureAwait(false);
+                    await _dbStore.SaveDocumentAsync(doc, ct).ConfigureAwait(false);
                     result.SuccessCount++;
-                    progress?.Report($"[JSON ➔ DB] Đã nạp nháp: {draft.DraftId} (HĐ: {draft.Invoice.Number})");
+                    progress?.Report($"[JSON ➔ DB] Đã nạp nháp: {doc.DraftId} ({doc.DraftType})");
                 }
                 catch (Exception ex)
                 {
                     result.ErrorCount++;
-                    result.Messages.Add($"Lỗi nạp nháp {draft.DraftId}: {ex.Message}");
+                    result.Messages.Add($"Lỗi nạp nháp {doc.DraftId}: {ex.Message}");
                 }
             }
 
@@ -86,18 +87,18 @@ namespace NewaccNet.Core.Staging
             var result = new MigrationResult();
             progress?.Report("Đang đọc các chứng từ nháp từ bảng CSDL StagingDraft...");
 
-            var dbDrafts = await _dbStore.QueryAsync(filter: null, ct).ConfigureAwait(false);
-            result.TotalFound = dbDrafts.Count;
+            var dbDocs = await _dbStore.QueryDocumentsAsync(filter: null, ct).ConfigureAwait(false);
+            result.TotalFound = dbDocs.Count;
             progress?.Report($"Tìm thấy {result.TotalFound} chứng từ nháp trong CSDL.");
 
-            foreach (var draft in dbDrafts)
+            foreach (var doc in dbDocs)
             {
                 ct.ThrowIfCancellationRequested();
                 try
                 {
                     if (!overwrite)
                     {
-                        var existing = await _jsonStore.GetAsync(draft.DraftId, ct).ConfigureAwait(false);
+                        var existing = await _jsonStore.GetDocumentAsync(doc.DraftId, ct).ConfigureAwait(false);
                         if (existing != null)
                         {
                             result.SkippedCount++;
@@ -105,18 +106,18 @@ namespace NewaccNet.Core.Staging
                         }
                     }
 
-                    await _jsonStore.SaveAsync(draft, ct).ConfigureAwait(false);
+                    await _jsonStore.SaveDocumentAsync(doc, ct).ConfigureAwait(false);
                     result.SuccessCount++;
-                    progress?.Report($"[DB ➔ JSON] Đã xuất nháp: {draft.DraftId} (HĐ: {draft.Invoice.Number})");
+                    progress?.Report($"[DB ➔ JSON] Đã xuất nháp: {doc.DraftId} ({doc.DraftType})");
                 }
                 catch (Exception ex)
                 {
                     result.ErrorCount++;
-                    result.Messages.Add($"Lỗi xuất nháp {draft.DraftId}: {ex.Message}");
+                    result.Messages.Add($"Lỗi xuất nháp {doc.DraftId}: {ex.Message}");
                 }
             }
 
-            progress?.Report($"Hoàn tất xuất ra JSON: {result.SuccessCount}/{result.TotalFound} thành công, {result.SkippedCount} bỏ qua, {result.ErrorCount} lỗi.");
+            progress?.Report($"Hoàn tất xuất ra tệp JSON: {result.SuccessCount}/{result.TotalFound} thành công, {result.SkippedCount} bỏ qua, {result.ErrorCount} lỗi.");
             return result;
         }
     }

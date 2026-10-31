@@ -59,9 +59,41 @@ namespace NewaccNet.Core.Staging
             return Task.CompletedTask;
         }
 
-        public Task<VoucherDraft?> GetAsync(string draftId, CancellationToken ct = default)
+        public async Task<VoucherDraft?> GetAsync(string draftId, CancellationToken ct = default)
         {
-            if (string.IsNullOrWhiteSpace(draftId)) return Task.FromResult<VoucherDraft?>(null);
+            var doc = await GetDocumentAsync(draftId, ct);
+            if (doc == null) return null;
+
+            if (!string.IsNullOrWhiteSpace(doc.PayloadJson))
+            {
+                try
+                {
+                    var parsed = JsonSerializer.Deserialize<VoucherDraft>(doc.PayloadJson, JsonOptions);
+                    if (parsed != null && parsed.Header != null) return parsed;
+                }
+                catch { }
+            }
+
+            return null;
+        }
+
+        public Task SaveDocumentAsync(StagingDocument doc, CancellationToken ct = default)
+        {
+            if (doc == null) throw new ArgumentNullException(nameof(doc));
+
+            string folder = GetMonthFolder(doc.CreatedAt);
+            string fileName = $"Draft_{doc.DraftId}.json";
+            string filePath = Path.Combine(folder, fileName);
+
+            string json = JsonSerializer.Serialize(doc, JsonOptions);
+            File.WriteAllText(filePath, json);
+
+            return Task.CompletedTask;
+        }
+
+        public Task<StagingDocument?> GetDocumentAsync(string draftId, CancellationToken ct = default)
+        {
+            if (string.IsNullOrWhiteSpace(draftId)) return Task.FromResult<StagingDocument?>(null);
 
             string fileName = $"Draft_{draftId}.json";
             var files = Directory.GetFiles(_baseFolder, fileName, SearchOption.AllDirectories);
@@ -70,13 +102,105 @@ namespace NewaccNet.Core.Staging
                 try
                 {
                     string json = File.ReadAllText(files[0]);
-                    var draft = JsonSerializer.Deserialize<VoucherDraft>(json, JsonOptions);
-                    return Task.FromResult(draft);
+                    using var jdoc = JsonDocument.Parse(json);
+                    var root = jdoc.RootElement;
+
+                    if (root.TryGetProperty("PayloadJson", out _) || root.TryGetProperty("payloadJson", out _))
+                    {
+                        var doc = JsonSerializer.Deserialize<StagingDocument>(json, JsonOptions);
+                        return Task.FromResult(doc);
+                    }
+                    else
+                    {
+                        // File JSON nháp trực tiếp VoucherDraft
+                        var vDraft = JsonSerializer.Deserialize<VoucherDraft>(json, JsonOptions);
+                        if (vDraft != null)
+                        {
+                            var doc = new StagingDocument
+                            {
+                                DraftId = vDraft.DraftId,
+                                DraftType = vDraft.DraftType.ToString(),
+                                Status = vDraft.Status,
+                                SourceKind = vDraft.Source.Kind,
+                                SourceRef = vDraft.Source.Ref,
+                                Title = vDraft.GetDisplayTitle(),
+                                PayloadJson = json,
+                                CreatedAt = vDraft.Header.VoucherDate,
+                                UpdatedAt = DateTime.Now,
+                                PostedVoucherId = vDraft.PostedVoucherId
+                            };
+                            return Task.FromResult<StagingDocument?>(doc);
+                        }
+                    }
                 }
                 catch { }
             }
 
-            return Task.FromResult<VoucherDraft?>(null);
+            return Task.FromResult<StagingDocument?>(null);
+        }
+
+        public Task<IReadOnlyList<StagingDocument>> QueryDocumentsAsync(DraftQueryFilter? filter = null, CancellationToken ct = default)
+        {
+            var result = new List<StagingDocument>();
+            if (!Directory.Exists(_baseFolder)) return Task.FromResult<IReadOnlyList<StagingDocument>>(result);
+
+            var files = Directory.GetFiles(_baseFolder, "Draft_*.json", SearchOption.AllDirectories);
+            foreach (var f in files)
+            {
+                try
+                {
+                    string json = File.ReadAllText(f);
+                    using var jdoc = JsonDocument.Parse(json);
+                    var root = jdoc.RootElement;
+
+                    StagingDocument? doc = null;
+                    if (root.TryGetProperty("PayloadJson", out _) || root.TryGetProperty("payloadJson", out _))
+                    {
+                        doc = JsonSerializer.Deserialize<StagingDocument>(json, JsonOptions);
+                    }
+                    else
+                    {
+                        var vDraft = JsonSerializer.Deserialize<VoucherDraft>(json, JsonOptions);
+                        if (vDraft != null)
+                        {
+                            doc = new StagingDocument
+                            {
+                                DraftId = vDraft.DraftId,
+                                DraftType = vDraft.DraftType.ToString(),
+                                Status = vDraft.Status,
+                                SourceKind = vDraft.Source.Kind,
+                                SourceRef = vDraft.Source.Ref,
+                                Title = vDraft.GetDisplayTitle(),
+                                PayloadJson = json,
+                                CreatedAt = vDraft.Header.VoucherDate,
+                                UpdatedAt = DateTime.Now,
+                                PostedVoucherId = vDraft.PostedVoucherId
+                            };
+                        }
+                    }
+
+                    if (doc == null) continue;
+
+                    if (filter != null)
+                    {
+                        if (filter.Status.HasValue && doc.Status != filter.Status.Value) continue;
+                        if (!string.IsNullOrWhiteSpace(filter.DraftTypeString) && !doc.DraftType.Equals(filter.DraftTypeString, StringComparison.OrdinalIgnoreCase)) continue;
+                        if (filter.DraftType.HasValue && !doc.DraftType.Equals(filter.DraftType.Value.ToString(), StringComparison.OrdinalIgnoreCase)) continue;
+                        if (!string.IsNullOrWhiteSpace(filter.SourceKind) && !string.Equals(doc.SourceKind, filter.SourceKind, StringComparison.OrdinalIgnoreCase)) continue;
+                        if (filter.FromDate.HasValue && doc.CreatedAt < filter.FromDate.Value.Date) continue;
+                        if (filter.ToDate.HasValue && doc.CreatedAt > filter.ToDate.Value.Date) continue;
+                    }
+
+                    result.Add(doc);
+                }
+                catch { }
+            }
+
+            var ordered = result
+                .OrderByDescending(x => x.CreatedAt)
+                .ToList();
+
+            return Task.FromResult<IReadOnlyList<StagingDocument>>(ordered);
         }
 
         public Task<IReadOnlyList<VoucherDraft>> QueryAsync(DraftQueryFilter? filter = null, CancellationToken ct = default)
