@@ -6,6 +6,8 @@
     xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
     xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
     xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+    xmlns:dxsps="http://schemas.devexpress.com/winfx/2008/xaml/spreadsheet"
+    xmlns:dxre="http://schemas.devexpress.com/winfx/2008/xaml/richedit"
     xmlns:base="clr-namespace:NewaccNet.Wpf.Views.Base"
     Title="Trung Tâm Trí Tuệ Nhân Tạo (AI Copilot &amp; CFO Brain)"
     Width="1280" Height="820"
@@ -137,9 +139,9 @@
             </TabItem>
 
             <!-- ============================================================== -->
-            <!-- TAB 2: OCR HÓA ĐƠN & QUÉT CHỨNG TỪ (OCR VISION)               -->
+            <!-- TAB 2: OCR TÀI LIỆU LINH HOẠT & OFFICE NỘI BỘ (AI VISION)      -->
             <!-- ============================================================== -->
-            <TabItem Header="📄 2. OCR Hóa đơn &amp; Quét chứng từ (OCR Vision)">
+            <TabItem Header="📄 2. OCR Tài liệu linh hoạt &amp; Office Nội bộ (AI Vision)">
                 <Grid Margin="10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -158,14 +160,16 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Column="0" Text="Tệp Hóa đơn/Ảnh/PDF:" VerticalAlignment="Center" FontWeight="SemiBold" Margin="0,0,8,0"/>
-                            <dxe:TextEdit x:Name="txtOcrFilePath" Grid.Column="1" Height="30" Margin="0,0,8,0" NullText="Chọn file JPG, PNG hoặc PDF để AI trích xuất tự động..."/>
+                            <TextBlock Grid.Column="0" Text="Tệp Tài liệu/Ảnh/PDF:" VerticalAlignment="Center" FontWeight="SemiBold" Margin="0,0,8,0"/>
+                            <dxe:TextEdit x:Name="txtOcrFilePath" Grid.Column="1" Height="30" Margin="0,0,8,0" NullText="Chọn file JPG, PNG, WEBP, BMP hoặc PDF để AI trích xuất linh hoạt..."/>
                             <dx:SimpleButton x:Name="btnBrowseOcr" Grid.Column="2" Content="📁 Chọn tệp..." Height="30" Width="110" Margin="0,0,8,0" Click="BtnBrowseOcr_Click"/>
-                            <dxe:ComboBoxEdit x:Name="cboOcrMode" Grid.Column="3" Width="180" Height="30" Margin="0,0,8,0" IsTextEditable="False">
-                                <dxe:ComboBoxEditItem Content="Trích xuất Hóa đơn (Bảng &amp; Tiền)" IsSelected="True"/>
-                                <dxe:ComboBoxEditItem Content="Nhận dạng Toàn văn (Markdown)"/>
+                            <dxe:ComboBoxEdit x:Name="cboOcrTargetFormat" Grid.Column="3" Width="210" Height="30" Margin="0,0,8,0" IsTextEditable="False">
+                                <dxe:ComboBoxEditItem Content="🤖 Tự động theo chỉ thị Prompt" IsSelected="True"/>
+                                <dxe:ComboBoxEditItem Content="📊 Xuất Bảng tính Excel nội bộ"/>
+                                <dxe:ComboBoxEditItem Content="📄 Xuất Văn bản Word nội bộ"/>
+                                <dxe:ComboBoxEditItem Content="📝 Chỉ lấy Văn bản thô (Markdown)"/>
                             </dxe:ComboBoxEdit>
-                            <dx:SimpleButton x:Name="btnRunOcr" Grid.Column="4" Content="⚡ Quét &amp; Trích xuất (AI OCR)" Height="30" Width="190" FontWeight="Bold"
+                            <dx:SimpleButton x:Name="btnRunOcr" Grid.Column="4" Content="⚡ Quét &amp; Bóc tách (AI OCR)" Height="30" Width="200" FontWeight="Bold"
                                              Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/pdf%20viewer/openfromweb.svg'}"
                                              Click="BtnRunOcr_Click"/>
                         </Grid>
@@ -174,105 +178,89 @@
                     <!-- Main Content Area -->
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="320"/>
+                            <ColumnDefinition Width="380"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <!-- Left: Invoice Header Info & Image Thumbnail -->
-                        <Border Grid.Column="0" Background="#FFF5F5F5" Padding="10" CornerRadius="6" BorderBrush="#FFE0E0E0" BorderThickness="1" Margin="0,0,10,0">
-                            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <!-- Left: Dynamic Prompt & Document Preview -->
+                        <Grid Grid.Column="0" Margin="0,0,10,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Prompt Box -->
+                            <GroupBox Grid.Row="0" Header="Chỉ thị Bóc tách linh hoạt (Prompt)" Margin="0,0,0,8">
                                 <StackPanel Orientation="Vertical">
-                                    <TextBlock Text="THÔNG TIN HÓA ĐƠN TRÍCH XUẤT" FontWeight="Bold" Foreground="#FF1976D2" Margin="0,0,0,8"/>
-
-                                    <TextBlock Text="Số hóa đơn:" FontSize="11" Foreground="Gray"/>
-                                    <dxe:TextEdit x:Name="txtOcrInvoiceNumber" Margin="0,0,0,6"/>
-
-                                    <TextBlock Text="Ngày hóa đơn:" FontSize="11" Foreground="Gray"/>
-                                    <dxe:DateEdit x:Name="dtOcrInvoiceDate" Margin="0,0,0,6"/>
-
-                                    <TextBlock Text="Ký hiệu / Mẫu số:" FontSize="11" Foreground="Gray"/>
-                                    <dxe:TextEdit x:Name="txtOcrSerial" Margin="0,0,0,6"/>
-
-                                    <TextBlock Text="Tên người bán (Nhà cung cấp):" FontSize="11" Foreground="Gray"/>
-                                    <dxe:TextEdit x:Name="txtOcrSellerName" Margin="0,0,0,6"/>
-
-                                    <TextBlock Text="Mã số thuế bán:" FontSize="11" Foreground="Gray"/>
-                                    <dxe:TextEdit x:Name="txtOcrSellerTaxCode" Margin="0,0,0,6"/>
-
-                                    <TextBlock Text="Địa chỉ bán:" FontSize="11" Foreground="Gray"/>
-                                    <dxe:TextEdit x:Name="txtOcrSellerAddress" TextWrapping="Wrap" Margin="0,0,0,6"/>
-
-                                    <TextBlock Text="Tên người mua:" FontSize="11" Foreground="Gray"/>
-                                    <dxe:TextEdit x:Name="txtOcrBuyerName" Margin="0,0,0,6"/>
-
-                                    <TextBlock Text="Mã số thuế mua:" FontSize="11" Foreground="Gray"/>
-                                    <dxe:TextEdit x:Name="txtOcrBuyerTaxCode" Margin="0,0,0,6"/>
-
-                                    <TextBlock Text="Tổng tiền thanh toán (VNĐ):" FontSize="11" Foreground="Gray"/>
-                                    <dxe:TextEdit x:Name="txtOcrTotalAmount" FontWeight="Bold" Foreground="DarkRed" Margin="0,0,0,6"
-                                                  MaskType="Numeric" Mask="n0" MaskUseAsDisplayFormat="True"/>
-
-                                    <!-- Image Thumbnail preview -->
-                                    <TextBlock Text="Ảnh xem trước:" FontSize="11" Foreground="Gray" Margin="0,8,0,4"/>
-                                    <Border BorderBrush="#CCCCCC" BorderThickness="1" Height="150" Background="White">
-                                        <Image x:Name="imgOcrPreview" Stretch="Uniform"/>
-                                    </Border>
+                                    <dxe:TextEdit x:Name="txtOcrPrompt" Height="90" AcceptsReturn="True" TextWrapping="Wrap"
+                                                  VerticalContentAlignment="Top" Margin="0,0,0,6"
+                                                  NullText="Nhập yêu cầu trích xuất (VD: Bóc tách đơn thuốc này ra bảng gồm STT, Tên biệt dược, Hoạt chất, ĐVT, Số lượng, Liều dùng sáng-trưa-tối... hoặc Bóc tách hóa đơn, biên bản...)"/>
+                                    
+                                    <!-- Prompt Presets / Chips -->
+                                    <TextBlock Text="Mẫu chỉ thị nhanh (Chọn một mẫu):" FontSize="11" Foreground="Gray" Margin="0,2,0,4"/>
+                                    <WrapPanel Orientation="Horizontal" Margin="0,0,0,2">
+                                        <dx:SimpleButton x:Name="btnChipPrescription" Content="💊 Đơn thuốc -&gt; Bảng" Margin="2" Padding="4,2" Click="BtnChipPrescription_Click"/>
+                                        <dx:SimpleButton x:Name="btnChipInvoice" Content="🧾 Hóa đơn -&gt; Excel" Margin="2" Padding="4,2" Click="BtnChipInvoice_Click"/>
+                                        <dx:SimpleButton x:Name="btnChipWarehouse" Content="📦 Phiếu kho -&gt; Excel" Margin="2" Padding="4,2" Click="BtnChipWarehouse_Click"/>
+                                        <dx:SimpleButton x:Name="btnChipTimesheet" Content="⏱ Chấm công -&gt; Excel" Margin="2" Padding="4,2" Click="BtnChipTimesheet_Click"/>
+                                        <dx:SimpleButton x:Name="btnChipDelivery" Content="📝 Biên bản -&gt; Word" Margin="2" Padding="4,2" Click="BtnChipDelivery_Click"/>
+                                        <dx:SimpleButton x:Name="btnChipContract" Content="📑 Hợp đồng -&gt; Word" Margin="2" Padding="4,2" Click="BtnChipContract_Click"/>
+                                        <dx:SimpleButton x:Name="btnChipFullDoc" Content="📄 Toàn văn (Markdown)" Margin="2" Padding="4,2" Click="BtnChipFullDoc_Click"/>
+                                    </WrapPanel>
                                 </StackPanel>
-                            </ScrollViewer>
-                        </Border>
-
-                        <!-- Right: Line Items Grid OR Full Text Markdown -->
-                        <Grid Grid.Column="1">
-                            <!-- Table View for Invoices -->
-                            <GroupBox x:Name="grpOcrItems" Header="Danh sách Mặt hàng / Dịch vụ (Trích xuất từ OCR)">
-                                <dxg:GridControl x:Name="gridOcrItems" AutoGenerateColumns="None">
-                                    <dxg:GridControl.View>
-                                        <dxg:TableView ShowGroupPanel="False" ShowTotalSummary="True" AutoWidth="True"
-                                                       AllowEditing="True" NavigationStyle="Cell"/>
-                                    </dxg:GridControl.View>
-                                    <dxg:GridControl.Columns>
-                                        <dxg:GridColumn FieldName="LineNo" Header="STT" Width="45" ReadOnly="True"/>
-                                        <dxg:GridColumn FieldName="ItemName" Header="Tên Mặt hàng / Dịch vụ" Width="220"/>
-                                        <dxg:GridColumn FieldName="Unit" Header="ĐVT" Width="60"/>
-                                        <dxg:GridColumn FieldName="Quantity" Header="Số lượng" Width="80">
-                                            <dxg:GridColumn.EditSettings>
-                                                <dxe:TextEditSettings MaskType="Numeric" Mask="n2" MaskUseAsDisplayFormat="True"/>
-                                            </dxg:GridColumn.EditSettings>
-                                        </dxg:GridColumn>
-                                        <dxg:GridColumn FieldName="UnitPrice" Header="Đơn giá" Width="100">
-                                            <dxg:GridColumn.EditSettings>
-                                                <dxe:TextEditSettings MaskType="Numeric" Mask="n0" MaskUseAsDisplayFormat="True"/>
-                                            </dxg:GridColumn.EditSettings>
-                                        </dxg:GridColumn>
-                                        <dxg:GridColumn FieldName="Amount" Header="Thành tiền" Width="110">
-                                            <dxg:GridColumn.EditSettings>
-                                                <dxe:TextEditSettings MaskType="Numeric" Mask="n0" MaskUseAsDisplayFormat="True"/>
-                                            </dxg:GridColumn.EditSettings>
-                                        </dxg:GridColumn>
-                                        <dxg:GridColumn FieldName="TaxRate" Header="Thuế %" Width="65"/>
-                                        <dxg:GridColumn FieldName="TaxAmount" Header="Tiền thuế" Width="100">
-                                            <dxg:GridColumn.EditSettings>
-                                                <dxe:TextEditSettings MaskType="Numeric" Mask="n0" MaskUseAsDisplayFormat="True"/>
-                                            </dxg:GridColumn.EditSettings>
-                                        </dxg:GridColumn>
-                                        <dxg:GridColumn FieldName="SuggestedAccount" Header="TK gợi ý" Width="75"/>
-                                        <dxg:GridColumn FieldName="SuggestedWarehouse" Header="Kho gợi ý" Width="75"/>
-                                    </dxg:GridControl.Columns>
-                                    <dxg:GridControl.TotalSummary>
-                                        <dxg:GridSummaryItem SummaryType="Count" Alignment="Left" DisplayFormat="Số dòng: {0}"/>
-                                        <dxg:GridSummaryItem FieldName="Amount" SummaryType="Sum" DisplayFormat="Tổng tiền hàng: {0:N0}"/>
-                                        <dxg:GridSummaryItem FieldName="TaxAmount" SummaryType="Sum" DisplayFormat="Tổng thuế: {0:N0}"/>
-                                    </dxg:GridControl.TotalSummary>
-                                </dxg:GridControl>
                             </GroupBox>
 
-                            <!-- Document Markdown View -->
-                            <GroupBox x:Name="grpOcrDocument" Header="Nội dung Văn bản Nhận dạng (Full Text / Markdown)" Visibility="Collapsed">
-                                <dxe:TextEdit x:Name="txtOcrFullDocument" VerticalContentAlignment="Top"
-                                              AcceptsReturn="True" TextWrapping="Wrap" IsReadOnly="True"
-                                              FontFamily="Consolas" FontSize="12"/>
+                            <!-- Document Preview -->
+                            <GroupBox Grid.Row="1" Header="Ảnh xem trước tài liệu" Margin="0,0,0,8">
+                                <Border BorderBrush="#CCCCCC" BorderThickness="1" Height="220" Background="#F8F9FA" CornerRadius="4">
+                                    <Image x:Name="imgOcrPreview" Stretch="Uniform"/>
+                                </Border>
                             </GroupBox>
+
+                            <!-- File & Status Info -->
+                            <Border Grid.Row="2" Background="#FFF5F5F5" Padding="8" CornerRadius="4" BorderBrush="#E0E0E0" BorderThickness="1">
+                                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Text="THÔNG TIN TÀI LIỆU &amp; TRẠNG THÁI" FontWeight="Bold" FontSize="11" Foreground="#1976D2" Margin="0,0,0,4"/>
+                                        <TextBlock x:Name="lblOcrFileInfo" Text="Chưa chọn tệp." FontSize="11" Foreground="#555555" TextWrapping="Wrap" Margin="0,0,0,4"/>
+                                        <TextBlock x:Name="lblOcrExtractedSummary" Text="Sẵn sàng bóc tách bằng AI Vision." FontSize="11" Foreground="#2E7D32" TextWrapping="Wrap"/>
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </Border>
                         </Grid>
+
+                        <!-- Right: In-App Office Studio Views (Direct Editing & Tweaking) -->
+                        <GroupBox Grid.Column="1" Header="KẾT QUẢ BÓC TÁCH (OFFICE NỘI BỘ - BIẾN TẤU &amp; BIÊN TẬP TRỰC TIẾP)">
+                            <TabControl x:Name="tabOcrOfficeResult">
+                                <!-- Tab 1: Spreadsheet (Excel) -->
+                                <TabItem x:Name="tabItemSpreadsheet" Header="📊 Bảng tính Excel (Nội bộ)">
+                                    <Grid>
+                                        <dxsps:SpreadsheetControl x:Name="ocrSpreadsheetControl" 
+                                                                  CommandBarStyle="Empty" 
+                                                                  ShowFormulaBar="True"/>
+                                    </Grid>
+                                </TabItem>
+
+                                <!-- Tab 2: RichEdit (Word) -->
+                                <TabItem x:Name="tabItemRichEdit" Header="📄 Văn bản Word (Nội bộ)">
+                                    <Grid>
+                                        <dxre:RichEditControl x:Name="ocrRichEditControl" 
+                                                              CommandBarStyle="Empty" 
+                                                              ShowBorder="False"/>
+                                    </Grid>
+                                </TabItem>
+
+                                <!-- Tab 3: Full Document Markdown / Text -->
+                                <TabItem x:Name="tabItemMarkdown" Header="📝 Văn bản thô (Raw / Markdown)">
+                                    <Grid Margin="4">
+                                        <dxe:TextEdit x:Name="txtOcrFullDocument" VerticalContentAlignment="Top"
+                                                      AcceptsReturn="True" TextWrapping="Wrap" IsReadOnly="False"
+                                                      FontFamily="Consolas" FontSize="12"/>
+                                    </Grid>
+                                </TabItem>
+                            </TabControl>
+                        </GroupBox>
                     </Grid>
 
                     <!-- Bottom OCR Actions -->
@@ -291,9 +279,9 @@
                                          FontWeight="SemiBold"
                                          Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/export/exporttoxls.svg'}"
                                          Click="BtnOcrOpenInOffice_Click"/>
-                        <dx:SimpleButton x:Name="btnOcrExportExcel" Content="📊 Xuất Bảng tính Excel (OpenXML)" Height="34" Width="220"
+                        <dx:SimpleButton x:Name="btnOcrSaveFile" Content="💾 Lưu tệp Office (.xlsx / .docx)" Height="34" Width="220"
                                          Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_export_toxlsx.svg'}"
-                                         Click="BtnOcrExportExcel_Click"/>
+                                         Click="BtnOcrSaveFile_Click"/>
                     </StackPanel>
                 </Grid>
             </TabItem>

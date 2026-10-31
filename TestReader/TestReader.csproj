@@ -3,4 +3,15 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net10.0-windows</TargetFramework>
   </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="NewaccNet.Plugin.ErpWarehouse">
+      <HintPath>..\NewaccNet.Plugin.ErpWarehouse\bin\Debug\net10.0-windows\NewaccNet.Plugin.ErpWarehouse.dll</HintPath>
+    </Reference>
+    <Reference Include="NewaccNet.Contracts">
+      <HintPath>..\NewaccNet.Contracts\bin\Debug\net10.0-windows\NewaccNet.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="DataAccess">
+      <HintPath>..\dataaccess\DatabaseGeneric\bin\Debug\net9.0\DataAccess.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 </Project>

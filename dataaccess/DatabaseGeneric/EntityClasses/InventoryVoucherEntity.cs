@@ -181,6 +181,14 @@ namespace DataAccess.EntityClasses
 			set { SetValue((int)InventoryVoucherFieldIndex.Carrier, value); }
 		}
 
+		/// <summary>The EntryGraph property of the Entity InventoryVoucher<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "InventoryVoucher"."EntryGraph".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String EntryGraph
+		{
+			get { return (System.String)GetValue((int)InventoryVoucherFieldIndex.EntryGraph, true); }
+			set { SetValue((int)InventoryVoucherFieldIndex.EntryGraph, value); }
+		}
+
 		/// <summary>The ExobjectId property of the Entity InventoryVoucher<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "InventoryVoucher"."ExobjectId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String ExobjectId
@@ -341,6 +349,8 @@ namespace DataAccess
 	{
 		///<summary>Carrier. </summary>
 		Carrier,
+		///<summary>EntryGraph. </summary>
+		EntryGraph,
 		///<summary>ExobjectId. </summary>
 		ExobjectId,
 		///<summary>Id. </summary>

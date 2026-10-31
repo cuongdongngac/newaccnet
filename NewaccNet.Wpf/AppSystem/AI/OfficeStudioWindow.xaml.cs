@@ -16,6 +16,10 @@ using NewaccNet.AI.Configuration;
 using NewaccNet.AI.Contracts;
 using NewaccNet.AI.Gateway;
 using NewaccNet.AI.Services;
+using NewaccNet.Contracts;
+using NewaccNet.Core.Posting;
+using NewaccNet.Core.Staging;
+using NewaccNet.Office;
 using NewaccNet.TaxInvoice;
 using NewaccNet.Wpf.AppSystem;
 using NewaccNet.Wpf.AppSystem.TaxInvoice;
@@ -143,6 +147,199 @@ namespace NewaccNet.Wpf.AppSystem.AI
             var win = new OfficeStudioWindow(stream, OfficeDocumentType.Word, title);
             win.Show();
             return win;
+        }
+
+        // ==============================================================
+        // DRAFT WORKSPACE (STAGING & OFFICE STUDIO WORKFLOW)
+        // ==============================================================
+        private VoucherDraft? _currentDraft = null;
+
+        public VoucherDraft? CurrentDraft => _currentDraft;
+
+        public void LoadDraft(VoucherDraft draft)
+        {
+            if (draft == null) return;
+            _currentDraft = draft;
+
+            var renderer = new DraftWorkbookRenderer();
+            var stream = renderer.RenderToStream(draft);
+
+            officeTabControl.SelectedIndex = 0;
+            LoadSpreadsheetStream(stream);
+
+            pnlDraftActions.Visibility = Visibility.Visible;
+            this.Title = $"Office Studio - Nháp HĐ {draft.Invoice.Series}-{draft.Invoice.Number} ({draft.Counterparty.Raw.Name})";
+            lblOfficeStatus.Text = $"📄 Đang mở chứng từ nháp HĐ #{draft.Invoice.Number} - Trạng thái: {draft.Status} - Lưu tại: {DraftStoreFactory.ConfiguredMode}";
+
+            ChatMessages.Add(new OfficeChatMessageItem
+            {
+                IsUser = false,
+                Message = $"Đã nạp chứng từ nháp hóa đơn #{draft.Invoice.Number} từ Lớp đệm (Staging).\n" +
+                          $"• Đối tác: {draft.Counterparty.Raw.Name} (MST: {draft.Counterparty.Raw.TaxCode})\n" +
+                          $"• Tổng thanh toán: {draft.Invoice.TotalAmount:N0} đ ({draft.Lines.Count} dòng hàng)\n" +
+                          $"• Cơ chế lưu: {DraftStoreFactory.ConfiguredMode}\n\n" +
+                          $"Bạn có thể sửa trực tiếp trên bảng tính Excel (Mã VT, Kho, TK Nợ/Có, Tiền...). Sau khi chỉnh sửa xong, bấm 'Lưu nháp' hoặc 'Ghi sổ qua Gateway'."
+            });
+        }
+
+        public static OfficeStudioWindow OpenDraft(VoucherDraft draft, Window? owner = null)
+        {
+            var win = new OfficeStudioWindow();
+            if (owner != null) win.Owner = owner;
+            win.LoadDraft(draft);
+            win.Show();
+            return win;
+        }
+
+        public VoucherDraft? SyncDraftFromSpreadsheet()
+        {
+            if (_currentDraft == null) return null;
+
+            try
+            {
+                using var ms = new MemoryStream();
+                spreadsheetControl.SaveDocument(ms, DevExpress.Spreadsheet.DocumentFormat.Xlsx);
+                ms.Seek(0, SeekOrigin.Begin);
+
+                var reader = new DraftWorkbookReader();
+                var updated = reader.ReadFromStream(ms);
+                if (updated != null)
+                {
+                    _currentDraft = updated;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi đồng bộ dữ liệu từ bảng tính: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            return _currentDraft;
+        }
+
+        private void BtnValidateDraft_Click(object sender, RoutedEventArgs e)
+        {
+            var draft = SyncDraftFromSpreadsheet();
+            if (draft == null)
+            {
+                MessageBox.Show("Hiện không có bản nháp nào đang mở.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            var validator = new VoucherValidator();
+            var issues = validator.ValidateDraft(draft);
+
+            if (issues.Count == 0)
+            {
+                MessageBox.Show("✅ Bản nháp hoàn toàn hợp lệ, cân đối Nợ = Có và sẵn sàng ghi sổ!", "Kiểm tra hợp lệ", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                int errors = issues.Count(x => x.Severity == IssueSeverity.Error);
+                int warnings = issues.Count(x => x.Severity == IssueSeverity.Warning);
+
+                string msg = string.Join("\n", issues.Select(x => $"• [{(x.Severity == IssueSeverity.Error ? "LỖI" : "LƯU Ý")}] {x.Message}"));
+                MessageBox.Show($"Phát hiện {issues.Count} vấn đề ({errors} lỗi, {warnings} cảnh báo):\n\n{msg}",
+                    "Kết quả kiểm tra hợp lệ", MessageBoxButton.OK, errors > 0 ? MessageBoxImage.Warning : MessageBoxImage.Information);
+            }
+        }
+
+        private async void BtnSaveDraftToStaging_Click(object sender, RoutedEventArgs e)
+        {
+            var draft = SyncDraftFromSpreadsheet();
+            if (draft == null)
+            {
+                MessageBox.Show("Hiện không có bản nháp nào đang mở.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            try
+            {
+                var store = DraftStoreFactory.Create();
+                await store.SaveAsync(draft);
+
+                lblOfficeStatus.Text = $"💾 Đã lưu nháp HĐ #{draft.Invoice.Number} vào kho Staging ({DraftStoreFactory.ConfiguredMode}) lúc {DateTime.Now:HH:mm:ss}.";
+                MessageBox.Show($"Đã lưu bản nháp HĐ #{draft.Invoice.Number} vào kho Staging ({DraftStoreFactory.ConfiguredMode}) thành công!",
+                    "Lưu nháp thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi lưu nháp vào Staging: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private async void BtnPostDraftToGateway_Click(object sender, RoutedEventArgs e)
+        {
+            var draft = SyncDraftFromSpreadsheet();
+            if (draft == null)
+            {
+                MessageBox.Show("Hiện không có bản nháp nào đang mở.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            if (draft.Status == DraftStatus.Posted)
+            {
+                var ask = MessageBox.Show(
+                    $"Chứng từ nháp này đã được ghi sổ trước đó (Số CT: {draft.Header.VoucherNo}).\nBạn có muốn tiếp tục ghi sổ lại chứng từ mới?",
+                    "Xác nhận ghi sổ lại", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (ask != MessageBoxResult.Yes) return;
+            }
+
+            var confirm = MessageBox.Show(
+                $"Bạn có chắc chắn muốn chốt ghi sổ HĐ #{draft.Invoice.Number} ({draft.Counterparty.Raw.Name}) vào CSDL thật qua Cổng Core Posting Gateway?\n\n" +
+                $"Hành động này sẽ thực hiện Transaction an toàn, cập nhật chi tiết công nợ/kho và sinh số chứng từ chính thức.",
+                "Xác nhận ghi sổ chứng từ", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (confirm != MessageBoxResult.Yes) return;
+
+            btnPostDraftToGateway.IsEnabled = false;
+            try
+            {
+                var gateway = new PostingGateway();
+                var result = await gateway.PostDraftAsync(draft);
+
+                if (result.Success)
+                {
+                    draft.Status = DraftStatus.Posted;
+                    draft.Header.VoucherNo = result.VoucherNo;
+
+                    var store = DraftStoreFactory.Create();
+                    await store.SaveAsync(draft);
+
+                    lblOfficeStatus.Text = $"🚀 Đã ghi sổ thành công vào CSDL! Số chứng từ: {result.VoucherNo}";
+
+                    ChatMessages.Add(new OfficeChatMessageItem
+                    {
+                        IsUser = false,
+                        Message = $"🎉 Chứng từ HĐ #{draft.Invoice.Number} đã được ghi sổ thành công vào CSDL!\n" +
+                                  $"• Số chứng từ: {result.VoucherNo}\n" +
+                                  $"• Tổng thanh toán: {draft.Invoice.TotalAmount:N0} đ\n" +
+                                  $"• Kho Staging đã cập nhật trạng thái 'Đã ghi sổ' (Posted)."
+                    });
+
+                    MessageBox.Show(
+                        $"Đã ghi sổ thành công vào CSDL thật qua Cổng Core Posting Gateway!\n\n" +
+                        $"• Số chứng từ sinh ra: {result.VoucherNo}\n" +
+                        $"• Trạng thái nháp: Đã ghi sổ (Posted)",
+                        "Ghi sổ thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    string err = result.ErrorMessage;
+                    if (result.Issues != null && result.Issues.Count > 0)
+                    {
+                        err += "\n" + string.Join("\n", result.Issues.Select(x => $"• {x.Message}"));
+                    }
+
+                    MessageBox.Show($"Cổng ghi sổ Core từ chối ghi sổ:\n\n{err}", "Ghi sổ không thành công", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi ngoại lệ khi ghi sổ qua Gateway: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                btnPostDraftToGateway.IsEnabled = true;
+            }
         }
 
         private void BtnToggleChat_Click(object sender, RoutedEventArgs e)
@@ -413,6 +610,22 @@ namespace NewaccNet.Wpf.AppSystem.AI
         // ==========================================
         // QUICK PROMPT CHIPS
         // ==========================================
+
+        private void BtnChipPrescription_Click(object sender, RoutedEventArgs e)
+        {
+            string prompt = _attachedFilePath != null
+                ? "Hãy bóc tách toàn bộ thông tin đơn thuốc này thành bảng số liệu Excel gồm: STT, Tên biệt dược, Hoạt chất & Hàm lượng, ĐVT, Số lượng, Liều dùng / Cách dùng (Sáng, Trưa, Chiều, Tối), Lời dặn của bác sĩ."
+                : "Lập bảng mẫu kê đơn thuốc điều trị ngoại trú gồm các cột: STT, Tên biệt dược, Hoạt chất, Hàm lượng, ĐVT, Số lượng, Liều dùng (Sáng - Trưa - Tối), Hướng dẫn sử dụng.";
+            _ = SendPromptToAiAsync(prompt);
+        }
+
+        private void BtnChipWarehouse_Click(object sender, RoutedEventArgs e)
+        {
+            string prompt = _attachedFilePath != null
+                ? "Hãy bóc tách chứng từ kho/giao nhận đính kèm thành bảng tính Excel gồm các cột: STT, Mã vật tư gợi ý, Tên quy cách vật tư hàng hóa, ĐVT, Số lượng theo chứng từ, Số lượng thực tế, Đơn giá, Thành tiền, Ghi chú."
+                : "Lập bảng kê phiếu nhập/xuất kho vật tư hàng hóa gồm: STT, Mã vật tư, Tên hàng, ĐVT, Số lượng chứng từ, Số lượng thực nhập, Đơn giá, Thành tiền, TK Nợ 152, TK Có 331, Mã Kho.";
+            _ = SendPromptToAiAsync(prompt);
+        }
 
         private void BtnChipOcrExcel_Click(object sender, RoutedEventArgs e)
         {

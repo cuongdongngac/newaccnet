@@ -49,7 +49,12 @@ namespace NewaccNet.Core.Data
                     if (config != null)
                     {
                         Current = config;
+                        Staging.DraftStoreFactory.ConfiguredMode = Current.StagingStorageMode;
                     }
+                }
+                else
+                {
+                    Staging.DraftStoreFactory.ConfiguredMode = Current.StagingStorageMode;
                 }
             }
             catch (Exception ex)
@@ -63,6 +68,7 @@ namespace NewaccNet.Core.Data
         {
             try
             {
+                Staging.DraftStoreFactory.ConfiguredMode = Current.StagingStorageMode;
                 System.IO.Directory.CreateDirectory(AppDataFolder);
                 var options = new JsonSerializerOptions { WriteIndented = true };
                 string json = JsonSerializer.Serialize(Current, options);

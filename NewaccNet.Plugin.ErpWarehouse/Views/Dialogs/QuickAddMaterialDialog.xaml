@@ -1,0 +1,32 @@
+<dx:ThemedWindow x:Class="NewaccNet.Plugin.ErpWarehouse.Views.Dialogs.QuickAddMaterialDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+        xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+        Title="Thêm nhanh Vật tư, Hàng hóa" Height="260" Width="420"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <dxlc:LayoutControl Orientation="Vertical" Padding="5">
+            <dxlc:LayoutItem Label="Mã vật tư (*):">
+                <dxe:TextEdit x:Name="txtId" CharacterCasing="Upper"/>
+            </dxlc:LayoutItem>
+            <dxlc:LayoutItem Label="Tên vật tư (*):">
+                <dxe:TextEdit x:Name="txtName"/>
+            </dxlc:LayoutItem>
+            <dxlc:LayoutItem Label="Đơn vị tính:">
+                <dxe:TextEdit x:Name="txtUnit"/>
+            </dxlc:LayoutItem>
+        </dxlc:LayoutControl>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+            <Button Content="Lưu" Width="85" Height="28" Margin="0,0,10,0" IsDefault="True" Click="BtnSave_Click"/>
+            <Button Content="Bỏ qua" Width="85" Height="28" IsCancel="True"/>
+        </StackPanel>
+    </Grid>
+</dx:ThemedWindow>

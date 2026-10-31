@@ -64,6 +64,22 @@
                     <dx:SimpleButton x:Name="btnPushToVoucher" Content="📥 Nhập vào Phiếu Kế toán" Height="28" Margin="0,0,6,0"
                                      Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_invoice.svg'}"
                                      Click="BtnPushToVoucher_Click"/>
+
+                    <!-- Nhóm thao tác Chứng từ nháp (Staging Draft) -->
+                    <StackPanel x:Name="pnlDraftActions" Orientation="Horizontal" Visibility="Collapsed">
+                        <Separator Margin="0,0,12,0"/>
+                        <dx:SimpleButton x:Name="btnValidateDraft" Content="🔍 Kiểm tra hợp lệ" Height="28" Margin="0,0,6,0"
+                                         ToolTip="Kiểm tra cân đối Nợ = Có và các thông tin đối tác, vật tư của bản nháp"
+                                         Click="BtnValidateDraft_Click"/>
+                        <dx:SimpleButton x:Name="btnSaveDraftToStaging" Content="💾 Lưu nháp (Staging)" Height="28" Margin="0,0,6,0"
+                                         FontWeight="SemiBold" Foreground="#FF1E40AF"
+                                         ToolTip="Lưu lại các sửa đổi trên bảng tính Excel vào kho đệm Staging"
+                                         Click="BtnSaveDraftToStaging_Click"/>
+                        <dx:SimpleButton x:Name="btnPostDraftToGateway" Content="🚀 Ghi sổ qua Gateway" Height="28" Margin="0,0,12,0"
+                                         FontWeight="Bold" Background="#FF16A34A" Foreground="White"
+                                         ToolTip="Kiểm tra hợp lệ và chốt ghi sổ vào CSDL thật qua Core Posting Gateway"
+                                         Click="BtnPostDraftToGateway_Click"/>
+                    </StackPanel>
                 </StackPanel>
 
                 <StackPanel Grid.Column="2" Orientation="Horizontal">
@@ -144,10 +160,12 @@
                         <StackPanel Orientation="Vertical">
                             <TextBlock Text="Gợi ý câu lệnh nhanh (Click để chọn):" FontSize="10.5" Foreground="#FF64748B" Margin="0,0,0,4" FontWeight="SemiBold"/>
                             <WrapPanel Orientation="Horizontal">
-                                <dx:SimpleButton Content="🧾 Quét Hóa đơn ➔ Excel" Height="22" Margin="2" Click="BtnChipOcrExcel_Click"/>
+                                <dx:SimpleButton Content="💊 Đơn thuốc ➔ Bảng Excel" Height="22" Margin="2" Click="BtnChipPrescription_Click"/>
+                                <dx:SimpleButton Content="🧾 Hóa đơn ➔ Excel" Height="22" Margin="2" Click="BtnChipOcrExcel_Click"/>
+                                <dx:SimpleButton Content="📦 Phiếu kho ➔ Excel" Height="22" Margin="2" Click="BtnChipWarehouse_Click"/>
                                 <dx:SimpleButton Content="📝 Biên bản Giao nhận ➔ Word" Height="22" Margin="2" Click="BtnChipOcrWord_Click"/>
-                                <dx:SimpleButton Content="📊 Bảng nhập kho (Nợ 152/Có 331)" Height="22" Margin="2" Click="BtnChipExpense_Click"/>
-                                <dx:SimpleButton Content="📋 Bảng đối chiếu công nợ (Word)" Height="22" Margin="2" Click="BtnChipReconcile_Click"/>
+                                <dx:SimpleButton Content="📊 Bảng chi phí / Lương" Height="22" Margin="2" Click="BtnChipExpense_Click"/>
+                                <dx:SimpleButton Content="📋 Đối chiếu công nợ (Word)" Height="22" Margin="2" Click="BtnChipReconcile_Click"/>
                             </WrapPanel>
                         </StackPanel>
                     </Border>

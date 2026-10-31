@@ -260,6 +260,12 @@ namespace NewaccNet.Core.Data
         {
             try
             {
+                if (ConfigManager.Current.DbType == DatabaseType.Access && 
+                    (string.IsNullOrWhiteSpace(ConfigManager.Current.AccessFilePath) || !System.IO.File.Exists(ConfigManager.Current.AccessFilePath)))
+                {
+                    return;
+                }
+
                 using (var conn = AppDataAccessAdapter.CreateRawConnection())
                 {
                     if (conn.State != ConnectionState.Open) conn.Open();
@@ -473,6 +479,12 @@ CREATE TABLE DbConfig (
             var dto = new DbConfigDto();
             try
             {
+                if (ConfigManager.Current.DbType == DatabaseType.Access && 
+                    (string.IsNullOrWhiteSpace(ConfigManager.Current.AccessFilePath) || !System.IO.File.Exists(ConfigManager.Current.AccessFilePath)))
+                {
+                    return dto;
+                }
+
                 using (var conn = AppDataAccessAdapter.CreateRawConnection())
                 {
                     if (conn.State != ConnectionState.Open) conn.Open();

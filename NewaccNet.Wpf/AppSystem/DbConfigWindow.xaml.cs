@@ -51,6 +51,9 @@ namespace NewaccNet.Wpf.AppSystem
                 spnAccountingYear.Value = DateTime.Today.Year;
             }
 
+            // Kho lưu nháp Staging
+            cboStagingStorageMode.SelectedIndex = config.StagingStorageMode == NewaccNet.Core.Staging.StagingStorageMode.Database ? 1 : 0;
+
             UpdateVisibility();
         }
 
@@ -179,6 +182,11 @@ namespace NewaccNet.Wpf.AppSystem
             config.PgUsername = txtPgUsername.Text;
             config.PgPassword = txtPgPassword.EditValue as string ?? "";
 
+            // Kho lưu nháp Staging
+            config.StagingStorageMode = cboStagingStorageMode.SelectedIndex == 1
+                ? NewaccNet.Core.Staging.StagingStorageMode.Database
+                : NewaccNet.Core.Staging.StagingStorageMode.JsonFile;
+
             // 1. Áp dụng cấu hình kết nối CSDL trước
             ConfigManager.BuildConnectionString();
             ConfigManager.SaveConfig();
@@ -209,6 +217,68 @@ namespace NewaccNet.Wpf.AppSystem
             MainWindow.SuppressExitPrompt = true;
             System.Diagnostics.Process.Start(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
             System.Windows.Application.Current.Shutdown();
+        }
+
+        private async void BtnMigrateJsonToDb_Click(object sender, RoutedEventArgs e)
+        {
+            var confirm = MessageBox.Show(
+                "Bạn có muốn nạp toàn bộ chứng từ nháp từ tệp JSON trong máy vào bảng StagingDraft trong CSDL đang kết nối?\n\n" +
+                "Các chứng từ đã có trong CSDL sẽ được giữ nguyên (không bị ghi đè).",
+                "Đồng bộ JSON ➔ CSDL", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (confirm != MessageBoxResult.Yes) return;
+
+            btnMigrateJsonToDb.IsEnabled = false;
+            try
+            {
+                var migration = new NewaccNet.Core.Staging.DraftMigrationService();
+                var result = await migration.MigrateJsonToDbAsync(overwrite: false);
+                MessageBox.Show(
+                    $"Đã hoàn tất đồng bộ JSON ➔ CSDL:\n" +
+                    $"- Tổng số tìm thấy: {result.TotalFound}\n" +
+                    $"- Đã nạp thành công: {result.SuccessCount}\n" +
+                    $"- Đã bỏ qua (đã có sẵn): {result.SkippedCount}\n" +
+                    $"- Lỗi: {result.ErrorCount}",
+                    "Kết quả đồng bộ", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi đồng bộ JSON ➔ CSDL: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                btnMigrateJsonToDb.IsEnabled = true;
+            }
+        }
+
+        private async void BtnMigrateDbToJson_Click(object sender, RoutedEventArgs e)
+        {
+            var confirm = MessageBox.Show(
+                "Bạn có muốn xuất toàn bộ chứng từ nháp từ bảng StagingDraft trong CSDL ra các tệp JSON trong thư mục AppData/NewaccNet/Staging?\n\n" +
+                "Các tệp đã tồn tại sẽ được giữ nguyên.",
+                "Đồng bộ CSDL ➔ JSON", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (confirm != MessageBoxResult.Yes) return;
+
+            btnMigrateDbToJson.IsEnabled = false;
+            try
+            {
+                var migration = new NewaccNet.Core.Staging.DraftMigrationService();
+                var result = await migration.MigrateDbToJsonAsync(overwrite: false);
+                MessageBox.Show(
+                    $"Đã hoàn tất xuất CSDL ➔ JSON:\n" +
+                    $"- Tổng số tìm thấy: {result.TotalFound}\n" +
+                    $"- Đã xuất thành công: {result.SuccessCount}\n" +
+                    $"- Đã bỏ qua (đã có sẵn): {result.SkippedCount}\n" +
+                    $"- Lỗi: {result.ErrorCount}",
+                    "Kết quả xuất dữ liệu", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi xuất CSDL ➔ JSON: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                btnMigrateDbToJson.IsEnabled = true;
+            }
         }
     }
 }

@@ -24,5 +24,18 @@ namespace NewaccNet.AI.Configuration
         public string AppTitle { get; set; } = "NewaccNet Accounting AI";
 
         public bool IsConfigured => !string.IsNullOrWhiteSpace(ApiKey);
+
+        public static OpenRouterOptions FromAppConfig(NewaccNet.Core.Data.AppConfig? config)
+        {
+            if (config == null) return new OpenRouterOptions();
+            return new OpenRouterOptions
+            {
+                ApiKey = config.OpenRouterApiKey ?? string.Empty,
+                BaseUrl = string.IsNullOrWhiteSpace(config.OpenRouterBaseUrl) ? DefaultBaseUrl : config.OpenRouterBaseUrl,
+                Model = string.IsNullOrWhiteSpace(config.OpenRouterChatModel) ? DefaultChatModel : config.OpenRouterChatModel,
+                VisionModel = string.IsNullOrWhiteSpace(config.OpenRouterVisionModel) ? DefaultVisionModel : config.OpenRouterVisionModel,
+                AnalysisModel = string.IsNullOrWhiteSpace(config.OpenRouterAnalysisModel) ? DefaultProModel : config.OpenRouterAnalysisModel
+            };
+        }
     }
 }

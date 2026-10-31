@@ -3,8 +3,15 @@
   <Project Path="dataaccess/MS Access (OleDb)/DatabaseSpecific/DataAccess.MsAccessDBSpecific.csproj" />
   <Project Path="dataaccess/PostgreSql (Npgsql)/DatabaseSpecific/DataAccess.PostgreSqlDBSpecific.csproj" />
   <Project Path="dataaccess/SQL Server (SqlClient)/DatabaseSpecific/DataAccess.SqlServerDBSpecific.csproj" />
+  <Project Path="NewaccNet.Contracts/NewaccNet.Contracts.csproj" />
+  <Project Path="NewaccNet.Core/NewaccNet.Core.csproj" />
+  <Project Path="NewaccNet.Office/NewaccNet.Office.csproj" />
+  <Project Path="NewaccNet.Tools/NewaccNet.Tools.csproj" />
+  <Project Path="NewaccNet.Agent/NewaccNet.Agent.csproj" />
+  <Project Path="NewaccNet.ArchitectureTests/NewaccNet.ArchitectureTests.csproj" />
   <Project Path="NewaccNet.AI/NewaccNet.AI.csproj" />
   <Project Path="NewaccNet.Reports/NewaccNet.Reports.csproj" />
+  <Project Path="NewaccNet.Plugin.ErpWarehouse/NewaccNet.Plugin.ErpWarehouse.csproj" />
   <Project Path="NewaccNet.TaxInvoice/NewaccNet.TaxInvoice.csproj" />
   <Project Path="NewaccNet.Wpf/NewaccNet.Wpf.csproj" />
 </Solution>

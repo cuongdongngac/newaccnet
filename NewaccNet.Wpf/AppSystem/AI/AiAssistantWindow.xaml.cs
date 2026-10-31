@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using NewaccNet.AI.Configuration;
 using NewaccNet.AI.Contracts;
 using NewaccNet.AI.Gateway;
+using NewaccNet.AI.Prompts;
 using NewaccNet.AI.Services;
 using NewaccNet.TaxInvoice;
 using NewaccNet.Wpf.AppSystem;
@@ -37,6 +39,9 @@ namespace NewaccNet.Wpf.AppSystem.AI
 
         private JournalEntryAiDto? _currentAiJournal;
         private OcrInvoiceResultDto? _currentOcrInvoice;
+        private OfficeChatResponseDto? _currentOcrOfficeResponse;
+        private MemoryStream? _currentOcrSpreadsheetStream;
+        private MemoryStream? _currentOcrWordStream;
         private ExecutiveInsightAiDto? _currentCfoInsight;
 
         public ObservableCollection<string> DbcrOptions { get; } = new() { "Nợ", "Có" };
@@ -265,21 +270,70 @@ namespace NewaccNet.Wpf.AppSystem.AI
         }
 
         // ==============================================================
-        // TAB 2: OCR HÓA ĐƠN & QUÉT CHỨNG TỪ (OCR VISION)
+        // TAB 2: OCR TÀI LIỆU LINH HOẠT & OFFICE NỘI BỘ (AI VISION)
         // ==============================================================
+
+        private void BtnChipPrescription_Click(object sender, RoutedEventArgs e)
+        {
+            txtOcrPrompt.Text = AiPromptTemplates.PromptPrescriptionToTable;
+            cboOcrTargetFormat.SelectedIndex = 1; // Bảng tính Excel
+        }
+
+        private void BtnChipInvoice_Click(object sender, RoutedEventArgs e)
+        {
+            txtOcrPrompt.Text = AiPromptTemplates.PromptInvoiceToExcel;
+            cboOcrTargetFormat.SelectedIndex = 1; // Bảng tính Excel
+        }
+
+        private void BtnChipWarehouse_Click(object sender, RoutedEventArgs e)
+        {
+            txtOcrPrompt.Text = AiPromptTemplates.PromptWarehouseToExcel;
+            cboOcrTargetFormat.SelectedIndex = 1; // Bảng tính Excel
+        }
+
+        private void BtnChipTimesheet_Click(object sender, RoutedEventArgs e)
+        {
+            txtOcrPrompt.Text = AiPromptTemplates.PromptTimesheetToExcel;
+            cboOcrTargetFormat.SelectedIndex = 1; // Bảng tính Excel
+        }
+
+        private void BtnChipDelivery_Click(object sender, RoutedEventArgs e)
+        {
+            txtOcrPrompt.Text = AiPromptTemplates.PromptDeliveryNoteToWord;
+            cboOcrTargetFormat.SelectedIndex = 2; // Văn bản Word
+        }
+
+        private void BtnChipContract_Click(object sender, RoutedEventArgs e)
+        {
+            txtOcrPrompt.Text = AiPromptTemplates.PromptContractToWord;
+            cboOcrTargetFormat.SelectedIndex = 2; // Văn bản Word
+        }
+
+        private void BtnChipFullDoc_Click(object sender, RoutedEventArgs e)
+        {
+            txtOcrPrompt.Text = AiPromptTemplates.PromptFullDocumentMarkdown;
+            cboOcrTargetFormat.SelectedIndex = 3; // Văn bản thô
+        }
 
         private void BtnBrowseOcr_Click(object sender, RoutedEventArgs e)
         {
             var dlg = new OpenFileDialog
             {
-                Title = "Chọn tệp Hóa đơn hoặc Chứng từ scan (Ảnh / PDF)",
-                Filter = "Tài liệu hóa đơn (*.jpg;*.jpeg;*.png;*.pdf)|*.jpg;*.jpeg;*.png;*.pdf|Tất cả tệp (*.*)|*.*"
+                Title = "Chọn tệp Tài liệu, Ảnh hoặc PDF để OCR",
+                Filter = "Tài liệu & Hình ảnh (*.jpg;*.jpeg;*.png;*.webp;*.bmp;*.pdf)|*.jpg;*.jpeg;*.png;*.webp;*.bmp;*.pdf|Tất cả tệp (*.*)|*.*"
             };
 
             if (dlg.ShowDialog() == true)
             {
                 txtOcrFilePath.Text = dlg.FileName;
+                var fi = new FileInfo(dlg.FileName);
+                lblOcrFileInfo.Text = $"Tệp: {fi.Name} ({fi.Length / 1024:N0} KB)";
                 LoadThumbnail(dlg.FileName);
+
+                if (string.IsNullOrWhiteSpace(txtOcrPrompt.Text))
+                {
+                    txtOcrPrompt.Text = AiPromptTemplates.PromptPrescriptionToTable;
+                }
             }
         }
 
@@ -288,7 +342,7 @@ namespace NewaccNet.Wpf.AppSystem.AI
             try
             {
                 string ext = Path.GetExtension(filePath).ToLowerInvariant();
-                if (ext is ".jpg" or ".jpeg" or ".png")
+                if (ext is ".jpg" or ".jpeg" or ".png" or ".webp" or ".bmp")
                 {
                     var bmp = new BitmapImage();
                     bmp.BeginInit();
@@ -313,78 +367,167 @@ namespace NewaccNet.Wpf.AppSystem.AI
             string filePath = txtOcrFilePath.Text?.Trim() ?? string.Empty;
             if (string.IsNullOrWhiteSpace(filePath) || !File.Exists(filePath))
             {
-                MessageBox.Show("Vui lòng chọn một tệp hóa đơn hoặc chứng từ hợp lệ trên máy tính.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Vui lòng chọn một tệp tài liệu hoặc ảnh scan hợp lệ trên máy tính.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
             if (!EnsureApiKeyConfigured()) return;
 
-            bool isInvoiceMode = cboOcrMode.SelectedIndex == 0;
+            string prompt = txtOcrPrompt.Text?.Trim() ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(prompt))
+            {
+                prompt = "Hãy bóc tách toàn bộ tài liệu đính kèm thành định dạng Office phù hợp.";
+            }
+
+            int targetFormatIndex = cboOcrTargetFormat.SelectedIndex;
+            var preferredOutput = targetFormatIndex switch
+            {
+                1 => OfficeOutputType.Spreadsheet,
+                2 => OfficeOutputType.WordDocument,
+                _ => OfficeOutputType.ChatOnly
+            };
 
             try
             {
                 btnRunOcr.IsEnabled = false;
-                lblAiStatus.Text = "⏳ Đang gửi tài liệu lên OpenRouter Vision để đọc chữ & trích xuất...";
+                lblAiStatus.Text = "⏳ Đang gửi tài liệu lên AI Vision để đọc chữ & bóc tách theo prompt...";
+                lblOcrExtractedSummary.Text = "⏳ AI Vision đang phân tích dữ liệu và cấu trúc tài liệu...";
 
                 var options = GetAiOptions();
                 using var gateway = new OpenRouterGateway(options);
                 var ocrService = new OcrVisionService(gateway);
+                var openXmlService = new OpenXmlReportService();
 
-                if (isInvoiceMode)
+                if (targetFormatIndex == 3)
                 {
-                    grpOcrItems.Visibility = Visibility.Visible;
-                    grpOcrDocument.Visibility = Visibility.Collapsed;
-
-                    var invoice = await ocrService.ExtractInvoiceFromImageOrPdfAsync(filePath);
-                    _currentOcrInvoice = invoice;
-
-                    // Bind header
-                    txtOcrInvoiceNumber.Text = invoice.InvoiceNo;
-                    if (DateTime.TryParse(invoice.InvoiceDate, out var dt))
-                    {
-                        dtOcrInvoiceDate.DateTime = dt;
-                    }
-                    else
-                    {
-                        dtOcrInvoiceDate.DateTime = DateTime.Today;
-                    }
-
-                    txtOcrSerial.Text = $"{invoice.InvoiceSeries} / {invoice.InvoiceType}";
-                    txtOcrSellerName.Text = invoice.SellerName;
-                    txtOcrSellerTaxCode.Text = invoice.SellerTaxCode;
-                    txtOcrSellerAddress.Text = invoice.SellerAddress;
-                    txtOcrBuyerName.Text = invoice.BuyerName;
-                    txtOcrBuyerTaxCode.Text = invoice.BuyerTaxCode;
-                    txtOcrTotalAmount.Text = invoice.TotalAmount.ToString("N0");
-
-                    // Gợi ý tài khoản tự động cho các mặt hàng
-                    var agent = new AccountingAgentService(gateway);
-                    var accountPairs = _accounts.Select(a => (a.AccountId, a.AccountName)).ToList();
-                    var warehousePairs = _warehouses.Select(w => (w.WarehouseId, w.WarehouseName)).ToList();
-                    await agent.SuggestInvoiceItemPostingAsync(invoice, accountPairs, warehousePairs);
-
-                    gridOcrItems.ItemsSource = invoice.Items;
-                    lblAiStatus.Text = $"✅ Đã trích xuất xong HĐĐT số {invoice.InvoiceNo} ({invoice.Items.Count} mặt hàng).";
+                    // Chế độ Raw Markdown
+                    string rawDoc = await ocrService.ExtractDocumentTextAsync(filePath, outputFormat: "markdown", additionalPrompt: prompt);
+                    txtOcrFullDocument.Text = rawDoc;
+                    tabOcrOfficeResult.SelectedItem = tabItemMarkdown;
+                    lblOcrExtractedSummary.Text = "✅ Đã nhận dạng xong toàn bộ văn bản dưới dạng Markdown.";
+                    lblAiStatus.Text = "✅ Hoàn tất OCR văn bản thô.";
                 }
                 else
                 {
-                    grpOcrItems.Visibility = Visibility.Collapsed;
-                    grpOcrDocument.Visibility = Visibility.Visible;
+                    var officeResponse = await ocrService.ExtractDocumentToOfficeFromFileAsync(filePath, prompt, preferredOutput);
+                    _currentOcrOfficeResponse = officeResponse;
 
-                    string docText = await ocrService.ExtractDocumentTextAsync(filePath);
-                    txtOcrFullDocument.Text = docText;
-                    lblAiStatus.Text = "✅ Đã hoàn tất OCR nhận dạng toàn văn văn bản dạng Markdown.";
+                    if (officeResponse == null)
+                    {
+                        throw new InvalidOperationException("Không nhận được dữ liệu trích xuất hợp lệ từ AI Vision.");
+                    }
+
+                    txtOcrFullDocument.Text = officeResponse.ChatMessage;
+
+                    if (officeResponse.OutputType == OfficeOutputType.Spreadsheet && officeResponse.Spreadsheet != null)
+                    {
+                        var stream = openXmlService.GenerateDynamicSpreadsheetStream(officeResponse.Spreadsheet);
+                        _currentOcrSpreadsheetStream?.Dispose();
+                        _currentOcrSpreadsheetStream = stream;
+
+                        stream.Seek(0, SeekOrigin.Begin);
+                        ocrSpreadsheetControl.LoadDocument(stream, DevExpress.Spreadsheet.DocumentFormat.OpenXml);
+                        tabOcrOfficeResult.SelectedItem = tabItemSpreadsheet;
+
+                        // Đồng thời map thành OcrInvoiceResultDto để hỗ trợ tạo phiếu hoặc trích xuất nếu cần
+                        _currentOcrInvoice = ConvertSpreadsheetToOcrInvoice(officeResponse.Spreadsheet);
+
+                        lblOcrExtractedSummary.Text = $"✅ Đã tạo Bảng tính Excel ({officeResponse.Spreadsheet.Columns.Count} cột, {officeResponse.Spreadsheet.Rows.Count} dòng). Bạn có thể bấm vào từng ô để chỉnh sửa, thêm bớt trực tiếp trên màn hình.";
+                        lblAiStatus.Text = $"✅ Hoàn tất OCR: {officeResponse.Spreadsheet.Title}";
+                    }
+                    else if (officeResponse.OutputType == OfficeOutputType.WordDocument && officeResponse.WordDocument != null)
+                    {
+                        var stream = openXmlService.GenerateDynamicWordStream(officeResponse.WordDocument);
+                        _currentOcrWordStream?.Dispose();
+                        _currentOcrWordStream = stream;
+
+                        stream.Seek(0, SeekOrigin.Begin);
+                        ocrRichEditControl.LoadDocument(stream, DevExpress.XtraRichEdit.DocumentFormat.OpenXml);
+                        tabOcrOfficeResult.SelectedItem = tabItemRichEdit;
+
+                        lblOcrExtractedSummary.Text = $"✅ Đã tạo Văn bản Word ({officeResponse.WordDocument.Sections.Count} phần mục). Bạn có thể chỉnh sửa câu chữ trực tiếp trên màn hình.";
+                        lblAiStatus.Text = $"✅ Hoàn tất OCR: {officeResponse.WordDocument.Title}";
+                    }
+                    else
+                    {
+                        txtOcrFullDocument.Text = officeResponse.ChatMessage;
+                        tabOcrOfficeResult.SelectedItem = tabItemMarkdown;
+                        lblOcrExtractedSummary.Text = "✅ Đã nhận dạng nội dung văn bản.";
+                        lblAiStatus.Text = "✅ Hoàn tất bóc tách.";
+                    }
                 }
             }
             catch (Exception ex)
             {
                 lblAiStatus.Text = "❌ Lỗi OCR: " + ex.Message;
-                MessageBox.Show("Lỗi nhận dạng tài liệu: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                lblOcrExtractedSummary.Text = "❌ Lỗi: " + ex.Message;
+                MessageBox.Show("Lỗi bóc tách tài liệu AI: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
             {
                 btnRunOcr.IsEnabled = true;
             }
+        }
+
+        private OcrInvoiceResultDto ConvertSpreadsheetToOcrInvoice(DynamicSpreadsheetDto sheet)
+        {
+            var dto = new OcrInvoiceResultDto
+            {
+                InvoiceNo = DateTime.Now.ToString("yyMMddHHmm"),
+                InvoiceDate = DateTime.Today.ToString("yyyy-MM-dd"),
+                SellerName = !string.IsNullOrWhiteSpace(sheet.Subtitle) ? sheet.Subtitle : sheet.Title
+            };
+
+            int nameCol = -1, unitCol = -1, qtyCol = -1, priceCol = -1, amountCol = -1;
+            for (int i = 0; i < sheet.Columns.Count; i++)
+            {
+                string h = sheet.Columns[i].Header.ToLowerInvariant();
+                if (h.Contains("tên") || h.Contains("thuốc") || h.Contains("hàng") || h.Contains("mô tả")) nameCol = i;
+                else if (h.Contains("đvt") || h.Contains("đơn vị")) unitCol = i;
+                else if (h.Contains("lượng") || h.Contains("qty")) qtyCol = i;
+                else if (h.Contains("giá") || h.Contains("price")) priceCol = i;
+                else if (h.Contains("tiền") || h.Contains("amount")) amountCol = i;
+            }
+
+            int line = 1;
+            foreach (var r in sheet.Rows)
+            {
+                string itemName = nameCol >= 0 && nameCol < r.Count ? r[nameCol] : (r.Count > 1 ? r[1] : (r.Count > 0 ? r[0] : ""));
+                if (string.IsNullOrWhiteSpace(itemName)) continue;
+
+                string unit = unitCol >= 0 && unitCol < r.Count ? r[unitCol] : "";
+                decimal qty = 1;
+                if (qtyCol >= 0 && qtyCol < r.Count)
+                {
+                    decimal.TryParse(r[qtyCol].Replace(",", "").Trim(), NumberStyles.Any, CultureInfo.InvariantCulture, out qty);
+                }
+
+                decimal price = 0;
+                if (priceCol >= 0 && priceCol < r.Count)
+                {
+                    decimal.TryParse(r[priceCol].Replace(",", "").Trim(), NumberStyles.Any, CultureInfo.InvariantCulture, out price);
+                }
+
+                decimal amount = price * qty;
+                if (amountCol >= 0 && amountCol < r.Count)
+                {
+                    decimal.TryParse(r[amountCol].Replace(",", "").Trim(), NumberStyles.Any, CultureInfo.InvariantCulture, out amount);
+                }
+
+                dto.Items.Add(new OcrInvoiceItemDto
+                {
+                    LineNo = line++,
+                    ItemName = itemName,
+                    Unit = unit,
+                    Quantity = (double)qty,
+                    UnitPrice = price,
+                    Amount = amount,
+                    SuggestedAccount = "156"
+                });
+            }
+
+            dto.TotalAmount = dto.Items.Sum(x => x.Amount);
+            return dto;
         }
 
         private void BtnOcrToVoucher_Click(object sender, RoutedEventArgs e)
@@ -396,10 +539,12 @@ namespace NewaccNet.Wpf.AppSystem.AI
             }
 
             var inv = _currentOcrInvoice;
+            DateTime voucherDate = DateTime.TryParse(inv.InvoiceDate, out var dtParsed) ? dtParsed : DateTime.Today;
+
             var voucher = new JournalVoucherEntity
             {
                 VoucherNo = "OCR" + DateTime.Now.ToString("yyMMddHHmm"),
-                VoucherDate = dtOcrInvoiceDate.DateTime != default ? dtOcrInvoiceDate.DateTime : DateTime.Today,
+                VoucherDate = voucherDate,
                 Invoicesnumber = inv.InvoiceNo,
                 Contents = $"Mua hàng theo HĐ số {inv.InvoiceNo} từ {inv.SellerName}",
                 Personname = inv.SellerName,
@@ -456,11 +601,13 @@ namespace NewaccNet.Wpf.AppSystem.AI
         {
             if (_currentOcrInvoice == null) return new TaxInvoiceDto();
 
+            DateTime invoiceDate = DateTime.TryParse(_currentOcrInvoice.InvoiceDate, out var dtInv) ? dtInv : DateTime.Today;
+
             return new TaxInvoiceDto
             {
                 InvoiceNo = long.TryParse(_currentOcrInvoice.InvoiceNo, out var no) ? no : 1,
                 InvoiceSeries = _currentOcrInvoice.InvoiceSeries,
-                InvoiceDate = dtOcrInvoiceDate.DateTime != default ? dtOcrInvoiceDate.DateTime : DateTime.Today,
+                InvoiceDate = invoiceDate,
                 SellerName = _currentOcrInvoice.SellerName,
                 SellerTaxCode = _currentOcrInvoice.SellerTaxCode,
                 SellerAddress = _currentOcrInvoice.SellerAddress,
@@ -514,22 +661,33 @@ namespace NewaccNet.Wpf.AppSystem.AI
 
         private void BtnOcrOpenInOffice_Click(object sender, RoutedEventArgs e)
         {
-            if (_currentOcrInvoice == null || _currentOcrInvoice.Items.Count == 0)
-            {
-                MessageBox.Show("Không có dữ liệu mặt hàng để mở trong Office Studio.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
-            }
-
             try
             {
-                var openXmlService = new OpenXmlReportService();
-                var stream = openXmlService.GenerateInvoiceItemsSpreadsheet(
-                    $"BẢNG KÊ CHI TIẾT HÓA ĐƠN SỐ {_currentOcrInvoice.InvoiceNo}",
-                    _currentOcrInvoice.SellerName,
-                    $"MST: {_currentOcrInvoice.SellerTaxCode} - Ngày: {_currentOcrInvoice.InvoiceDate}",
-                    _currentOcrInvoice.Items);
+                if (_currentOcrSpreadsheetStream != null)
+                {
+                    _currentOcrSpreadsheetStream.Seek(0, SeekOrigin.Begin);
+                    OfficeStudioWindow.OpenExcel(_currentOcrSpreadsheetStream, "Bảng tính OCR");
+                }
+                else if (_currentOcrWordStream != null)
+                {
+                    _currentOcrWordStream.Seek(0, SeekOrigin.Begin);
+                    OfficeStudioWindow.OpenWord(_currentOcrWordStream, "Văn bản Word OCR");
+                }
+                else if (_currentOcrInvoice != null && _currentOcrInvoice.Items.Count > 0)
+                {
+                    var openXmlService = new OpenXmlReportService();
+                    var stream = openXmlService.GenerateInvoiceItemsSpreadsheet(
+                        $"BẢNG KÊ CHI TIẾT HÓA ĐƠN SỐ {_currentOcrInvoice.InvoiceNo}",
+                        _currentOcrInvoice.SellerName,
+                        $"MST: {_currentOcrInvoice.SellerTaxCode} - Ngày: {_currentOcrInvoice.InvoiceDate}",
+                        _currentOcrInvoice.Items);
 
-                OfficeStudioWindow.OpenExcel(stream, $"Hóa đơn {_currentOcrInvoice.InvoiceNo}");
+                    OfficeStudioWindow.OpenExcel(stream, $"Hóa đơn {_currentOcrInvoice.InvoiceNo}");
+                }
+                else
+                {
+                    MessageBox.Show("Chưa có dữ liệu Office nào được trích xuất. Vui lòng chạy Quét & Bóc tách trước.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
             }
             catch (Exception ex)
             {
@@ -537,40 +695,75 @@ namespace NewaccNet.Wpf.AppSystem.AI
             }
         }
 
-        private void BtnOcrExportExcel_Click(object sender, RoutedEventArgs e)
+        private void BtnOcrSaveFile_Click(object sender, RoutedEventArgs e)
         {
-            if (_currentOcrInvoice == null || _currentOcrInvoice.Items.Count == 0)
+            try
             {
-                MessageBox.Show("Không có dữ liệu mặt hàng để xuất Excel.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
+                if (_currentOcrSpreadsheetStream != null)
+                {
+                    var dlg = new SaveFileDialog
+                    {
+                        Title = "Lưu Bảng tính Excel",
+                        Filter = "Excel Workbook (*.xlsx)|*.xlsx",
+                        FileName = $"BangTinh_OCR_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx"
+                    };
+
+                    if (dlg.ShowDialog() == true)
+                    {
+                        _currentOcrSpreadsheetStream.Seek(0, SeekOrigin.Begin);
+                        File.WriteAllBytes(dlg.FileName, _currentOcrSpreadsheetStream.ToArray());
+                        MessageBox.Show("Xuất file Excel OpenXML thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                        Process.Start(new ProcessStartInfo(dlg.FileName) { UseShellExecute = true });
+                    }
+                }
+                else if (_currentOcrWordStream != null)
+                {
+                    var dlg = new SaveFileDialog
+                    {
+                        Title = "Lưu Văn bản Word",
+                        Filter = "Word Document (*.docx)|*.docx",
+                        FileName = $"VanBan_OCR_{DateTime.Now:yyyyMMdd_HHmmss}.docx"
+                    };
+
+                    if (dlg.ShowDialog() == true)
+                    {
+                        _currentOcrWordStream.Seek(0, SeekOrigin.Begin);
+                        File.WriteAllBytes(dlg.FileName, _currentOcrWordStream.ToArray());
+                        MessageBox.Show("Xuất file Word OpenXML thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                        Process.Start(new ProcessStartInfo(dlg.FileName) { UseShellExecute = true });
+                    }
+                }
+                else if (_currentOcrInvoice != null && _currentOcrInvoice.Items.Count > 0)
+                {
+                    var dlg = new SaveFileDialog
+                    {
+                        Title = "Lưu Bảng tính Excel Chi tiết Hóa đơn",
+                        Filter = "Excel Workbook (*.xlsx)|*.xlsx",
+                        FileName = $"ChiTiet_HD_{_currentOcrInvoice.InvoiceNo}_{DateTime.Now:yyyyMMdd}.xlsx"
+                    };
+
+                    if (dlg.ShowDialog() == true)
+                    {
+                        var openXmlService = new OpenXmlReportService();
+                        using var stream = openXmlService.GenerateInvoiceItemsSpreadsheet(
+                            $"BẢNG KÊ CHI TIẾT HÓA ĐƠN SỐ {_currentOcrInvoice.InvoiceNo}",
+                            _currentOcrInvoice.SellerName,
+                            $"MST: {_currentOcrInvoice.SellerTaxCode} - Ngày: {_currentOcrInvoice.InvoiceDate}",
+                            _currentOcrInvoice.Items);
+
+                        File.WriteAllBytes(dlg.FileName, stream.ToArray());
+                        MessageBox.Show("Xuất file Excel OpenXML thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                        Process.Start(new ProcessStartInfo(dlg.FileName) { UseShellExecute = true });
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Chưa có dữ liệu nào để xuất tệp Office.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
             }
-
-            var dlg = new SaveFileDialog
+            catch (Exception ex)
             {
-                Title = "Lưu Bảng tính Excel Chi tiết Hóa đơn",
-                Filter = "Excel Workbook (*.xlsx)|*.xlsx",
-                FileName = $"ChiTiet_HD_{_currentOcrInvoice.InvoiceNo}_{DateTime.Now:yyyyMMdd}.xlsx"
-            };
-
-            if (dlg.ShowDialog() == true)
-            {
-                try
-                {
-                    var openXmlService = new OpenXmlReportService();
-                    using var stream = openXmlService.GenerateInvoiceItemsSpreadsheet(
-                        $"BẢNG KÊ CHI TIẾT HÓA ĐƠN SỐ {_currentOcrInvoice.InvoiceNo}",
-                        _currentOcrInvoice.SellerName,
-                        $"MST: {_currentOcrInvoice.SellerTaxCode} - Ngày: {_currentOcrInvoice.InvoiceDate}",
-                        _currentOcrInvoice.Items);
-
-                    File.WriteAllBytes(dlg.FileName, stream.ToArray());
-                    MessageBox.Show("Xuất file Excel OpenXML thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                    Process.Start(new ProcessStartInfo(dlg.FileName) { UseShellExecute = true });
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Lỗi xuất Excel: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+                MessageBox.Show("Lỗi xuất tệp: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

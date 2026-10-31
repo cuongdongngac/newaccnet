@@ -781,23 +781,24 @@ namespace DataAccess.PostgreSql.DatabaseSpecific
 		/// <summary>Inits InventoryVoucherEntity's mappings</summary>
 		private void InitInventoryVoucherEntityMappings()
 		{
-			this.AddElementMapping("InventoryVoucherEntity", @"Default", @"Newacc", "InventoryVoucher", 16, 0);
+			this.AddElementMapping("InventoryVoucherEntity", @"Default", @"Newacc", "InventoryVoucher", 17, 0);
 			this.AddElementFieldMapping("InventoryVoucherEntity", "Carrier", "Carrier", true, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 0);
-			this.AddElementFieldMapping("InventoryVoucherEntity", "ExobjectId", "ExobjectId", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 1);
-			this.AddElementFieldMapping("InventoryVoucherEntity", "Id", "Id", false, "Integer", 0, 10, 0, true, "SystemIdentity", null, typeof(System.Int32), 2);
-			this.AddElementFieldMapping("InventoryVoucherEntity", "Inoutnumber", "Inoutnumber", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 3);
-			this.AddElementFieldMapping("InventoryVoucherEntity", "JournalEntryId", "JournalEntryId", true, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 4);
-			this.AddElementFieldMapping("InventoryVoucherEntity", "Printflag", "Printflag", false, "Boolean", 0, 0, 0, false, "", null, typeof(System.Boolean), 5);
-			this.AddElementFieldMapping("InventoryVoucherEntity", "Serialno", "Serialno", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 6);
-			this.AddElementFieldMapping("InventoryVoucherEntity", "Taxflag", "Taxflag", false, "Boolean", 0, 0, 0, false, "", null, typeof(System.Boolean), 7);
-			this.AddElementFieldMapping("InventoryVoucherEntity", "Taxno", "Taxno", true, "Varchar", 20, 0, 0, false, "", null, typeof(System.String), 8);
-			this.AddElementFieldMapping("InventoryVoucherEntity", "Vataddress", "Vataddress", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 9);
-			this.AddElementFieldMapping("InventoryVoucherEntity", "Vatbilldate", "Vatbilldate", true, "Date", 0, 0, 0, false, "", null, typeof(System.DateTime), 10);
-			this.AddElementFieldMapping("InventoryVoucherEntity", "Vatbillno", "Vatbillno", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 11);
-			this.AddElementFieldMapping("InventoryVoucherEntity", "Vatmaterialdes", "Vatmaterialdes", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 12);
-			this.AddElementFieldMapping("InventoryVoucherEntity", "Vatobjectid", "Vatobjectid", true, "Varchar", 20, 0, 0, false, "", null, typeof(System.String), 13);
-			this.AddElementFieldMapping("InventoryVoucherEntity", "Vatobjectname", "Vatobjectname", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 14);
-			this.AddElementFieldMapping("InventoryVoucherEntity", "WarehouseId", "WarehouseId", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 15);
+			this.AddElementFieldMapping("InventoryVoucherEntity", "EntryGraph", "EntryGraph", true, "Text", 1073741824, 0, 0, false, "", null, typeof(System.String), 1);
+			this.AddElementFieldMapping("InventoryVoucherEntity", "ExobjectId", "ExobjectId", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("InventoryVoucherEntity", "Id", "Id", false, "Integer", 0, 10, 0, true, "SystemIdentity", null, typeof(System.Int32), 3);
+			this.AddElementFieldMapping("InventoryVoucherEntity", "Inoutnumber", "Inoutnumber", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 4);
+			this.AddElementFieldMapping("InventoryVoucherEntity", "JournalEntryId", "JournalEntryId", true, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 5);
+			this.AddElementFieldMapping("InventoryVoucherEntity", "Printflag", "Printflag", false, "Boolean", 0, 0, 0, false, "", null, typeof(System.Boolean), 6);
+			this.AddElementFieldMapping("InventoryVoucherEntity", "Serialno", "Serialno", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 7);
+			this.AddElementFieldMapping("InventoryVoucherEntity", "Taxflag", "Taxflag", false, "Boolean", 0, 0, 0, false, "", null, typeof(System.Boolean), 8);
+			this.AddElementFieldMapping("InventoryVoucherEntity", "Taxno", "Taxno", true, "Varchar", 20, 0, 0, false, "", null, typeof(System.String), 9);
+			this.AddElementFieldMapping("InventoryVoucherEntity", "Vataddress", "Vataddress", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 10);
+			this.AddElementFieldMapping("InventoryVoucherEntity", "Vatbilldate", "Vatbilldate", true, "Date", 0, 0, 0, false, "", null, typeof(System.DateTime), 11);
+			this.AddElementFieldMapping("InventoryVoucherEntity", "Vatbillno", "Vatbillno", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 12);
+			this.AddElementFieldMapping("InventoryVoucherEntity", "Vatmaterialdes", "Vatmaterialdes", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 13);
+			this.AddElementFieldMapping("InventoryVoucherEntity", "Vatobjectid", "Vatobjectid", true, "Varchar", 20, 0, 0, false, "", null, typeof(System.String), 14);
+			this.AddElementFieldMapping("InventoryVoucherEntity", "Vatobjectname", "Vatobjectname", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 15);
+			this.AddElementFieldMapping("InventoryVoucherEntity", "WarehouseId", "WarehouseId", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 16);
 		}
 
 		/// <summary>Inits InventoryVoucherLineEntity's mappings</summary>

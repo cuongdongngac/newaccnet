@@ -22,6 +22,9 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
         {
             InitializeComponent();
 
+            // Khởi tạo bộ giải Captcha AI Vision Fallback
+            _client.CaptchaSolver = new NewaccNet.AI.Services.AiCaptchaSolver();
+
             if (!string.IsNullOrEmpty(databasePath) && System.IO.File.Exists(databasePath))
             {
                 _dbService = new TaxInvoiceDbService(databasePath);

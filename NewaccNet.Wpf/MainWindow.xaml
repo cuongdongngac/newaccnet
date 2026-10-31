@@ -503,11 +503,11 @@ Bao gồm liên kết tới loại hình tương ứng."/>
                                 </dx:SuperTip>
                             </dxb:BarButtonItem.SuperTip>
                         </dxb:BarButtonItem>
-                        <dxb:BarButtonItem Content="OCR Hóa đơn giấy" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/pdf%20viewer/openfromweb.svg'}" ItemClick="BtnAiOcr_ItemClick">
+                        <dxb:BarButtonItem Content="OCR Tài liệu &amp; Office" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/pdf%20viewer/openfromweb.svg'}" ItemClick="BtnAiOcr_ItemClick">
                             <dxb:BarButtonItem.SuperTip>
                                 <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Nhận dạng &amp; Trích xuất Hóa đơn / Chứng từ (OCR Vision)"/>
-                                    <dx:SuperTipItem Content="Quét hóa đơn giấy, hóa đơn ảnh hoặc PDF bằng OpenRouter Vision đa phương thức. Tự động bóc tách mặt hàng, tiền thuế, nhà cung cấp và khởi tạo chứng từ kế toán."/>
+                                    <dx:SuperTipHeaderItem Content="Nhận dạng &amp; Bóc tách Tài liệu / Ảnh bằng Prompt (AI OCR -&gt; Office)"/>
+                                    <dx:SuperTipItem Content="Bóc tách linh hoạt mọi tài liệu (Đơn thuốc y tế, Hóa đơn, Phiếu kho, Bảng chấm công, Biên bản, Hợp đồng...) qua Prompt và xuất thẳng ra Bảng tính Excel hoặc Văn bản Word nội bộ để người dùng xem và biên tập trước khi chuẩn hóa."/>
                                 </dx:SuperTip>
                             </dxb:BarButtonItem.SuperTip>
                         </dxb:BarButtonItem>

@@ -14,6 +14,7 @@
     <ProjectReference Include="..\dataaccess\SQL Server (SqlClient)\DatabaseSpecific\DataAccess.SqlServerDBSpecific.csproj" />
     <ProjectReference Include="..\dataaccess\PostgreSql (Npgsql)\DatabaseSpecific\DataAccess.PostgreSqlDBSpecific.csproj" />
     <ProjectReference Include="..\NewaccNet.Contracts\NewaccNet.Contracts.csproj" />
+    <ProjectReference Include="..\NewaccNet.TaxInvoice\NewaccNet.TaxInvoice.csproj" />
     <ProjectReference Include="..\NewaccNet.Reports\NewaccNet.Reports.csproj" />
   </ItemGroup>
 

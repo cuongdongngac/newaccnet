@@ -14,6 +14,7 @@
     <ProjectReference Include="..\NewaccNet.AI\NewaccNet.AI.csproj" />
     <ProjectReference Include="..\NewaccNet.Contracts\NewaccNet.Contracts.csproj" />
     <ProjectReference Include="..\NewaccNet.Core\NewaccNet.Core.csproj" />
+    <ProjectReference Include="..\NewaccNet.Office\NewaccNet.Office.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

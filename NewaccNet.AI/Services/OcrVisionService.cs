@@ -111,5 +111,47 @@ namespace NewaccNet.AI.Services
             var uri = ConvertFileToDataUri(filePath);
             return await RecognizeDocumentTextAsync(new[] { uri }, outputFormat, additionalPrompt, cancellationToken);
         }
+
+        /// <summary>
+        /// OCR linh hoạt mọi tài liệu (Đơn thuốc, Hóa đơn, Bảng kê, Hợp đồng, v.v.) qua Prompt người dùng,
+        /// tự động xuất ra đối tượng Office nội bộ (Bảng tính Excel hoặc Văn bản Word).
+        /// </summary>
+        public async Task<OfficeChatResponseDto?> ExtractDocumentToOfficeAsync(
+            IEnumerable<string> fileDataUris,
+            string userPrompt,
+            OfficeOutputType preferredOutput = OfficeOutputType.ChatOnly,
+            CancellationToken cancellationToken = default)
+        {
+            var systemPrompt = AiPromptTemplates.FlexibleOcrSystemPrompt;
+
+            if (preferredOutput == OfficeOutputType.Spreadsheet)
+            {
+                systemPrompt += "\n\n[ƯU TIÊN ĐỊNH DẠNG]: Người dùng yêu cầu xuất kết quả thành BẢNG TÍNH EXCEL (OutputType = 1). Hãy cấu trúc dữ liệu thành các cột và dòng bảng tính chi tiết.";
+            }
+            else if (preferredOutput == OfficeOutputType.WordDocument)
+            {
+                systemPrompt += "\n\n[ƯU TIÊN ĐỊNH DẠNG]: Người dùng yêu cầu xuất kết quả thành VĂN BẢN WORD (OutputType = 2). Hãy cấu trúc dữ liệu thành các tiêu đề và đoạn văn rõ ràng.";
+            }
+
+            var promptText = string.IsNullOrWhiteSpace(userPrompt)
+                ? "Hãy phân tích và bóc tách toàn bộ tài liệu đính kèm thành định dạng Office phù hợp."
+                : $"[CHỈ THỊ CỦA NGƯỜI DÙNG]:\n{userPrompt.Trim()}";
+
+            return await _gateway.SendStructuredVisionRequestAsync<OfficeChatResponseDto>(
+                systemPrompt,
+                promptText,
+                fileDataUris,
+                cancellationToken: cancellationToken);
+        }
+
+        public async Task<OfficeChatResponseDto?> ExtractDocumentToOfficeFromFileAsync(
+            string filePath,
+            string userPrompt,
+            OfficeOutputType preferredOutput = OfficeOutputType.ChatOnly,
+            CancellationToken cancellationToken = default)
+        {
+            var uri = ConvertFileToDataUri(filePath);
+            return await ExtractDocumentToOfficeAsync(new[] { uri }, userPrompt, preferredOutput, cancellationToken);
+        }
     }
 }

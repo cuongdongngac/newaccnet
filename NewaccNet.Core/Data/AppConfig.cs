@@ -35,6 +35,9 @@ namespace NewaccNet.Core.Data
         public string OpenRouterChatModel { get; set; } = "google/gemini-2.5-flash";
         public string OpenRouterVisionModel { get; set; } = "google/gemini-2.5-flash";
         public string OpenRouterAnalysisModel { get; set; } = "google/gemini-2.5-pro";
+
+        // ── Staging Draft Storage Configuration ──────────────
+        public Staging.StagingStorageMode StagingStorageMode { get; set; } = Staging.StagingStorageMode.JsonFile;
     }
 }
 

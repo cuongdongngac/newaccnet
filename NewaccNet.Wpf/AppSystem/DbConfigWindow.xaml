@@ -4,7 +4,7 @@
         xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
         xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
         xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
-        Title="Cấu hình Kết nối CSDL" Height="660" Width="540" WindowStartupLocation="CenterOwner">
+        Title="Cấu hình Kết nối CSDL" Height="770" Width="540" WindowStartupLocation="CenterOwner">
     <Grid>
         <dxlc:LayoutControl Orientation="Vertical" Padding="15">
 
@@ -83,6 +83,27 @@
                 <dxlc:LayoutItem Label="Năm kế toán:">
                     <dxe:SpinEdit x:Name="spnAccountingYear" IsFloatValue="False" Mask="d" MinValue="1900" MaxValue="2100"/>
                 </dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+
+            <!-- Khung Cấu hình Kho lưu nháp Staging (VoucherDraft) -->
+            <dxlc:LayoutGroup Header="Kho lưu trữ chứng từ nháp (Staging Store)"
+                              View="GroupBox" Orientation="Vertical" Margin="0,8,0,0">
+                <dxlc:LayoutItem Label="Cơ chế lưu nháp:">
+                    <dxe:ComboBoxEdit x:Name="cboStagingStorageMode" IsTextEditable="False">
+                        <dxe:ComboBoxEditItem Content="Tệp JSON cục bộ (AppData/NewaccNet/Staging)"/>
+                        <dxe:ComboBoxEditItem Content="Bảng CSDL tập trung (StagingDraft table)"/>
+                    </dxe:ComboBoxEdit>
+                </dxlc:LayoutItem>
+                <TextBlock Text="* Chế độ tệp JSON phù hợp máy đơn / Access. Bảng CSDL phù hợp SQL Server / PostgreSQL đa máy trạm."
+                           FontSize="11" Foreground="#64748B" TextWrapping="Wrap" Margin="0,3,0,0"/>
+                <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                    <dx:SimpleButton x:Name="btnMigrateJsonToDb" Content="📥 Nạp JSON ➔ CSDL" Height="26" Margin="0,0,8,0"
+                                     ToolTip="Đọc toàn bộ các tệp nháp JSON trong AppData và lưu vào bảng StagingDraft trong CSDL"
+                                     Click="BtnMigrateJsonToDb_Click"/>
+                    <dx:SimpleButton x:Name="btnMigrateDbToJson" Content="📤 Xuất CSDL ➔ JSON" Height="26"
+                                     ToolTip="Đọc toàn bộ chứng từ nháp từ bảng StagingDraft và xuất thành các tệp JSON theo tháng"
+                                     Click="BtnMigrateDbToJson_Click"/>
+                </StackPanel>
             </dxlc:LayoutGroup>
 
             <!-- Preview Connection String -->

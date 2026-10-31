@@ -66,6 +66,7 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
                         <Button x:Name="btnSelectAll" Grid.Column="0" Content="✔ Chọn tất cả" Height="28" Width="100" Margin="0,0,6,0" Click="BtnSelectAll_Click"/>
@@ -83,19 +84,22 @@
                             <TextBlock x:Name="lblSelectedStats" Text="Đã chọn: 0/0 hóa đơn" FontWeight="SemiBold" Foreground="#FF0D47A1" Margin="8,0,0,0"/>
                         </StackPanel>
 
-                        <Button x:Name="btnExtractPartners" Grid.Column="5" Content="👥 Trích xuất Đối tác" Height="30" Width="145" Margin="0,0,6,0" 
+                        <Button x:Name="btnPrepareDrafts" Grid.Column="5" Content="⚡ Chuẩn bị dữ liệu (Staging)" Height="30" Width="190" Margin="0,0,6,0" 
+                                FontWeight="Bold" Background="#FFD97706" Foreground="White" Click="BtnPrepareDrafts_Click"/>
+
+                        <Button x:Name="btnExtractPartners" Grid.Column="6" Content="👥 Trích xuất Đối tác" Height="30" Width="140" Margin="0,0,6,0" 
                                 FontWeight="SemiBold" Background="#FF37474F" Foreground="White" Click="BtnExtractPartners_Click"/>
 
-                        <Button x:Name="btnExtractItems" Grid.Column="6" Content="📦 Trích xuất Vật tư" Height="30" Width="140" Margin="0,0,6,0" 
+                        <Button x:Name="btnExtractItems" Grid.Column="7" Content="📦 Trích xuất Vật tư" Height="30" Width="135" Margin="0,0,6,0" 
                                 FontWeight="SemiBold" Background="#FF00695C" Foreground="White" Click="BtnExtractItems_Click"/>
 
-                        <Button x:Name="btnExportExcelJson" Grid.Column="7" Content="📊 Xuất Excel" Height="30" Width="105" Margin="0,0,6,0" 
+                        <Button x:Name="btnExportExcelJson" Grid.Column="8" Content="📊 Xuất Excel" Height="30" Width="100" Margin="0,0,6,0" 
                                 FontWeight="SemiBold" Background="#FF0284C7" Foreground="White" Click="BtnExportExcelJson_Click"/>
 
-                        <Button x:Name="btnOpenInOffice" Grid.Column="8" Content="📝 Sửa trong Office" Height="30" Width="145" Margin="0,0,6,0" 
+                        <Button x:Name="btnOpenInOffice" Grid.Column="9" Content="📝 Sửa trong Office" Height="30" Width="140" Margin="0,0,6,0" 
                                 FontWeight="Bold" Background="#FF6D28D9" Foreground="White" Click="BtnOpenInOffice_Click"/>
 
-                        <Button x:Name="btnImportToDb" Grid.Column="9" Content="💾 Nhập vào CSDL" Height="30" Width="140" 
+                        <Button x:Name="btnImportToDb" Grid.Column="10" Content="💾 Nhập thô CSDL" Height="30" Width="130" 
                                 FontWeight="Bold" Background="#FF2E7D32" Foreground="White" Click="BtnImportToDb_Click"/>
                     </Grid>
 
@@ -217,9 +221,169 @@
             </TabItem>
 
             <!-- ============================================================== -->
-            <!-- TAB 2: DỮ LIỆU TRONG CSDL (ĐÃ NẠP)                             -->
+            <!-- TAB 2: DỮ LIỆU ĐÃ CHUẨN BỊ (PREPARED / STAGING)                  -->
             <!-- ============================================================== -->
-            <TabItem Header="🗄️ 2. Dữ liệu trong CSDL (Đã nạp)">
+            <TabItem Header="⚡ 2. Dữ liệu đã chuẩn bị (Prepared)">
+                <Grid Margin="6">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="220"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- 1. Prepared Folder Bar -->
+                    <Border Grid.Row="0" Background="#FFF5F5F5" Padding="8,6" CornerRadius="4" Margin="0,0,0,6" BorderBrush="#FFE0E0E0" BorderThickness="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" Text="Thư mục Đệm (Prepared):" VerticalAlignment="Center" FontWeight="SemiBold" Margin="0,0,8,0"/>
+                            <dxe:TextEdit x:Name="txtPreparedFolder" Grid.Column="1" Height="28" Margin="0,0,8,0" IsReadOnly="True"/>
+                            <Button x:Name="btnBrowsePrepared" Grid.Column="2" Content="📁 Chọn thư mục..." Height="28" Width="130" Margin="0,0,8,0" Click="BtnBrowsePrepared_Click"/>
+                            <Button x:Name="btnReloadPrepared" Grid.Column="3" Content="🔄 Nạp lại" Height="28" Width="100" Click="BtnReloadPrepared_Click"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- 2. Action Toolbar -->
+                    <Grid Grid.Row="1" Margin="0,0,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button x:Name="btnPreparedSelectAll" Grid.Column="0" Content="✔ Chọn tất cả" Height="28" Width="100" Margin="0,0,6,0" Click="BtnPreparedSelectAll_Click"/>
+                        <Button x:Name="btnPreparedUnselectAll" Grid.Column="1" Content="✖ Bỏ chọn" Height="28" Width="85" Margin="0,0,12,0" Click="BtnPreparedUnselectAll_Click"/>
+
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock x:Name="lblPreparedStats" Text="Đã chọn: 0/0 bản nháp" FontWeight="SemiBold" Foreground="#FFD97706" Margin="8,0,0,0"/>
+                        </StackPanel>
+
+                        <Button x:Name="btnOpenPreparedInOffice" Grid.Column="3" Content="📊 Xem/Sửa Office Studio" Height="30" Width="175" Margin="0,0,8,0" 
+                                FontWeight="Bold" Background="#FF6D28D9" Foreground="White" Click="BtnOpenPreparedInOffice_Click"/>
+
+                        <Button x:Name="btnApproveMasterData" Grid.Column="4" Content="📑 Duyệt tạo danh mục" Height="30" Width="160" Margin="0,0,8,0" 
+                                FontWeight="Bold" Background="#FF0284C7" Foreground="White" Click="BtnApproveMasterData_Click"/>
+
+                        <Button x:Name="btnDeletePrepared" Grid.Column="5" Content="🗑 Xóa nháp" Height="30" Width="95" Margin="0,0,8,0" 
+                                FontWeight="SemiBold" Background="#FFC62828" Foreground="White" Click="BtnDeletePrepared_Click"/>
+
+                        <Button x:Name="btnPostPreparedToDb" Grid.Column="6" Content="🚀 Nhập vào CSDL (Core)" Height="30" Width="175" 
+                                FontWeight="Bold" Background="#FF2E7D32" Foreground="White" Click="BtnPostPreparedToDb_Click"/>
+                    </Grid>
+
+                    <!-- 3. Master Grid (Prepared) -->
+                    <dxg:GridControl x:Name="gridPreparedMaster" Grid.Row="2" AutoGenerateColumns="None" SelectionMode="Row"
+                                     SelectedItemChanged="GridPreparedMaster_SelectedItemChanged">
+                        <dxg:GridControl.View>
+                            <dxg:TableView x:Name="viewPreparedMaster" ShowGroupPanel="True" ShowSearchPanelMode="Always" 
+                                           ShowAutoFilterRow="True" AllowEditing="True"
+                                           RowDoubleClick="ViewPreparedMaster_RowDoubleClick"/>
+                        </dxg:GridControl.View>
+                        <dxg:GridControl.Columns>
+                            <dxg:GridColumn FieldName="IsSelected" Header="Chọn" Width="55" FixedWidth="True" AllowEditing="True">
+                                <dxg:GridColumn.EditSettings>
+                                    <dxe:CheckEditSettings/>
+                                </dxg:GridColumn.EditSettings>
+                            </dxg:GridColumn>
+                            <dxg:GridColumn FieldName="Direction" Header="Chiều" Width="70" FixedWidth="True" AllowEditing="False"/>
+                            <dxg:GridColumn FieldName="InvoiceSeries" Header="Ký hiệu" Width="95" FixedWidth="True" AllowEditing="False"/>
+                            <dxg:GridColumn FieldName="InvoiceNo" Header="Số HĐ" Width="90" FixedWidth="True" AllowEditing="False"/>
+                            <dxg:GridColumn FieldName="InvoiceDate" Header="Ngày lập" Width="95" FixedWidth="True" AllowEditing="False">
+                                <dxg:GridColumn.EditSettings>
+                                    <dxe:DateEditSettings DisplayFormat="dd/MM/yyyy"/>
+                                </dxg:GridColumn.EditSettings>
+                            </dxg:GridColumn>
+                            <dxg:GridColumn FieldName="PartnerId" Header="Mã Đối tác" Width="110" FixedWidth="True" AllowEditing="True"/>
+                            <dxg:GridColumn FieldName="PartnerName" Header="Tên Đối tác" Width="200" AllowEditing="False"/>
+                            <dxg:GridColumn FieldName="PartnerTaxCode" Header="MST Đối tác" Width="110" FixedWidth="True" AllowEditing="False"/>
+                            <dxg:GridColumn FieldName="TotalAmountWithoutTax" Header="Tiền chưa thuế" Width="120" FixedWidth="True" AllowEditing="False">
+                                <dxg:GridColumn.EditSettings>
+                                    <dxe:TextEditSettings MaskType="Numeric" Mask="n0" MaskUseAsDisplayFormat="True"/>
+                                </dxg:GridColumn.EditSettings>
+                            </dxg:GridColumn>
+                            <dxg:GridColumn FieldName="TotalTaxAmount" Header="Tiền thuế" Width="100" FixedWidth="True" AllowEditing="False">
+                                <dxg:GridColumn.EditSettings>
+                                    <dxe:TextEditSettings MaskType="Numeric" Mask="n0" MaskUseAsDisplayFormat="True"/>
+                                </dxg:GridColumn.EditSettings>
+                            </dxg:GridColumn>
+                            <dxg:GridColumn FieldName="TotalAmount" Header="Tổng cộng" Width="120" FixedWidth="True" AllowEditing="False">
+                                <dxg:GridColumn.EditSettings>
+                                    <dxe:TextEditSettings MaskType="Numeric" Mask="n0" MaskUseAsDisplayFormat="True"/>
+                                </dxg:GridColumn.EditSettings>
+                            </dxg:GridColumn>
+                            <dxg:GridColumn FieldName="PartnerMatchReason" Header="Căn cứ khớp Đối tác" Width="180" AllowEditing="False"/>
+                            <dxg:GridColumn FieldName="StatusText" Header="Trạng thái" Width="110" FixedWidth="True" AllowEditing="False"/>
+                            <dxg:GridColumn FieldName="DbStatus" Header="CSDL" Width="95" FixedWidth="True" AllowEditing="False"/>
+                        </dxg:GridControl.Columns>
+                    </dxg:GridControl>
+
+                    <!-- Splitter -->
+                    <GridSplitter Grid.Row="3" Height="5" HorizontalAlignment="Stretch" Background="#FFE0E0E0" Cursor="SizeNS"/>
+
+                    <!-- 4. Detail Grid (Prepared) -->
+                    <TabControl Grid.Row="4" Margin="0,4,0,0">
+                        <TabItem Header="📦 Chi tiết Hàng hóa / Dịch vụ đã chuẩn bị">
+                            <dxg:GridControl x:Name="gridPreparedDetails" AutoGenerateColumns="None">
+                                <dxg:GridControl.View>
+                                    <dxg:TableView ShowGroupPanel="False" ShowSearchPanelMode="Never" AllowEditing="True"/>
+                                </dxg:GridControl.View>
+                                <dxg:GridControl.Columns>
+                                    <dxg:GridColumn FieldName="LineNo" Header="STT" Width="45" FixedWidth="True" AllowEditing="False"/>
+                                    <dxg:GridColumn FieldName="RawItemName" Header="Tên hàng gốc trên hóa đơn" Width="220" AllowEditing="False"/>
+                                    <dxg:GridColumn FieldName="MaterialId" Header="Mã VT nội bộ" Width="110" FixedWidth="True" AllowEditing="True"/>
+                                    <dxg:GridColumn FieldName="WarehouseId" Header="Mã Kho" Width="85" FixedWidth="True" AllowEditing="True"/>
+                                    <dxg:GridColumn FieldName="DebitAccountId" Header="TK Nợ" Width="80" FixedWidth="True" AllowEditing="True"/>
+                                    <dxg:GridColumn FieldName="Unit" Header="ĐVT" Width="65" FixedWidth="True" AllowEditing="False"/>
+                                    <dxg:GridColumn FieldName="Quantity" Header="Số lượng" Width="80" FixedWidth="True" AllowEditing="False">
+                                        <dxg:GridColumn.EditSettings>
+                                            <dxe:TextEditSettings MaskType="Numeric" Mask="n2" MaskUseAsDisplayFormat="True"/>
+                                        </dxg:GridColumn.EditSettings>
+                                    </dxg:GridColumn>
+                                    <dxg:GridColumn FieldName="UnitPrice" Header="Đơn giá" Width="100" FixedWidth="True" AllowEditing="False">
+                                        <dxg:GridColumn.EditSettings>
+                                            <dxe:TextEditSettings MaskType="Numeric" Mask="n0" MaskUseAsDisplayFormat="True"/>
+                                        </dxg:GridColumn.EditSettings>
+                                    </dxg:GridColumn>
+                                    <dxg:GridColumn FieldName="Amount" Header="Thành tiền" Width="110" FixedWidth="True" AllowEditing="False">
+                                        <dxg:GridColumn.EditSettings>
+                                            <dxe:TextEditSettings MaskType="Numeric" Mask="n0" MaskUseAsDisplayFormat="True"/>
+                                        </dxg:GridColumn.EditSettings>
+                                    </dxg:GridColumn>
+                                    <dxg:GridColumn FieldName="VatRate" Header="Thuế %" Width="70" FixedWidth="True" AllowEditing="False"/>
+                                    <dxg:GridColumn FieldName="VatAmount" Header="Tiền thuế" Width="100" FixedWidth="True" AllowEditing="False">
+                                        <dxg:GridColumn.EditSettings>
+                                            <dxe:TextEditSettings MaskType="Numeric" Mask="n0" MaskUseAsDisplayFormat="True"/>
+                                        </dxg:GridColumn.EditSettings>
+                                    </dxg:GridColumn>
+                                    <dxg:GridColumn FieldName="MatchReason" Header="Căn cứ so khớp vật tư" Width="*" AllowEditing="False"/>
+                                </dxg:GridControl.Columns>
+                            </dxg:GridControl>
+                        </TabItem>
+                    </TabControl>
+
+                    <!-- 5. Tab 2 Footer -->
+                    <Grid Grid.Row="5" Margin="0,6,0,0">
+                        <TextBlock x:Name="lblPreparedSummary" Text="Tổng số bản nháp: 0" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+            <!-- ============================================================== -->
+            <!-- TAB 3: DỮ LIỆU TRONG CSDL (ĐÃ NẠP)                             -->
+            <!-- ============================================================== -->
+            <TabItem Header="🗄️ 3. Dữ liệu trong CSDL (Đã nạp)">
                 <Grid Margin="6">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>

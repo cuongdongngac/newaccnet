@@ -966,6 +966,8 @@ namespace DataAccess.HelperClasses
 	{
 		/// <summary>Creates a new InventoryVoucherEntity.Carrier field instance</summary>
 		public static EntityField2 Carrier { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(InventoryVoucherFieldIndex.Carrier); }}
+		/// <summary>Creates a new InventoryVoucherEntity.EntryGraph field instance</summary>
+		public static EntityField2 EntryGraph { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(InventoryVoucherFieldIndex.EntryGraph); }}
 		/// <summary>Creates a new InventoryVoucherEntity.ExobjectId field instance</summary>
 		public static EntityField2 ExobjectId { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(InventoryVoucherFieldIndex.ExobjectId); }}
 		/// <summary>Creates a new InventoryVoucherEntity.Id field instance</summary>

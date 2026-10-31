@@ -15,6 +15,7 @@ using System.ComponentModel;
 using System.Windows.Media;
 using NewaccNet.Wpf.AppSystem.Voucher.Reports;
 using LicenseManager = NewaccNet.Core.License.LicenseManager;
+using NewaccNet.Core.Posting;
 
 namespace NewaccNet.Wpf.AppSystem.Voucher
 {
@@ -58,6 +59,9 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
         private bool _isDirty = false;
         public bool HasSaved { get; private set; } = false;
         private List<JournalVoucherEntity> _deletedVouchersInBatch = new List<JournalVoucherEntity>();
+
+        private readonly IVoucherPostingService _postingService = new VoucherPostingService();
+        private readonly IVoucherNumberService _numberService = new VoucherNumberService();
 
         public ObservableCollection<ChartOfAccountEntity> Accounts { get; set; }
         public List<DbcrItem> DbcrList { get; set; }
@@ -711,37 +715,10 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
 
         private string GenerateNextVoucherNo()
         {
-            // 1. Nếu trong lô đã có chứng từ trước đó có số hiệu, tìm số tiếp theo
-            // Ví dụ: PK001 -> PK002, CT10 -> CT11, CT26101101 -> CT26101102
-            var lastVoucherNo = _voucherBatch
-                .Select(v => v.VoucherNo)
-                .LastOrDefault(no => !string.IsNullOrWhiteSpace(no));
-
-            if (!string.IsNullOrWhiteSpace(lastVoucherNo))
-            {
-                var match = System.Text.RegularExpressions.Regex.Match(lastVoucherNo.Trim(), @"^(.*?)(\d+)$");
-                if (match.Success)
-                {
-                    string prefix = match.Groups[1].Value;
-                    string digits = match.Groups[2].Value;
-                    if (long.TryParse(digits, out long num))
-                    {
-                        long nextNum = num + 1;
-                        string nextDigits = nextNum.ToString().PadLeft(digits.Length, '0');
-                        string candidate = prefix + nextDigits;
-                        if (candidate.Length <= 10)
-                        {
-                            return candidate;
-                        }
-                    }
-                }
-            }
-
-            // 2. Mặc định theo ngày và số thứ tự: CTyyMMdd + số thứ tự 2 số (Ví dụ: CT26101101, đúng 10 ký tự)
-            int seq = (_voucherBatch.Count + 1) % 100;
-            if (seq == 0) seq = 1;
-            string defaultNo = $"CT{DateTime.Now:yyMMdd}{seq:D2}";
-            return defaultNo.Length > 10 ? defaultNo.Substring(0, 10) : defaultNo;
+            return _numberService.GenerateNextInBatch(
+                _voucherBatch.Select(v => v.VoucherNo),
+                "CT",
+                _voucherBatch.Count);
         }
 
         private JournalVoucherEntity CreateNewVoucher()
@@ -1061,82 +1038,48 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
             {
                 CommitCurrentVoucherToBatch();
 
-                // 1. Kiểm tra cân đối từng chứng từ trong lô
-                for (int i = 0; i < _voucherBatch.Count; i++)
-                {
-                    var v = _voucherBatch[i];
-                    double bal = 0;
-                    foreach (var je in v.JournalEntries)
-                    {
-                        bal += (je.Amount ?? 0) * (je.Dbcr ?? 0);
-                    }
-                    if (v.VoucherDate.HasValue && !DbConfigService.CanUpdateVoucher(v.VoucherDate.Value, out string warningMsg))
-                    {
-                        NavigateTo(i);
-                        MessageBox.Show(warningMsg, "Hết hạn sử dụng", MessageBoxButton.OK, MessageBoxImage.Warning);
-                        return;
-                    }
+                // Gọi Cổng ghi sổ Posting Service (Core)
+                var result = _postingService.PostBatch(_voucherBatch, _deletedVouchersInBatch);
 
-                    if (Math.Round(bal, 0) != 0)
-                    {
-                        NavigateTo(i);
-                        MessageBox.Show($"Chứng từ số '{v.VoucherNo}' (vị trí {i + 1}/{_voucherBatch.Count}) chưa cân đối (Độ lệch: {bal:N0})!\nBạn phải cân đối tất cả chứng từ trong lô trước khi lưu.", 
-                                        "Lỗi cân đối", MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-                }
-
-                // 2. Kiểm tra giới hạn số lượng chứng từ thực tế (JournalVoucher) theo gói bản quyền
-                int newVouchersCount = _voucherBatch.Count(v => v.Id == 0);
-                if (newVouchersCount > 0)
+                if (!result.Success)
                 {
-                    if (!DbConfigService.CheckRecordLimit(out int count, out int maxLimit, out string warningMsg, newVouchersCount))
+                    // Nếu lỗi do hạn mức bản quyền
+                    var limitError = result.Issues.FirstOrDefault(i => i.Code == "RECORD_LIMIT_EXCEEDED");
+                    if (limitError != null)
                     {
-                        var result = ThemedMessageBox.Show(
+                        var prompt = ThemedMessageBox.Show(
                             "Hạn mức Chứng từ",
-                            $"{warningMsg}\n\nBạn có muốn mở cửa sổ Đăng ký Bản quyền để gia tăng số lượng chứng từ không?",
+                            $"{limitError.Message}\n\nBạn có muốn mở cửa sổ Đăng ký Bản quyền để gia tăng số lượng chứng từ không?",
                             MessageBoxButton.YesNo, MessageBoxImage.Information);
-                        if (result == MessageBoxResult.Yes)
+                        if (prompt == MessageBoxResult.Yes)
                         {
                             var regWin = new NewaccNet.Wpf.AppSystem.CompanyRegistrationWindow { Owner = this };
                             regWin.ShowDialog();
                         }
                         return;
                     }
-                }
 
-                // 3. Lưu toàn bộ lô trong 1 Transaction
-                using (var adapter = AppDataAccessAdapter.Create())
-                {
-                    adapter.StartTransaction(System.Data.IsolationLevel.ReadCommitted, "SaveVoucherBatch");
-                    try
+                    // Nếu lỗi do mất cân đối hoặc khóa sổ, nhảy đến chứng từ có lỗi
+                    var unbalanced = result.Issues.FirstOrDefault(i => i.Code == "UNBALANCED_ENTRIES" || i.Code == "PERIOD_LOCKED_OR_EXPIRED");
+                    if (unbalanced != null)
                     {
-                        // Xóa các chứng từ đã xóa khỏi lô trong bộ nhớ
-                        foreach (var del in _deletedVouchersInBatch)
+                        for (int i = 0; i < _voucherBatch.Count; i++)
                         {
-                            if (del.Id > 0)
+                            var v = _voucherBatch[i];
+                            double bal = v.JournalEntries.Sum(je => (je.Amount ?? 0) * (je.Dbcr ?? 0));
+                            if (Math.Round(bal, 0) != 0 || (v.VoucherDate.HasValue && !NewaccNet.Core.Data.DbConfigService.CanUpdateVoucher(v.VoucherDate.Value, out _)))
                             {
-                                var entity = new JournalVoucherEntity(del.Id);
-                                entity.IsNew = false;
-                                adapter.DeleteEntity(entity);
+                                NavigateTo(i);
+                                break;
                             }
                         }
-                        _deletedVouchersInBatch.Clear();
-
-                        foreach (var v in _voucherBatch)
-                        {
-                            SaveSingleVoucher(adapter, v);
-                        }
-
-                        adapter.Commit();
                     }
-                    catch
-                    {
-                        adapter.Rollback();
-                        throw;
-                    }
+
+                    MessageBox.Show(result.ErrorMessage, "Lỗi khi lưu chứng từ", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
                 }
 
+                _deletedVouchersInBatch.Clear();
                 _isDirty = false;
                 HasSaved = true;
 
@@ -1200,117 +1143,6 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
             {
                 MessageBox.Show("Lỗi khi xóa chứng từ: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }
-
-        private void SaveSingleVoucher(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter adapter, JournalVoucherEntity voucher)
-        {
-            if (!voucher.IsNew)
-            {
-                var dbVoucher = new JournalVoucherEntity(voucher.Id);
-                var prefetch = new PrefetchPath2((int)DataAccess.EntityType.JournalVoucherEntity);
-                var jeNode = prefetch.Add(JournalVoucherEntity.PrefetchPathJournalEntries);
-                jeNode.SubPath.Add(JournalEntryEntity.PrefetchPathDebtDetails);
-                jeNode.SubPath.Add(JournalEntryEntity.PrefetchPathCurrencyDetails);
-                jeNode.SubPath.Add(JournalEntryEntity.PrefetchPathInvestmentDetails);
-                jeNode.SubPath.Add(JournalEntryEntity.PrefetchPathAssetDetails);
-                var costNode = jeNode.SubPath.Add(JournalEntryEntity.PrefetchPathCostDetails);
-                costNode.SubPath.Add(CostDetailEntity.PrefetchPathExpenseTaxLine);
-                var ivNode = jeNode.SubPath.Add(JournalEntryEntity.PrefetchPathInventoryVouchers);
-                var ivlNode = ivNode.SubPath.Add(InventoryVoucherEntity.PrefetchPathInventoryVoucherLines);
-                ivlNode.SubPath.Add(InventoryVoucherLineEntity.PrefetchPathMaterialTaxLine);
-
-                if (adapter.FetchEntity(dbVoucher, prefetch))
-                {
-                    foreach (var dbJe in dbVoucher.JournalEntries)
-                    {
-                        var ramJe = voucher.JournalEntries.FirstOrDefault(x => x.Id == dbJe.Id && !x.IsNew);
-                        if (ramJe == null)
-                        {
-                            foreach (var dbDebt in dbJe.DebtDetails) adapter.DeleteEntity(dbDebt);
-                            foreach (var dbCurr in dbJe.CurrencyDetails) adapter.DeleteEntity(dbCurr);
-                            foreach (var dbInv in dbJe.InvestmentDetails) adapter.DeleteEntity(dbInv);
-                            foreach (var dbAsset in dbJe.AssetDetails) adapter.DeleteEntity(dbAsset);
-                            foreach (var dbCost in dbJe.CostDetails)
-                            {
-                                if (dbCost.ExpenseTaxLine != null) adapter.DeleteEntity(dbCost.ExpenseTaxLine);
-                                adapter.DeleteEntity(dbCost);
-                            }
-                            foreach (var dbIv in dbJe.InventoryVouchers)
-                            {
-                                foreach (var dbLine in dbIv.InventoryVoucherLines)
-                                {
-                                    if (dbLine.MaterialTaxLine != null) adapter.DeleteEntity(dbLine.MaterialTaxLine);
-                                    adapter.DeleteEntity(dbLine);
-                                }
-                                adapter.DeleteEntity(dbIv);
-                            }
-                            adapter.DeleteEntity(dbJe);
-                        }
-                        else
-                        {
-                            foreach (var dbDebt in dbJe.DebtDetails)
-                            {
-                                if (!ramJe.DebtDetails.Any(x => x.Id == dbDebt.Id && !x.IsNew))
-                                    adapter.DeleteEntity(dbDebt);
-                            }
-                            foreach (var dbCurr in dbJe.CurrencyDetails)
-                            {
-                                if (!ramJe.CurrencyDetails.Any(x => x.Id == dbCurr.Id && !x.IsNew))
-                                    adapter.DeleteEntity(dbCurr);
-                            }
-                            foreach (var dbInv in dbJe.InvestmentDetails)
-                            {
-                                if (!ramJe.InvestmentDetails.Any(x => x.Lineid == dbInv.Lineid && !x.IsNew))
-                                    adapter.DeleteEntity(dbInv);
-                            }
-                            foreach (var dbAsset in dbJe.AssetDetails)
-                            {
-                                if (!ramJe.AssetDetails.Any(x => x.Id == dbAsset.Id && !x.IsNew))
-                                    adapter.DeleteEntity(dbAsset);
-                            }
-                            foreach (var dbCost in dbJe.CostDetails)
-                            {
-                                if (!ramJe.CostDetails.Any(x => x.Id == dbCost.Id && !x.IsNew))
-                                {
-                                    if (dbCost.ExpenseTaxLine != null) adapter.DeleteEntity(dbCost.ExpenseTaxLine);
-                                    adapter.DeleteEntity(dbCost);
-                                }
-                            }
-                            foreach (var dbIv in dbJe.InventoryVouchers)
-                            {
-                                var ramIv = ramJe.InventoryVouchers.FirstOrDefault(x => x.Id == dbIv.Id && !x.IsNew);
-                                if (ramIv == null)
-                                {
-                                    foreach (var dbLine in dbIv.InventoryVoucherLines)
-                                    {
-                                        if (dbLine.MaterialTaxLine != null) adapter.DeleteEntity(dbLine.MaterialTaxLine);
-                                        adapter.DeleteEntity(dbLine);
-                                    }
-                                    adapter.DeleteEntity(dbIv);
-                                }
-                                else
-                                {
-                                    foreach (var dbLine in dbIv.InventoryVoucherLines)
-                                    {
-                                        var ramLine = ramIv.InventoryVoucherLines.FirstOrDefault(x => x.Id == dbLine.Id && !x.IsNew);
-                                        if (ramLine == null)
-                                        {
-                                            if (dbLine.MaterialTaxLine != null) adapter.DeleteEntity(dbLine.MaterialTaxLine);
-                                            adapter.DeleteEntity(dbLine);
-                                        }
-                                        else if (dbLine.MaterialTaxLine != null && ramLine.MaterialTaxLine == null)
-                                        {
-                                            adapter.DeleteEntity(dbLine.MaterialTaxLine);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            adapter.SaveEntity(voucher, true, recurse: true);
         }
 
         private bool ConfirmDiscardChanges()

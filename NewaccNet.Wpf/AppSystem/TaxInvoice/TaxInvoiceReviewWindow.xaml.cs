@@ -12,12 +12,104 @@ using System.Windows.Input;
 using DevExpress.Xpf.Editors;
 using Microsoft.Win32;
 using MiniExcelLibs;
+using NewaccNet.Contracts;
+using NewaccNet.Core.Data;
+using NewaccNet.Core.Posting;
+using NewaccNet.Core.Staging;
 using NewaccNet.TaxInvoice;
 using NewaccNet.Wpf.AppSystem.AI;
 using NewaccNet.Wpf.Views.Base;
 
 namespace NewaccNet.Wpf.AppSystem.TaxInvoice
 {
+    public class PreparedDraftItemViewModel : INotifyPropertyChanged
+    {
+        private bool _isSelected = true;
+
+        public VoucherDraft Draft { get; set; } = null!;
+
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set { _isSelected = value; OnPropertyChanged(); }
+        }
+
+        public string Direction => Draft.DraftType == DraftType.PurchaseInvoice ? "Mua vào" : "Bán ra";
+        public string InvoiceSeries => Draft.Invoice.Series;
+        public string InvoiceNo => Draft.Invoice.Number;
+        public DateTime InvoiceDate => Draft.Invoice.Date;
+
+        public string PartnerId
+        {
+            get => Draft.Counterparty.Resolved.PartnerId;
+            set { Draft.Counterparty.Resolved.PartnerId = value; OnPropertyChanged(); }
+        }
+
+        public string PartnerName => Draft.Counterparty.Raw.Name;
+        public string PartnerTaxCode => Draft.Counterparty.Raw.TaxCode;
+        public decimal TotalAmountWithoutTax => Draft.Invoice.AmountBeforeTax;
+        public decimal TotalTaxAmount => Draft.Invoice.VatAmount;
+        public decimal TotalAmount => Draft.Invoice.TotalAmount;
+        public string PartnerMatchReason => Draft.Counterparty.Match.Reason;
+
+        public string StatusText => Draft.Status switch
+        {
+            DraftStatus.Posted => "🟢 Đã ghi sổ",
+            DraftStatus.Approved => "🔵 Đã duyệt",
+            DraftStatus.Matched => "🟢 Sẵn sàng",
+            DraftStatus.NeedsReview => "🟡 Cần rà soát",
+            _ => Draft.Status.ToString()
+        };
+
+        public string DbStatus => Draft.PostedVoucherId.HasValue ? $"CT #{Draft.PostedVoucherId}" : "Chưa ghi sổ";
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string? name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+    }
+
+    public class PreparedDraftLineViewModel : INotifyPropertyChanged
+    {
+        public DraftLine Line { get; set; } = null!;
+
+        public int LineNo => Line.LineNo;
+        public string RawItemName => Line.Raw.ItemName;
+
+        public string MaterialId
+        {
+            get => Line.Resolved.MaterialId;
+            set { Line.Resolved.MaterialId = value; OnPropertyChanged(); }
+        }
+
+        public string WarehouseId
+        {
+            get => Line.Resolved.WarehouseId;
+            set { Line.Resolved.WarehouseId = value; OnPropertyChanged(); }
+        }
+
+        public string DebitAccountId
+        {
+            get => Line.Resolved.DebitAccountId;
+            set { Line.Resolved.DebitAccountId = value; OnPropertyChanged(); }
+        }
+
+        public string Unit => Line.Raw.Unit;
+        public decimal Quantity => Line.Raw.Quantity;
+        public decimal UnitPrice => Line.Raw.UnitPrice;
+        public decimal Amount => Line.Raw.Amount;
+        public double VatRate => Line.Raw.VatRate;
+        public decimal VatAmount => Line.Raw.VatAmount;
+        public string MatchReason => Line.Matches.Count > 0 ? Line.Matches[0].Reason : "";
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string? name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+    }
+
     public class ReviewInvoiceItemViewModel : INotifyPropertyChanged
     {
         private bool _isSelected = true;
@@ -67,7 +159,11 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
         private readonly List<ReviewInvoiceItemViewModel> _rawItems = new List<ReviewInvoiceItemViewModel>();
         private readonly ObservableCollection<ReviewInvoiceItemViewModel> _items = new ObservableCollection<ReviewInvoiceItemViewModel>();
 
-        // Tab 2 (DB) display items
+        // Tab 2 (Prepared) in-memory cache and display items
+        private readonly ObservableCollection<PreparedDraftItemViewModel> _preparedItems = new ObservableCollection<PreparedDraftItemViewModel>();
+        private string _preparedFolder = string.Empty;
+
+        // Tab 3 (DB) display items
         private readonly ObservableCollection<TaxInvoiceDto> _dbItems = new ObservableCollection<TaxInvoiceDto>();
 
         private bool _isLoaded;
@@ -100,6 +196,8 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
             if (!string.IsNullOrEmpty(initialFolder) && System.IO.Directory.Exists(initialFolder))
             {
                 txtSourceFolder.Text = initialFolder;
+                _preparedFolder = JsonFileDraftStore.GetDefaultPreparedFolder(initialFolder);
+                txtPreparedFolder.Text = _preparedFolder;
             }
             else
             {
@@ -108,6 +206,9 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
             gridMaster.ItemsSource = _items;
 
             // Tab 2 setup
+            gridPreparedMaster.ItemsSource = _preparedItems;
+
+            // Tab 3 setup
             var today = DateTime.Today;
             dtDbFrom.DateTime = new DateTime(today.Year, 1, 1);
             dtDbTo.DateTime = today;
@@ -133,7 +234,11 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
         {
             if (e.Source != mainTabControl) return;
 
-            if (mainTabControl.SelectedIndex == 1 && _dbItems.Count == 0)
+            if (mainTabControl.SelectedIndex == 1 && _preparedItems.Count == 0 && !string.IsNullOrEmpty(_preparedFolder))
+            {
+                await LoadPreparedDraftsAsync();
+            }
+            else if (mainTabControl.SelectedIndex == 2 && _dbItems.Count == 0)
             {
                 await LoadDbInvoicesAsync();
             }
@@ -245,6 +350,9 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
 
             _rawItems.AddRange(parsedList);
             ApplyJsonFilter();
+
+            _preparedFolder = JsonFileDraftStore.GetDefaultPreparedFolder(folder);
+            txtPreparedFolder.Text = _preparedFolder;
         }
 
         private void CboJsonDirection_SelectedIndexChanged(object sender, RoutedEventArgs e)
@@ -406,8 +514,395 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
             }
         }
 
+        private async void BtnPrepareDrafts_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedInvoices = _items.Where(x => x.IsSelected).Select(x => x.Invoice).ToList();
+            if (selectedInvoices.Count == 0) selectedInvoices = _items.Select(x => x.Invoice).ToList();
+
+            if (selectedInvoices.Count == 0)
+            {
+                MessageBox.Show("Chưa có hóa đơn nào để chuẩn bị dữ liệu.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(_preparedFolder))
+            {
+                var folder = txtSourceFolder.Text.Trim();
+                _preparedFolder = JsonFileDraftStore.GetDefaultPreparedFolder(string.IsNullOrEmpty(folder) ? "Prepared" : folder);
+                txtPreparedFolder.Text = _preparedFolder;
+            }
+
+            try
+            {
+                var prepService = new VoucherDraftPreparationService();
+                int preparedCount = 0;
+                int matchedCount = 0;
+                int needsReviewCount = 0;
+
+                await Task.Run(() =>
+                {
+                    foreach (var inv in selectedInvoices)
+                    {
+                        var draft = prepService.PrepareDraftFromInvoice(inv);
+                        JsonFileDraftStore.SaveDraft(_preparedFolder, draft);
+                        preparedCount++;
+
+                        if (draft.Status == DraftStatus.Matched) matchedCount++;
+                        else needsReviewCount++;
+                    }
+                });
+
+                MessageBox.Show(
+                    $"Đã chuẩn bị thành công {preparedCount} hóa đơn vào thư mục đệm:\n{_preparedFolder}\n\n" +
+                    $"- Sẵn sàng ghi sổ (Khớp 100%): {matchedCount} hóa đơn\n" +
+                    $"- Cần rà soát (Có mã/đối tác mới): {needsReviewCount} hóa đơn\n\n" +
+                    $"Hệ thống sẽ tự động chuyển sang Tab 'Dữ liệu đã chuẩn bị' để bạn kiểm tra.",
+                    "Chuẩn bị dữ liệu hoàn tất", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                mainTabControl.SelectedIndex = 1;
+                await LoadPreparedDraftsAsync();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi chuẩn bị dữ liệu:\n{ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
         // ==============================================================
-        // TAB 2: DATABASE VIEW LOGIC
+        // TAB 2: PREPARED REVIEW & POSTING LOGIC
+        // ==============================================================
+
+        private void BtnBrowsePrepared_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new OpenFolderDialog
+            {
+                Title = "Chọn thư mục chứa tệp bản nháp Prepared"
+            };
+            if (dialog.ShowDialog() == true)
+            {
+                _preparedFolder = dialog.FolderName;
+                txtPreparedFolder.Text = dialog.FolderName;
+                _ = LoadPreparedDraftsAsync();
+            }
+        }
+
+        private async void BtnReloadPrepared_Click(object sender, RoutedEventArgs e)
+        {
+            await LoadPreparedDraftsAsync();
+        }
+
+        private async Task LoadPreparedDraftsAsync()
+        {
+            _preparedItems.Clear();
+            gridPreparedDetails.ItemsSource = null;
+
+            if (string.IsNullOrWhiteSpace(_preparedFolder) || !System.IO.Directory.Exists(_preparedFolder))
+            {
+                lblPreparedStats.Text = "Thư mục Prepared chưa tồn tại hoặc rỗng.";
+                lblPreparedSummary.Text = "Tổng số bản nháp: 0";
+                return;
+            }
+
+            try
+            {
+                List<VoucherDraft> drafts = new();
+                await Task.Run(() =>
+                {
+                    drafts = JsonFileDraftStore.LoadDrafts(_preparedFolder);
+                });
+
+                foreach (var d in drafts)
+                {
+                    _preparedItems.Add(new PreparedDraftItemViewModel
+                    {
+                        Draft = d,
+                        IsSelected = d.Status != DraftStatus.Posted
+                    });
+                }
+
+                UpdatePreparedStats();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi đọc thư mục Prepared:\n{ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void BtnPreparedSelectAll_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var item in _preparedItems) item.IsSelected = true;
+            UpdatePreparedStats();
+        }
+
+        private void BtnPreparedUnselectAll_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var item in _preparedItems) item.IsSelected = false;
+            UpdatePreparedStats();
+        }
+
+        private void GridPreparedMaster_SelectedItemChanged(object sender, DevExpress.Xpf.Grid.SelectedItemChangedEventArgs e)
+        {
+            if (e.NewItem is PreparedDraftItemViewModel vm && vm.Draft.Lines != null)
+            {
+                gridPreparedDetails.ItemsSource = vm.Draft.Lines.Select(l => new PreparedDraftLineViewModel { Line = l }).ToList();
+            }
+            else
+            {
+                gridPreparedDetails.ItemsSource = null;
+            }
+        }
+
+        private void UpdatePreparedStats()
+        {
+            var total = _preparedItems.Count;
+            var selected = _preparedItems.Count(x => x.IsSelected);
+            var ready = _preparedItems.Count(x => x.Draft.Status == DraftStatus.Matched);
+            var needsReview = _preparedItems.Count(x => x.Draft.Status == DraftStatus.NeedsReview);
+            var posted = _preparedItems.Count(x => x.Draft.Status == DraftStatus.Posted);
+
+            lblPreparedStats.Text = $"Đã chọn: {selected}/{total} | Sẵn sàng: {ready} | Cần duyệt: {needsReview} | Đã ghi sổ: {posted}";
+            lblPreparedSummary.Text = $"Tổng số bản nháp: {total} | Sẵn sàng ghi sổ: {ready} | Cần rà soát danh mục: {needsReview}";
+        }
+
+        private void BtnApproveMasterData_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedDrafts = _preparedItems.Where(x => x.IsSelected).Select(x => x.Draft).ToList();
+            if (selectedDrafts.Count == 0)
+            {
+                MessageBox.Show("Vui lòng chọn ít nhất một bản nháp.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var proposedList = selectedDrafts.SelectMany(d => d.ProposedMasterData.Where(p => !p.Approved)).ToList();
+            if (proposedList.Count == 0)
+            {
+                MessageBox.Show("Không có đối tác hoặc vật tư mới nào cần duyệt trong các bản nháp đã chọn.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            int partnersCount = proposedList.Count(p => p.Kind == "Partner");
+            int materialsCount = proposedList.Count(p => p.Kind == "Material");
+
+            var confirm = MessageBox.Show(
+                $"Hệ thống phát hiện các danh mục mới được đề xuất:\n" +
+                $"- Đối tác mới: {partnersCount}\n" +
+                $"- Vật tư mới: {materialsCount}\n\n" +
+                $"Bạn có đồng ý tạo nhanh các danh mục này vào CSDL và cập nhật trạng thái bản nháp sang 'Sẵn sàng ghi sổ' không?",
+                "Xác nhận duyệt danh mục", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (confirm != MessageBoxResult.Yes) return;
+
+            try
+            {
+                int partnersCreated = 0;
+                int materialsCreated = 0;
+
+                using var adapter = AppDataAccessAdapter.Create();
+
+                // 1. Tạo Partners
+                var existingPartners = WarehousePostingGateway.LoadPartners();
+                var existingPartnerIds = new HashSet<string>(existingPartners.Select(p => p.Id), StringComparer.OrdinalIgnoreCase);
+
+                foreach (var p in proposedList.Where(x => x.Kind == "Partner"))
+                {
+                    var id = p.Fields.TryGetValue("Id", out var pid) ? pid : p.TempKey;
+                    if (!existingPartnerIds.Contains(id))
+                    {
+                        var entity = new DataAccess.EntityClasses.PartnerEntity
+                        {
+                            Id = id,
+                            Taxno = p.Fields.TryGetValue("Taxno", out var t) ? t : "",
+                            CustomerName = p.Fields.TryGetValue("CustomerName", out var cn) ? cn : "",
+                            Address = p.Fields.TryGetValue("Address", out var a) ? a : ""
+                        };
+                        adapter.SaveEntity(entity, true);
+                        existingPartnerIds.Add(id);
+                        partnersCreated++;
+                    }
+                    p.Approved = true;
+                }
+
+                // 2. Tạo Materials
+                var existingMaterials = WarehousePostingGateway.LoadMaterials();
+                var existingMaterialIds = new HashSet<string>(existingMaterials.Select(m => m.MaterialId), StringComparer.OrdinalIgnoreCase);
+
+                foreach (var m in proposedList.Where(x => x.Kind == "Material"))
+                {
+                    var id = m.Fields.TryGetValue("MaterialId", out var mid) ? mid : m.TempKey;
+                    if (!existingMaterialIds.Contains(id))
+                    {
+                        var entity = new DataAccess.EntityClasses.InventoryItemEntity
+                        {
+                            MaterialId = id,
+                            MaterialName = m.Fields.TryGetValue("MaterialName", out var mn) ? mn : "",
+                            Unit = m.Fields.TryGetValue("Unit", out var u) ? u : "",
+                            Categoryid = m.Fields.TryGetValue("CategoryId", out var cid) ? cid : "156"
+                        };
+                        adapter.SaveEntity(entity, true);
+                        existingMaterialIds.Add(id);
+                        materialsCreated++;
+                    }
+                    m.Approved = true;
+                }
+
+                // Cập nhật lại status của các draft
+                foreach (var draftItem in _preparedItems.Where(x => x.IsSelected))
+                {
+                    if (draftItem.Draft.ProposedMasterData.All(p => p.Approved))
+                    {
+                        draftItem.Draft.Status = DraftStatus.Matched;
+                    }
+                    JsonFileDraftStore.SaveDraft(_preparedFolder, draftItem.Draft);
+                }
+
+                MessageBox.Show(
+                    $"Đã tạo thành công vào CSDL:\n" +
+                    $"- {partnersCreated} đối tác mới\n" +
+                    $"- {materialsCreated} vật tư mới\n" +
+                    $"Các bản nháp đã sẵn sàng ghi sổ!",
+                    "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                _ = LoadPreparedDraftsAsync();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi tạo danh mục:\n{ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private async void BtnPostPreparedToDb_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedItems = _preparedItems.Where(x => x.IsSelected && x.Draft.Status != DraftStatus.Posted).ToList();
+            if (selectedItems.Count == 0)
+            {
+                MessageBox.Show("Vui lòng tích chọn ít nhất một bản nháp chưa ghi sổ.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var confirm = MessageBox.Show(
+                $"Bạn có chắc chắn muốn ghi sổ {selectedItems.Count} chứng từ vào CSDL thật thông qua cổng Core Posting Gateway?\n" +
+                $"Hệ thống sẽ thực hiện giao dịch an toàn (Transaction) và tự động lưu ánh xạ vào Sổ tay ghi nhớ.",
+                "Xác nhận ghi sổ chứng từ", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (confirm != MessageBoxResult.Yes) return;
+
+            btnPostPreparedToDb.IsEnabled = false;
+            int successCount = 0;
+            var errors = new List<string>();
+
+            try
+            {
+                var prepService = new VoucherDraftPreparationService();
+
+                await Task.Run(() =>
+                {
+                    foreach (var item in selectedItems)
+                    {
+                        if (prepService.PostDraft(item.Draft, out string error, out int savedId))
+                        {
+                            successCount++;
+                            JsonFileDraftStore.SaveDraft(_preparedFolder, item.Draft);
+                        }
+                        else
+                        {
+                            errors.Add($"HĐ {item.InvoiceNo}: {error}");
+                        }
+                    }
+                });
+
+                if (errors.Count == 0)
+                {
+                    MessageBox.Show($"Đã ghi sổ thành công toàn bộ {successCount} chứng từ kho vào CSDL!", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    MessageBox.Show(
+                        $"Đã ghi sổ thành công: {successCount}/{selectedItems.Count} chứng từ.\n\n" +
+                        $"Các lỗi gặp phải:\n{string.Join("\n", errors.Take(5))}",
+                        "Kết quả ghi sổ", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+
+                await LoadPreparedDraftsAsync();
+
+                // Refresh tab DB nếu đã nạp
+                if (_dbItems.Count > 0)
+                {
+                    await LoadDbInvoicesAsync();
+                }
+            }
+            finally
+            {
+                btnPostPreparedToDb.IsEnabled = true;
+            }
+        }
+
+        private void BtnDeletePrepared_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedItems = _preparedItems.Where(x => x.IsSelected).ToList();
+            if (selectedItems.Count == 0)
+            {
+                MessageBox.Show("Vui lòng tích chọn bản nháp muốn xóa.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var confirm = MessageBox.Show(
+                $"Bạn có chắc chắn muốn xóa {selectedItems.Count} tệp bản nháp đã chọn khỏi thư mục Prepared?",
+                "Xác nhận xóa", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (confirm != MessageBoxResult.Yes) return;
+
+            foreach (var item in selectedItems)
+            {
+                JsonFileDraftStore.DeleteDraft(_preparedFolder, item.Draft.DraftId);
+            }
+
+            _ = LoadPreparedDraftsAsync();
+        }
+
+        private void BtnOpenPreparedInOffice_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedItem = gridPreparedMaster.SelectedItem as PreparedDraftItemViewModel;
+            if (selectedItem == null)
+            {
+                selectedItem = _preparedItems.FirstOrDefault(x => x.IsSelected);
+            }
+
+            if (selectedItem?.Draft == null)
+            {
+                MessageBox.Show("Vui lòng chọn hoặc tích chọn một bản nháp để mở trong Office Studio.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            OpenDraftInOfficeStudio(selectedItem.Draft);
+        }
+
+        private void ViewPreparedMaster_RowDoubleClick(object sender, DevExpress.Xpf.Grid.RowDoubleClickEventArgs e)
+        {
+            if (gridPreparedMaster.SelectedItem is PreparedDraftItemViewModel sel && sel.Draft != null)
+            {
+                OpenDraftInOfficeStudio(sel.Draft);
+            }
+        }
+
+        private void OpenDraftInOfficeStudio(VoucherDraft draft)
+        {
+            try
+            {
+                var officeWin = NewaccNet.Wpf.AppSystem.AI.OfficeStudioWindow.OpenDraft(draft, this);
+                officeWin.Closed += async (s, args) =>
+                {
+                    // Tự động tải lại danh sách bản nháp sau khi người dùng chỉnh sửa/ghi sổ trên Office Studio
+                    await LoadPreparedDraftsAsync();
+                };
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi mở bản nháp trong Office Studio: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        // ==============================================================
+        // TAB 3: DATABASE VIEW LOGIC
         // ==============================================================
 
         private async void FilterDbInvoices_Changed(object sender, RoutedEventArgs e)

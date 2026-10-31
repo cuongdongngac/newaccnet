@@ -789,6 +789,7 @@ namespace DataAccess.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(InventoryVoucherFieldIndex), "InventoryVoucherEntity");
 			this.AddElementFieldInfo("InventoryVoucherEntity", "Carrier", typeof(System.String), false, false, false, true,  (int)InventoryVoucherFieldIndex.Carrier, 100, 0, 0);
+			this.AddElementFieldInfo("InventoryVoucherEntity", "EntryGraph", typeof(System.String), false, false, false, true,  (int)InventoryVoucherFieldIndex.EntryGraph, 2147483647, 0, 0);
 			this.AddElementFieldInfo("InventoryVoucherEntity", "ExobjectId", typeof(System.String), false, true, false, true,  (int)InventoryVoucherFieldIndex.ExobjectId, 10, 0, 0);
 			this.AddElementFieldInfo("InventoryVoucherEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)InventoryVoucherFieldIndex.Id, 0, 0, 10);
 			this.AddElementFieldInfo("InventoryVoucherEntity", "Inoutnumber", typeof(System.String), false, false, false, true,  (int)InventoryVoucherFieldIndex.Inoutnumber, 10, 0, 0);

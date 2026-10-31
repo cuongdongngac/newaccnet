@@ -40,6 +40,16 @@ namespace NewaccNet.TaxInvoice
 
         public TaxInvoiceToken? Token { get; set; }
 
+        /// <summary>
+        /// Bộ giải mã Captcha mặc định dùng chung (ví dụ AI Vision Fallback).
+        /// </summary>
+        public static ICaptchaSolver? DefaultCaptchaSolver { get; set; }
+
+        /// <summary>
+        /// Bộ giải mã Captcha riêng cho phiên làm việc hiện tại.
+        /// </summary>
+        public ICaptchaSolver? CaptchaSolver { get; set; }
+
         public async Task<CaptchaChallenge> GetCaptchaAsync(CancellationToken cancellationToken = default)
         {
             var responseBody = await SendStringAsync(HttpMethod.Get, _options.BaseUrl + "/captcha", requiresAuth: false, cancellationToken).ConfigureAwait(false);
@@ -104,10 +114,29 @@ namespace NewaccNet.TaxInvoice
             Func<CaptchaChallenge, Task<string>>? promptUserFunc = null, int maxAttempts = 3, CancellationToken cancellationToken = default)
         {
             TaxInvoiceLoginException? lastException = null;
+            var solver = CaptchaSolver ?? DefaultCaptchaSolver;
+
             for (var attempt = 0; attempt < maxAttempts; attempt++)
             {
                 var challenge = await GetCaptchaAsync(cancellationToken).ConfigureAwait(false);
                 var captchaValue = challenge.RecognizedValue;
+
+                // Nếu thuật toán ban đầu không nhận được (hoặc đã thử lần 1 bị lỗi captcha), dùng solver AI nếu có
+                if ((string.IsNullOrWhiteSpace(captchaValue) || attempt > 0) && solver != null)
+                {
+                    try
+                    {
+                        var aiSolved = await solver.SolveAsync(challenge, cancellationToken).ConfigureAwait(false);
+                        if (!string.IsNullOrWhiteSpace(aiSolved))
+                        {
+                            captchaValue = aiSolved.Trim();
+                        }
+                    }
+                    catch
+                    {
+                        // Bỏ qua lỗi solver, tiếp tục thử các phương thức dự phòng khác
+                    }
+                }
 
                 var shouldPrompt = promptUserFunc != null && (string.IsNullOrEmpty(captchaValue) || (attempt > 0 && attempt == maxAttempts - 1));
                 if (shouldPrompt)
