@@ -21,6 +21,11 @@ namespace NewaccNet.Core.Posting
         Task<PostingResult> PostDraftAsync(VoucherDraft draft, CancellationToken ct = default);
 
         /// <summary>
+        /// Ghi sổ một chứng từ 3 tầng hoàn chỉnh (AccountingVoucherThreeTierDraft - Vòng đời 3) vào CSDL.
+        /// </summary>
+        Task<PostingResult> PostThreeTierDraftAsync(AccountingVoucherThreeTierDraft threeTierDraft, CancellationToken ct = default);
+
+        /// <summary>
         /// Ghi sổ một chứng từ JournalVoucherEntity (ví dụ từ form nhập tay VoucherEntryWindow).
         /// </summary>
         Task<PostingResult> PostVoucherAsync(JournalVoucherEntity voucher, CancellationToken ct = default);
@@ -127,6 +132,139 @@ namespace NewaccNet.Core.Posting
             }
 
             return postResult;
+        }
+
+        public async Task<PostingResult> PostThreeTierDraftAsync(AccountingVoucherThreeTierDraft threeTierDraft, CancellationToken ct = default)
+        {
+            if (threeTierDraft == null)
+            {
+                return new PostingResult { Success = false, ErrorMessage = "Chứng từ 3 tầng rỗng." };
+            }
+
+            var top = threeTierDraft.TopVoucher;
+            var voucher = new JournalVoucherEntity
+            {
+                VoucherDate = top.VoucherDate,
+                VoucherNo = top.VoucherNo ?? string.Empty,
+                Invoicesnumber = "01",
+                Contents = !string.IsNullOrWhiteSpace(top.Contents) ? top.Contents : $"Giao dịch với {top.PartnerName}",
+                Personname = top.PartnerName,
+                Personaddress = top.Address
+            };
+
+            // Sinh số chứng từ nếu thiếu
+            if (string.IsNullOrWhiteSpace(voucher.VoucherNo))
+            {
+                voucher.VoucherNo = _numberService.GenerateNextVoucherNo(top.VoucherSourceCode, voucher.VoucherDate);
+                top.VoucherNo = voucher.VoucherNo;
+            }
+
+            // 1. Dòng Có (Thanh toán / Công nợ)
+            string creditAcc = !string.IsNullOrWhiteSpace(top.SettlementAccountId) ? top.SettlementAccountId : "3311";
+            var creditJe = new JournalEntryEntity
+            {
+                AccountId = creditAcc,
+                Dbcr = -1,
+                Amount = (double)top.TotalAmount
+            };
+
+            // Nếu là giao dịch công nợ thì gắn đối tác vào chi tiết 131/331
+            if (top.IsDebtTransaction && !string.IsNullOrWhiteSpace(top.PartnerId))
+            {
+                creditJe.DebtDetails.Add(new DebtDetailEntity
+                {
+                    PartnerId = top.PartnerId,
+                    Amount = (double)top.TotalAmount,
+                    Liabilitydate = top.DueDate ?? top.VoucherDate
+                });
+            }
+            voucher.JournalEntries.Add(creditJe);
+
+            // 2. Các dòng Nợ (Vật tư / Kho / Chi phí)
+            var groups = threeTierDraft.Details.GroupBy(d => new
+            {
+                AccountId = !string.IsNullOrWhiteSpace(d.DebitAccountId) ? d.DebitAccountId : "1561",
+                WarehouseId = !string.IsNullOrWhiteSpace(d.WarehouseId) ? d.WarehouseId : (threeTierDraft.InventoryVoucher?.DefaultWarehouseId ?? "KHO1")
+            });
+
+            foreach (var g in groups)
+            {
+                decimal gAmount = g.Sum(x => x.Amount);
+                var debitJe = new JournalEntryEntity
+                {
+                    AccountId = g.Key.AccountId,
+                    Dbcr = 1,
+                    Amount = (double)gAmount
+                };
+
+                // Nếu có phân hệ kho
+                if (threeTierDraft.InventoryVoucher != null || g.Any(x => !string.IsNullOrWhiteSpace(x.MaterialId)))
+                {
+                    var iv = new InventoryVoucherEntity
+                    {
+                        WarehouseId = g.Key.WarehouseId,
+                        Taxflag = true,
+                        Taxno = top.TaxCode,
+                        Vatobjectid = top.PartnerId,
+                        Vatobjectname = top.PartnerName,
+                        Vataddress = top.Address,
+                        Vatbillno = top.InvoiceNumber ?? string.Empty,
+                        Serialno = top.InvoiceSeries ?? string.Empty,
+                        Vatbilldate = top.InvoiceDate ?? top.VoucherDate,
+                        Vatmaterialdes = voucher.Contents
+                    };
+
+                    foreach (var item in g)
+                    {
+                        iv.InventoryVoucherLines.Add(new InventoryVoucherLineEntity
+                        {
+                            MaterialId = item.MaterialId,
+                            Quantity = (double)item.Quantity,
+                            Price = (double)item.UnitPrice
+                        });
+                    }
+
+                    debitJe.InventoryVouchers.Add(iv);
+                }
+
+                voucher.JournalEntries.Add(debitJe);
+            }
+
+            // 3. Dòng Nợ Thuế GTGT (nếu có)
+            if (top.TotalTaxAmount > 0)
+            {
+                string vatAcc = threeTierDraft.Details.FirstOrDefault(d => !string.IsNullOrWhiteSpace(d.VatDebitAccountId))?.VatDebitAccountId ?? "13311";
+                var vatJe = new JournalEntryEntity
+                {
+                    AccountId = vatAcc,
+                    Dbcr = 1,
+                    Amount = (double)top.TotalTaxAmount
+                };
+
+                vatJe.VatEntries.Add(new VatEntryEntity
+                {
+                    Taxno = top.TaxCode,
+                    Vatobjectid = top.PartnerId,
+                    Vatobjectname = top.PartnerName,
+                    Vatbillno = top.InvoiceNumber ?? string.Empty,
+                    Serialno = top.InvoiceSeries ?? string.Empty,
+                    Vatbilldate = top.InvoiceDate ?? top.VoucherDate,
+                    Beforetaxamount = (double)top.TotalAmountWithoutTax,
+                    Amount = (double)top.TotalTaxAmount,
+                    Vatdescription = voucher.Contents
+                });
+
+                voucher.JournalEntries.Add(vatJe);
+            }
+
+            // Ghi sổ qua service
+            var result = await _postingService.PostVoucherAsync(voucher, ct);
+            if (result.Success)
+            {
+                threeTierDraft.Stage = DraftLifecycleStage.Stage4_Posted;
+            }
+
+            return result;
         }
 
         public Task<PostingResult> PostVoucherAsync(JournalVoucherEntity voucher, CancellationToken ct = default)

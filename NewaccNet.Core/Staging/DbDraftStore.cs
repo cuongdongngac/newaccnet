@@ -38,8 +38,15 @@ namespace NewaccNet.Core.Staging
                 if (_tableInitialized) return;
                 try
                 {
-                    using var adapter = AppDataAccessAdapter.Create();
                     var dbType = ConfigManager.Current.DbType;
+                    if (dbType == DatabaseType.Access && 
+                        (string.IsNullOrWhiteSpace(ConfigManager.Current.AccessFilePath) || !System.IO.File.Exists(ConfigManager.Current.AccessFilePath)))
+                    {
+                        _tableInitialized = true;
+                        return;
+                    }
+
+                    using var adapter = AppDataAccessAdapter.Create();
 
                     string sql;
                     if (dbType == DatabaseType.SqlServer)
@@ -144,9 +151,20 @@ CREATE TABLE StagingDraft (
             }
         }
 
+        private static bool IsDatabaseAvailable()
+        {
+            if (ConfigManager.Current.DbType == DatabaseType.Access)
+            {
+                return !string.IsNullOrWhiteSpace(ConfigManager.Current.AccessFilePath) &&
+                       System.IO.File.Exists(ConfigManager.Current.AccessFilePath);
+            }
+            return true;
+        }
+
         public async Task SaveDocumentAsync(StagingDocument doc, CancellationToken ct = default)
         {
             if (doc == null) throw new ArgumentNullException(nameof(doc));
+            if (!IsDatabaseAvailable()) return;
 
             DateTime now = DateTime.Now;
 
@@ -203,7 +221,7 @@ VALUES (@DraftId, @DraftType, @Status, @SourceKind, @SourceRef, @PayloadJson, @C
 
         public async Task<StagingDocument?> GetDocumentAsync(string draftId, CancellationToken ct = default)
         {
-            if (string.IsNullOrWhiteSpace(draftId)) return null;
+            if (string.IsNullOrWhiteSpace(draftId) || !IsDatabaseAvailable()) return null;
 
             using var conn = AppDataAccessAdapter.CreateRawConnection();
             await conn.OpenAsync(ct);
@@ -224,6 +242,7 @@ VALUES (@DraftId, @DraftType, @Status, @SourceKind, @SourceRef, @PayloadJson, @C
         public async Task<IReadOnlyList<StagingDocument>> QueryDocumentsAsync(DraftQueryFilter? filter = null, CancellationToken ct = default)
         {
             var list = new List<StagingDocument>();
+            if (!IsDatabaseAvailable()) return list;
 
             using var conn = AppDataAccessAdapter.CreateRawConnection();
             await conn.OpenAsync(ct);
@@ -291,6 +310,7 @@ VALUES (@DraftId, @DraftType, @Status, @SourceKind, @SourceRef, @PayloadJson, @C
         public async Task<IReadOnlyList<VoucherDraft>> QueryAsync(DraftQueryFilter? filter = null, CancellationToken ct = default)
         {
             var list = new List<VoucherDraft>();
+            if (!IsDatabaseAvailable()) return list;
 
             using var conn = AppDataAccessAdapter.CreateRawConnection();
             await conn.OpenAsync(ct);
@@ -354,7 +374,7 @@ VALUES (@DraftId, @DraftType, @Status, @SourceKind, @SourceRef, @PayloadJson, @C
 
         public async Task DeleteAsync(string draftId, CancellationToken ct = default)
         {
-            if (string.IsNullOrWhiteSpace(draftId)) return;
+            if (string.IsNullOrWhiteSpace(draftId) || !IsDatabaseAvailable()) return;
 
             using var conn = AppDataAccessAdapter.CreateRawConnection();
             await conn.OpenAsync(ct);
@@ -368,7 +388,7 @@ VALUES (@DraftId, @DraftType, @Status, @SourceKind, @SourceRef, @PayloadJson, @C
 
         public async Task<bool> ExistsBySourceRefAsync(string sourceKind, string sourceRef, CancellationToken ct = default)
         {
-            if (string.IsNullOrWhiteSpace(sourceRef)) return false;
+            if (string.IsNullOrWhiteSpace(sourceRef) || !IsDatabaseAvailable()) return false;
 
             using var conn = AppDataAccessAdapter.CreateRawConnection();
             await conn.OpenAsync(ct);

@@ -247,5 +247,213 @@ namespace NewaccNet.ArchitectureTests
             Assert.Equal("Nguyễn Văn A", parsedPayroll.Employees[0].FullName);
             Assert.Equal(25_850_000, parsedPayroll.Employees[0].NetPay);
         }
+
+        [Fact]
+        public void MasterDataDraft_OneTier_MatchingAndAiProposal_ShouldWork()
+        {
+            var masterDraft = new MasterDataDraft
+            {
+                Kind = "Partner",
+                SourceRef = "HoaDonTCT_Thang10.xml",
+                Items = new()
+                {
+                    new MasterDataDraftItem
+                    {
+                        LineNo = 1,
+                        RawTaxCode = "0101234567",
+                        RawName = "Công ty TNHH Thép Việt Nhật",
+                        RawAddress = "KCN Thăng Long, Hà Nội",
+                        ExistsInDb = false,
+                        ProposedCode = "NCC_THEPVN",
+                        ProposedName = "Thép Việt Nhật",
+                        ProposedGroup = "NHA_CUNG_CAP",
+                        ProposedDefaultAccount = "3311",
+                        Match = new MatchInfo
+                        {
+                            Field = "TaxCode",
+                            Method = MatchMethod.Ai,
+                            Confidence = 0.95,
+                            Reason = "AI đề xuất mã NCC dựa trên tên công ty và ngành hàng thép"
+                        },
+                        IsApproved = true
+                    }
+                }
+            };
+
+            var doc = StagingDocument.FromPayload("MD_001", "MasterData", masterDraft);
+            var parsed = doc.As<MasterDataDraft>();
+
+            Assert.NotNull(parsed);
+            Assert.Equal("Partner", parsed.Kind);
+            Assert.Single(parsed.Items);
+            Assert.Equal("0101234567", parsed.Items[0].RawTaxCode);
+            Assert.Equal("NCC_THEPVN", parsed.Items[0].ProposedCode);
+            Assert.Equal(MatchMethod.Ai, parsed.Items[0].Match.Method);
+        }
+
+        [Fact]
+        public void ThreeTierVoucherTransformer_FromStage2_ToStage3_DebtDetails_ShouldTransformCorrectly()
+        {
+            var stage2Draft = new VoucherDraft
+            {
+                DraftId = "STAGE2_001",
+                DraftType = DraftType.PurchaseInvoice,
+                Status = DraftStatus.Approved,
+                Header = new DraftHeader
+                {
+                    VoucherDate = new DateTime(2026, 10, 31),
+                    VoucherSourceCode = "NM",
+                    VoucherNo = "NM0001",
+                    Contents = "Nhập mua nguyên vật liệu",
+                    PersonName = "Anh Tuấn"
+                },
+                Counterparty = new DraftCounterparty
+                {
+                    Raw = new CounterpartyRaw
+                    {
+                        Name = "Công ty TNHH Xi Măng Hà Tiên",
+                        TaxCode = "0300445566",
+                        Address = "TP. Hồ Chí Minh"
+                    },
+                    Resolved = new CounterpartyResolved
+                    {
+                        PartnerId = "NCC_HATIEN",
+                        IsNew = false
+                    }
+                },
+                Invoice = new DraftInvoiceInfo
+                {
+                    Number = "0001234",
+                    Series = "1C26TBB",
+                    Date = new DateTime(2026, 10, 30)
+                },
+                Settlement = new DraftSettlement
+                {
+                    CreditAccountId = "3311",
+                    DueDate = new DateTime(2026, 11, 30)
+                },
+                Lines = new()
+                {
+                    new DraftLine
+                    {
+                        LineNo = 1,
+                        Raw = new DraftLineRaw
+                        {
+                            ItemName = "Xi măng PCB40",
+                            Unit = "Tấn",
+                            Quantity = 10,
+                            UnitPrice = 1500000,
+                            Amount = 15000000,
+                            VatRate = 10,
+                            VatAmount = 1500000
+                        },
+                        Resolved = new DraftLineResolved
+                        {
+                            MaterialId = "XM_PCB40",
+                            WarehouseId = "KHO_CHINH",
+                            DebitAccountId = "1521",
+                            VatAccountId = "13311"
+                        }
+                    }
+                }
+            };
+
+            // Chuyển hóa sang DTO 3 tầng (Vòng đời 3)
+            var threeTier = NewaccNet.Core.Posting.ThreeTierVoucherTransformer.Transform(stage2Draft);
+
+            Assert.NotNull(threeTier);
+            Assert.Equal(DraftLifecycleStage.Stage3_VoucherReady, threeTier.Stage);
+
+            // Tầng Top
+            Assert.Equal("NM", threeTier.TopVoucher.VoucherSourceCode);
+            Assert.Equal("NCC_HATIEN", threeTier.TopVoucher.PartnerId);
+            Assert.Equal("0300445566", threeTier.TopVoucher.TaxCode);
+            Assert.True(threeTier.TopVoucher.IsDebtTransaction);
+            Assert.Equal(16500000, threeTier.TopVoucher.TotalAmount);
+
+            // Tầng Giữa (Phiếu kho)
+            Assert.NotNull(threeTier.InventoryVoucher);
+            Assert.Equal("NK", threeTier.InventoryVoucher.MovementType);
+            Assert.Equal("KHO_CHINH", threeTier.InventoryVoucher.DefaultWarehouseId);
+
+            // Tầng Dưới (Chi tiết định khoản & gắn công nợ)
+            Assert.Single(threeTier.Details);
+            var line = threeTier.Details[0];
+            Assert.Equal("XM_PCB40", line.MaterialId);
+            Assert.Equal("1521", line.DebitAccountId);
+            Assert.Equal("3311", line.CreditAccountId);
+            // Giao dịch nợ nên MST và PartnerId được đưa vào chi tiết để lên sổ 331
+            Assert.Equal("NCC_HATIEN", line.DebtPartnerId);
+            Assert.Equal("0300445566", line.DebtPartnerTaxCode);
+        }
+
+        [Fact]
+        public async Task ThreeTierDraft_LoadAndResumeCheckpoint_RoundTrip()
+        {
+            string tempFolder = Path.Combine(Path.GetTempPath(), "NewaccNet_Test_ThreeTier_" + Guid.NewGuid().ToString("N"));
+            try
+            {
+                var store = new JsonFileDraftStore(tempFolder);
+
+                var threeTier = new AccountingVoucherThreeTierDraft
+                {
+                    Stage = DraftLifecycleStage.Stage3_VoucherReady,
+                    TopVoucher = new TopVoucherTier
+                    {
+                        VoucherDate = DateTime.Today,
+                        VoucherSourceCode = "NM",
+                        VoucherNo = "NM_PAUSE_01",
+                        PartnerId = "NCC_01",
+                        PartnerName = "Công ty Tạm Dừng Để Mai Làm Tiếp",
+                        TaxCode = "0109998888",
+                        IsDebtTransaction = true,
+                        TotalAmount = 5000000
+                    },
+                    InventoryVoucher = new MiddleInventoryTier
+                    {
+                        MovementType = "NK",
+                        DefaultWarehouseId = "KHO_A"
+                    },
+                    Details = new()
+                    {
+                        new DetailLineTier
+                        {
+                            LineNo = 1,
+                            MaterialId = "VT_01",
+                            Quantity = 5,
+                            UnitPrice = 1000000,
+                            Amount = 5000000,
+                            DebitAccountId = "1561",
+                            CreditAccountId = "3311",
+                            DebtPartnerId = "NCC_01"
+                        }
+                    }
+                };
+
+                // Lưu bản nháp Vòng 3 ở trạng thái chờ
+                var doc = StagingDocument.FromPayload("DRAFT_V3_001", "AccountingVoucher3Tier", threeTier);
+                await store.SaveDocumentAsync(doc);
+
+                // Lần sau mở máy lên: load lại đúng điểm dừng để hiệu chỉnh tiếp
+                var loadedDoc = await store.GetDocumentAsync("DRAFT_V3_001");
+                Assert.NotNull(loadedDoc);
+
+                var resumedTier = loadedDoc.As<AccountingVoucherThreeTierDraft>();
+                Assert.NotNull(resumedTier);
+                Assert.Equal(DraftLifecycleStage.Stage3_VoucherReady, resumedTier.Stage);
+                Assert.Equal("NM_PAUSE_01", resumedTier.TopVoucher.VoucherNo);
+                Assert.NotNull(resumedTier.InventoryVoucher);
+                Assert.Single(resumedTier.Details);
+                Assert.Equal("VT_01", resumedTier.Details[0].MaterialId);
+                Assert.Equal("NCC_01", resumedTier.Details[0].DebtPartnerId);
+            }
+            finally
+            {
+                if (Directory.Exists(tempFolder))
+                {
+                    try { Directory.Delete(tempFolder, true); } catch { }
+                }
+            }
+        }
     }
 }

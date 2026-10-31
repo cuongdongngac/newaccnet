@@ -1,106 +1,98 @@
-# KIẾN TRÚC LỚP ĐỆM STAGING & CƠ CHẾ DTO PHÂN CẤP ĐỘNG
-*Tài liệu kỹ thuật giải pháp Schema-less Document Store & Dynamic Hierarchical DTOs*
+# KIẾN TRÚC LỚP ĐỆM STAGING: TÍNH BẤT BIẾN, VÒNG ĐỜI VÀ MÔ HÌNH DTO 3 TẦNG
+*Tài liệu kỹ thuật định hướng giải pháp Schema-less Document Store & Dynamic Lifecycle Stages*
 
 ---
 
-## 1. BẢN CHẤT VẤN ĐỀ: SỰ BIẾN ĐỘNG CỦA DỮ LIỆU ĐẦU VÀO
-Trong kế toán doanh nghiệp, dữ liệu nháp đổ về hệ thống từ nhiều nguồn rất phân mảnh và biến động:
-1. **Hóa đơn điện tử (XML từ Cổng Thuế TCT):** Hóa đơn bán lẻ, dịch vụ, thương mại, sản xuất, xăng dầu, viễn thông có chỉ số kỳ cước...
-2. **Sao kê ngân hàng (Bank Statements):** Định dạng khác nhau giữa Vietcombank, BIDV, Techcombank, VPBank... (Cột Ghi nợ, Ghi có, Số dư, Diễn giải nội dung, Mã GD).
-3. **Bảng kê kho & Kiểm kê (Excel):** Mã kho, tên vật tư, quy cách lô/hạn, số lượng sổ sách, số lượng thực tế, nguyên nhân thừa thiếu.
-4. **Bảng lương & Trích bảo hiểm (Excel):** Hàng chục cột phụ cấp, ngày công, bảo hiểm bắt buộc (3383, 3384, 3386), thuế TNCN (3335), lương thực lĩnh (334).
-5. **Dữ liệu do AI / OCR trích xuất:** Chứa các đề xuất suy luận, độ tự tin (Confidence), lý do đối chiếu.
-
-> [!IMPORTANT]
-> **Không thể và không nên gò ép các dữ liệu này thành các cột cố định trong CSDL quan hệ!**  
-> Việc tạo các bảng quan hệ cứng nhắc sẽ dẫn đến:
-> - Schema liên tục vỡ khi nhà nước đổi chuẩn hóa đơn hoặc doanh nghiệp đổi mẫu biểu Excel.
-> - CSDL phình to với vô số cột `NULL` hoặc quan hệ thừa thãi.
-> - Người dùng bị bó buộc, không thể đưa dữ liệu đa ngành nghề vào phân tích.
+## 1. TRIẾT LÝ THIẾT KẾ CỐT LÕI (BẤT BIẾN & VÒNG ĐỜI)
+1. **Stagedata là bất biến (Immutable Raw):** Dữ liệu gốc khi lấy về từ nguồn ngoài (XML hóa đơn Cổng thuế, file Excel thô, sao kê ngân hàng) được giữ nguyên vẹn 100%, không bị sửa đổi hay ghi đè làm mất dấu vết pháp lý.
+2. **Dữ liệu có vòng đời (Lifecycle Stages):** Stagedata không đứng yên mà chuyển hóa từng bước qua các vòng đời.
+3. **Lưu trạng thái chờ (Persistent Checkpoints):** Ở bất kỳ vòng đời nào, người dùng có thể lưu lại dạng chờ để hôm sau mở lên làm việc tiếp từ đúng điểm dừng đó.
+4. **Luôn cho phép hiệu chỉnh ở vòng cuối (Human-in-the-loop):** Vòng 3 (mức DTO hoàn chỉnh) vẫn được nạp lên giao diện (Office Studio / Review Grid) để người dùng kiểm tra hoặc sửa tay lần cuối trước khi bấm nút.
+5. **"Bấm một cái là cập nhật luôn":** Khi đã duyệt vòng 3, người dùng chỉ cần nhấn 1 nút ➔ Cổng ghi sổ duy nhất `IPostingGateway` lập tức hạch toán và mở Transaction ghi vào CSDL thật.
 
 ---
 
-## 2. GIẢI PHÁP: DOCUMENT STORE TRONG LÒNG RDBMS (SCHEMA-LESS STAGING)
+## 2. CÁC ĐỊNH DẠNG TẦNG CỦA STAGING (1 TẦNG, 2 TẦNG, 3 TẦNG)
 
-### 2.1. Vỏ bọc lưu trữ vật lý tối giản (`StagingDraft` / `StagingDocument`)
-Hệ thống lưu trữ ở tầng Staging (cả ở chế độ CSDL tập trung MSSQL/PostgreSQL/Access lẫn chế độ Tệp JSON cục bộ) chỉ duy trì **1 bảng duy nhất** với cấu trúc Document Store:
+Dữ liệu nạp vào Staging tùy theo bài toán sẽ có format khác nhau:
 
-```sql
-CREATE TABLE [dbo].[StagingDraft](
-    [DraftId]         NVARCHAR(64) NOT NULL PRIMARY KEY, -- Mã định danh duy nhất (UUID)
-    [DraftType]       NVARCHAR(50) NOT NULL,             -- Phân hệ nghiệp vụ (PurchaseInvoice, BankStatement, InventoryMovement, Payroll...)
-    [Status]          NVARCHAR(50) NOT NULL,             -- Trạng thái: Imported, Matched, NeedsReview, Approved, Posted, Rejected
-    [SourceKind]      NVARCHAR(50) NULL,                 -- Nguồn: TaxInvoice, Excel, BankXml, Ocr, AiChat...
-    [SourceRef]       NVARCHAR(255) NULL,                -- Số HĐ, tên file, số tham chiếu
-    [PayloadJson]     NVARCHAR(MAX) NOT NULL,            -- Toàn bộ cây dữ liệu phân cấp dạng JSON
-    [CreatedAt]       DATETIME NOT NULL,                 -- Thời điểm nạp
-    [UpdatedAt]       DATETIME NOT NULL,                 -- Thời điểm cập nhật cuối
-    [PostedVoucherId] INT NULL                           -- ID chứng từ kế toán thật sau khi đã ghi sổ
-);
-```
+### 2.1. Định dạng 1 tầng — Danh mục độc lập (`MasterDataDraft`)
+- **Tình huống:** Chỉ cần đồng bộ hoặc bổ sung danh mục Đối tác (Khách hàng / NCC), Hàng hóa / Vật tư, Nhóm hàng từ file Excel hoặc từ hóa đơn.
+- **Quy trình:**
+  - Hệ thống lấy danh sách mã/tên/MST từ nguồn ngoài.
+  - So khớp với DB nội bộ xem đã tồn tại chưa (`ExistsInDb`).
+  - Với các bản ghi mới hoặc gần giống: **AI trợ giúp gợi ý** (Gợi ý mã chuẩn, nhóm vật tư, tài khoản mặc định, độ tự tin `Confidence`, lý do `Reason`).
+  - Người dùng tick duyệt ➔ Đẩy vào DB danh mục thật qua `IMasterDataGateway`.
 
-### 2.2. Ưu điểm vượt trội của giải pháp:
-- **Linh hoạt tuyệt đối:** Dữ liệu có thể có 5 trường hay 50 trường, phẳng hay phân cấp 5 tầng đều nằm trọn vẹn trong `PayloadJson`.
-- **Độc lập và an toàn:** Dữ liệu nháp dù sai lệch, thiếu tài khoản, mất cân đối cũng không bao giờ làm vỡ ràng buộc (Foreign Key / Constraints) của CSDL kế toán thật.
-- **Dễ dàng đồng bộ 2 chiều (JSON ⇄ DB):** Mỗi bản ghi tương đương 1 tệp JSON `Draft_{DraftId}.json`, công cụ `DraftMigrationService` có thể quét và chuyển dịch 2 chiều với hiệu năng cực cao.
+### 2.2. Định dạng 2 tầng — Hóa đơn gốc vừa nạp (Vòng đời 1)
+- **Tình huống:** Khi tải hóa đơn XML từ Cổng Thuế về, được lưu trữ theo thư mục phân cấp JSON hoặc bảng CSDL `StagingDraft`.
+- **Cấu trúc 2 tầng:**
+  - **Tầng trên (Header):** Mã số thuế, tên người bán/người mua, địa chỉ, mẫu số, ký hiệu, số hóa đơn, ngày lập.
+  - **Tầng dưới (Lines):** Chi tiết các dòng hàng thô (Tên hàng gốc, ĐVT gốc, Số lượng, Đơn giá, Thành tiền, Thuế suất).
+
+### 2.3. Vòng đời 2 — Chuẩn hóa & So khớp danh mục (Master Data Resolution)
+- **Tầng trên (Giao diện):** Chuẩn hóa thông tin đối tác & so khớp với danh mục Khách hàng/NCC trong DB (`RawTaxCode` ➔ `ResolvedPartnerId`).
+- **Tầng dưới (Giao diện):** Chuẩn hóa danh mục hàng hóa, vật tư, nhóm, kho nội bộ (`RawItemName` ➔ `ResolvedMaterialId`, `WarehouseId`, `DebitAccountId`).
+- **AI trợ giúp:** Áp dụng bộ lọc 3 nấc: Khớp MST tất định ➔ Khớp Sổ tay ghi nhớ (`AliasMemory`) ➔ Trợ lý AI gợi ý cho các mã chưa từng gặp.
+- Dữ liệu ở Vòng đời 2 có thể **lưu nháp ở dạng chờ** để người dùng nghỉ tay, lần sau làm tiếp.
+
+### 2.4. Vòng đời 3 — Chuẩn hóa mức DTO hạch toán (Cấu trúc 3 tầng: Voucher ➔ InventoryVoucher ➔ Detail)
+Khi danh mục đã thông, hệ thống nâng cấp dữ liệu lên **Cấu trúc 3 tầng (`AccountingVoucherThreeTierDraft`)**:
+- **Tầng Top (Tầng 1 - Voucher):** Chứng từ sổ cái (Journal Voucher) gồm Số chứng từ, Ngày hạch toán, Diễn giải, Tổng tiền hàng, Tiền thuế, Tổng thanh toán, Tài khoản thanh toán (3311, 111, 112).
+- **Tầng Giữa (Tầng 2 - InventoryVoucher):** Phiếu kho (nếu có hàng hóa/vật tư qua kho): Mã kho, Loại phiếu (Nhập kho `NK` / Xuất kho `XK`), Người giao nhận, Ngày nhập.
+- **Tầng Dưới (Tầng 3 - Detail):** Chi tiết từng dòng định khoản (Nợ TK Kho/Chi phí, Có TK Thanh toán, Tiền thuế GTGT).
+  > [!NOTE]
+  > **Quy tắc công nợ:** *Nếu là giao dịch công nợ (có TK 131/331), hệ thống mới lấy thông tin Mã số thuế & Mã đối tác đưa vào chi tiết để theo dõi sổ công nợ chi tiết theo từng đối tượng.*
 
 ---
 
-## 3. CƠ CHẾ SINH DTO PHÂN CẤP TÙY THEO TÌNH HUỐNG (DYNAMIC HIERARCHICAL DTOS)
-
-Khi dữ liệu nằm trong Staging, nó là một chuỗi JSON linh hoạt (`StagingDocument`).  
-**Nhưng khi đưa vào một tình huống nghiệp vụ cụ thể**, hệ thống sẽ sinh ra **Cây DTO phân cấp tương ứng** để hiển thị, tính toán, kiểm tra và cho người dùng thao tác.
+## 3. SƠ ĐỒ VÒNG ĐỜI DỮ LIỆU TOÀN CẢNH
 
 ```mermaid
 flowchart TD
-    Raw[Dữ liệu thô: XML HĐ, Excel Kho, Sao kê Bank, Bảng lương] --> Ingestion[Lớp nạp Staging]
-    Ingestion --> Doc["StagingDocument (PayloadJson vô cấu trúc)"]
-    Doc --> Store[IDraftStore: CSDL StagingDraft hoặc File JSON]
-    
-    Doc -. Tùy tình huống .-> Registry[DraftPayloadRegistry / Factory]
-    
-    Registry --> DTO1["PurchaseInvoiceDraft (Header -> Line -> Raw/Resolved/Match)"]
-    Registry --> DTO2["BankStatementDraft (BankInfo -> Transactions -> Đối trừ 131/331)"]
-    Registry --> DTO3["InventoryDraft (Warehouse -> Items -> Sổ sách vs Thực tế)"]
-    Registry --> DTO4["PayrollDraft (Dept -> Employees -> Lương/BHXH/Thuế TNCN)"]
-    
-    DTO1 & DTO2 & DTO3 & DTO4 --> Studio[Office Studio / Review Window: Người dùng kiểm tra & sửa trực tiếp trên RAM]
-    Studio --> Gate[IPostingGateway duy nhất: Validate Cân đối Nợ=Có, Khóa sổ]
-    Gate --> MasterDB[(CSDL Kế toán thật: JournalVoucher + Chi tiết)]
-```
+    subgraph S1["VÒNG ĐỜI 1: NẠP THÔ (IMMUTABLE RAW)"]
+        RawXml["XML Cổng Thuế / Excel / Sao kê"] --> Tier2["Format 2 tầng: Top = MST/Đối tác | Bottom = Chi tiết hàng"]
+    end
 
-### 3.1. Các DTO phân cấp chuyên biệt (`NewaccNet.Contracts`):
+    subgraph S2["VÒNG ĐỜI 2: CHUẨN HÓA & SO KHỚP"]
+        Tier2 --> MapTop["Chuẩn hóa tầng trên: So khớp Khách hàng/NCC nội bộ"]
+        Tier2 --> MapBottom["Chuẩn hóa tầng dưới: So khớp Vật tư/Kho/Nhóm (AI hỗ trợ)"]
+        MapTop & MapBottom --> Checkpoint2["💾 Lưu trạng thái chờ (Lần sau mở làm tiếp)"]
+    end
 
-1. **`VoucherDraft` (Hóa đơn mua vào / Bán ra / Phiếu thu / chi):**
-   - Phân cấp 3 tầng: `Header` ➔ `Lines` ➔ `(Raw, Resolved, Match)`.
-   - Lưu vết đối chiếu: Khớp MST (`TaxCodeExact`), Khớp bí danh (`AliasMemory`), Khớp luật (`PostingRule`), Gợi ý AI (`Ai`).
-2. **`BankStatementDraft` (Sao kê ngân hàng):**
-   - Phân cấp: `BankInfo` (TK, Ngân hàng, Số dư đầu/cuối) ➔ `Transactions` (Ngày, Số tiền Thu/Chi, Diễn giải, Gợi ý TK Nợ/Có, Đối tác).
-3. **`InventoryDraft` (Kiểm kê / Nhập xuất kho từ Excel):**
-   - Phân cấp: `Warehouse` ➔ `Items` (Mã, Tên, ĐVT, Lô/Hạn, SL sổ sách, SL thực tế, Chênh lệch `DiffQuantity`, Tài khoản kho/giá vốn).
-4. **`PayrollDraft` (Bảng lương & Trích bảo hiểm):**
-   - Phân cấp: `Period` (Tháng/Năm, Phòng ban) ➔ `Employees` (Lương cơ bản, Phụ cấp, Trích BHXH 338, Thuế TNCN 3335, Phải trả 334).
+    subgraph S3["VÒNG ĐỜI 3: DTO HOÀN CHỈNH 3 TẦNG"]
+        Checkpoint2 --> Transform["ThreeTierVoucherTransformer"]
+        Transform --> T1["Tầng Top: Voucher (Sổ cái, Ngày, Số CT, Tổng tiền)"]
+        Transform --> T2["Tầng Giữa: InventoryVoucher (Phiếu kho NK/XK)"]
+        Transform --> T3["Tầng Dưới: Detail (Chi tiết định khoản Nợ/Có + Gắn MST vào 131/331 nếu nợ)"]
+        T1 & T2 & T3 --> Studio["📊 Nạp lên Office Studio / Review: Hiệu chỉnh tiếp nếu cần"]
+    end
 
-### 3.2. Cơ chế chuyển đổi 2 chiều đơn giản:
-```csharp
-// 1. Đóng gói DTO phân cấp vào StagingDocument
-var doc = StagingDocument.FromPayload("DRAFT_001", "BankStatement", bankDraft);
-await store.SaveDocumentAsync(doc);
-
-// 2. Tùy tình huống nghiệp vụ: Lấy tài liệu ra và chuyển sang DTO tương ứng
-var doc = await store.GetDocumentAsync("DRAFT_001");
-var bankDraft = doc.As<BankStatementDraft>();
-
-// Hoặc phân giải tự động đa hình qua Registry
-var payload = DraftPayloadRegistry.Deserialize(doc.DraftType, doc.PayloadJson);
+    subgraph S4["VÒNG ĐỜI 4: GHI SỔ CSDL THẬT (ONE CLICK)"]
+        Studio --> Button["🚀 BẤM 1 CÁI LÀ CẬP NHẬT LUÔN"]
+        Button --> Gateway["IPostingGateway duy nhất"]
+        Gateway --> RealDB[("CSDL Kế toán thật: JournalVoucher + InventoryVoucher + DebtDetails")]
+    end
 ```
 
 ---
 
-## 4. TÍCH HỢP VỚI OFFICE STUDIO & POSTING GATEWAY
-1. **Zero-Disk I/O trên Excel:** Chuỗi `PayloadJson` được nhúng ẩn an toàn vào thẻ `CustomXmlPart` của tệp Excel OpenXML thông qua `DraftWorkbookPackage`. Người dùng nhìn thấy giao diện bảng tính trực quan, sửa số liệu trên Excel thì JSON ngầm được cập nhật theo.
-2. **Human-in-the-loop:** Người dùng là người duyệt cuối cùng trên màn hình Office Studio.
-3. **Cổng ghi sổ duy nhất `IPostingGateway`:** Khi bấm Duyệt & Ghi sổ:
-   - DTO phân cấp đi qua `IDraftVoucherBuilder` để chuyển thành `JournalVoucherEntity`.
-   - `IVoucherValidator` thẩm định điều kiện cân đối Nợ = Có và kỳ khóa sổ.
-   - `IPostingGateway` mở Transaction ghi vào bảng thật và cập nhật `PostedVoucherId` trở lại `StagingDraft`.
+## 4. TỔ CHỨC LƯU TRỮ VẬT LÝ TRONG STAGING
+Dù dữ liệu ở Vòng đời 1 (2 tầng), Vòng đời 2 (đang map dở), hay Vòng đời 3 (3 tầng hoàn chỉnh), ở tầng lưu trữ vật lý (CSDL bảng `StagingDraft` hoặc File JSON `Draft_{DraftId}.json`) đều lưu dưới dạng:
+
+```sql
+CREATE TABLE [dbo].[StagingDraft](
+    [DraftId]         NVARCHAR(64) NOT NULL PRIMARY KEY,
+    [DraftType]       NVARCHAR(50) NOT NULL, -- MasterData, PurchaseInvoice, AccountingVoucher3Tier...
+    [Status]          NVARCHAR(50) NOT NULL, -- Imported, Matched, NeedsReview, Approved, Posted
+    [SourceKind]      NVARCHAR(50) NULL,
+    [SourceRef]       NVARCHAR(255) NULL,
+    [PayloadJson]     NVARCHAR(MAX) NOT NULL, -- Toàn bộ cây 1 tầng / 2 tầng / 3 tầng
+    [CreatedAt]       DATETIME NOT NULL,
+    [UpdatedAt]       DATETIME NOT NULL,
+    [PostedVoucherId] INT NULL
+);
+```
+
+Mỗi lần kế toán dừng tay nghỉ, hệ thống serialize DTO hiện tại vào `PayloadJson` và lưu lại. Khi mở phần mềm lên, hệ thống deserialize ra đúng tầng của vòng đời đó để tiếp tục làm việc mà không làm mất bất kỳ thông tin nào!
+

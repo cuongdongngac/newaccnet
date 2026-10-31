@@ -143,7 +143,9 @@ namespace NewaccNet.Contracts
             ["BankStatement"] = typeof(BankStatementDraft),
             ["InventoryMovement"] = typeof(InventoryDraft),
             ["InventoryCount"] = typeof(InventoryDraft),
-            ["Payroll"] = typeof(PayrollDraft)
+            ["Payroll"] = typeof(PayrollDraft),
+            ["MasterData"] = typeof(MasterDataDraft),
+            ["AccountingVoucher3Tier"] = typeof(AccountingVoucherThreeTierDraft)
         };
 
         public static void Register(string draftType, Type payloadType)
