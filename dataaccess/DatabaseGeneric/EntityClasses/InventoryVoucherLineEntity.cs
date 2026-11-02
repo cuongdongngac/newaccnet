@@ -162,7 +162,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathMaterialTaxLine { get { return _staticMetaData.GetPrefetchPathElement("MaterialTaxLine", CommonEntityBase.CreateEntityCollection<MaterialTaxLineEntity>()); } }
 
 		/// <summary>The Id property of the Entity InventoryVoucherLine<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryVoucherLine"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "InventoryVoucherLine"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)InventoryVoucherLineFieldIndex.Id, true); }
@@ -170,7 +170,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The InventoryVoucherId property of the Entity InventoryVoucherLine<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryVoucherLine"."InventoryVoucherId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InventoryVoucherLine"."InventoryVoucherId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> InventoryVoucherId
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)InventoryVoucherLineFieldIndex.InventoryVoucherId, false); }
@@ -178,7 +178,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The MaterialId property of the Entity InventoryVoucherLine<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryVoucherLine"."MaterialId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "InventoryVoucherLine"."MaterialId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 20.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String MaterialId
 		{
 			get { return (System.String)GetValue((int)InventoryVoucherLineFieldIndex.MaterialId, true); }
@@ -186,10 +186,10 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Price property of the Entity InventoryVoucherLine<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryVoucherLine"."Price".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> Price
+		/// <remarks>Mapped on  table field: "InventoryVoucherLine"."Price".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 19, 4, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Decimal> Price
 		{
-			get { return (Nullable<System.Double>)GetValue((int)InventoryVoucherLineFieldIndex.Price, false); }
+			get { return (Nullable<System.Decimal>)GetValue((int)InventoryVoucherLineFieldIndex.Price, false); }
 			set { SetValue((int)InventoryVoucherLineFieldIndex.Price, value); }
 		}
 
@@ -202,10 +202,10 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Quantity property of the Entity InventoryVoucherLine<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "InventoryVoucherLine"."Quantity".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> Quantity
+		/// <remarks>Mapped on  table field: "InventoryVoucherLine"."Quantity".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 19, 4, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Decimal> Quantity
 		{
-			get { return (Nullable<System.Double>)GetValue((int)InventoryVoucherLineFieldIndex.Quantity, false); }
+			get { return (Nullable<System.Decimal>)GetValue((int)InventoryVoucherLineFieldIndex.Quantity, false); }
 			set { SetValue((int)InventoryVoucherLineFieldIndex.Quantity, value); }
 		}
 

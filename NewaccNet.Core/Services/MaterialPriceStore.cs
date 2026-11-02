@@ -15,10 +15,10 @@ namespace NewaccNet.Core.Services
     public sealed class GoodsReceiptResult
     {
         public bool IsNewRecord { get; set; }
-        public double OldQuantity { get; set; }
-        public double OldPrice { get; set; }
-        public double NewQuantity { get; set; }
-        public double NewPrice { get; set; }
+        public decimal OldQuantity { get; set; }
+        public decimal OldPrice { get; set; }
+        public decimal NewQuantity { get; set; }
+        public decimal NewPrice { get; set; }
     }
 
     /// <summary>
@@ -27,16 +27,16 @@ namespace NewaccNet.Core.Services
     public sealed class GoodsIssueResult
     {
         /// <summary>Đơn giá xuất kho = Current_Price tại thời điểm xuất → dùng ghi vào phiếu xuất / bút toán giá vốn.</summary>
-        public double IssuePrice { get; set; }
+        public decimal IssuePrice { get; set; }
 
         /// <summary>Giá trị xuất kho = Output_Quantity * IssuePrice.</summary>
-        public double IssueAmount { get; set; }
+        public decimal IssueAmount { get; set; }
 
-        public double OldQuantity { get; set; }
-        public double RemainQuantity { get; set; }
+        public decimal OldQuantity { get; set; }
+        public decimal RemainQuantity { get; set; }
 
         /// <summary>Phần xuất vượt tồn (Output_Quantity - Current_Quantity) nếu có, để cảnh báo người dùng.</summary>
-        public double ShortageQuantity { get; set; }
+        public decimal ShortageQuantity { get; set; }
 
         /// <summary>false = chưa từng có record (Vật tư, Kho) trong MaterialPrice → không có giá xuất.</summary>
         public bool HasPriceRecord { get; set; }
@@ -154,7 +154,7 @@ namespace NewaccNet.Core.Services
         // =====================================================================
         // 1. TÍNH LIÊN HOÀN: BÌNH QUÂN GIA QUYỀN (Moving Average)
         // =====================================================================
-        public GoodsReceiptResult ApplyMovingAverageReceipt(string materialId, string warehouseId, double quantity, double price)
+        public GoodsReceiptResult ApplyMovingAverageReceipt(string materialId, string warehouseId, decimal quantity, decimal price)
         {
             if (quantity <= 0) throw new ArgumentException("Số lượng nhập phải lớn hơn 0.", nameof(quantity));
             if (price < 0) throw new ArgumentException("Đơn giá nhập không được âm.", nameof(price));
@@ -171,15 +171,15 @@ namespace NewaccNet.Core.Services
             }
             else
             {
-                decimal curQty = (decimal)(record.Quantity ?? 0);
-                decimal curPrice = (decimal)record.Price;
+                decimal curQty = record.Quantity ?? 0m;
+                decimal curPrice = record.Price;
                 if (curQty < 0) curQty = 0;
 
-                result.OldQuantity = (double)curQty;
-                result.OldPrice = (double)curPrice;
+                result.OldQuantity = curQty;
+                result.OldPrice = curPrice;
 
-                decimal inQty = (decimal)quantity;
-                decimal inPrice = (decimal)price;
+                decimal inQty = quantity;
+                decimal inPrice = price;
 
                 decimal newQty = curQty + inQty;
                 decimal newTotalValue = (curQty * curPrice) + (inQty * inPrice);
@@ -188,16 +188,16 @@ namespace NewaccNet.Core.Services
                     ? Math.Round(newTotalValue / newQty, PricePrecision)
                     : inPrice;
 
-                record.Quantity = (double)newQty;
-                record.Price = (double)newPrice;
+                record.Quantity = newQty;
+                record.Price = newPrice;
             }
 
-            result.NewQuantity = record.Quantity ?? 0;
+            result.NewQuantity = record.Quantity ?? 0m;
             result.NewPrice = record.Price;
             return result;
         }
 
-        public GoodsIssueResult ApplyMovingAverageIssue(string materialId, string warehouseId, double quantity)
+        public GoodsIssueResult ApplyMovingAverageIssue(string materialId, string warehouseId, decimal quantity)
         {
             if (quantity <= 0) throw new ArgumentException("Số lượng xuất phải lớn hơn 0.", nameof(quantity));
 
@@ -207,29 +207,29 @@ namespace NewaccNet.Core.Services
                 return new GoodsIssueResult { HasPriceRecord = false, ShortageQuantity = quantity };
             }
 
-            decimal curQty = (decimal)(record.Quantity ?? 0);
-            decimal curPrice = (decimal)record.Price;
-            decimal outQty = (decimal)quantity;
+            decimal curQty = record.Quantity ?? 0m;
+            decimal curPrice = record.Price;
+            decimal outQty = quantity;
 
             var result = new GoodsIssueResult
             {
                 HasPriceRecord = true,
-                IssuePrice = (double)curPrice,
-                IssueAmount = (double)Math.Round(outQty * curPrice, PricePrecision),
-                OldQuantity = (double)curQty
+                IssuePrice = curPrice,
+                IssueAmount = Math.Round(outQty * curPrice, PricePrecision),
+                OldQuantity = curQty
             };
 
             decimal remainQty = curQty - outQty;
 
             if (remainQty <= Epsilon)
             {
-                result.ShortageQuantity = remainQty < -Epsilon ? (double)(-remainQty) : 0;
-                remainQty = 0;
-                if (!KeepPriceWhenEmpty) record.Price = 0;
+                result.ShortageQuantity = remainQty < -Epsilon ? (-remainQty) : 0m;
+                remainQty = 0m;
+                if (!KeepPriceWhenEmpty) record.Price = 0m;
             }
 
-            record.Quantity = (double)remainQty;
-            result.RemainQuantity = (double)remainQty;
+            record.Quantity = remainQty;
+            result.RemainQuantity = remainQty;
             return result;
         }
 
@@ -280,8 +280,8 @@ namespace NewaccNet.Core.Services
                     VoucherId = voucher.Id,
                     LineId = line.Id,
                     IsReceipt = isReceipt,
-                    Quantity = (decimal)(line.Quantity ?? 0),
-                    Price = (decimal)(line.Price ?? 0),
+                    Quantity = line.Quantity ?? 0m,
+                    Price = line.Price ?? 0m,
                     MaterialId = line.MaterialId,
                     WarehouseId = voucher.WarehouseId
                 });
@@ -300,8 +300,8 @@ namespace NewaccNet.Core.Services
 
             // Cập nhật kết quả vào Store (để save xuống MaterialPrice)
             var record = GetOrAdd(materialId, warehouseId);
-            record.Quantity = (double)balance.Quantity;
-            record.Price = (double)balance.Price;
+            record.Quantity = balance.Quantity;
+            record.Price = balance.Price;
         }
 
         // =====================================================================

@@ -28,10 +28,10 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
         private string _taxAccountId = "13311";
         private string _totalAccountId = "3311";
 
-        private double _totalCostAmount = 0;
-        private double _totalSellAmount = 0;
-        private double _totalTaxAmount = 0;
-        private double _totalAllAmount = 0;
+        private decimal _totalCostAmount = 0m;
+        private decimal _totalSellAmount = 0m;
+        private decimal _totalTaxAmount = 0m;
+        private decimal _totalAllAmount = 0m;
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string propName = null)
@@ -220,32 +220,32 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             }
         }
 
-        public double TotalCostAmount
+        public decimal TotalCostAmount
         {
             get => _totalCostAmount;
             set { if (_totalCostAmount != value) { _totalCostAmount = value; OnPropertyChanged(); } }
         }
 
-        private double _currentVoucherCostAmount = 0;
-        public double CurrentVoucherCostAmount
+        private decimal _currentVoucherCostAmount = 0m;
+        public decimal CurrentVoucherCostAmount
         {
             get => _currentVoucherCostAmount;
             set { if (_currentVoucherCostAmount != value) { _currentVoucherCostAmount = value; OnPropertyChanged(); } }
         }
 
-        public double TotalSellAmount
+        public decimal TotalSellAmount
         {
             get => _totalSellAmount;
             set { if (_totalSellAmount != value) { _totalSellAmount = value; OnPropertyChanged(); } }
         }
 
-        public double TotalTaxAmount
+        public decimal TotalTaxAmount
         {
             get => _totalTaxAmount;
             set { if (_totalTaxAmount != value) { _totalTaxAmount = value; OnPropertyChanged(); } }
         }
 
-        public double TotalAllAmount
+        public decimal TotalAllAmount
         {
             get => _totalAllAmount;
             set { if (_totalAllAmount != value) { _totalAllAmount = value; OnPropertyChanged(); } }
@@ -618,15 +618,15 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
                         if (subRevList.Count >= 2)
                         {
                             // Tính trước tiền bán và tiền thuế từ các dòng chi tiết vật tư
-                            double calcSell = 0;
-                            double calcTax = 0;
+                            decimal calcSell = 0m;
+                            decimal calcTax = 0m;
                             if (ctx.InventoryVoucher?.InventoryVoucherLines != null)
                             {
                                 foreach (var l in ctx.InventoryVoucher.InventoryVoucherLines)
                                 {
-                                    double s = (l.Quantity ?? 0) * (l.SellPrice ?? 0);
+                                    decimal s = (l.Quantity ?? 0m) * (l.SellPrice ?? 0m);
                                     calcSell += s;
-                                    calcTax += s * (l.Rate ?? 0);
+                                    calcTax += s * (l.Rate ?? 0m);
                                 }
                             }
 
@@ -642,10 +642,10 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
                             }
 
                             // Tiêu chí 2: So sánh số tiền khớp với tính toán từ chi tiết vật tư
-                            if (revEntry == null && taxEntry == null && (calcSell > 0 || calcTax > 0) && Math.Abs(calcSell - calcTax) > 0.01)
+                            if (revEntry == null && taxEntry == null && (calcSell > 0 || calcTax > 0) && Math.Abs(calcSell - calcTax) > 0.01m)
                             {
-                                var matchTax = subRevList.FirstOrDefault(s => Math.Abs((s.Amount ?? 0) - calcTax) < 0.01);
-                                var matchSell = subRevList.FirstOrDefault(s => Math.Abs((s.Amount ?? 0) - calcSell) < 0.01);
+                                var matchTax = subRevList.FirstOrDefault(s => Math.Abs((s.Amount ?? 0m) - calcTax) < 0.01m);
+                                var matchSell = subRevList.FirstOrDefault(s => Math.Abs((s.Amount ?? 0m) - calcSell) < 0.01m);
 
                                 if (matchTax != null && matchSell != null && matchTax != matchSell)
                                 {
@@ -915,15 +915,15 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             {
                 _isRecalculatingTotals = true;
 
-                CurrentVoucherCostAmount = InventoryVoucher?.TotalCostAmount ?? 0;
+                CurrentVoucherCostAmount = InventoryVoucher?.TotalCostAmount ?? 0m;
 
                 var allVouchers = (MaterialEntry?.InventoryVouchers != null && MaterialEntry.InventoryVouchers.Count > 0)
                     ? MaterialEntry.InventoryVouchers.ToList()
                     : (InventoryVoucher != null ? new List<InventoryVoucherEntity> { InventoryVoucher } : new List<InventoryVoucherEntity>());
 
-                double cost = 0;
-                double sell = 0;
-                double tax = 0;
+                decimal cost = 0m;
+                decimal sell = 0m;
+                decimal tax = 0m;
 
                 foreach (var iv in allVouchers)
                 {
@@ -962,7 +962,7 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
 
                 // ==================== DOMINO CASCADING ====================
                 // 1. Dòng vật tư nhận tổng tiền hàng của tất cả các phiếu kho thuộc nó (đồng bộ từ ORM)
-                if (MaterialEntry != null && (!MaterialEntry.Amount.HasValue || Math.Abs(MaterialEntry.Amount.Value - cost) > 0.001))
+                if (MaterialEntry != null && (!MaterialEntry.Amount.HasValue || Math.Abs(MaterialEntry.Amount.Value - cost) > 0.001m))
                 {
                     MaterialEntry.Amount = cost;
                 }

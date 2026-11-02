@@ -8,7 +8,7 @@ namespace NewaccNet.Wpf.AppSystem.BalanceTransfer
     public class NormalBalanceDto
     {
         public string AccountId { get; set; } = string.Empty;
-        public double Amount { get; set; }
+        public decimal Amount { get; set; }
         public short Dbcr { get; set; } = 1; // 1: Nợ, -1: Có
     }
 
@@ -21,7 +21,7 @@ namespace NewaccNet.Wpf.AppSystem.BalanceTransfer
         public string PartnerId { get; set; } = string.Empty;
         public int? DebtReasonId { get; set; }
         public string DebtTypeId { get; set; } = string.Empty;
-        public double Amount { get; set; }
+        public decimal Amount { get; set; }
         public short Dbcr { get; set; } = 1;
     }
 
@@ -33,9 +33,9 @@ namespace NewaccNet.Wpf.AppSystem.BalanceTransfer
         public string AccountId { get; set; } = string.Empty;
         public string WarehouseId { get; set; } = string.Empty;
         public string MaterialId { get; set; } = string.Empty;
-        public double Quantity { get; set; }
-        public double Price { get; set; }
-        public double Amount { get; set; }
+        public decimal Quantity { get; set; }
+        public decimal Price { get; set; }
+        public decimal Amount { get; set; }
     }
 
     /// <summary>
@@ -46,7 +46,7 @@ namespace NewaccNet.Wpf.AppSystem.BalanceTransfer
         public string AccountId { get; set; } = string.Empty;
         public string CostObjectId { get; set; } = string.Empty;
         public string CostElementId { get; set; } = string.Empty;
-        public double Amount { get; set; }
+        public decimal Amount { get; set; }
         public short Dbcr { get; set; } = 1;
     }
 
@@ -59,9 +59,9 @@ namespace NewaccNet.Wpf.AppSystem.BalanceTransfer
         public string AssetId { get; set; } = string.Empty;
         public string SrCode { get; set; } = string.Empty;
         public string ReasonId { get; set; } = string.Empty;
-        public double Quantity { get; set; }
-        public double Price { get; set; }
-        public double Amount { get; set; }
+        public decimal Quantity { get; set; }
+        public decimal Price { get; set; }
+        public decimal Amount { get; set; }
         public short Dbcr { get; set; } = 1;
     }
 
@@ -73,9 +73,9 @@ namespace NewaccNet.Wpf.AppSystem.BalanceTransfer
         public string AccountId { get; set; } = string.Empty;
         public string StockId { get; set; } = string.Empty;
         public string CustomerId { get; set; } = string.Empty;
-        public double Quantity { get; set; }
-        public double Price { get; set; }
-        public double Amount { get; set; }
+        public decimal Quantity { get; set; }
+        public decimal Price { get; set; }
+        public decimal Amount { get; set; }
     }
 
     /// <summary>
@@ -85,9 +85,9 @@ namespace NewaccNet.Wpf.AppSystem.BalanceTransfer
     {
         public string AccountId { get; set; } = string.Empty;
         public string CurrencyId { get; set; } = string.Empty;
-        public double Quantity { get; set; } // Số tiền nguyên tệ
-        public double Amount { get; set; } // Số tiền quy đổi VND
-        public double ExchangeRate { get; set; } // Tỷ giá ghi sổ bình quân = Amount / Quantity
+        public decimal Quantity { get; set; } // Số tiền nguyên tệ
+        public decimal Amount { get; set; } // Số tiền quy đổi VND
+        public decimal ExchangeRate { get; set; } // Tỷ giá ghi sổ bình quân = Amount / Quantity
         public short Dbcr { get; set; } = 1;
     }
 }

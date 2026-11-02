@@ -33,9 +33,9 @@ namespace NewaccNet.Plugin.ErpWarehouse.Models
         public string MaterialId { get; set; } = string.Empty;
         public string MaterialName { get; set; } = string.Empty;
         public string Unit { get; set; } = string.Empty;
-        public double Quantity { get; set; }
-        public double UnitPrice { get; set; }
-        public double Amount => Math.Round(Quantity * UnitPrice, 0);
+        public decimal Quantity { get; set; }
+        public decimal UnitPrice { get; set; }
+        public decimal Amount => Math.Round(Quantity * UnitPrice, 0);
 
         /// <summary>Tài khoản Nợ (VD: 152, 156, 632, 642...)</summary>
         public string DebitAccount { get; set; } = "156";
@@ -79,21 +79,21 @@ namespace NewaccNet.Plugin.ErpWarehouse.Models
 
         public List<ErpInventoryItemDto> Items { get; set; } = new();
 
-        public double TotalQuantity
+        public decimal TotalQuantity
         {
             get
             {
-                double sum = 0;
+                decimal sum = 0;
                 foreach (var i in Items) sum += i.Quantity;
                 return sum;
             }
         }
 
-        public double TotalAmount
+        public decimal TotalAmount
         {
             get
             {
-                double sum = 0;
+                decimal sum = 0;
                 foreach (var i in Items) sum += i.Amount;
                 return sum;
             }

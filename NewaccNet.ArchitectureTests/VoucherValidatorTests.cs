@@ -124,13 +124,13 @@ namespace NewaccNet.ArchitectureTests
             // Nợ 1561: 1.000.000 (+1)
             // Nợ 13311: 100.000 (+1)
             // Tổng: 0
-            double balance = 0;
+            decimal balance = 0m;
             foreach (var je in voucher.JournalEntries)
             {
-                balance += (je.Amount ?? 0) * (je.Dbcr ?? 0);
+                balance += (je.Amount ?? 0m) * (je.Dbcr ?? 0);
             }
 
-            Assert.Equal(0, Math.Round(balance, 2));
+            Assert.Equal(0m, Math.Round(balance, 2));
             Assert.Equal(3, voucher.JournalEntries.Count);
         }
     }

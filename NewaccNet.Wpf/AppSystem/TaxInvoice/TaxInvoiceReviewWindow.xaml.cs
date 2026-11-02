@@ -99,7 +99,7 @@ namespace NewaccNet.Wpf.AppSystem.TaxInvoice
         public decimal Quantity => Line.Raw.Quantity;
         public decimal UnitPrice => Line.Raw.UnitPrice;
         public decimal Amount => Line.Raw.Amount;
-        public double VatRate => Line.Raw.VatRate;
+        public decimal VatRate => Line.Raw.VatRate;
         public decimal VatAmount => Line.Raw.VatAmount;
         public string MatchReason => Line.Matches.Count > 0 ? Line.Matches[0].Reason : "";
 

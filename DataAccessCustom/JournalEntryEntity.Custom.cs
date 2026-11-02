@@ -102,8 +102,8 @@ namespace DataAccess.EntityClasses
             if (sender is InvestmentDetailEntity inv &&
                 (e.PropertyName == nameof(InvestmentDetailEntity.Quantity) || e.PropertyName == nameof(InvestmentDetailEntity.Inprice)))
             {
-                double calc = (inv.Quantity ?? 0) * (inv.Inprice ?? 0);
-                if (Math.Abs((inv.Originamount ?? 0) - calc) > 0.001)
+                decimal calc = (inv.Quantity ?? 0m) * (inv.Inprice ?? 0m);
+                if (Math.Abs((inv.Originamount ?? 0m) - calc) > 0.001m)
                 {
                     inv.Originamount = calc;
                 }
@@ -136,11 +136,11 @@ namespace DataAccess.EntityClasses
 
                 if (CanUpdateFromChild(childSource))
                 {
-                    double? calculatedAmount = CalculateTotalFromChildType(childSource);
+                    decimal? calculatedAmount = CalculateTotalFromChildType(childSource);
                     if (calculatedAmount.HasValue)
                     {
-                        double rounded = Math.Round(calculatedAmount.Value, 0);
-                        if (!this.Amount.HasValue || Math.Abs(this.Amount.Value - rounded) > 0.001)
+                        decimal rounded = Math.Round(calculatedAmount.Value, 0);
+                        if (!this.Amount.HasValue || Math.Abs(this.Amount.Value - rounded) > 0.001m)
                         {
                             this.Amount = rounded;
                         }
@@ -155,45 +155,45 @@ namespace DataAccess.EntityClasses
             }
         }
 
-        private double? CalculateTotalFromChildType(object childSource)
+        private decimal? CalculateTotalFromChildType(object childSource)
         {
             if (childSource is InventoryVoucherEntity || childSource is InventoryVoucherLineEntity)
             {
-                return this.InventoryVouchers?.Sum(iv => iv.TotalCostAmount) ?? 0;
+                return this.InventoryVouchers?.Sum(iv => iv.TotalCostAmount) ?? 0m;
             }
             if (childSource is DebtDetailEntity)
             {
-                return this.DebtDetails?.Sum(d => d.Amount ?? 0) ?? 0;
+                return this.DebtDetails?.Sum(d => d.Amount ?? 0m) ?? 0m;
             }
             if (childSource is CostDetailEntity)
             {
-                return this.CostDetails?.Sum(c => c.Amount ?? 0) ?? 0;
+                return this.CostDetails?.Sum(c => c.Amount ?? 0m) ?? 0m;
             }
             if (childSource is AssetDetailEntity)
             {
-                return this.AssetDetails?.Sum(a => (a.Quantity ?? 0) * (a.Price ?? 0)) ?? 0;
+                return this.AssetDetails?.Sum(a => (a.Quantity ?? 0m) * (a.Price ?? 0m)) ?? 0m;
             }
             if (childSource is InvestmentDetailEntity)
             {
-                return this.InvestmentDetails?.Sum(s => (s.Quantity ?? 0) * (s.Inprice ?? 0)) ?? 0;
+                return this.InvestmentDetails?.Sum(s => (s.Quantity ?? 0m) * (s.Inprice ?? 0m)) ?? 0m;
             }
             if (childSource is CurrencyDetailEntity)
             {
-                return this.CurrencyDetails?.Sum(c => (c.Quantity ?? 0) * (c.ExchangeRate ?? 0)) ?? 0;
+                return this.CurrencyDetails?.Sum(c => (c.Quantity ?? 0m) * (c.ExchangeRate ?? 0m)) ?? 0m;
             }
 
             if (this.InventoryVouchers != null && this.InventoryVouchers.Count > 0)
                 return this.InventoryVouchers.Sum(iv => iv.TotalCostAmount);
             if (this.DebtDetails != null && this.DebtDetails.Count > 0)
-                return this.DebtDetails.Sum(d => d.Amount ?? 0);
+                return this.DebtDetails.Sum(d => d.Amount ?? 0m);
             if (this.CostDetails != null && this.CostDetails.Count > 0)
-                return this.CostDetails.Sum(c => c.Amount ?? 0);
+                return this.CostDetails.Sum(c => c.Amount ?? 0m);
             if (this.AssetDetails != null && this.AssetDetails.Count > 0)
-                return this.AssetDetails.Sum(a => (a.Quantity ?? 0) * (a.Price ?? 0));
+                return this.AssetDetails.Sum(a => (a.Quantity ?? 0m) * (a.Price ?? 0m));
             if (this.InvestmentDetails != null && this.InvestmentDetails.Count > 0)
-                return this.InvestmentDetails.Sum(s => (s.Quantity ?? 0) * (s.Inprice ?? 0));
+                return this.InvestmentDetails.Sum(s => (s.Quantity ?? 0m) * (s.Inprice ?? 0m));
             if (this.CurrencyDetails != null && this.CurrencyDetails.Count > 0)
-                return this.CurrencyDetails.Sum(c => (c.Quantity ?? 0) * (c.ExchangeRate ?? 0));
+                return this.CurrencyDetails.Sum(c => (c.Quantity ?? 0m) * (c.ExchangeRate ?? 0m));
 
             return null;
         }
@@ -206,7 +206,7 @@ namespace DataAccess.EntityClasses
             return typeName.Contains("Inventory") || typeName.Contains("Material");
         }
 
-        public bool TryUpdateAmountFromChild(object child, double newAmount)
+        public bool TryUpdateAmountFromChild(object child, decimal newAmount)
         {
             if (!CanUpdateFromChild(child)) return false;
             this.Amount = Math.Round(newAmount, 0);

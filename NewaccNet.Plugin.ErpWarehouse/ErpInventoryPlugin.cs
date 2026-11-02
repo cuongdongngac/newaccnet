@@ -32,14 +32,14 @@ namespace NewaccNet.Plugin.ErpWarehouse
             const string category = "Xuất nhập";
             const string group = "Phiếu xuất nhập";
 
-            // 1. Phiếu Nhập Mua Hàng (NM) - Biểu tượng Mua sắm / Nhập hàng
+            // 1. Phiếu Nhập Mua Hàng (NM) - Biểu tượng Đơn mua hàng / Nhập hàng NCC (bo_order)
             _context.RegisterRibbonAction(new PluginRibbonAction
             {
                 Category = category,
                 GroupName = group,
                 Title = "Nhập mua hàng",
                 ToolTip = "Lập Phiếu nhập kho mua hàng từ nhà cung cấp (NM - kèm hóa đơn và thuế GTGT)",
-                GlyphUri = "pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/icon%20builder/shopping_shoppingcart.svg",
+                GlyphUri = "pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_order.svg",
                 ExecuteAction = (ownerWindow) =>
                 {
                     var win = new PurchaseReceiptWindow();
@@ -48,14 +48,14 @@ namespace NewaccNet.Plugin.ErpWarehouse
                 }
             });
 
-            // 2. Phiếu Xuất Bán Hàng (XB) - Biểu tượng Xe tải giao vận / Giao hàng bán
+            // 2. Phiếu Xuất Bán Hàng (XB) - Biểu tượng Bán hàng thương mại kèm doanh thu (bo_sale)
             _context.RegisterRibbonAction(new PluginRibbonAction
             {
                 Category = category,
                 GroupName = group,
                 Title = "Xuất bán hàng",
                 ToolTip = "Lập Phiếu xuất kho bán hàng cho khách hàng (XB - theo dõi song song giá vốn và doanh thu/thuế)",
-                GlyphUri = "pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/icon%20builder/shopping_delivery.svg",
+                GlyphUri = "pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_sale.svg",
                 ExecuteAction = (ownerWindow) =>
                 {
                     var win = new SalesDeliveryWindow();
@@ -64,14 +64,14 @@ namespace NewaccNet.Plugin.ErpWarehouse
                 }
             });
 
-            // 3. Phiếu Nhập Kho Nội Bộ (NNB) - Biểu tượng Thùng hàng / Thành phẩm nhập kho
+            // 3. Phiếu Nhập Kho Nội Bộ (NNB) - Biểu tượng Kiện hàng / Thành phẩm sản xuất nhập kho (bo_product)
             _context.RegisterRibbonAction(new PluginRibbonAction
             {
                 Category = category,
                 GroupName = group,
                 Title = "Nhập nội bộ",
                 ToolTip = "Lập Phiếu nhập kho thành phẩm, nội bộ hoặc nhập khác (NNB)",
-                GlyphUri = "pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/icon%20builder/shopping_box.svg",
+                GlyphUri = "pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_product.svg",
                 ExecuteAction = (ownerWindow) =>
                 {
                     var win = new InternalReceiptWindow();
@@ -80,14 +80,14 @@ namespace NewaccNet.Plugin.ErpWarehouse
                 }
             });
 
-            // 4. Phiếu Xuất Kho Nội Bộ (XNB) - Biểu tượng Kiện hàng / Xuất dùng nội bộ
+            // 4. Phiếu Xuất Kho Nội Bộ (XNB) - Biểu tượng Điều động / Xuất dùng nội bộ (export)
             _context.RegisterRibbonAction(new PluginRibbonAction
             {
                 Category = category,
                 GroupName = group,
                 Title = "Xuất nội bộ",
                 ToolTip = "Lập Phiếu xuất kho dùng cho sản xuất, công trình hoặc chi phí quản lý (XNB)",
-                GlyphUri = "pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/icon%20builder/shopping_package.svg",
+                GlyphUri = "pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/export/export.svg",
                 ExecuteAction = (ownerWindow) =>
                 {
                     var win = new InternalIssueWindow();
@@ -96,14 +96,14 @@ namespace NewaccNet.Plugin.ErpWarehouse
                 }
             });
 
-            // 5. Phiếu Điều Chuyển Kho (CK) - Biểu tượng Kho hàng / Luân chuyển giữa các kho
+            // 5. Phiếu Điều Chuyển Kho (CK) - Biểu tượng Luân chuyển giữa các kho (bo_transition)
             _context.RegisterRibbonAction(new PluginRibbonAction
             {
                 Category = category,
                 GroupName = group,
                 Title = "Điều chuyển kho",
                 ToolTip = "Lập Phiếu xuất điều chuyển hàng hóa giữa các kho nội bộ (CK)",
-                GlyphUri = "pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/icon%20builder/shopping_store.svg",
+                GlyphUri = "pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_transition.svg",
                 ExecuteAction = (ownerWindow) =>
                 {
                     var win = new WarehouseTransferWindow();

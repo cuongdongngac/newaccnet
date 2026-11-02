@@ -50,12 +50,12 @@ namespace NewaccNet.Reports.TrialBalance
                     results.Add(new TrialBalanceEntity
                     {
                         AccountId = accountId,
-                        Begindebit = netBeginDebit,
-                        Begincredit = netBeginCredit,
-                        Intdebit = intDebit,
-                        Intcredit = intCredit,
-                        Enddebit = endDebit,
-                        Endcredit = endCredit
+                        Begindebit = (decimal)netBeginDebit,
+                        Begincredit = (decimal)netBeginCredit,
+                        Intdebit = (decimal)intDebit,
+                        Intcredit = (decimal)intCredit,
+                        Enddebit = (decimal)endDebit,
+                        Endcredit = (decimal)endCredit
                     });
                 }
             }

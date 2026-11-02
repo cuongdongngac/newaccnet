@@ -598,6 +598,29 @@ public partial class MainWindow : ThemedWindow {
                                 RibbonStyle = DevExpress.Xpf.Bars.RibbonItemStyles.Large
                             };
 
+                            if (!string.IsNullOrEmpty(act.GlyphUri))
+                            {
+                                try
+                                {
+                                    var ext = new DevExpress.Xpf.Core.SvgImageSourceExtension { Uri = new Uri(act.GlyphUri) };
+                                    var img = ext.ProvideValue(null) as System.Windows.Media.ImageSource;
+                                    btn.LargeGlyph = img;
+                                    btn.Glyph = img;
+                                }
+                                catch (Exception ex)
+                                {
+                                    System.Diagnostics.Debug.WriteLine($"Lỗi nạp icon Ribbon: {ex.Message}");
+                                }
+                            }
+
+                            if (!string.IsNullOrEmpty(act.ToolTip))
+                            {
+                                var superTip = new DevExpress.Xpf.Core.SuperTip();
+                                superTip.Items.Add(new DevExpress.Xpf.Core.SuperTipHeaderItem { Content = act.Title });
+                                superTip.Items.Add(new DevExpress.Xpf.Core.SuperTipItem { Content = act.ToolTip });
+                                btn.SuperTip = superTip;
+                            }
+
                             var currentAct = act;
                             btn.ItemClick += (_, _) => currentAct.ExecuteAction(this);
                             pageGroup.Items.Add(btn);

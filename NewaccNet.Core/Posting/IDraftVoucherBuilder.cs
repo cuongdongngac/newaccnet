@@ -103,7 +103,7 @@ namespace NewaccNet.Core.Posting
             {
                 AccountId = creditAcc,
                 Dbcr = -1, // Có
-                Amount = (double)grandTotal
+                Amount = grandTotal
             };
 
             if (!string.IsNullOrWhiteSpace(partnerId))
@@ -111,7 +111,7 @@ namespace NewaccNet.Core.Posting
                 var debt = new DebtDetailEntity
                 {
                     PartnerId = partnerId,
-                    Amount = (double)grandTotal,
+                    Amount = grandTotal,
                     Liabilitydate = draft.Settlement.DueDate ?? draft.Header.VoucherDate
                 };
                 creditJe.DebtDetails.Add(debt);
@@ -132,7 +132,7 @@ namespace NewaccNet.Core.Posting
                 {
                     AccountId = group.Key.AccountId,
                     Dbcr = 1, // Nợ
-                    Amount = (double)groupAmount
+                    Amount = groupAmount
                 };
 
                 // Tạo phiếu kho đi kèm (InventoryVoucherEntity)
@@ -155,8 +155,8 @@ namespace NewaccNet.Core.Posting
                     var ivl = new InventoryVoucherLineEntity
                     {
                         MaterialId = line.Resolved.MaterialId,
-                        Quantity = (double)line.Raw.Quantity,
-                        Price = (double)line.Raw.UnitPrice
+                        Quantity = line.Raw.Quantity,
+                        Price = line.Raw.UnitPrice
                     };
                     iv.InventoryVoucherLines.Add(ivl);
                 }
@@ -173,7 +173,7 @@ namespace NewaccNet.Core.Posting
                 {
                     AccountId = vatAcc,
                     Dbcr = 1, // Nợ
-                    Amount = (double)totalVatAmount
+                    Amount = totalVatAmount
                 };
 
                 var vatEntry = new VatEntryEntity
@@ -184,8 +184,8 @@ namespace NewaccNet.Core.Posting
                     Vatbillno = draft.Invoice.Number,
                     Serialno = draft.Invoice.Series,
                     Vatbilldate = draft.Invoice.Date,
-                    Beforetaxamount = (double)totalGoodsAmount,
-                    Amount = (double)totalVatAmount,
+                    Beforetaxamount = totalGoodsAmount,
+                    Amount = totalVatAmount,
                     Vatdescription = voucher.Contents
                 };
                 vatJe.VatEntries.Add(vatEntry);

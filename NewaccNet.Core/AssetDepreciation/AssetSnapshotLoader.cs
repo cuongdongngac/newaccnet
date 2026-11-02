@@ -103,8 +103,8 @@ namespace NewaccNet.Core.AssetDepreciation
                             {
                                 AssetId = assetId,
                                 Srcode = srcode,
-                                Quantity = d.Quantity ?? 0.0,
-                                Price = d.Price ?? 0.0,
+                                Quantity = (double)(d.Quantity ?? 0m),
+                                Price = (double)(d.Price ?? 0m),
                                 Dbcr = (int)(je.Dbcr ?? 0),
                                 VoucherDate = voucherDate,
                                 ReasonFlag = reasonFlag
@@ -130,7 +130,7 @@ namespace NewaccNet.Core.AssetDepreciation
 
                         assetDict.TryGetValue(sample.AssetId, out var asset);
 
-                        double remainValue = tracking.Remainvalue ?? 0.0;
+                        double remainValue = (double)(tracking.Remainvalue ?? 0m);
 
                         // RestQty = Sum(Quantity * Dbcr) voi cac dong co Reason.Flag == true
                         double restQty = grp
@@ -149,8 +149,8 @@ namespace NewaccNet.Core.AssetDepreciation
                             continue;
 
                         // Quy doi Thoi gian su dung: trong Asset List / AssetTracking co the luu so nam hoac so thang
-                        double rawTimeUsing = asset?.Timeusing ?? tracking.Timeusing ?? 0.0;
-                        double depRate = tracking.Deprate ?? 0.0;
+                        double rawTimeUsing = (double)(asset?.Timeusing ?? tracking.Timeusing ?? 0m);
+                        double depRate = (double)(tracking.Deprate ?? 0m);
                         double usingYears = rawTimeUsing;
                         if (usingYears <= 0 && depRate > 0)
                         {
@@ -158,7 +158,7 @@ namespace NewaccNet.Core.AssetDepreciation
                         }
 
                         DateTime purchaseDate = asset?.Date ?? tracking.Begindate ?? param.BeginDate;
-                        double depPrice = tracking.Depprice ?? asset?.Price ?? 0.0;
+                        double depPrice = (double)(tracking.Depprice ?? asset?.Price ?? 0m);
 
                         result.Add(new AssetSnapshot
                         {

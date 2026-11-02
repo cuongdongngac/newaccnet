@@ -32,7 +32,7 @@ namespace DataAccess.TypedListClasses
 		/// <summary>Gets or sets the Taxflag field. Mapped onto 'Newacc.ChartOfAccount.Taxflag'</summary>
 		public System.Boolean Taxflag { get; set; }
 		/// <summary>Gets or sets the Amount field. Mapped onto 'Newacc.JournalEntry.Amount'</summary>
-		public Nullable<System.Double> Amount { get; set; }
+		public Nullable<System.Decimal> Amount { get; set; }
 		/// <summary>Gets or sets the Dbcr field. Mapped onto 'Newacc.JournalEntry.Dbcr'</summary>
 		public Nullable<System.Int16> Dbcr { get; set; }
 		/// <summary>Gets or sets the Marked field. Mapped onto 'Newacc.JournalVoucher.Marked'</summary>

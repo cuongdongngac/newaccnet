@@ -163,7 +163,7 @@ namespace NewaccNet.Reports.FlattenedDetails
                         DebtTypeId = string.Empty,
                         IsUnmappedEntry = true
                     };
-                    PopulateBaseFields(unmapped, 0, entry, entry.Amount ?? 0.0);
+                    PopulateBaseFields(unmapped, 0, entry, (double)(entry.Amount ?? 0m));
                     result.Add(unmapped);
                 }
             }
@@ -174,7 +174,7 @@ namespace NewaccNet.Reports.FlattenedDetails
         private static DebtFlatRow CreateDebtFlatRow(DebtDetailEntity d)
         {
             var entry = d.JournalEntry;
-            double amount = d.Amount ?? entry.Amount ?? 0.0;
+            double amount = (double)(d.Amount ?? entry.Amount ?? 0m);
             var row = new DebtFlatRow
             {
                 PartnerId = d.PartnerId?.Trim() ?? string.Empty,
@@ -185,8 +185,8 @@ namespace NewaccNet.Reports.FlattenedDetails
                 Currency = d.Currency,
                 InterestFlag = d.Interestflag,
                 CurrencyId = d.CurrencyLiabilityLine?.CurrencyId?.Trim() ?? string.Empty,
-                ExchangeRate = d.CurrencyLiabilityLine?.ExchangeRate ?? 0.0,
-                ForeignQuantity = d.CurrencyLiabilityLine?.Quantity ?? 0.0
+                ExchangeRate = (double)(d.CurrencyLiabilityLine?.ExchangeRate ?? 0m),
+                ForeignQuantity = (double)(d.CurrencyLiabilityLine?.Quantity ?? 0m)
             };
 
             PopulateBaseFields(row, d.Id, entry, amount);
@@ -225,7 +225,7 @@ namespace NewaccNet.Reports.FlattenedDetails
                     DebtTypeId = string.Empty,
                     IsUnmappedEntry = true
                 };
-                PopulateBaseFields(unmapped, 0, entry, entry.Amount ?? 0.0);
+                PopulateBaseFields(unmapped, 0, entry, (double)(entry.Amount ?? 0m));
 
                 if (MatchesFilters(unmapped, accountPrefix, fromDate, toDate, includeOpeningBeforeFromDate))
                 {
@@ -267,7 +267,7 @@ namespace NewaccNet.Reports.FlattenedDetails
         private static CostFlatRow CreateCostFlatRow(CostDetailEntity d)
         {
             var entry = d.JournalEntry;
-            double amount = d.Amount ?? entry.Amount ?? 0.0;
+            double amount = (double)(d.Amount ?? entry.Amount ?? 0m);
             var row = new CostFlatRow
             {
                 CostObjectId = d.CostObjectId?.Trim() ?? string.Empty,
@@ -315,9 +315,9 @@ namespace NewaccNet.Reports.FlattenedDetails
         private static AssetFlatRow CreateAssetFlatRow(AssetDetailEntity d)
         {
             var entry = d.JournalEntry;
-            double qty = d.Quantity ?? 0.0;
-            double price = d.Price ?? 0.0;
-            double amount = (qty != 0 && price != 0) ? (qty * price) : (price != 0 ? price : (entry.Amount ?? 0.0));
+            double qty = (double)(d.Quantity ?? 0m);
+            double price = (double)(d.Price ?? 0m);
+            double amount = (qty != 0 && price != 0) ? (qty * price) : (price != 0 ? price : (double)(entry.Amount ?? 0m));
 
             var row = new AssetFlatRow
             {
@@ -378,9 +378,9 @@ namespace NewaccNet.Reports.FlattenedDetails
         {
             var inv = l.InventoryVoucher;
             var entry = inv.JournalEntry;
-            double qty = l.Quantity ?? 0.0;
-            double price = l.Price ?? 0.0;
-            double amount = (qty != 0 && price != 0) ? (qty * price) : (entry.Amount ?? 0.0);
+            double qty = (double)(l.Quantity ?? 0m);
+            double price = (double)(l.Price ?? 0m);
+            double amount = (qty != 0 && price != 0) ? (qty * price) : (double)(entry.Amount ?? 0m);
 
             var row = new InventoryFlatRow
             {
@@ -440,9 +440,9 @@ namespace NewaccNet.Reports.FlattenedDetails
         private static CurrencyFlatRow CreateCurrencyFlatRow(CurrencyDetailEntity d)
         {
             var entry = d.JournalEntry;
-            double qty = d.Quantity ?? 0.0;
-            double rate = d.ExchangeRate ?? 0.0;
-            double amount = entry.Amount ?? (qty * rate);
+            double qty = (double)(d.Quantity ?? 0m);
+            double rate = (double)(d.ExchangeRate ?? 0m);
+            double amount = (double)(entry.Amount ?? (decimal)(qty * rate));
 
             var row = new CurrencyFlatRow
             {
@@ -496,18 +496,18 @@ namespace NewaccNet.Reports.FlattenedDetails
         private static InvestmentFlatRow CreateInvestmentFlatRow(InvestmentDetailEntity d)
         {
             var entry = d.JournalEntry;
-            double amount = entry.Amount ?? d.Originamount ?? 0.0;
+            double amount = (double)(entry.Amount ?? d.Originamount ?? 0m);
 
             var row = new InvestmentFlatRow
             {
                 StockId = d.Stockid?.Trim() ?? string.Empty,
                 CustomerId = d.CustomerId?.Trim() ?? string.Empty,
                 StockStoreId = d.Stockstoreid,
-                Quantity = d.Quantity ?? 0.0,
-                InPrice = d.Inprice ?? 0.0,
-                OutPrice = d.Outprice ?? 0.0,
-                OriginAmount = d.Originamount ?? 0.0,
-                OtherExpense = d.Otherexpense ?? 0.0
+                Quantity = (double)(d.Quantity ?? 0m),
+                InPrice = (double)(d.Inprice ?? 0m),
+                OutPrice = (double)(d.Outprice ?? 0m),
+                OriginAmount = (double)(d.Originamount ?? 0m),
+                OtherExpense = (double)(d.Otherexpense ?? 0m)
             };
 
             PopulateBaseFields(row, d.Lineid, entry, amount);
@@ -554,15 +554,15 @@ namespace NewaccNet.Reports.FlattenedDetails
         private static VatFlatRow CreateVatFlatRow(VatEntryEntity d)
         {
             var entry = d.JournalEntry;
-            double amount = entry.Amount ?? 0.0;
+            double amount = (double)(entry.Amount ?? 0m);
 
             var row = new VatFlatRow
             {
                 VatType = d.Type,
                 CatId = d.Catid,
                 TaxRateId = d.Taxrateid,
-                Rate = d.Rate ?? 0.0,
-                BeforeTaxAmount = d.Beforetaxamount ?? 0.0,
+                Rate = (double)(d.Rate ?? 0m),
+                BeforeTaxAmount = (double)(d.Beforetaxamount ?? 0m),
                 VatBillNo = d.Vatbillno?.Trim() ?? string.Empty,
                 VatBillDate = d.Vatbilldate,
                 SerialNo = d.Serialno?.Trim() ?? string.Empty,

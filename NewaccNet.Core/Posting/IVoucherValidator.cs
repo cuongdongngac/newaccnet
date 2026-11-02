@@ -72,15 +72,15 @@ namespace NewaccNet.Core.Posting
             }
 
             // 2. Kiểm tra cân đối Nợ = Có
-            double balance = 0;
+            decimal balance = 0m;
             if (voucher.JournalEntries != null && voucher.JournalEntries.Count > 0)
             {
                 foreach (var je in voucher.JournalEntries)
                 {
-                    balance += (je.Amount ?? 0) * (je.Dbcr ?? 0);
+                    balance += (je.Amount ?? 0m) * (je.Dbcr ?? 0);
                 }
 
-                if (Math.Round(balance, 0) != 0)
+                if (Math.Round(balance, 0) != 0m)
                 {
                     issues.Add(new DraftIssue
                     {

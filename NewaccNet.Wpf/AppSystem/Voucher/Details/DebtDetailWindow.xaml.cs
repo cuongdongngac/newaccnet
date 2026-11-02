@@ -186,10 +186,10 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             var newRow = GridDebtDetails.GetRow(e.RowHandle) as DebtDetailEntity;
             if (newRow != null)
             {
-                double totalExist = _parentEntry.DebtDetails.Where(x => x != newRow).Sum(x => x.Amount ?? 0);
-                double remain = (_parentEntry.Amount ?? 0) - totalExist;
+                decimal totalExist = _parentEntry.DebtDetails.Where(x => x != newRow).Sum(x => x.Amount ?? 0m);
+                decimal remain = (_parentEntry.Amount ?? 0m) - totalExist;
                 
-                newRow.Amount = remain > 0 ? remain : 0;
+                newRow.Amount = remain > 0m ? remain : 0m;
                 newRow.Liabilitydate = _parentEntry.JournalVoucher?.VoucherDate ?? DateTime.Today;
             }
         }

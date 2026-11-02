@@ -138,7 +138,7 @@ namespace DataAccess.HelperClasses
 			this.AddElementFieldInfo("AccountBusinessResultEntity", "BusinessResultItemId", typeof(Nullable<System.Int32>), false, true, false, true,  (int)AccountBusinessResultFieldIndex.BusinessResultItemId, 0, 0, 10);
 			this.AddElementFieldInfo("AccountBusinessResultEntity", "CounterAccountId", typeof(System.String), false, false, false, true,  (int)AccountBusinessResultFieldIndex.CounterAccountId, 50, 0, 0);
 			this.AddElementFieldInfo("AccountBusinessResultEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)AccountBusinessResultFieldIndex.Id, 0, 0, 10);
-			this.AddElementFieldInfo("AccountBusinessResultEntity", "IsAdd", typeof(System.Boolean), false, false, false, false,  (int)AccountBusinessResultFieldIndex.IsAdd, 0, 0, 0);
+			this.AddElementFieldInfo("AccountBusinessResultEntity", "IsAdd", typeof(System.Boolean), false, false, false, false,  (int)AccountBusinessResultFieldIndex.IsAdd, 2, 0, 0);
 			this.AddElementFieldInfo("AccountBusinessResultEntity", "Method", typeof(Nullable<System.Int16>), false, false, false, true,  (int)AccountBusinessResultFieldIndex.Method, 0, 0, 5);
 		}
 
@@ -149,7 +149,7 @@ namespace DataAccess.HelperClasses
 			this.AddElementFieldInfo("AccountCashFlowItemEntity", "AccountId", typeof(System.String), false, false, false, true,  (int)AccountCashFlowItemFieldIndex.AccountId, 50, 0, 0);
 			this.AddElementFieldInfo("AccountCashFlowItemEntity", "CashFlowItemId", typeof(Nullable<System.Int32>), false, true, false, true,  (int)AccountCashFlowItemFieldIndex.CashFlowItemId, 0, 0, 10);
 			this.AddElementFieldInfo("AccountCashFlowItemEntity", "CounterAccountId", typeof(System.String), false, false, false, true,  (int)AccountCashFlowItemFieldIndex.CounterAccountId, 50, 0, 0);
-			this.AddElementFieldInfo("AccountCashFlowItemEntity", "Dbcr", typeof(System.Boolean), false, false, false, false,  (int)AccountCashFlowItemFieldIndex.Dbcr, 0, 0, 0);
+			this.AddElementFieldInfo("AccountCashFlowItemEntity", "Dbcr", typeof(System.Boolean), false, false, false, false,  (int)AccountCashFlowItemFieldIndex.Dbcr, 2, 0, 0);
 			this.AddElementFieldInfo("AccountCashFlowItemEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)AccountCashFlowItemFieldIndex.Id, 0, 0, 10);
 		}
 
@@ -160,7 +160,7 @@ namespace DataAccess.HelperClasses
 			this.AddElementFieldInfo("AccountCostCalculatingItemEntity", "AccountId", typeof(System.String), false, false, false, true,  (int)AccountCostCalculatingItemFieldIndex.AccountId, 50, 0, 0);
 			this.AddElementFieldInfo("AccountCostCalculatingItemEntity", "CostCalculatingItemId", typeof(Nullable<System.Int32>), false, true, false, true,  (int)AccountCostCalculatingItemFieldIndex.CostCalculatingItemId, 0, 0, 10);
 			this.AddElementFieldInfo("AccountCostCalculatingItemEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)AccountCostCalculatingItemFieldIndex.Id, 0, 0, 10);
-			this.AddElementFieldInfo("AccountCostCalculatingItemEntity", "IsAdd", typeof(System.Boolean), false, false, false, false,  (int)AccountCostCalculatingItemFieldIndex.IsAdd, 0, 0, 0);
+			this.AddElementFieldInfo("AccountCostCalculatingItemEntity", "IsAdd", typeof(System.Boolean), false, false, false, false,  (int)AccountCostCalculatingItemFieldIndex.IsAdd, 2, 0, 0);
 			this.AddElementFieldInfo("AccountCostCalculatingItemEntity", "Method", typeof(Nullable<System.Int16>), false, false, false, true,  (int)AccountCostCalculatingItemFieldIndex.Method, 0, 0, 5);
 		}
 
@@ -169,10 +169,10 @@ namespace DataAccess.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(AccountTaxObligationFieldIndex), "AccountTaxObligationEntity");
 			this.AddElementFieldInfo("AccountTaxObligationEntity", "AccountId", typeof(System.String), false, false, false, true,  (int)AccountTaxObligationFieldIndex.AccountId, 50, 0, 0);
-			this.AddElementFieldInfo("AccountTaxObligationEntity", "ColIndex", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AccountTaxObligationFieldIndex.ColIndex, 0, 0, 10);
+			this.AddElementFieldInfo("AccountTaxObligationEntity", "ColIndex", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AccountTaxObligationFieldIndex.ColIndex, 0, 0, 3);
 			this.AddElementFieldInfo("AccountTaxObligationEntity", "CounterAccountId", typeof(System.String), false, false, false, true,  (int)AccountTaxObligationFieldIndex.CounterAccountId, 50, 0, 0);
 			this.AddElementFieldInfo("AccountTaxObligationEntity", "Id", typeof(System.Int32), true, false, false, false,  (int)AccountTaxObligationFieldIndex.Id, 0, 0, 10);
-			this.AddElementFieldInfo("AccountTaxObligationEntity", "IsAdd", typeof(System.Boolean), false, false, false, false,  (int)AccountTaxObligationFieldIndex.IsAdd, 0, 0, 0);
+			this.AddElementFieldInfo("AccountTaxObligationEntity", "IsAdd", typeof(System.Boolean), false, false, false, false,  (int)AccountTaxObligationFieldIndex.IsAdd, 2, 0, 0);
 			this.AddElementFieldInfo("AccountTaxObligationEntity", "Method", typeof(Nullable<System.Int16>), false, false, false, true,  (int)AccountTaxObligationFieldIndex.Method, 0, 0, 5);
 			this.AddElementFieldInfo("AccountTaxObligationEntity", "TaxObligationItemId", typeof(Nullable<System.Int32>), false, true, false, true,  (int)AccountTaxObligationFieldIndex.TaxObligationItemId, 0, 0, 10);
 		}
@@ -184,7 +184,7 @@ namespace DataAccess.HelperClasses
 			this.AddElementFieldInfo("AccountVat3ItemEntity", "AccountId", typeof(System.String), false, false, false, true,  (int)AccountVat3ItemFieldIndex.AccountId, 50, 0, 0);
 			this.AddElementFieldInfo("AccountVat3ItemEntity", "CounterAccountId", typeof(System.String), false, false, false, true,  (int)AccountVat3ItemFieldIndex.CounterAccountId, 50, 0, 0);
 			this.AddElementFieldInfo("AccountVat3ItemEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)AccountVat3ItemFieldIndex.Id, 0, 0, 10);
-			this.AddElementFieldInfo("AccountVat3ItemEntity", "IsAdd", typeof(System.Boolean), false, false, false, false,  (int)AccountVat3ItemFieldIndex.IsAdd, 0, 0, 0);
+			this.AddElementFieldInfo("AccountVat3ItemEntity", "IsAdd", typeof(System.Boolean), false, false, false, false,  (int)AccountVat3ItemFieldIndex.IsAdd, 2, 0, 0);
 			this.AddElementFieldInfo("AccountVat3ItemEntity", "Method", typeof(Nullable<System.Int16>), false, false, false, true,  (int)AccountVat3ItemFieldIndex.Method, 0, 0, 5);
 			this.AddElementFieldInfo("AccountVat3ItemEntity", "Vat3TaxItemId", typeof(Nullable<System.Int32>), false, true, false, true,  (int)AccountVat3ItemFieldIndex.Vat3TaxItemId, 0, 0, 10);
 		}
@@ -197,7 +197,7 @@ namespace DataAccess.HelperClasses
 			this.AddElementFieldInfo("AccountVatDeclareItemEntity", "ColumnNo", typeof(Nullable<System.Int16>), false, false, false, true,  (int)AccountVatDeclareItemFieldIndex.ColumnNo, 0, 0, 5);
 			this.AddElementFieldInfo("AccountVatDeclareItemEntity", "CounterAccountId", typeof(System.String), false, false, false, true,  (int)AccountVatDeclareItemFieldIndex.CounterAccountId, 50, 0, 0);
 			this.AddElementFieldInfo("AccountVatDeclareItemEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)AccountVatDeclareItemFieldIndex.Id, 0, 0, 10);
-			this.AddElementFieldInfo("AccountVatDeclareItemEntity", "IsAdd", typeof(System.Boolean), false, false, false, false,  (int)AccountVatDeclareItemFieldIndex.IsAdd, 0, 0, 0);
+			this.AddElementFieldInfo("AccountVatDeclareItemEntity", "IsAdd", typeof(System.Boolean), false, false, false, false,  (int)AccountVatDeclareItemFieldIndex.IsAdd, 2, 0, 0);
 			this.AddElementFieldInfo("AccountVatDeclareItemEntity", "Method", typeof(Nullable<System.Int16>), false, false, false, true,  (int)AccountVatDeclareItemFieldIndex.Method, 0, 0, 5);
 			this.AddElementFieldInfo("AccountVatDeclareItemEntity", "VatDeclareItemId", typeof(Nullable<System.Int32>), false, true, false, true,  (int)AccountVatDeclareItemFieldIndex.VatDeclareItemId, 0, 0, 10);
 		}
@@ -211,9 +211,9 @@ namespace DataAccess.HelperClasses
 			this.AddElementFieldInfo("AssetEntity", "AssetName", typeof(System.String), false, false, false, true,  (int)AssetFieldIndex.AssetName, 50, 0, 0);
 			this.AddElementFieldInfo("AssetEntity", "Country", typeof(System.String), false, false, false, true,  (int)AssetFieldIndex.Country, 50, 0, 0);
 			this.AddElementFieldInfo("AssetEntity", "Date", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)AssetFieldIndex.Date, 0, 0, 0);
-			this.AddElementFieldInfo("AssetEntity", "Price", typeof(Nullable<System.Double>), false, false, false, true,  (int)AssetFieldIndex.Price, 0, 0, 15);
-			this.AddElementFieldInfo("AssetEntity", "Qty", typeof(Nullable<System.Double>), false, false, false, true,  (int)AssetFieldIndex.Qty, 0, 0, 15);
-			this.AddElementFieldInfo("AssetEntity", "Timeusing", typeof(Nullable<System.Double>), false, false, false, true,  (int)AssetFieldIndex.Timeusing, 0, 0, 15);
+			this.AddElementFieldInfo("AssetEntity", "Price", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)AssetFieldIndex.Price, 0, 4, 19);
+			this.AddElementFieldInfo("AssetEntity", "Qty", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)AssetFieldIndex.Qty, 0, 4, 19);
+			this.AddElementFieldInfo("AssetEntity", "Timeusing", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)AssetFieldIndex.Timeusing, 0, 4, 19);
 			this.AddElementFieldInfo("AssetEntity", "Unit", typeof(System.String), false, false, false, true,  (int)AssetFieldIndex.Unit, 10, 0, 0);
 		}
 
@@ -224,8 +224,8 @@ namespace DataAccess.HelperClasses
 			this.AddElementFieldInfo("AssetDetailEntity", "AssetId", typeof(System.String), false, true, false, true,  (int)AssetDetailFieldIndex.AssetId, 10, 0, 0);
 			this.AddElementFieldInfo("AssetDetailEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)AssetDetailFieldIndex.Id, 0, 0, 10);
 			this.AddElementFieldInfo("AssetDetailEntity", "JournalEntryId", typeof(Nullable<System.Int32>), false, true, false, true,  (int)AssetDetailFieldIndex.JournalEntryId, 0, 0, 10);
-			this.AddElementFieldInfo("AssetDetailEntity", "Price", typeof(Nullable<System.Double>), false, false, false, true,  (int)AssetDetailFieldIndex.Price, 0, 0, 15);
-			this.AddElementFieldInfo("AssetDetailEntity", "Quantity", typeof(Nullable<System.Double>), false, false, false, true,  (int)AssetDetailFieldIndex.Quantity, 0, 0, 15);
+			this.AddElementFieldInfo("AssetDetailEntity", "Price", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)AssetDetailFieldIndex.Price, 0, 4, 19);
+			this.AddElementFieldInfo("AssetDetailEntity", "Quantity", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)AssetDetailFieldIndex.Quantity, 0, 4, 19);
 			this.AddElementFieldInfo("AssetDetailEntity", "Reasonid", typeof(System.String), false, true, false, true,  (int)AssetDetailFieldIndex.Reasonid, 10, 0, 0);
 			this.AddElementFieldInfo("AssetDetailEntity", "Srcode", typeof(System.String), false, true, false, true,  (int)AssetDetailFieldIndex.Srcode, 10, 0, 0);
 		}
@@ -245,15 +245,15 @@ namespace DataAccess.HelperClasses
 		private void InitAssetLedgerEntityInfo()
 		{
 			this.AddFieldIndexEnumForElementName(typeof(AssetLedgerFieldIndex), "AssetLedgerEntity");
-			this.AddElementFieldInfo("AssetLedgerEntity", "Camount", typeof(Nullable<System.Double>), false, false, false, true,  (int)AssetLedgerFieldIndex.Camount, 0, 0, 15);
+			this.AddElementFieldInfo("AssetLedgerEntity", "Camount", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)AssetLedgerFieldIndex.Camount, 0, 4, 19);
 			this.AddElementFieldInfo("AssetLedgerEntity", "Contents", typeof(System.String), false, false, false, true,  (int)AssetLedgerFieldIndex.Contents, 100, 0, 0);
-			this.AddElementFieldInfo("AssetLedgerEntity", "Cprice", typeof(Nullable<System.Double>), false, false, false, true,  (int)AssetLedgerFieldIndex.Cprice, 0, 0, 15);
-			this.AddElementFieldInfo("AssetLedgerEntity", "Cquantity", typeof(Nullable<System.Double>), false, false, false, true,  (int)AssetLedgerFieldIndex.Cquantity, 0, 0, 15);
-			this.AddElementFieldInfo("AssetLedgerEntity", "Damount", typeof(Nullable<System.Double>), false, false, false, true,  (int)AssetLedgerFieldIndex.Damount, 0, 0, 15);
-			this.AddElementFieldInfo("AssetLedgerEntity", "Dprice", typeof(Nullable<System.Double>), false, false, false, true,  (int)AssetLedgerFieldIndex.Dprice, 0, 0, 15);
-			this.AddElementFieldInfo("AssetLedgerEntity", "Dquantity", typeof(Nullable<System.Double>), false, false, false, true,  (int)AssetLedgerFieldIndex.Dquantity, 0, 0, 15);
-			this.AddElementFieldInfo("AssetLedgerEntity", "Endamount", typeof(Nullable<System.Double>), false, false, false, true,  (int)AssetLedgerFieldIndex.Endamount, 0, 0, 15);
-			this.AddElementFieldInfo("AssetLedgerEntity", "Endqty", typeof(Nullable<System.Double>), false, false, false, true,  (int)AssetLedgerFieldIndex.Endqty, 0, 0, 15);
+			this.AddElementFieldInfo("AssetLedgerEntity", "Cprice", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)AssetLedgerFieldIndex.Cprice, 0, 4, 19);
+			this.AddElementFieldInfo("AssetLedgerEntity", "Cquantity", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)AssetLedgerFieldIndex.Cquantity, 0, 4, 19);
+			this.AddElementFieldInfo("AssetLedgerEntity", "Damount", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)AssetLedgerFieldIndex.Damount, 0, 4, 19);
+			this.AddElementFieldInfo("AssetLedgerEntity", "Dprice", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)AssetLedgerFieldIndex.Dprice, 0, 4, 19);
+			this.AddElementFieldInfo("AssetLedgerEntity", "Dquantity", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)AssetLedgerFieldIndex.Dquantity, 0, 4, 19);
+			this.AddElementFieldInfo("AssetLedgerEntity", "Endamount", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)AssetLedgerFieldIndex.Endamount, 0, 4, 19);
+			this.AddElementFieldInfo("AssetLedgerEntity", "Endqty", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)AssetLedgerFieldIndex.Endqty, 0, 4, 19);
 			this.AddElementFieldInfo("AssetLedgerEntity", "Flag", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AssetLedgerFieldIndex.Flag, 0, 0, 10);
 			this.AddElementFieldInfo("AssetLedgerEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)AssetLedgerFieldIndex.Id, 0, 0, 10);
 			this.AddElementFieldInfo("AssetLedgerEntity", "JournalVoucherId", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AssetLedgerFieldIndex.JournalVoucherId, 0, 0, 10);
@@ -270,15 +270,15 @@ namespace DataAccess.HelperClasses
 			this.AddElementFieldInfo("AssetTrackingEntity", "Assettrackingid", typeof(System.Int32), true, false, true, false,  (int)AssetTrackingFieldIndex.Assettrackingid, 0, 0, 10);
 			this.AddElementFieldInfo("AssetTrackingEntity", "Begindate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)AssetTrackingFieldIndex.Begindate, 0, 0, 0);
 			this.AddElementFieldInfo("AssetTrackingEntity", "Country", typeof(System.String), false, false, false, true,  (int)AssetTrackingFieldIndex.Country, 50, 0, 0);
-			this.AddElementFieldInfo("AssetTrackingEntity", "Depprice", typeof(Nullable<System.Double>), false, false, false, true,  (int)AssetTrackingFieldIndex.Depprice, 0, 0, 15);
-			this.AddElementFieldInfo("AssetTrackingEntity", "Deprate", typeof(Nullable<System.Double>), false, false, false, true,  (int)AssetTrackingFieldIndex.Deprate, 0, 0, 15);
+			this.AddElementFieldInfo("AssetTrackingEntity", "Depprice", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)AssetTrackingFieldIndex.Depprice, 0, 4, 19);
+			this.AddElementFieldInfo("AssetTrackingEntity", "Deprate", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)AssetTrackingFieldIndex.Deprate, 0, 4, 19);
 			this.AddElementFieldInfo("AssetTrackingEntity", "Deptid", typeof(System.String), false, true, false, true,  (int)AssetTrackingFieldIndex.Deptid, 10, 0, 0);
 			this.AddElementFieldInfo("AssetTrackingEntity", "Enddate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)AssetTrackingFieldIndex.Enddate, 0, 0, 0);
 			this.AddElementFieldInfo("AssetTrackingEntity", "ExaccountId", typeof(System.String), false, false, false, true,  (int)AssetTrackingFieldIndex.ExaccountId, 10, 0, 0);
 			this.AddElementFieldInfo("AssetTrackingEntity", "ExobjectId", typeof(System.String), false, true, false, true,  (int)AssetTrackingFieldIndex.ExobjectId, 10, 0, 0);
-			this.AddElementFieldInfo("AssetTrackingEntity", "Qty", typeof(Nullable<System.Double>), false, false, false, true,  (int)AssetTrackingFieldIndex.Qty, 0, 0, 15);
-			this.AddElementFieldInfo("AssetTrackingEntity", "Remainvalue", typeof(Nullable<System.Double>), false, false, false, true,  (int)AssetTrackingFieldIndex.Remainvalue, 0, 0, 15);
-			this.AddElementFieldInfo("AssetTrackingEntity", "Timeusing", typeof(Nullable<System.Double>), false, false, false, true,  (int)AssetTrackingFieldIndex.Timeusing, 0, 0, 15);
+			this.AddElementFieldInfo("AssetTrackingEntity", "Qty", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)AssetTrackingFieldIndex.Qty, 0, 4, 19);
+			this.AddElementFieldInfo("AssetTrackingEntity", "Remainvalue", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)AssetTrackingFieldIndex.Remainvalue, 0, 4, 19);
+			this.AddElementFieldInfo("AssetTrackingEntity", "Timeusing", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)AssetTrackingFieldIndex.Timeusing, 0, 4, 19);
 		}
 
 		/// <summary>Inits AssetTrackingDepreciationEntity's info objects</summary>
@@ -288,15 +288,15 @@ namespace DataAccess.HelperClasses
 			this.AddElementFieldInfo("AssetTrackingDepreciationEntity", "AsaccountId", typeof(System.String), false, false, false, true,  (int)AssetTrackingDepreciationFieldIndex.AsaccountId, 10, 0, 0);
 			this.AddElementFieldInfo("AssetTrackingDepreciationEntity", "AssetId", typeof(System.String), true, false, false, false,  (int)AssetTrackingDepreciationFieldIndex.AssetId, 10, 0, 0);
 			this.AddElementFieldInfo("AssetTrackingDepreciationEntity", "Begindate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)AssetTrackingDepreciationFieldIndex.Begindate, 0, 0, 0);
-			this.AddElementFieldInfo("AssetTrackingDepreciationEntity", "Depprice", typeof(Nullable<System.Double>), false, false, false, true,  (int)AssetTrackingDepreciationFieldIndex.Depprice, 0, 0, 15);
-			this.AddElementFieldInfo("AssetTrackingDepreciationEntity", "Deprate", typeof(Nullable<System.Double>), false, false, false, true,  (int)AssetTrackingDepreciationFieldIndex.Deprate, 0, 0, 15);
+			this.AddElementFieldInfo("AssetTrackingDepreciationEntity", "Depprice", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)AssetTrackingDepreciationFieldIndex.Depprice, 0, 4, 19);
+			this.AddElementFieldInfo("AssetTrackingDepreciationEntity", "Deprate", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)AssetTrackingDepreciationFieldIndex.Deprate, 0, 4, 19);
 			this.AddElementFieldInfo("AssetTrackingDepreciationEntity", "Deptid", typeof(System.String), false, true, false, true,  (int)AssetTrackingDepreciationFieldIndex.Deptid, 10, 0, 0);
 			this.AddElementFieldInfo("AssetTrackingDepreciationEntity", "Enddate", typeof(Nullable<System.DateTime>), false, true, false, true,  (int)AssetTrackingDepreciationFieldIndex.Enddate, 0, 0, 0);
 			this.AddElementFieldInfo("AssetTrackingDepreciationEntity", "ExaccountId", typeof(System.String), false, false, false, true,  (int)AssetTrackingDepreciationFieldIndex.ExaccountId, 10, 0, 0);
 			this.AddElementFieldInfo("AssetTrackingDepreciationEntity", "ExobjectId", typeof(System.String), false, true, false, true,  (int)AssetTrackingDepreciationFieldIndex.ExobjectId, 10, 0, 0);
-			this.AddElementFieldInfo("AssetTrackingDepreciationEntity", "Qty", typeof(Nullable<System.Double>), false, false, false, true,  (int)AssetTrackingDepreciationFieldIndex.Qty, 0, 0, 15);
-			this.AddElementFieldInfo("AssetTrackingDepreciationEntity", "Remainvalue", typeof(Nullable<System.Double>), false, false, false, true,  (int)AssetTrackingDepreciationFieldIndex.Remainvalue, 0, 0, 15);
-			this.AddElementFieldInfo("AssetTrackingDepreciationEntity", "Timeusing", typeof(Nullable<System.Double>), false, false, false, true,  (int)AssetTrackingDepreciationFieldIndex.Timeusing, 0, 0, 15);
+			this.AddElementFieldInfo("AssetTrackingDepreciationEntity", "Qty", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)AssetTrackingDepreciationFieldIndex.Qty, 0, 4, 19);
+			this.AddElementFieldInfo("AssetTrackingDepreciationEntity", "Remainvalue", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)AssetTrackingDepreciationFieldIndex.Remainvalue, 0, 4, 19);
+			this.AddElementFieldInfo("AssetTrackingDepreciationEntity", "Timeusing", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)AssetTrackingDepreciationFieldIndex.Timeusing, 0, 4, 19);
 		}
 
 		/// <summary>Inits BusinessResultItemEntity's info objects</summary>
@@ -306,9 +306,9 @@ namespace DataAccess.HelperClasses
 			this.AddElementFieldInfo("BusinessResultItemEntity", "Code", typeof(System.String), false, false, false, true,  (int)BusinessResultItemFieldIndex.Code, 50, 0, 0);
 			this.AddElementFieldInfo("BusinessResultItemEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)BusinessResultItemFieldIndex.Id, 0, 0, 10);
 			this.AddElementFieldInfo("BusinessResultItemEntity", "Illustration", typeof(System.String), false, false, false, true,  (int)BusinessResultItemFieldIndex.Illustration, 255, 0, 0);
-			this.AddElementFieldInfo("BusinessResultItemEntity", "IsBold", typeof(System.Boolean), false, false, false, false,  (int)BusinessResultItemFieldIndex.IsBold, 0, 0, 0);
-			this.AddElementFieldInfo("BusinessResultItemEntity", "IsDecrease", typeof(System.Boolean), false, false, false, false,  (int)BusinessResultItemFieldIndex.IsDecrease, 0, 0, 0);
-			this.AddElementFieldInfo("BusinessResultItemEntity", "IsItalic", typeof(System.Boolean), false, false, false, false,  (int)BusinessResultItemFieldIndex.IsItalic, 0, 0, 0);
+			this.AddElementFieldInfo("BusinessResultItemEntity", "IsBold", typeof(System.Boolean), false, false, false, false,  (int)BusinessResultItemFieldIndex.IsBold, 2, 0, 0);
+			this.AddElementFieldInfo("BusinessResultItemEntity", "IsDecrease", typeof(System.Boolean), false, false, false, false,  (int)BusinessResultItemFieldIndex.IsDecrease, 2, 0, 0);
+			this.AddElementFieldInfo("BusinessResultItemEntity", "IsItalic", typeof(System.Boolean), false, false, false, false,  (int)BusinessResultItemFieldIndex.IsItalic, 2, 0, 0);
 			this.AddElementFieldInfo("BusinessResultItemEntity", "ItemName", typeof(System.String), false, false, false, true,  (int)BusinessResultItemFieldIndex.ItemName, 255, 0, 0);
 		}
 
@@ -317,10 +317,10 @@ namespace DataAccess.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(CashFlowBalanceFieldIndex), "CashFlowBalanceEntity");
 			this.AddElementFieldInfo("CashFlowBalanceEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)CashFlowBalanceFieldIndex.Id, 0, 0, 10);
-			this.AddElementFieldInfo("CashFlowBalanceEntity", "Prevbeginbalance", typeof(Nullable<System.Double>), false, false, false, true,  (int)CashFlowBalanceFieldIndex.Prevbeginbalance, 0, 0, 15);
-			this.AddElementFieldInfo("CashFlowBalanceEntity", "Prevendbalance", typeof(Nullable<System.Double>), false, false, false, true,  (int)CashFlowBalanceFieldIndex.Prevendbalance, 0, 0, 15);
-			this.AddElementFieldInfo("CashFlowBalanceEntity", "Thisbeginbalance", typeof(Nullable<System.Double>), false, false, false, true,  (int)CashFlowBalanceFieldIndex.Thisbeginbalance, 0, 0, 15);
-			this.AddElementFieldInfo("CashFlowBalanceEntity", "Thisendbalance", typeof(Nullable<System.Double>), false, false, false, true,  (int)CashFlowBalanceFieldIndex.Thisendbalance, 0, 0, 15);
+			this.AddElementFieldInfo("CashFlowBalanceEntity", "Prevbeginbalance", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)CashFlowBalanceFieldIndex.Prevbeginbalance, 0, 4, 19);
+			this.AddElementFieldInfo("CashFlowBalanceEntity", "Prevendbalance", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)CashFlowBalanceFieldIndex.Prevendbalance, 0, 4, 19);
+			this.AddElementFieldInfo("CashFlowBalanceEntity", "Thisbeginbalance", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)CashFlowBalanceFieldIndex.Thisbeginbalance, 0, 4, 19);
+			this.AddElementFieldInfo("CashFlowBalanceEntity", "Thisendbalance", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)CashFlowBalanceFieldIndex.Thisendbalance, 0, 4, 19);
 		}
 
 		/// <summary>Inits CashFlowCategoryEntity's info objects</summary>
@@ -338,11 +338,11 @@ namespace DataAccess.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(CashFlowItemFieldIndex), "CashFlowItemEntity");
 			this.AddElementFieldInfo("CashFlowItemEntity", "CashFlowCategoryId", typeof(Nullable<System.Int32>), false, true, false, true,  (int)CashFlowItemFieldIndex.CashFlowCategoryId, 0, 0, 10);
 			this.AddElementFieldInfo("CashFlowItemEntity", "Code", typeof(System.String), false, false, false, true,  (int)CashFlowItemFieldIndex.Code, 50, 0, 0);
-			this.AddElementFieldInfo("CashFlowItemEntity", "Dbcr", typeof(System.Boolean), false, false, false, false,  (int)CashFlowItemFieldIndex.Dbcr, 0, 0, 0);
+			this.AddElementFieldInfo("CashFlowItemEntity", "Dbcr", typeof(System.Boolean), false, false, false, false,  (int)CashFlowItemFieldIndex.Dbcr, 2, 0, 0);
 			this.AddElementFieldInfo("CashFlowItemEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)CashFlowItemFieldIndex.Id, 0, 0, 10);
 			this.AddElementFieldInfo("CashFlowItemEntity", "Illustration", typeof(System.String), false, false, false, true,  (int)CashFlowItemFieldIndex.Illustration, 255, 0, 0);
-			this.AddElementFieldInfo("CashFlowItemEntity", "IsBold", typeof(System.Boolean), false, false, false, false,  (int)CashFlowItemFieldIndex.IsBold, 0, 0, 0);
-			this.AddElementFieldInfo("CashFlowItemEntity", "IsItalic", typeof(System.Boolean), false, false, false, false,  (int)CashFlowItemFieldIndex.IsItalic, 0, 0, 0);
+			this.AddElementFieldInfo("CashFlowItemEntity", "IsBold", typeof(System.Boolean), false, false, false, false,  (int)CashFlowItemFieldIndex.IsBold, 2, 0, 0);
+			this.AddElementFieldInfo("CashFlowItemEntity", "IsItalic", typeof(System.Boolean), false, false, false, false,  (int)CashFlowItemFieldIndex.IsItalic, 2, 0, 0);
 			this.AddElementFieldInfo("CashFlowItemEntity", "ItemName", typeof(System.String), false, false, false, true,  (int)CashFlowItemFieldIndex.ItemName, 255, 0, 0);
 		}
 
@@ -350,7 +350,7 @@ namespace DataAccess.HelperClasses
 		private void InitCashFlowPreviousPeriodEntityInfo()
 		{
 			this.AddFieldIndexEnumForElementName(typeof(CashFlowPreviousPeriodFieldIndex), "CashFlowPreviousPeriodEntity");
-			this.AddElementFieldInfo("CashFlowPreviousPeriodEntity", "Amount", typeof(Nullable<System.Double>), false, false, false, true,  (int)CashFlowPreviousPeriodFieldIndex.Amount, 0, 0, 15);
+			this.AddElementFieldInfo("CashFlowPreviousPeriodEntity", "Amount", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)CashFlowPreviousPeriodFieldIndex.Amount, 0, 4, 19);
 			this.AddElementFieldInfo("CashFlowPreviousPeriodEntity", "Bold", typeof(System.String), false, false, false, true,  (int)CashFlowPreviousPeriodFieldIndex.Bold, 50, 0, 0);
 			this.AddElementFieldInfo("CashFlowPreviousPeriodEntity", "CashFlowId", typeof(Nullable<System.Int32>), false, true, false, true,  (int)CashFlowPreviousPeriodFieldIndex.CashFlowId, 0, 0, 10);
 			this.AddElementFieldInfo("CashFlowPreviousPeriodEntity", "CashFlowName", typeof(System.String), false, false, false, true,  (int)CashFlowPreviousPeriodFieldIndex.CashFlowName, 50, 0, 0);
@@ -366,8 +366,8 @@ namespace DataAccess.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(CashFlowYearBalanceFieldIndex), "CashFlowYearBalanceEntity");
 			this.AddElementFieldInfo("CashFlowYearBalanceEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)CashFlowYearBalanceFieldIndex.Id, 0, 0, 10);
-			this.AddElementFieldInfo("CashFlowYearBalanceEntity", "Prevbeginbalance", typeof(Nullable<System.Double>), false, false, false, true,  (int)CashFlowYearBalanceFieldIndex.Prevbeginbalance, 0, 0, 15);
-			this.AddElementFieldInfo("CashFlowYearBalanceEntity", "Thisbeginbalance", typeof(Nullable<System.Double>), false, false, false, true,  (int)CashFlowYearBalanceFieldIndex.Thisbeginbalance, 0, 0, 15);
+			this.AddElementFieldInfo("CashFlowYearBalanceEntity", "Prevbeginbalance", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)CashFlowYearBalanceFieldIndex.Prevbeginbalance, 0, 4, 19);
+			this.AddElementFieldInfo("CashFlowYearBalanceEntity", "Thisbeginbalance", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)CashFlowYearBalanceFieldIndex.Thisbeginbalance, 0, 4, 19);
 		}
 
 		/// <summary>Inits CategoryEntity's info objects</summary>
@@ -387,10 +387,10 @@ namespace DataAccess.HelperClasses
 			this.AddElementFieldInfo("ChartOfAccountEntity", "AccountName", typeof(System.String), false, false, false, true,  (int)ChartOfAccountFieldIndex.AccountName, 50, 0, 0);
 			this.AddElementFieldInfo("ChartOfAccountEntity", "CategoryId", typeof(System.String), false, false, false, true,  (int)ChartOfAccountFieldIndex.CategoryId, 10, 0, 0);
 			this.AddElementFieldInfo("ChartOfAccountEntity", "Dispflag", typeof(Nullable<System.Int32>), false, false, false, true,  (int)ChartOfAccountFieldIndex.Dispflag, 0, 0, 10);
-			this.AddElementFieldInfo("ChartOfAccountEntity", "Outtableflag", typeof(System.Boolean), false, false, false, false,  (int)ChartOfAccountFieldIndex.Outtableflag, 0, 0, 0);
+			this.AddElementFieldInfo("ChartOfAccountEntity", "Outtableflag", typeof(System.Boolean), false, false, false, false,  (int)ChartOfAccountFieldIndex.Outtableflag, 2, 0, 0);
 			this.AddElementFieldInfo("ChartOfAccountEntity", "ParentId", typeof(System.String), false, false, false, true,  (int)ChartOfAccountFieldIndex.ParentId, 10, 0, 0);
-			this.AddElementFieldInfo("ChartOfAccountEntity", "Splite", typeof(System.Boolean), false, false, false, false,  (int)ChartOfAccountFieldIndex.Splite, 0, 0, 0);
-			this.AddElementFieldInfo("ChartOfAccountEntity", "Taxflag", typeof(System.Boolean), false, false, false, false,  (int)ChartOfAccountFieldIndex.Taxflag, 0, 0, 0);
+			this.AddElementFieldInfo("ChartOfAccountEntity", "Splite", typeof(System.Boolean), false, false, false, false,  (int)ChartOfAccountFieldIndex.Splite, 2, 0, 0);
+			this.AddElementFieldInfo("ChartOfAccountEntity", "Taxflag", typeof(System.Boolean), false, false, false, false,  (int)ChartOfAccountFieldIndex.Taxflag, 2, 0, 0);
 		}
 
 		/// <summary>Inits CostCalculatingBookEntity's info objects</summary>
@@ -415,14 +415,14 @@ namespace DataAccess.HelperClasses
 		private void InitCostDetailEntityInfo()
 		{
 			this.AddFieldIndexEnumForElementName(typeof(CostDetailFieldIndex), "CostDetailEntity");
-			this.AddElementFieldInfo("CostDetailEntity", "Amount", typeof(Nullable<System.Double>), false, false, false, true,  (int)CostDetailFieldIndex.Amount, 0, 0, 15);
+			this.AddElementFieldInfo("CostDetailEntity", "Amount", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)CostDetailFieldIndex.Amount, 0, 4, 19);
 			this.AddElementFieldInfo("CostDetailEntity", "CostElementId", typeof(System.String), false, true, false, true,  (int)CostDetailFieldIndex.CostElementId, 10, 0, 0);
 			this.AddElementFieldInfo("CostDetailEntity", "CostObjectId", typeof(System.String), false, true, false, true,  (int)CostDetailFieldIndex.CostObjectId, 10, 0, 0);
 			this.AddElementFieldInfo("CostDetailEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)CostDetailFieldIndex.Id, 0, 0, 10);
 			this.AddElementFieldInfo("CostDetailEntity", "JournalEntryId", typeof(Nullable<System.Int32>), false, true, false, true,  (int)CostDetailFieldIndex.JournalEntryId, 0, 0, 10);
-			this.AddElementFieldInfo("CostDetailEntity", "Liabilityflag", typeof(System.Boolean), false, false, false, false,  (int)CostDetailFieldIndex.Liabilityflag, 0, 0, 0);
+			this.AddElementFieldInfo("CostDetailEntity", "Liabilityflag", typeof(System.Boolean), false, false, false, false,  (int)CostDetailFieldIndex.Liabilityflag, 2, 0, 0);
 			this.AddElementFieldInfo("CostDetailEntity", "Serialno", typeof(System.String), false, false, false, true,  (int)CostDetailFieldIndex.Serialno, 50, 0, 0);
-			this.AddElementFieldInfo("CostDetailEntity", "Transflag", typeof(System.Boolean), false, false, false, false,  (int)CostDetailFieldIndex.Transflag, 0, 0, 0);
+			this.AddElementFieldInfo("CostDetailEntity", "Transflag", typeof(System.Boolean), false, false, false, false,  (int)CostDetailFieldIndex.Transflag, 2, 0, 0);
 		}
 
 		/// <summary>Inits CostElementEntity's info objects</summary>
@@ -431,7 +431,7 @@ namespace DataAccess.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(CostElementFieldIndex), "CostElementEntity");
 			this.AddElementFieldInfo("CostElementEntity", "ElementName", typeof(System.String), false, false, false, true,  (int)CostElementFieldIndex.ElementName, 50, 0, 0);
 			this.AddElementFieldInfo("CostElementEntity", "Id", typeof(System.String), true, false, false, false,  (int)CostElementFieldIndex.Id, 10, 0, 0);
-			this.AddElementFieldInfo("CostElementEntity", "Taxflag", typeof(System.Boolean), false, false, false, false,  (int)CostElementFieldIndex.Taxflag, 0, 0, 0);
+			this.AddElementFieldInfo("CostElementEntity", "Taxflag", typeof(System.Boolean), false, false, false, false,  (int)CostElementFieldIndex.Taxflag, 2, 0, 0);
 		}
 
 		/// <summary>Inits CostLedgerEntity's info objects</summary>
@@ -439,9 +439,9 @@ namespace DataAccess.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(CostLedgerFieldIndex), "CostLedgerEntity");
 			this.AddElementFieldInfo("CostLedgerEntity", "Contents", typeof(System.String), false, false, false, true,  (int)CostLedgerFieldIndex.Contents, 100, 0, 0);
-			this.AddElementFieldInfo("CostLedgerEntity", "Credit", typeof(Nullable<System.Double>), false, false, false, true,  (int)CostLedgerFieldIndex.Credit, 0, 0, 15);
-			this.AddElementFieldInfo("CostLedgerEntity", "Debit", typeof(Nullable<System.Double>), false, false, false, true,  (int)CostLedgerFieldIndex.Debit, 0, 0, 15);
-			this.AddElementFieldInfo("CostLedgerEntity", "Endbalance", typeof(Nullable<System.Double>), false, false, false, true,  (int)CostLedgerFieldIndex.Endbalance, 0, 0, 15);
+			this.AddElementFieldInfo("CostLedgerEntity", "Credit", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)CostLedgerFieldIndex.Credit, 0, 4, 19);
+			this.AddElementFieldInfo("CostLedgerEntity", "Debit", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)CostLedgerFieldIndex.Debit, 0, 4, 19);
+			this.AddElementFieldInfo("CostLedgerEntity", "Endbalance", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)CostLedgerFieldIndex.Endbalance, 0, 4, 19);
 			this.AddElementFieldInfo("CostLedgerEntity", "ExobjectId", typeof(System.String), false, true, false, true,  (int)CostLedgerFieldIndex.ExobjectId, 10, 0, 0);
 			this.AddElementFieldInfo("CostLedgerEntity", "ExpenseAtributeId", typeof(System.String), false, true, false, true,  (int)CostLedgerFieldIndex.ExpenseAtributeId, 10, 0, 0);
 			this.AddElementFieldInfo("CostLedgerEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)CostLedgerFieldIndex.Id, 0, 0, 10);
@@ -456,7 +456,7 @@ namespace DataAccess.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(CostObjectFieldIndex), "CostObjectEntity");
 			this.AddElementFieldInfo("CostObjectEntity", "Id", typeof(System.String), true, false, false, false,  (int)CostObjectFieldIndex.Id, 10, 0, 0);
 			this.AddElementFieldInfo("CostObjectEntity", "ObjectName", typeof(System.String), false, false, false, true,  (int)CostObjectFieldIndex.ObjectName, 50, 0, 0);
-			this.AddElementFieldInfo("CostObjectEntity", "Syncronizeflag", typeof(System.Boolean), false, false, false, false,  (int)CostObjectFieldIndex.Syncronizeflag, 0, 0, 0);
+			this.AddElementFieldInfo("CostObjectEntity", "Syncronizeflag", typeof(System.Boolean), false, false, false, false,  (int)CostObjectFieldIndex.Syncronizeflag, 2, 0, 0);
 		}
 
 		/// <summary>Inits CurrencyEntity's info objects</summary>
@@ -472,25 +472,25 @@ namespace DataAccess.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(CurrencyDetailFieldIndex), "CurrencyDetailEntity");
 			this.AddElementFieldInfo("CurrencyDetailEntity", "CurrencyId", typeof(System.String), false, true, false, true,  (int)CurrencyDetailFieldIndex.CurrencyId, 10, 0, 0);
-			this.AddElementFieldInfo("CurrencyDetailEntity", "ExchangeRate", typeof(Nullable<System.Double>), false, false, false, true,  (int)CurrencyDetailFieldIndex.ExchangeRate, 0, 0, 15);
+			this.AddElementFieldInfo("CurrencyDetailEntity", "ExchangeRate", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)CurrencyDetailFieldIndex.ExchangeRate, 0, 4, 19);
 			this.AddElementFieldInfo("CurrencyDetailEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)CurrencyDetailFieldIndex.Id, 0, 0, 10);
 			this.AddElementFieldInfo("CurrencyDetailEntity", "JournalEntryId", typeof(Nullable<System.Int32>), false, true, false, true,  (int)CurrencyDetailFieldIndex.JournalEntryId, 0, 0, 10);
-			this.AddElementFieldInfo("CurrencyDetailEntity", "Quantity", typeof(Nullable<System.Double>), false, false, false, true,  (int)CurrencyDetailFieldIndex.Quantity, 0, 0, 15);
+			this.AddElementFieldInfo("CurrencyDetailEntity", "Quantity", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)CurrencyDetailFieldIndex.Quantity, 0, 4, 19);
 		}
 
 		/// <summary>Inits CurrencyLedgerEntity's info objects</summary>
 		private void InitCurrencyLedgerEntityInfo()
 		{
 			this.AddFieldIndexEnumForElementName(typeof(CurrencyLedgerFieldIndex), "CurrencyLedgerEntity");
-			this.AddElementFieldInfo("CurrencyLedgerEntity", "Camount", typeof(Nullable<System.Double>), false, false, false, true,  (int)CurrencyLedgerFieldIndex.Camount, 0, 0, 15);
+			this.AddElementFieldInfo("CurrencyLedgerEntity", "Camount", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)CurrencyLedgerFieldIndex.Camount, 0, 4, 19);
 			this.AddElementFieldInfo("CurrencyLedgerEntity", "Contents", typeof(System.String), false, false, false, true,  (int)CurrencyLedgerFieldIndex.Contents, 100, 0, 0);
-			this.AddElementFieldInfo("CurrencyLedgerEntity", "Cquantity", typeof(Nullable<System.Double>), false, false, false, true,  (int)CurrencyLedgerFieldIndex.Cquantity, 0, 0, 15);
-			this.AddElementFieldInfo("CurrencyLedgerEntity", "Crate", typeof(Nullable<System.Double>), false, false, false, true,  (int)CurrencyLedgerFieldIndex.Crate, 0, 0, 15);
-			this.AddElementFieldInfo("CurrencyLedgerEntity", "Damount", typeof(Nullable<System.Double>), false, false, false, true,  (int)CurrencyLedgerFieldIndex.Damount, 0, 0, 15);
-			this.AddElementFieldInfo("CurrencyLedgerEntity", "Dquantity", typeof(Nullable<System.Double>), false, false, false, true,  (int)CurrencyLedgerFieldIndex.Dquantity, 0, 0, 15);
-			this.AddElementFieldInfo("CurrencyLedgerEntity", "Drate", typeof(Nullable<System.Double>), false, false, false, true,  (int)CurrencyLedgerFieldIndex.Drate, 0, 0, 15);
-			this.AddElementFieldInfo("CurrencyLedgerEntity", "Endamount", typeof(Nullable<System.Double>), false, false, false, true,  (int)CurrencyLedgerFieldIndex.Endamount, 0, 0, 15);
-			this.AddElementFieldInfo("CurrencyLedgerEntity", "Endqty", typeof(Nullable<System.Double>), false, false, false, true,  (int)CurrencyLedgerFieldIndex.Endqty, 0, 0, 15);
+			this.AddElementFieldInfo("CurrencyLedgerEntity", "Cquantity", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)CurrencyLedgerFieldIndex.Cquantity, 0, 4, 19);
+			this.AddElementFieldInfo("CurrencyLedgerEntity", "Crate", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)CurrencyLedgerFieldIndex.Crate, 0, 4, 19);
+			this.AddElementFieldInfo("CurrencyLedgerEntity", "Damount", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)CurrencyLedgerFieldIndex.Damount, 0, 4, 19);
+			this.AddElementFieldInfo("CurrencyLedgerEntity", "Dquantity", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)CurrencyLedgerFieldIndex.Dquantity, 0, 4, 19);
+			this.AddElementFieldInfo("CurrencyLedgerEntity", "Drate", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)CurrencyLedgerFieldIndex.Drate, 0, 4, 19);
+			this.AddElementFieldInfo("CurrencyLedgerEntity", "Endamount", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)CurrencyLedgerFieldIndex.Endamount, 0, 4, 19);
+			this.AddElementFieldInfo("CurrencyLedgerEntity", "Endqty", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)CurrencyLedgerFieldIndex.Endqty, 0, 4, 19);
 			this.AddElementFieldInfo("CurrencyLedgerEntity", "Flag", typeof(Nullable<System.Int32>), false, false, false, true,  (int)CurrencyLedgerFieldIndex.Flag, 0, 0, 10);
 			this.AddElementFieldInfo("CurrencyLedgerEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)CurrencyLedgerFieldIndex.Id, 0, 0, 10);
 			this.AddElementFieldInfo("CurrencyLedgerEntity", "JournalVoucherId", typeof(Nullable<System.Int32>), false, false, false, true,  (int)CurrencyLedgerFieldIndex.JournalVoucherId, 0, 0, 10);
@@ -503,9 +503,9 @@ namespace DataAccess.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(CurrencyLiabilityLineFieldIndex), "CurrencyLiabilityLineEntity");
 			this.AddElementFieldInfo("CurrencyLiabilityLineEntity", "CurrencyId", typeof(System.String), false, true, false, true,  (int)CurrencyLiabilityLineFieldIndex.CurrencyId, 10, 0, 0);
-			this.AddElementFieldInfo("CurrencyLiabilityLineEntity", "ExchangeRate", typeof(Nullable<System.Double>), false, false, false, true,  (int)CurrencyLiabilityLineFieldIndex.ExchangeRate, 0, 0, 15);
+			this.AddElementFieldInfo("CurrencyLiabilityLineEntity", "ExchangeRate", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)CurrencyLiabilityLineFieldIndex.ExchangeRate, 0, 4, 19);
 			this.AddElementFieldInfo("CurrencyLiabilityLineEntity", "LineId", typeof(System.Int32), true, true, false, false,  (int)CurrencyLiabilityLineFieldIndex.LineId, 0, 0, 10);
-			this.AddElementFieldInfo("CurrencyLiabilityLineEntity", "Quantity", typeof(Nullable<System.Double>), false, false, false, true,  (int)CurrencyLiabilityLineFieldIndex.Quantity, 0, 0, 15);
+			this.AddElementFieldInfo("CurrencyLiabilityLineEntity", "Quantity", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)CurrencyLiabilityLineFieldIndex.Quantity, 0, 4, 19);
 		}
 
 		/// <summary>Inits CustomCostReportEntity's info objects</summary>
@@ -534,7 +534,7 @@ namespace DataAccess.HelperClasses
 			this.AddElementFieldInfo("CustomerExportLineEntity", "CustomerId", typeof(System.String), false, true, false, true,  (int)CustomerExportLineFieldIndex.CustomerId, 20, 0, 0);
 			this.AddElementFieldInfo("CustomerExportLineEntity", "DebtReasonId", typeof(Nullable<System.Int32>), false, true, false, true,  (int)CustomerExportLineFieldIndex.DebtReasonId, 0, 0, 10);
 			this.AddElementFieldInfo("CustomerExportLineEntity", "DebtTypeId", typeof(System.String), false, true, false, true,  (int)CustomerExportLineFieldIndex.DebtTypeId, 10, 0, 0);
-			this.AddElementFieldInfo("CustomerExportLineEntity", "Interestflag", typeof(System.Boolean), false, false, false, false,  (int)CustomerExportLineFieldIndex.Interestflag, 0, 0, 0);
+			this.AddElementFieldInfo("CustomerExportLineEntity", "Interestflag", typeof(System.Boolean), false, false, false, false,  (int)CustomerExportLineFieldIndex.Interestflag, 2, 0, 0);
 			this.AddElementFieldInfo("CustomerExportLineEntity", "Liabilitydate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)CustomerExportLineFieldIndex.Liabilitydate, 0, 0, 0);
 			this.AddElementFieldInfo("CustomerExportLineEntity", "LiabilityDuesId", typeof(Nullable<System.Int32>), false, true, false, true,  (int)CustomerExportLineFieldIndex.LiabilityDuesId, 0, 0, 10);
 			this.AddElementFieldInfo("CustomerExportLineEntity", "LineId", typeof(System.Int32), true, true, false, false,  (int)CustomerExportLineFieldIndex.LineId, 0, 0, 10);
@@ -545,7 +545,7 @@ namespace DataAccess.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(DbConfigFieldIndex), "DbConfigEntity");
 			this.AddElementFieldInfo("DbConfigEntity", "AccountingYear", typeof(Nullable<System.Int32>), false, false, false, true,  (int)DbConfigFieldIndex.AccountingYear, 0, 0, 10);
-			this.AddElementFieldInfo("DbConfigEntity", "AccountMethod", typeof(Nullable<System.Int32>), false, false, false, true,  (int)DbConfigFieldIndex.AccountMethod, 0, 0, 3);
+			this.AddElementFieldInfo("DbConfigEntity", "AccountMethod", typeof(Nullable<System.Int32>), false, false, false, true,  (int)DbConfigFieldIndex.AccountMethod, 0, 0, 10);
 			this.AddElementFieldInfo("DbConfigEntity", "Address", typeof(System.String), false, false, false, true,  (int)DbConfigFieldIndex.Address, 255, 0, 0);
 			this.AddElementFieldInfo("DbConfigEntity", "BankAccount", typeof(System.String), false, false, false, true,  (int)DbConfigFieldIndex.BankAccount, 50, 0, 0);
 			this.AddElementFieldInfo("DbConfigEntity", "CompanyName", typeof(System.String), false, false, false, true,  (int)DbConfigFieldIndex.CompanyName, 255, 0, 0);
@@ -553,12 +553,12 @@ namespace DataAccess.HelperClasses
 			this.AddElementFieldInfo("DbConfigEntity", "DepartmentName", typeof(System.String), false, false, false, true,  (int)DbConfigFieldIndex.DepartmentName, 150, 0, 0);
 			this.AddElementFieldInfo("DbConfigEntity", "ExpiryDate", typeof(System.String), false, false, false, true,  (int)DbConfigFieldIndex.ExpiryDate, 10, 0, 0);
 			this.AddElementFieldInfo("DbConfigEntity", "Id", typeof(System.Int32), true, false, false, false,  (int)DbConfigFieldIndex.Id, 0, 0, 10);
-			this.AddElementFieldInfo("DbConfigEntity", "IsCompanyLicense", typeof(System.Boolean), false, false, false, false,  (int)DbConfigFieldIndex.IsCompanyLicense, 0, 0, 0);
-			this.AddElementFieldInfo("DbConfigEntity", "Material", typeof(Nullable<System.Int32>), false, false, false, true,  (int)DbConfigFieldIndex.Material, 0, 0, 3);
+			this.AddElementFieldInfo("DbConfigEntity", "IsCompanyLicense", typeof(System.Boolean), false, false, false, false,  (int)DbConfigFieldIndex.IsCompanyLicense, 2, 0, 0);
+			this.AddElementFieldInfo("DbConfigEntity", "Material", typeof(Nullable<System.Int32>), false, false, false, true,  (int)DbConfigFieldIndex.Material, 0, 0, 10);
 			this.AddElementFieldInfo("DbConfigEntity", "RegistrationCode", typeof(System.String), false, false, false, true,  (int)DbConfigFieldIndex.RegistrationCode, 100, 0, 0);
 			this.AddElementFieldInfo("DbConfigEntity", "TaxCode", typeof(System.String), false, false, false, true,  (int)DbConfigFieldIndex.TaxCode, 50, 0, 0);
 			this.AddElementFieldInfo("DbConfigEntity", "UpdatedDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)DbConfigFieldIndex.UpdatedDate, 0, 0, 0);
-			this.AddElementFieldInfo("DbConfigEntity", "VoucherPostingConfig", typeof(System.String), false, false, false, true,  (int)DbConfigFieldIndex.VoucherPostingConfig, 2147483647, 0, 0);
+			this.AddElementFieldInfo("DbConfigEntity", "VoucherPostingConfig", typeof(System.String), false, false, false, true,  (int)DbConfigFieldIndex.VoucherPostingConfig, 536870911, 0, 0);
 		}
 
 		/// <summary>Inits DebtBalanceEntity's info objects</summary>
@@ -566,17 +566,17 @@ namespace DataAccess.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(DebtBalanceFieldIndex), "DebtBalanceEntity");
 			this.AddElementFieldInfo("DebtBalanceEntity", "AccountId", typeof(System.String), false, true, false, true,  (int)DebtBalanceFieldIndex.AccountId, 10, 0, 0);
-			this.AddElementFieldInfo("DebtBalanceEntity", "Beginbalance", typeof(Nullable<System.Double>), false, false, false, true,  (int)DebtBalanceFieldIndex.Beginbalance, 0, 0, 15);
-			this.AddElementFieldInfo("DebtBalanceEntity", "Begincredit", typeof(Nullable<System.Double>), false, false, false, true,  (int)DebtBalanceFieldIndex.Begincredit, 0, 0, 15);
-			this.AddElementFieldInfo("DebtBalanceEntity", "Begindebit", typeof(Nullable<System.Double>), false, false, false, true,  (int)DebtBalanceFieldIndex.Begindebit, 0, 0, 15);
+			this.AddElementFieldInfo("DebtBalanceEntity", "Beginbalance", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)DebtBalanceFieldIndex.Beginbalance, 0, 4, 19);
+			this.AddElementFieldInfo("DebtBalanceEntity", "Begincredit", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)DebtBalanceFieldIndex.Begincredit, 0, 4, 19);
+			this.AddElementFieldInfo("DebtBalanceEntity", "Begindebit", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)DebtBalanceFieldIndex.Begindebit, 0, 4, 19);
 			this.AddElementFieldInfo("DebtBalanceEntity", "DebtTypeId", typeof(System.String), false, true, false, true,  (int)DebtBalanceFieldIndex.DebtTypeId, 10, 0, 0);
-			this.AddElementFieldInfo("DebtBalanceEntity", "Endbalance", typeof(Nullable<System.Double>), false, false, false, true,  (int)DebtBalanceFieldIndex.Endbalance, 0, 0, 15);
-			this.AddElementFieldInfo("DebtBalanceEntity", "Endcredit", typeof(Nullable<System.Double>), false, false, false, true,  (int)DebtBalanceFieldIndex.Endcredit, 0, 0, 15);
-			this.AddElementFieldInfo("DebtBalanceEntity", "Enddebit", typeof(Nullable<System.Double>), false, false, false, true,  (int)DebtBalanceFieldIndex.Enddebit, 0, 0, 15);
+			this.AddElementFieldInfo("DebtBalanceEntity", "Endbalance", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)DebtBalanceFieldIndex.Endbalance, 0, 4, 19);
+			this.AddElementFieldInfo("DebtBalanceEntity", "Endcredit", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)DebtBalanceFieldIndex.Endcredit, 0, 4, 19);
+			this.AddElementFieldInfo("DebtBalanceEntity", "Enddebit", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)DebtBalanceFieldIndex.Enddebit, 0, 4, 19);
 			this.AddElementFieldInfo("DebtBalanceEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)DebtBalanceFieldIndex.Id, 0, 0, 10);
-			this.AddElementFieldInfo("DebtBalanceEntity", "Inbalance", typeof(Nullable<System.Double>), false, false, false, true,  (int)DebtBalanceFieldIndex.Inbalance, 0, 0, 15);
-			this.AddElementFieldInfo("DebtBalanceEntity", "Incredit", typeof(Nullable<System.Double>), false, false, false, true,  (int)DebtBalanceFieldIndex.Incredit, 0, 0, 15);
-			this.AddElementFieldInfo("DebtBalanceEntity", "Indebit", typeof(Nullable<System.Double>), false, false, false, true,  (int)DebtBalanceFieldIndex.Indebit, 0, 0, 15);
+			this.AddElementFieldInfo("DebtBalanceEntity", "Inbalance", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)DebtBalanceFieldIndex.Inbalance, 0, 4, 19);
+			this.AddElementFieldInfo("DebtBalanceEntity", "Incredit", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)DebtBalanceFieldIndex.Incredit, 0, 4, 19);
+			this.AddElementFieldInfo("DebtBalanceEntity", "Indebit", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)DebtBalanceFieldIndex.Indebit, 0, 4, 19);
 			this.AddElementFieldInfo("DebtBalanceEntity", "LongtermFlag", typeof(Nullable<System.Int16>), false, false, false, true,  (int)DebtBalanceFieldIndex.LongtermFlag, 0, 0, 5);
 			this.AddElementFieldInfo("DebtBalanceEntity", "PartnerId", typeof(System.String), false, true, false, true,  (int)DebtBalanceFieldIndex.PartnerId, 20, 0, 0);
 		}
@@ -585,12 +585,12 @@ namespace DataAccess.HelperClasses
 		private void InitDebtDetailEntityInfo()
 		{
 			this.AddFieldIndexEnumForElementName(typeof(DebtDetailFieldIndex), "DebtDetailEntity");
-			this.AddElementFieldInfo("DebtDetailEntity", "Amount", typeof(Nullable<System.Double>), false, false, false, true,  (int)DebtDetailFieldIndex.Amount, 0, 0, 15);
-			this.AddElementFieldInfo("DebtDetailEntity", "Currency", typeof(System.Boolean), false, false, false, false,  (int)DebtDetailFieldIndex.Currency, 0, 0, 0);
+			this.AddElementFieldInfo("DebtDetailEntity", "Amount", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)DebtDetailFieldIndex.Amount, 0, 4, 19);
+			this.AddElementFieldInfo("DebtDetailEntity", "Currency", typeof(System.Boolean), false, false, false, false,  (int)DebtDetailFieldIndex.Currency, 2, 0, 0);
 			this.AddElementFieldInfo("DebtDetailEntity", "DebtReasonId", typeof(Nullable<System.Int32>), false, true, false, true,  (int)DebtDetailFieldIndex.DebtReasonId, 0, 0, 10);
 			this.AddElementFieldInfo("DebtDetailEntity", "DebtTypeId", typeof(System.String), false, true, false, true,  (int)DebtDetailFieldIndex.DebtTypeId, 10, 0, 0);
 			this.AddElementFieldInfo("DebtDetailEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)DebtDetailFieldIndex.Id, 0, 0, 10);
-			this.AddElementFieldInfo("DebtDetailEntity", "Interestflag", typeof(System.Boolean), false, false, false, false,  (int)DebtDetailFieldIndex.Interestflag, 0, 0, 0);
+			this.AddElementFieldInfo("DebtDetailEntity", "Interestflag", typeof(System.Boolean), false, false, false, false,  (int)DebtDetailFieldIndex.Interestflag, 2, 0, 0);
 			this.AddElementFieldInfo("DebtDetailEntity", "JournalEntryId", typeof(Nullable<System.Int32>), false, true, false, true,  (int)DebtDetailFieldIndex.JournalEntryId, 0, 0, 10);
 			this.AddElementFieldInfo("DebtDetailEntity", "Liabilitydate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)DebtDetailFieldIndex.Liabilitydate, 0, 0, 0);
 			this.AddElementFieldInfo("DebtDetailEntity", "LiabilityDuesId", typeof(Nullable<System.Int32>), false, true, false, true,  (int)DebtDetailFieldIndex.LiabilityDuesId, 0, 0, 10);
@@ -602,11 +602,11 @@ namespace DataAccess.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(DebtLedgerFieldIndex), "DebtLedgerEntity");
 			this.AddElementFieldInfo("DebtLedgerEntity", "Contents", typeof(System.String), false, false, false, true,  (int)DebtLedgerFieldIndex.Contents, 100, 0, 0);
-			this.AddElementFieldInfo("DebtLedgerEntity", "Credit", typeof(Nullable<System.Double>), false, false, false, true,  (int)DebtLedgerFieldIndex.Credit, 0, 0, 15);
+			this.AddElementFieldInfo("DebtLedgerEntity", "Credit", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)DebtLedgerFieldIndex.Credit, 0, 4, 19);
 			this.AddElementFieldInfo("DebtLedgerEntity", "CustomerId", typeof(System.String), false, true, false, true,  (int)DebtLedgerFieldIndex.CustomerId, 20, 0, 0);
-			this.AddElementFieldInfo("DebtLedgerEntity", "Debit", typeof(Nullable<System.Double>), false, false, false, true,  (int)DebtLedgerFieldIndex.Debit, 0, 0, 15);
+			this.AddElementFieldInfo("DebtLedgerEntity", "Debit", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)DebtLedgerFieldIndex.Debit, 0, 4, 19);
 			this.AddElementFieldInfo("DebtLedgerEntity", "DebtTypeId", typeof(System.String), false, true, false, true,  (int)DebtLedgerFieldIndex.DebtTypeId, 10, 0, 0);
-			this.AddElementFieldInfo("DebtLedgerEntity", "Endbalance", typeof(Nullable<System.Double>), false, false, false, true,  (int)DebtLedgerFieldIndex.Endbalance, 0, 0, 15);
+			this.AddElementFieldInfo("DebtLedgerEntity", "Endbalance", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)DebtLedgerFieldIndex.Endbalance, 0, 4, 19);
 			this.AddElementFieldInfo("DebtLedgerEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)DebtLedgerFieldIndex.Id, 0, 0, 10);
 			this.AddElementFieldInfo("DebtLedgerEntity", "JournalVoucherId", typeof(Nullable<System.Int32>), false, false, false, true,  (int)DebtLedgerFieldIndex.JournalVoucherId, 0, 0, 10);
 			this.AddElementFieldInfo("DebtLedgerEntity", "LiabilityDuesId", typeof(Nullable<System.Int32>), false, true, false, true,  (int)DebtLedgerFieldIndex.LiabilityDuesId, 0, 0, 10);
@@ -620,7 +620,7 @@ namespace DataAccess.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(DebtReasonFieldIndex), "DebtReasonEntity");
 			this.AddElementFieldInfo("DebtReasonEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)DebtReasonFieldIndex.Id, 0, 0, 10);
 			this.AddElementFieldInfo("DebtReasonEntity", "ReasonName", typeof(System.String), false, false, false, true,  (int)DebtReasonFieldIndex.ReasonName, 50, 0, 0);
-			this.AddElementFieldInfo("DebtReasonEntity", "Visible", typeof(System.Boolean), false, false, false, false,  (int)DebtReasonFieldIndex.Visible, 0, 0, 0);
+			this.AddElementFieldInfo("DebtReasonEntity", "Visible", typeof(System.Boolean), false, false, false, false,  (int)DebtReasonFieldIndex.Visible, 2, 0, 0);
 		}
 
 		/// <summary>Inits DebtTypeEntity's info objects</summary>
@@ -628,7 +628,7 @@ namespace DataAccess.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(DebtTypeFieldIndex), "DebtTypeEntity");
 			this.AddElementFieldInfo("DebtTypeEntity", "Id", typeof(System.String), true, false, false, false,  (int)DebtTypeFieldIndex.Id, 10, 0, 0);
-			this.AddElementFieldInfo("DebtTypeEntity", "Syncronizeflag", typeof(System.Boolean), false, false, false, false,  (int)DebtTypeFieldIndex.Syncronizeflag, 0, 0, 0);
+			this.AddElementFieldInfo("DebtTypeEntity", "Syncronizeflag", typeof(System.Boolean), false, false, false, false,  (int)DebtTypeFieldIndex.Syncronizeflag, 2, 0, 0);
 			this.AddElementFieldInfo("DebtTypeEntity", "TypeName", typeof(System.String), false, false, false, true,  (int)DebtTypeFieldIndex.TypeName, 50, 0, 0);
 		}
 
@@ -644,12 +644,12 @@ namespace DataAccess.HelperClasses
 		private void InitDepreciationEntityInfo()
 		{
 			this.AddFieldIndexEnumForElementName(typeof(DepreciationFieldIndex), "DepreciationEntity");
-			this.AddElementFieldInfo("DepreciationEntity", "Amount", typeof(Nullable<System.Double>), false, false, false, true,  (int)DepreciationFieldIndex.Amount, 0, 0, 15);
+			this.AddElementFieldInfo("DepreciationEntity", "Amount", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)DepreciationFieldIndex.Amount, 0, 4, 19);
 			this.AddElementFieldInfo("DepreciationEntity", "AssetId", typeof(System.String), false, true, false, true,  (int)DepreciationFieldIndex.AssetId, 10, 0, 0);
 			this.AddElementFieldInfo("DepreciationEntity", "Flag", typeof(Nullable<System.Int32>), false, false, false, true,  (int)DepreciationFieldIndex.Flag, 0, 0, 10);
 			this.AddElementFieldInfo("DepreciationEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)DepreciationFieldIndex.Id, 0, 0, 10);
-			this.AddElementFieldInfo("DepreciationEntity", "Rest", typeof(Nullable<System.Double>), false, false, false, true,  (int)DepreciationFieldIndex.Rest, 0, 0, 15);
-			this.AddElementFieldInfo("DepreciationEntity", "Restqty", typeof(Nullable<System.Double>), false, false, false, true,  (int)DepreciationFieldIndex.Restqty, 0, 0, 15);
+			this.AddElementFieldInfo("DepreciationEntity", "Rest", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)DepreciationFieldIndex.Rest, 0, 4, 19);
+			this.AddElementFieldInfo("DepreciationEntity", "Restqty", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)DepreciationFieldIndex.Restqty, 0, 4, 19);
 			this.AddElementFieldInfo("DepreciationEntity", "Srcode", typeof(System.String), false, true, false, true,  (int)DepreciationFieldIndex.Srcode, 10, 0, 0);
 		}
 
@@ -658,7 +658,7 @@ namespace DataAccess.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(ExchangeRateFieldIndex), "ExchangeRateEntity");
 			this.AddElementFieldInfo("ExchangeRateEntity", "CurrencyId", typeof(System.String), false, true, false, false,  (int)ExchangeRateFieldIndex.CurrencyId, 10, 0, 0);
-			this.AddElementFieldInfo("ExchangeRateEntity", "ExchangeRate", typeof(Nullable<System.Double>), false, false, false, true,  (int)ExchangeRateFieldIndex.ExchangeRate, 0, 0, 15);
+			this.AddElementFieldInfo("ExchangeRateEntity", "ExchangeRate", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)ExchangeRateFieldIndex.ExchangeRate, 0, 4, 19);
 			this.AddElementFieldInfo("ExchangeRateEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)ExchangeRateFieldIndex.Id, 0, 0, 10);
 			this.AddElementFieldInfo("ExchangeRateEntity", "Month", typeof(System.Int16), false, false, false, false,  (int)ExchangeRateFieldIndex.Month, 0, 0, 5);
 		}
@@ -668,10 +668,10 @@ namespace DataAccess.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(ExpenseTaxLineFieldIndex), "ExpenseTaxLineEntity");
 			this.AddElementFieldInfo("ExpenseTaxLineEntity", "Lineid", typeof(System.Int32), true, true, false, false,  (int)ExpenseTaxLineFieldIndex.Lineid, 0, 0, 10);
-			this.AddElementFieldInfo("ExpenseTaxLineEntity", "Printflag", typeof(System.Boolean), false, false, false, false,  (int)ExpenseTaxLineFieldIndex.Printflag, 0, 0, 0);
-			this.AddElementFieldInfo("ExpenseTaxLineEntity", "Rate", typeof(Nullable<System.Double>), false, false, false, true,  (int)ExpenseTaxLineFieldIndex.Rate, 0, 0, 15);
+			this.AddElementFieldInfo("ExpenseTaxLineEntity", "Printflag", typeof(System.Boolean), false, false, false, false,  (int)ExpenseTaxLineFieldIndex.Printflag, 2, 0, 0);
+			this.AddElementFieldInfo("ExpenseTaxLineEntity", "Rate", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)ExpenseTaxLineFieldIndex.Rate, 0, 4, 19);
 			this.AddElementFieldInfo("ExpenseTaxLineEntity", "Taxno", typeof(System.String), false, false, false, true,  (int)ExpenseTaxLineFieldIndex.Taxno, 20, 0, 0);
-			this.AddElementFieldInfo("ExpenseTaxLineEntity", "Taxrateid", typeof(Nullable<System.Int16>), false, false, false, true,  (int)ExpenseTaxLineFieldIndex.Taxrateid, 0, 0, 5);
+			this.AddElementFieldInfo("ExpenseTaxLineEntity", "Taxrateid", typeof(Nullable<System.Int16>), false, false, false, true,  (int)ExpenseTaxLineFieldIndex.Taxrateid, 0, 0, 10);
 			this.AddElementFieldInfo("ExpenseTaxLineEntity", "Vataddress", typeof(System.String), false, false, false, true,  (int)ExpenseTaxLineFieldIndex.Vataddress, 50, 0, 0);
 			this.AddElementFieldInfo("ExpenseTaxLineEntity", "Vatbilldate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)ExpenseTaxLineFieldIndex.Vatbilldate, 0, 0, 0);
 			this.AddElementFieldInfo("ExpenseTaxLineEntity", "Vatbillno", typeof(System.String), false, false, false, true,  (int)ExpenseTaxLineFieldIndex.Vatbillno, 10, 0, 0);
@@ -693,9 +693,9 @@ namespace DataAccess.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(GeneralLedgerFieldIndex), "GeneralLedgerEntity");
 			this.AddElementFieldInfo("GeneralLedgerEntity", "Contents", typeof(System.String), false, false, false, true,  (int)GeneralLedgerFieldIndex.Contents, 100, 0, 0);
 			this.AddElementFieldInfo("GeneralLedgerEntity", "CounterAccountId", typeof(System.String), false, false, false, true,  (int)GeneralLedgerFieldIndex.CounterAccountId, 10, 0, 0);
-			this.AddElementFieldInfo("GeneralLedgerEntity", "Credit", typeof(Nullable<System.Double>), false, false, false, true,  (int)GeneralLedgerFieldIndex.Credit, 0, 0, 15);
-			this.AddElementFieldInfo("GeneralLedgerEntity", "Debit", typeof(Nullable<System.Double>), false, false, false, true,  (int)GeneralLedgerFieldIndex.Debit, 0, 0, 15);
-			this.AddElementFieldInfo("GeneralLedgerEntity", "Endbalance", typeof(Nullable<System.Double>), false, false, false, true,  (int)GeneralLedgerFieldIndex.Endbalance, 0, 0, 15);
+			this.AddElementFieldInfo("GeneralLedgerEntity", "Credit", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)GeneralLedgerFieldIndex.Credit, 0, 4, 19);
+			this.AddElementFieldInfo("GeneralLedgerEntity", "Debit", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)GeneralLedgerFieldIndex.Debit, 0, 4, 19);
+			this.AddElementFieldInfo("GeneralLedgerEntity", "Endbalance", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)GeneralLedgerFieldIndex.Endbalance, 0, 4, 19);
 			this.AddElementFieldInfo("GeneralLedgerEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)GeneralLedgerFieldIndex.Id, 0, 0, 10);
 			this.AddElementFieldInfo("GeneralLedgerEntity", "JournalVoucherId", typeof(Nullable<System.Int32>), false, false, false, true,  (int)GeneralLedgerFieldIndex.JournalVoucherId, 0, 0, 10);
 			this.AddElementFieldInfo("GeneralLedgerEntity", "VoucherDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)GeneralLedgerFieldIndex.VoucherDate, 0, 0, 0);
@@ -706,8 +706,8 @@ namespace DataAccess.HelperClasses
 		private void InitInterestEntityInfo()
 		{
 			this.AddFieldIndexEnumForElementName(typeof(InterestFieldIndex), "InterestEntity");
-			this.AddElementFieldInfo("InterestEntity", "Amount", typeof(Nullable<System.Double>), false, false, false, true,  (int)InterestFieldIndex.Amount, 0, 0, 15);
-			this.AddElementFieldInfo("InterestEntity", "Balance", typeof(Nullable<System.Double>), false, false, false, true,  (int)InterestFieldIndex.Balance, 0, 0, 15);
+			this.AddElementFieldInfo("InterestEntity", "Amount", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)InterestFieldIndex.Amount, 0, 4, 19);
+			this.AddElementFieldInfo("InterestEntity", "Balance", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)InterestFieldIndex.Balance, 0, 4, 19);
 			this.AddElementFieldInfo("InterestEntity", "Contents", typeof(System.String), false, false, false, true,  (int)InterestFieldIndex.Contents, 100, 0, 0);
 			this.AddElementFieldInfo("InterestEntity", "CustomerId", typeof(System.String), false, true, false, true,  (int)InterestFieldIndex.CustomerId, 20, 0, 0);
 			this.AddElementFieldInfo("InterestEntity", "Dayno", typeof(Nullable<System.Int32>), false, false, false, true,  (int)InterestFieldIndex.Dayno, 0, 0, 10);
@@ -715,8 +715,8 @@ namespace DataAccess.HelperClasses
 			this.AddElementFieldInfo("InterestEntity", "DebtReasonId", typeof(Nullable<System.Int32>), false, true, false, true,  (int)InterestFieldIndex.DebtReasonId, 0, 0, 10);
 			this.AddElementFieldInfo("InterestEntity", "DebtTypeId", typeof(System.String), false, true, false, true,  (int)InterestFieldIndex.DebtTypeId, 10, 0, 0);
 			this.AddElementFieldInfo("InterestEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)InterestFieldIndex.Id, 0, 0, 10);
-			this.AddElementFieldInfo("InterestEntity", "Interest", typeof(Nullable<System.Double>), false, false, false, true,  (int)InterestFieldIndex.Interest, 0, 0, 15);
-			this.AddElementFieldInfo("InterestEntity", "Interestbalance", typeof(Nullable<System.Double>), false, false, false, true,  (int)InterestFieldIndex.Interestbalance, 0, 0, 15);
+			this.AddElementFieldInfo("InterestEntity", "Interest", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)InterestFieldIndex.Interest, 0, 4, 19);
+			this.AddElementFieldInfo("InterestEntity", "Interestbalance", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)InterestFieldIndex.Interestbalance, 0, 4, 19);
 			this.AddElementFieldInfo("InterestEntity", "Interestflag", typeof(Nullable<System.Int32>), false, false, false, true,  (int)InterestFieldIndex.Interestflag, 0, 0, 10);
 			this.AddElementFieldInfo("InterestEntity", "JournalVoucherId", typeof(Nullable<System.Int32>), false, false, false, true,  (int)InterestFieldIndex.JournalVoucherId, 0, 0, 10);
 			this.AddElementFieldInfo("InterestEntity", "LiabilityDuesId", typeof(Nullable<System.Int32>), false, true, false, true,  (int)InterestFieldIndex.LiabilityDuesId, 0, 0, 10);
@@ -729,13 +729,13 @@ namespace DataAccess.HelperClasses
 		private void InitInterestDetailEntityInfo()
 		{
 			this.AddFieldIndexEnumForElementName(typeof(InterestDetailFieldIndex), "InterestDetailEntity");
-			this.AddElementFieldInfo("InterestDetailEntity", "Amount", typeof(Nullable<System.Double>), false, false, false, true,  (int)InterestDetailFieldIndex.Amount, 0, 0, 15);
+			this.AddElementFieldInfo("InterestDetailEntity", "Amount", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)InterestDetailFieldIndex.Amount, 0, 4, 19);
 			this.AddElementFieldInfo("InterestDetailEntity", "Begindate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)InterestDetailFieldIndex.Begindate, 0, 0, 0);
 			this.AddElementFieldInfo("InterestDetailEntity", "Enddate", typeof(Nullable<System.DateTime>), false, true, false, true,  (int)InterestDetailFieldIndex.Enddate, 0, 0, 0);
 			this.AddElementFieldInfo("InterestDetailEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)InterestDetailFieldIndex.Id, 0, 0, 10);
-			this.AddElementFieldInfo("InterestDetailEntity", "Interest", typeof(Nullable<System.Double>), false, false, false, true,  (int)InterestDetailFieldIndex.Interest, 0, 0, 15);
+			this.AddElementFieldInfo("InterestDetailEntity", "Interest", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)InterestDetailFieldIndex.Interest, 0, 4, 19);
 			this.AddElementFieldInfo("InterestDetailEntity", "LineId", typeof(Nullable<System.Int32>), false, false, false, true,  (int)InterestDetailFieldIndex.LineId, 0, 0, 10);
-			this.AddElementFieldInfo("InterestDetailEntity", "Rate", typeof(Nullable<System.Double>), false, false, false, true,  (int)InterestDetailFieldIndex.Rate, 0, 0, 15);
+			this.AddElementFieldInfo("InterestDetailEntity", "Rate", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)InterestDetailFieldIndex.Rate, 0, 4, 19);
 		}
 
 		/// <summary>Inits InterestRateEntity's info objects</summary>
@@ -743,7 +743,7 @@ namespace DataAccess.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(InterestRateFieldIndex), "InterestRateEntity");
 			this.AddElementFieldInfo("InterestRateEntity", "Enddate", typeof(System.DateTime), true, false, false, false,  (int)InterestRateFieldIndex.Enddate, 0, 0, 0);
-			this.AddElementFieldInfo("InterestRateEntity", "Rate", typeof(Nullable<System.Double>), false, false, false, true,  (int)InterestRateFieldIndex.Rate, 0, 0, 15);
+			this.AddElementFieldInfo("InterestRateEntity", "Rate", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)InterestRateFieldIndex.Rate, 0, 4, 19);
 		}
 
 		/// <summary>Inits InventoryExportVoucherEntity's info objects</summary>
@@ -769,15 +769,15 @@ namespace DataAccess.HelperClasses
 		private void InitInventoryLedgerEntityInfo()
 		{
 			this.AddFieldIndexEnumForElementName(typeof(InventoryLedgerFieldIndex), "InventoryLedgerEntity");
-			this.AddElementFieldInfo("InventoryLedgerEntity", "Camount", typeof(Nullable<System.Double>), false, false, false, true,  (int)InventoryLedgerFieldIndex.Camount, 0, 0, 15);
+			this.AddElementFieldInfo("InventoryLedgerEntity", "Camount", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)InventoryLedgerFieldIndex.Camount, 0, 4, 19);
 			this.AddElementFieldInfo("InventoryLedgerEntity", "Contents", typeof(System.String), false, false, false, true,  (int)InventoryLedgerFieldIndex.Contents, 100, 0, 0);
-			this.AddElementFieldInfo("InventoryLedgerEntity", "Cprice", typeof(Nullable<System.Double>), false, false, false, true,  (int)InventoryLedgerFieldIndex.Cprice, 0, 0, 15);
-			this.AddElementFieldInfo("InventoryLedgerEntity", "Cquantity", typeof(Nullable<System.Double>), false, false, false, true,  (int)InventoryLedgerFieldIndex.Cquantity, 0, 0, 15);
-			this.AddElementFieldInfo("InventoryLedgerEntity", "Damount", typeof(Nullable<System.Double>), false, false, false, true,  (int)InventoryLedgerFieldIndex.Damount, 0, 0, 15);
-			this.AddElementFieldInfo("InventoryLedgerEntity", "Dprice", typeof(Nullable<System.Double>), false, false, false, true,  (int)InventoryLedgerFieldIndex.Dprice, 0, 0, 15);
-			this.AddElementFieldInfo("InventoryLedgerEntity", "Dquantity", typeof(Nullable<System.Double>), false, false, false, true,  (int)InventoryLedgerFieldIndex.Dquantity, 0, 0, 15);
-			this.AddElementFieldInfo("InventoryLedgerEntity", "Endamount", typeof(Nullable<System.Double>), false, false, false, true,  (int)InventoryLedgerFieldIndex.Endamount, 0, 0, 15);
-			this.AddElementFieldInfo("InventoryLedgerEntity", "Endqty", typeof(Nullable<System.Double>), false, false, false, true,  (int)InventoryLedgerFieldIndex.Endqty, 0, 0, 15);
+			this.AddElementFieldInfo("InventoryLedgerEntity", "Cprice", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)InventoryLedgerFieldIndex.Cprice, 0, 4, 19);
+			this.AddElementFieldInfo("InventoryLedgerEntity", "Cquantity", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)InventoryLedgerFieldIndex.Cquantity, 0, 4, 19);
+			this.AddElementFieldInfo("InventoryLedgerEntity", "Damount", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)InventoryLedgerFieldIndex.Damount, 0, 4, 19);
+			this.AddElementFieldInfo("InventoryLedgerEntity", "Dprice", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)InventoryLedgerFieldIndex.Dprice, 0, 4, 19);
+			this.AddElementFieldInfo("InventoryLedgerEntity", "Dquantity", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)InventoryLedgerFieldIndex.Dquantity, 0, 4, 19);
+			this.AddElementFieldInfo("InventoryLedgerEntity", "Endamount", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)InventoryLedgerFieldIndex.Endamount, 0, 4, 19);
+			this.AddElementFieldInfo("InventoryLedgerEntity", "Endqty", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)InventoryLedgerFieldIndex.Endqty, 0, 4, 19);
 			this.AddElementFieldInfo("InventoryLedgerEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)InventoryLedgerFieldIndex.Id, 0, 0, 10);
 			this.AddElementFieldInfo("InventoryLedgerEntity", "JournalVoucherId", typeof(Nullable<System.Int32>), false, false, false, true,  (int)InventoryLedgerFieldIndex.JournalVoucherId, 0, 0, 10);
 			this.AddElementFieldInfo("InventoryLedgerEntity", "VoucherDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)InventoryLedgerFieldIndex.VoucherDate, 0, 0, 0);
@@ -789,14 +789,14 @@ namespace DataAccess.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(InventoryVoucherFieldIndex), "InventoryVoucherEntity");
 			this.AddElementFieldInfo("InventoryVoucherEntity", "Carrier", typeof(System.String), false, false, false, true,  (int)InventoryVoucherFieldIndex.Carrier, 100, 0, 0);
-			this.AddElementFieldInfo("InventoryVoucherEntity", "EntryGraph", typeof(System.String), false, false, false, true,  (int)InventoryVoucherFieldIndex.EntryGraph, 2147483647, 0, 0);
+			this.AddElementFieldInfo("InventoryVoucherEntity", "EntryGraph", typeof(System.String), false, false, false, true,  (int)InventoryVoucherFieldIndex.EntryGraph, 536870911, 0, 0);
 			this.AddElementFieldInfo("InventoryVoucherEntity", "ExobjectId", typeof(System.String), false, true, false, true,  (int)InventoryVoucherFieldIndex.ExobjectId, 10, 0, 0);
 			this.AddElementFieldInfo("InventoryVoucherEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)InventoryVoucherFieldIndex.Id, 0, 0, 10);
 			this.AddElementFieldInfo("InventoryVoucherEntity", "Inoutnumber", typeof(System.String), false, false, false, true,  (int)InventoryVoucherFieldIndex.Inoutnumber, 10, 0, 0);
 			this.AddElementFieldInfo("InventoryVoucherEntity", "JournalEntryId", typeof(Nullable<System.Int32>), false, true, false, true,  (int)InventoryVoucherFieldIndex.JournalEntryId, 0, 0, 10);
-			this.AddElementFieldInfo("InventoryVoucherEntity", "Printflag", typeof(System.Boolean), false, false, false, false,  (int)InventoryVoucherFieldIndex.Printflag, 0, 0, 0);
+			this.AddElementFieldInfo("InventoryVoucherEntity", "Printflag", typeof(System.Boolean), false, false, false, false,  (int)InventoryVoucherFieldIndex.Printflag, 2, 0, 0);
 			this.AddElementFieldInfo("InventoryVoucherEntity", "Serialno", typeof(System.String), false, false, false, true,  (int)InventoryVoucherFieldIndex.Serialno, 50, 0, 0);
-			this.AddElementFieldInfo("InventoryVoucherEntity", "Taxflag", typeof(System.Boolean), false, false, false, false,  (int)InventoryVoucherFieldIndex.Taxflag, 0, 0, 0);
+			this.AddElementFieldInfo("InventoryVoucherEntity", "Taxflag", typeof(System.Boolean), false, false, false, false,  (int)InventoryVoucherFieldIndex.Taxflag, 2, 0, 0);
 			this.AddElementFieldInfo("InventoryVoucherEntity", "Taxno", typeof(System.String), false, false, false, true,  (int)InventoryVoucherFieldIndex.Taxno, 20, 0, 0);
 			this.AddElementFieldInfo("InventoryVoucherEntity", "Vataddress", typeof(System.String), false, false, false, true,  (int)InventoryVoucherFieldIndex.Vataddress, 50, 0, 0);
 			this.AddElementFieldInfo("InventoryVoucherEntity", "Vatbilldate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)InventoryVoucherFieldIndex.Vatbilldate, 0, 0, 0);
@@ -814,9 +814,9 @@ namespace DataAccess.HelperClasses
 			this.AddElementFieldInfo("InventoryVoucherLineEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)InventoryVoucherLineFieldIndex.Id, 0, 0, 10);
 			this.AddElementFieldInfo("InventoryVoucherLineEntity", "InventoryVoucherId", typeof(Nullable<System.Int32>), false, true, false, true,  (int)InventoryVoucherLineFieldIndex.InventoryVoucherId, 0, 0, 10);
 			this.AddElementFieldInfo("InventoryVoucherLineEntity", "MaterialId", typeof(System.String), false, true, false, true,  (int)InventoryVoucherLineFieldIndex.MaterialId, 20, 0, 0);
-			this.AddElementFieldInfo("InventoryVoucherLineEntity", "Price", typeof(Nullable<System.Double>), false, false, false, true,  (int)InventoryVoucherLineFieldIndex.Price, 0, 0, 15);
+			this.AddElementFieldInfo("InventoryVoucherLineEntity", "Price", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)InventoryVoucherLineFieldIndex.Price, 0, 4, 19);
 			this.AddElementFieldInfo("InventoryVoucherLineEntity", "Purpose", typeof(Nullable<System.Int16>), false, false, false, true,  (int)InventoryVoucherLineFieldIndex.Purpose, 0, 0, 5);
-			this.AddElementFieldInfo("InventoryVoucherLineEntity", "Quantity", typeof(Nullable<System.Double>), false, false, false, true,  (int)InventoryVoucherLineFieldIndex.Quantity, 0, 0, 15);
+			this.AddElementFieldInfo("InventoryVoucherLineEntity", "Quantity", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)InventoryVoucherLineFieldIndex.Quantity, 0, 4, 19);
 		}
 
 		/// <summary>Inits InvestmentDetailEntity's info objects</summary>
@@ -824,13 +824,13 @@ namespace DataAccess.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(InvestmentDetailFieldIndex), "InvestmentDetailEntity");
 			this.AddElementFieldInfo("InvestmentDetailEntity", "CustomerId", typeof(System.String), false, true, false, true,  (int)InvestmentDetailFieldIndex.CustomerId, 20, 0, 0);
-			this.AddElementFieldInfo("InvestmentDetailEntity", "Inprice", typeof(Nullable<System.Double>), false, false, false, true,  (int)InvestmentDetailFieldIndex.Inprice, 0, 0, 15);
+			this.AddElementFieldInfo("InvestmentDetailEntity", "Inprice", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)InvestmentDetailFieldIndex.Inprice, 0, 4, 19);
 			this.AddElementFieldInfo("InvestmentDetailEntity", "JournalEntryId", typeof(Nullable<System.Int32>), false, true, false, true,  (int)InvestmentDetailFieldIndex.JournalEntryId, 0, 0, 10);
 			this.AddElementFieldInfo("InvestmentDetailEntity", "Lineid", typeof(System.Int32), true, false, true, false,  (int)InvestmentDetailFieldIndex.Lineid, 0, 0, 10);
-			this.AddElementFieldInfo("InvestmentDetailEntity", "Originamount", typeof(Nullable<System.Double>), false, false, false, true,  (int)InvestmentDetailFieldIndex.Originamount, 0, 0, 15);
-			this.AddElementFieldInfo("InvestmentDetailEntity", "Otherexpense", typeof(Nullable<System.Double>), false, false, false, true,  (int)InvestmentDetailFieldIndex.Otherexpense, 0, 0, 15);
-			this.AddElementFieldInfo("InvestmentDetailEntity", "Outprice", typeof(Nullable<System.Double>), false, false, false, true,  (int)InvestmentDetailFieldIndex.Outprice, 0, 0, 15);
-			this.AddElementFieldInfo("InvestmentDetailEntity", "Quantity", typeof(Nullable<System.Double>), false, false, false, true,  (int)InvestmentDetailFieldIndex.Quantity, 0, 0, 15);
+			this.AddElementFieldInfo("InvestmentDetailEntity", "Originamount", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)InvestmentDetailFieldIndex.Originamount, 0, 4, 19);
+			this.AddElementFieldInfo("InvestmentDetailEntity", "Otherexpense", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)InvestmentDetailFieldIndex.Otherexpense, 0, 4, 19);
+			this.AddElementFieldInfo("InvestmentDetailEntity", "Outprice", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)InvestmentDetailFieldIndex.Outprice, 0, 4, 19);
+			this.AddElementFieldInfo("InvestmentDetailEntity", "Quantity", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)InvestmentDetailFieldIndex.Quantity, 0, 4, 19);
 			this.AddElementFieldInfo("InvestmentDetailEntity", "Stockid", typeof(System.String), false, true, false, true,  (int)InvestmentDetailFieldIndex.Stockid, 10, 0, 0);
 			this.AddElementFieldInfo("InvestmentDetailEntity", "Stockstoreid", typeof(Nullable<System.Int16>), false, false, false, true,  (int)InvestmentDetailFieldIndex.Stockstoreid, 0, 0, 5);
 		}
@@ -839,15 +839,15 @@ namespace DataAccess.HelperClasses
 		private void InitInvestmentLedgerEntityInfo()
 		{
 			this.AddFieldIndexEnumForElementName(typeof(InvestmentLedgerFieldIndex), "InvestmentLedgerEntity");
-			this.AddElementFieldInfo("InvestmentLedgerEntity", "Camount", typeof(Nullable<System.Double>), false, false, false, true,  (int)InvestmentLedgerFieldIndex.Camount, 0, 0, 15);
+			this.AddElementFieldInfo("InvestmentLedgerEntity", "Camount", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)InvestmentLedgerFieldIndex.Camount, 0, 4, 19);
 			this.AddElementFieldInfo("InvestmentLedgerEntity", "Contents", typeof(System.String), false, false, false, true,  (int)InvestmentLedgerFieldIndex.Contents, 100, 0, 0);
-			this.AddElementFieldInfo("InvestmentLedgerEntity", "Cprice", typeof(Nullable<System.Double>), false, false, false, true,  (int)InvestmentLedgerFieldIndex.Cprice, 0, 0, 15);
-			this.AddElementFieldInfo("InvestmentLedgerEntity", "Cquantity", typeof(Nullable<System.Double>), false, false, false, true,  (int)InvestmentLedgerFieldIndex.Cquantity, 0, 0, 15);
-			this.AddElementFieldInfo("InvestmentLedgerEntity", "Damount", typeof(Nullable<System.Double>), false, false, false, true,  (int)InvestmentLedgerFieldIndex.Damount, 0, 0, 15);
-			this.AddElementFieldInfo("InvestmentLedgerEntity", "Dprice", typeof(Nullable<System.Double>), false, false, false, true,  (int)InvestmentLedgerFieldIndex.Dprice, 0, 0, 15);
-			this.AddElementFieldInfo("InvestmentLedgerEntity", "Dquantity", typeof(Nullable<System.Double>), false, false, false, true,  (int)InvestmentLedgerFieldIndex.Dquantity, 0, 0, 15);
-			this.AddElementFieldInfo("InvestmentLedgerEntity", "Endamount", typeof(Nullable<System.Double>), false, false, false, true,  (int)InvestmentLedgerFieldIndex.Endamount, 0, 0, 15);
-			this.AddElementFieldInfo("InvestmentLedgerEntity", "Endqty", typeof(Nullable<System.Double>), false, false, false, true,  (int)InvestmentLedgerFieldIndex.Endqty, 0, 0, 15);
+			this.AddElementFieldInfo("InvestmentLedgerEntity", "Cprice", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)InvestmentLedgerFieldIndex.Cprice, 0, 4, 19);
+			this.AddElementFieldInfo("InvestmentLedgerEntity", "Cquantity", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)InvestmentLedgerFieldIndex.Cquantity, 0, 4, 19);
+			this.AddElementFieldInfo("InvestmentLedgerEntity", "Damount", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)InvestmentLedgerFieldIndex.Damount, 0, 4, 19);
+			this.AddElementFieldInfo("InvestmentLedgerEntity", "Dprice", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)InvestmentLedgerFieldIndex.Dprice, 0, 4, 19);
+			this.AddElementFieldInfo("InvestmentLedgerEntity", "Dquantity", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)InvestmentLedgerFieldIndex.Dquantity, 0, 4, 19);
+			this.AddElementFieldInfo("InvestmentLedgerEntity", "Endamount", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)InvestmentLedgerFieldIndex.Endamount, 0, 4, 19);
+			this.AddElementFieldInfo("InvestmentLedgerEntity", "Endqty", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)InvestmentLedgerFieldIndex.Endqty, 0, 4, 19);
 			this.AddElementFieldInfo("InvestmentLedgerEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)InvestmentLedgerFieldIndex.Id, 0, 0, 10);
 			this.AddElementFieldInfo("InvestmentLedgerEntity", "JournalVoucherId", typeof(Nullable<System.Int32>), false, false, false, true,  (int)InvestmentLedgerFieldIndex.JournalVoucherId, 0, 0, 10);
 			this.AddElementFieldInfo("InvestmentLedgerEntity", "VoucherDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)InvestmentLedgerFieldIndex.VoucherDate, 0, 0, 0);
@@ -859,7 +859,7 @@ namespace DataAccess.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(JournalEntryFieldIndex), "JournalEntryEntity");
 			this.AddElementFieldInfo("JournalEntryEntity", "AccountId", typeof(System.String), false, true, false, true,  (int)JournalEntryFieldIndex.AccountId, 10, 0, 0);
-			this.AddElementFieldInfo("JournalEntryEntity", "Amount", typeof(Nullable<System.Double>), false, false, false, true,  (int)JournalEntryFieldIndex.Amount, 0, 0, 15);
+			this.AddElementFieldInfo("JournalEntryEntity", "Amount", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)JournalEntryFieldIndex.Amount, 0, 4, 19);
 			this.AddElementFieldInfo("JournalEntryEntity", "Createdate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)JournalEntryFieldIndex.Createdate, 0, 0, 0);
 			this.AddElementFieldInfo("JournalEntryEntity", "Createuser", typeof(System.String), false, false, false, true,  (int)JournalEntryFieldIndex.Createuser, 20, 0, 0);
 			this.AddElementFieldInfo("JournalEntryEntity", "Dbcr", typeof(Nullable<System.Int16>), false, false, false, true,  (int)JournalEntryFieldIndex.Dbcr, 0, 0, 5);
@@ -876,13 +876,13 @@ namespace DataAccess.HelperClasses
 		private void InitJournalVoucherEntityInfo()
 		{
 			this.AddFieldIndexEnumForElementName(typeof(JournalVoucherFieldIndex), "JournalVoucherEntity");
-			this.AddElementFieldInfo("JournalVoucherEntity", "Bookflag", typeof(System.Boolean), false, false, false, false,  (int)JournalVoucherFieldIndex.Bookflag, 0, 0, 0);
+			this.AddElementFieldInfo("JournalVoucherEntity", "Bookflag", typeof(System.Boolean), false, false, false, false,  (int)JournalVoucherFieldIndex.Bookflag, 2, 0, 0);
 			this.AddElementFieldInfo("JournalVoucherEntity", "Contents", typeof(System.String), false, false, false, true,  (int)JournalVoucherFieldIndex.Contents, 100, 0, 0);
-			this.AddElementFieldInfo("JournalVoucherEntity", "Flag", typeof(System.Boolean), false, false, false, false,  (int)JournalVoucherFieldIndex.Flag, 0, 0, 0);
+			this.AddElementFieldInfo("JournalVoucherEntity", "Flag", typeof(System.Boolean), false, false, false, false,  (int)JournalVoucherFieldIndex.Flag, 2, 0, 0);
 			this.AddElementFieldInfo("JournalVoucherEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)JournalVoucherFieldIndex.Id, 0, 0, 10);
 			this.AddElementFieldInfo("JournalVoucherEntity", "Invoicesnumber", typeof(System.String), false, false, false, true,  (int)JournalVoucherFieldIndex.Invoicesnumber, 2, 0, 0);
-			this.AddElementFieldInfo("JournalVoucherEntity", "Marked", typeof(System.Boolean), false, false, false, false,  (int)JournalVoucherFieldIndex.Marked, 0, 0, 0);
-			this.AddElementFieldInfo("JournalVoucherEntity", "Outtableflag", typeof(System.Boolean), false, false, false, false,  (int)JournalVoucherFieldIndex.Outtableflag, 0, 0, 0);
+			this.AddElementFieldInfo("JournalVoucherEntity", "Marked", typeof(System.Boolean), false, false, false, false,  (int)JournalVoucherFieldIndex.Marked, 2, 0, 0);
+			this.AddElementFieldInfo("JournalVoucherEntity", "Outtableflag", typeof(System.Boolean), false, false, false, false,  (int)JournalVoucherFieldIndex.Outtableflag, 2, 0, 0);
 			this.AddElementFieldInfo("JournalVoucherEntity", "Paymentacc", typeof(System.String), false, false, false, true,  (int)JournalVoucherFieldIndex.Paymentacc, 50, 0, 0);
 			this.AddElementFieldInfo("JournalVoucherEntity", "Paymentbank", typeof(System.String), false, false, false, true,  (int)JournalVoucherFieldIndex.Paymentbank, 150, 0, 0);
 			this.AddElementFieldInfo("JournalVoucherEntity", "Personaddress", typeof(System.String), false, false, false, true,  (int)JournalVoucherFieldIndex.Personaddress, 255, 0, 0);
@@ -902,12 +902,12 @@ namespace DataAccess.HelperClasses
 			this.AddElementFieldInfo("LiabilityDueEntity", "CustomerId", typeof(System.String), false, true, false, false,  (int)LiabilityDueFieldIndex.CustomerId, 20, 0, 0);
 			this.AddElementFieldInfo("LiabilityDueEntity", "DebtTypeId", typeof(System.String), false, true, false, false,  (int)LiabilityDueFieldIndex.DebtTypeId, 10, 0, 0);
 			this.AddElementFieldInfo("LiabilityDueEntity", "EndDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)LiabilityDueFieldIndex.EndDate, 0, 0, 0);
-			this.AddElementFieldInfo("LiabilityDueEntity", "Feedbackrate", typeof(Nullable<System.Double>), false, false, false, true,  (int)LiabilityDueFieldIndex.Feedbackrate, 0, 0, 15);
+			this.AddElementFieldInfo("LiabilityDueEntity", "Feedbackrate", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)LiabilityDueFieldIndex.Feedbackrate, 0, 4, 19);
 			this.AddElementFieldInfo("LiabilityDueEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)LiabilityDueFieldIndex.Id, 0, 0, 10);
-			this.AddElementFieldInfo("LiabilityDueEntity", "Interestrate", typeof(Nullable<System.Double>), false, false, false, true,  (int)LiabilityDueFieldIndex.Interestrate, 0, 0, 15);
-			this.AddElementFieldInfo("LiabilityDueEntity", "Outvatrate", typeof(Nullable<System.Double>), false, false, false, true,  (int)LiabilityDueFieldIndex.Outvatrate, 0, 0, 15);
-			this.AddElementFieldInfo("LiabilityDueEntity", "Remark", typeof(System.String), false, false, false, true,  (int)LiabilityDueFieldIndex.Remark, 2147483647, 0, 0);
-			this.AddElementFieldInfo("LiabilityDueEntity", "Settledflag", typeof(System.Boolean), false, false, false, false,  (int)LiabilityDueFieldIndex.Settledflag, 0, 0, 0);
+			this.AddElementFieldInfo("LiabilityDueEntity", "Interestrate", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)LiabilityDueFieldIndex.Interestrate, 0, 4, 19);
+			this.AddElementFieldInfo("LiabilityDueEntity", "Outvatrate", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)LiabilityDueFieldIndex.Outvatrate, 0, 4, 19);
+			this.AddElementFieldInfo("LiabilityDueEntity", "Remark", typeof(System.String), false, false, false, true,  (int)LiabilityDueFieldIndex.Remark, 536870911, 0, 0);
+			this.AddElementFieldInfo("LiabilityDueEntity", "Settledflag", typeof(System.Boolean), false, false, false, false,  (int)LiabilityDueFieldIndex.Settledflag, 2, 0, 0);
 		}
 
 		/// <summary>Inits MaterialPriceEntity's info objects</summary>
@@ -916,8 +916,8 @@ namespace DataAccess.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(MaterialPriceFieldIndex), "MaterialPriceEntity");
 			this.AddElementFieldInfo("MaterialPriceEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)MaterialPriceFieldIndex.Id, 0, 0, 10);
 			this.AddElementFieldInfo("MaterialPriceEntity", "MaterialId", typeof(System.String), false, true, false, false,  (int)MaterialPriceFieldIndex.MaterialId, 20, 0, 0);
-			this.AddElementFieldInfo("MaterialPriceEntity", "Price", typeof(System.Double), false, false, false, false,  (int)MaterialPriceFieldIndex.Price, 0, 0, 15);
-			this.AddElementFieldInfo("MaterialPriceEntity", "Quantity", typeof(Nullable<System.Double>), false, false, false, true,  (int)MaterialPriceFieldIndex.Quantity, 0, 0, 15);
+			this.AddElementFieldInfo("MaterialPriceEntity", "Price", typeof(System.Decimal), false, false, false, false,  (int)MaterialPriceFieldIndex.Price, 0, 4, 19);
+			this.AddElementFieldInfo("MaterialPriceEntity", "Quantity", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)MaterialPriceFieldIndex.Quantity, 0, 4, 19);
 			this.AddElementFieldInfo("MaterialPriceEntity", "WarehouseId", typeof(System.String), false, true, false, false,  (int)MaterialPriceFieldIndex.WarehouseId, 10, 0, 0);
 		}
 
@@ -926,9 +926,9 @@ namespace DataAccess.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(MaterialTaxLineFieldIndex), "MaterialTaxLineEntity");
 			this.AddElementFieldInfo("MaterialTaxLineEntity", "LineId", typeof(System.Int32), true, true, false, false,  (int)MaterialTaxLineFieldIndex.LineId, 0, 0, 10);
-			this.AddElementFieldInfo("MaterialTaxLineEntity", "Rate", typeof(Nullable<System.Double>), false, false, false, true,  (int)MaterialTaxLineFieldIndex.Rate, 0, 0, 15);
-			this.AddElementFieldInfo("MaterialTaxLineEntity", "SellPrice", typeof(Nullable<System.Double>), false, false, false, true,  (int)MaterialTaxLineFieldIndex.SellPrice, 0, 0, 15);
-			this.AddElementFieldInfo("MaterialTaxLineEntity", "Taxrateid", typeof(Nullable<System.Int16>), false, false, false, true,  (int)MaterialTaxLineFieldIndex.Taxrateid, 0, 0, 5);
+			this.AddElementFieldInfo("MaterialTaxLineEntity", "Rate", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)MaterialTaxLineFieldIndex.Rate, 0, 4, 19);
+			this.AddElementFieldInfo("MaterialTaxLineEntity", "SellPrice", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)MaterialTaxLineFieldIndex.SellPrice, 0, 4, 19);
+			this.AddElementFieldInfo("MaterialTaxLineEntity", "Taxrateid", typeof(Nullable<System.Int16>), false, false, false, true,  (int)MaterialTaxLineFieldIndex.Taxrateid, 0, 0, 10);
 		}
 
 		/// <summary>Inits PartnerEntity's info objects</summary>
@@ -939,8 +939,8 @@ namespace DataAccess.HelperClasses
 			this.AddElementFieldInfo("PartnerEntity", "CustomerName", typeof(System.String), false, false, false, true,  (int)PartnerFieldIndex.CustomerName, 50, 0, 0);
 			this.AddElementFieldInfo("PartnerEntity", "Faxnumber", typeof(System.String), false, false, false, true,  (int)PartnerFieldIndex.Faxnumber, 30, 0, 0);
 			this.AddElementFieldInfo("PartnerEntity", "Id", typeof(System.String), true, false, false, false,  (int)PartnerFieldIndex.Id, 20, 0, 0);
-			this.AddElementFieldInfo("PartnerEntity", "Isemployee", typeof(System.Boolean), false, false, false, false,  (int)PartnerFieldIndex.Isemployee, 0, 0, 0);
-			this.AddElementFieldInfo("PartnerEntity", "Note", typeof(System.String), false, false, false, true,  (int)PartnerFieldIndex.Note, 2147483647, 0, 0);
+			this.AddElementFieldInfo("PartnerEntity", "Isemployee", typeof(System.Boolean), false, false, false, false,  (int)PartnerFieldIndex.Isemployee, 2, 0, 0);
+			this.AddElementFieldInfo("PartnerEntity", "Note", typeof(System.String), false, false, false, true,  (int)PartnerFieldIndex.Note, 536870911, 0, 0);
 			this.AddElementFieldInfo("PartnerEntity", "Phonenumber", typeof(System.String), false, false, false, true,  (int)PartnerFieldIndex.Phonenumber, 30, 0, 0);
 			this.AddElementFieldInfo("PartnerEntity", "Taxno", typeof(System.String), false, false, false, true,  (int)PartnerFieldIndex.Taxno, 50, 0, 0);
 		}
@@ -955,14 +955,14 @@ namespace DataAccess.HelperClasses
 			this.AddElementFieldInfo("PreviousBusinessPeriodEntity", "Italic", typeof(System.String), false, false, false, true,  (int)PreviousBusinessPeriodFieldIndex.Italic, 50, 0, 0);
 			this.AddElementFieldInfo("PreviousBusinessPeriodEntity", "ItemsId", typeof(Nullable<System.Int32>), false, true, false, true,  (int)PreviousBusinessPeriodFieldIndex.ItemsId, 0, 0, 10);
 			this.AddElementFieldInfo("PreviousBusinessPeriodEntity", "ItemsName", typeof(System.String), false, false, false, true,  (int)PreviousBusinessPeriodFieldIndex.ItemsName, 50, 0, 0);
-			this.AddElementFieldInfo("PreviousBusinessPeriodEntity", "Prevyearamount", typeof(Nullable<System.Double>), false, false, false, true,  (int)PreviousBusinessPeriodFieldIndex.Prevyearamount, 0, 0, 15);
+			this.AddElementFieldInfo("PreviousBusinessPeriodEntity", "Prevyearamount", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)PreviousBusinessPeriodFieldIndex.Prevyearamount, 0, 4, 19);
 		}
 
 		/// <summary>Inits ReasonEntity's info objects</summary>
 		private void InitReasonEntityInfo()
 		{
 			this.AddFieldIndexEnumForElementName(typeof(ReasonFieldIndex), "ReasonEntity");
-			this.AddElementFieldInfo("ReasonEntity", "Flag", typeof(System.Boolean), false, false, false, false,  (int)ReasonFieldIndex.Flag, 0, 0, 0);
+			this.AddElementFieldInfo("ReasonEntity", "Flag", typeof(System.Boolean), false, false, false, false,  (int)ReasonFieldIndex.Flag, 2, 0, 0);
 			this.AddElementFieldInfo("ReasonEntity", "Reasonid", typeof(System.String), true, false, false, false,  (int)ReasonFieldIndex.Reasonid, 10, 0, 0);
 			this.AddElementFieldInfo("ReasonEntity", "ReasonName", typeof(System.String), false, false, false, true,  (int)ReasonFieldIndex.ReasonName, 50, 0, 0);
 		}
@@ -981,15 +981,15 @@ namespace DataAccess.HelperClasses
 		private void InitReportFormulaEntityInfo()
 		{
 			this.AddFieldIndexEnumForElementName(typeof(ReportFormulaFieldIndex), "ReportFormulaEntity");
-			this.AddElementFieldInfo("ReportFormulaEntity", "Calculate", typeof(System.Boolean), false, false, false, false,  (int)ReportFormulaFieldIndex.Calculate, 0, 0, 0);
+			this.AddElementFieldInfo("ReportFormulaEntity", "Calculate", typeof(System.Boolean), false, false, false, false,  (int)ReportFormulaFieldIndex.Calculate, 2, 0, 0);
 			this.AddElementFieldInfo("ReportFormulaEntity", "Code", typeof(System.String), false, false, false, true,  (int)ReportFormulaFieldIndex.Code, 10, 0, 0);
 			this.AddElementFieldInfo("ReportFormulaEntity", "Formula", typeof(System.String), false, false, false, true,  (int)ReportFormulaFieldIndex.Formula, 50, 0, 0);
 			this.AddElementFieldInfo("ReportFormulaEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)ReportFormulaFieldIndex.Id, 0, 0, 10);
 			this.AddElementFieldInfo("ReportFormulaEntity", "Illu", typeof(System.String), false, false, false, true,  (int)ReportFormulaFieldIndex.Illu, 10, 0, 0);
 			this.AddElementFieldInfo("ReportFormulaEntity", "ItemsName", typeof(System.String), false, false, false, true,  (int)ReportFormulaFieldIndex.ItemsName, 50, 0, 0);
 			this.AddElementFieldInfo("ReportFormulaEntity", "Longorshortterm", typeof(Nullable<System.Int32>), false, false, false, true,  (int)ReportFormulaFieldIndex.Longorshortterm, 0, 0, 10);
-			this.AddElementFieldInfo("ReportFormulaEntity", "Order", typeof(System.Int32), false, false, false, false,  (int)ReportFormulaFieldIndex.Order, 0, 0, 10);
-			this.AddElementFieldInfo("ReportFormulaEntity", "Print", typeof(System.Boolean), false, false, false, false,  (int)ReportFormulaFieldIndex.Print, 0, 0, 0);
+			this.AddElementFieldInfo("ReportFormulaEntity", "Order", typeof(System.Int32), false, false, false, false,  (int)ReportFormulaFieldIndex.Order, 0, 0, 3);
+			this.AddElementFieldInfo("ReportFormulaEntity", "Print", typeof(System.Boolean), false, false, false, false,  (int)ReportFormulaFieldIndex.Print, 2, 0, 0);
 			this.AddElementFieldInfo("ReportFormulaEntity", "ReportItemId", typeof(Nullable<System.Int32>), false, true, false, true,  (int)ReportFormulaFieldIndex.ReportItemId, 0, 0, 10);
 		}
 
@@ -1017,7 +1017,7 @@ namespace DataAccess.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(ReportSectionFieldIndex), "ReportSectionEntity");
 			this.AddElementFieldInfo("ReportSectionEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)ReportSectionFieldIndex.Id, 0, 0, 10);
-			this.AddElementFieldInfo("ReportSectionEntity", "Indebit", typeof(System.Boolean), false, false, false, false,  (int)ReportSectionFieldIndex.Indebit, 0, 0, 0);
+			this.AddElementFieldInfo("ReportSectionEntity", "Indebit", typeof(System.Boolean), false, false, false, false,  (int)ReportSectionFieldIndex.Indebit, 2, 0, 0);
 			this.AddElementFieldInfo("ReportSectionEntity", "SectionName", typeof(System.String), false, false, false, true,  (int)ReportSectionFieldIndex.SectionName, 50, 0, 0);
 		}
 
@@ -1060,7 +1060,7 @@ namespace DataAccess.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(SystemUserFieldIndex), "SystemUserEntity");
 			this.AddElementFieldInfo("SystemUserEntity", "FullName", typeof(System.String), false, false, false, true,  (int)SystemUserFieldIndex.FullName, 100, 0, 0);
-			this.AddElementFieldInfo("SystemUserEntity", "IsActive", typeof(System.Boolean), false, false, false, false,  (int)SystemUserFieldIndex.IsActive, 0, 0, 0);
+			this.AddElementFieldInfo("SystemUserEntity", "IsActive", typeof(System.Boolean), false, false, false, false,  (int)SystemUserFieldIndex.IsActive, 2, 0, 0);
 			this.AddElementFieldInfo("SystemUserEntity", "Password", typeof(System.String), false, false, false, false,  (int)SystemUserFieldIndex.Password, 255, 0, 0);
 			this.AddElementFieldInfo("SystemUserEntity", "RoleMask", typeof(System.Int32), false, false, false, false,  (int)SystemUserFieldIndex.RoleMask, 0, 0, 10);
 			this.AddElementFieldInfo("SystemUserEntity", "Username", typeof(System.String), true, false, false, false,  (int)SystemUserFieldIndex.Username, 50, 0, 0);
@@ -1072,11 +1072,11 @@ namespace DataAccess.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(TaxAccountConfigFieldIndex), "TaxAccountConfigEntity");
 			this.AddElementFieldInfo("TaxAccountConfigEntity", "CompanyName", typeof(System.String), false, false, false, true,  (int)TaxAccountConfigFieldIndex.CompanyName, 255, 0, 0);
 			this.AddElementFieldInfo("TaxAccountConfigEntity", "CreatedAt", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)TaxAccountConfigFieldIndex.CreatedAt, 0, 0, 0);
-			this.AddElementFieldInfo("TaxAccountConfigEntity", "EncryptedPassword", typeof(System.String), false, false, false, true,  (int)TaxAccountConfigFieldIndex.EncryptedPassword, 2147483647, 0, 0);
+			this.AddElementFieldInfo("TaxAccountConfigEntity", "EncryptedPassword", typeof(System.String), false, false, false, true,  (int)TaxAccountConfigFieldIndex.EncryptedPassword, 536870911, 0, 0);
 			this.AddElementFieldInfo("TaxAccountConfigEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)TaxAccountConfigFieldIndex.Id, 0, 0, 10);
 			this.AddElementFieldInfo("TaxAccountConfigEntity", "LastSyncDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)TaxAccountConfigFieldIndex.LastSyncDate, 0, 0, 0);
 			this.AddElementFieldInfo("TaxAccountConfigEntity", "TaxCode", typeof(System.String), false, false, false, false,  (int)TaxAccountConfigFieldIndex.TaxCode, 20, 0, 0);
-			this.AddElementFieldInfo("TaxAccountConfigEntity", "Token", typeof(System.String), false, false, false, true,  (int)TaxAccountConfigFieldIndex.Token, 2147483647, 0, 0);
+			this.AddElementFieldInfo("TaxAccountConfigEntity", "Token", typeof(System.String), false, false, false, true,  (int)TaxAccountConfigFieldIndex.Token, 536870911, 0, 0);
 			this.AddElementFieldInfo("TaxAccountConfigEntity", "TokenExpiresAt", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)TaxAccountConfigFieldIndex.TokenExpiresAt, 0, 0, 0);
 			this.AddElementFieldInfo("TaxAccountConfigEntity", "UpdatedAt", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)TaxAccountConfigFieldIndex.UpdatedAt, 0, 0, 0);
 		}
@@ -1085,13 +1085,13 @@ namespace DataAccess.HelperClasses
 		private void InitTaxInvoiceEntityInfo()
 		{
 			this.AddFieldIndexEnumForElementName(typeof(TaxInvoiceFieldIndex), "TaxInvoiceEntity");
-			this.AddElementFieldInfo("TaxInvoiceEntity", "BuyerAddress", typeof(System.String), false, false, false, true,  (int)TaxInvoiceFieldIndex.BuyerAddress, 2147483647, 0, 0);
+			this.AddElementFieldInfo("TaxInvoiceEntity", "BuyerAddress", typeof(System.String), false, false, false, true,  (int)TaxInvoiceFieldIndex.BuyerAddress, 536870911, 0, 0);
 			this.AddElementFieldInfo("TaxInvoiceEntity", "BuyerName", typeof(System.String), false, false, false, true,  (int)TaxInvoiceFieldIndex.BuyerName, 255, 0, 0);
 			this.AddElementFieldInfo("TaxInvoiceEntity", "BuyerTaxCode", typeof(System.String), false, false, false, true,  (int)TaxInvoiceFieldIndex.BuyerTaxCode, 20, 0, 0);
 			this.AddElementFieldInfo("TaxInvoiceEntity", "CurrencyId", typeof(System.String), false, false, false, true,  (int)TaxInvoiceFieldIndex.CurrencyId, 5, 0, 0);
 			this.AddElementFieldInfo("TaxInvoiceEntity", "Direction", typeof(System.String), false, false, false, false,  (int)TaxInvoiceFieldIndex.Direction, 10, 0, 0);
 			this.AddElementFieldInfo("TaxInvoiceEntity", "DownloadedAt", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)TaxInvoiceFieldIndex.DownloadedAt, 0, 0, 0);
-			this.AddElementFieldInfo("TaxInvoiceEntity", "ExchangeRate", typeof(Nullable<System.Double>), false, false, false, true,  (int)TaxInvoiceFieldIndex.ExchangeRate, 0, 0, 15);
+			this.AddElementFieldInfo("TaxInvoiceEntity", "ExchangeRate", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)TaxInvoiceFieldIndex.ExchangeRate, 0, 4, 19);
 			this.AddElementFieldInfo("TaxInvoiceEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)TaxInvoiceFieldIndex.Id, 0, 0, 10);
 			this.AddElementFieldInfo("TaxInvoiceEntity", "InvoiceDate", typeof(System.DateTime), false, false, false, false,  (int)TaxInvoiceFieldIndex.InvoiceDate, 0, 0, 0);
 			this.AddElementFieldInfo("TaxInvoiceEntity", "InvoiceNo", typeof(System.Int32), false, false, false, false,  (int)TaxInvoiceFieldIndex.InvoiceNo, 0, 0, 10);
@@ -1100,9 +1100,9 @@ namespace DataAccess.HelperClasses
 			this.AddElementFieldInfo("TaxInvoiceEntity", "InvoiceStatus", typeof(Nullable<System.Int32>), false, false, false, true,  (int)TaxInvoiceFieldIndex.InvoiceStatus, 0, 0, 10);
 			this.AddElementFieldInfo("TaxInvoiceEntity", "InvoiceTemplate", typeof(System.String), false, false, false, false,  (int)TaxInvoiceFieldIndex.InvoiceTemplate, 10, 0, 0);
 			this.AddElementFieldInfo("TaxInvoiceEntity", "ProcessStatus", typeof(Nullable<System.Int32>), false, false, false, true,  (int)TaxInvoiceFieldIndex.ProcessStatus, 0, 0, 10);
-			this.AddElementFieldInfo("TaxInvoiceEntity", "RawJsonPath", typeof(System.String), false, false, false, true,  (int)TaxInvoiceFieldIndex.RawJsonPath, 2147483647, 0, 0);
+			this.AddElementFieldInfo("TaxInvoiceEntity", "RawJsonPath", typeof(System.String), false, false, false, true,  (int)TaxInvoiceFieldIndex.RawJsonPath, 536870911, 0, 0);
 			this.AddElementFieldInfo("TaxInvoiceEntity", "ReconcileNote", typeof(System.String), false, false, false, true,  (int)TaxInvoiceFieldIndex.ReconcileNote, 255, 0, 0);
-			this.AddElementFieldInfo("TaxInvoiceEntity", "SellerAddress", typeof(System.String), false, false, false, true,  (int)TaxInvoiceFieldIndex.SellerAddress, 2147483647, 0, 0);
+			this.AddElementFieldInfo("TaxInvoiceEntity", "SellerAddress", typeof(System.String), false, false, false, true,  (int)TaxInvoiceFieldIndex.SellerAddress, 536870911, 0, 0);
 			this.AddElementFieldInfo("TaxInvoiceEntity", "SellerName", typeof(System.String), false, false, false, true,  (int)TaxInvoiceFieldIndex.SellerName, 255, 0, 0);
 			this.AddElementFieldInfo("TaxInvoiceEntity", "SellerTaxCode", typeof(System.String), false, false, false, false,  (int)TaxInvoiceFieldIndex.SellerTaxCode, 20, 0, 0);
 			this.AddElementFieldInfo("TaxInvoiceEntity", "SignedDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)TaxInvoiceFieldIndex.SignedDate, 0, 0, 0);
@@ -1112,7 +1112,7 @@ namespace DataAccess.HelperClasses
 			this.AddElementFieldInfo("TaxInvoiceEntity", "TotalDiscountAmount", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)TaxInvoiceFieldIndex.TotalDiscountAmount, 0, 2, 19);
 			this.AddElementFieldInfo("TaxInvoiceEntity", "TotalTaxAmount", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)TaxInvoiceFieldIndex.TotalTaxAmount, 0, 2, 19);
 			this.AddElementFieldInfo("TaxInvoiceEntity", "VoucherId", typeof(System.String), false, false, false, true,  (int)TaxInvoiceFieldIndex.VoucherId, 50, 0, 0);
-			this.AddElementFieldInfo("TaxInvoiceEntity", "XmlFilePath", typeof(System.String), false, false, false, true,  (int)TaxInvoiceFieldIndex.XmlFilePath, 2147483647, 0, 0);
+			this.AddElementFieldInfo("TaxInvoiceEntity", "XmlFilePath", typeof(System.String), false, false, false, true,  (int)TaxInvoiceFieldIndex.XmlFilePath, 536870911, 0, 0);
 		}
 
 		/// <summary>Inits TaxInvoiceDetailEntity's info objects</summary>
@@ -1124,7 +1124,7 @@ namespace DataAccess.HelperClasses
 			this.AddElementFieldInfo("TaxInvoiceDetailEntity", "ItemCode", typeof(System.String), false, false, false, true,  (int)TaxInvoiceDetailFieldIndex.ItemCode, 50, 0, 0);
 			this.AddElementFieldInfo("TaxInvoiceDetailEntity", "ItemName", typeof(System.String), false, false, false, true,  (int)TaxInvoiceDetailFieldIndex.ItemName, 255, 0, 0);
 			this.AddElementFieldInfo("TaxInvoiceDetailEntity", "LineNo", typeof(Nullable<System.Int32>), false, false, false, true,  (int)TaxInvoiceDetailFieldIndex.LineNo, 0, 0, 10);
-			this.AddElementFieldInfo("TaxInvoiceDetailEntity", "Quantity", typeof(Nullable<System.Double>), false, false, false, true,  (int)TaxInvoiceDetailFieldIndex.Quantity, 0, 0, 15);
+			this.AddElementFieldInfo("TaxInvoiceDetailEntity", "Quantity", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)TaxInvoiceDetailFieldIndex.Quantity, 0, 4, 19);
 			this.AddElementFieldInfo("TaxInvoiceDetailEntity", "TaxAmount", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)TaxInvoiceDetailFieldIndex.TaxAmount, 0, 2, 19);
 			this.AddElementFieldInfo("TaxInvoiceDetailEntity", "TaxInvoiceId", typeof(System.Int32), false, true, false, false,  (int)TaxInvoiceDetailFieldIndex.TaxInvoiceId, 0, 0, 10);
 			this.AddElementFieldInfo("TaxInvoiceDetailEntity", "TaxRate", typeof(System.String), false, false, false, true,  (int)TaxInvoiceDetailFieldIndex.TaxRate, 20, 0, 0);
@@ -1165,7 +1165,7 @@ namespace DataAccess.HelperClasses
 		private void InitTaxRateEntityInfo()
 		{
 			this.AddFieldIndexEnumForElementName(typeof(TaxRateFieldIndex), "TaxRateEntity");
-			this.AddElementFieldInfo("TaxRateEntity", "Rate", typeof(Nullable<System.Double>), false, false, false, true,  (int)TaxRateFieldIndex.Rate, 0, 0, 15);
+			this.AddElementFieldInfo("TaxRateEntity", "Rate", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)TaxRateFieldIndex.Rate, 0, 4, 19);
 			this.AddElementFieldInfo("TaxRateEntity", "Taxratedes", typeof(System.String), false, false, false, true,  (int)TaxRateFieldIndex.Taxratedes, 50, 0, 0);
 			this.AddElementFieldInfo("TaxRateEntity", "Taxrateid", typeof(System.Int32), true, false, false, false,  (int)TaxRateFieldIndex.Taxrateid, 0, 0, 10);
 		}
@@ -1175,14 +1175,14 @@ namespace DataAccess.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(TrialBalanceFieldIndex), "TrialBalanceEntity");
 			this.AddElementFieldInfo("TrialBalanceEntity", "AccountId", typeof(System.String), false, true, false, true,  (int)TrialBalanceFieldIndex.AccountId, 10, 0, 0);
-			this.AddElementFieldInfo("TrialBalanceEntity", "Begincredit", typeof(Nullable<System.Double>), false, false, false, true,  (int)TrialBalanceFieldIndex.Begincredit, 0, 0, 15);
-			this.AddElementFieldInfo("TrialBalanceEntity", "Begindebit", typeof(Nullable<System.Double>), false, false, false, true,  (int)TrialBalanceFieldIndex.Begindebit, 0, 0, 15);
+			this.AddElementFieldInfo("TrialBalanceEntity", "Begincredit", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)TrialBalanceFieldIndex.Begincredit, 0, 4, 19);
+			this.AddElementFieldInfo("TrialBalanceEntity", "Begindebit", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)TrialBalanceFieldIndex.Begindebit, 0, 4, 19);
 			this.AddElementFieldInfo("TrialBalanceEntity", "CategoryId", typeof(System.String), false, false, false, true,  (int)TrialBalanceFieldIndex.CategoryId, 1, 0, 0);
-			this.AddElementFieldInfo("TrialBalanceEntity", "Endcredit", typeof(Nullable<System.Double>), false, false, false, true,  (int)TrialBalanceFieldIndex.Endcredit, 0, 0, 15);
-			this.AddElementFieldInfo("TrialBalanceEntity", "Enddebit", typeof(Nullable<System.Double>), false, false, false, true,  (int)TrialBalanceFieldIndex.Enddebit, 0, 0, 15);
+			this.AddElementFieldInfo("TrialBalanceEntity", "Endcredit", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)TrialBalanceFieldIndex.Endcredit, 0, 4, 19);
+			this.AddElementFieldInfo("TrialBalanceEntity", "Enddebit", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)TrialBalanceFieldIndex.Enddebit, 0, 4, 19);
 			this.AddElementFieldInfo("TrialBalanceEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)TrialBalanceFieldIndex.Id, 0, 0, 10);
-			this.AddElementFieldInfo("TrialBalanceEntity", "Intcredit", typeof(Nullable<System.Double>), false, false, false, true,  (int)TrialBalanceFieldIndex.Intcredit, 0, 0, 15);
-			this.AddElementFieldInfo("TrialBalanceEntity", "Intdebit", typeof(Nullable<System.Double>), false, false, false, true,  (int)TrialBalanceFieldIndex.Intdebit, 0, 0, 15);
+			this.AddElementFieldInfo("TrialBalanceEntity", "Intcredit", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)TrialBalanceFieldIndex.Intcredit, 0, 4, 19);
+			this.AddElementFieldInfo("TrialBalanceEntity", "Intdebit", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)TrialBalanceFieldIndex.Intdebit, 0, 4, 19);
 			this.AddElementFieldInfo("TrialBalanceEntity", "Splite", typeof(Nullable<System.Int32>), false, false, false, true,  (int)TrialBalanceFieldIndex.Splite, 0, 0, 10);
 		}
 
@@ -1201,8 +1201,8 @@ namespace DataAccess.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(Vat3TaxItemFieldIndex), "Vat3TaxItemEntity");
 			this.AddElementFieldInfo("Vat3TaxItemEntity", "Code", typeof(System.String), false, false, false, true,  (int)Vat3TaxItemFieldIndex.Code, 50, 0, 0);
 			this.AddElementFieldInfo("Vat3TaxItemEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)Vat3TaxItemFieldIndex.Id, 0, 0, 10);
-			this.AddElementFieldInfo("Vat3TaxItemEntity", "IsBold", typeof(System.Boolean), false, false, false, false,  (int)Vat3TaxItemFieldIndex.IsBold, 0, 0, 0);
-			this.AddElementFieldInfo("Vat3TaxItemEntity", "IsItalic", typeof(System.Boolean), false, false, false, false,  (int)Vat3TaxItemFieldIndex.IsItalic, 0, 0, 0);
+			this.AddElementFieldInfo("Vat3TaxItemEntity", "IsBold", typeof(System.Boolean), false, false, false, false,  (int)Vat3TaxItemFieldIndex.IsBold, 2, 0, 0);
+			this.AddElementFieldInfo("Vat3TaxItemEntity", "IsItalic", typeof(System.Boolean), false, false, false, false,  (int)Vat3TaxItemFieldIndex.IsItalic, 2, 0, 0);
 			this.AddElementFieldInfo("Vat3TaxItemEntity", "ItemName", typeof(System.String), false, false, false, true,  (int)Vat3TaxItemFieldIndex.ItemName, 255, 0, 0);
 		}
 
@@ -1212,8 +1212,8 @@ namespace DataAccess.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(VatDeclareItemFieldIndex), "VatDeclareItemEntity");
 			this.AddElementFieldInfo("VatDeclareItemEntity", "Code", typeof(System.String), false, false, false, true,  (int)VatDeclareItemFieldIndex.Code, 50, 0, 0);
 			this.AddElementFieldInfo("VatDeclareItemEntity", "Id", typeof(System.Int32), true, false, true, false,  (int)VatDeclareItemFieldIndex.Id, 0, 0, 10);
-			this.AddElementFieldInfo("VatDeclareItemEntity", "IsBold", typeof(System.Boolean), false, false, false, false,  (int)VatDeclareItemFieldIndex.IsBold, 0, 0, 0);
-			this.AddElementFieldInfo("VatDeclareItemEntity", "IsItalic", typeof(System.Boolean), false, false, false, false,  (int)VatDeclareItemFieldIndex.IsItalic, 0, 0, 0);
+			this.AddElementFieldInfo("VatDeclareItemEntity", "IsBold", typeof(System.Boolean), false, false, false, false,  (int)VatDeclareItemFieldIndex.IsBold, 2, 0, 0);
+			this.AddElementFieldInfo("VatDeclareItemEntity", "IsItalic", typeof(System.Boolean), false, false, false, false,  (int)VatDeclareItemFieldIndex.IsItalic, 2, 0, 0);
 			this.AddElementFieldInfo("VatDeclareItemEntity", "ItemName", typeof(System.String), false, false, false, true,  (int)VatDeclareItemFieldIndex.ItemName, 255, 0, 0);
 		}
 
@@ -1221,12 +1221,12 @@ namespace DataAccess.HelperClasses
 		private void InitVatEntryEntityInfo()
 		{
 			this.AddFieldIndexEnumForElementName(typeof(VatEntryFieldIndex), "VatEntryEntity");
-			this.AddElementFieldInfo("VatEntryEntity", "Amount", typeof(Nullable<System.Double>), false, false, false, true,  (int)VatEntryFieldIndex.Amount, 0, 0, 15);
-			this.AddElementFieldInfo("VatEntryEntity", "Beforetaxamount", typeof(Nullable<System.Double>), false, false, false, true,  (int)VatEntryFieldIndex.Beforetaxamount, 0, 0, 15);
+			this.AddElementFieldInfo("VatEntryEntity", "Amount", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)VatEntryFieldIndex.Amount, 0, 4, 19);
+			this.AddElementFieldInfo("VatEntryEntity", "Beforetaxamount", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)VatEntryFieldIndex.Beforetaxamount, 0, 4, 19);
 			this.AddElementFieldInfo("VatEntryEntity", "Catid", typeof(Nullable<System.Int16>), false, false, false, true,  (int)VatEntryFieldIndex.Catid, 0, 0, 5);
 			this.AddElementFieldInfo("VatEntryEntity", "Id", typeof(Nullable<System.Int32>), false, true, false, true,  (int)VatEntryFieldIndex.Id, 0, 0, 10);
 			this.AddElementFieldInfo("VatEntryEntity", "Lineid", typeof(System.Int32), true, false, true, false,  (int)VatEntryFieldIndex.Lineid, 0, 0, 10);
-			this.AddElementFieldInfo("VatEntryEntity", "Rate", typeof(Nullable<System.Double>), false, false, false, true,  (int)VatEntryFieldIndex.Rate, 0, 0, 15);
+			this.AddElementFieldInfo("VatEntryEntity", "Rate", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)VatEntryFieldIndex.Rate, 0, 4, 19);
 			this.AddElementFieldInfo("VatEntryEntity", "Remark", typeof(System.String), false, false, false, true,  (int)VatEntryFieldIndex.Remark, 255, 0, 0);
 			this.AddElementFieldInfo("VatEntryEntity", "Serialno", typeof(System.String), false, false, false, true,  (int)VatEntryFieldIndex.Serialno, 30, 0, 0);
 			this.AddElementFieldInfo("VatEntryEntity", "Taxno", typeof(System.String), false, false, false, true,  (int)VatEntryFieldIndex.Taxno, 50, 0, 0);

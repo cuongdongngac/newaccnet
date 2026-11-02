@@ -179,7 +179,7 @@ namespace NewaccNet.Core.Staging
                         Quantity = 1,
                         UnitPrice = invoice.TotalAmountWithoutTax,
                         Amount = invoice.TotalAmountWithoutTax,
-                        VatRate = invoice.TotalAmountWithoutTax > 0 ? (double)(invoice.TotalTaxAmount / invoice.TotalAmountWithoutTax * 100) : 10,
+                        VatRate = invoice.TotalAmountWithoutTax > 0 ? (invoice.TotalTaxAmount / invoice.TotalAmountWithoutTax * 100m) : 10m,
                         VatAmount = invoice.TotalTaxAmount
                     },
                     Resolved = new DraftLineResolved
@@ -235,16 +235,16 @@ namespace NewaccNet.Core.Staging
             return draft;
         }
 
-        private static double ParseVatRate(string? taxRateStr)
+        private static decimal ParseVatRate(string? taxRateStr)
         {
-            if (string.IsNullOrWhiteSpace(taxRateStr)) return 10;
+            if (string.IsNullOrWhiteSpace(taxRateStr)) return 10m;
             var clean = taxRateStr.Replace("%", "").Trim();
-            if (double.TryParse(clean, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var rate))
+            if (decimal.TryParse(clean, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var rate))
             {
-                if (rate <= 1.0 && rate > 0) return rate * 100;
+                if (rate <= 1.0m && rate > 0) return rate * 100m;
                 return rate;
             }
-            return 10;
+            return 10m;
         }
 
         /// <summary>
@@ -284,14 +284,14 @@ namespace NewaccNet.Core.Staging
                     MaterialId = line.Resolved.MaterialId,
                     MaterialName = line.Raw.ItemName,
                     Unit = line.Raw.Unit,
-                    Quantity = (double)line.Raw.Quantity,
-                    Price = (double)line.Raw.UnitPrice,
-                    Amount = (double)line.Raw.Amount,
-                    SellPrice = (double)line.Raw.UnitPrice,
-                    SellAmount = (double)line.Raw.Amount,
+                    Quantity = line.Raw.Quantity,
+                    Price = line.Raw.UnitPrice,
+                    Amount = line.Raw.Amount,
+                    SellPrice = line.Raw.UnitPrice,
+                    SellAmount = line.Raw.Amount,
                     Taxrateid = taxRateId,
                     TaxRate = line.Raw.VatRate,
-                    TaxAmount = (double)line.Raw.VatAmount,
+                    TaxAmount = line.Raw.VatAmount,
                     Note = string.Empty
                 };
 

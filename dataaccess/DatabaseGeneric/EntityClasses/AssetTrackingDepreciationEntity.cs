@@ -162,7 +162,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathInterestRate { get { return _staticMetaData.GetPrefetchPathElement("InterestRate", CommonEntityBase.CreateEntityCollection<InterestRateEntity>()); } }
 
 		/// <summary>The AsaccountId property of the Entity AssetTrackingDepreciation<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AssetTrackingDepreciation"."AsaccountId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AssetTrackingDepreciation"."AsaccountId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String AsaccountId
 		{
 			get { return (System.String)GetValue((int)AssetTrackingDepreciationFieldIndex.AsaccountId, true); }
@@ -170,7 +170,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The AssetId property of the Entity AssetTrackingDepreciation<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AssetTrackingDepreciation"."AssetId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		/// <remarks>Mapped on  table field: "AssetTrackingDepreciation"."AssetId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
 		public virtual System.String AssetId
 		{
 			get { return (System.String)GetValue((int)AssetTrackingDepreciationFieldIndex.AssetId, true); }
@@ -178,7 +178,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Begindate property of the Entity AssetTrackingDepreciation<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AssetTrackingDepreciation"."Begindate".<br/>Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AssetTrackingDepreciation"."Begindate".<br/>Table field type characteristics (type, precision, scale, length): Date, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.DateTime> Begindate
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)AssetTrackingDepreciationFieldIndex.Begindate, false); }
@@ -186,23 +186,23 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Depprice property of the Entity AssetTrackingDepreciation<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AssetTrackingDepreciation"."Depprice".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> Depprice
+		/// <remarks>Mapped on  table field: "AssetTrackingDepreciation"."Depprice".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 19, 4, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Decimal> Depprice
 		{
-			get { return (Nullable<System.Double>)GetValue((int)AssetTrackingDepreciationFieldIndex.Depprice, false); }
+			get { return (Nullable<System.Decimal>)GetValue((int)AssetTrackingDepreciationFieldIndex.Depprice, false); }
 			set { SetValue((int)AssetTrackingDepreciationFieldIndex.Depprice, value); }
 		}
 
 		/// <summary>The Deprate property of the Entity AssetTrackingDepreciation<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AssetTrackingDepreciation"."Deprate".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> Deprate
+		/// <remarks>Mapped on  table field: "AssetTrackingDepreciation"."Deprate".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 19, 4, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Decimal> Deprate
 		{
-			get { return (Nullable<System.Double>)GetValue((int)AssetTrackingDepreciationFieldIndex.Deprate, false); }
+			get { return (Nullable<System.Decimal>)GetValue((int)AssetTrackingDepreciationFieldIndex.Deprate, false); }
 			set { SetValue((int)AssetTrackingDepreciationFieldIndex.Deprate, value); }
 		}
 
 		/// <summary>The Deptid property of the Entity AssetTrackingDepreciation<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AssetTrackingDepreciation"."Deptid".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AssetTrackingDepreciation"."Deptid".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Deptid
 		{
 			get { return (System.String)GetValue((int)AssetTrackingDepreciationFieldIndex.Deptid, true); }
@@ -210,7 +210,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Enddate property of the Entity AssetTrackingDepreciation<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AssetTrackingDepreciation"."Enddate".<br/>Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AssetTrackingDepreciation"."Enddate".<br/>Table field type characteristics (type, precision, scale, length): Date, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.DateTime> Enddate
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)AssetTrackingDepreciationFieldIndex.Enddate, false); }
@@ -218,7 +218,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The ExaccountId property of the Entity AssetTrackingDepreciation<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AssetTrackingDepreciation"."ExaccountId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AssetTrackingDepreciation"."ExaccountId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String ExaccountId
 		{
 			get { return (System.String)GetValue((int)AssetTrackingDepreciationFieldIndex.ExaccountId, true); }
@@ -226,7 +226,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The ExobjectId property of the Entity AssetTrackingDepreciation<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AssetTrackingDepreciation"."ExobjectId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AssetTrackingDepreciation"."ExobjectId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String ExobjectId
 		{
 			get { return (System.String)GetValue((int)AssetTrackingDepreciationFieldIndex.ExobjectId, true); }
@@ -234,26 +234,26 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Qty property of the Entity AssetTrackingDepreciation<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AssetTrackingDepreciation"."Qty".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> Qty
+		/// <remarks>Mapped on  table field: "AssetTrackingDepreciation"."Qty".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 19, 4, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Decimal> Qty
 		{
-			get { return (Nullable<System.Double>)GetValue((int)AssetTrackingDepreciationFieldIndex.Qty, false); }
+			get { return (Nullable<System.Decimal>)GetValue((int)AssetTrackingDepreciationFieldIndex.Qty, false); }
 			set { SetValue((int)AssetTrackingDepreciationFieldIndex.Qty, value); }
 		}
 
 		/// <summary>The Remainvalue property of the Entity AssetTrackingDepreciation<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AssetTrackingDepreciation"."Remainvalue".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> Remainvalue
+		/// <remarks>Mapped on  table field: "AssetTrackingDepreciation"."Remainvalue".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 19, 4, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Decimal> Remainvalue
 		{
-			get { return (Nullable<System.Double>)GetValue((int)AssetTrackingDepreciationFieldIndex.Remainvalue, false); }
+			get { return (Nullable<System.Decimal>)GetValue((int)AssetTrackingDepreciationFieldIndex.Remainvalue, false); }
 			set { SetValue((int)AssetTrackingDepreciationFieldIndex.Remainvalue, value); }
 		}
 
 		/// <summary>The Timeusing property of the Entity AssetTrackingDepreciation<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AssetTrackingDepreciation"."Timeusing".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> Timeusing
+		/// <remarks>Mapped on  table field: "AssetTrackingDepreciation"."Timeusing".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 19, 4, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Decimal> Timeusing
 		{
-			get { return (Nullable<System.Double>)GetValue((int)AssetTrackingDepreciationFieldIndex.Timeusing, false); }
+			get { return (Nullable<System.Decimal>)GetValue((int)AssetTrackingDepreciationFieldIndex.Timeusing, false); }
 			set { SetValue((int)AssetTrackingDepreciationFieldIndex.Timeusing, value); }
 		}
 

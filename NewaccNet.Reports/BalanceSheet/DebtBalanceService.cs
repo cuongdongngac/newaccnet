@@ -90,12 +90,12 @@ namespace NewaccNet.Reports.BalanceSheet
                 {
                     AccountId = g.Key.AccountId,
                     LongtermFlag = (short)g.Key.LongtermFlag,
-                    Begindebit = (double)sumBeginDebit,
-                    Begincredit = (double)sumBeginCredit,
-                    Indebit = (double)sumInDebit,
-                    Incredit = (double)sumInCredit,
-                    Enddebit = (double)sumEndDebit,
-                    Endcredit = (double)sumEndCredit,
+                    Begindebit = sumBeginDebit,
+                    Begincredit = sumBeginCredit,
+                    Indebit = sumInDebit,
+                    Incredit = sumInCredit,
+                    Enddebit = sumEndDebit,
+                    Endcredit = sumEndCredit,
                 });
             }
 

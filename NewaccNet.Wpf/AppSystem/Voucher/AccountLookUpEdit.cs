@@ -37,6 +37,14 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
             DependencyProperty.Register(nameof(ShowDetailButton), typeof(bool), typeof(AccountLookUpEdit),
                 new FrameworkPropertyMetadata(true, OnShowDetailButtonChanged));
 
+        public static readonly DependencyProperty ButtonOnlyModeProperty =
+            DependencyProperty.Register(nameof(ButtonOnlyMode), typeof(bool), typeof(AccountLookUpEdit),
+                new FrameworkPropertyMetadata(false, OnButtonOnlyModeChanged));
+
+        public static readonly DependencyProperty ButtonTextProperty =
+            DependencyProperty.Register(nameof(ButtonText), typeof(string), typeof(AccountLookUpEdit),
+                new FrameworkPropertyMetadata("Chi tiết công nợ...", OnButtonTextChanged));
+
         public JournalEntryEntity JournalEntry
         {
             get => (JournalEntryEntity)GetValue(JournalEntryProperty);
@@ -53,6 +61,34 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
         {
             get => (bool)GetValue(ShowDetailButtonProperty);
             set => SetValue(ShowDetailButtonProperty, value);
+        }
+
+        public bool ButtonOnlyMode
+        {
+            get => (bool)GetValue(ButtonOnlyModeProperty);
+            set => SetValue(ButtonOnlyModeProperty, value);
+        }
+
+        public string ButtonText
+        {
+            get => (string)GetValue(ButtonTextProperty);
+            set => SetValue(ButtonTextProperty, value);
+        }
+
+        private static void OnButtonOnlyModeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is AccountLookUpEdit editor)
+            {
+                editor.ApplyButtonOnlyMode((bool)e.NewValue);
+            }
+        }
+
+        private static void OnButtonTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is AccountLookUpEdit editor && editor._detailButton != null && editor.ButtonOnlyMode)
+            {
+                editor._detailButton.Content = e.NewValue?.ToString() ?? "Chi tiết công nợ...";
+            }
         }
 
         private static void OnShowDetailButtonChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -119,6 +155,43 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
         private bool _wasPopupOpened = false;
         private ButtonInfo _detailButton;
 
+        private static readonly Lazy<ControlTemplate> _emptyEditTemplate = new Lazy<ControlTemplate>(() =>
+        {
+            string xaml = @"<ControlTemplate xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""><Grid Width=""0"" Height=""0""/></ControlTemplate>";
+            return (ControlTemplate)System.Windows.Markup.XamlReader.Parse(xaml);
+        });
+
+        private void ApplyButtonOnlyMode(bool enabled)
+        {
+            if (enabled)
+            {
+                this.AllowDefaultButton = false;
+                this.ShowBorder = false;
+                this.IsTextEditable = false;
+                this.Focusable = false;
+                this.EditTemplate = _emptyEditTemplate.Value;
+                if (_detailButton != null)
+                {
+                    _detailButton.Content = ButtonText;
+                    _detailButton.ToolTip = "Mở form chi tiết công nợ";
+                }
+            }
+            else
+            {
+                this.AllowDefaultButton = true;
+                this.ShowBorder = true;
+                this.IsTextEditable = true;
+                this.Focusable = true;
+                this.ClearValue(EditTemplateProperty);
+                if (_detailButton != null)
+                {
+                    _detailButton.Content = "...";
+                    _detailButton.ToolTip = "Chi tiết tài khoản (Mở form phụ)";
+                }
+            }
+            UpdateAccountAppearance(this.EditValue?.ToString());
+        }
+
         public static bool IsDetailAccount(string accountId)
         {
             if (string.IsNullOrEmpty(accountId)) return false;
@@ -129,6 +202,11 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
         public void UpdateAccountAppearance(string accountId)
         {
             bool hasDetail = IsDetailAccount(accountId);
+            if (ButtonOnlyMode)
+            {
+                this.Visibility = hasDetail ? Visibility.Visible : Visibility.Collapsed;
+            }
+
             if (hasDetail)
             {
                 this.Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(21, 101, 192)); // Xanh đậm #1565C0
@@ -136,7 +214,7 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
                 if (_detailButton != null)
                 {
                     _detailButton.IsEnabled = true;
-                    _detailButton.ToolTip = "Tài khoản có chi tiết (Bấm để xem/sửa chi tiết con)";
+                    _detailButton.ToolTip = ButtonOnlyMode ? "Mở form chi tiết công nợ" : "Tài khoản có chi tiết (Bấm để xem/sửa chi tiết con)";
                 }
             }
             else
@@ -184,6 +262,10 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
 
         private void AccountLookUpEdit_Loaded(object sender, RoutedEventArgs e)
         {
+            if (ButtonOnlyMode)
+            {
+                ApplyButtonOnlyMode(true);
+            }
             if (_detailButton != null)
             {
                 _detailButton.Visibility = ShowDetailButton ? Visibility.Visible : Visibility.Collapsed;

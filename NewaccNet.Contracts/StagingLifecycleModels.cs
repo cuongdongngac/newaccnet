@@ -171,7 +171,7 @@ namespace NewaccNet.Contracts
         public string CreditAccountId { get; set; } = "3311";
 
         // Thuế GTGT
-        public double VatRate { get; set; } = 10;
+        public decimal VatRate { get; set; } = 10m;
         public decimal VatAmount { get; set; }
         public string VatDebitAccountId { get; set; } = "13311";
 

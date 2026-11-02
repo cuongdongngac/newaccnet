@@ -67,6 +67,14 @@ namespace NewaccNet.Core.Data
         public Dictionary<string, CashVoucherConfigItemDto> Payment { get; set; } = new(StringComparer.OrdinalIgnoreCase);
     }
 
+    public class PaymentMethodOptionDto
+    {
+        public string Code { get; set; } = "";        // "Debt", "Cash", "Bank", "Advance", ...
+        public string Name { get; set; } = "";        // "Chưa thanh toán (Công nợ)", "Tiền mặt", ...
+        public string AccountId { get; set; } = "";   // "3311", "1111", "1121", "141", ...
+        public bool IsDebt { get; set; } = false;     // True nếu theo dõi công nợ đối tác
+    }
+
     public class InventoryVoucherConfigItemDto
     {
         public string Code { get; set; } = "";
@@ -78,6 +86,45 @@ namespace NewaccNet.Core.Data
         public string CostAccountId { get; set; } = "";
         public string RevenueAccountId { get; set; } = "";
         public string PartnerType { get; set; } = "";
+
+        // Danh sách các tình huống thanh toán được cấu hình động
+        public List<PaymentMethodOptionDto> PaymentMethods { get; set; } = new();
+
+        public List<PaymentMethodOptionDto> GetEffectivePaymentMethods()
+        {
+            if (PaymentMethods != null && PaymentMethods.Count > 0)
+                return PaymentMethods;
+
+            if (Code == "NM")
+            {
+                return new List<PaymentMethodOptionDto>
+                {
+                    new PaymentMethodOptionDto { Code = "Debt", Name = "Chưa thanh toán (Công nợ)", AccountId = !string.IsNullOrEmpty(TotalAccountId) ? TotalAccountId : "3311", IsDebt = true },
+                    new PaymentMethodOptionDto { Code = "Cash", Name = "Tiền mặt", AccountId = "1111", IsDebt = false },
+                    new PaymentMethodOptionDto { Code = "Bank", Name = "Chuyển khoản", AccountId = "1121", IsDebt = false },
+                    new PaymentMethodOptionDto { Code = "Advance", Name = "Tạm ứng nhân viên", AccountId = "141", IsDebt = false }
+                };
+            }
+            else
+            {
+                return new List<PaymentMethodOptionDto>
+                {
+                    new PaymentMethodOptionDto { Code = "Debt", Name = "Chưa thu tiền (Công nợ)", AccountId = !string.IsNullOrEmpty(TotalAccountId) ? TotalAccountId : "131", IsDebt = true },
+                    new PaymentMethodOptionDto { Code = "Cash", Name = "Tiền mặt", AccountId = "1111", IsDebt = false },
+                    new PaymentMethodOptionDto { Code = "Bank", Name = "Chuyển khoản", AccountId = "1121", IsDebt = false }
+                };
+            }
+        }
+
+        public string GetAccountIdForPaymentType(string? paymentType)
+        {
+            var methods = GetEffectivePaymentMethods();
+            if (string.IsNullOrEmpty(paymentType))
+                return methods.FirstOrDefault()?.AccountId ?? TotalAccountId;
+
+            var match = methods.FirstOrDefault(m => m.Code.Equals(paymentType, StringComparison.OrdinalIgnoreCase));
+            return match != null ? match.AccountId : TotalAccountId;
+        }
     }
 
     public class CashVoucherConfigItemDto
@@ -139,7 +186,14 @@ namespace NewaccNet.Core.Data
                 TaxAccountId = "13311",
                 CostAccountId = "6321",
                 RevenueAccountId = "5111",
-                PartnerType = "Vendor"
+                PartnerType = "Vendor",
+                PaymentMethods = new List<PaymentMethodOptionDto>
+                {
+                    new PaymentMethodOptionDto { Code = "Debt", Name = "Chưa thanh toán (Công nợ)", AccountId = "3311", IsDebt = true },
+                    new PaymentMethodOptionDto { Code = "Cash", Name = "Tiền mặt", AccountId = "1111", IsDebt = false },
+                    new PaymentMethodOptionDto { Code = "Bank", Name = "Chuyển khoản", AccountId = "1121", IsDebt = false },
+                    new PaymentMethodOptionDto { Code = "Advance", Name = "Tạm ứng nhân viên", AccountId = "141", IsDebt = false }
+                }
             };
             cfg.Inventory["XB"] = new InventoryVoucherConfigItemDto
             {
@@ -151,7 +205,13 @@ namespace NewaccNet.Core.Data
                 TaxAccountId = "33311",
                 CostAccountId = "6321",
                 RevenueAccountId = "5111",
-                PartnerType = "Customer"
+                PartnerType = "Customer",
+                PaymentMethods = new List<PaymentMethodOptionDto>
+                {
+                    new PaymentMethodOptionDto { Code = "Debt", Name = "Chưa thu tiền (Công nợ)", AccountId = "131", IsDebt = true },
+                    new PaymentMethodOptionDto { Code = "Cash", Name = "Tiền mặt", AccountId = "1111", IsDebt = false },
+                    new PaymentMethodOptionDto { Code = "Bank", Name = "Chuyển khoản", AccountId = "1121", IsDebt = false }
+                }
             };
             cfg.Inventory["NNB"] = new InventoryVoucherConfigItemDto
             {

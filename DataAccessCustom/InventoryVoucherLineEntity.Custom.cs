@@ -88,11 +88,11 @@ namespace DataAccess.EntityClasses
             return this.MaterialTaxLine;
         }
 
-        public double Amount => Math.Round((this.Quantity ?? 0) * (this.Price ?? 0), 0);
+        public decimal Amount => Math.Round((this.Quantity ?? 0m) * (this.Price ?? 0m), 0);
 
-        public double SellAmount => Math.Round((this.Quantity ?? 0) * (this.SellPrice ?? 0), 0);
+        public decimal SellAmount => Math.Round((this.Quantity ?? 0m) * (this.SellPrice ?? 0m), 0);
 
-        public double TaxAmount
+        public decimal TaxAmount
         {
             get
             {
@@ -100,12 +100,12 @@ namespace DataAccess.EntityClasses
                     || (string.IsNullOrEmpty(this.InventoryVoucher?.VoucherType)
                         && this.InventoryVoucher?.JournalEntry?.Dbcr == -1
                         && (this.InventoryVoucher?.Taxflag ?? false));
-                double baseAmount = isSales ? this.SellAmount : this.Amount;
-                return Math.Round(baseAmount * (this.Rate ?? 0), 0);
+                decimal baseAmount = isSales ? this.SellAmount : this.Amount;
+                return Math.Round(baseAmount * (this.Rate ?? 0m), 0);
             }
         }
 
-        public double? SellPrice
+        public decimal? SellPrice
         {
             get => this.MaterialTaxLine?.SellPrice;
             set
@@ -118,7 +118,7 @@ namespace DataAccess.EntityClasses
             }
         }
 
-        public double? Rate
+        public decimal? Rate
         {
             get => this.MaterialTaxLine?.Rate;
             set

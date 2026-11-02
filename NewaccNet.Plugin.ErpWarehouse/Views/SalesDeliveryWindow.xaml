@@ -28,6 +28,8 @@
                 <dxb:BarButtonItem Name="btnNext" ToolTip="Phiếu tiếp theo (PageDown)" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/arrows/next.svg'}" ItemClick="BtnNext_Click"/>
                 <dxb:BarButtonItem Name="btnLast" ToolTip="Phiếu cuối cùng (End)" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/arrows/doublelast.svg'}" ItemClick="BtnLast_Click"/>
                 <dxb:BarItemSeparator/>
+                <dxb:BarButtonItem Name="btnSearch" Content="Tìm kiếm (F3)" ToolTip="Tìm kiếm danh sách phiếu chưa ghi sổ" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/find/find.svg'}" ItemClick="BtnSearch_Click" BarItemDisplayMode="ContentAndGlyph"/>
+                <dxb:BarItemSeparator/>
                 <dxb:BarButtonItem Name="btnNew" Content="Thêm mới (Ctrl+N)" ToolTip="Tạo phiếu mới trống" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_new.svg'}" ItemClick="BtnNew_Click" BarItemDisplayMode="ContentAndGlyph"/>
                 <dxb:BarButtonItem Name="btnAccept" Content="Lưu (Ctrl+S)" ToolTip="Lưu phiếu hiện tại" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_save.svg'}" ItemClick="BtnAccept_Click" BarItemDisplayMode="ContentAndGlyph"/>
                 <dxb:BarButtonItem Name="btnSaveAndNew" Content="Lưu &amp; Thêm mới (Ctrl+Shift+S)" ToolTip="Lưu phiếu hiện tại và tạo phiếu mới ngay" Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_save_new.svg'}" ItemClick="BtnSaveAndNew_Click" BarItemDisplayMode="ContentAndGlyph"/>
@@ -257,11 +259,18 @@
                                   FontWeight="Bold" FontSize="14" Foreground="#E65100" HorizontalContentAlignment="Right" Margin="0,4,0,0"/>
                 </StackPanel>
 
-                <!-- Cột 4: Tổng thanh toán (Nợ TK Phải thu 131) -->
+                <!-- Cột 4: Tổng thanh toán -->
                 <StackPanel Grid.Column="6" Orientation="Vertical">
-                    <TextBlock Text="Tổng thanh toán (Nợ TK 131)" FontWeight="SemiBold" Foreground="#333" Margin="0,0,0,4"/>
-                    <dxg:LookUpEdit x:Name="lueTotalAccount" DisplayMember="Display" ValueMember="AccountId" 
-                                    AutoComplete="True" ImmediatePopup="True" IsTextEditable="True"/>
+                    <TextBlock Text="Tổng thanh toán" FontWeight="SemiBold" Foreground="#333" Margin="0,0,0,4"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <dxe:ComboBoxEdit x:Name="cboPaymentType" DisplayMember="Name" ValueMember="Code" IsTextEditable="False" EditValueChanged="CboPaymentType_EditValueChanged"/>
+                        <Button x:Name="btnDebtDetail" Grid.Column="1" Content="..." ToolTip="Xem / Nhập chi tiết công nợ" Width="28" Margin="4,0,0,0" Click="BtnDebtDetail_Click"/>
+                    </Grid>
+                    <dxg:LookUpEdit x:Name="lueTotalAccount" DisplayMember="Display" ValueMember="AccountId" Visibility="Collapsed"/>
                     <dxe:TextEdit x:Name="txtTotalAll" EditValue="0" IsReadOnly="True" ShowBorder="False" Focusable="False"
                                   MaskType="Numeric" Mask="n0" MaskUseAsDisplayFormat="True" 
                                   FontWeight="Bold" FontSize="15" Foreground="#C2185B" HorizontalContentAlignment="Right" Margin="0,4,0,0"/>

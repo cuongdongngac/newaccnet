@@ -138,7 +138,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathReportCategories { get { return _staticMetaData.GetPrefetchPathElement("ReportCategories", CommonEntityBase.CreateEntityCollection<ReportCategoryEntity>()); } }
 
 		/// <summary>The Id property of the Entity ReportSection<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ReportSection"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "ReportSection"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)ReportSectionFieldIndex.Id, true); }
@@ -146,7 +146,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Indebit property of the Entity ReportSection<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ReportSection"."Indebit".<br/>Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "ReportSection"."Indebit".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Boolean Indebit
 		{
 			get { return (System.Boolean)GetValue((int)ReportSectionFieldIndex.Indebit, true); }
@@ -154,7 +154,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The SectionName property of the Entity ReportSection<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ReportSection"."SectionName".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "ReportSection"."SectionName".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String SectionName
 		{
 			get { return (System.String)GetValue((int)ReportSectionFieldIndex.SectionName, true); }

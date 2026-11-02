@@ -290,7 +290,7 @@ namespace DataAccess.FactoryClasses
 								{
 									AccountName = ChartOfAccountFields.AccountName.ToValue<System.String>(),
 									Taxflag = ChartOfAccountFields.Taxflag.ToValue<System.Boolean>(),
-									Amount = JournalEntryFields.Amount.ToValue<Nullable<System.Double>>(),
+									Amount = JournalEntryFields.Amount.ToValue<Nullable<System.Decimal>>(),
 									Dbcr = JournalEntryFields.Dbcr.ToValue<Nullable<System.Int16>>(),
 									Marked = JournalVoucherFields.Marked.ToValue<System.Boolean>(),
 									VoucherNo = JournalVoucherFields.VoucherNo.ToValue<System.String>(),

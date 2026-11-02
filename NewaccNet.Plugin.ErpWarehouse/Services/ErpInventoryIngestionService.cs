@@ -115,7 +115,7 @@ namespace NewaccNet.Plugin.ErpWarehouse.Services
         /// </summary>
         private static void BuildTransferEntries(JournalVoucherEntity jv, ErpInventoryVoucherDto dto, string voucherNo)
         {
-            double totalAmount = dto.TotalAmount;
+            decimal totalAmount = dto.TotalAmount;
             string primaryAccount = dto.Items.FirstOrDefault()?.DebitAccount ?? "156";
 
             // Dòng Xuất kho A (Có TK Vật tư)
@@ -179,7 +179,7 @@ namespace NewaccNet.Plugin.ErpWarehouse.Services
 
         private static void BuildPurchaseReceiptEntries(JournalVoucherEntity jv, ErpInventoryVoucherDto dto, string voucherNo)
         {
-            double totalAmount = dto.TotalAmount;
+            decimal totalAmount = dto.TotalAmount;
             string creditAcc = dto.Items.FirstOrDefault()?.CreditAccount ?? "331";
             string debitAcc = dto.Items.FirstOrDefault()?.DebitAccount ?? "156";
 
@@ -223,7 +223,7 @@ namespace NewaccNet.Plugin.ErpWarehouse.Services
 
         private static void BuildSalesDeliveryEntries(JournalVoucherEntity jv, ErpInventoryVoucherDto dto, string voucherNo)
         {
-            double totalAmount = dto.TotalAmount;
+            decimal totalAmount = dto.TotalAmount;
             string debitAcc = "632";
             string creditAcc = dto.Items.FirstOrDefault()?.CreditAccount ?? "156";
 
@@ -267,7 +267,7 @@ namespace NewaccNet.Plugin.ErpWarehouse.Services
 
         private static void BuildGeneralIssueEntries(JournalVoucherEntity jv, ErpInventoryVoucherDto dto, string voucherNo)
         {
-            double totalAmount = dto.TotalAmount;
+            decimal totalAmount = dto.TotalAmount;
             string debitAcc = dto.Items.FirstOrDefault()?.DebitAccount ?? "642";
             string creditAcc = dto.Items.FirstOrDefault()?.CreditAccount ?? "152";
 

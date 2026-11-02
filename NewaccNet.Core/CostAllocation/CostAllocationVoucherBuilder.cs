@@ -39,7 +39,7 @@ namespace NewaccNet.Core.CostAllocation
                 {
                     AccountId = param.SourceAccountId.Trim(),
                     Dbcr = -1,
-                    Amount = calculation.TotalPoolAmount,
+                    Amount = (decimal)calculation.TotalPoolAmount,
                     Createdate = DateTime.Now
                 };
 
@@ -49,7 +49,7 @@ namespace NewaccNet.Core.CostAllocation
                     {
                         CostObjectId = srcItem.CostObjectId,
                         CostElementId = srcItem.CostElementId,
-                        Amount = srcItem.Amount,
+                        Amount = (decimal)srcItem.Amount,
                         // Đánh dấu bút toán kết chuyển/phân bổ tự động trên dòng giảm trừ TK nguồn (vba-reference.cls dòng 83)
                         Transflag = true
                     };
@@ -62,7 +62,7 @@ namespace NewaccNet.Core.CostAllocation
                 {
                     AccountId = param.DestinationAccountId.Trim(),
                     Dbcr = 1,
-                    Amount = calculation.TotalPoolAmount,
+                    Amount = (decimal)calculation.TotalPoolAmount,
                     ParentEntry = creditEntry,
                     Createdate = DateTime.Now
                 };
@@ -76,7 +76,7 @@ namespace NewaccNet.Core.CostAllocation
                     {
                         CostObjectId = critItem.CostObjectId,
                         CostElementId = desCostElem,
-                        Amount = critItem.AllocatedAmount,
+                        Amount = (decimal)critItem.AllocatedAmount,
                         // Chi phí ghi nhận vào đối tượng đích là chi phí thực tế (vba-reference.cls dòng 94-99: không gán TransFlag = True)
                         Transflag = false
                     };

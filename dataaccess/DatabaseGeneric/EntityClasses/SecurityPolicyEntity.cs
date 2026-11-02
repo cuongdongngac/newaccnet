@@ -126,7 +126,7 @@ namespace DataAccess.EntityClasses
 		public static SecurityPolicyRelations Relations { get { return _relationsFactory; } }
 
 		/// <summary>The Id property of the Entity SecurityPolicy<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "SecurityPolicy"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "SecurityPolicy"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)SecurityPolicyFieldIndex.Id, true); }
@@ -134,7 +134,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The SecurityLevel property of the Entity SecurityPolicy<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "SecurityPolicy"."SecurityLevel".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "SecurityPolicy"."SecurityLevel".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 20.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String SecurityLevel
 		{
 			get { return (System.String)GetValue((int)SecurityPolicyFieldIndex.SecurityLevel, true); }
@@ -142,7 +142,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The UserName property of the Entity SecurityPolicy<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "SecurityPolicy"."UserName".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "SecurityPolicy"."UserName".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 20.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String UserName
 		{
 			get { return (System.String)GetValue((int)SecurityPolicyFieldIndex.UserName, true); }

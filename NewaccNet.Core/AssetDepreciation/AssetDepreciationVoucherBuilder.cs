@@ -81,7 +81,7 @@ namespace NewaccNet.Core.AssetDepreciation
                     {
                         AccountId = param.DepAccountId.Trim(),
                         Dbcr = -1,
-                        Amount = allAmount,
+                        Amount = (decimal)allAmount,
                         Createdate = DateTime.Now
                     };
 
@@ -99,8 +99,8 @@ namespace NewaccNet.Core.AssetDepreciation
                         var assetDetail = new AssetDetailEntity
                         {
                             AssetId = row.AssetId.Trim(),
-                            Quantity = qty,
-                            Price = unitPrice,
+                            Quantity = (decimal)qty,
+                            Price = (decimal)unitPrice,
                             Reasonid = param.ReasonId.Trim()
                         };
                         if (!string.IsNullOrEmpty(srcode))
@@ -120,7 +120,7 @@ namespace NewaccNet.Core.AssetDepreciation
                         {
                             AccountId = row.ExpenseAccountId.Trim(),
                             Dbcr = 1,
-                            Amount = row.DepAmount,
+                            Amount = (decimal)row.DepAmount,
                             ParentEntry = creditEntry,
                             Createdate = DateTime.Now
                         };
@@ -128,7 +128,7 @@ namespace NewaccNet.Core.AssetDepreciation
                         var costDetail = new CostDetailEntity
                         {
                             CostElementId = param.CostElementId.Trim(),
-                            Amount = row.DepAmount,
+                            Amount = (decimal)row.DepAmount,
                             Transflag = true
                         };
                         if (!string.IsNullOrWhiteSpace(row.CostObjectId))

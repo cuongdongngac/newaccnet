@@ -11,8 +11,8 @@ namespace NewaccNet.Core.Posting
     public class TaxRateOption
     {
         public int Taxrateid { get; set; }
-        public double Rate { get; set; }
-        public string Display => (Rate > 1) ? $"{Rate:G29}%" : $"{Rate * 100:G29}%";
+        public decimal Rate { get; set; }
+        public string Display => (Rate > 1m) ? $"{Rate:G29}%" : $"{Rate * 100m:G29}%";
     }
 
     /// <summary>
@@ -34,16 +34,16 @@ namespace NewaccNet.Core.Posting
         private string _materialId = string.Empty;
         private string _materialName = string.Empty;
         private string _unit = string.Empty;
-        private double _quantity = 1;
-        private double _price = 0;
-        private double _amount = 0;
+        private decimal _quantity = 1m;
+        private decimal _price = 0m;
+        private decimal _amount = 0m;
 
         // Bán hàng & Thuế
-        private double _sellPrice = 0;
-        private double _sellAmount = 0;
+        private decimal _sellPrice = 0m;
+        private decimal _sellAmount = 0m;
         private int? _taxRateId = null;
-        private double _taxRate = 0;
-        private double _taxAmount = 0;
+        private decimal _taxRate = 0m;
+        private decimal _taxAmount = 0m;
 
         private string _note = string.Empty;
 
@@ -92,12 +92,12 @@ namespace NewaccNet.Core.Posting
             }
         }
 
-        public double Quantity
+        public decimal Quantity
         {
             get => _quantity;
             set
             {
-                if (Math.Abs(_quantity - value) > 0.0001)
+                if (Math.Abs(_quantity - value) > 0.0001m)
                 {
                     _quantity = value;
                     OnPropertyChanged();
@@ -106,12 +106,12 @@ namespace NewaccNet.Core.Posting
             }
         }
 
-        public double Price
+        public decimal Price
         {
             get => _price;
             set
             {
-                if (Math.Abs(_price - value) > 0.0001)
+                if (Math.Abs(_price - value) > 0.0001m)
                 {
                     _price = value;
                     OnPropertyChanged();
@@ -120,12 +120,12 @@ namespace NewaccNet.Core.Posting
             }
         }
 
-        public double Amount
+        public decimal Amount
         {
             get => _amount;
             set
             {
-                if (Math.Abs(_amount - value) > 0.0001)
+                if (Math.Abs(_amount - value) > 0.0001m)
                 {
                     _amount = value;
                     OnPropertyChanged();
@@ -133,12 +133,12 @@ namespace NewaccNet.Core.Posting
             }
         }
 
-        public double SellPrice
+        public decimal SellPrice
         {
             get => _sellPrice;
             set
             {
-                if (Math.Abs(_sellPrice - value) > 0.0001)
+                if (Math.Abs(_sellPrice - value) > 0.0001m)
                 {
                     _sellPrice = value;
                     OnPropertyChanged();
@@ -147,12 +147,12 @@ namespace NewaccNet.Core.Posting
             }
         }
 
-        public double SellAmount
+        public decimal SellAmount
         {
             get => _sellAmount;
             set
             {
-                if (Math.Abs(_sellAmount - value) > 0.0001)
+                if (Math.Abs(_sellAmount - value) > 0.0001m)
                 {
                     _sellAmount = value;
                     OnPropertyChanged();
@@ -173,23 +173,23 @@ namespace NewaccNet.Core.Posting
                     {
                         TaxRate = _taxRateId.Value switch
                         {
-                            1 => 0.0,
-                            2 => 0.05,
-                            3 => 0.10,
-                            4 => 0.08,
-                            _ => 0.0
+                            1 => 0.0m,
+                            2 => 0.05m,
+                            3 => 0.10m,
+                            4 => 0.08m,
+                            _ => 0.0m
                         };
                     }
                 }
             }
         }
 
-        public double TaxRate
+        public decimal TaxRate
         {
             get => _taxRate;
             set
             {
-                if (Math.Abs(_taxRate - value) > 0.0001)
+                if (Math.Abs(_taxRate - value) > 0.0001m)
                 {
                     _taxRate = value;
                     OnPropertyChanged();
@@ -198,12 +198,12 @@ namespace NewaccNet.Core.Posting
             }
         }
 
-        public double TaxAmount
+        public decimal TaxAmount
         {
             get => _taxAmount;
             set
             {
-                if (Math.Abs(_taxAmount - value) > 0.0001)
+                if (Math.Abs(_taxAmount - value) > 0.0001m)
                 {
                     _taxAmount = value;
                     OnPropertyChanged();
@@ -274,6 +274,8 @@ namespace NewaccNet.Core.Posting
         public string TaxAccountId { get; set; } = "13311";
         public string TotalAccountId { get; set; } = "3311";
         public string OffsetAccountId { get; set; } = "1541"; // Cho NNB hoặc XNB
+        public string? PaymentType { get; set; } = "Debt"; // "Debt" (Công nợ), "Cash" (Tiền mặt), "Bank" (Chuyển khoản)
+        public bool Bookflag { get; set; } = false;
 
         // Dòng chi tiết
         public List<WarehouseVoucherLineItem> Lines { get; set; } = new();
@@ -292,7 +294,23 @@ namespace NewaccNet.Core.Posting
         public int? TaxEntryId { get; set; }        // Dòng Thuế GTGT (133/3331)
         public int? TotalEntryId { get; set; }      // Dòng Phải trả/Tiền mua hàng (331/111/112)
         public int? OffsetEntryId { get; set; }     // Dòng Đối ứng nội bộ (154/621/642/711)
+        public string? PaymentType { get; set; }    // "Debt", "Cash", "Bank"
         public string? Note { get; set; }
+    }
+
+    /// <summary>
+    /// DTO hiển thị danh sách tìm kiếm phiếu kho dành cho nhân viên Nhập / Xuất kho (ERP).
+    /// </summary>
+    public class WarehouseVoucherLookupDto
+    {
+        public int VoucherId { get; set; }
+        public string VoucherNo { get; set; } = string.Empty;
+        public DateTime VoucherDate { get; set; }
+        public string PartnerName { get; set; } = string.Empty;
+        public decimal TotalAmount { get; set; }
+        public string Description { get; set; } = string.Empty;
+        public bool Bookflag { get; set; }
+        public string WarehouseId { get; set; } = string.Empty;
     }
 
     /// <summary>

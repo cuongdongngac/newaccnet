@@ -55,19 +55,19 @@ namespace NewaccNet.Reports.TrialBalance
                     var parentInfo = accountDict.ContainsKey(parentId) ? accountDict[parentId] : null;
                     bool isDebtAccount = parentInfo != null && parentInfo.CategoryId == "A";
 
-                    double sumBeginDebit = childBalances.Sum(b => b.Begindebit ?? 0);
-                    double sumBeginCredit = childBalances.Sum(b => b.Begincredit ?? 0);
-                    double sumEndDebit = childBalances.Sum(b => b.Enddebit ?? 0);
-                    double sumEndCredit = childBalances.Sum(b => b.Endcredit ?? 0);
+                    decimal sumBeginDebit = childBalances.Sum(b => b.Begindebit ?? 0m);
+                    decimal sumBeginCredit = childBalances.Sum(b => b.Begincredit ?? 0m);
+                    decimal sumEndDebit = childBalances.Sum(b => b.Enddebit ?? 0m);
+                    decimal sumEndCredit = childBalances.Sum(b => b.Endcredit ?? 0m);
 
                     if (!isDebtAccount)
                     {
                         // Tài khoản thường: bù trừ số dư
-                        if (sumBeginDebit > sumBeginCredit) { sumBeginDebit -= sumBeginCredit; sumBeginCredit = 0; }
-                        else { sumBeginCredit -= sumBeginDebit; sumBeginDebit = 0; }
+                        if (sumBeginDebit > sumBeginCredit) { sumBeginDebit -= sumBeginCredit; sumBeginCredit = 0m; }
+                        else { sumBeginCredit -= sumBeginDebit; sumBeginDebit = 0m; }
 
-                        if (sumEndDebit > sumEndCredit) { sumEndDebit -= sumEndCredit; sumEndCredit = 0; }
-                        else { sumEndCredit -= sumEndDebit; sumEndDebit = 0; }
+                        if (sumEndDebit > sumEndCredit) { sumEndDebit -= sumEndCredit; sumEndCredit = 0m; }
+                        else { sumEndCredit -= sumEndDebit; sumEndDebit = 0m; }
                     }
 
                     fullList.Add(new TrialBalanceEntity
@@ -75,8 +75,8 @@ namespace NewaccNet.Reports.TrialBalance
                         AccountId = parentId,
                         Begindebit = sumBeginDebit,
                         Begincredit = sumBeginCredit,
-                        Intdebit = childBalances.Sum(b => b.Intdebit ?? 0),
-                        Intcredit = childBalances.Sum(b => b.Intcredit ?? 0),
+                        Intdebit = childBalances.Sum(b => b.Intdebit ?? 0m),
+                        Intcredit = childBalances.Sum(b => b.Intcredit ?? 0m),
                         Enddebit = sumEndDebit,
                         Endcredit = sumEndCredit,
                         Splite = 1 // Cha

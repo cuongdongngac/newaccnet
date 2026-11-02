@@ -136,31 +136,47 @@ namespace NewaccNet.Wpf.AppSystem
                 if (_config == null) _config = new VoucherPostingConfigDto();
 
                 // 1. Nhập mua (NM)
+                var nmTotalAcc = cboNmTotalAccount.EditValue?.ToString() ?? "3311";
+                var nmMethods = _config.Inventory.TryGetValue("NM", out var oldNm) && oldNm.PaymentMethods != null && oldNm.PaymentMethods.Count > 0
+                    ? oldNm.PaymentMethods
+                    : DbConfigService.GetDefaultVoucherPostingConfig().Inventory["NM"].PaymentMethods;
+                var nmDebtMethod = nmMethods.FirstOrDefault(m => m.IsDebt || m.Code == "Debt");
+                if (nmDebtMethod != null) nmDebtMethod.AccountId = nmTotalAcc;
+
                 _config.Inventory["NM"] = new InventoryVoucherConfigItemDto
                 {
                     Code = "NM",
                     Name = string.IsNullOrWhiteSpace(txtNmName.Text) ? "Nhập mua" : txtNmName.Text.Trim(),
                     Dbcr = 1,
                     Taxflag = true,
-                    TotalAccountId = cboNmTotalAccount.EditValue?.ToString() ?? "3311",
+                    TotalAccountId = nmTotalAcc,
                     TaxAccountId = cboNmTaxAccount.EditValue?.ToString() ?? "13311",
                     CostAccountId = "6321",
                     RevenueAccountId = "5111",
-                    PartnerType = "Vendor"
+                    PartnerType = "Vendor",
+                    PaymentMethods = nmMethods
                 };
 
                 // 2. Xuất bán (XB)
+                var xbTotalAcc = cboXbTotalAccount.EditValue?.ToString() ?? "131";
+                var xbMethods = _config.Inventory.TryGetValue("XB", out var oldXb) && oldXb.PaymentMethods != null && oldXb.PaymentMethods.Count > 0
+                    ? oldXb.PaymentMethods
+                    : DbConfigService.GetDefaultVoucherPostingConfig().Inventory["XB"].PaymentMethods;
+                var xbDebtMethod = xbMethods.FirstOrDefault(m => m.IsDebt || m.Code == "Debt");
+                if (xbDebtMethod != null) xbDebtMethod.AccountId = xbTotalAcc;
+
                 _config.Inventory["XB"] = new InventoryVoucherConfigItemDto
                 {
                     Code = "XB",
                     Name = string.IsNullOrWhiteSpace(txtXbName.Text) ? "Xuất bán" : txtXbName.Text.Trim(),
                     Dbcr = -1,
                     Taxflag = true,
-                    TotalAccountId = cboXbTotalAccount.EditValue?.ToString() ?? "131",
+                    TotalAccountId = xbTotalAcc,
                     TaxAccountId = cboXbTaxAccount.EditValue?.ToString() ?? "33311",
                     RevenueAccountId = cboXbRevenueAccount.EditValue?.ToString() ?? "5111",
                     CostAccountId = cboXbCostAccount.EditValue?.ToString() ?? "6321",
-                    PartnerType = "Customer"
+                    PartnerType = "Customer",
+                    PaymentMethods = xbMethods
                 };
 
                 // 3. Nhập nội bộ (NNB)

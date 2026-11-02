@@ -138,7 +138,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathVat3TaxItem { get { return _staticMetaData.GetPrefetchPathElement("Vat3TaxItem", CommonEntityBase.CreateEntityCollection<Vat3TaxItemEntity>()); } }
 
 		/// <summary>The AccountId property of the Entity AccountVat3Item<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AccountVat3Item"."AccountId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AccountVat3Item"."AccountId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String AccountId
 		{
 			get { return (System.String)GetValue((int)AccountVat3ItemFieldIndex.AccountId, true); }
@@ -146,7 +146,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The CounterAccountId property of the Entity AccountVat3Item<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AccountVat3Item"."CounterAccountId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AccountVat3Item"."CounterAccountId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String CounterAccountId
 		{
 			get { return (System.String)GetValue((int)AccountVat3ItemFieldIndex.CounterAccountId, true); }
@@ -154,7 +154,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Id property of the Entity AccountVat3Item<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AccountVat3Item"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "AccountVat3Item"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)AccountVat3ItemFieldIndex.Id, true); }
@@ -162,7 +162,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The IsAdd property of the Entity AccountVat3Item<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AccountVat3Item"."IsAdd".<br/>Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AccountVat3Item"."IsAdd".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Boolean IsAdd
 		{
 			get { return (System.Boolean)GetValue((int)AccountVat3ItemFieldIndex.IsAdd, true); }
@@ -178,7 +178,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Vat3TaxItemId property of the Entity AccountVat3Item<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AccountVat3Item"."Vat3TaxItemId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AccountVat3Item"."Vat3TaxItemId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> Vat3TaxItemId
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)AccountVat3ItemFieldIndex.Vat3TaxItemId, false); }

@@ -19,6 +19,8 @@ namespace NewaccNet.Plugin.ErpWarehouse.Services
         public static List<TaxRateOption> LoadTaxRates() => WarehousePostingGateway.LoadTaxRates();
         public static List<AccountOption> LoadAccounts() => WarehousePostingGateway.LoadAccounts();
         public static List<int> GetVoucherIds(string prefix) => WarehousePostingGateway.GetVoucherIds(prefix);
+        public static List<WarehouseVoucherLookupDto> SearchWarehouseVouchers(string prefix, bool unpostedOnly = true, DateTime? fromDate = null, DateTime? toDate = null) 
+            => WarehousePostingGateway.SearchWarehouseVouchers(prefix, unpostedOnly, fromDate, toDate);
         public static string GenerateNextVoucherNo(string prefix) => WarehousePostingGateway.GenerateNextVoucherNo(prefix);
         public static WarehouseVoucherSaveParams? LoadVoucherDetail(int voucherId) => WarehousePostingGateway.LoadVoucherDetail(voucherId);
         public static WarehouseVoucherSaveParams? LoadVoucherDetailByInventoryVoucher(int inventoryVoucherId) => WarehousePostingGateway.LoadVoucherDetailByInventoryVoucher(inventoryVoucherId);

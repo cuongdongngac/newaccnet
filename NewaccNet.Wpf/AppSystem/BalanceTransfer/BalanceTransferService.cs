@@ -1221,7 +1221,7 @@ namespace NewaccNet.Wpf.AppSystem.BalanceTransfer
                         .GroupBy(e => e.AccountId.Trim())
                         .Select(g =>
                         {
-                            double net = g.Sum(x => (double)((x.Amount ?? 0.0) * (x.Dbcr ?? 0)));
+                            decimal net = g.Sum(x => (x.Amount ?? 0m) * (x.Dbcr ?? 0));
                             return new NormalBalanceDto
                             {
                                 AccountId = g.Key,
@@ -1229,7 +1229,7 @@ namespace NewaccNet.Wpf.AppSystem.BalanceTransfer
                                 Dbcr = (short)(net >= 0 ? 1 : -1)
                             };
                         })
-                        .Where(x => x.Amount > 0.001)
+                        .Where(x => x.Amount > 0.001m)
                         .ToList();
 
                     // DỌN DẸP SỐ DƯ ĐẦU KỲ CŨ TẠI CSDL ĐÍCH (IDEMPOTENT)
@@ -1331,7 +1331,7 @@ namespace NewaccNet.Wpf.AppSystem.BalanceTransfer
                         })
                         .Select(g =>
                         {
-                            double net = g.Sum(x => (double)((x.Amount ?? 0.0) * (x.JournalEntry.Dbcr ?? 0)));
+                            decimal net = g.Sum(x => (x.Amount ?? 0m) * (x.JournalEntry.Dbcr ?? 0));
                             return new DebtBalanceDto
                             {
                                 AccountId = g.Key.AccountId,
@@ -1342,7 +1342,7 @@ namespace NewaccNet.Wpf.AppSystem.BalanceTransfer
                                 Dbcr = (short)(net >= 0 ? 1 : -1)
                             };
                         })
-                        .Where(x => x.Amount > 0.001)
+                        .Where(x => x.Amount > 0.001m)
                         .ToList();
 
                     // DỌN DẸP SỐ DƯ ĐẦU KỲ CÔNG NỢ CŨ TẠI CSDL ĐÍCH (IDEMPOTENT)
@@ -1497,9 +1497,9 @@ namespace NewaccNet.Wpf.AppSystem.BalanceTransfer
                         })
                         .Select(g =>
                         {
-                            double netQty = g.Sum(x => (double)((x.Quantity ?? 0.0) * (x.InventoryVoucher.JournalEntry.Dbcr ?? 0)));
-                            double netAmt = g.Sum(x => (double)((x.Quantity ?? 0.0) * (x.Price ?? 0.0) * (x.InventoryVoucher.JournalEntry.Dbcr ?? 0)));
-                            double price = netQty > 0.0001 ? (netAmt / netQty) : 0;
+                            decimal netQty = g.Sum(x => (x.Quantity ?? 0m) * (x.InventoryVoucher.JournalEntry.Dbcr ?? 0));
+                            decimal netAmt = g.Sum(x => (x.Quantity ?? 0m) * (x.Price ?? 0m) * (x.InventoryVoucher.JournalEntry.Dbcr ?? 0));
+                            decimal price = netQty > 0.0001m ? (netAmt / netQty) : 0m;
                             return new MaterialBalanceDto
                             {
                                 AccountId = g.Key.AccountId,
@@ -1510,7 +1510,7 @@ namespace NewaccNet.Wpf.AppSystem.BalanceTransfer
                                 Amount = netAmt
                             };
                         })
-                        .Where(x => x.Quantity > 0.0001 && x.Amount > 0.0001)
+                        .Where(x => x.Quantity > 0.0001m && x.Amount > 0.0001m)
                         .ToList();
 
                     // DỌN DẸP SỐ DƯ ĐẦU KỲ VẬT TƯ CŨ TẠI CSDL ĐÍCH (IDEMPOTENT)
@@ -1677,7 +1677,7 @@ namespace NewaccNet.Wpf.AppSystem.BalanceTransfer
                         })
                         .Select(g =>
                         {
-                            double net = g.Sum(x => (double)((x.Amount ?? 0.0) * (x.JournalEntry.Dbcr ?? 0)));
+                            decimal net = g.Sum(x => (x.Amount ?? 0m) * (x.JournalEntry.Dbcr ?? 0));
                             return new CostBalanceDto
                             {
                                 AccountId = g.Key.AccountId,
@@ -1687,7 +1687,7 @@ namespace NewaccNet.Wpf.AppSystem.BalanceTransfer
                                 Dbcr = (short)(net >= 0 ? 1 : -1)
                             };
                         })
-                        .Where(x => x.Amount > 0.001)
+                        .Where(x => x.Amount > 0.001m)
                         .ToList();
 
                     // DỌN DẸP SỐ DƯ ĐẦU KỲ CHI PHÍ CŨ TẠI CSDL ĐÍCH (IDEMPOTENT)
@@ -1827,9 +1827,9 @@ namespace NewaccNet.Wpf.AppSystem.BalanceTransfer
                         })
                         .Select(g =>
                         {
-                            double netQty = g.Sum(x => (double)((x.Quantity ?? 0.0) * (x.JournalEntry.Dbcr ?? 0)));
-                            double netAmt = g.Sum(x => (double)((x.Quantity ?? 0.0) * (x.Price ?? 0.0) * (x.JournalEntry.Dbcr ?? 0)));
-                            double price = Math.Abs(netQty) > 0.0001 ? Math.Abs(netAmt / netQty) : 0;
+                            decimal netQty = g.Sum(x => (x.Quantity ?? 0m) * (x.JournalEntry.Dbcr ?? 0));
+                            decimal netAmt = g.Sum(x => (x.Quantity ?? 0m) * (x.Price ?? 0m) * (x.JournalEntry.Dbcr ?? 0));
+                            decimal price = Math.Abs(netQty) > 0.0001m ? Math.Abs(netAmt / netQty) : 0m;
                             return new AssetBalanceDto
                             {
                                 AccountId = g.Key.AccountId,
@@ -1842,7 +1842,7 @@ namespace NewaccNet.Wpf.AppSystem.BalanceTransfer
                                 Dbcr = (short)(netAmt >= 0 ? 1 : -1)
                             };
                         })
-                        .Where(x => x.Quantity > 0.0001 && x.Amount > 0.0001)
+                        .Where(x => x.Quantity > 0.0001m && x.Amount > 0.0001m)
                         .ToList();
 
                     // DỌN DẸP SỐ DƯ ĐẦU KỲ TSCĐ CŨ TẠI CSDL ĐÍCH (IDEMPOTENT)
@@ -1969,9 +1969,9 @@ namespace NewaccNet.Wpf.AppSystem.BalanceTransfer
                         })
                         .Select(g =>
                         {
-                            double netQty = g.Sum(x => (double)((x.Quantity ?? 0.0) * (x.JournalEntry.Dbcr ?? 0)));
-                            double netAmt = g.Sum(x => (double)((x.Quantity ?? 0.0) * (x.Inprice ?? 0.0) * (x.JournalEntry.Dbcr ?? 0)));
-                            double price = netQty > 0.0001 ? (netAmt / netQty) : 0;
+                            decimal netQty = g.Sum(x => (x.Quantity ?? 0m) * (x.JournalEntry.Dbcr ?? 0));
+                            decimal netAmt = g.Sum(x => (x.Quantity ?? 0m) * (x.Inprice ?? 0m) * (x.JournalEntry.Dbcr ?? 0));
+                            decimal price = netQty > 0.0001m ? (netAmt / netQty) : 0m;
                             return new StockBalanceDto
                             {
                                 AccountId = g.Key.AccountId,
@@ -1982,7 +1982,7 @@ namespace NewaccNet.Wpf.AppSystem.BalanceTransfer
                                 Amount = netAmt
                             };
                         })
-                        .Where(x => x.Quantity > 0.0001 && x.Amount > 0.0001)
+                        .Where(x => x.Quantity > 0.0001m && x.Amount > 0.0001m)
                         .ToList();
 
                     // DỌN DẸP SỐ DƯ ĐẦU KỲ CỔ PHIẾU CŨ TẠI CSDL ĐÍCH (IDEMPOTENT)
@@ -2098,9 +2098,9 @@ namespace NewaccNet.Wpf.AppSystem.BalanceTransfer
                         })
                         .Select(g =>
                         {
-                            double netQty = g.Sum(x => (double)((x.Quantity ?? 0.0) * (x.JournalEntry.Dbcr ?? 0)));
-                            double netAmt = g.Sum(x => (double)((x.JournalEntry.Amount ?? 0.0) * (x.JournalEntry.Dbcr ?? 0)));
-                            double rate = (Math.Abs(netQty) > 0.0001) ? Math.Abs(netAmt / netQty) : 0;
+                            decimal netQty = g.Sum(x => (x.Quantity ?? 0m) * (x.JournalEntry.Dbcr ?? 0));
+                            decimal netAmt = g.Sum(x => (x.JournalEntry.Amount ?? 0m) * (x.JournalEntry.Dbcr ?? 0));
+                            decimal rate = (Math.Abs(netQty) > 0.0001m) ? Math.Abs(netAmt / netQty) : 0m;
                             return new CurrencyBalanceDto
                             {
                                 AccountId = g.Key.AccountId,
@@ -2111,7 +2111,7 @@ namespace NewaccNet.Wpf.AppSystem.BalanceTransfer
                                 Dbcr = (short)(netAmt >= 0 ? 1 : -1)
                             };
                         })
-                        .Where(x => x.Quantity > 0.0001 && x.Amount > 0.0001)
+                        .Where(x => x.Quantity > 0.0001m && x.Amount > 0.0001m)
                         .ToList();
 
                     // DỌN DẸP SỐ DƯ ĐẦU KỲ NGOẠI TỆ CŨ TẠI CSDL ĐÍCH (IDEMPOTENT)

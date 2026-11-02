@@ -198,7 +198,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathLiabilityDues { get { return _staticMetaData.GetPrefetchPathElement("LiabilityDues", CommonEntityBase.CreateEntityCollection<LiabilityDueEntity>()); } }
 
 		/// <summary>The Id property of the Entity DebtType<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DebtType"."Id".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		/// <remarks>Mapped on  table field: "DebtType"."Id".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
 		public virtual System.String Id
 		{
 			get { return (System.String)GetValue((int)DebtTypeFieldIndex.Id, true); }
@@ -206,7 +206,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Syncronizeflag property of the Entity DebtType<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DebtType"."Syncronizeflag".<br/>Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "DebtType"."Syncronizeflag".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Boolean Syncronizeflag
 		{
 			get { return (System.Boolean)GetValue((int)DebtTypeFieldIndex.Syncronizeflag, true); }
@@ -214,7 +214,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The TypeName property of the Entity DebtType<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DebtType"."TypeName".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "DebtType"."TypeName".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String TypeName
 		{
 			get { return (System.String)GetValue((int)DebtTypeFieldIndex.TypeName, true); }

@@ -126,7 +126,7 @@ namespace DataAccess.EntityClasses
 		public static DbConfigRelations Relations { get { return _relationsFactory; } }
 
 		/// <summary>The AccountingYear property of the Entity DbConfig<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Dbconfig"."AccountingYear".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "DbConfig"."AccountingYear".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> AccountingYear
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)DbConfigFieldIndex.AccountingYear, false); }
@@ -134,7 +134,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The AccountMethod property of the Entity DbConfig<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Dbconfig"."AccountMethod".<br/>Table field type characteristics (type, precision, scale, length): TinyInt, 3, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "DbConfig"."AccountMethod".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> AccountMethod
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)DbConfigFieldIndex.AccountMethod, false); }
@@ -142,7 +142,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Address property of the Entity DbConfig<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Dbconfig"."Version".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "DbConfig"."Address".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Address
 		{
 			get { return (System.String)GetValue((int)DbConfigFieldIndex.Address, true); }
@@ -150,7 +150,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The BankAccount property of the Entity DbConfig<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Dbconfig"."BankAccount".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "DbConfig"."BankAccount".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String BankAccount
 		{
 			get { return (System.String)GetValue((int)DbConfigFieldIndex.BankAccount, true); }
@@ -158,7 +158,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The CompanyName property of the Entity DbConfig<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Dbconfig"."CompanyName".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "DbConfig"."CompanyName".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String CompanyName
 		{
 			get { return (System.String)GetValue((int)DbConfigFieldIndex.CompanyName, true); }
@@ -166,7 +166,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The CreatedDate property of the Entity DbConfig<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Dbconfig"."CreatedDate".<br/>Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "DbConfig"."CreatedDate".<br/>Table field type characteristics (type, precision, scale, length): Date, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.DateTime> CreatedDate
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)DbConfigFieldIndex.CreatedDate, false); }
@@ -174,7 +174,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The DepartmentName property of the Entity DbConfig<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Dbconfig"."DepartmentName".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 150.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "DbConfig"."DepartmentName".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 150.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String DepartmentName
 		{
 			get { return (System.String)GetValue((int)DbConfigFieldIndex.DepartmentName, true); }
@@ -182,7 +182,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The ExpiryDate property of the Entity DbConfig<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Dbconfig"."ExpiryDate".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "DbConfig"."ExpiryDate".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String ExpiryDate
 		{
 			get { return (System.String)GetValue((int)DbConfigFieldIndex.ExpiryDate, true); }
@@ -190,7 +190,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Id property of the Entity DbConfig<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Dbconfig"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "DbConfig"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)DbConfigFieldIndex.Id, true); }
@@ -198,7 +198,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The IsCompanyLicense property of the Entity DbConfig<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Dbconfig"."AccountFlag".<br/>Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "DbConfig"."IsCompanyLicense".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Boolean IsCompanyLicense
 		{
 			get { return (System.Boolean)GetValue((int)DbConfigFieldIndex.IsCompanyLicense, true); }
@@ -206,7 +206,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Material property of the Entity DbConfig<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Dbconfig"."Material".<br/>Table field type characteristics (type, precision, scale, length): TinyInt, 3, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "DbConfig"."Material".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> Material
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)DbConfigFieldIndex.Material, false); }
@@ -214,7 +214,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The RegistrationCode property of the Entity DbConfig<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Dbconfig"."RegistrationCode".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "DbConfig"."RegistrationCode".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 100.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String RegistrationCode
 		{
 			get { return (System.String)GetValue((int)DbConfigFieldIndex.RegistrationCode, true); }
@@ -222,7 +222,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The TaxCode property of the Entity DbConfig<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Dbconfig"."TaxCode".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "DbConfig"."TaxCode".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String TaxCode
 		{
 			get { return (System.String)GetValue((int)DbConfigFieldIndex.TaxCode, true); }
@@ -230,7 +230,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The UpdatedDate property of the Entity DbConfig<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Dbconfig"."UpdatedDate".<br/>Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "DbConfig"."UpdatedDate".<br/>Table field type characteristics (type, precision, scale, length): Date, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.DateTime> UpdatedDate
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)DbConfigFieldIndex.UpdatedDate, false); }
@@ -238,7 +238,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The VoucherPostingConfig property of the Entity DbConfig<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Dbconfig"."VoucherPostingConfig".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "DbConfig"."VoucherPostingConfig".<br/>Table field type characteristics (type, precision, scale, length): LongVarWChar, 0, 0, 536870911.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String VoucherPostingConfig
 		{
 			get { return (System.String)GetValue((int)DbConfigFieldIndex.VoucherPostingConfig, true); }

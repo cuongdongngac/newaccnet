@@ -138,7 +138,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathTaxObligationItems { get { return _staticMetaData.GetPrefetchPathElement("TaxObligationItems", CommonEntityBase.CreateEntityCollection<TaxObligationItemEntity>()); } }
 
 		/// <summary>The Id property of the Entity TaxObligation<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "TaxObligation"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "TaxObligation"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)TaxObligationFieldIndex.Id, true); }
@@ -146,7 +146,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The ObligationName property of the Entity TaxObligation<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "TaxObligation"."ObligationName".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "TaxObligation"."ObligationName".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String ObligationName
 		{
 			get { return (System.String)GetValue((int)TaxObligationFieldIndex.ObligationName, true); }

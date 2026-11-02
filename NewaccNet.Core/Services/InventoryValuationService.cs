@@ -396,15 +396,15 @@ namespace NewaccNet.Core.Services
                     row = new MaterialPriceEntity { MaterialId = b.MaterialId, WarehouseId = b.WarehouseId };
                 }
 
-                row.Quantity = (double)b.Quantity;
-                row.Price = (double)b.Price;
+                row.Quantity = b.Quantity;
+                row.Price = b.Price;
                 uow.AddForSave(row);
                 touched.Add(row);
             }
 
             foreach (var row in lookup.Values.Where(r => !touched.Contains(r)))
             {
-                row.Quantity = 0;
+                row.Quantity = 0m;
                 uow.AddForSave(row);
             }
 

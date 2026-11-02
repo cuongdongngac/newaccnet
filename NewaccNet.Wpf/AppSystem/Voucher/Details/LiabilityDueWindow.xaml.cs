@@ -178,15 +178,15 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             var tb = sender as TextBox;
             if (tb == null) return;
 
-            double val;
-            bool ok = double.TryParse(tb.Text.Replace(",", "").Replace("%", "").Trim(), 
+            decimal val;
+            bool ok = decimal.TryParse(tb.Text.Replace(",", "").Replace("%", "").Trim(), 
                                       NumberStyles.Any, CultureInfo.InvariantCulture, out val);
             
             switch (tb.Name)
             {
-                case "txtInterestrate":  _currentEntity.Interestrate = ok ? val : (double?)null; break;
-                case "txtFeedbackrate":  _currentEntity.Feedbackrate = ok ? val : (double?)null; break;
-                case "txtOutvatrate":    _currentEntity.Outvatrate   = ok ? val : (double?)null; break;
+                case "txtInterestrate":  _currentEntity.Interestrate = ok ? val : (decimal?)null; break;
+                case "txtFeedbackrate":  _currentEntity.Feedbackrate = ok ? val : (decimal?)null; break;
+                case "txtOutvatrate":    _currentEntity.Outvatrate   = ok ? val : (decimal?)null; break;
             }
             _isDirty = true;
             // Format lại ô sau khi parse xong

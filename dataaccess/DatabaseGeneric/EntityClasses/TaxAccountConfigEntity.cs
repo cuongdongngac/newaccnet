@@ -135,7 +135,7 @@ namespace DataAccess.EntityClasses
 		public static TaxAccountConfigRelations Relations { get { return _relationsFactory; } }
 
 		/// <summary>The CompanyName property of the Entity TaxAccountConfig<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "TaxAccountConfig"."CompanyName".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "TaxAccountConfig"."CompanyName".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String CompanyName
 		{
 			get { return (System.String)GetValue((int)TaxAccountConfigFieldIndex.CompanyName, true); }
@@ -143,7 +143,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The CreatedAt property of the Entity TaxAccountConfig<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "TaxAccountConfig"."CreatedAt".<br/>Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "TaxAccountConfig"."CreatedAt".<br/>Table field type characteristics (type, precision, scale, length): Date, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.DateTime> CreatedAt
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)TaxAccountConfigFieldIndex.CreatedAt, false); }
@@ -151,7 +151,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The EncryptedPassword property of the Entity TaxAccountConfig<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "TaxAccountConfig"."EncryptedPassword".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "TaxAccountConfig"."EncryptedPassword".<br/>Table field type characteristics (type, precision, scale, length): LongVarWChar, 0, 0, 536870911.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String EncryptedPassword
 		{
 			get { return (System.String)GetValue((int)TaxAccountConfigFieldIndex.EncryptedPassword, true); }
@@ -159,7 +159,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Id property of the Entity TaxAccountConfig<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "TaxAccountConfig"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "TaxAccountConfig"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)TaxAccountConfigFieldIndex.Id, true); }
@@ -167,7 +167,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The LastSyncDate property of the Entity TaxAccountConfig<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "TaxAccountConfig"."LastSyncDate".<br/>Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "TaxAccountConfig"."LastSyncDate".<br/>Table field type characteristics (type, precision, scale, length): Date, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.DateTime> LastSyncDate
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)TaxAccountConfigFieldIndex.LastSyncDate, false); }
@@ -175,7 +175,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The TaxCode property of the Entity TaxAccountConfig<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "TaxAccountConfig"."TaxCode".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "TaxAccountConfig"."TaxCode".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 20.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String TaxCode
 		{
 			get { return (System.String)GetValue((int)TaxAccountConfigFieldIndex.TaxCode, true); }
@@ -183,7 +183,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Token property of the Entity TaxAccountConfig<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "TaxAccountConfig"."Token".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "TaxAccountConfig"."Token".<br/>Table field type characteristics (type, precision, scale, length): LongVarWChar, 0, 0, 536870911.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Token
 		{
 			get { return (System.String)GetValue((int)TaxAccountConfigFieldIndex.Token, true); }
@@ -191,7 +191,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The TokenExpiresAt property of the Entity TaxAccountConfig<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "TaxAccountConfig"."TokenExpiresAt".<br/>Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "TaxAccountConfig"."TokenExpiresAt".<br/>Table field type characteristics (type, precision, scale, length): Date, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.DateTime> TokenExpiresAt
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)TaxAccountConfigFieldIndex.TokenExpiresAt, false); }
@@ -199,7 +199,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The UpdatedAt property of the Entity TaxAccountConfig<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "TaxAccountConfig"."UpdatedAt".<br/>Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "TaxAccountConfig"."UpdatedAt".<br/>Table field type characteristics (type, precision, scale, length): Date, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.DateTime> UpdatedAt
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)TaxAccountConfigFieldIndex.UpdatedAt, false); }

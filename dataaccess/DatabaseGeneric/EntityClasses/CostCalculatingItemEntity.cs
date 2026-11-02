@@ -150,7 +150,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathCostCalculatingBook { get { return _staticMetaData.GetPrefetchPathElement("CostCalculatingBook", CommonEntityBase.CreateEntityCollection<CostCalculatingBookEntity>()); } }
 
 		/// <summary>The Code property of the Entity CostCalculatingItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CostCalculatingItem"."Code".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CostCalculatingItem"."Code".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Code
 		{
 			get { return (System.String)GetValue((int)CostCalculatingItemFieldIndex.Code, true); }
@@ -158,7 +158,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The CostCalculatingBookId property of the Entity CostCalculatingItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CostCalculatingItem"."CostCalculatingBookId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CostCalculatingItem"."CostCalculatingBookId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> CostCalculatingBookId
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)CostCalculatingItemFieldIndex.CostCalculatingBookId, false); }
@@ -166,7 +166,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Id property of the Entity CostCalculatingItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CostCalculatingItem"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "CostCalculatingItem"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)CostCalculatingItemFieldIndex.Id, true); }
@@ -174,7 +174,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The ItemName property of the Entity CostCalculatingItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CostCalculatingItem"."ItemName".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CostCalculatingItem"."ItemName".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String ItemName
 		{
 			get { return (System.String)GetValue((int)CostCalculatingItemFieldIndex.ItemName, true); }

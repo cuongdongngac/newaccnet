@@ -7,6 +7,7 @@ using System.Windows.Input;
 using DataAccess.EntityClasses;
 using DevExpress.Xpf.Core;
 using DevExpress.Xpf.Grid;
+using NewaccNet.Core.Data;
 using NewaccNet.Plugin.ErpWarehouse.Models;
 using NewaccNet.Plugin.ErpWarehouse.Services;
 using NewaccNet.Plugin.ErpWarehouse.Views.Dialogs;
@@ -25,6 +26,7 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
         private List<int> _voucherIds = new();
         private int _currentVoucherIndex = -1;
         private int _currentVoucherId = 0;
+        private bool _isCurrentVoucherPosted = false;
 
         public SalesDeliveryWindow()
         {
@@ -91,6 +93,42 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
             if (!string.IsNullOrEmpty(data.TaxAccountId)) lueTaxAccount.EditValue = data.TaxAccountId;
             if (!string.IsNullOrEmpty(data.TotalAccountId)) lueTotalAccount.EditValue = data.TotalAccountId;
 
+            // Đồng bộ trạng thái thanh toán từ DTO/Data
+            if (cboPaymentType.ItemsSource is IEnumerable<PaymentMethodOptionDto> methods)
+            {
+                var match = methods.FirstOrDefault(m => (!string.IsNullOrEmpty(data.PaymentType) && m.Code.Equals(data.PaymentType, StringComparison.OrdinalIgnoreCase))
+                                                     || (!string.IsNullOrEmpty(data.TotalAccountId) && m.AccountId == data.TotalAccountId));
+                if (match != null)
+                {
+                    cboPaymentType.SelectedItem = match;
+                }
+                else
+                {
+                    cboPaymentType.SelectedIndex = 0;
+                }
+            }
+
+            // Khóa sửa nếu kế toán đã ghi sổ
+            _isCurrentVoucherPosted = data.Bookflag;
+            if (_isCurrentVoucherPosted)
+            {
+                lblNavPosition.Content = $"Phiếu: {index + 1} / {_voucherIds.Count} [ĐÃ GHI SỔ - KHÓA SỬA]";
+                btnAccept.IsEnabled = false;
+                btnSaveAndNew.IsEnabled = false;
+                btnAddRow.IsEnabled = false;
+                btnDeleteRow.IsEnabled = false;
+                viewDetails.AllowEditing = false;
+            }
+            else
+            {
+                lblNavPosition.Content = $"Phiếu: {index + 1} / {_voucherIds.Count} (Chưa ghi sổ)";
+                btnAccept.IsEnabled = true;
+                btnSaveAndNew.IsEnabled = true;
+                btnAddRow.IsEnabled = true;
+                btnDeleteRow.IsEnabled = true;
+                viewDetails.AllowEditing = true;
+            }
+
             Lines.Clear();
             foreach (var l in data.Lines)
             {
@@ -122,6 +160,14 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
             Lines.Clear();
             Lines.Add(new WarehouseVoucherLineItem { Quantity = 1, Price = 0, SellPrice = 0 });
             UpdateTotals();
+
+            _isCurrentVoucherPosted = false;
+            cboPaymentType.SelectedIndex = 0;
+            btnAccept.IsEnabled = true;
+            btnSaveAndNew.IsEnabled = true;
+            btnAddRow.IsEnabled = true;
+            btnDeleteRow.IsEnabled = true;
+            viewDetails.AllowEditing = true;
 
             RefreshNavigation();
             txtVoucherNo.Focus();
@@ -204,6 +250,14 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
                 if (!string.IsNullOrEmpty(rule.TotalAccountId)) lueTotalAccount.EditValue = rule.TotalAccountId;
             }
 
+            // Nạp danh mục hình thức thanh toán từ cấu hình
+            var paymentMethods = rule?.GetEffectivePaymentMethods() ?? new List<PaymentMethodOptionDto>();
+            cboPaymentType.ItemsSource = paymentMethods;
+            if (paymentMethods.Count > 0)
+            {
+                cboPaymentType.SelectedIndex = 0;
+            }
+
             // Dòng mẫu ban đầu
             Lines.Clear();
             Lines.Add(new WarehouseVoucherLineItem { Quantity = 1, Price = 0, SellPrice = 0 });
@@ -231,6 +285,11 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
             {
                 e.Handled = true;
                 BtnPrint_Click(sender, e);
+            }
+            else if (e.Key == Key.F3)
+            {
+                e.Handled = true;
+                BtnSearch_Click(sender, e);
             }
             else if (e.Key == Key.Insert)
             {
@@ -282,10 +341,10 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
 
         private void UpdateTotals()
         {
-            double cost = Lines.Sum(l => l.Amount);
-            double sell = Lines.Sum(l => l.SellAmount);
-            double tax = Lines.Sum(l => l.TaxAmount);
-            double total = sell + tax;
+            decimal cost = Lines.Sum(l => l.Amount);
+            decimal sell = Lines.Sum(l => l.SellAmount);
+            decimal tax = Lines.Sum(l => l.TaxAmount);
+            decimal total = sell + tax;
 
             txtTotalCost.EditValue = cost;
             txtTotalSell.EditValue = sell;
@@ -363,6 +422,58 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
             }
         }
 
+        private void BtnSearch_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new WarehouseVoucherLookupDialog("XB") { Owner = this };
+            if (dlg.ShowDialog() == true && dlg.SelectedVoucherId.HasValue)
+            {
+                int targetId = dlg.SelectedVoucherId.Value;
+                RefreshVoucherList();
+                int idx = _voucherIds.IndexOf(targetId);
+                if (idx >= 0)
+                {
+                    LoadVoucherAtIndex(idx);
+                }
+                else
+                {
+                    _voucherIds.Add(targetId);
+                    LoadVoucherAtIndex(_voucherIds.Count - 1);
+                }
+            }
+        }
+
+        private void CboPaymentType_EditValueChanged(object sender, DevExpress.Xpf.Editors.EditValueChangedEventArgs e)
+        {
+            if (cboPaymentType.SelectedItem is PaymentMethodOptionDto opt)
+            {
+                lueTotalAccount.EditValue = opt.AccountId;
+                if (btnDebtDetail != null)
+                {
+                    btnDebtDetail.Visibility = opt.IsDebt ? Visibility.Visible : Visibility.Collapsed;
+                }
+            }
+        }
+
+        private void BtnDebtDetail_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedPayment = cboPaymentType.SelectedItem as PaymentMethodOptionDto;
+            string pName = txtPartnerName.Text?.Trim() ?? "";
+            string pId = luePartner.EditValue as string ?? "";
+            decimal amount = txtTotalAll.EditValue is decimal d ? d : 0m;
+            DateTime vDate = dpVoucherDate.DateTime;
+            string accId = selectedPayment?.AccountId ?? (lueTotalAccount.EditValue as string ?? "131");
+
+            MessageBox.Show(
+                $"Thông tin công nợ đối ứng:\n" +
+                $"- Khách hàng chịu trách nhiệm công nợ: {pId} - {pName}\n" +
+                $"- Hình thức: {selectedPayment?.Name ?? "Công nợ"}\n" +
+                $"- Tài khoản: {accId}\n" +
+                $"- Số tiền công nợ: {amount:n0} VNĐ\n" +
+                $"- Hạn thanh toán mặc định: {vDate:dd/MM/yyyy}\n\n" +
+                $"Hệ thống ORM sẽ tự động sinh bản ghi chi tiết công nợ tương ứng khi lưu phiếu.",
+                "Chi tiết công nợ", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
         private void BtnAccept_Click(object sender, RoutedEventArgs e)
         {
             PerformSave(isSaveAndNew: false);
@@ -375,6 +486,12 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
 
         private bool PerformSave(bool isSaveAndNew)
         {
+            if (_isCurrentVoucherPosted)
+            {
+                MessageBox.Show("Chứng từ này đã được Kế toán ghi sổ. Bạn không có quyền chỉnh sửa.", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
             viewDetails.CommitEditing();
 
             string voucherNo = txtVoucherNo.Text?.Trim() ?? "";
@@ -400,6 +517,8 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
                 return false;
             }
 
+            var selectedPayment = cboPaymentType.SelectedItem as PaymentMethodOptionDto;
+
             var p = new WarehouseVoucherSaveParams
             {
                 VoucherId = _currentVoucherId,
@@ -422,7 +541,8 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
                 InventoryAccountId = "1561",
                 RevenueAccountId = lueRevenueAccount.EditValue as string ?? "5111",
                 TaxAccountId = lueTaxAccount.EditValue as string ?? "33311",
-                TotalAccountId = lueTotalAccount.EditValue as string ?? "131",
+                TotalAccountId = selectedPayment?.AccountId ?? (lueTotalAccount.EditValue as string ?? "131"),
+                PaymentType = selectedPayment?.Code ?? "Debt",
 
                 Lines = validLines
             };

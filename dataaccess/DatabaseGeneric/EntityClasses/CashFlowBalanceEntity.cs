@@ -126,7 +126,7 @@ namespace DataAccess.EntityClasses
 		public static CashFlowBalanceRelations Relations { get { return _relationsFactory; } }
 
 		/// <summary>The Id property of the Entity CashFlowBalance<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CashFlowBalance"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "CashFlowBalance"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)CashFlowBalanceFieldIndex.Id, true); }
@@ -134,34 +134,34 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Prevbeginbalance property of the Entity CashFlowBalance<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CashFlowBalance"."Prevbeginbalance".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> Prevbeginbalance
+		/// <remarks>Mapped on  table field: "CashFlowBalance"."Prevbeginbalance".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 19, 4, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Decimal> Prevbeginbalance
 		{
-			get { return (Nullable<System.Double>)GetValue((int)CashFlowBalanceFieldIndex.Prevbeginbalance, false); }
+			get { return (Nullable<System.Decimal>)GetValue((int)CashFlowBalanceFieldIndex.Prevbeginbalance, false); }
 			set { SetValue((int)CashFlowBalanceFieldIndex.Prevbeginbalance, value); }
 		}
 
 		/// <summary>The Prevendbalance property of the Entity CashFlowBalance<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CashFlowBalance"."Prevendbalance".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> Prevendbalance
+		/// <remarks>Mapped on  table field: "CashFlowBalance"."Prevendbalance".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 19, 4, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Decimal> Prevendbalance
 		{
-			get { return (Nullable<System.Double>)GetValue((int)CashFlowBalanceFieldIndex.Prevendbalance, false); }
+			get { return (Nullable<System.Decimal>)GetValue((int)CashFlowBalanceFieldIndex.Prevendbalance, false); }
 			set { SetValue((int)CashFlowBalanceFieldIndex.Prevendbalance, value); }
 		}
 
 		/// <summary>The Thisbeginbalance property of the Entity CashFlowBalance<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CashFlowBalance"."Thisbeginbalance".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> Thisbeginbalance
+		/// <remarks>Mapped on  table field: "CashFlowBalance"."Thisbeginbalance".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 19, 4, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Decimal> Thisbeginbalance
 		{
-			get { return (Nullable<System.Double>)GetValue((int)CashFlowBalanceFieldIndex.Thisbeginbalance, false); }
+			get { return (Nullable<System.Decimal>)GetValue((int)CashFlowBalanceFieldIndex.Thisbeginbalance, false); }
 			set { SetValue((int)CashFlowBalanceFieldIndex.Thisbeginbalance, value); }
 		}
 
 		/// <summary>The Thisendbalance property of the Entity CashFlowBalance<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CashFlowBalance"."Thisendbalance".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> Thisendbalance
+		/// <remarks>Mapped on  table field: "CashFlowBalance"."Thisendbalance".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 19, 4, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Decimal> Thisendbalance
 		{
-			get { return (Nullable<System.Double>)GetValue((int)CashFlowBalanceFieldIndex.Thisendbalance, false); }
+			get { return (Nullable<System.Decimal>)GetValue((int)CashFlowBalanceFieldIndex.Thisendbalance, false); }
 			set { SetValue((int)CashFlowBalanceFieldIndex.Thisendbalance, value); }
 		}
 

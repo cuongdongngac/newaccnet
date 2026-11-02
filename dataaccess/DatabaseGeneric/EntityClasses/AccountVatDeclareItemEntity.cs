@@ -138,7 +138,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathVatDeclareItem { get { return _staticMetaData.GetPrefetchPathElement("VatDeclareItem", CommonEntityBase.CreateEntityCollection<VatDeclareItemEntity>()); } }
 
 		/// <summary>The AccountId property of the Entity AccountVatDeclareItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AccountVatDeclareItem"."AccountId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AccountVatDeclareItem"."AccountId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String AccountId
 		{
 			get { return (System.String)GetValue((int)AccountVatDeclareItemFieldIndex.AccountId, true); }
@@ -154,7 +154,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The CounterAccountId property of the Entity AccountVatDeclareItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AccountVatDeclareItem"."CounterAccountId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AccountVatDeclareItem"."CounterAccountId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String CounterAccountId
 		{
 			get { return (System.String)GetValue((int)AccountVatDeclareItemFieldIndex.CounterAccountId, true); }
@@ -162,7 +162,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Id property of the Entity AccountVatDeclareItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AccountVatDeclareItem"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "AccountVatDeclareItem"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)AccountVatDeclareItemFieldIndex.Id, true); }
@@ -170,7 +170,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The IsAdd property of the Entity AccountVatDeclareItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AccountVatDeclareItem"."IsAdd".<br/>Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AccountVatDeclareItem"."IsAdd".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Boolean IsAdd
 		{
 			get { return (System.Boolean)GetValue((int)AccountVatDeclareItemFieldIndex.IsAdd, true); }
@@ -186,7 +186,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The VatDeclareItemId property of the Entity AccountVatDeclareItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AccountVatDeclareItem"."VatDeclareItemId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AccountVatDeclareItem"."VatDeclareItemId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> VatDeclareItemId
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)AccountVatDeclareItemFieldIndex.VatDeclareItemId, false); }

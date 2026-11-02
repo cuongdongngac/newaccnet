@@ -150,7 +150,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathDebtDetail { get { return _staticMetaData.GetPrefetchPathElement("DebtDetail", CommonEntityBase.CreateEntityCollection<DebtDetailEntity>()); } }
 
 		/// <summary>The CurrencyId property of the Entity CurrencyLiabilityLine<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CurrencyLiabilityLine"."CurrencyId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CurrencyLiabilityLine"."CurrencyId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String CurrencyId
 		{
 			get { return (System.String)GetValue((int)CurrencyLiabilityLineFieldIndex.CurrencyId, true); }
@@ -158,15 +158,15 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The ExchangeRate property of the Entity CurrencyLiabilityLine<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CurrencyLiabilityLine"."ExchangeRate".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> ExchangeRate
+		/// <remarks>Mapped on  table field: "CurrencyLiabilityLine"."ExchangeRate".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 19, 4, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Decimal> ExchangeRate
 		{
-			get { return (Nullable<System.Double>)GetValue((int)CurrencyLiabilityLineFieldIndex.ExchangeRate, false); }
+			get { return (Nullable<System.Decimal>)GetValue((int)CurrencyLiabilityLineFieldIndex.ExchangeRate, false); }
 			set { SetValue((int)CurrencyLiabilityLineFieldIndex.ExchangeRate, value); }
 		}
 
 		/// <summary>The LineId property of the Entity CurrencyLiabilityLine<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CurrencyLiabilityLine"."LineId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		/// <remarks>Mapped on  table field: "CurrencyLiabilityLine"."LineId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
 		public virtual System.Int32 LineId
 		{
 			get { return (System.Int32)GetValue((int)CurrencyLiabilityLineFieldIndex.LineId, true); }
@@ -174,10 +174,10 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Quantity property of the Entity CurrencyLiabilityLine<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CurrencyLiabilityLine"."Quantity".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> Quantity
+		/// <remarks>Mapped on  table field: "CurrencyLiabilityLine"."Quantity".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 19, 4, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Decimal> Quantity
 		{
-			get { return (Nullable<System.Double>)GetValue((int)CurrencyLiabilityLineFieldIndex.Quantity, false); }
+			get { return (Nullable<System.Decimal>)GetValue((int)CurrencyLiabilityLineFieldIndex.Quantity, false); }
 			set { SetValue((int)CurrencyLiabilityLineFieldIndex.Quantity, value); }
 		}
 

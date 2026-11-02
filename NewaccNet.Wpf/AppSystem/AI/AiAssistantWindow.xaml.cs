@@ -241,7 +241,7 @@ namespace NewaccNet.Wpf.AppSystem.AI
                 {
                     Dbcr = (short)(m.DbcrText.Equals("Nợ", StringComparison.OrdinalIgnoreCase) ? 1 : -1),
                     AccountId = m.AccountId,
-                    Amount = (double)m.Amount
+                    Amount = (decimal)m.Amount
                 };
 
                 voucher.JournalEntries.Add(masterEntity);
@@ -254,7 +254,7 @@ namespace NewaccNet.Wpf.AppSystem.AI
                         {
                             Dbcr = (short)(d.DbcrText.Equals("Nợ", StringComparison.OrdinalIgnoreCase) ? 1 : -1),
                             AccountId = d.AccountId,
-                            Amount = (double)d.Amount,
+                            Amount = (decimal)d.Amount,
                             ParentEntry = masterEntity
                         };
                         masterEntity.SubEntries.Add(childEntity);
@@ -557,7 +557,7 @@ namespace NewaccNet.Wpf.AppSystem.AI
             {
                 Dbcr = -1, // Có
                 AccountId = "331",
-                Amount = (double)inv.TotalAmount
+                Amount = (decimal)inv.TotalAmount
             };
             voucher.JournalEntries.Add(payMaster);
 
@@ -570,7 +570,7 @@ namespace NewaccNet.Wpf.AppSystem.AI
             {
                 Dbcr = 1, // Nợ
                 AccountId = primaryAccount,
-                Amount = (double)totalNet,
+                Amount = totalNet,
                 ParentEntry = payMaster
             };
             payMaster.SubEntries.Add(goodsEntry);
@@ -584,7 +584,7 @@ namespace NewaccNet.Wpf.AppSystem.AI
                 {
                     Dbcr = 1, // Nợ
                     AccountId = "1331",
-                    Amount = (double)totalTax,
+                    Amount = totalTax,
                     ParentEntry = payMaster
                 };
                 payMaster.SubEntries.Add(taxEntry);

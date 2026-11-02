@@ -246,15 +246,15 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
                 }
 
                 // Tự động bù trừ số tiền (Amount)
-                double parentAmount = parent.Amount ?? 0;
-                double sumExisting = 0;
+                decimal parentAmount = parent.Amount ?? 0m;
+                decimal sumExisting = 0m;
                 if (parent.SubEntries != null)
                 {
                     foreach (var child in parent.SubEntries)
                     {
                         if (child != newEntry) // Bỏ qua chính nó vừa tạo
                         {
-                            sumExisting += (child.Amount ?? 0);
+                            sumExisting += (child.Amount ?? 0m);
                         }
                     }
                 }
@@ -446,25 +446,25 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
         {
             if (_masterEntries == null) return;
             
-            double total = 0;
+            decimal total = 0m;
             // Tính tổng tất cả Master
             foreach (var master in _masterEntries)
             {
-                total += (master.Amount ?? 0) * (master.Dbcr ?? 0);
+                total += (master.Amount ?? 0m) * (master.Dbcr ?? 0);
                 
                 // Tính tổng tất cả Detail của Master đó
                 if (master.SubEntries != null)
                 {
                     foreach (var detail in master.SubEntries)
                     {
-                        total += (detail.Amount ?? 0) * (detail.Dbcr ?? 0);
+                        total += (detail.Amount ?? 0m) * (detail.Dbcr ?? 0);
                     }
                 }
             }
             
             total = Math.Round(total, 0);
             txtBalance.Text = Math.Abs(total).ToString("N0");
-            if (total == 0)
+            if (total == 0m)
                 txtBalance.Foreground = new SolidColorBrush(Colors.Green);
             else
                 txtBalance.Foreground = new SolidColorBrush(Colors.Red);
@@ -942,15 +942,15 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
                 }
 
                 // Tính tổng tiền theo định khoản phát sinh của cụm giao dịch
-                decimal sumDebit = (decimal)debitEntries.Sum(d => d.Amount ?? 0.0);
-                decimal sumCredit = (decimal)creditEntries.Sum(c => c.Amount ?? 0.0);
+                decimal sumDebit = debitEntries.Sum(d => d.Amount ?? 0m);
+                decimal sumCredit = creditEntries.Sum(c => c.Amount ?? 0m);
                 model.Amount = isReceipt
                     ? (sumDebit > 0 ? sumDebit : sumCredit)
                     : (sumCredit > 0 ? sumCredit : sumDebit);
 
                 if (model.Amount == 0 && selectedMaster.Amount.HasValue)
                 {
-                    model.Amount = (decimal)selectedMaster.Amount.Value;
+                    model.Amount = selectedMaster.Amount.Value;
                 }
             }
             else
@@ -1066,8 +1066,8 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
                         for (int i = 0; i < _voucherBatch.Count; i++)
                         {
                             var v = _voucherBatch[i];
-                            double bal = v.JournalEntries.Sum(je => (je.Amount ?? 0) * (je.Dbcr ?? 0));
-                            if (Math.Round(bal, 0) != 0 || (v.VoucherDate.HasValue && !NewaccNet.Core.Data.DbConfigService.CanUpdateVoucher(v.VoucherDate.Value, out _)))
+                            decimal bal = v.JournalEntries.Sum(je => (je.Amount ?? 0m) * (je.Dbcr ?? 0));
+                            if (Math.Round(bal, 0) != 0m || (v.VoucherDate.HasValue && !NewaccNet.Core.Data.DbConfigService.CanUpdateVoucher(v.VoucherDate.Value, out _)))
                             {
                                 NavigateTo(i);
                                 break;

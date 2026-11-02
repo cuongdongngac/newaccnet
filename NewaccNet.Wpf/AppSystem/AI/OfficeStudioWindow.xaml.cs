@@ -787,7 +787,7 @@ namespace NewaccNet.Wpf.AppSystem.AI
                 {
                     Dbcr = -1, // Có
                     AccountId = "331",
-                    Amount = (double)invoiceDto.TotalAmount
+                    Amount = (decimal)invoiceDto.TotalAmount
                 };
                 voucher.JournalEntries.Add(payMaster);
 
@@ -798,7 +798,7 @@ namespace NewaccNet.Wpf.AppSystem.AI
                     {
                         Dbcr = 1, // Nợ
                         AccountId = "156",
-                        Amount = (double)item.Amount,
+                        Amount = (decimal)item.Amount,
                         ParentEntry = payMaster
                     };
                     payMaster.SubEntries.Add(goodsEntry);
@@ -812,7 +812,7 @@ namespace NewaccNet.Wpf.AppSystem.AI
                     {
                         Dbcr = 1, // Nợ
                         AccountId = "1331",
-                        Amount = (double)invoiceDto.TotalTaxAmount,
+                        Amount = (decimal)invoiceDto.TotalTaxAmount,
                         ParentEntry = payMaster
                     };
                     payMaster.SubEntries.Add(taxEntry);

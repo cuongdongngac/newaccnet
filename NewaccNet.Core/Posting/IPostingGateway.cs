@@ -165,7 +165,7 @@ namespace NewaccNet.Core.Posting
             {
                 AccountId = creditAcc,
                 Dbcr = -1,
-                Amount = (double)top.TotalAmount
+                Amount = top.TotalAmount
             };
 
             // Nếu là giao dịch công nợ thì gắn đối tác vào chi tiết 131/331
@@ -174,7 +174,7 @@ namespace NewaccNet.Core.Posting
                 creditJe.DebtDetails.Add(new DebtDetailEntity
                 {
                     PartnerId = top.PartnerId,
-                    Amount = (double)top.TotalAmount,
+                    Amount = top.TotalAmount,
                     Liabilitydate = top.DueDate ?? top.VoucherDate
                 });
             }
@@ -194,7 +194,7 @@ namespace NewaccNet.Core.Posting
                 {
                     AccountId = g.Key.AccountId,
                     Dbcr = 1,
-                    Amount = (double)gAmount
+                    Amount = gAmount
                 };
 
                 // Nếu có phân hệ kho
@@ -219,8 +219,8 @@ namespace NewaccNet.Core.Posting
                         iv.InventoryVoucherLines.Add(new InventoryVoucherLineEntity
                         {
                             MaterialId = item.MaterialId,
-                            Quantity = (double)item.Quantity,
-                            Price = (double)item.UnitPrice
+                            Quantity = item.Quantity,
+                            Price = item.UnitPrice
                         });
                     }
 
@@ -238,7 +238,7 @@ namespace NewaccNet.Core.Posting
                 {
                     AccountId = vatAcc,
                     Dbcr = 1,
-                    Amount = (double)top.TotalTaxAmount
+                    Amount = top.TotalTaxAmount
                 };
 
                 vatJe.VatEntries.Add(new VatEntryEntity
@@ -249,8 +249,8 @@ namespace NewaccNet.Core.Posting
                     Vatbillno = top.InvoiceNumber ?? string.Empty,
                     Serialno = top.InvoiceSeries ?? string.Empty,
                     Vatbilldate = top.InvoiceDate ?? top.VoucherDate,
-                    Beforetaxamount = (double)top.TotalAmountWithoutTax,
-                    Amount = (double)top.TotalTaxAmount,
+                    Beforetaxamount = top.TotalAmountWithoutTax,
+                    Amount = top.TotalTaxAmount,
                     Vatdescription = voucher.Contents
                 });
 

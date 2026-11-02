@@ -33,9 +33,9 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
         public string SelectedTotalAccount => _context?.TotalAccountId ?? "";
         
         public string VoucherType => _context?.VoucherType ?? "";
-        public double TotalCostAmount => _context?.TotalCostAmount ?? 0;
-        public double TotalSellAmount => _context?.TotalSellAmount ?? 0;
-        public double TotalTaxAmount => _context?.TotalTaxAmount ?? 0;
+        public decimal TotalCostAmount => _context?.TotalCostAmount ?? 0m;
+        public decimal TotalSellAmount => _context?.TotalSellAmount ?? 0m;
+        public decimal TotalTaxAmount => _context?.TotalTaxAmount ?? 0m;
 
         public class MaterialBillTypeItem
         {
@@ -46,7 +46,7 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
         public class TaxRateItem
         {
             public int Taxrateid { get; set; }
-            public double Rate { get; set; }
+            public decimal Rate { get; set; }
             public string Display => (Rate > 1) ? $"{Rate:G29}%" : $"{Rate * 100:G29}%";
         }
 
@@ -120,7 +120,7 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
                 lueTaxRate.ItemsSource = _taxRates.Select(t => new TaxRateItem 
                 { 
                     Taxrateid = t.Taxrateid, 
-                    Rate = t.Rate ?? 0 
+                    Rate = t.Rate ?? 0m
                 }).ToList();
 
                 var partners = new EntityCollection<PartnerEntity>();
@@ -707,18 +707,18 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
                     if (string.IsNullOrWhiteSpace(line.MaterialId)) continue;
 
                     var mat = _materials.FirstOrDefault(m => m.MaterialId == line.MaterialId);
-                    double qty = line.Quantity ?? 0.0;
+                    decimal qty = line.Quantity ?? 0m;
                     
-                    double price;
-                    double amt;
+                    decimal price;
+                    decimal amt;
                     if (isSales)
                     {
-                        price = line.SellPrice ?? line.Price ?? 0.0;
+                        price = line.SellPrice ?? line.Price ?? 0m;
                         amt = line.SellAmount > 0 ? line.SellAmount : (qty * price);
                     }
                     else
                     {
-                        price = line.Price ?? 0.0;
+                        price = line.Price ?? 0m;
                         amt = line.Amount > 0 ? line.Amount : (qty * price);
                     }
 
@@ -739,7 +739,7 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
 
             if (hasTax)
             {
-                double sumTax = lines?.Sum(l => l.TaxAmount) ?? 0.0;
+                decimal sumTax = lines?.Sum(l => l.TaxAmount) ?? 0m;
                 if (sumTax == 0 && _context != null && _context.TotalTaxAmount > 0)
                 {
                     sumTax = _context.TotalTaxAmount;
@@ -763,7 +763,7 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
                 model.TotalPaymentAmount = model.TotalGoodsAmount;
             }
 
-            model.AmountInWords = NumberToWordsConverter.ConvertToWords((decimal)model.TotalPaymentAmount, "đồng");
+            model.AmountInWords = NumberToWordsConverter.ConvertToWords(model.TotalPaymentAmount, "đồng");
 
             return model;
         }

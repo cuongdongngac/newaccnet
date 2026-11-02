@@ -162,7 +162,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathPartner { get { return _staticMetaData.GetPrefetchPathElement("Partner", CommonEntityBase.CreateEntityCollection<PartnerEntity>()); } }
 
 		/// <summary>The AccountId property of the Entity DebtBalance<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DebtBalance"."AccountId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "DebtBalance"."AccountId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String AccountId
 		{
 			get { return (System.String)GetValue((int)DebtBalanceFieldIndex.AccountId, true); }
@@ -170,31 +170,31 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Beginbalance property of the Entity DebtBalance<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DebtBalance"."Beginbalance".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> Beginbalance
+		/// <remarks>Mapped on  table field: "DebtBalance"."Beginbalance".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 19, 4, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Decimal> Beginbalance
 		{
-			get { return (Nullable<System.Double>)GetValue((int)DebtBalanceFieldIndex.Beginbalance, false); }
+			get { return (Nullable<System.Decimal>)GetValue((int)DebtBalanceFieldIndex.Beginbalance, false); }
 			set { SetValue((int)DebtBalanceFieldIndex.Beginbalance, value); }
 		}
 
 		/// <summary>The Begincredit property of the Entity DebtBalance<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DebtBalance"."Begincredit".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> Begincredit
+		/// <remarks>Mapped on  table field: "DebtBalance"."Begincredit".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 19, 4, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Decimal> Begincredit
 		{
-			get { return (Nullable<System.Double>)GetValue((int)DebtBalanceFieldIndex.Begincredit, false); }
+			get { return (Nullable<System.Decimal>)GetValue((int)DebtBalanceFieldIndex.Begincredit, false); }
 			set { SetValue((int)DebtBalanceFieldIndex.Begincredit, value); }
 		}
 
 		/// <summary>The Begindebit property of the Entity DebtBalance<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DebtBalance"."Begindebit".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> Begindebit
+		/// <remarks>Mapped on  table field: "DebtBalance"."Begindebit".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 19, 4, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Decimal> Begindebit
 		{
-			get { return (Nullable<System.Double>)GetValue((int)DebtBalanceFieldIndex.Begindebit, false); }
+			get { return (Nullable<System.Decimal>)GetValue((int)DebtBalanceFieldIndex.Begindebit, false); }
 			set { SetValue((int)DebtBalanceFieldIndex.Begindebit, value); }
 		}
 
 		/// <summary>The DebtTypeId property of the Entity DebtBalance<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DebtBalance"."DebtTypeId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "DebtBalance"."DebtTypeId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String DebtTypeId
 		{
 			get { return (System.String)GetValue((int)DebtBalanceFieldIndex.DebtTypeId, true); }
@@ -202,31 +202,31 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Endbalance property of the Entity DebtBalance<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DebtBalance"."Endbalance".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> Endbalance
+		/// <remarks>Mapped on  table field: "DebtBalance"."Endbalance".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 19, 4, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Decimal> Endbalance
 		{
-			get { return (Nullable<System.Double>)GetValue((int)DebtBalanceFieldIndex.Endbalance, false); }
+			get { return (Nullable<System.Decimal>)GetValue((int)DebtBalanceFieldIndex.Endbalance, false); }
 			set { SetValue((int)DebtBalanceFieldIndex.Endbalance, value); }
 		}
 
 		/// <summary>The Endcredit property of the Entity DebtBalance<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DebtBalance"."Endcredit".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> Endcredit
+		/// <remarks>Mapped on  table field: "DebtBalance"."Endcredit".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 19, 4, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Decimal> Endcredit
 		{
-			get { return (Nullable<System.Double>)GetValue((int)DebtBalanceFieldIndex.Endcredit, false); }
+			get { return (Nullable<System.Decimal>)GetValue((int)DebtBalanceFieldIndex.Endcredit, false); }
 			set { SetValue((int)DebtBalanceFieldIndex.Endcredit, value); }
 		}
 
 		/// <summary>The Enddebit property of the Entity DebtBalance<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DebtBalance"."Enddebit".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> Enddebit
+		/// <remarks>Mapped on  table field: "DebtBalance"."Enddebit".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 19, 4, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Decimal> Enddebit
 		{
-			get { return (Nullable<System.Double>)GetValue((int)DebtBalanceFieldIndex.Enddebit, false); }
+			get { return (Nullable<System.Decimal>)GetValue((int)DebtBalanceFieldIndex.Enddebit, false); }
 			set { SetValue((int)DebtBalanceFieldIndex.Enddebit, value); }
 		}
 
 		/// <summary>The Id property of the Entity DebtBalance<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DebtBalance"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "DebtBalance"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)DebtBalanceFieldIndex.Id, true); }
@@ -234,26 +234,26 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Inbalance property of the Entity DebtBalance<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DebtBalance"."Inbalance".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> Inbalance
+		/// <remarks>Mapped on  table field: "DebtBalance"."Inbalance".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 19, 4, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Decimal> Inbalance
 		{
-			get { return (Nullable<System.Double>)GetValue((int)DebtBalanceFieldIndex.Inbalance, false); }
+			get { return (Nullable<System.Decimal>)GetValue((int)DebtBalanceFieldIndex.Inbalance, false); }
 			set { SetValue((int)DebtBalanceFieldIndex.Inbalance, value); }
 		}
 
 		/// <summary>The Incredit property of the Entity DebtBalance<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DebtBalance"."Incredit".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> Incredit
+		/// <remarks>Mapped on  table field: "DebtBalance"."Incredit".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 19, 4, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Decimal> Incredit
 		{
-			get { return (Nullable<System.Double>)GetValue((int)DebtBalanceFieldIndex.Incredit, false); }
+			get { return (Nullable<System.Decimal>)GetValue((int)DebtBalanceFieldIndex.Incredit, false); }
 			set { SetValue((int)DebtBalanceFieldIndex.Incredit, value); }
 		}
 
 		/// <summary>The Indebit property of the Entity DebtBalance<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DebtBalance"."Indebit".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> Indebit
+		/// <remarks>Mapped on  table field: "DebtBalance"."Indebit".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 19, 4, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Decimal> Indebit
 		{
-			get { return (Nullable<System.Double>)GetValue((int)DebtBalanceFieldIndex.Indebit, false); }
+			get { return (Nullable<System.Decimal>)GetValue((int)DebtBalanceFieldIndex.Indebit, false); }
 			set { SetValue((int)DebtBalanceFieldIndex.Indebit, value); }
 		}
 
@@ -266,7 +266,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The PartnerId property of the Entity DebtBalance<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DebtBalance"."PartnerId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "DebtBalance"."PartnerId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 20.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String PartnerId
 		{
 			get { return (System.String)GetValue((int)DebtBalanceFieldIndex.PartnerId, true); }

@@ -313,8 +313,8 @@ namespace NewaccNet.Reports
                 // Tra cứu thông tin Tài sản
                 assets.TryGetValue(aId, out var assetEntity);
                 string aName = assetEntity?.AssetName?.Trim() ?? aId;
-                double? origPrice = assetEntity?.Price;
-                double? timeUsing = assetEntity?.Timeusing;
+                double? origPrice = (double?)assetEntity?.Price;
+                double? timeUsing = (double?)assetEntity?.Timeusing;
                 DateTime? startDate = assetEntity?.Date;
 
                 // Tra cứu thông tin Bộ phận sử dụng

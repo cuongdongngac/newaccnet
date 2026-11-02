@@ -23,11 +23,11 @@ namespace DataAccess.EntityClasses
             }
         }
 
-        public double TotalCostAmount => Math.Round(this.InventoryVoucherLines?.Sum(l => l.Amount) ?? 0, 0);
+        public decimal TotalCostAmount => Math.Round(this.InventoryVoucherLines?.Sum(l => l.Amount) ?? 0m, 0);
 
-        public double TotalSellAmount => Math.Round(this.InventoryVoucherLines?.Sum(l => l.SellAmount) ?? 0, 0);
+        public decimal TotalSellAmount => Math.Round(this.InventoryVoucherLines?.Sum(l => l.SellAmount) ?? 0m, 0);
 
-        public double TotalTaxAmount => Math.Round(this.InventoryVoucherLines?.Sum(l => l.TaxAmount) ?? 0, 0);
+        public decimal TotalTaxAmount => Math.Round(this.InventoryVoucherLines?.Sum(l => l.TaxAmount) ?? 0m, 0);
 
         protected override void OnInitClassMembersComplete()
         {

@@ -56,18 +56,18 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             var tb = sender as System.Windows.Controls.TextBox;
             if (tb == null) return;
 
-            double val;
-            bool ok = double.TryParse(tb.Text.Replace(",", "").Trim(),
+            decimal val;
+            bool ok = decimal.TryParse(tb.Text.Replace(",", "").Trim(),
                                       System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out val);
 
             if (tb.Name == "txtQuantity")
             {
-                _currencyLine.Quantity = ok ? val : (double?)null;
+                _currencyLine.Quantity = ok ? val : (decimal?)null;
                 if (ok) tb.Text = val.ToString("N2");
             }
             else if (tb.Name == "txtExchangeRate")
             {
-                _currencyLine.ExchangeRate = ok ? val : (double?)null;
+                _currencyLine.ExchangeRate = ok ? val : (decimal?)null;
                 if (ok) tb.Text = val.ToString("N0");
             }
 
@@ -76,8 +76,8 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
 
         private void UpdateTotalText()
         {
-            double qty = _currencyLine.Quantity ?? 0;
-            double rate = _currencyLine.ExchangeRate ?? 0;
+            decimal qty = _currencyLine.Quantity ?? 0m;
+            decimal rate = _currencyLine.ExchangeRate ?? 0m;
             txtTotalAmount.Text = (qty * rate).ToString("N0");
         }
 
@@ -93,8 +93,8 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             _debtRow.CurrencyLiabilityLine = _currencyLine;
             
             // Tự động tính lại số tiền VND trên lưới công nợ
-            double qty = _currencyLine.Quantity ?? 0;
-            double rate = _currencyLine.ExchangeRate ?? 0;
+            decimal qty = _currencyLine.Quantity ?? 0m;
+            decimal rate = _currencyLine.ExchangeRate ?? 0m;
             if (qty > 0 && rate > 0)
             {
                 _debtRow.Amount = qty * rate;

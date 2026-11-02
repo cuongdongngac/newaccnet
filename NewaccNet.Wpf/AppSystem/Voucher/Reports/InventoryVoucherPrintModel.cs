@@ -9,9 +9,9 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Reports
         public string MaterialName { get; set; } = "";
         public string MaterialId { get; set; } = "";
         public string Unit { get; set; } = "";
-        public double Quantity { get; set; }
-        public double Price { get; set; }
-        public double Amount { get; set; }
+        public decimal Quantity { get; set; }
+        public decimal Price { get; set; }
+        public decimal Amount { get; set; }
     }
 
     public class InventoryVoucherPrintModel
@@ -49,9 +49,9 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Reports
         // Thuế & Tổng tiền
         public bool HasTax { get; set; } = false;
         public string TaxRateText { get; set; } = "Thuế GTGT";
-        public double TotalGoodsAmount { get; set; }
-        public double TotalTaxAmount { get; set; }
-        public double TotalPaymentAmount { get; set; }
+        public decimal TotalGoodsAmount { get; set; }
+        public decimal TotalTaxAmount { get; set; }
+        public decimal TotalPaymentAmount { get; set; }
 
         public string AmountInWords { get; set; } = "";
         public string OriginalVouchersCount { get; set; } = "";

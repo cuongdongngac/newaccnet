@@ -138,7 +138,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathCashFlowItem { get { return _staticMetaData.GetPrefetchPathElement("CashFlowItem", CommonEntityBase.CreateEntityCollection<CashFlowItemEntity>()); } }
 
 		/// <summary>The AccountId property of the Entity AccountCashFlowItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AccountCashFlowItem"."AccountId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AccountCashFlowItem"."AccountId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String AccountId
 		{
 			get { return (System.String)GetValue((int)AccountCashFlowItemFieldIndex.AccountId, true); }
@@ -146,7 +146,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The CashFlowItemId property of the Entity AccountCashFlowItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AccountCashFlowItem"."CashFlowItemId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AccountCashFlowItem"."CashFlowItemId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> CashFlowItemId
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)AccountCashFlowItemFieldIndex.CashFlowItemId, false); }
@@ -154,7 +154,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The CounterAccountId property of the Entity AccountCashFlowItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AccountCashFlowItem"."CounterAccountId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AccountCashFlowItem"."CounterAccountId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String CounterAccountId
 		{
 			get { return (System.String)GetValue((int)AccountCashFlowItemFieldIndex.CounterAccountId, true); }
@@ -162,7 +162,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Dbcr property of the Entity AccountCashFlowItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AccountCashFlowItem"."Dbcr".<br/>Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "AccountCashFlowItem"."DBCR".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Boolean Dbcr
 		{
 			get { return (System.Boolean)GetValue((int)AccountCashFlowItemFieldIndex.Dbcr, true); }
@@ -170,7 +170,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Id property of the Entity AccountCashFlowItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AccountCashFlowItem"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "AccountCashFlowItem"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)AccountCashFlowItemFieldIndex.Id, true); }

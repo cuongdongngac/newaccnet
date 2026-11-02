@@ -107,12 +107,12 @@ namespace NewaccNet.Wpf.AppSystem.Directory
             _entity.Date = (DateTime?)dtDate.EditValue;
             _entity.Country = string.IsNullOrWhiteSpace(txtCountry.Text) ? null : txtCountry.Text.Trim();
 
-            double qty;
-            double price;
-            double timeUsing;
-            _entity.Qty = double.TryParse(txtQty.Text, out qty) ? qty : (double?)null;
-            _entity.Price = double.TryParse(txtPrice.Text, out price) ? price : (double?)null;
-            _entity.Timeusing = double.TryParse(txtTimeUsing.Text, out timeUsing) ? timeUsing : (double?)null;
+            decimal qty;
+            decimal price;
+            decimal timeUsing;
+            _entity.Qty = decimal.TryParse(txtQty.Text, out qty) ? qty : null;
+            _entity.Price = decimal.TryParse(txtPrice.Text, out price) ? price : null;
+            _entity.Timeusing = decimal.TryParse(txtTimeUsing.Text, out timeUsing) ? timeUsing : null;
 
             this.DialogResult = true;
             this.Close();

@@ -7,6 +7,7 @@ using DataAccess.EntityClasses;
 using DataAccess.HelperClasses;
 using NewaccNet.Core.Data;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using SD.LLBLGen.Pro.QuerySpec;
 
 namespace NewaccNet.Core.Posting
 {
@@ -63,7 +64,7 @@ namespace NewaccNet.Core.Posting
             return list.Select(t => new TaxRateOption
             {
                 Taxrateid = t.Taxrateid,
-                Rate = t.Rate ?? 0
+                Rate = t.Rate ?? 0m
             }).OrderBy(t => t.Rate).ToList();
         }
 
@@ -207,6 +208,87 @@ namespace NewaccNet.Core.Posting
             }
         }
 
+        public static List<WarehouseVoucherLookupDto> SearchWarehouseVouchers(string typeOrPrefix, bool unpostedOnly = true, DateTime? fromDate = null, DateTime? toDate = null)
+        {
+            try
+            {
+                using var adapter = AppDataAccessAdapter.Create();
+                var voucherIds = GetVoucherIds(typeOrPrefix);
+                if (voucherIds.Count == 0) return new List<WarehouseVoucherLookupDto>();
+
+                var jvCol = new EntityCollection<JournalVoucherEntity>();
+                var bucket = new RelationPredicateBucket(JournalVoucherFields.Id.In(voucherIds));
+                if (unpostedOnly)
+                {
+                    bucket.PredicateExpression.Add(JournalVoucherFields.Bookflag.Equal(false));
+                }
+                if (fromDate.HasValue)
+                {
+                    bucket.PredicateExpression.Add(JournalVoucherFields.VoucherDate.GreaterEqual(fromDate.Value));
+                }
+                if (toDate.HasValue)
+                {
+                    bucket.PredicateExpression.Add(JournalVoucherFields.VoucherDate.LesserEqual(toDate.Value));
+                }
+
+                var prefetch = new PrefetchPath2(EntityType.JournalVoucherEntity);
+                var pEntries = prefetch.Add(JournalVoucherEntity.PrefetchPathJournalEntries);
+                pEntries.SubPath.Add(JournalEntryEntity.PrefetchPathSubEntries);
+                var pIv = pEntries.SubPath.Add(JournalEntryEntity.PrefetchPathInventoryVouchers);
+                pIv.SubPath.Add(InventoryVoucherEntity.PrefetchPathInventoryVoucherLines);
+
+                var sorter = new SortExpression(JournalVoucherFields.VoucherDate | SortOperator.Descending);
+                sorter.Add(JournalVoucherFields.Id | SortOperator.Descending);
+
+                adapter.FetchEntityCollection(jvCol, bucket, 0, sorter, prefetch);
+
+                var result = new List<WarehouseVoucherLookupDto>();
+                foreach (var jv in jvCol)
+                {
+                    InventoryVoucherEntity? iv = null;
+                    decimal totalAmount = 0;
+                    foreach (var je in jv.JournalEntries)
+                    {
+                        if (iv == null && je.InventoryVouchers.Count > 0)
+                        {
+                            iv = je.InventoryVouchers[0];
+                        }
+                        foreach (var sub in je.SubEntries)
+                        {
+                            if (iv == null && sub.InventoryVouchers.Count > 0)
+                            {
+                                iv = sub.InventoryVouchers[0];
+                            }
+                        }
+                    }
+
+                    if (iv != null)
+                    {
+                        totalAmount = iv.InventoryVoucherLines.Sum(l => (l.Quantity ?? 0m) * (l.Price ?? 0m));
+                        decimal taxAmt = iv.InventoryVoucherLines.Sum(l => ((l.Quantity ?? 0m) * (l.Price ?? 0m)) * (l.Rate ?? 0m) / 100m);
+                        totalAmount += taxAmt;
+                    }
+
+                    result.Add(new WarehouseVoucherLookupDto
+                    {
+                        VoucherId = jv.Id,
+                        VoucherNo = jv.VoucherNo ?? string.Empty,
+                        VoucherDate = jv.VoucherDate ?? DateTime.Today,
+                        PartnerName = iv?.Vatobjectname ?? string.Empty,
+                        Description = jv.Contents ?? string.Empty,
+                        TotalAmount = totalAmount,
+                        Bookflag = jv.Bookflag,
+                        WarehouseId = iv?.WarehouseId ?? string.Empty
+                    });
+                }
+                return result;
+            }
+            catch
+            {
+                return new List<WarehouseVoucherLookupDto>();
+            }
+        }
+
         public static WarehouseVoucherSaveParams? LoadVoucherDetailByInventoryVoucher(int inventoryVoucherId)
         {
             try
@@ -254,7 +336,8 @@ namespace NewaccNet.Core.Posting
                     VoucherNo = jv.VoucherNo ?? string.Empty,
                     VoucherDate = jv.VoucherDate ?? DateTime.Today,
                     Description = jv.Contents ?? string.Empty,
-                    Carrier = jv.Personname ?? string.Empty
+                    Carrier = jv.Personname ?? string.Empty,
+                    Bookflag = jv.Bookflag
                 };
 
                 InventoryVoucherEntity? iv = null;
@@ -314,9 +397,9 @@ namespace NewaccNet.Core.Posting
                         var item = new WarehouseVoucherLineItem
                         {
                             MaterialId = line.MaterialId ?? string.Empty,
-                            Quantity = line.Quantity ?? 0,
-                            Price = line.Price ?? 0,
-                            SellPrice = line.SellPrice ?? 0,
+                            Quantity = line.Quantity ?? 0m,
+                            Price = line.Price ?? 0m,
+                            SellPrice = line.SellPrice ?? 0m,
                             Taxrateid = line.Taxrateid
                         };
                         if (line.Rate.HasValue) item.TaxRate = line.Rate.Value;
@@ -373,6 +456,10 @@ namespace NewaccNet.Core.Posting
                                 var e = allEntries.FirstOrDefault(x => x.Id == graph.MaterialEntryId.Value);
                                 if (e != null && !string.IsNullOrEmpty(e.AccountId)) p.InventoryAccountId = e.AccountId;
                             }
+                            if (!string.IsNullOrEmpty(graph.PaymentType))
+                            {
+                                p.PaymentType = graph.PaymentType;
+                            }
 
                             loadedFromGraph = true;
                         }
@@ -412,6 +499,11 @@ namespace NewaccNet.Core.Posting
                             }
                         }
                     }
+                }
+
+                if (string.IsNullOrEmpty(p.PaymentType))
+                {
+                    p.PaymentType = p.TotalAccountId?.StartsWith("111") == true ? "Cash" : (p.TotalAccountId?.StartsWith("112") == true ? "Bank" : "Debt");
                 }
 
                 return p;
@@ -519,10 +611,10 @@ namespace NewaccNet.Core.Posting
                     Bookflag = true
                 };
 
-                double totalCost = p.Lines.Sum(l => l.Amount);
-                double totalSell = p.Lines.Sum(l => l.SellAmount);
-                double totalTax = p.Lines.Sum(l => l.TaxAmount);
-                double totalAll = (p.VoucherType == "XB") ? (totalSell + totalTax) : (totalCost + totalTax);
+                decimal totalCost = p.Lines.Sum(l => l.Amount);
+                decimal totalSell = p.Lines.Sum(l => l.SellAmount);
+                decimal totalTax = p.Lines.Sum(l => l.TaxAmount);
+                decimal totalAll = (p.VoucherType == "XB") ? (totalSell + totalTax) : (totalCost + totalTax);
 
                 string whId = !string.IsNullOrEmpty(p.WarehouseId) ? p.WarehouseId : p.FromWarehouseId;
 
@@ -613,7 +705,7 @@ namespace NewaccNet.Core.Posting
                                 Taxno = p.TaxCode,
                                 Beforetaxamount = totalCost,
                                 Amount = totalTax,
-                                Rate = (p.Lines.FirstOrDefault(l => l.TaxRate > 0)?.TaxRate ?? 0.1) * 100,
+                                Rate = (p.Lines.FirstOrDefault(l => l.TaxRate > 0)?.TaxRate ?? 0.1m) * 100m,
                                 Vatdescription = p.Description,
                                 Type = 1 // Đầu vào
                             });
@@ -687,7 +779,7 @@ namespace NewaccNet.Core.Posting
                                 Taxno = p.TaxCode,
                                 Beforetaxamount = totalSell,
                                 Amount = totalTax,
-                                Rate = (p.Lines.FirstOrDefault(l => l.TaxRate > 0)?.TaxRate ?? 0.1) * 100,
+                                Rate = (p.Lines.FirstOrDefault(l => l.TaxRate > 0)?.TaxRate ?? 0.1m) * 100m,
                                 Vatdescription = p.Description,
                                 Type = 2 // Đầu ra
                             });
@@ -829,6 +921,7 @@ namespace NewaccNet.Core.Posting
                             graphDto.MaterialEntryId = sub?.Id;
                         }
 
+                        graphDto.PaymentType = p.PaymentType ?? (p.TotalAccountId?.StartsWith("111") == true ? "Cash" : (p.TotalAccountId?.StartsWith("112") == true ? "Bank" : "Debt"));
                         iv.EntryGraph = JsonSerializer.Serialize(graphDto);
                         adapter.SaveEntity(iv, false, false);
                     }
@@ -996,6 +1089,8 @@ namespace NewaccNet.Core.Posting
                                 graphDto.OffsetEntryId = master?.Id;
                             }
 
+                            string? totalAcc = jv.JournalEntries.FirstOrDefault(x => x.AccountId != null && (x.AccountId.StartsWith("331") || x.AccountId.StartsWith("131") || x.AccountId.StartsWith("111") || x.AccountId.StartsWith("112")))?.AccountId;
+                            graphDto.PaymentType = totalAcc?.StartsWith("111") == true ? "Cash" : (totalAcc?.StartsWith("112") == true ? "Bank" : "Debt");
                             iv.EntryGraph = JsonSerializer.Serialize(graphDto);
                             batchToSave.Add(iv);
                             successCount++;

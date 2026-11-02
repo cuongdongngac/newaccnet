@@ -241,7 +241,7 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
 
         private void UpdateTotals()
         {
-            double cost = Lines.Sum(l => l.Amount);
+            decimal cost = Lines.Sum(l => l.Amount);
             txtTotalCost.EditValue = cost;
         }
 

@@ -150,7 +150,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathCostObject { get { return _staticMetaData.GetPrefetchPathElement("CostObject", CommonEntityBase.CreateEntityCollection<CostObjectEntity>()); } }
 
 		/// <summary>The Contents property of the Entity CostLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CostLedger"."Contents".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CostLedger"."Contents".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 100.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Contents
 		{
 			get { return (System.String)GetValue((int)CostLedgerFieldIndex.Contents, true); }
@@ -158,31 +158,31 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Credit property of the Entity CostLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CostLedger"."Credit".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> Credit
+		/// <remarks>Mapped on  table field: "CostLedger"."Credit".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 19, 4, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Decimal> Credit
 		{
-			get { return (Nullable<System.Double>)GetValue((int)CostLedgerFieldIndex.Credit, false); }
+			get { return (Nullable<System.Decimal>)GetValue((int)CostLedgerFieldIndex.Credit, false); }
 			set { SetValue((int)CostLedgerFieldIndex.Credit, value); }
 		}
 
 		/// <summary>The Debit property of the Entity CostLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CostLedger"."Debit".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> Debit
+		/// <remarks>Mapped on  table field: "CostLedger"."Debit".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 19, 4, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Decimal> Debit
 		{
-			get { return (Nullable<System.Double>)GetValue((int)CostLedgerFieldIndex.Debit, false); }
+			get { return (Nullable<System.Decimal>)GetValue((int)CostLedgerFieldIndex.Debit, false); }
 			set { SetValue((int)CostLedgerFieldIndex.Debit, value); }
 		}
 
 		/// <summary>The Endbalance property of the Entity CostLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CostLedger"."Endbalance".<br/>Table field type characteristics (type, precision, scale, length): Float, 15, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> Endbalance
+		/// <remarks>Mapped on  table field: "CostLedger"."Endbalance".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 19, 4, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Decimal> Endbalance
 		{
-			get { return (Nullable<System.Double>)GetValue((int)CostLedgerFieldIndex.Endbalance, false); }
+			get { return (Nullable<System.Decimal>)GetValue((int)CostLedgerFieldIndex.Endbalance, false); }
 			set { SetValue((int)CostLedgerFieldIndex.Endbalance, value); }
 		}
 
 		/// <summary>The ExobjectId property of the Entity CostLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CostLedger"."ExobjectId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CostLedger"."ExobjectId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String ExobjectId
 		{
 			get { return (System.String)GetValue((int)CostLedgerFieldIndex.ExobjectId, true); }
@@ -190,7 +190,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The ExpenseAtributeId property of the Entity CostLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CostLedger"."ExpenseAtributeId".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CostLedger"."ExpenseAtributeId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String ExpenseAtributeId
 		{
 			get { return (System.String)GetValue((int)CostLedgerFieldIndex.ExpenseAtributeId, true); }
@@ -198,7 +198,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Id property of the Entity CostLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CostLedger"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "CostLedger"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)CostLedgerFieldIndex.Id, true); }
@@ -206,7 +206,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The JournalVoucherId property of the Entity CostLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CostLedger"."JournalVoucherId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CostLedger"."JournalVoucherId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> JournalVoucherId
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)CostLedgerFieldIndex.JournalVoucherId, false); }
@@ -214,7 +214,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The VoucherDate property of the Entity CostLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CostLedger"."VoucherDate".<br/>Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CostLedger"."VoucherDate".<br/>Table field type characteristics (type, precision, scale, length): Date, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.DateTime> VoucherDate
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)CostLedgerFieldIndex.VoucherDate, false); }
@@ -222,7 +222,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The VoucherNo property of the Entity CostLedger<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "CostLedger"."VoucherNo".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "CostLedger"."VoucherNo".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String VoucherNo
 		{
 			get { return (System.String)GetValue((int)CostLedgerFieldIndex.VoucherNo, true); }

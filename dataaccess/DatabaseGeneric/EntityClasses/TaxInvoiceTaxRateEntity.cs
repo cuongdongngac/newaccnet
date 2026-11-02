@@ -138,7 +138,7 @@ namespace DataAccess.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathTaxInvoice { get { return _staticMetaData.GetPrefetchPathElement("TaxInvoice", CommonEntityBase.CreateEntityCollection<TaxInvoiceEntity>()); } }
 
 		/// <summary>The AmountWithoutTax property of the Entity TaxInvoiceTaxRate<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "TaxInvoiceTaxRate"."AmountWithoutTax".<br/>Table field type characteristics (type, precision, scale, length): Decimal, 19, 2, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "TaxInvoiceTaxRate"."AmountWithoutTax".<br/>Table field type characteristics (type, precision, scale, length): Currency, 19, 2, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Decimal> AmountWithoutTax
 		{
 			get { return (Nullable<System.Decimal>)GetValue((int)TaxInvoiceTaxRateFieldIndex.AmountWithoutTax, false); }
@@ -146,7 +146,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The Id property of the Entity TaxInvoiceTaxRate<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "TaxInvoiceTaxRate"."Id".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// <remarks>Mapped on  table field: "TaxInvoiceTaxRate"."Id".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int32 Id
 		{
 			get { return (System.Int32)GetValue((int)TaxInvoiceTaxRateFieldIndex.Id, true); }
@@ -154,7 +154,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The TaxAmount property of the Entity TaxInvoiceTaxRate<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "TaxInvoiceTaxRate"."TaxAmount".<br/>Table field type characteristics (type, precision, scale, length): Decimal, 19, 2, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "TaxInvoiceTaxRate"."TaxAmount".<br/>Table field type characteristics (type, precision, scale, length): Currency, 19, 2, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Decimal> TaxAmount
 		{
 			get { return (Nullable<System.Decimal>)GetValue((int)TaxInvoiceTaxRateFieldIndex.TaxAmount, false); }
@@ -162,7 +162,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The TaxInvoiceId property of the Entity TaxInvoiceTaxRate<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "TaxInvoiceTaxRate"."TaxInvoiceId".<br/>Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "TaxInvoiceTaxRate"."TaxInvoiceId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Int32 TaxInvoiceId
 		{
 			get { return (System.Int32)GetValue((int)TaxInvoiceTaxRateFieldIndex.TaxInvoiceId, true); }
@@ -170,7 +170,7 @@ namespace DataAccess.EntityClasses
 		}
 
 		/// <summary>The TaxRate property of the Entity TaxInvoiceTaxRate<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "TaxInvoiceTaxRate"."TaxRate".<br/>Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "TaxInvoiceTaxRate"."TaxRate".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 20.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String TaxRate
 		{
 			get { return (System.String)GetValue((int)TaxInvoiceTaxRateFieldIndex.TaxRate, true); }

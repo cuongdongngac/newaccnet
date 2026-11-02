@@ -205,9 +205,9 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 			this.AddElementFieldMapping("AssetEntity", "AssetName", "AssetName", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
 			this.AddElementFieldMapping("AssetEntity", "Country", "Country", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
 			this.AddElementFieldMapping("AssetEntity", "Date", "Date", true, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 4);
-			this.AddElementFieldMapping("AssetEntity", "Price", "Price", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 5);
-			this.AddElementFieldMapping("AssetEntity", "Qty", "Qty", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 6);
-			this.AddElementFieldMapping("AssetEntity", "Timeusing", "Timeusing", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 7);
+			this.AddElementFieldMapping("AssetEntity", "Price", "Price", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 5);
+			this.AddElementFieldMapping("AssetEntity", "Qty", "Qty", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 6);
+			this.AddElementFieldMapping("AssetEntity", "Timeusing", "Timeusing", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 7);
 			this.AddElementFieldMapping("AssetEntity", "Unit", "Unit", true, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 8);
 		}
 
@@ -218,8 +218,8 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 			this.AddElementFieldMapping("AssetDetailEntity", "AssetId", "AssetId", true, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("AssetDetailEntity", "Id", "Id", false, "Int", 0, 10, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("AssetDetailEntity", "JournalEntryId", "JournalEntryId", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
-			this.AddElementFieldMapping("AssetDetailEntity", "Price", "Price", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 3);
-			this.AddElementFieldMapping("AssetDetailEntity", "Quantity", "Quantity", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 4);
+			this.AddElementFieldMapping("AssetDetailEntity", "Price", "Price", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 3);
+			this.AddElementFieldMapping("AssetDetailEntity", "Quantity", "Quantity", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 4);
 			this.AddElementFieldMapping("AssetDetailEntity", "Reasonid", "Reasonid", true, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 5);
 			this.AddElementFieldMapping("AssetDetailEntity", "Srcode", "Srcode", true, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 6);
 		}
@@ -239,15 +239,15 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 		private void InitAssetLedgerEntityMappings()
 		{
 			this.AddElementMapping("AssetLedgerEntity", @"DataAccess", @"Newacc", "AssetLedger", 14, 0);
-			this.AddElementFieldMapping("AssetLedgerEntity", "Camount", "Camount", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 0);
+			this.AddElementFieldMapping("AssetLedgerEntity", "Camount", "Camount", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 0);
 			this.AddElementFieldMapping("AssetLedgerEntity", "Contents", "Contents", true, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 1);
-			this.AddElementFieldMapping("AssetLedgerEntity", "Cprice", "Cprice", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 2);
-			this.AddElementFieldMapping("AssetLedgerEntity", "Cquantity", "Cquantity", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 3);
-			this.AddElementFieldMapping("AssetLedgerEntity", "Damount", "Damount", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 4);
-			this.AddElementFieldMapping("AssetLedgerEntity", "Dprice", "Dprice", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 5);
-			this.AddElementFieldMapping("AssetLedgerEntity", "Dquantity", "Dquantity", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 6);
-			this.AddElementFieldMapping("AssetLedgerEntity", "Endamount", "Endamount", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 7);
-			this.AddElementFieldMapping("AssetLedgerEntity", "Endqty", "Endqty", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 8);
+			this.AddElementFieldMapping("AssetLedgerEntity", "Cprice", "Cprice", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 2);
+			this.AddElementFieldMapping("AssetLedgerEntity", "Cquantity", "Cquantity", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 3);
+			this.AddElementFieldMapping("AssetLedgerEntity", "Damount", "Damount", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 4);
+			this.AddElementFieldMapping("AssetLedgerEntity", "Dprice", "Dprice", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 5);
+			this.AddElementFieldMapping("AssetLedgerEntity", "Dquantity", "Dquantity", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 6);
+			this.AddElementFieldMapping("AssetLedgerEntity", "Endamount", "Endamount", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 7);
+			this.AddElementFieldMapping("AssetLedgerEntity", "Endqty", "Endqty", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 8);
 			this.AddElementFieldMapping("AssetLedgerEntity", "Flag", "Flag", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 9);
 			this.AddElementFieldMapping("AssetLedgerEntity", "Id", "Id", false, "Int", 0, 10, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int32), 10);
 			this.AddElementFieldMapping("AssetLedgerEntity", "JournalVoucherId", "JournalVoucherId", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 11);
@@ -264,15 +264,15 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 			this.AddElementFieldMapping("AssetTrackingEntity", "Assettrackingid", "Assettrackingid", false, "Int", 0, 10, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int32), 2);
 			this.AddElementFieldMapping("AssetTrackingEntity", "Begindate", "Begindate", true, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 3);
 			this.AddElementFieldMapping("AssetTrackingEntity", "Country", "Country", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 4);
-			this.AddElementFieldMapping("AssetTrackingEntity", "Depprice", "Depprice", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 5);
-			this.AddElementFieldMapping("AssetTrackingEntity", "Deprate", "Deprate", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 6);
+			this.AddElementFieldMapping("AssetTrackingEntity", "Depprice", "Depprice", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 5);
+			this.AddElementFieldMapping("AssetTrackingEntity", "Deprate", "Deprate", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 6);
 			this.AddElementFieldMapping("AssetTrackingEntity", "Deptid", "Deptid", true, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 7);
 			this.AddElementFieldMapping("AssetTrackingEntity", "Enddate", "Enddate", true, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 8);
 			this.AddElementFieldMapping("AssetTrackingEntity", "ExaccountId", "ExaccountId", true, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 9);
 			this.AddElementFieldMapping("AssetTrackingEntity", "ExobjectId", "ExobjectId", true, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 10);
-			this.AddElementFieldMapping("AssetTrackingEntity", "Qty", "Qty", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 11);
-			this.AddElementFieldMapping("AssetTrackingEntity", "Remainvalue", "Remainvalue", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 12);
-			this.AddElementFieldMapping("AssetTrackingEntity", "Timeusing", "Timeusing", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 13);
+			this.AddElementFieldMapping("AssetTrackingEntity", "Qty", "Qty", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 11);
+			this.AddElementFieldMapping("AssetTrackingEntity", "Remainvalue", "Remainvalue", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 12);
+			this.AddElementFieldMapping("AssetTrackingEntity", "Timeusing", "Timeusing", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 13);
 		}
 
 		/// <summary>Inits AssetTrackingDepreciationEntity's mappings</summary>
@@ -282,15 +282,15 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 			this.AddElementFieldMapping("AssetTrackingDepreciationEntity", "AsaccountId", "AsaccountId", true, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("AssetTrackingDepreciationEntity", "AssetId", "AssetId", false, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("AssetTrackingDepreciationEntity", "Begindate", "Begindate", true, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 2);
-			this.AddElementFieldMapping("AssetTrackingDepreciationEntity", "Depprice", "Depprice", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 3);
-			this.AddElementFieldMapping("AssetTrackingDepreciationEntity", "Deprate", "Deprate", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 4);
+			this.AddElementFieldMapping("AssetTrackingDepreciationEntity", "Depprice", "Depprice", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 3);
+			this.AddElementFieldMapping("AssetTrackingDepreciationEntity", "Deprate", "Deprate", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 4);
 			this.AddElementFieldMapping("AssetTrackingDepreciationEntity", "Deptid", "Deptid", true, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 5);
 			this.AddElementFieldMapping("AssetTrackingDepreciationEntity", "Enddate", "Enddate", true, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 6);
 			this.AddElementFieldMapping("AssetTrackingDepreciationEntity", "ExaccountId", "ExaccountId", true, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 7);
 			this.AddElementFieldMapping("AssetTrackingDepreciationEntity", "ExobjectId", "ExobjectId", true, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 8);
-			this.AddElementFieldMapping("AssetTrackingDepreciationEntity", "Qty", "Qty", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 9);
-			this.AddElementFieldMapping("AssetTrackingDepreciationEntity", "Remainvalue", "Remainvalue", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 10);
-			this.AddElementFieldMapping("AssetTrackingDepreciationEntity", "Timeusing", "Timeusing", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 11);
+			this.AddElementFieldMapping("AssetTrackingDepreciationEntity", "Qty", "Qty", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 9);
+			this.AddElementFieldMapping("AssetTrackingDepreciationEntity", "Remainvalue", "Remainvalue", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 10);
+			this.AddElementFieldMapping("AssetTrackingDepreciationEntity", "Timeusing", "Timeusing", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 11);
 		}
 
 		/// <summary>Inits BusinessResultItemEntity's mappings</summary>
@@ -311,10 +311,10 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 		{
 			this.AddElementMapping("CashFlowBalanceEntity", @"DataAccess", @"Newacc", "CashFlowBalance", 5, 0);
 			this.AddElementFieldMapping("CashFlowBalanceEntity", "Id", "Id", false, "Int", 0, 10, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int32), 0);
-			this.AddElementFieldMapping("CashFlowBalanceEntity", "Prevbeginbalance", "Prevbeginbalance", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 1);
-			this.AddElementFieldMapping("CashFlowBalanceEntity", "Prevendbalance", "Prevendbalance", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 2);
-			this.AddElementFieldMapping("CashFlowBalanceEntity", "Thisbeginbalance", "Thisbeginbalance", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 3);
-			this.AddElementFieldMapping("CashFlowBalanceEntity", "Thisendbalance", "Thisendbalance", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 4);
+			this.AddElementFieldMapping("CashFlowBalanceEntity", "Prevbeginbalance", "Prevbeginbalance", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 1);
+			this.AddElementFieldMapping("CashFlowBalanceEntity", "Prevendbalance", "Prevendbalance", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 2);
+			this.AddElementFieldMapping("CashFlowBalanceEntity", "Thisbeginbalance", "Thisbeginbalance", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 3);
+			this.AddElementFieldMapping("CashFlowBalanceEntity", "Thisendbalance", "Thisendbalance", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 4);
 		}
 
 		/// <summary>Inits CashFlowCategoryEntity's mappings</summary>
@@ -344,7 +344,7 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 		private void InitCashFlowPreviousPeriodEntityMappings()
 		{
 			this.AddElementMapping("CashFlowPreviousPeriodEntity", @"DataAccess", @"Newacc", "CashFlowPreviousPeriod", 9, 0);
-			this.AddElementFieldMapping("CashFlowPreviousPeriodEntity", "Amount", "Amount", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 0);
+			this.AddElementFieldMapping("CashFlowPreviousPeriodEntity", "Amount", "Amount", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 0);
 			this.AddElementFieldMapping("CashFlowPreviousPeriodEntity", "Bold", "Bold", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("CashFlowPreviousPeriodEntity", "CashFlowId", "CashFlowId", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
 			this.AddElementFieldMapping("CashFlowPreviousPeriodEntity", "CashFlowName", "CashFlowName", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
@@ -360,8 +360,8 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 		{
 			this.AddElementMapping("CashFlowYearBalanceEntity", @"DataAccess", @"Newacc", "CashFlowYearBalance", 3, 0);
 			this.AddElementFieldMapping("CashFlowYearBalanceEntity", "Id", "Id", false, "Int", 0, 10, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int32), 0);
-			this.AddElementFieldMapping("CashFlowYearBalanceEntity", "Prevbeginbalance", "Prevbeginbalance", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 1);
-			this.AddElementFieldMapping("CashFlowYearBalanceEntity", "Thisbeginbalance", "Thisbeginbalance", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 2);
+			this.AddElementFieldMapping("CashFlowYearBalanceEntity", "Prevbeginbalance", "Prevbeginbalance", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 1);
+			this.AddElementFieldMapping("CashFlowYearBalanceEntity", "Thisbeginbalance", "Thisbeginbalance", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 2);
 		}
 
 		/// <summary>Inits CategoryEntity's mappings</summary>
@@ -409,7 +409,7 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 		private void InitCostDetailEntityMappings()
 		{
 			this.AddElementMapping("CostDetailEntity", @"DataAccess", @"Newacc", "CostDetail", 8, 0);
-			this.AddElementFieldMapping("CostDetailEntity", "Amount", "Amount", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 0);
+			this.AddElementFieldMapping("CostDetailEntity", "Amount", "Amount", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 0);
 			this.AddElementFieldMapping("CostDetailEntity", "CostElementId", "CostElementId", true, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("CostDetailEntity", "CostObjectId", "CostObjectId", true, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 2);
 			this.AddElementFieldMapping("CostDetailEntity", "Id", "Id", false, "Int", 0, 10, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int32), 3);
@@ -433,9 +433,9 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 		{
 			this.AddElementMapping("CostLedgerEntity", @"DataAccess", @"Newacc", "CostLedger", 10, 0);
 			this.AddElementFieldMapping("CostLedgerEntity", "Contents", "Contents", true, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 0);
-			this.AddElementFieldMapping("CostLedgerEntity", "Credit", "Credit", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 1);
-			this.AddElementFieldMapping("CostLedgerEntity", "Debit", "Debit", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 2);
-			this.AddElementFieldMapping("CostLedgerEntity", "Endbalance", "Endbalance", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 3);
+			this.AddElementFieldMapping("CostLedgerEntity", "Credit", "Credit", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 1);
+			this.AddElementFieldMapping("CostLedgerEntity", "Debit", "Debit", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 2);
+			this.AddElementFieldMapping("CostLedgerEntity", "Endbalance", "Endbalance", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 3);
 			this.AddElementFieldMapping("CostLedgerEntity", "ExobjectId", "ExobjectId", true, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 4);
 			this.AddElementFieldMapping("CostLedgerEntity", "ExpenseAtributeId", "ExpenseAtributeId", true, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 5);
 			this.AddElementFieldMapping("CostLedgerEntity", "Id", "Id", false, "Int", 0, 10, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int32), 6);
@@ -466,25 +466,25 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 		{
 			this.AddElementMapping("CurrencyDetailEntity", @"DataAccess", @"Newacc", "CurrencyDetail", 5, 0);
 			this.AddElementFieldMapping("CurrencyDetailEntity", "CurrencyId", "CurrencyId", true, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 0);
-			this.AddElementFieldMapping("CurrencyDetailEntity", "ExchangeRate", "ExchangeRate", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 1);
+			this.AddElementFieldMapping("CurrencyDetailEntity", "ExchangeRate", "ExchangeRate", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 1);
 			this.AddElementFieldMapping("CurrencyDetailEntity", "Id", "Id", false, "Int", 0, 10, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int32), 2);
 			this.AddElementFieldMapping("CurrencyDetailEntity", "JournalEntryId", "JournalEntryId", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 3);
-			this.AddElementFieldMapping("CurrencyDetailEntity", "Quantity", "Quantity", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 4);
+			this.AddElementFieldMapping("CurrencyDetailEntity", "Quantity", "Quantity", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 4);
 		}
 
 		/// <summary>Inits CurrencyLedgerEntity's mappings</summary>
 		private void InitCurrencyLedgerEntityMappings()
 		{
 			this.AddElementMapping("CurrencyLedgerEntity", @"DataAccess", @"Newacc", "CurrencyLedger", 14, 0);
-			this.AddElementFieldMapping("CurrencyLedgerEntity", "Camount", "Camount", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 0);
+			this.AddElementFieldMapping("CurrencyLedgerEntity", "Camount", "Camount", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 0);
 			this.AddElementFieldMapping("CurrencyLedgerEntity", "Contents", "Contents", true, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 1);
-			this.AddElementFieldMapping("CurrencyLedgerEntity", "Cquantity", "Cquantity", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 2);
-			this.AddElementFieldMapping("CurrencyLedgerEntity", "Crate", "Crate", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 3);
-			this.AddElementFieldMapping("CurrencyLedgerEntity", "Damount", "Damount", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 4);
-			this.AddElementFieldMapping("CurrencyLedgerEntity", "Dquantity", "Dquantity", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 5);
-			this.AddElementFieldMapping("CurrencyLedgerEntity", "Drate", "Drate", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 6);
-			this.AddElementFieldMapping("CurrencyLedgerEntity", "Endamount", "Endamount", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 7);
-			this.AddElementFieldMapping("CurrencyLedgerEntity", "Endqty", "Endqty", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 8);
+			this.AddElementFieldMapping("CurrencyLedgerEntity", "Cquantity", "Cquantity", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 2);
+			this.AddElementFieldMapping("CurrencyLedgerEntity", "Crate", "Crate", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 3);
+			this.AddElementFieldMapping("CurrencyLedgerEntity", "Damount", "Damount", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 4);
+			this.AddElementFieldMapping("CurrencyLedgerEntity", "Dquantity", "Dquantity", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 5);
+			this.AddElementFieldMapping("CurrencyLedgerEntity", "Drate", "Drate", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 6);
+			this.AddElementFieldMapping("CurrencyLedgerEntity", "Endamount", "Endamount", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 7);
+			this.AddElementFieldMapping("CurrencyLedgerEntity", "Endqty", "Endqty", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 8);
 			this.AddElementFieldMapping("CurrencyLedgerEntity", "Flag", "Flag", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 9);
 			this.AddElementFieldMapping("CurrencyLedgerEntity", "Id", "Id", false, "Int", 0, 10, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int32), 10);
 			this.AddElementFieldMapping("CurrencyLedgerEntity", "JournalVoucherId", "JournalVoucherId", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 11);
@@ -497,9 +497,9 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 		{
 			this.AddElementMapping("CurrencyLiabilityLineEntity", @"DataAccess", @"Newacc", "CurrencyLiabilityLine", 4, 0);
 			this.AddElementFieldMapping("CurrencyLiabilityLineEntity", "CurrencyId", "CurrencyId", true, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 0);
-			this.AddElementFieldMapping("CurrencyLiabilityLineEntity", "ExchangeRate", "ExchangeRate", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 1);
+			this.AddElementFieldMapping("CurrencyLiabilityLineEntity", "ExchangeRate", "ExchangeRate", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 1);
 			this.AddElementFieldMapping("CurrencyLiabilityLineEntity", "LineId", "LineId", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
-			this.AddElementFieldMapping("CurrencyLiabilityLineEntity", "Quantity", "Quantity", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 3);
+			this.AddElementFieldMapping("CurrencyLiabilityLineEntity", "Quantity", "Quantity", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 3);
 		}
 
 		/// <summary>Inits CustomCostReportEntity's mappings</summary>
@@ -537,18 +537,18 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 		/// <summary>Inits DbConfigEntity's mappings</summary>
 		private void InitDbConfigEntityMappings()
 		{
-			this.AddElementMapping("DbConfigEntity", @"DataAccess", @"Newacc", "Dbconfig", 15, 0);
+			this.AddElementMapping("DbConfigEntity", @"DataAccess", @"Newacc", "DbConfig", 15, 0);
 			this.AddElementFieldMapping("DbConfigEntity", "AccountingYear", "AccountingYear", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 0);
-			this.AddElementFieldMapping("DbConfigEntity", "AccountMethod", "AccountMethod", true, "TinyInt", 0, 3, 0, false, "", new SD.LLBLGen.Pro.ORMSupportClasses.ChangeTypeConverter<System.Int32>(), typeof(System.Byte), 1);
-			this.AddElementFieldMapping("DbConfigEntity", "Address", "Version", true, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("DbConfigEntity", "AccountMethod", "AccountMethod", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
+			this.AddElementFieldMapping("DbConfigEntity", "Address", "Address", true, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 2);
 			this.AddElementFieldMapping("DbConfigEntity", "BankAccount", "BankAccount", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
 			this.AddElementFieldMapping("DbConfigEntity", "CompanyName", "CompanyName", true, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 4);
 			this.AddElementFieldMapping("DbConfigEntity", "CreatedDate", "CreatedDate", true, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 5);
 			this.AddElementFieldMapping("DbConfigEntity", "DepartmentName", "DepartmentName", true, "NVarChar", 150, 0, 0, false, "", null, typeof(System.String), 6);
 			this.AddElementFieldMapping("DbConfigEntity", "ExpiryDate", "ExpiryDate", true, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 7);
 			this.AddElementFieldMapping("DbConfigEntity", "Id", "Id", false, "Int", 0, 10, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int32), 8);
-			this.AddElementFieldMapping("DbConfigEntity", "IsCompanyLicense", "AccountFlag", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 9);
-			this.AddElementFieldMapping("DbConfigEntity", "Material", "Material", true, "TinyInt", 0, 3, 0, false, "", new SD.LLBLGen.Pro.ORMSupportClasses.ChangeTypeConverter<System.Int32>(), typeof(System.Byte), 10);
+			this.AddElementFieldMapping("DbConfigEntity", "IsCompanyLicense", "IsCompanyLicense", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 9);
+			this.AddElementFieldMapping("DbConfigEntity", "Material", "Material", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 10);
 			this.AddElementFieldMapping("DbConfigEntity", "RegistrationCode", "RegistrationCode", true, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 11);
 			this.AddElementFieldMapping("DbConfigEntity", "TaxCode", "TaxCode", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 12);
 			this.AddElementFieldMapping("DbConfigEntity", "UpdatedDate", "UpdatedDate", true, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 13);
@@ -560,17 +560,17 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 		{
 			this.AddElementMapping("DebtBalanceEntity", @"DataAccess", @"Newacc", "DebtBalance", 14, 0);
 			this.AddElementFieldMapping("DebtBalanceEntity", "AccountId", "AccountId", true, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 0);
-			this.AddElementFieldMapping("DebtBalanceEntity", "Beginbalance", "Beginbalance", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 1);
-			this.AddElementFieldMapping("DebtBalanceEntity", "Begincredit", "Begincredit", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 2);
-			this.AddElementFieldMapping("DebtBalanceEntity", "Begindebit", "Begindebit", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 3);
+			this.AddElementFieldMapping("DebtBalanceEntity", "Beginbalance", "Beginbalance", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 1);
+			this.AddElementFieldMapping("DebtBalanceEntity", "Begincredit", "Begincredit", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 2);
+			this.AddElementFieldMapping("DebtBalanceEntity", "Begindebit", "Begindebit", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 3);
 			this.AddElementFieldMapping("DebtBalanceEntity", "DebtTypeId", "DebtTypeId", true, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 4);
-			this.AddElementFieldMapping("DebtBalanceEntity", "Endbalance", "Endbalance", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 5);
-			this.AddElementFieldMapping("DebtBalanceEntity", "Endcredit", "Endcredit", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 6);
-			this.AddElementFieldMapping("DebtBalanceEntity", "Enddebit", "Enddebit", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 7);
+			this.AddElementFieldMapping("DebtBalanceEntity", "Endbalance", "Endbalance", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 5);
+			this.AddElementFieldMapping("DebtBalanceEntity", "Endcredit", "Endcredit", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 6);
+			this.AddElementFieldMapping("DebtBalanceEntity", "Enddebit", "Enddebit", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 7);
 			this.AddElementFieldMapping("DebtBalanceEntity", "Id", "Id", false, "Int", 0, 10, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int32), 8);
-			this.AddElementFieldMapping("DebtBalanceEntity", "Inbalance", "Inbalance", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 9);
-			this.AddElementFieldMapping("DebtBalanceEntity", "Incredit", "Incredit", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 10);
-			this.AddElementFieldMapping("DebtBalanceEntity", "Indebit", "Indebit", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 11);
+			this.AddElementFieldMapping("DebtBalanceEntity", "Inbalance", "Inbalance", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 9);
+			this.AddElementFieldMapping("DebtBalanceEntity", "Incredit", "Incredit", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 10);
+			this.AddElementFieldMapping("DebtBalanceEntity", "Indebit", "Indebit", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 11);
 			this.AddElementFieldMapping("DebtBalanceEntity", "LongtermFlag", "LongtermFlag", true, "SmallInt", 0, 5, 0, false, "", null, typeof(System.Int16), 12);
 			this.AddElementFieldMapping("DebtBalanceEntity", "PartnerId", "PartnerId", true, "NVarChar", 20, 0, 0, false, "", null, typeof(System.String), 13);
 		}
@@ -579,7 +579,7 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 		private void InitDebtDetailEntityMappings()
 		{
 			this.AddElementMapping("DebtDetailEntity", @"DataAccess", @"Newacc", "DebtDetail", 10, 0);
-			this.AddElementFieldMapping("DebtDetailEntity", "Amount", "Amount", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 0);
+			this.AddElementFieldMapping("DebtDetailEntity", "Amount", "Amount", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 0);
 			this.AddElementFieldMapping("DebtDetailEntity", "Currency", "Currency", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 1);
 			this.AddElementFieldMapping("DebtDetailEntity", "DebtReasonId", "DebtReasonId", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
 			this.AddElementFieldMapping("DebtDetailEntity", "DebtTypeId", "DebtTypeId", true, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 3);
@@ -596,11 +596,11 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 		{
 			this.AddElementMapping("DebtLedgerEntity", @"DataAccess", @"Newacc", "DebtLedger", 11, 0);
 			this.AddElementFieldMapping("DebtLedgerEntity", "Contents", "Contents", true, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 0);
-			this.AddElementFieldMapping("DebtLedgerEntity", "Credit", "Credit", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 1);
+			this.AddElementFieldMapping("DebtLedgerEntity", "Credit", "Credit", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 1);
 			this.AddElementFieldMapping("DebtLedgerEntity", "CustomerId", "CustomerId", true, "NVarChar", 20, 0, 0, false, "", null, typeof(System.String), 2);
-			this.AddElementFieldMapping("DebtLedgerEntity", "Debit", "Debit", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 3);
+			this.AddElementFieldMapping("DebtLedgerEntity", "Debit", "Debit", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 3);
 			this.AddElementFieldMapping("DebtLedgerEntity", "DebtTypeId", "DebtTypeId", true, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 4);
-			this.AddElementFieldMapping("DebtLedgerEntity", "Endbalance", "Endbalance", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 5);
+			this.AddElementFieldMapping("DebtLedgerEntity", "Endbalance", "Endbalance", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 5);
 			this.AddElementFieldMapping("DebtLedgerEntity", "Id", "Id", false, "Int", 0, 10, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int32), 6);
 			this.AddElementFieldMapping("DebtLedgerEntity", "JournalVoucherId", "JournalVoucherId", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 7);
 			this.AddElementFieldMapping("DebtLedgerEntity", "LiabilityDuesId", "LiabilityDuesId", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 8);
@@ -638,12 +638,12 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 		private void InitDepreciationEntityMappings()
 		{
 			this.AddElementMapping("DepreciationEntity", @"DataAccess", @"Newacc", "Depreciation", 7, 0);
-			this.AddElementFieldMapping("DepreciationEntity", "Amount", "Amount", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 0);
+			this.AddElementFieldMapping("DepreciationEntity", "Amount", "Amount", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 0);
 			this.AddElementFieldMapping("DepreciationEntity", "AssetId", "AssetId", true, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("DepreciationEntity", "Flag", "Flag", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
 			this.AddElementFieldMapping("DepreciationEntity", "Id", "Id", false, "Int", 0, 10, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int32), 3);
-			this.AddElementFieldMapping("DepreciationEntity", "Rest", "Rest", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 4);
-			this.AddElementFieldMapping("DepreciationEntity", "Restqty", "Restqty", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 5);
+			this.AddElementFieldMapping("DepreciationEntity", "Rest", "Rest", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 4);
+			this.AddElementFieldMapping("DepreciationEntity", "Restqty", "Restqty", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 5);
 			this.AddElementFieldMapping("DepreciationEntity", "Srcode", "Srcode", true, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 6);
 		}
 
@@ -652,7 +652,7 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 		{
 			this.AddElementMapping("ExchangeRateEntity", @"DataAccess", @"Newacc", "ExchangeRate", 4, 0);
 			this.AddElementFieldMapping("ExchangeRateEntity", "CurrencyId", "CurrencyId", false, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 0);
-			this.AddElementFieldMapping("ExchangeRateEntity", "ExchangeRate", "ExchangeRate", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 1);
+			this.AddElementFieldMapping("ExchangeRateEntity", "ExchangeRate", "ExchangeRate", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 1);
 			this.AddElementFieldMapping("ExchangeRateEntity", "Id", "Id", false, "Int", 0, 10, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int32), 2);
 			this.AddElementFieldMapping("ExchangeRateEntity", "Month", "Month", false, "SmallInt", 0, 5, 0, false, "", null, typeof(System.Int16), 3);
 		}
@@ -663,7 +663,7 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 			this.AddElementMapping("ExpenseTaxLineEntity", @"DataAccess", @"Newacc", "ExpenseTaxLine", 10, 0);
 			this.AddElementFieldMapping("ExpenseTaxLineEntity", "Lineid", "Lineid", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 0);
 			this.AddElementFieldMapping("ExpenseTaxLineEntity", "Printflag", "Printflag", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 1);
-			this.AddElementFieldMapping("ExpenseTaxLineEntity", "Rate", "Rate", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 2);
+			this.AddElementFieldMapping("ExpenseTaxLineEntity", "Rate", "Rate", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 2);
 			this.AddElementFieldMapping("ExpenseTaxLineEntity", "Taxno", "Taxno", true, "NVarChar", 20, 0, 0, false, "", null, typeof(System.String), 3);
 			this.AddElementFieldMapping("ExpenseTaxLineEntity", "Taxrateid", "Taxrateid", true, "SmallInt", 0, 5, 0, false, "", null, typeof(System.Int16), 4);
 			this.AddElementFieldMapping("ExpenseTaxLineEntity", "Vataddress", "Vataddress", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 5);
@@ -687,9 +687,9 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 			this.AddElementMapping("GeneralLedgerEntity", @"DataAccess", @"Newacc", "GeneralLedger", 9, 0);
 			this.AddElementFieldMapping("GeneralLedgerEntity", "Contents", "Contents", true, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("GeneralLedgerEntity", "CounterAccountId", "CounterAccountId", true, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 1);
-			this.AddElementFieldMapping("GeneralLedgerEntity", "Credit", "Credit", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 2);
-			this.AddElementFieldMapping("GeneralLedgerEntity", "Debit", "Debit", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 3);
-			this.AddElementFieldMapping("GeneralLedgerEntity", "Endbalance", "Endbalance", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 4);
+			this.AddElementFieldMapping("GeneralLedgerEntity", "Credit", "Credit", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 2);
+			this.AddElementFieldMapping("GeneralLedgerEntity", "Debit", "Debit", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 3);
+			this.AddElementFieldMapping("GeneralLedgerEntity", "Endbalance", "Endbalance", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 4);
 			this.AddElementFieldMapping("GeneralLedgerEntity", "Id", "Id", false, "Int", 0, 10, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int32), 5);
 			this.AddElementFieldMapping("GeneralLedgerEntity", "JournalVoucherId", "JournalVoucherId", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 6);
 			this.AddElementFieldMapping("GeneralLedgerEntity", "VoucherDate", "VoucherDate", true, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 7);
@@ -700,8 +700,8 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 		private void InitInterestEntityMappings()
 		{
 			this.AddElementMapping("InterestEntity", @"DataAccess", @"Newacc", "Interest", 17, 0);
-			this.AddElementFieldMapping("InterestEntity", "Amount", "Amount", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 0);
-			this.AddElementFieldMapping("InterestEntity", "Balance", "Balance", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 1);
+			this.AddElementFieldMapping("InterestEntity", "Amount", "Amount", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 0);
+			this.AddElementFieldMapping("InterestEntity", "Balance", "Balance", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 1);
 			this.AddElementFieldMapping("InterestEntity", "Contents", "Contents", true, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 2);
 			this.AddElementFieldMapping("InterestEntity", "CustomerId", "CustomerId", true, "NVarChar", 20, 0, 0, false, "", null, typeof(System.String), 3);
 			this.AddElementFieldMapping("InterestEntity", "Dayno", "Dayno", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 4);
@@ -709,8 +709,8 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 			this.AddElementFieldMapping("InterestEntity", "DebtReasonId", "DebtReasonId", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 6);
 			this.AddElementFieldMapping("InterestEntity", "DebtTypeId", "DebtTypeId", true, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 7);
 			this.AddElementFieldMapping("InterestEntity", "Id", "Id", false, "Int", 0, 10, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int32), 8);
-			this.AddElementFieldMapping("InterestEntity", "Interest", "Interest", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 9);
-			this.AddElementFieldMapping("InterestEntity", "Interestbalance", "Interestbalance", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 10);
+			this.AddElementFieldMapping("InterestEntity", "Interest", "Interest", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 9);
+			this.AddElementFieldMapping("InterestEntity", "Interestbalance", "Interestbalance", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 10);
 			this.AddElementFieldMapping("InterestEntity", "Interestflag", "Interestflag", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 11);
 			this.AddElementFieldMapping("InterestEntity", "JournalVoucherId", "JournalVoucherId", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 12);
 			this.AddElementFieldMapping("InterestEntity", "LiabilityDuesId", "LiabilityDuesId", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 13);
@@ -723,13 +723,13 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 		private void InitInterestDetailEntityMappings()
 		{
 			this.AddElementMapping("InterestDetailEntity", @"DataAccess", @"Newacc", "InterestDetail", 7, 0);
-			this.AddElementFieldMapping("InterestDetailEntity", "Amount", "Amount", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 0);
+			this.AddElementFieldMapping("InterestDetailEntity", "Amount", "Amount", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 0);
 			this.AddElementFieldMapping("InterestDetailEntity", "Begindate", "Begindate", true, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 1);
 			this.AddElementFieldMapping("InterestDetailEntity", "Enddate", "Enddate", true, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 2);
 			this.AddElementFieldMapping("InterestDetailEntity", "Id", "Id", false, "Int", 0, 10, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int32), 3);
-			this.AddElementFieldMapping("InterestDetailEntity", "Interest", "Interest", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 4);
+			this.AddElementFieldMapping("InterestDetailEntity", "Interest", "Interest", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 4);
 			this.AddElementFieldMapping("InterestDetailEntity", "LineId", "LineId", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 5);
-			this.AddElementFieldMapping("InterestDetailEntity", "Rate", "Rate", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 6);
+			this.AddElementFieldMapping("InterestDetailEntity", "Rate", "Rate", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 6);
 		}
 
 		/// <summary>Inits InterestRateEntity's mappings</summary>
@@ -737,7 +737,7 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 		{
 			this.AddElementMapping("InterestRateEntity", @"DataAccess", @"Newacc", "InterestRate", 2, 0);
 			this.AddElementFieldMapping("InterestRateEntity", "Enddate", "Enddate", false, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 0);
-			this.AddElementFieldMapping("InterestRateEntity", "Rate", "Rate", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 1);
+			this.AddElementFieldMapping("InterestRateEntity", "Rate", "Rate", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 1);
 		}
 
 		/// <summary>Inits InventoryExportVoucherEntity's mappings</summary>
@@ -763,15 +763,15 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 		private void InitInventoryLedgerEntityMappings()
 		{
 			this.AddElementMapping("InventoryLedgerEntity", @"DataAccess", @"Newacc", "InventoryLedger", 13, 0);
-			this.AddElementFieldMapping("InventoryLedgerEntity", "Camount", "Camount", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 0);
+			this.AddElementFieldMapping("InventoryLedgerEntity", "Camount", "Camount", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 0);
 			this.AddElementFieldMapping("InventoryLedgerEntity", "Contents", "Contents", true, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 1);
-			this.AddElementFieldMapping("InventoryLedgerEntity", "Cprice", "Cprice", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 2);
-			this.AddElementFieldMapping("InventoryLedgerEntity", "Cquantity", "Cquantity", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 3);
-			this.AddElementFieldMapping("InventoryLedgerEntity", "Damount", "Damount", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 4);
-			this.AddElementFieldMapping("InventoryLedgerEntity", "Dprice", "Dprice", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 5);
-			this.AddElementFieldMapping("InventoryLedgerEntity", "Dquantity", "Dquantity", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 6);
-			this.AddElementFieldMapping("InventoryLedgerEntity", "Endamount", "Endamount", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 7);
-			this.AddElementFieldMapping("InventoryLedgerEntity", "Endqty", "Endqty", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 8);
+			this.AddElementFieldMapping("InventoryLedgerEntity", "Cprice", "Cprice", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 2);
+			this.AddElementFieldMapping("InventoryLedgerEntity", "Cquantity", "Cquantity", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 3);
+			this.AddElementFieldMapping("InventoryLedgerEntity", "Damount", "Damount", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 4);
+			this.AddElementFieldMapping("InventoryLedgerEntity", "Dprice", "Dprice", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 5);
+			this.AddElementFieldMapping("InventoryLedgerEntity", "Dquantity", "Dquantity", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 6);
+			this.AddElementFieldMapping("InventoryLedgerEntity", "Endamount", "Endamount", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 7);
+			this.AddElementFieldMapping("InventoryLedgerEntity", "Endqty", "Endqty", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 8);
 			this.AddElementFieldMapping("InventoryLedgerEntity", "Id", "Id", false, "Int", 0, 10, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int32), 9);
 			this.AddElementFieldMapping("InventoryLedgerEntity", "JournalVoucherId", "JournalVoucherId", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 10);
 			this.AddElementFieldMapping("InventoryLedgerEntity", "VoucherDate", "VoucherDate", true, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 11);
@@ -808,9 +808,9 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 			this.AddElementFieldMapping("InventoryVoucherLineEntity", "Id", "Id", false, "Int", 0, 10, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int32), 0);
 			this.AddElementFieldMapping("InventoryVoucherLineEntity", "InventoryVoucherId", "InventoryVoucherId", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("InventoryVoucherLineEntity", "MaterialId", "MaterialId", true, "NVarChar", 20, 0, 0, false, "", null, typeof(System.String), 2);
-			this.AddElementFieldMapping("InventoryVoucherLineEntity", "Price", "Price", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 3);
+			this.AddElementFieldMapping("InventoryVoucherLineEntity", "Price", "Price", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 3);
 			this.AddElementFieldMapping("InventoryVoucherLineEntity", "Purpose", "Purpose", true, "SmallInt", 0, 5, 0, false, "", null, typeof(System.Int16), 4);
-			this.AddElementFieldMapping("InventoryVoucherLineEntity", "Quantity", "Quantity", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 5);
+			this.AddElementFieldMapping("InventoryVoucherLineEntity", "Quantity", "Quantity", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 5);
 		}
 
 		/// <summary>Inits InvestmentDetailEntity's mappings</summary>
@@ -818,13 +818,13 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 		{
 			this.AddElementMapping("InvestmentDetailEntity", @"DataAccess", @"Newacc", "InvestmentDetail", 10, 0);
 			this.AddElementFieldMapping("InvestmentDetailEntity", "CustomerId", "CustomerId", true, "NVarChar", 20, 0, 0, false, "", null, typeof(System.String), 0);
-			this.AddElementFieldMapping("InvestmentDetailEntity", "Inprice", "Inprice", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 1);
+			this.AddElementFieldMapping("InvestmentDetailEntity", "Inprice", "Inprice", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 1);
 			this.AddElementFieldMapping("InvestmentDetailEntity", "JournalEntryId", "JournalEntryId", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
 			this.AddElementFieldMapping("InvestmentDetailEntity", "Lineid", "Lineid", false, "Int", 0, 10, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int32), 3);
-			this.AddElementFieldMapping("InvestmentDetailEntity", "Originamount", "Originamount", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 4);
-			this.AddElementFieldMapping("InvestmentDetailEntity", "Otherexpense", "Otherexpense", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 5);
-			this.AddElementFieldMapping("InvestmentDetailEntity", "Outprice", "Outprice", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 6);
-			this.AddElementFieldMapping("InvestmentDetailEntity", "Quantity", "Quantity", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 7);
+			this.AddElementFieldMapping("InvestmentDetailEntity", "Originamount", "Originamount", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 4);
+			this.AddElementFieldMapping("InvestmentDetailEntity", "Otherexpense", "Otherexpense", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 5);
+			this.AddElementFieldMapping("InvestmentDetailEntity", "Outprice", "Outprice", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 6);
+			this.AddElementFieldMapping("InvestmentDetailEntity", "Quantity", "Quantity", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 7);
 			this.AddElementFieldMapping("InvestmentDetailEntity", "Stockid", "Stockid", true, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 8);
 			this.AddElementFieldMapping("InvestmentDetailEntity", "Stockstoreid", "Stockstoreid", true, "SmallInt", 0, 5, 0, false, "", null, typeof(System.Int16), 9);
 		}
@@ -833,15 +833,15 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 		private void InitInvestmentLedgerEntityMappings()
 		{
 			this.AddElementMapping("InvestmentLedgerEntity", @"DataAccess", @"Newacc", "InvestmentLedger", 13, 0);
-			this.AddElementFieldMapping("InvestmentLedgerEntity", "Camount", "Camount", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 0);
+			this.AddElementFieldMapping("InvestmentLedgerEntity", "Camount", "Camount", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 0);
 			this.AddElementFieldMapping("InvestmentLedgerEntity", "Contents", "Contents", true, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 1);
-			this.AddElementFieldMapping("InvestmentLedgerEntity", "Cprice", "Cprice", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 2);
-			this.AddElementFieldMapping("InvestmentLedgerEntity", "Cquantity", "Cquantity", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 3);
-			this.AddElementFieldMapping("InvestmentLedgerEntity", "Damount", "Damount", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 4);
-			this.AddElementFieldMapping("InvestmentLedgerEntity", "Dprice", "Dprice", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 5);
-			this.AddElementFieldMapping("InvestmentLedgerEntity", "Dquantity", "Dquantity", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 6);
-			this.AddElementFieldMapping("InvestmentLedgerEntity", "Endamount", "Endamount", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 7);
-			this.AddElementFieldMapping("InvestmentLedgerEntity", "Endqty", "Endqty", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 8);
+			this.AddElementFieldMapping("InvestmentLedgerEntity", "Cprice", "Cprice", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 2);
+			this.AddElementFieldMapping("InvestmentLedgerEntity", "Cquantity", "Cquantity", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 3);
+			this.AddElementFieldMapping("InvestmentLedgerEntity", "Damount", "Damount", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 4);
+			this.AddElementFieldMapping("InvestmentLedgerEntity", "Dprice", "Dprice", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 5);
+			this.AddElementFieldMapping("InvestmentLedgerEntity", "Dquantity", "Dquantity", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 6);
+			this.AddElementFieldMapping("InvestmentLedgerEntity", "Endamount", "Endamount", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 7);
+			this.AddElementFieldMapping("InvestmentLedgerEntity", "Endqty", "Endqty", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 8);
 			this.AddElementFieldMapping("InvestmentLedgerEntity", "Id", "Id", false, "Int", 0, 10, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int32), 9);
 			this.AddElementFieldMapping("InvestmentLedgerEntity", "JournalVoucherId", "JournalVoucherId", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 10);
 			this.AddElementFieldMapping("InvestmentLedgerEntity", "VoucherDate", "VoucherDate", true, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 11);
@@ -853,7 +853,7 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 		{
 			this.AddElementMapping("JournalEntryEntity", @"DataAccess", @"Newacc", "JournalEntry", 12, 0);
 			this.AddElementFieldMapping("JournalEntryEntity", "AccountId", "AccountId", true, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 0);
-			this.AddElementFieldMapping("JournalEntryEntity", "Amount", "Amount", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 1);
+			this.AddElementFieldMapping("JournalEntryEntity", "Amount", "Amount", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 1);
 			this.AddElementFieldMapping("JournalEntryEntity", "Createdate", "Createdate", true, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 2);
 			this.AddElementFieldMapping("JournalEntryEntity", "Createuser", "Createuser", true, "NVarChar", 20, 0, 0, false, "", null, typeof(System.String), 3);
 			this.AddElementFieldMapping("JournalEntryEntity", "Dbcr", "Dbcr", true, "SmallInt", 0, 5, 0, false, "", null, typeof(System.Int16), 4);
@@ -896,10 +896,10 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 			this.AddElementFieldMapping("LiabilityDueEntity", "CustomerId", "CustomerId", false, "NVarChar", 20, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("LiabilityDueEntity", "DebtTypeId", "DebtTypeId", false, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 2);
 			this.AddElementFieldMapping("LiabilityDueEntity", "EndDate", "EndDate", true, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 3);
-			this.AddElementFieldMapping("LiabilityDueEntity", "Feedbackrate", "Feedbackrate", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 4);
+			this.AddElementFieldMapping("LiabilityDueEntity", "Feedbackrate", "Feedbackrate", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 4);
 			this.AddElementFieldMapping("LiabilityDueEntity", "Id", "Id", false, "Int", 0, 10, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int32), 5);
-			this.AddElementFieldMapping("LiabilityDueEntity", "Interestrate", "Interestrate", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 6);
-			this.AddElementFieldMapping("LiabilityDueEntity", "Outvatrate", "Outvatrate", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 7);
+			this.AddElementFieldMapping("LiabilityDueEntity", "Interestrate", "Interestrate", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 6);
+			this.AddElementFieldMapping("LiabilityDueEntity", "Outvatrate", "Outvatrate", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 7);
 			this.AddElementFieldMapping("LiabilityDueEntity", "Remark", "Remark", true, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 8);
 			this.AddElementFieldMapping("LiabilityDueEntity", "Settledflag", "Settledflag", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 9);
 		}
@@ -910,8 +910,8 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 			this.AddElementMapping("MaterialPriceEntity", @"DataAccess", @"Newacc", "MaterialPrice", 5, 0);
 			this.AddElementFieldMapping("MaterialPriceEntity", "Id", "Id", false, "Int", 0, 10, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int32), 0);
 			this.AddElementFieldMapping("MaterialPriceEntity", "MaterialId", "MaterialId", false, "NVarChar", 20, 0, 0, false, "", null, typeof(System.String), 1);
-			this.AddElementFieldMapping("MaterialPriceEntity", "Price", "Price", false, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 2);
-			this.AddElementFieldMapping("MaterialPriceEntity", "Quantity", "Quantity", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 3);
+			this.AddElementFieldMapping("MaterialPriceEntity", "Price", "Price", false, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 2);
+			this.AddElementFieldMapping("MaterialPriceEntity", "Quantity", "Quantity", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 3);
 			this.AddElementFieldMapping("MaterialPriceEntity", "WarehouseId", "WarehouseId", false, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 4);
 		}
 
@@ -920,8 +920,8 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 		{
 			this.AddElementMapping("MaterialTaxLineEntity", @"DataAccess", @"Newacc", "MaterialTaxLine", 4, 0);
 			this.AddElementFieldMapping("MaterialTaxLineEntity", "LineId", "LineId", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 0);
-			this.AddElementFieldMapping("MaterialTaxLineEntity", "Rate", "Rate", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 1);
-			this.AddElementFieldMapping("MaterialTaxLineEntity", "SellPrice", "SellPrice", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 2);
+			this.AddElementFieldMapping("MaterialTaxLineEntity", "Rate", "Rate", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 1);
+			this.AddElementFieldMapping("MaterialTaxLineEntity", "SellPrice", "SellPrice", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 2);
 			this.AddElementFieldMapping("MaterialTaxLineEntity", "Taxrateid", "Taxrateid", true, "SmallInt", 0, 5, 0, false, "", null, typeof(System.Int16), 3);
 		}
 
@@ -949,7 +949,7 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 			this.AddElementFieldMapping("PreviousBusinessPeriodEntity", "Italic", "Italic", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
 			this.AddElementFieldMapping("PreviousBusinessPeriodEntity", "ItemsId", "ItemsId", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 4);
 			this.AddElementFieldMapping("PreviousBusinessPeriodEntity", "ItemsName", "ItemsName", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 5);
-			this.AddElementFieldMapping("PreviousBusinessPeriodEntity", "Prevyearamount", "Prevyearamount", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 6);
+			this.AddElementFieldMapping("PreviousBusinessPeriodEntity", "Prevyearamount", "Prevyearamount", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 6);
 		}
 
 		/// <summary>Inits ReasonEntity's mappings</summary>
@@ -1085,7 +1085,7 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 			this.AddElementFieldMapping("TaxInvoiceEntity", "CurrencyId", "CurrencyId", true, "NVarChar", 5, 0, 0, false, "", null, typeof(System.String), 3);
 			this.AddElementFieldMapping("TaxInvoiceEntity", "Direction", "Direction", false, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 4);
 			this.AddElementFieldMapping("TaxInvoiceEntity", "DownloadedAt", "DownloadedAt", true, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 5);
-			this.AddElementFieldMapping("TaxInvoiceEntity", "ExchangeRate", "ExchangeRate", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 6);
+			this.AddElementFieldMapping("TaxInvoiceEntity", "ExchangeRate", "ExchangeRate", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 6);
 			this.AddElementFieldMapping("TaxInvoiceEntity", "Id", "Id", false, "Int", 0, 10, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int32), 7);
 			this.AddElementFieldMapping("TaxInvoiceEntity", "InvoiceDate", "InvoiceDate", false, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 8);
 			this.AddElementFieldMapping("TaxInvoiceEntity", "InvoiceNo", "InvoiceNo", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 9);
@@ -1118,7 +1118,7 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 			this.AddElementFieldMapping("TaxInvoiceDetailEntity", "ItemCode", "ItemCode", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
 			this.AddElementFieldMapping("TaxInvoiceDetailEntity", "ItemName", "ItemName", true, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 3);
 			this.AddElementFieldMapping("TaxInvoiceDetailEntity", "LineNo", "LineNo", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 4);
-			this.AddElementFieldMapping("TaxInvoiceDetailEntity", "Quantity", "Quantity", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 5);
+			this.AddElementFieldMapping("TaxInvoiceDetailEntity", "Quantity", "Quantity", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 5);
 			this.AddElementFieldMapping("TaxInvoiceDetailEntity", "TaxAmount", "TaxAmount", true, "Decimal", 0, 19, 2, false, "", null, typeof(System.Decimal), 6);
 			this.AddElementFieldMapping("TaxInvoiceDetailEntity", "TaxInvoiceId", "TaxInvoiceId", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 7);
 			this.AddElementFieldMapping("TaxInvoiceDetailEntity", "TaxRate", "TaxRate", true, "NVarChar", 20, 0, 0, false, "", null, typeof(System.String), 8);
@@ -1159,9 +1159,9 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 		private void InitTaxRateEntityMappings()
 		{
 			this.AddElementMapping("TaxRateEntity", @"DataAccess", @"Newacc", "TaxRate", 3, 0);
-			this.AddElementFieldMapping("TaxRateEntity", "Rate", "Rate", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 0);
+			this.AddElementFieldMapping("TaxRateEntity", "Rate", "Rate", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 0);
 			this.AddElementFieldMapping("TaxRateEntity", "Taxratedes", "Taxratedes", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
-			this.AddElementFieldMapping("TaxRateEntity", "Taxrateid", "Taxrateid", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
+			this.AddElementFieldMapping("TaxRateEntity", "Taxrateid", "Taxrateid", false, "Int", 0, 10, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int32), 2);
 		}
 
 		/// <summary>Inits TrialBalanceEntity's mappings</summary>
@@ -1169,14 +1169,14 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 		{
 			this.AddElementMapping("TrialBalanceEntity", @"DataAccess", @"Newacc", "TrialBalance", 10, 0);
 			this.AddElementFieldMapping("TrialBalanceEntity", "AccountId", "AccountId", true, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 0);
-			this.AddElementFieldMapping("TrialBalanceEntity", "Begincredit", "Begincredit", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 1);
-			this.AddElementFieldMapping("TrialBalanceEntity", "Begindebit", "Begindebit", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 2);
+			this.AddElementFieldMapping("TrialBalanceEntity", "Begincredit", "Begincredit", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 1);
+			this.AddElementFieldMapping("TrialBalanceEntity", "Begindebit", "Begindebit", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 2);
 			this.AddElementFieldMapping("TrialBalanceEntity", "CategoryId", "CategoryId", true, "NVarChar", 1, 0, 0, false, "", null, typeof(System.String), 3);
-			this.AddElementFieldMapping("TrialBalanceEntity", "Endcredit", "Endcredit", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 4);
-			this.AddElementFieldMapping("TrialBalanceEntity", "Enddebit", "Enddebit", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 5);
+			this.AddElementFieldMapping("TrialBalanceEntity", "Endcredit", "Endcredit", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 4);
+			this.AddElementFieldMapping("TrialBalanceEntity", "Enddebit", "Enddebit", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 5);
 			this.AddElementFieldMapping("TrialBalanceEntity", "Id", "Id", false, "Int", 0, 10, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int32), 6);
-			this.AddElementFieldMapping("TrialBalanceEntity", "Intcredit", "Intcredit", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 7);
-			this.AddElementFieldMapping("TrialBalanceEntity", "Intdebit", "Intdebit", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 8);
+			this.AddElementFieldMapping("TrialBalanceEntity", "Intcredit", "Intcredit", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 7);
+			this.AddElementFieldMapping("TrialBalanceEntity", "Intdebit", "Intdebit", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 8);
 			this.AddElementFieldMapping("TrialBalanceEntity", "Splite", "Splite", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 9);
 		}
 
@@ -1215,12 +1215,12 @@ namespace DataAccess.SqlServer.DatabaseSpecific
 		private void InitVatEntryEntityMappings()
 		{
 			this.AddElementMapping("VatEntryEntity", @"DataAccess", @"Newacc", "VatEntry", 16, 0);
-			this.AddElementFieldMapping("VatEntryEntity", "Amount", "Amount", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 0);
-			this.AddElementFieldMapping("VatEntryEntity", "Beforetaxamount", "Beforetaxamount", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 1);
+			this.AddElementFieldMapping("VatEntryEntity", "Amount", "Amount", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 0);
+			this.AddElementFieldMapping("VatEntryEntity", "Beforetaxamount", "Beforetaxamount", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 1);
 			this.AddElementFieldMapping("VatEntryEntity", "Catid", "Catid", true, "SmallInt", 0, 5, 0, false, "", null, typeof(System.Int16), 2);
 			this.AddElementFieldMapping("VatEntryEntity", "Id", "Id", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 3);
 			this.AddElementFieldMapping("VatEntryEntity", "Lineid", "Lineid", false, "Int", 0, 10, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int32), 4);
-			this.AddElementFieldMapping("VatEntryEntity", "Rate", "Rate", true, "Float", 0, 15, 0, false, "", null, typeof(System.Double), 5);
+			this.AddElementFieldMapping("VatEntryEntity", "Rate", "Rate", true, "Decimal", 0, 19, 4, false, "", null, typeof(System.Decimal), 5);
 			this.AddElementFieldMapping("VatEntryEntity", "Remark", "Remark", true, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 6);
 			this.AddElementFieldMapping("VatEntryEntity", "Serialno", "Serialno", true, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 7);
 			this.AddElementFieldMapping("VatEntryEntity", "Taxno", "Taxno", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 8);

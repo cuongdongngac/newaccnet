@@ -1,0 +1,64 @@
+<dx:ThemedWindow x:Class="NewaccNet.Plugin.ErpWarehouse.Views.Dialogs.WarehouseVoucherLookupDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+        xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+        Title="Tìm kiếm chứng từ kho" Height="520" Width="850"
+        WindowStartupLocation="CenterOwner">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- THANH LỌC TÌM KIẾM -->
+        <Border Grid.Row="0" Background="#F4F5F7" Padding="10" Margin="0,0,0,10" CornerRadius="4">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Từ ngày:" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                <dxe:DateEdit x:Name="dtFrom" Width="110" Mask="dd/MM/yyyy" MaskUseAsDisplayFormat="True"/>
+
+                <TextBlock Text="Đến ngày:" VerticalAlignment="Center" Margin="12,0,6,0"/>
+                <dxe:DateEdit x:Name="dtTo" Width="110" Mask="dd/MM/yyyy" MaskUseAsDisplayFormat="True"/>
+
+                <dxe:CheckEdit x:Name="chkUnpostedOnly" Content="Chỉ phiếu chưa ghi sổ" IsChecked="True" VerticalAlignment="Center" Margin="15,0,0,0" FontWeight="SemiBold"/>
+
+                <Button Content="Tìm kiếm" Width="90" Height="26" Margin="15,0,0,0" Background="#1565C0" Foreground="White" FontWeight="SemiBold" Click="BtnSearch_Click"/>
+            </StackPanel>
+        </Border>
+
+        <!-- DANH SÁCH CHỨNG TỪ -->
+        <dxg:GridControl x:Name="gridVouchers" Grid.Row="1" AutoGenerateColumns="None" MouseDoubleClick="GridVouchers_MouseDoubleClick">
+            <dxg:GridControl.View>
+                <dxg:TableView ShowAutoFilterRow="True" AllowEditing="False" ShowGroupPanel="False" SearchPanelFindMode="Always"/>
+            </dxg:GridControl.View>
+            <dxg:GridControl.Columns>
+                <dxg:GridColumn FieldName="VoucherNo" Header="Số chứng từ" Width="120"/>
+                <dxg:GridColumn FieldName="VoucherDate" Header="Ngày lập" Width="100">
+                    <dxg:GridColumn.EditSettings>
+                        <dxe:DateEditSettings DisplayFormat="dd/MM/yyyy"/>
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
+                <dxg:GridColumn FieldName="PartnerName" Header="Đối tác (NCC / Khách hàng)" Width="*"/>
+                <dxg:GridColumn FieldName="TotalAmount" Header="Tổng tiền" Width="130" HorizontalHeaderContentAlignment="Right">
+                    <dxg:GridColumn.EditSettings>
+                        <dxe:TextEditSettings MaskType="Numeric" Mask="n0" MaskUseAsDisplayFormat="True" HorizontalContentAlignment="Right"/>
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
+                <dxg:GridColumn FieldName="Description" Header="Diễn giải" Width="180"/>
+                <dxg:GridColumn FieldName="Bookflag" Header="Ghi sổ" Width="70" FixedWidth="True" HorizontalHeaderContentAlignment="Center">
+                    <dxg:GridColumn.EditSettings>
+                        <dxe:CheckEditSettings HorizontalContentAlignment="Center"/>
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
+            </dxg:GridControl.Columns>
+        </dxg:GridControl>
+
+        <!-- BUTTONS ACTION -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+            <Button Content="Chọn phiếu" Width="100" Height="28" Margin="0,0,10,0" Background="#2E7D32" Foreground="White" FontWeight="Bold" IsDefault="True" Click="BtnSelect_Click"/>
+            <Button Content="Đóng" Width="85" Height="28" IsCancel="True"/>
+        </StackPanel>
+    </Grid>
+</dx:ThemedWindow>
