@@ -1,4 +1,4 @@
-﻿; =====================================================================
+; =====================================================================
 ;  BỘ CÀI NEWACCNET (WPF .NET 10) – Inno Setup 6.3+
 ;
 ;  Build: chạy ..\publish_all.bat (tự publish x86/x64 rồi gọi ISCC).
@@ -87,12 +87,16 @@ ArchitecturesInstallIn64BitMode=x64compatible
 
 [Tasks]
 Name: "desktopicon"; Description: "Tạo biểu tượng ngoài Desktop"; Flags: unchecked
+Name: "migrateicon"; Description: "Tạo biểu tượng Chuyển đổi dữ liệu (Migrate) ngoài Desktop"; Flags: unchecked
 
 [Dirs]
 ; App ghi appsettings.json, *.json cấu hình và file .accdb ngay trong thư mục cài
 ; -> cấp quyền sửa cho Users để chạy không cần quyền Admin
 Name: "{app}"; Permissions: users-modify
 Name: "{app}\Plugins"; Permissions: users-modify
+Name: "{app}\sampledb"; Permissions: users-modify
+Name: "{app}\Template"; Permissions: users-modify
+Name: "{app}\mapping"; Permissions: users-modify
 
 [Files]
 ; ---------------- Ứng dụng ----------------
@@ -108,16 +112,21 @@ Source: "{#PubX86}\*"; DestDir: "{app}"; Check: not UseX64; \
   Flags: ignoreversion recursesubdirs createallsubdirs
 #endif
 
-; ---------------- Dữ liệu: Template & sampledb (chung cho x86/x64) ----------------
-; Lấy từ thư mục gốc dự án (bản template.accdb mới nhất), giữ nguyên cấu trúc thư mục.
-; App có thể dùng/ghi thẳng vào các file .accdb này -> chỉ chép khi máy chưa có,
-; không ghi đè khi nâng cấp và không xóa khi gỡ cài đặt.
+; ---------------- Dữ liệu: Template, sampledb, mapping, Plugins, migrate.exe (chung cho x86/x64) ----------------
+; JSON cấu hình mẫu (luôn cập nhật bản mới nhất)
+Source: "{#Root}\Template\*.json"; DestDir: "{app}\Template"; Flags: ignoreversion
+; Database mẫu & template (chỉ chép khi chưa có để không mất dữ liệu người dùng khi update)
 Source: "{#Root}\Template\*"; DestDir: "{app}\Template"; \
-  Excludes: "desktop.ini,*.laccdb,*_backup_*.accdb,*_compact_tmp.accdb"; \
+  Excludes: "desktop.ini,*.laccdb,*_backup_*.accdb,*_compact_tmp.accdb,*.json"; \
   Flags: onlyifdoesntexist uninsneveruninstall recursesubdirs createallsubdirs
 Source: "{#Root}\sampledb\*"; DestDir: "{app}\sampledb"; \
   Excludes: "desktop.ini,*.laccdb,*_backup_*.accdb"; \
   Flags: onlyifdoesntexist uninsneveruninstall recursesubdirs createallsubdirs
+Source: "{#Root}\mapping\*"; DestDir: "{app}\mapping"; \
+  Excludes: "desktop.ini,*.laccdb"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#Root}\migrate.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#Root}\Plugins\*"; DestDir: "{app}\Plugins"; \
+  Excludes: "*.pdb"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 ; ---------------- Thành phần phụ thuộc (chỉ giải nén khi cần, xem [Code]) ----------------
 #if Arch != "x86"
@@ -132,9 +141,11 @@ Source: "{#PreAce}\{#AceX86}"; DestDir: "{tmp}"; Flags: dontcopy
 #endif
 
 [Icons]
-Name: "{group}\{#AppName}";          Filename: "{app}\{#AppExe}"
-Name: "{group}\Gỡ cài {#AppName}";   Filename: "{uninstallexe}"
-Name: "{autodesktop}\{#AppName}";    Filename: "{app}\{#AppExe}"; Tasks: desktopicon
+Name: "{group}\{#AppName}";                   Filename: "{app}\{#AppExe}"
+Name: "{group}\Chuyển đổi dữ liệu (Migrate)"; Filename: "{app}\migrate.exe"; IconFilename: "{app}\{#AppExe}"
+Name: "{group}\Gỡ cài {#AppName}";            Filename: "{uninstallexe}"
+Name: "{autodesktop}\{#AppName}";             Filename: "{app}\{#AppExe}"; Tasks: desktopicon
+Name: "{autodesktop}\Chuyển đổi dữ liệu";      Filename: "{app}\migrate.exe"; IconFilename: "{app}\{#AppExe}"; Tasks: migrateicon
 
 [Run]
 Filename: "{app}\{#AppExe}"; Description: "Chạy {#AppName}"; Flags: nowait postinstall skipifsilent

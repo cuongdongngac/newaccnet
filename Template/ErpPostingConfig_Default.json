@@ -1,0 +1,394 @@
+{
+  "NM": {
+    "Inventory": [
+      {
+        "AccountId": "1561",
+        "AccountName": "Hàng hóa kho chính chủ",
+        "CategoryId": "B",
+        "ParentId": "",
+        "IsDefault": true,
+        "AllowDetail": false,
+        "DisplayName": "Hàng hóa kho chính chủ",
+        "FullDisplay": "1561 - Hàng hóa kho chính chủ"
+      },
+      {
+        "AccountId": "1521",
+        "AccountName": "Nguyên, vật liệu chính",
+        "CategoryId": "B",
+        "ParentId": "152",
+        "IsDefault": false,
+        "AllowDetail": false,
+        "DisplayName": "Nguyên, vật liệu chính",
+        "FullDisplay": "1521 - Nguyên, vật liệu chính"
+      },
+      {
+        "AccountId": "1531",
+        "AccountName": "Công cụ, dụng cụ",
+        "CategoryId": "B",
+        "ParentId": "153",
+        "IsDefault": false,
+        "AllowDetail": false,
+        "DisplayName": "Công cụ, dụng cụ",
+        "FullDisplay": "1531 - Công cụ, dụng cụ"
+      },
+      {
+        "AccountId": "155",
+        "AccountName": "Thành phẩm",
+        "CategoryId": "B",
+        "ParentId": "",
+        "IsDefault": false,
+        "AllowDetail": false,
+        "DisplayName": "Thành phẩm",
+        "FullDisplay": "155 - Thành phẩm"
+      }
+    ],
+    "Tax": [
+      {
+        "AccountId": "13311",
+        "AccountName": "Thuế GTGT mua vào",
+        "CategoryId": "V",
+        "ParentId": "",
+        "IsDefault": true,
+        "AllowDetail": true,
+        "DisplayName": "Thuế GTGT mua vào",
+        "FullDisplay": "13311 - Thuế GTGT mua vào"
+      },
+      {
+        "AccountId": "13312",
+        "AccountName": "Thuế GTGT mua vào TSCĐ",
+        "CategoryId": "V",
+        "ParentId": "",
+        "IsDefault": false,
+        "AllowDetail": true,
+        "DisplayName": "Thuế GTGT mua vào TSCĐ",
+        "FullDisplay": "13312 - Thuế GTGT mua vào TSCĐ"
+      }
+    ],
+    "Total": [
+      {
+        "AccountId": "131",
+        "AccountName": "Phải thu của khách hàng - nợ",
+        "CategoryId": "A",
+        "ParentId": "",
+        "IsDefault": true,
+        "AllowDetail": true,
+        "DisplayName": "Phải thu của khách hàng - nợ",
+        "FullDisplay": "131 - Phải thu của khách hàng - nợ"
+      },
+      {
+        "AccountId": "1111",
+        "AccountName": "Tiền mặt",
+        "CategoryId": "I",
+        "ParentId": "",
+        "IsDefault": false,
+        "AllowDetail": true,
+        "DisplayName": "Tiền mặt",
+        "FullDisplay": "1111 - Tiền mặt"
+      },
+      {
+        "AccountId": "11212",
+        "AccountName": "VNĐ Ngân hàng đầu tư ( nhà N04A) 8618",
+        "CategoryId": "I",
+        "ParentId": "1121",
+        "IsDefault": false,
+        "AllowDetail": true,
+        "DisplayName": "VNĐ Ngân hàng đầu tư ( nhà N04A) 8618",
+        "FullDisplay": "11212 - VNĐ Ngân hàng đầu tư ( nhà N04A) 8618"
+      },
+      {
+        "AccountId": "1412",
+        "AccountName": "Tạm ứng mua vật tư hàng hoá",
+        "CategoryId": "A",
+        "ParentId": "141",
+        "IsDefault": false,
+        "AllowDetail": true,
+        "DisplayName": "Tạm ứng mua vật tư hàng hoá",
+        "FullDisplay": "1412 - Tạm ứng mua vật tư hàng hoá"
+      }
+    ]
+  },
+  "XB": {
+    "Revenue": [
+      {
+        "AccountId": "5111",
+        "AccountName": "Doanh thu bán hàng hóa",
+        "CategoryId": "I",
+        "ParentId": "",
+        "IsDefault": true,
+        "AllowDetail": true,
+        "DisplayName": "Doanh thu bán hàng hóa",
+        "FullDisplay": "5111 - Doanh thu bán hàng hóa"
+      },
+      {
+        "AccountId": "5112",
+        "AccountName": "Doanh thu bán thành phẩm",
+        "CategoryId": "I",
+        "ParentId": "",
+        "IsDefault": false,
+        "AllowDetail": true,
+        "DisplayName": "Doanh thu bán thành phẩm",
+        "FullDisplay": "5112 - Doanh thu bán thành phẩm"
+      },
+      {
+        "AccountId": "5113",
+        "AccountName": "Doanh thu dịch vụ",
+        "CategoryId": "I",
+        "ParentId": "",
+        "IsDefault": false,
+        "AllowDetail": true,
+        "DisplayName": "Doanh thu dịch vụ",
+        "FullDisplay": "5113 - Doanh thu dịch vụ"
+      },
+      {
+        "AccountId": "711",
+        "AccountName": "Thu nhập khác",
+        "CategoryId": "I",
+        "ParentId": "",
+        "IsDefault": false,
+        "AllowDetail": true,
+        "DisplayName": "Thu nhập khác",
+        "FullDisplay": "711 - Thu nhập khác"
+      }
+    ],
+    "Cost": [
+      {
+        "AccountId": "6321",
+        "AccountName": "Giá vốn hàng hóa",
+        "CategoryId": "E",
+        "ParentId": "",
+        "IsDefault": true,
+        "AllowDetail": true,
+        "DisplayName": "Giá vốn hàng hóa",
+        "FullDisplay": "6321 - Giá vốn hàng hóa"
+      },
+      {
+        "AccountId": "6322",
+        "AccountName": "Giá vốn thành phẩm",
+        "CategoryId": "E",
+        "ParentId": "",
+        "IsDefault": false,
+        "AllowDetail": true,
+        "DisplayName": "Giá vốn thành phẩm",
+        "FullDisplay": "6322 - Giá vốn thành phẩm"
+      },
+      {
+        "AccountId": "811",
+        "AccountName": "Chi phí khác",
+        "CategoryId": "E",
+        "ParentId": "",
+        "IsDefault": false,
+        "AllowDetail": true,
+        "DisplayName": "Chi phí khác",
+        "FullDisplay": "811 - Chi phí khác"
+      }
+    ],
+    "Tax": [
+      {
+        "AccountId": "33311",
+        "AccountName": "Thuế GTGT đầu ra",
+        "CategoryId": "V",
+        "ParentId": "",
+        "IsDefault": true,
+        "AllowDetail": true,
+        "DisplayName": "Thuế GTGT đầu ra",
+        "FullDisplay": "33311 - Thuế GTGT đầu ra"
+      }
+    ],
+    "Total": [
+      {
+        "AccountId": "131",
+        "AccountName": "Phải thu khách hàng",
+        "CategoryId": "A",
+        "ParentId": "",
+        "IsDefault": true,
+        "AllowDetail": true,
+        "DisplayName": "Phải thu khách hàng",
+        "FullDisplay": "131 - Phải thu khách hàng"
+      },
+      {
+        "AccountId": "1111",
+        "AccountName": "Tiền mặt",
+        "CategoryId": "I",
+        "ParentId": "",
+        "IsDefault": false,
+        "AllowDetail": true,
+        "DisplayName": "Tiền mặt",
+        "FullDisplay": "1111 - Tiền mặt"
+      },
+      {
+        "AccountId": "11214",
+        "AccountName": "VNĐ Ngân hàng đầu tư ( Nhà N01T8) 9043",
+        "CategoryId": "I",
+        "ParentId": "1121",
+        "IsDefault": false,
+        "AllowDetail": true,
+        "DisplayName": "VNĐ Ngân hàng đầu tư ( Nhà N01T8) 9043",
+        "FullDisplay": "11214 - VNĐ Ngân hàng đầu tư ( Nhà N01T8) 9043"
+      }
+    ],
+    "Inventory": [
+      {
+        "AccountId": "1561",
+        "AccountName": "Hàng hóa kho chính",
+        "CategoryId": "B",
+        "ParentId": "",
+        "IsDefault": true,
+        "AllowDetail": false,
+        "DisplayName": "Hàng hóa kho chính",
+        "FullDisplay": "1561 - Hàng hóa kho chính"
+      },
+      {
+        "AccountId": "155",
+        "AccountName": "Thành phẩm",
+        "CategoryId": "B",
+        "ParentId": "",
+        "IsDefault": false,
+        "AllowDetail": false,
+        "DisplayName": "Thành phẩm",
+        "FullDisplay": "155 - Thành phẩm"
+      },
+      {
+        "AccountId": "1521",
+        "AccountName": "Nguyên, vật liệu chính",
+        "CategoryId": "B",
+        "ParentId": "152",
+        "IsDefault": false,
+        "AllowDetail": false,
+        "DisplayName": "Nguyên, vật liệu chính",
+        "FullDisplay": "1521 - Nguyên, vật liệu chính"
+      }
+    ]
+  },
+  "NNB": {
+    "Inventory": [
+      {
+        "AccountId": "1561",
+        "AccountName": "Hàng hóa kho chính chủ",
+        "CategoryId": "B",
+        "ParentId": "",
+        "IsDefault": true,
+        "AllowDetail": false,
+        "DisplayName": "Hàng hóa kho chính chủ",
+        "FullDisplay": "1561 - Hàng hóa kho chính chủ"
+      },
+      {
+        "AccountId": "155",
+        "AccountName": "Thành phẩm",
+        "CategoryId": "B",
+        "ParentId": "",
+        "IsDefault": false,
+        "AllowDetail": false,
+        "DisplayName": "Thành phẩm",
+        "FullDisplay": "155 - Thành phẩm"
+      },
+      {
+        "AccountId": "1521",
+        "AccountName": "Nguyên, vật liệu chính",
+        "CategoryId": "B",
+        "ParentId": "152",
+        "IsDefault": false,
+        "AllowDetail": false,
+        "DisplayName": "Nguyên, vật liệu chính",
+        "FullDisplay": "1521 - Nguyên, vật liệu chính"
+      }
+    ],
+    "Offset": [
+      {
+        "AccountId": "6413",
+        "AccountName": "Chi phí dụng cụ, đồ dùng",
+        "CategoryId": "E",
+        "ParentId": "641",
+        "IsDefault": true,
+        "AllowDetail": true,
+        "DisplayName": "Chi phí dụng cụ, đồ dùng",
+        "FullDisplay": "6413 - Chi phí dụng cụ, đồ dùng"
+      },
+      {
+        "AccountId": "711",
+        "AccountName": "Thu nhập khác",
+        "CategoryId": "I",
+        "ParentId": "",
+        "IsDefault": false,
+        "AllowDetail": true,
+        "DisplayName": "Thu nhập khác",
+        "FullDisplay": "711 - Thu nhập khác"
+      }
+    ]
+  },
+  "XNB": {
+    "Inventory": [
+      {
+        "AccountId": "155",
+        "AccountName": "Thành phẩm",
+        "CategoryId": "B",
+        "ParentId": "",
+        "IsDefault": true,
+        "AllowDetail": false,
+        "DisplayName": "Thành phẩm",
+        "FullDisplay": "155 - Thành phẩm"
+      },
+      {
+        "AccountId": "1521",
+        "AccountName": "Nguyên, vật liệu chính",
+        "CategoryId": "B",
+        "ParentId": "152",
+        "IsDefault": false,
+        "AllowDetail": false,
+        "DisplayName": "Nguyên, vật liệu chính",
+        "FullDisplay": "1521 - Nguyên, vật liệu chính"
+      },
+      {
+        "AccountId": "1561",
+        "AccountName": "Hàng hóa",
+        "CategoryId": "B",
+        "ParentId": "",
+        "IsDefault": false,
+        "AllowDetail": false,
+        "DisplayName": "Hàng hóa",
+        "FullDisplay": "1561 - Hàng hóa"
+      }
+    ],
+    "Offset": [
+      {
+        "AccountId": "6411",
+        "AccountName": "Chi phí nhân viên",
+        "CategoryId": "E",
+        "ParentId": "641",
+        "IsDefault": true,
+        "AllowDetail": true,
+        "DisplayName": "Chi phí nhân viên",
+        "FullDisplay": "6411 - Chi phí nhân viên"
+      },
+      {
+        "AccountId": "6277",
+        "AccountName": "Chi phí dịch vụ mua ngoài",
+        "CategoryId": "E",
+        "ParentId": "627",
+        "IsDefault": false,
+        "AllowDetail": true,
+        "DisplayName": "Chi phí dịch vụ mua ngoài",
+        "FullDisplay": "6277 - Chi phí dịch vụ mua ngoài"
+      },
+      {
+        "AccountId": "621",
+        "AccountName": "Chi phí NVL trực tiếp",
+        "CategoryId": "E",
+        "ParentId": "",
+        "IsDefault": false,
+        "AllowDetail": true,
+        "DisplayName": "Chi phí NVL trực tiếp",
+        "FullDisplay": "621 - Chi phí NVL trực tiếp"
+      },
+      {
+        "AccountId": "6234",
+        "AccountName": "Chi phí khấu hao máy thi công",
+        "CategoryId": "E",
+        "ParentId": "623",
+        "IsDefault": false,
+        "AllowDetail": true,
+        "DisplayName": "Chi phí khấu hao máy thi công",
+        "FullDisplay": "6234 - Chi phí khấu hao máy thi công"
+      }
+    ]
+  }
+}

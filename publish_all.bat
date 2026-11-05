@@ -46,6 +46,18 @@ if exist "NewaccNet.Plugin.ErpWarehouse\NewaccNet.Plugin.ErpWarehouse.csproj" (
 if exist "NewaccNet.Plugin.CashBank\NewaccNet.Plugin.CashBank.csproj" (
     dotnet publish "NewaccNet.Plugin.CashBank\NewaccNet.Plugin.CashBank.csproj" -r win-x86 %COMMON% -o "Publish\x86\Plugins"
 )
+if exist "Template" (
+    xcopy /E /I /Y "Template" "Publish\x86\Template"
+)
+if exist "sampledb" (
+    xcopy /E /I /Y "sampledb" "Publish\x86\sampledb"
+)
+if exist "mapping" (
+    xcopy /E /I /Y "mapping" "Publish\x86\mapping"
+)
+if exist "migrate.exe" (
+    copy /Y "migrate.exe" "Publish\x86\"
+)
 
 echo.
 echo [3/4] Publish ban 64-bit (x64)...
@@ -56,6 +68,18 @@ if exist "NewaccNet.Plugin.ErpWarehouse\NewaccNet.Plugin.ErpWarehouse.csproj" (
 )
 if exist "NewaccNet.Plugin.CashBank\NewaccNet.Plugin.CashBank.csproj" (
     dotnet publish "NewaccNet.Plugin.CashBank\NewaccNet.Plugin.CashBank.csproj" -r win-x64 %COMMON% -o "Publish\x64\Plugins"
+)
+if exist "Template" (
+    xcopy /E /I /Y "Template" "Publish\x64\Template"
+)
+if exist "sampledb" (
+    xcopy /E /I /Y "sampledb" "Publish\x64\sampledb"
+)
+if exist "mapping" (
+    xcopy /E /I /Y "mapping" "Publish\x64\mapping"
+)
+if exist "migrate.exe" (
+    copy /Y "migrate.exe" "Publish\x64\"
 )
 
 echo.
