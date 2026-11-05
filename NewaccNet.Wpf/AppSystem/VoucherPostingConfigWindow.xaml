@@ -47,12 +47,12 @@
                         <!-- TK Phải trả người bán (TotalAccountId) -->
                         <TextBlock Grid.Row="0" Grid.Column="2" Text="TK Phải trả (Tổng TT):" VerticalAlignment="Center" Margin="0,5" FontWeight="Normal" Foreground="#334155"/>
                         <dxe:ComboBoxEdit Grid.Row="0" Grid.Column="3" x:Name="cboNmTotalAccount" Margin="0,4" Height="28"
-                                          DisplayMember="AccountId" ValueMember="AccountId" AutoComplete="True" ImmediatePopup="True"/>
+                                          DisplayMember="Display" ValueMember="AccountId" AutoComplete="True" ImmediatePopup="True"/>
 
                         <!-- TK Thuế GTGT đầu vào (TaxAccountId) -->
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="TK Thuế GTGT mua vào:" VerticalAlignment="Center" Margin="0,5" FontWeight="Normal" Foreground="#334155"/>
                         <dxe:ComboBoxEdit Grid.Row="1" Grid.Column="1" x:Name="cboNmTaxAccount" Margin="0,4,12,4" Height="28"
-                                          DisplayMember="AccountId" ValueMember="AccountId" AutoComplete="True" ImmediatePopup="True"/>
+                                          DisplayMember="Display" ValueMember="AccountId" AutoComplete="True" ImmediatePopup="True"/>
 
                         <!-- Gợi ý đối tượng -->
                         <TextBlock Grid.Row="1" Grid.Column="2" Text="Đối tượng liên quan:" VerticalAlignment="Center" Margin="0,5" FontWeight="Normal" Foreground="#334155"/>
@@ -82,22 +82,22 @@
                         <!-- TK Phải thu khách hàng (TotalAccountId) -->
                         <TextBlock Grid.Row="0" Grid.Column="2" Text="TK Phải thu (Tổng TT):" VerticalAlignment="Center" Margin="0,5" FontWeight="Normal" Foreground="#334155"/>
                         <dxe:ComboBoxEdit Grid.Row="0" Grid.Column="3" x:Name="cboXbTotalAccount" Margin="0,4" Height="28"
-                                          DisplayMember="AccountId" ValueMember="AccountId" AutoComplete="True" ImmediatePopup="True"/>
+                                          DisplayMember="Display" ValueMember="AccountId" AutoComplete="True" ImmediatePopup="True"/>
 
                         <!-- TK Doanh thu bán hàng (RevenueAccountId) -->
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="TK Doanh thu bán:" VerticalAlignment="Center" Margin="0,5" FontWeight="Normal" Foreground="#334155"/>
                         <dxe:ComboBoxEdit Grid.Row="1" Grid.Column="1" x:Name="cboXbRevenueAccount" Margin="0,4,12,4" Height="28"
-                                          DisplayMember="AccountId" ValueMember="AccountId" AutoComplete="True" ImmediatePopup="True"/>
+                                          DisplayMember="Display" ValueMember="AccountId" AutoComplete="True" ImmediatePopup="True"/>
 
                         <!-- TK Thuế GTGT đầu ra (TaxAccountId) -->
                         <TextBlock Grid.Row="1" Grid.Column="2" Text="TK Thuế GTGT bán ra:" VerticalAlignment="Center" Margin="0,5" FontWeight="Normal" Foreground="#334155"/>
                         <dxe:ComboBoxEdit Grid.Row="1" Grid.Column="3" x:Name="cboXbTaxAccount" Margin="0,4" Height="28"
-                                          DisplayMember="AccountId" ValueMember="AccountId" AutoComplete="True" ImmediatePopup="True"/>
+                                          DisplayMember="Display" ValueMember="AccountId" AutoComplete="True" ImmediatePopup="True"/>
 
                         <!-- TK Giá vốn hàng bán (CostAccountId) -->
                         <TextBlock Grid.Row="2" Grid.Column="0" Text="TK Giá vốn hàng bán:" VerticalAlignment="Center" Margin="0,5" FontWeight="Normal" Foreground="#334155"/>
                         <dxe:ComboBoxEdit Grid.Row="2" Grid.Column="1" x:Name="cboXbCostAccount" Margin="0,4,12,4" Height="28"
-                                          DisplayMember="AccountId" ValueMember="AccountId" AutoComplete="True" ImmediatePopup="True"/>
+                                          DisplayMember="Display" ValueMember="AccountId" AutoComplete="True" ImmediatePopup="True"/>
 
                         <!-- Gợi ý đối tượng -->
                         <TextBlock Grid.Row="2" Grid.Column="2" Text="Đối tượng liên quan:" VerticalAlignment="Center" Margin="0,5" FontWeight="Normal" Foreground="#334155"/>
@@ -126,7 +126,7 @@
                         <!-- TK Đối ứng NNB -->
                         <TextBlock Grid.Row="0" Grid.Column="2" Text="TK Có đối ứng NNB:" VerticalAlignment="Center" Margin="0,5" FontWeight="Normal" Foreground="#334155"/>
                         <dxe:ComboBoxEdit Grid.Row="0" Grid.Column="3" x:Name="cboNnbTotalAccount" Margin="0,4" Height="28"
-                                          DisplayMember="AccountId" ValueMember="AccountId" AutoComplete="True" ImmediatePopup="True"/>
+                                          DisplayMember="Display" ValueMember="AccountId" AutoComplete="True" ImmediatePopup="True"/>
 
                         <!-- Tên XNB -->
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="Tên phiếu Xuất nội bộ:" VerticalAlignment="Center" Margin="0,5" FontWeight="Normal" Foreground="#334155"/>
@@ -135,7 +135,7 @@
                         <!-- TK Đối ứng XNB -->
                         <TextBlock Grid.Row="1" Grid.Column="2" Text="TK Nợ đối ứng XNB:" VerticalAlignment="Center" Margin="0,5" FontWeight="Normal" Foreground="#334155"/>
                         <dxe:ComboBoxEdit Grid.Row="1" Grid.Column="3" x:Name="cboXnbTotalAccount" Margin="0,4" Height="28"
-                                          DisplayMember="AccountId" ValueMember="AccountId" AutoComplete="True" ImmediatePopup="True"/>
+                                          DisplayMember="Display" ValueMember="AccountId" AutoComplete="True" ImmediatePopup="True"/>
                     </Grid>
                 </GroupBox>
 

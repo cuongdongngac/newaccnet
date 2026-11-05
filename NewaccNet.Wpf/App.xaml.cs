@@ -33,6 +33,7 @@ public partial class App : Application
         NewaccNet.Wpf.Controls.Search.SearchSetup.Initialize();
 
         // 1. Tải cấu hình từ hệ thống
+        NewaccNet.Core.UI.AccountLookUpEditBase.DetailWindowOpener = (entry, owner, showMsg) => NewaccNet.Wpf.AppSystem.Voucher.AccountLookUpEdit.OpenDetailWindow(entry, owner, false, showMsg);
         ConfigManager.LoadConfig();
 
         // 2. Kiểm tra xem file cấu hình đã tồn tại chưa (Lần chạy đầu tiên)

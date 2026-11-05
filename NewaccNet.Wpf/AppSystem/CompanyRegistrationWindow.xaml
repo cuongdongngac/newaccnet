@@ -42,7 +42,6 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
                     <!-- Đơn vị -->
@@ -75,13 +74,9 @@
                     <dxe:ComboBoxEdit Grid.Row="6" Grid.Column="1" x:Name="cboMaterial" Height="28" Margin="0,4" 
                                       DisplayMember="Name" ValueMember="Value" IsTextEditable="False"/>
 
-                    <!-- Cấu hình định khoản chứng từ -->
-                    <TextBlock Grid.Row="7" Grid.Column="0" Text="Định khoản chứng từ:" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#334155" Margin="0,5"/>
-                    <dx:SimpleButton Grid.Row="7" Grid.Column="1" Content="Cấu hình tài khoản ngầm định chứng từ..." Height="28" Margin="0,4" HorizontalAlignment="Left" Padding="12,0" Click="BtnVoucherPostingConfig_Click"/>
-
                     <!-- Mã cài đặt (Mã máy) -->
-                    <TextBlock Grid.Row="8" Grid.Column="0" Text="Mã máy tính:" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#334155" Margin="0,5"/>
-                    <Grid Grid.Row="8" Grid.Column="1" Margin="0,4">
+                    <TextBlock Grid.Row="7" Grid.Column="0" Text="Mã máy tính:" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#334155" Margin="0,5"/>
+                    <Grid Grid.Row="7" Grid.Column="1" Margin="0,4">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
@@ -91,8 +86,8 @@
                     </Grid>
 
                     <!-- Mã đăng ký -->
-                    <TextBlock Grid.Row="9" Grid.Column="0" Text="Mã đăng ký:" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#334155" Margin="0,5"/>
-                    <dxe:TextEdit Grid.Row="9" Grid.Column="1" x:Name="txtRegistrationCode" Height="28" Margin="0,4" 
+                    <TextBlock Grid.Row="8" Grid.Column="0" Text="Mã đăng ký:" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#334155" Margin="0,5"/>
+                    <dxe:TextEdit Grid.Row="8" Grid.Column="1" x:Name="txtRegistrationCode" Height="28" Margin="0,4" 
                                   FontWeight="Bold" Foreground="#0F172A" NullText="Ví dụ: A1B2-C3D4-E5F6 (Theo mã máy)"/>
 
 

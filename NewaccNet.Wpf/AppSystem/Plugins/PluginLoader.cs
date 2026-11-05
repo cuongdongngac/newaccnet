@@ -67,21 +67,38 @@ namespace NewaccNet.Wpf.AppSystem.Plugins
             // Hỗ trợ AssemblyResolve để các DLL Plugin bên ngoài luôn tìm thấy NewaccNet.Contracts.dll và các thư viện Core
             AppDomain.CurrentDomain.AssemblyResolve += (s, args) =>
             {
-                var assemblyName = new AssemblyName(args.Name).Name + ".dll";
-                var appPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, assemblyName);
+                var reqName = new AssemblyName(args.Name);
+                var simpleName = reqName.Name;
+                if (string.IsNullOrEmpty(simpleName)) return null;
+
+                // 1. WPF luôn dò tìm satellite assembly (.resources) trước khi fallback sang tài nguyên mặc định.
+                // Tránh tìm kiếm các file .resources.dll không tồn tại.
+                if (simpleName.EndsWith(".resources", StringComparison.OrdinalIgnoreCase))
+                {
+                    return null;
+                }
+
+                // 2. Kiểm tra xem assembly đã được nạp trong AppDomain chưa (tránh nạp trùng lặp làm phân mảnh kiểu dữ liệu)
+                var existing = AppDomain.CurrentDomain.GetAssemblies()
+                    .FirstOrDefault(a => string.Equals(a.GetName().Name, simpleName, StringComparison.OrdinalIgnoreCase));
+                if (existing != null) return existing;
+
+                var assemblyFileName = simpleName + ".dll";
+                var appPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, assemblyFileName);
                 if (File.Exists(appPath)) return Assembly.LoadFrom(appPath);
-                var pluginPath = System.IO.Path.Combine(PluginsDirectory, assemblyName);
+
+                var localPluginPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins", assemblyFileName);
+                if (File.Exists(localPluginPath))
+                {
+                    try { return Assembly.LoadFrom(localPluginPath); }
+                    catch { }
+                }
+
+                var pluginPath = System.IO.Path.Combine(PluginsDirectory, assemblyFileName);
                 if (File.Exists(pluginPath))
                 {
-                    try
-                    {
-                        byte[] bytes = File.ReadAllBytes(pluginPath);
-                        return Assembly.Load(bytes);
-                    }
-                    catch
-                    {
-                        return Assembly.LoadFrom(pluginPath);
-                    }
+                    try { return Assembly.LoadFrom(pluginPath); }
+                    catch { }
                 }
                 return null;
             };
@@ -107,36 +124,56 @@ namespace NewaccNet.Wpf.AppSystem.Plugins
                 var records = LoadManifest().Where(r => !string.Equals(r.Id, "plugin.ai", StringComparison.OrdinalIgnoreCase)).ToList();
                 var recordDict = records.ToDictionary(x => x.Id, StringComparer.OrdinalIgnoreCase);
 
-                // 3. Quét các file .dll trong thư mục Plugins của người dùng
-                var dllFiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-                if (System.IO.Directory.Exists(PluginsDirectory))
-                {
-                    foreach (var file in System.IO.Directory.GetFiles(PluginsDirectory, "*.dll"))
-                    {
-                        dllFiles.Add(file);
-                    }
-                }
+                // 3. Quét các file .dll plugin (gom nhóm theo tên file để tránh load 2 lần từ cả BaseDir và AppData)
+                var dllFilesMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
-                // Quét thêm thư mục Plugins cục bộ trong BaseDirectory nếu có
+                // Ưu tiên 1: Thư mục Plugins cục bộ trong BaseDirectory
                 var localPluginDir = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins");
                 if (System.IO.Directory.Exists(localPluginDir))
                 {
-                    foreach (var file in System.IO.Directory.GetFiles(localPluginDir, "*.dll"))
+                    foreach (var file in System.IO.Directory.GetFiles(localPluginDir, "*.dll", SearchOption.AllDirectories))
                     {
-                        dllFiles.Add(file);
+                        var fname = System.IO.Path.GetFileName(file);
+                        dllFilesMap[fname] = file;
                     }
                 }
+
+                // Ưu tiên 2: Thư mục Plugins trong AppData của người dùng (chỉ thêm nếu chưa có ở BaseDir)
+                if (System.IO.Directory.Exists(PluginsDirectory))
+                {
+                    foreach (var file in System.IO.Directory.GetFiles(PluginsDirectory, "*.dll", SearchOption.AllDirectories))
+                    {
+                        var fname = System.IO.Path.GetFileName(file);
+                        if (!dllFilesMap.ContainsKey(fname))
+                        {
+                            dllFilesMap[fname] = file;
+                        }
+                    }
+                }
+
+                var dllFiles = dllFilesMap.Values.ToList();
 
                 foreach (var dllPath in dllFiles)
                 {
                     try
                     {
                         var fileName = System.IO.Path.GetFileName(dllPath);
-                        // Đọc assembly vào bộ nhớ RAM để KHÔNG KHÓA tệp trên đĩa cứng (Zero File Lock)
-                        byte[] rawBytes = File.ReadAllBytes(dllPath);
-                        string pdbPath = System.IO.Path.ChangeExtension(dllPath, ".pdb");
-                        byte[]? pdbBytes = File.Exists(pdbPath) ? File.ReadAllBytes(pdbPath) : null;
-                        var asm = pdbBytes != null ? Assembly.Load(rawBytes, pdbBytes) : Assembly.Load(rawBytes);
+                        var fullPath = System.IO.Path.GetFullPath(dllPath);
+
+                        // Dùng Assembly.LoadFrom để WPF Pack URI (/Plugin;component/...) và BAML resource stream phân giải trơn tru
+                        Assembly asm;
+                        try
+                        {
+                            asm = Assembly.LoadFrom(fullPath);
+                        }
+                        catch
+                        {
+                            byte[] rawBytes = File.ReadAllBytes(dllPath);
+                            string pdbPath = System.IO.Path.ChangeExtension(dllPath, ".pdb");
+                            byte[]? pdbBytes = File.Exists(pdbPath) ? File.ReadAllBytes(pdbPath) : null;
+                            asm = pdbBytes != null ? Assembly.Load(rawBytes, pdbBytes) : Assembly.Load(rawBytes);
+                        }
+
                         var pluginTypes = asm.GetTypes().Where(t => typeof(IPlugin).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract);
 
                         foreach (var type in pluginTypes)

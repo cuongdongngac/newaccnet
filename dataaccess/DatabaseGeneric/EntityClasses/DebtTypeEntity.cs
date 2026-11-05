@@ -26,11 +26,8 @@ namespace DataAccess.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
-		private EntityCollection<CustomerExportLineEntity> _customerExportLines;
 		private EntityCollection<DebtBalanceEntity> _debtBalances;
 		private EntityCollection<DebtDetailEntity> _debtDetails;
-		private EntityCollection<DebtLedgerEntity> _debtLedgers;
-		private EntityCollection<InterestEntity> _interests;
 		private EntityCollection<LiabilityDueEntity> _liabilityDues;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
@@ -41,16 +38,10 @@ namespace DataAccess.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
-			/// <summary>Member name CustomerExportLines</summary>
-			public static readonly string CustomerExportLines = "CustomerExportLines";
 			/// <summary>Member name DebtBalances</summary>
 			public static readonly string DebtBalances = "DebtBalances";
 			/// <summary>Member name DebtDetails</summary>
 			public static readonly string DebtDetails = "DebtDetails";
-			/// <summary>Member name DebtLedgers</summary>
-			public static readonly string DebtLedgers = "DebtLedgers";
-			/// <summary>Member name Interests</summary>
-			public static readonly string Interests = "Interests";
 			/// <summary>Member name LiabilityDues</summary>
 			public static readonly string LiabilityDues = "LiabilityDues";
 		}
@@ -61,11 +52,8 @@ namespace DataAccess.EntityClasses
 			public DebtTypeEntityStaticMetaData()
 			{
 				SetEntityCoreInfo("DebtTypeEntity", InheritanceHierarchyType.None, false, (int)DataAccess.EntityType.DebtTypeEntity, typeof(DebtTypeEntity), typeof(DebtTypeEntityFactory), false);
-				AddNavigatorMetaData<DebtTypeEntity, EntityCollection<CustomerExportLineEntity>>("CustomerExportLines", a => a._customerExportLines, (a, b) => a._customerExportLines = b, a => a.CustomerExportLines, () => new DebtTypeRelations().CustomerExportLineEntityUsingDebtTypeId, typeof(CustomerExportLineEntity), (int)DataAccess.EntityType.CustomerExportLineEntity);
 				AddNavigatorMetaData<DebtTypeEntity, EntityCollection<DebtBalanceEntity>>("DebtBalances", a => a._debtBalances, (a, b) => a._debtBalances = b, a => a.DebtBalances, () => new DebtTypeRelations().DebtBalanceEntityUsingDebtTypeId, typeof(DebtBalanceEntity), (int)DataAccess.EntityType.DebtBalanceEntity);
 				AddNavigatorMetaData<DebtTypeEntity, EntityCollection<DebtDetailEntity>>("DebtDetails", a => a._debtDetails, (a, b) => a._debtDetails = b, a => a.DebtDetails, () => new DebtTypeRelations().DebtDetailEntityUsingDebtTypeId, typeof(DebtDetailEntity), (int)DataAccess.EntityType.DebtDetailEntity);
-				AddNavigatorMetaData<DebtTypeEntity, EntityCollection<DebtLedgerEntity>>("DebtLedgers", a => a._debtLedgers, (a, b) => a._debtLedgers = b, a => a.DebtLedgers, () => new DebtTypeRelations().DebtLedgerEntityUsingDebtTypeId, typeof(DebtLedgerEntity), (int)DataAccess.EntityType.DebtLedgerEntity);
-				AddNavigatorMetaData<DebtTypeEntity, EntityCollection<InterestEntity>>("Interests", a => a._interests, (a, b) => a._interests = b, a => a.Interests, () => new DebtTypeRelations().InterestEntityUsingDebtTypeId, typeof(InterestEntity), (int)DataAccess.EntityType.InterestEntity);
 				AddNavigatorMetaData<DebtTypeEntity, EntityCollection<LiabilityDueEntity>>("LiabilityDues", a => a._liabilityDues, (a, b) => a._liabilityDues = b, a => a.LiabilityDues, () => new DebtTypeRelations().LiabilityDueEntityUsingDebtTypeId, typeof(LiabilityDueEntity), (int)DataAccess.EntityType.LiabilityDueEntity);
 			}
 		}
@@ -119,10 +107,6 @@ namespace DataAccess.EntityClasses
 			// __LLBLGENPRO_USER_CODE_REGION_END
 		}
 
-		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'CustomerExportLine' to this entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoCustomerExportLines() { return CreateRelationInfoForNavigator("CustomerExportLines"); }
-
 		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'DebtBalance' to this entity.</summary>
 		/// <returns></returns>
 		public virtual IRelationPredicateBucket GetRelationInfoDebtBalances() { return CreateRelationInfoForNavigator("DebtBalances"); }
@@ -130,14 +114,6 @@ namespace DataAccess.EntityClasses
 		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'DebtDetail' to this entity.</summary>
 		/// <returns></returns>
 		public virtual IRelationPredicateBucket GetRelationInfoDebtDetails() { return CreateRelationInfoForNavigator("DebtDetails"); }
-
-		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'DebtLedger' to this entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoDebtLedgers() { return CreateRelationInfoForNavigator("DebtLedgers"); }
-
-		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'Interest' to this entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoInterests() { return CreateRelationInfoForNavigator("Interests"); }
 
 		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'LiabilityDue' to this entity.</summary>
 		/// <returns></returns>
@@ -173,10 +149,6 @@ namespace DataAccess.EntityClasses
 		/// <summary>The relations object holding all relations of this entity with other entity classes.</summary>
 		public static DebtTypeRelations Relations { get { return _relationsFactory; } }
 
-		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'CustomerExportLine' for this entity.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathCustomerExportLines { get { return _staticMetaData.GetPrefetchPathElement("CustomerExportLines", CommonEntityBase.CreateEntityCollection<CustomerExportLineEntity>()); } }
-
 		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'DebtBalance' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
 		public static IPrefetchPathElement2 PrefetchPathDebtBalances { get { return _staticMetaData.GetPrefetchPathElement("DebtBalances", CommonEntityBase.CreateEntityCollection<DebtBalanceEntity>()); } }
@@ -184,14 +156,6 @@ namespace DataAccess.EntityClasses
 		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'DebtDetail' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
 		public static IPrefetchPathElement2 PrefetchPathDebtDetails { get { return _staticMetaData.GetPrefetchPathElement("DebtDetails", CommonEntityBase.CreateEntityCollection<DebtDetailEntity>()); } }
-
-		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'DebtLedger' for this entity.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathDebtLedgers { get { return _staticMetaData.GetPrefetchPathElement("DebtLedgers", CommonEntityBase.CreateEntityCollection<DebtLedgerEntity>()); } }
-
-		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'Interest' for this entity.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathInterests { get { return _staticMetaData.GetPrefetchPathElement("Interests", CommonEntityBase.CreateEntityCollection<InterestEntity>()); } }
 
 		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'LiabilityDue' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
@@ -221,10 +185,6 @@ namespace DataAccess.EntityClasses
 			set { SetValue((int)DebtTypeFieldIndex.TypeName, value); }
 		}
 
-		/// <summary>Gets the EntityCollection with the related entities of type 'CustomerExportLineEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
-		[TypeContainedAttribute(typeof(CustomerExportLineEntity))]
-		public virtual EntityCollection<CustomerExportLineEntity> CustomerExportLines { get { return GetOrCreateEntityCollection<CustomerExportLineEntity, CustomerExportLineEntityFactory>("DebtType", true, false, ref _customerExportLines); } }
-
 		/// <summary>Gets the EntityCollection with the related entities of type 'DebtBalanceEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(DebtBalanceEntity))]
 		public virtual EntityCollection<DebtBalanceEntity> DebtBalances { get { return GetOrCreateEntityCollection<DebtBalanceEntity, DebtBalanceEntityFactory>("DebtType", true, false, ref _debtBalances); } }
@@ -232,14 +192,6 @@ namespace DataAccess.EntityClasses
 		/// <summary>Gets the EntityCollection with the related entities of type 'DebtDetailEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(DebtDetailEntity))]
 		public virtual EntityCollection<DebtDetailEntity> DebtDetails { get { return GetOrCreateEntityCollection<DebtDetailEntity, DebtDetailEntityFactory>("DebtType", true, false, ref _debtDetails); } }
-
-		/// <summary>Gets the EntityCollection with the related entities of type 'DebtLedgerEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
-		[TypeContainedAttribute(typeof(DebtLedgerEntity))]
-		public virtual EntityCollection<DebtLedgerEntity> DebtLedgers { get { return GetOrCreateEntityCollection<DebtLedgerEntity, DebtLedgerEntityFactory>("DebtType", true, false, ref _debtLedgers); } }
-
-		/// <summary>Gets the EntityCollection with the related entities of type 'InterestEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
-		[TypeContainedAttribute(typeof(InterestEntity))]
-		public virtual EntityCollection<InterestEntity> Interests { get { return GetOrCreateEntityCollection<InterestEntity, InterestEntityFactory>("DebtType", true, false, ref _interests); } }
 
 		/// <summary>Gets the EntityCollection with the related entities of type 'LiabilityDueEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(LiabilityDueEntity))]
@@ -271,12 +223,6 @@ namespace DataAccess.RelationClasses
 	/// <summary>Implements the relations factory for the entity: DebtType. </summary>
 	public partial class DebtTypeRelations: RelationFactory
 	{
-		/// <summary>Returns a new IEntityRelation object, between DebtTypeEntity and CustomerExportLineEntity over the 1:n relation they have, using the relation between the fields: DebtType.Id - CustomerExportLine.DebtTypeId</summary>
-		public virtual IEntityRelation CustomerExportLineEntityUsingDebtTypeId
-		{
-			get { return ModelInfoProviderSingleton.GetInstance().CreateRelation(RelationType.OneToMany, "CustomerExportLines", true, new[] { DebtTypeFields.Id, CustomerExportLineFields.DebtTypeId }); }
-		}
-
 		/// <summary>Returns a new IEntityRelation object, between DebtTypeEntity and DebtBalanceEntity over the 1:n relation they have, using the relation between the fields: DebtType.Id - DebtBalance.DebtTypeId</summary>
 		public virtual IEntityRelation DebtBalanceEntityUsingDebtTypeId
 		{
@@ -287,18 +233,6 @@ namespace DataAccess.RelationClasses
 		public virtual IEntityRelation DebtDetailEntityUsingDebtTypeId
 		{
 			get { return ModelInfoProviderSingleton.GetInstance().CreateRelation(RelationType.OneToMany, "DebtDetails", true, new[] { DebtTypeFields.Id, DebtDetailFields.DebtTypeId }); }
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between DebtTypeEntity and DebtLedgerEntity over the 1:n relation they have, using the relation between the fields: DebtType.Id - DebtLedger.DebtTypeId</summary>
-		public virtual IEntityRelation DebtLedgerEntityUsingDebtTypeId
-		{
-			get { return ModelInfoProviderSingleton.GetInstance().CreateRelation(RelationType.OneToMany, "DebtLedgers", true, new[] { DebtTypeFields.Id, DebtLedgerFields.DebtTypeId }); }
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between DebtTypeEntity and InterestEntity over the 1:n relation they have, using the relation between the fields: DebtType.Id - Interest.DebtTypeId</summary>
-		public virtual IEntityRelation InterestEntityUsingDebtTypeId
-		{
-			get { return ModelInfoProviderSingleton.GetInstance().CreateRelation(RelationType.OneToMany, "Interests", true, new[] { DebtTypeFields.Id, InterestFields.DebtTypeId }); }
 		}
 
 		/// <summary>Returns a new IEntityRelation object, between DebtTypeEntity and LiabilityDueEntity over the 1:n relation they have, using the relation between the fields: DebtType.Id - LiabilityDue.DebtTypeId</summary>
@@ -312,11 +246,8 @@ namespace DataAccess.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticDebtTypeRelations
 	{
-		internal static readonly IEntityRelation CustomerExportLineEntityUsingDebtTypeIdStatic = new DebtTypeRelations().CustomerExportLineEntityUsingDebtTypeId;
 		internal static readonly IEntityRelation DebtBalanceEntityUsingDebtTypeIdStatic = new DebtTypeRelations().DebtBalanceEntityUsingDebtTypeId;
 		internal static readonly IEntityRelation DebtDetailEntityUsingDebtTypeIdStatic = new DebtTypeRelations().DebtDetailEntityUsingDebtTypeId;
-		internal static readonly IEntityRelation DebtLedgerEntityUsingDebtTypeIdStatic = new DebtTypeRelations().DebtLedgerEntityUsingDebtTypeId;
-		internal static readonly IEntityRelation InterestEntityUsingDebtTypeIdStatic = new DebtTypeRelations().InterestEntityUsingDebtTypeId;
 		internal static readonly IEntityRelation LiabilityDueEntityUsingDebtTypeIdStatic = new DebtTypeRelations().LiabilityDueEntityUsingDebtTypeId;
 
 		/// <summary>CTor</summary>

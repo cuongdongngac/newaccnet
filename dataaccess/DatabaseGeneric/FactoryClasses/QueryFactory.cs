@@ -42,23 +42,14 @@ namespace DataAccess.FactoryClasses
 		/// <summary>Creates and returns a new EntityQuery for the AssetDetail entity</summary>
 		public EntityQuery<AssetDetailEntity> AssetDetail { get { return Create<AssetDetailEntity>(); } }
 
-		/// <summary>Creates and returns a new EntityQuery for the AssetExportVoucher entity</summary>
-		public EntityQuery<AssetExportVoucherEntity> AssetExportVoucher { get { return Create<AssetExportVoucherEntity>(); } }
-
-		/// <summary>Creates and returns a new EntityQuery for the AssetLedger entity</summary>
-		public EntityQuery<AssetLedgerEntity> AssetLedger { get { return Create<AssetLedgerEntity>(); } }
-
 		/// <summary>Creates and returns a new EntityQuery for the AssetTracking entity</summary>
 		public EntityQuery<AssetTrackingEntity> AssetTracking { get { return Create<AssetTrackingEntity>(); } }
-
-		/// <summary>Creates and returns a new EntityQuery for the AssetTrackingDepreciation entity</summary>
-		public EntityQuery<AssetTrackingDepreciationEntity> AssetTrackingDepreciation { get { return Create<AssetTrackingDepreciationEntity>(); } }
 
 		/// <summary>Creates and returns a new EntityQuery for the BusinessResultItem entity</summary>
 		public EntityQuery<BusinessResultItemEntity> BusinessResultItem { get { return Create<BusinessResultItemEntity>(); } }
 
-		/// <summary>Creates and returns a new EntityQuery for the CashFlowBalance entity</summary>
-		public EntityQuery<CashFlowBalanceEntity> CashFlowBalance { get { return Create<CashFlowBalanceEntity>(); } }
+		/// <summary>Creates and returns a new EntityQuery for the CalculationSession entity</summary>
+		public EntityQuery<CalculationSessionEntity> CalculationSession { get { return Create<CalculationSessionEntity>(); } }
 
 		/// <summary>Creates and returns a new EntityQuery for the CashFlowCategory entity</summary>
 		public EntityQuery<CashFlowCategoryEntity> CashFlowCategory { get { return Create<CashFlowCategoryEntity>(); } }
@@ -68,9 +59,6 @@ namespace DataAccess.FactoryClasses
 
 		/// <summary>Creates and returns a new EntityQuery for the CashFlowPreviousPeriod entity</summary>
 		public EntityQuery<CashFlowPreviousPeriodEntity> CashFlowPreviousPeriod { get { return Create<CashFlowPreviousPeriodEntity>(); } }
-
-		/// <summary>Creates and returns a new EntityQuery for the CashFlowYearBalance entity</summary>
-		public EntityQuery<CashFlowYearBalanceEntity> CashFlowYearBalance { get { return Create<CashFlowYearBalanceEntity>(); } }
 
 		/// <summary>Creates and returns a new EntityQuery for the Category entity</summary>
 		public EntityQuery<CategoryEntity> Category { get { return Create<CategoryEntity>(); } }
@@ -90,9 +78,6 @@ namespace DataAccess.FactoryClasses
 		/// <summary>Creates and returns a new EntityQuery for the CostElement entity</summary>
 		public EntityQuery<CostElementEntity> CostElement { get { return Create<CostElementEntity>(); } }
 
-		/// <summary>Creates and returns a new EntityQuery for the CostLedger entity</summary>
-		public EntityQuery<CostLedgerEntity> CostLedger { get { return Create<CostLedgerEntity>(); } }
-
 		/// <summary>Creates and returns a new EntityQuery for the CostObject entity</summary>
 		public EntityQuery<CostObjectEntity> CostObject { get { return Create<CostObjectEntity>(); } }
 
@@ -101,9 +86,6 @@ namespace DataAccess.FactoryClasses
 
 		/// <summary>Creates and returns a new EntityQuery for the CurrencyDetail entity</summary>
 		public EntityQuery<CurrencyDetailEntity> CurrencyDetail { get { return Create<CurrencyDetailEntity>(); } }
-
-		/// <summary>Creates and returns a new EntityQuery for the CurrencyLedger entity</summary>
-		public EntityQuery<CurrencyLedgerEntity> CurrencyLedger { get { return Create<CurrencyLedgerEntity>(); } }
 
 		/// <summary>Creates and returns a new EntityQuery for the CurrencyLiabilityLine entity</summary>
 		public EntityQuery<CurrencyLiabilityLineEntity> CurrencyLiabilityLine { get { return Create<CurrencyLiabilityLineEntity>(); } }
@@ -114,8 +96,11 @@ namespace DataAccess.FactoryClasses
 		/// <summary>Creates and returns a new EntityQuery for the CustomCostReportAccount entity</summary>
 		public EntityQuery<CustomCostReportAccountEntity> CustomCostReportAccount { get { return Create<CustomCostReportAccountEntity>(); } }
 
-		/// <summary>Creates and returns a new EntityQuery for the CustomerExportLine entity</summary>
-		public EntityQuery<CustomerExportLineEntity> CustomerExportLine { get { return Create<CustomerExportLineEntity>(); } }
+		/// <summary>Creates and returns a new EntityQuery for the CustomFieldDefinition entity</summary>
+		public EntityQuery<CustomFieldDefinitionEntity> CustomFieldDefinition { get { return Create<CustomFieldDefinitionEntity>(); } }
+
+		/// <summary>Creates and returns a new EntityQuery for the CustomFieldOption entity</summary>
+		public EntityQuery<CustomFieldOptionEntity> CustomFieldOption { get { return Create<CustomFieldOptionEntity>(); } }
 
 		/// <summary>Creates and returns a new EntityQuery for the DbConfig entity</summary>
 		public EntityQuery<DbConfigEntity> DbConfig { get { return Create<DbConfigEntity>(); } }
@@ -126,9 +111,6 @@ namespace DataAccess.FactoryClasses
 		/// <summary>Creates and returns a new EntityQuery for the DebtDetail entity</summary>
 		public EntityQuery<DebtDetailEntity> DebtDetail { get { return Create<DebtDetailEntity>(); } }
 
-		/// <summary>Creates and returns a new EntityQuery for the DebtLedger entity</summary>
-		public EntityQuery<DebtLedgerEntity> DebtLedger { get { return Create<DebtLedgerEntity>(); } }
-
 		/// <summary>Creates and returns a new EntityQuery for the DebtReason entity</summary>
 		public EntityQuery<DebtReasonEntity> DebtReason { get { return Create<DebtReasonEntity>(); } }
 
@@ -138,8 +120,11 @@ namespace DataAccess.FactoryClasses
 		/// <summary>Creates and returns a new EntityQuery for the Department entity</summary>
 		public EntityQuery<DepartmentEntity> Department { get { return Create<DepartmentEntity>(); } }
 
-		/// <summary>Creates and returns a new EntityQuery for the Depreciation entity</summary>
-		public EntityQuery<DepreciationEntity> Depreciation { get { return Create<DepreciationEntity>(); } }
+		/// <summary>Creates and returns a new EntityQuery for the Dimension entity</summary>
+		public EntityQuery<DimensionEntity> Dimension { get { return Create<DimensionEntity>(); } }
+
+		/// <summary>Creates and returns a new EntityQuery for the DimensionValue entity</summary>
+		public EntityQuery<DimensionValueEntity> DimensionValue { get { return Create<DimensionValueEntity>(); } }
 
 		/// <summary>Creates and returns a new EntityQuery for the ExchangeRate entity</summary>
 		public EntityQuery<ExchangeRateEntity> ExchangeRate { get { return Create<ExchangeRateEntity>(); } }
@@ -147,29 +132,11 @@ namespace DataAccess.FactoryClasses
 		/// <summary>Creates and returns a new EntityQuery for the ExpenseTaxLine entity</summary>
 		public EntityQuery<ExpenseTaxLineEntity> ExpenseTaxLine { get { return Create<ExpenseTaxLineEntity>(); } }
 
-		/// <summary>Creates and returns a new EntityQuery for the FinancialMonth entity</summary>
-		public EntityQuery<FinancialMonthEntity> FinancialMonth { get { return Create<FinancialMonthEntity>(); } }
-
-		/// <summary>Creates and returns a new EntityQuery for the GeneralLedger entity</summary>
-		public EntityQuery<GeneralLedgerEntity> GeneralLedger { get { return Create<GeneralLedgerEntity>(); } }
-
-		/// <summary>Creates and returns a new EntityQuery for the Interest entity</summary>
-		public EntityQuery<InterestEntity> Interest { get { return Create<InterestEntity>(); } }
-
-		/// <summary>Creates and returns a new EntityQuery for the InterestDetail entity</summary>
-		public EntityQuery<InterestDetailEntity> InterestDetail { get { return Create<InterestDetailEntity>(); } }
-
 		/// <summary>Creates and returns a new EntityQuery for the InterestRate entity</summary>
 		public EntityQuery<InterestRateEntity> InterestRate { get { return Create<InterestRateEntity>(); } }
 
-		/// <summary>Creates and returns a new EntityQuery for the InventoryExportVoucher entity</summary>
-		public EntityQuery<InventoryExportVoucherEntity> InventoryExportVoucher { get { return Create<InventoryExportVoucherEntity>(); } }
-
 		/// <summary>Creates and returns a new EntityQuery for the InventoryItem entity</summary>
 		public EntityQuery<InventoryItemEntity> InventoryItem { get { return Create<InventoryItemEntity>(); } }
-
-		/// <summary>Creates and returns a new EntityQuery for the InventoryLedger entity</summary>
-		public EntityQuery<InventoryLedgerEntity> InventoryLedger { get { return Create<InventoryLedgerEntity>(); } }
 
 		/// <summary>Creates and returns a new EntityQuery for the InventoryVoucher entity</summary>
 		public EntityQuery<InventoryVoucherEntity> InventoryVoucher { get { return Create<InventoryVoucherEntity>(); } }
@@ -179,9 +146,6 @@ namespace DataAccess.FactoryClasses
 
 		/// <summary>Creates and returns a new EntityQuery for the InvestmentDetail entity</summary>
 		public EntityQuery<InvestmentDetailEntity> InvestmentDetail { get { return Create<InvestmentDetailEntity>(); } }
-
-		/// <summary>Creates and returns a new EntityQuery for the InvestmentLedger entity</summary>
-		public EntityQuery<InvestmentLedgerEntity> InvestmentLedger { get { return Create<InvestmentLedgerEntity>(); } }
 
 		/// <summary>Creates and returns a new EntityQuery for the JournalEntry entity</summary>
 		public EntityQuery<JournalEntryEntity> JournalEntry { get { return Create<JournalEntryEntity>(); } }

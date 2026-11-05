@@ -1,0 +1,12 @@
+---
+description: Phiên bản công nghệ chuẩn bắt buộc - DevExpress 25 & LLBLGen 5.12
+alwaysApply: true
+---
+
+# Phiên bản Công nghệ Chuẩn Bắt buộc
+
+- **DevExpress:** Phiên bản cố định **v25** (chuẩn `25.2.x`). Sử dụng toàn bộ cho UI/UX WPF (`DevExpress.Wpf.*`, `DevExpress.XtraReports`). Tuyệt đối không dùng bản khác hoặc WinForms controls.
+- **ORM:** Phiên bản cố định **LLBLGen Pro v5.12** (`5.12.0`). Tuân thủ Adapter pattern, Entity, TypedList. Không tự ý sửa đổi phiên bản runtime package.
+- **Platform:** C# / WPF thuần túy trên .NET mới nhất (.NET 10).
+- **Kiến trúc:** MVVM nghiêm ngặt, Accounting-first, DB-Agnostic (không dùng Stored Procedures).
+- **Chi tiết:** Xem thêm tại `.ai_context/02_rules/csharp_rules.md`.

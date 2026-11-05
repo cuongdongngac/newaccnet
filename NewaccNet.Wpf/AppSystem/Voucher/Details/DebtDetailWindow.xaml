@@ -24,7 +24,7 @@
                     <TextBlock Text="{Binding AccountId}" FontWeight="Bold" Foreground="#1976D2"/>
                 </dxlc:LayoutItem>
                 <dxlc:LayoutItem Label="Tổng tiền cần phân bổ:" Width="300">
-                    <TextBlock Text="{Binding Amount, StringFormat='N0'}" FontWeight="Bold" Foreground="#D32F2F"/>
+                    <TextBlock Text="{Binding TargetAmount, ElementName=debtWindow, StringFormat='N0'}" FontWeight="Bold" Foreground="#D32F2F"/>
                 </dxlc:LayoutItem>
             </dxlc:LayoutGroup>
         </dxlc:LayoutControl>

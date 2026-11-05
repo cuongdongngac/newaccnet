@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -22,6 +22,7 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
     {
         private bool _hasTax = false;
         private string _warehouseId = "";
+        private JournalEntryEntity? _originalParentEntry;
 
         private string _costAccountId = "6321";
         private string _revenueAccountId = "5111";
@@ -424,6 +425,7 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             ctx.IsNew = true;
             ctx.MaterialEntry = seedEntry ?? new JournalEntryEntity();
             ctx.Voucher = voucher ?? seedEntry?.JournalVoucher;
+            ctx._originalParentEntry = ctx.MaterialEntry.ParentEntry;
 
             // Đảm bảo MaterialEntry thuộc về Voucher
             if (ctx.Voucher != null && !ctx.Voucher.JournalEntries.Contains(ctx.MaterialEntry))
@@ -499,6 +501,7 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             }
 
             ctx.MaterialEntry = matEntry;
+            ctx._originalParentEntry = matEntry.ParentEntry;
             ctx.InventoryVoucher = matEntry.InventoryVouchers[0];
             ctx._warehouseId = ctx.InventoryVoucher.WarehouseId ?? "";
             // Gán trực tiếp backing field _hasTax để KHÔNG kích hoạt OnTaxflagChanged() / RebuildTradeHierarchy()
@@ -869,26 +872,53 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
                 InventoryVoucher.Taxflag = false;
             }
 
-            // Gỡ MaterialEntry khỏi cha
-            MaterialEntry.ParentEntry = null;
-            MaterialEntry.SubEntries.Clear();
-            MaterialEntry.Dbcr = (short)(VoucherType == "NNB" ? 1 : -1);
-
-            // Gỡ các entity phụ khỏi Voucher.JournalEntries
+            // Gỡ các entity phụ do Trade tự sinh khỏi Voucher.JournalEntries
             if (Voucher != null)
             {
-                if (PayMasterEntry != null) Voucher.JournalEntries.Remove(PayMasterEntry);
-                if (TaxEntry != null) Voucher.JournalEntries.Remove(TaxEntry);
-                if (CostMasterEntry != null) Voucher.JournalEntries.Remove(CostMasterEntry);
-                if (RevMasterEntry != null) Voucher.JournalEntries.Remove(RevMasterEntry);
-                if (RevEntry != null) Voucher.JournalEntries.Remove(RevEntry);
+                if (TaxEntry != null && TaxEntry != MaterialEntry && TaxEntry != _originalParentEntry)
+                {
+                    Voucher.JournalEntries.Remove(TaxEntry);
+                }
+                if (RevEntry != null && RevEntry != MaterialEntry && RevEntry != _originalParentEntry)
+                {
+                    Voucher.JournalEntries.Remove(RevEntry);
+                }
+                if (RevMasterEntry != null && RevMasterEntry != MaterialEntry && RevMasterEntry != _originalParentEntry)
+                {
+                    Voucher.JournalEntries.Remove(RevMasterEntry);
+                }
+                if (PayMasterEntry != null && PayMasterEntry != MaterialEntry && PayMasterEntry != _originalParentEntry)
+                {
+                    Voucher.JournalEntries.Remove(PayMasterEntry);
+                }
+                if (CostMasterEntry != null && CostMasterEntry != MaterialEntry && CostMasterEntry != _originalParentEntry)
+                {
+                    Voucher.JournalEntries.Remove(CostMasterEntry);
+                }
             }
 
-            PayMasterEntry = null;
+            // Bảo toàn mối quan hệ cha-con tự nhiên ban đầu của chứng từ (Accounting First)
+            if (_originalParentEntry != null)
+            {
+                MaterialEntry.ParentEntry = _originalParentEntry;
+                if (_originalParentEntry.Id != 0) MaterialEntry.ParentId = _originalParentEntry.Id;
+                if (!_originalParentEntry.SubEntries.Contains(MaterialEntry))
+                {
+                    _originalParentEntry.SubEntries.Add(MaterialEntry);
+                }
+            }
+
+            // Đảm bảo MaterialEntry luôn thuộc Voucher.JournalEntries (Bills)
+            if (Voucher != null && !Voucher.JournalEntries.Contains(MaterialEntry))
+            {
+                Voucher.JournalEntries.Add(MaterialEntry);
+            }
+
             TaxEntry = null;
-            CostMasterEntry = null;
             RevMasterEntry = null;
             RevEntry = null;
+            if (PayMasterEntry != _originalParentEntry) PayMasterEntry = null;
+            if (CostMasterEntry != _originalParentEntry) CostMasterEntry = null;
         }
 
         /// <summary>
@@ -965,6 +995,16 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
                 if (MaterialEntry != null && (!MaterialEntry.Amount.HasValue || Math.Abs(MaterialEntry.Amount.Value - cost) > 0.001m))
                 {
                     MaterialEntry.Amount = cost;
+                }
+
+                // Nếu là Nội bộ (không phải Mua bán) và có dòng cha trên chứng từ, đồng bộ tổng tiền lên dòng cha:
+                if (!IsTrade && _originalParentEntry != null)
+                {
+                    decimal subTotal = _originalParentEntry.SubEntries.Sum(x => x.Amount ?? 0m);
+                    if (subTotal > 0m)
+                    {
+                        _originalParentEntry.Amount = subTotal;
+                    }
                 }
 
                 // 2. Nếu là Mua bán, domino gọi đến các Entity con và cha
@@ -1093,6 +1133,26 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
                     {
                         if (Voucher != null && TaxEntry != null)
                             Voucher.JournalEntries.Remove(TaxEntry);
+                    }
+                }
+            }
+            else
+            {
+                // NỘI BỘ (NNB / XNB) - Chuẩn Accounting First:
+                // Đảm bảo MaterialEntry luôn nằm trong Voucher.JournalEntries (Bills)
+                if (Voucher != null && !Voucher.JournalEntries.Contains(MaterialEntry))
+                {
+                    Voucher.JournalEntries.Add(MaterialEntry);
+                }
+
+                // Bảo toàn mối quan hệ cha-con với Master entry
+                if (_originalParentEntry != null)
+                {
+                    MaterialEntry.ParentEntry = _originalParentEntry;
+                    if (_originalParentEntry.Id != 0) MaterialEntry.ParentId = _originalParentEntry.Id;
+                    if (!_originalParentEntry.SubEntries.Contains(MaterialEntry))
+                    {
+                        _originalParentEntry.SubEntries.Add(MaterialEntry);
                     }
                 }
             }

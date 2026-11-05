@@ -58,6 +58,7 @@ namespace NewaccNet.Core.Data
         public short Material { get; set; } = 1; // 1 = Bình quân, 2 = FIFO, 3 = Đích danh
         public int MaxRecords { get; set; } = 100; // Hạn mức bản ghi JournalVoucher (Mặc định dùng thử = 100)
         public string VoucherPostingConfig { get; set; } = ""; // Chuỗi JSON cấu hình định khoản ngầm định cho các loại phiếu
+        public string CashPostingConfig { get; set; } = ""; // Chuỗi JSON cấu hình định khoản cho phân hệ Tiền mặt & Ngân hàng
     }
 
     public class VoucherPostingConfigDto
@@ -65,6 +66,52 @@ namespace NewaccNet.Core.Data
         public Dictionary<string, InventoryVoucherConfigItemDto> Inventory { get; set; } = new(StringComparer.OrdinalIgnoreCase);
         public Dictionary<string, CashVoucherConfigItemDto> Receipt { get; set; } = new(StringComparer.OrdinalIgnoreCase);
         public Dictionary<string, CashVoucherConfigItemDto> Payment { get; set; } = new(StringComparer.OrdinalIgnoreCase);
+
+        // Danh sách thiết lập tài khoản đặc thù cho phân hệ kho (ERP Warehouse) kèm tên định nghĩa lại (CustomName)
+        public List<PluginAccountConfigItemDto> ErpAccounts { get; set; } = new();
+    }
+
+    /// <summary>
+    /// Phần tử cấu hình tài khoản đặc thù theo từng plugin (VD: ERP Warehouse).
+    /// Giữ nguyên AccountId làm gốc kế toán, cho phép định nghĩa lại Tên hiển thị (CustomName)
+    /// và phân nhóm nghiệp vụ (Category).
+    /// </summary>
+    public class PluginAccountConfigItemDto
+    {
+        public string AccountId { get; set; } = "";
+        public string BaseName { get; set; } = "";
+        public string CustomName { get; set; } = "";
+        public string Category { get; set; } = ""; // "Revenue", "Cost", "Inventory", "Tax", "Debt", "Payment", "Internal"
+        public string BaseCategoryId { get; set; } = ""; // Category gốc trong COA (A, B, E, V, I...) để đối chiếu
+        public bool IsActive { get; set; } = true;
+
+        public string DisplayName => !string.IsNullOrWhiteSpace(CustomName) ? CustomName : (!string.IsNullOrWhiteSpace(BaseName) ? BaseName : AccountId);
+        public string FullDisplay => !string.IsNullOrWhiteSpace(CustomName) ? $"{CustomName} ({AccountId})" : $"{AccountId} - {BaseName}";
+    }
+
+    /// <summary>
+    /// Tùy chọn tài khoản trong danh sách được phép của một mục định khoản cụ thể (Slot-based).
+    /// Cấu trúc chuẩn tương tự thực thể Account đầy đủ (AccountId, AccountName, CategoryId, ParentId, IsDefault).
+    /// </summary>
+    public class VoucherPostingAccountOptionDto
+    {
+        public string AccountId { get; set; } = "";
+        public string AccountName { get; set; } = "";
+        public string CategoryId { get; set; } = "";
+        public string? ParentId { get; set; } = "";
+        public bool IsDefault { get; set; } = false;
+        public bool AllowDetail { get; set; } = true; // Cho phép bật form chi tiết (nếu = false: cấm mở form chi tiết)
+
+        // Thuộc tính tương thích ngược
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string BaseName { get => AccountName; set { if (string.IsNullOrEmpty(AccountName)) AccountName = value; } }
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string CustomName { get => AccountName; set => AccountName = value; }
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string BaseCategoryId { get => CategoryId; set => CategoryId = value; }
+
+        public string DisplayName => !string.IsNullOrWhiteSpace(AccountName) ? AccountName : AccountId;
+        public string FullDisplay => !string.IsNullOrWhiteSpace(AccountName) ? $"{AccountId} - {AccountName}" : AccountId;
     }
 
     public class PaymentMethodOptionDto
@@ -86,6 +133,36 @@ namespace NewaccNet.Core.Data
         public string CostAccountId { get; set; } = "";
         public string RevenueAccountId { get; set; } = "";
         public string PartnerType { get; set; } = "";
+
+        // Danh sách tài khoản được phép cấu hình theo từng mục định khoản (Slot-based)
+        // Key: "Revenue", "Cost", "Tax", "Total", "Inventory", "Offset"...
+        public Dictionary<string, List<VoucherPostingAccountOptionDto>> AccountSlots { get; set; } = new(StringComparer.OrdinalIgnoreCase);
+
+        public List<NewaccNet.Core.Posting.AccountOption> GetAccountsForSlot(string slotKey, string? fallbackPrefix = null)
+        {
+            if (AccountSlots != null && AccountSlots.TryGetValue(slotKey, out var list) && list != null && list.Count > 0)
+            {
+                return list.Select(x => new NewaccNet.Core.Posting.AccountOption
+                {
+                    AccountId = x.AccountId,
+                    AccountName = !string.IsNullOrWhiteSpace(x.AccountName) ? x.AccountName : x.AccountId,
+                    CustomName = !string.IsNullOrWhiteSpace(x.AccountName) ? x.AccountName : x.AccountId
+                }).ToList();
+            }
+
+            return NewaccNet.Core.Posting.WarehousePostingGateway.LoadAccounts(fallbackPrefix);
+        }
+
+        public string GetDefaultAccountIdForSlot(string slotKey, string fallbackAccId)
+        {
+            if (AccountSlots != null && AccountSlots.TryGetValue(slotKey, out var list) && list != null && list.Count > 0)
+            {
+                var def = list.FirstOrDefault(x => x.IsDefault);
+                if (def != null && !string.IsNullOrEmpty(def.AccountId)) return def.AccountId;
+                return list[0].AccountId;
+            }
+            return fallbackAccId;
+        }
 
         // Danh sách các tình huống thanh toán được cấu hình động
         public List<PaymentMethodOptionDto> PaymentMethods { get; set; } = new();
@@ -137,6 +214,31 @@ namespace NewaccNet.Core.Data
         public string PartnerType { get; set; } = "";
     }
 
+    public class CashPostingConfigDto
+    {
+        public string DefaultCashAccount { get; set; } = "1111";
+        public string DefaultBankAccount { get; set; } = "1121";
+        public List<PluginAccountConfigItemDto> CashAccounts { get; set; } = new();
+        public List<CashAliasItemDto> ReceiptAliases { get; set; } = new();
+        public List<CashAliasItemDto> PaymentAliases { get; set; } = new();
+    }
+
+    public class CashAliasItemDto
+    {
+        public string Code { get; set; } = "";
+        public string Name { get; set; } = "";
+        public string OffsetAccount { get; set; } = "";
+        public string VatAccount { get; set; } = "";
+        public string Category { get; set; } = ""; // Debt, Cost, Revenue, Inventory, Internal, Other
+        public bool RequireDetail { get; set; } = false;
+        public string DefaultDescription { get; set; } = "";
+        public bool IsActive { get; set; } = true;
+        public bool IsDefault { get; set; } = false;
+
+        public string DisplayName => !string.IsNullOrWhiteSpace(Name) ? Name : Code;
+        public string FullDisplay => !string.IsNullOrWhiteSpace(OffsetAccount) ? $"{Name} ({OffsetAccount})" : Name;
+    }
+
     public static class DbConfigService
     {
         // Khóa kiểm soát bí mật (Secret Salt) của tác giả Phạm Việt Cường
@@ -169,7 +271,8 @@ namespace NewaccNet.Core.Data
                 ExpiryDate = entity.ExpiryDate ?? "20991231",
                 AccountMethod = (short)(entity.AccountMethod ?? 1),
                 Material = (short)(entity.Material ?? 1),
-                VoucherPostingConfig = entity.VoucherPostingConfig ?? ""
+                VoucherPostingConfig = entity.VoucherPostingConfig ?? "",
+                CashPostingConfig = entity.CashPostingConfig ?? ""
             };
         }
 
@@ -237,6 +340,125 @@ namespace NewaccNet.Core.Data
                 RevenueAccountId = "",
                 PartnerType = "Department"
             };
+
+            // 1. Cấu hình danh sách tài khoản theo từng mục định khoản (Slot-based) cho NM
+            cfg.Inventory["NM"].AccountSlots["Inventory"] = new List<VoucherPostingAccountOptionDto>
+            {
+                new() { AccountId = "1561", BaseName = "Giá mua hàng hóa", CustomName = "Hàng hóa kho chính", IsDefault = true, BaseCategoryId = "B", AllowDetail = false },
+                new() { AccountId = "152", BaseName = "Nguyên liệu, vật liệu", CustomName = "Nguyên vật liệu", IsDefault = false, BaseCategoryId = "B", AllowDetail = false },
+                new() { AccountId = "153", BaseName = "Công cụ, dụng cụ", CustomName = "Công cụ, dụng cụ", IsDefault = false, BaseCategoryId = "B", AllowDetail = false },
+                new() { AccountId = "155", BaseName = "Thành phẩm", CustomName = "Thành phẩm", IsDefault = false, BaseCategoryId = "B", AllowDetail = false }
+            };
+            cfg.Inventory["NM"].AccountSlots["Tax"] = new List<VoucherPostingAccountOptionDto>
+            {
+                new() { AccountId = "13311", BaseName = "Thuế GTGT đầu vào của hàng hóa, dịch vụ", CustomName = "Thuế GTGT mua vào", IsDefault = true, BaseCategoryId = "V" },
+                new() { AccountId = "13312", BaseName = "Thuế GTGT đầu vào của TSCĐ", CustomName = "Thuế GTGT mua vào TSCĐ", IsDefault = false, BaseCategoryId = "V" }
+            };
+            cfg.Inventory["NM"].AccountSlots["Total"] = new List<VoucherPostingAccountOptionDto>
+            {
+                new() { AccountId = "3311", BaseName = "Phải trả cho người bán", CustomName = "Phải trả người bán", IsDefault = true, BaseCategoryId = "A" },
+                new() { AccountId = "1111", BaseName = "Tiền mặt Việt Nam", CustomName = "Tiền mặt", IsDefault = false, BaseCategoryId = "I" },
+                new() { AccountId = "1121", BaseName = "Tiền gửi ngân hàng Việt Nam", CustomName = "Tiền gửi ngân hàng", IsDefault = false, BaseCategoryId = "I" },
+                new() { AccountId = "141", BaseName = "Tạm ứng", CustomName = "Tạm ứng nhân viên", IsDefault = false, BaseCategoryId = "I" }
+            };
+
+            // 2. Cấu hình danh sách tài khoản theo từng mục định khoản (Slot-based) cho XB
+            cfg.Inventory["XB"].AccountSlots["Revenue"] = new List<VoucherPostingAccountOptionDto>
+            {
+                new() { AccountId = "5111", BaseName = "Doanh thu bán hàng hóa", CustomName = "Doanh thu bán hàng hóa", IsDefault = true, BaseCategoryId = "I" },
+                new() { AccountId = "5112", BaseName = "Doanh thu bán các thành phẩm", CustomName = "Doanh thu bán thành phẩm", IsDefault = false, BaseCategoryId = "I" },
+                new() { AccountId = "5113", BaseName = "Doanh thu cung cấp dịch vụ", CustomName = "Doanh thu dịch vụ", IsDefault = false, BaseCategoryId = "I" },
+                new() { AccountId = "711", BaseName = "Thu nhập khác", CustomName = "Thu nhập khác", IsDefault = false, BaseCategoryId = "I" }
+            };
+            cfg.Inventory["XB"].AccountSlots["Cost"] = new List<VoucherPostingAccountOptionDto>
+            {
+                new() { AccountId = "6321", BaseName = "Giá vốn hàng hóa", CustomName = "Giá vốn hàng hóa", IsDefault = true, BaseCategoryId = "E" },
+                new() { AccountId = "6322", BaseName = "Giá vốn thành phẩm", CustomName = "Giá vốn thành phẩm", IsDefault = false, BaseCategoryId = "E" },
+                new() { AccountId = "811", BaseName = "Chi phí khác", CustomName = "Chi phí khác", IsDefault = false, BaseCategoryId = "E" }
+            };
+            cfg.Inventory["XB"].AccountSlots["Tax"] = new List<VoucherPostingAccountOptionDto>
+            {
+                new() { AccountId = "33311", BaseName = "Thuế GTGT đầu ra", CustomName = "Thuế GTGT đầu ra", IsDefault = true, BaseCategoryId = "V" }
+            };
+            cfg.Inventory["XB"].AccountSlots["Total"] = new List<VoucherPostingAccountOptionDto>
+            {
+                new() { AccountId = "131", BaseName = "Phải thu của khách hàng", CustomName = "Phải thu khách hàng", IsDefault = true, BaseCategoryId = "A" },
+                new() { AccountId = "1111", BaseName = "Tiền mặt Việt Nam", CustomName = "Tiền mặt", IsDefault = false, BaseCategoryId = "I" },
+                new() { AccountId = "1121", BaseName = "Tiền gửi ngân hàng Việt Nam", CustomName = "Tiền gửi ngân hàng", IsDefault = false, BaseCategoryId = "I" }
+            };
+            cfg.Inventory["XB"].AccountSlots["Inventory"] = new List<VoucherPostingAccountOptionDto>
+            {
+                new() { AccountId = "1561", BaseName = "Giá mua hàng hóa", CustomName = "Hàng hóa kho chính", IsDefault = true, BaseCategoryId = "B", AllowDetail = false },
+                new() { AccountId = "155", BaseName = "Thành phẩm", CustomName = "Thành phẩm", IsDefault = false, BaseCategoryId = "B", AllowDetail = false },
+                new() { AccountId = "152", BaseName = "Nguyên liệu, vật liệu", CustomName = "Nguyên vật liệu", IsDefault = false, BaseCategoryId = "B", AllowDetail = false }
+            };
+
+            // 3. Cấu hình danh sách tài khoản theo từng mục định khoản (Slot-based) cho NNB
+            cfg.Inventory["NNB"].AccountSlots["Inventory"] = new List<VoucherPostingAccountOptionDto>
+            {
+                new() { AccountId = "1561", BaseName = "Giá mua hàng hóa", CustomName = "Hàng hóa kho chính", IsDefault = true, BaseCategoryId = "B", AllowDetail = false },
+                new() { AccountId = "155", BaseName = "Thành phẩm", CustomName = "Thành phẩm", IsDefault = false, BaseCategoryId = "B", AllowDetail = false },
+                new() { AccountId = "152", BaseName = "Nguyên liệu, vật liệu", CustomName = "Nguyên vật liệu", IsDefault = false, BaseCategoryId = "B", AllowDetail = false }
+            };
+            cfg.Inventory["NNB"].AccountSlots["Offset"] = new List<VoucherPostingAccountOptionDto>
+            {
+                new() { AccountId = "154", BaseName = "Chi phí sản xuất, kinh doanh dở dang", CustomName = "Chi phí SXKD dở dang", IsDefault = true, BaseCategoryId = "E" },
+                new() { AccountId = "711", BaseName = "Thu nhập khác", CustomName = "Thu nhập khác", IsDefault = false, BaseCategoryId = "I" }
+            };
+
+            // 4. Cấu hình danh sách tài khoản theo từng mục định khoản (Slot-based) cho XNB
+            cfg.Inventory["XNB"].AccountSlots["Inventory"] = new List<VoucherPostingAccountOptionDto>
+            {
+                new() { AccountId = "152", BaseName = "Nguyên liệu, vật liệu", CustomName = "Nguyên vật liệu", IsDefault = true, BaseCategoryId = "B", AllowDetail = false },
+                new() { AccountId = "153", BaseName = "Công cụ, dụng cụ", CustomName = "Công cụ dụng cụ", IsDefault = false, BaseCategoryId = "B", AllowDetail = false },
+                new() { AccountId = "1561", BaseName = "Giá mua hàng hóa", CustomName = "Hàng hóa", IsDefault = false, BaseCategoryId = "B", AllowDetail = false }
+            };
+            cfg.Inventory["XNB"].AccountSlots["Offset"] = new List<VoucherPostingAccountOptionDto>
+            {
+                new() { AccountId = "642", BaseName = "Chi phí quản lý doanh nghiệp", CustomName = "Chi phí quản lý", IsDefault = true, BaseCategoryId = "E" },
+                new() { AccountId = "641", BaseName = "Chi phí bán hàng", CustomName = "Chi phí bán hàng", IsDefault = false, BaseCategoryId = "E" },
+                new() { AccountId = "621", BaseName = "Chi phí nguyên liệu, vật liệu trực tiếp", CustomName = "Chi phí NVL trực tiếp", IsDefault = false, BaseCategoryId = "E" },
+                new() { AccountId = "154", BaseName = "Chi phí sản xuất, kinh doanh dở dang", CustomName = "Chi phí SXKD dở dang", IsDefault = false, BaseCategoryId = "E" }
+            };
+
+            // Tập tài khoản ERP chuẩn mặc định
+            cfg.ErpAccounts = new List<PluginAccountConfigItemDto>
+            {
+                // 1. Doanh thu (Revenue)
+                new() { AccountId = "5111", BaseName = "Doanh thu bán hàng hóa", CustomName = "Doanh thu bán hàng hóa", Category = "Revenue" },
+                new() { AccountId = "5112", BaseName = "Doanh thu bán các thành phẩm", CustomName = "Doanh thu bán thành phẩm", Category = "Revenue" },
+                new() { AccountId = "5113", BaseName = "Doanh thu cung cấp dịch vụ", CustomName = "Doanh thu dịch vụ", Category = "Revenue" },
+                new() { AccountId = "711", BaseName = "Thu nhập khác", CustomName = "Thu nhập khác", Category = "Revenue" },
+
+                // 2. Giá vốn (Cost)
+                new() { AccountId = "6321", BaseName = "Giá vốn hàng hóa", CustomName = "Giá vốn hàng hóa", Category = "Cost" },
+                new() { AccountId = "6322", BaseName = "Giá vốn thành phẩm", CustomName = "Giá vốn thành phẩm", Category = "Cost" },
+                new() { AccountId = "632", BaseName = "Giá vốn hàng bán", CustomName = "Giá vốn hàng bán", Category = "Cost" },
+                new() { AccountId = "811", BaseName = "Chi phí khác", CustomName = "Chi phí khác", Category = "Cost" },
+
+                // 3. Kho vật tư / Hàng hóa (Inventory)
+                new() { AccountId = "1561", BaseName = "Giá mua hàng hóa", CustomName = "Hàng hóa kho chính", Category = "Inventory" },
+                new() { AccountId = "152", BaseName = "Nguyên liệu, vật liệu", CustomName = "Nguyên vật liệu", Category = "Inventory" },
+                new() { AccountId = "153", BaseName = "Công cụ, dụng cụ", CustomName = "Công cụ dụng cụ", Category = "Inventory" },
+                new() { AccountId = "155", BaseName = "Thành phẩm", CustomName = "Thành phẩm", Category = "Inventory" },
+                new() { AccountId = "156", BaseName = "Hàng hóa", CustomName = "Hàng hóa", Category = "Inventory" },
+
+                // 4. Thuế GTGT (Tax)
+                new() { AccountId = "13311", BaseName = "Thuế GTGT đầu vào của hàng hóa, dịch vụ", CustomName = "Thuế GTGT mua vào", Category = "Tax" },
+                new() { AccountId = "33311", BaseName = "Thuế GTGT đầu ra", CustomName = "Thuế GTGT bán ra", Category = "Tax" },
+
+                // 5. Công nợ & Thanh toán (Debt / Payment)
+                new() { AccountId = "131", BaseName = "Phải thu của khách hàng", CustomName = "Phải thu khách hàng", Category = "Debt" },
+                new() { AccountId = "3311", BaseName = "Phải trả cho người bán", CustomName = "Phải trả người bán", Category = "Debt" },
+                new() { AccountId = "1111", BaseName = "Tiền mặt Việt Nam", CustomName = "Tiền mặt", Category = "Payment" },
+                new() { AccountId = "1121", BaseName = "Tiền gửi ngân hàng Việt Nam", CustomName = "Tiền gửi ngân hàng", Category = "Payment" },
+                new() { AccountId = "141", BaseName = "Tạm ứng", CustomName = "Tạm ứng nhân viên", Category = "Payment" },
+
+                // 6. Nội bộ (Internal)
+                new() { AccountId = "154", BaseName = "Chi phí sản xuất, kinh doanh dở dang", CustomName = "Chi phí SXKD dở dang", Category = "Internal" },
+                new() { AccountId = "642", BaseName = "Chi phí quản lý doanh nghiệp", CustomName = "Chi phí quản lý doanh nghiệp", Category = "Internal" }
+            };
+
             return cfg;
         }
 
@@ -253,6 +475,26 @@ namespace NewaccNet.Core.Data
                 var res = System.Text.Json.JsonSerializer.Deserialize<VoucherPostingConfigDto>(cfg.VoucherPostingConfig, options);
                 if (res != null && res.Inventory != null && res.Inventory.Count > 0)
                 {
+                    var defCfg = GetDefaultVoucherPostingConfig();
+                    foreach (var kvp in defCfg.Inventory)
+                    {
+                        if (res.Inventory.TryGetValue(kvp.Key, out var item))
+                        {
+                            if (item.AccountSlots == null || item.AccountSlots.Count == 0)
+                            {
+                                item.AccountSlots = kvp.Value.AccountSlots;
+                            }
+                        }
+                        else
+                        {
+                            res.Inventory[kvp.Key] = kvp.Value;
+                        }
+                    }
+
+                    if (res.ErpAccounts == null || res.ErpAccounts.Count == 0)
+                    {
+                        res.ErpAccounts = defCfg.ErpAccounts;
+                    }
                     return res;
                 }
             }
@@ -275,6 +517,97 @@ namespace NewaccNet.Core.Data
             catch { }
         }
 
+        public static bool SaveVoucherPostingConfig(VoucherPostingConfigDto postingCfg)
+        {
+            var cfg = Current;
+            cfg.SetVoucherPostingConfig(postingCfg);
+            return SaveDbConfig(cfg);
+        }
+
+        public static CashPostingConfigDto GetDefaultCashPostingConfig()
+        {
+            var cfg = new CashPostingConfigDto();
+            cfg.CashAccounts = new List<PluginAccountConfigItemDto>
+            {
+                new PluginAccountConfigItemDto { AccountId = "1111", BaseName = "Tiền Việt Nam", CustomName = "Tiền mặt tại quỹ", Category = "Cash", BaseCategoryId = "A", IsActive = true },
+                new PluginAccountConfigItemDto { AccountId = "1112", BaseName = "Ngoại tệ", CustomName = "Ngoại tệ tại quỹ", Category = "Cash", BaseCategoryId = "A", IsActive = true },
+                new PluginAccountConfigItemDto { AccountId = "1121", BaseName = "Tiền gửi ngân hàng", CustomName = "Tài khoản ngân hàng", Category = "Bank", BaseCategoryId = "A", IsActive = true }
+            };
+
+            cfg.ReceiptAliases = new List<CashAliasItemDto>
+            {
+                new CashAliasItemDto { Code = "THU_NO_KH", Name = "Thu nợ khách hàng", OffsetAccount = "131", Category = "Debt", RequireDetail = true, DefaultDescription = "Thu tiền nợ của khách hàng", IsDefault = true },
+                new CashAliasItemDto { Code = "THU_BAN_HANG", Name = "Thu tiền bán hàng trực tiếp", OffsetAccount = "5111", VatAccount = "33311", Category = "Revenue", RequireDetail = false, DefaultDescription = "Thu tiền bán hàng trực tiếp" },
+                new CashAliasItemDto { Code = "THU_TAM_UNG", Name = "Thu hoàn ứng nhân viên", OffsetAccount = "141", Category = "Debt", RequireDetail = true, DefaultDescription = "Thu hoàn tiền tạm ứng của nhân viên" },
+                new CashAliasItemDto { Code = "THU_RUT_NH", Name = "Rút tiền ngân hàng về quỹ tiền mặt", OffsetAccount = "1121", Category = "Internal", RequireDetail = false, DefaultDescription = "Rút tiền gửi ngân hàng về nhập quỹ tiền mặt" },
+                new CashAliasItemDto { Code = "THU_LAI_NH", Name = "Thu lãi tiền gửi ngân hàng", OffsetAccount = "515", Category = "Revenue", RequireDetail = false, DefaultDescription = "Thu lãi tiền gửi ngân hàng" },
+                new CashAliasItemDto { Code = "THU_KHAC", Name = "Thu nhập khác", OffsetAccount = "711", Category = "Other", RequireDetail = false, DefaultDescription = "Thu tiền khác" }
+            };
+
+            cfg.PaymentAliases = new List<CashAliasItemDto>
+            {
+                new CashAliasItemDto { Code = "CHI_TRA_NCC", Name = "Trả nợ tiền mua hàng cho NCC", OffsetAccount = "3311", Category = "Debt", RequireDetail = true, DefaultDescription = "Chi trả tiền nợ cho nhà cung cấp", IsDefault = true },
+                new CashAliasItemDto { Code = "CHI_TAM_UNG", Name = "Tạm ứng cho nhân viên", OffsetAccount = "141", Category = "Debt", RequireDetail = true, DefaultDescription = "Chi tạm ứng cho nhân viên" },
+                new CashAliasItemDto { Code = "CHI_PHI_QL", Name = "Chi phí quản lý doanh nghiệp", OffsetAccount = "642", Category = "Cost", RequireDetail = true, DefaultDescription = "Chi phí quản lý doanh nghiệp" },
+                new CashAliasItemDto { Code = "CHI_PHI_BH", Name = "Chi phí bán hàng", OffsetAccount = "641", Category = "Cost", RequireDetail = true, DefaultDescription = "Chi phí bán hàng" },
+                new CashAliasItemDto { Code = "CHI_MUA_HANG", Name = "Mua hàng/vật tư trả tiền ngay", OffsetAccount = "1561", VatAccount = "13311", Category = "Inventory", RequireDetail = false, DefaultDescription = "Chi tiền mua hàng hóa, vật tư trả ngay" },
+                new CashAliasItemDto { Code = "CHI_LUONG", Name = "Chi trả lương cán bộ công nhân viên", OffsetAccount = "3341", Category = "Debt", RequireDetail = false, DefaultDescription = "Chi trả lương cán bộ công nhân viên" },
+                new CashAliasItemDto { Code = "CHI_NOP_NH", Name = "Nộp tiền mặt vào ngân hàng", OffsetAccount = "1111", Category = "Internal", RequireDetail = false, DefaultDescription = "Nộp tiền mặt vào tài khoản ngân hàng" },
+                new CashAliasItemDto { Code = "CHI_NOP_THUE", Name = "Nộp thuế vào NSNN", OffsetAccount = "333", Category = "Debt", RequireDetail = false, DefaultDescription = "Nộp thuế vào ngân sách nhà nước" },
+                new CashAliasItemDto { Code = "CHI_KHAC", Name = "Chi phí khác bằng tiền", OffsetAccount = "811", Category = "Other", RequireDetail = false, DefaultDescription = "Chi phí khác bằng tiền" }
+            };
+
+            return cfg;
+        }
+
+        public static CashPostingConfigDto GetCashPostingConfig(this DbConfigDto cfg)
+        {
+            if (cfg == null || string.IsNullOrWhiteSpace(cfg.CashPostingConfig))
+            {
+                return GetDefaultCashPostingConfig();
+            }
+
+            try
+            {
+                var options = new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                var res = System.Text.Json.JsonSerializer.Deserialize<CashPostingConfigDto>(cfg.CashPostingConfig, options);
+                if (res != null)
+                {
+                    var def = GetDefaultCashPostingConfig();
+                    if (res.ReceiptAliases == null || res.ReceiptAliases.Count == 0) res.ReceiptAliases = def.ReceiptAliases;
+                    if (res.PaymentAliases == null || res.PaymentAliases.Count == 0) res.PaymentAliases = def.PaymentAliases;
+                    if (res.CashAccounts == null || res.CashAccounts.Count == 0) res.CashAccounts = def.CashAccounts;
+                    if (string.IsNullOrWhiteSpace(res.DefaultCashAccount)) res.DefaultCashAccount = def.DefaultCashAccount;
+                    if (string.IsNullOrWhiteSpace(res.DefaultBankAccount)) res.DefaultBankAccount = def.DefaultBankAccount;
+                    return res;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Deserialize CashPostingConfig error: " + ex.Message);
+            }
+
+            return GetDefaultCashPostingConfig();
+        }
+
+        public static void SetCashPostingConfig(this DbConfigDto cfg, CashPostingConfigDto postingCfg)
+        {
+            if (cfg == null || postingCfg == null) return;
+            try
+            {
+                var options = new System.Text.Json.JsonSerializerOptions { WriteIndented = true };
+                cfg.CashPostingConfig = System.Text.Json.JsonSerializer.Serialize(postingCfg, options);
+            }
+            catch { }
+        }
+
+        public static bool SaveCashPostingConfig(CashPostingConfigDto postingCfg)
+        {
+            var cfg = Current;
+            cfg.SetCashPostingConfig(postingCfg);
+            return SaveDbConfig(cfg);
+        }
+
         public static DataAccess.EntityClasses.DbConfigEntity ToEntity(DbConfigDto dto)
         {
             return new DataAccess.EntityClasses.DbConfigEntity
@@ -292,6 +625,7 @@ namespace NewaccNet.Core.Data
                 AccountMethod = dto.AccountMethod,
                 Material = dto.Material,
                 VoucherPostingConfig = dto.VoucherPostingConfig ?? "",
+                CashPostingConfig = dto.CashPostingConfig ?? "",
                 UpdatedDate = DateTime.Now
             };
         }
@@ -449,17 +783,44 @@ CREATE TABLE DbConfig (
             }
         }
 
+        private static string GetDefaultVoucherPostingConfigJson()
+        {
+            try
+            {
+                var defaultCfg = GetDefaultVoucherPostingConfig();
+                return System.Text.Json.JsonSerializer.Serialize(defaultCfg, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+            }
+            catch
+            {
+                return "";
+            }
+        }
+
         private static void InsertDefaultRow(DbConnection conn)
         {
             try
             {
+                string defaultJson = GetDefaultVoucherPostingConfigJson();
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = ConfigManager.Current.DbType == DatabaseType.PostgreSql
-                        ? @"INSERT INTO ""DbConfig"" (""Id"", ""CompanyName"", ""DepartmentName"", ""Address"", ""BankAccount"", ""TaxCode"", ""AccountingYear"", ""RegistrationCode"", ""IsCompanyLicense"", ""ExpiryDate"", ""AccountMethod"", ""Material"")
-                            VALUES (1, '', 'Phòng Kế Toán', '', '', '', " + DateTime.Today.Year + @", '', false, '20991231', 1, 1)"
-                        : @"INSERT INTO DbConfig (Id, CompanyName, DepartmentName, Address, BankAccount, TaxCode, AccountingYear, RegistrationCode, IsCompanyLicense, ExpiryDate, AccountMethod, Material)
-                            VALUES (1, '', 'Phòng Kế Toán', '', '', '', " + DateTime.Today.Year + @", '', 0, '20991231', 1, 1)";
+                    if (ConfigManager.Current.DbType == DatabaseType.PostgreSql)
+                    {
+                        cmd.CommandText = @"INSERT INTO ""DbConfig"" (""Id"", ""CompanyName"", ""DepartmentName"", ""Address"", ""BankAccount"", ""TaxCode"", ""AccountingYear"", ""RegistrationCode"", ""IsCompanyLicense"", ""ExpiryDate"", ""AccountMethod"", ""Material"", ""VoucherPostingConfig"")
+                            VALUES (1, '', 'Phòng Kế Toán', '', '', '', " + DateTime.Today.Year + @", '', false, '20991231', 1, 1, @cfg)";
+                        var p = cmd.CreateParameter();
+                        p.ParameterName = "@cfg";
+                        p.Value = defaultJson;
+                        cmd.Parameters.Add(p);
+                    }
+                    else
+                    {
+                        cmd.CommandText = @"INSERT INTO DbConfig (Id, CompanyName, DepartmentName, Address, BankAccount, TaxCode, AccountingYear, RegistrationCode, IsCompanyLicense, ExpiryDate, AccountMethod, Material, VoucherPostingConfig)
+                            VALUES (1, '', 'Phòng Kế Toán', '', '', '', " + DateTime.Today.Year + @", '', 0, '20991231', 1, 1, @cfg)";
+                        var p = cmd.CreateParameter();
+                        p.ParameterName = "@cfg";
+                        p.Value = defaultJson;
+                        cmd.Parameters.Add(p);
+                    }
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -484,7 +845,61 @@ CREATE TABLE DbConfig (
                     {
                         InsertDefaultRow(conn);
                     }
+                    else
+                    {
+                        // Kiểm tra nếu VoucherPostingConfig đang NULL hoặc rỗng thì tự động nạp cấu hình default
+                        try
+                        {
+                            using var checkCmd = conn.CreateCommand();
+                            checkCmd.CommandText = ConfigManager.Current.DbType == DatabaseType.PostgreSql
+                                ? @"SELECT ""VoucherPostingConfig"" FROM ""DbConfig"" WHERE ""Id"" = 1"
+                                : "SELECT VoucherPostingConfig FROM DbConfig WHERE Id = 1";
+                            var val = checkCmd.ExecuteScalar();
+                            if (val == null || val == DBNull.Value || string.IsNullOrWhiteSpace(val.ToString()))
+                            {
+                                string defaultJson = GetDefaultVoucherPostingConfigJson();
+                                if (!string.IsNullOrEmpty(defaultJson))
+                                {
+                                    using var updateCmd = conn.CreateCommand();
+                                    updateCmd.CommandText = ConfigManager.Current.DbType == DatabaseType.PostgreSql
+                                        ? @"UPDATE ""DbConfig"" SET ""VoucherPostingConfig"" = @cfg WHERE ""Id"" = 1"
+                                        : "UPDATE DbConfig SET VoucherPostingConfig = @cfg WHERE Id = 1";
+                                    var p = updateCmd.CreateParameter();
+                                    p.ParameterName = "@cfg";
+                                    p.Value = defaultJson;
+                                    updateCmd.Parameters.Add(p);
+                                    updateCmd.ExecuteNonQuery();
+                                }
+                            }
+                        }
+                        catch { }
+
+                        // Tự động chuẩn hóa liên kết JournalVoucherId cho các dòng con (SubEntries) có ParentId hợp lệ
+                        EnsureSubEntriesLinkedToVoucher(conn);
+                    }
                 }
+            }
+            catch { }
+        }
+
+        private static void EnsureSubEntriesLinkedToVoucher(DbConnection conn)
+        {
+            try
+            {
+                using var cmd = conn.CreateCommand();
+                if (ConfigManager.Current.DbType == DatabaseType.Access)
+                {
+                    cmd.CommandText = "UPDATE Journal INNER JOIN Journal AS p ON Journal.ParentId = p.Id SET Journal.JournalVoucherId = p.JournalVoucherId WHERE (Journal.JournalVoucherId IS NULL OR Journal.JournalVoucherId = 0) AND (p.JournalVoucherId IS NOT NULL AND p.JournalVoucherId > 0)";
+                }
+                else if (ConfigManager.Current.DbType == DatabaseType.SqlServer)
+                {
+                    cmd.CommandText = "UPDATE c SET c.JournalVoucherId = p.JournalVoucherId FROM Journal c INNER JOIN Journal p ON c.ParentId = p.Id WHERE (c.JournalVoucherId IS NULL OR c.JournalVoucherId = 0) AND (p.JournalVoucherId IS NOT NULL AND p.JournalVoucherId > 0)";
+                }
+                else if (ConfigManager.Current.DbType == DatabaseType.PostgreSql)
+                {
+                    cmd.CommandText = @"UPDATE ""Journal"" c SET ""JournalVoucherId"" = p.""JournalVoucherId"" FROM ""Journal"" p WHERE c.""ParentId"" = p.""Id"" AND (c.""JournalVoucherId"" IS NULL OR c.""JournalVoucherId"" = 0) AND (p.""JournalVoucherId"" IS NOT NULL AND p.""JournalVoucherId"" > 0)";
+                }
+                cmd.ExecuteNonQuery();
             }
             catch { }
         }
@@ -500,7 +915,8 @@ CREATE TABLE DbConfig (
                 {
                     "IF COL_LENGTH('DbConfig', 'AccountMethod') IS NULL ALTER TABLE DbConfig ADD AccountMethod SMALLINT DEFAULT 1;",
                     "IF COL_LENGTH('DbConfig', 'Material') IS NULL ALTER TABLE DbConfig ADD Material SMALLINT DEFAULT 1;",
-                    "IF COL_LENGTH('DbConfig', 'VoucherPostingConfig') IS NULL ALTER TABLE DbConfig ADD VoucherPostingConfig NVARCHAR(MAX);"
+                    "IF COL_LENGTH('DbConfig', 'VoucherPostingConfig') IS NULL ALTER TABLE DbConfig ADD VoucherPostingConfig NVARCHAR(MAX);",
+                    "IF COL_LENGTH('DbConfig', 'CashPostingConfig') IS NULL ALTER TABLE DbConfig ADD CashPostingConfig NVARCHAR(MAX);"
                 };
             }
             else if (dbType == "PostgreSql")
@@ -509,7 +925,8 @@ CREATE TABLE DbConfig (
                 {
                     "ALTER TABLE \"DbConfig\" ADD COLUMN IF NOT EXISTS \"AccountMethod\" SMALLINT DEFAULT 1;",
                     "ALTER TABLE \"DbConfig\" ADD COLUMN IF NOT EXISTS \"Material\" SMALLINT DEFAULT 1;",
-                    "ALTER TABLE \"DbConfig\" ADD COLUMN IF NOT EXISTS \"VoucherPostingConfig\" TEXT;"
+                    "ALTER TABLE \"DbConfig\" ADD COLUMN IF NOT EXISTS \"VoucherPostingConfig\" TEXT;",
+                    "ALTER TABLE \"DbConfig\" ADD COLUMN IF NOT EXISTS \"CashPostingConfig\" TEXT;"
                 };
             }
             else // Access
@@ -518,7 +935,8 @@ CREATE TABLE DbConfig (
                 {
                     "ALTER TABLE DbConfig ADD COLUMN AccountMethod INTEGER;",
                     "ALTER TABLE DbConfig ADD COLUMN Material INTEGER;",
-                    "ALTER TABLE DbConfig ADD COLUMN VoucherPostingConfig LONGTEXT;"
+                    "ALTER TABLE DbConfig ADD COLUMN VoucherPostingConfig LONGTEXT;",
+                    "ALTER TABLE DbConfig ADD COLUMN CashPostingConfig LONGTEXT;"
                 };
             }
 
@@ -582,6 +1000,7 @@ CREATE TABLE DbConfig (
                                 dto.AccountMethod = HasColumn(reader, "AccountMethod") && reader["AccountMethod"] != DBNull.Value ? Convert.ToInt16(reader["AccountMethod"]) : (short)1;
                                 dto.Material = HasColumn(reader, "Material") && reader["Material"] != DBNull.Value ? Convert.ToInt16(reader["Material"]) : (short)1;
                                 dto.VoucherPostingConfig = HasColumn(reader, "VoucherPostingConfig") ? (reader["VoucherPostingConfig"]?.ToString() ?? "") : "";
+                                dto.CashPostingConfig = HasColumn(reader, "CashPostingConfig") ? (reader["CashPostingConfig"]?.ToString() ?? "") : "";
                             }
                         }
                     }
@@ -650,8 +1069,8 @@ CREATE TABLE DbConfig (
                         {
                             if (existingCount == 0)
                             {
-                                cmd.CommandText = @"INSERT INTO [DbConfig] ([Id], [CompanyName], [DepartmentName], [Address], [BankAccount], [TaxCode], [AccountingYear], [RegistrationCode], [IsCompanyLicense], [ExpiryDate], [AccountMethod], [Material], [VoucherPostingConfig], [CreatedDate], [UpdatedDate])
-                                    VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, Now(), Now())";
+                                cmd.CommandText = @"INSERT INTO [DbConfig] ([Id], [CompanyName], [DepartmentName], [Address], [BankAccount], [TaxCode], [AccountingYear], [RegistrationCode], [IsCompanyLicense], [ExpiryDate], [AccountMethod], [Material], [VoucherPostingConfig], [CashPostingConfig], [CreatedDate], [UpdatedDate])
+                                    VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, Now(), Now())";
                             }
                             else
                             {
@@ -668,6 +1087,7 @@ CREATE TABLE DbConfig (
                                         [AccountMethod] = ?,
                                         [Material] = ?,
                                         [VoucherPostingConfig] = ?,
+                                        [CashPostingConfig] = ?,
                                         [UpdatedDate] = Now()
                                     WHERE [Id] = 1";
                             }
@@ -683,13 +1103,14 @@ CREATE TABLE DbConfig (
                             AddParam(cmd, "?", (int)dto.AccountMethod);
                             AddParam(cmd, "?", (int)dto.Material);
                             AddParam(cmd, "?", dto.VoucherPostingConfig ?? "");
+                            AddParam(cmd, "?", dto.CashPostingConfig ?? "");
                         }
                         else if (dbType == DatabaseType.PostgreSql)
                         {
                             if (existingCount == 0)
                             {
-                                cmd.CommandText = @"INSERT INTO ""DbConfig"" (""Id"", ""CompanyName"", ""DepartmentName"", ""Address"", ""BankAccount"", ""TaxCode"", ""AccountingYear"", ""RegistrationCode"", ""IsCompanyLicense"", ""ExpiryDate"", ""AccountMethod"", ""Material"", ""VoucherPostingConfig"", ""CreatedDate"", ""UpdatedDate"")
-                                    VALUES (1, @CompanyName, @DepartmentName, @Address, @BankAccount, @TaxCode, @AccountingYear, @RegistrationCode, @IsCompanyLicense, @ExpiryDate, @AccountMethod, @Material, @VoucherPostingConfig, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)";
+                                cmd.CommandText = @"INSERT INTO ""DbConfig"" (""Id"", ""CompanyName"", ""DepartmentName"", ""Address"", ""BankAccount"", ""TaxCode"", ""AccountingYear"", ""RegistrationCode"", ""IsCompanyLicense"", ""ExpiryDate"", ""AccountMethod"", ""Material"", ""VoucherPostingConfig"", ""CashPostingConfig"", ""CreatedDate"", ""UpdatedDate"")
+                                    VALUES (1, @CompanyName, @DepartmentName, @Address, @BankAccount, @TaxCode, @AccountingYear, @RegistrationCode, @IsCompanyLicense, @ExpiryDate, @AccountMethod, @Material, @VoucherPostingConfig, @CashPostingConfig, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)";
                             }
                             else
                             {
@@ -721,13 +1142,14 @@ CREATE TABLE DbConfig (
                             AddParam(cmd, "@AccountMethod", dto.AccountMethod);
                             AddParam(cmd, "@Material", dto.Material);
                             AddParam(cmd, "@VoucherPostingConfig", dto.VoucherPostingConfig ?? "");
+                            AddParam(cmd, "@CashPostingConfig", dto.CashPostingConfig ?? "");
                         }
                         else // SQL Server
                         {
                             if (existingCount == 0)
                             {
-                                cmd.CommandText = @"INSERT INTO DbConfig (Id, CompanyName, DepartmentName, Address, BankAccount, TaxCode, AccountingYear, RegistrationCode, IsCompanyLicense, ExpiryDate, AccountMethod, Material, VoucherPostingConfig, CreatedDate, UpdatedDate)
-                                    VALUES (1, @CompanyName, @DepartmentName, @Address, @BankAccount, @TaxCode, @AccountingYear, @RegistrationCode, @IsCompanyLicense, @ExpiryDate, @AccountMethod, @Material, @VoucherPostingConfig, GETDATE(), GETDATE())";
+                                cmd.CommandText = @"INSERT INTO DbConfig (Id, CompanyName, DepartmentName, Address, BankAccount, TaxCode, AccountingYear, RegistrationCode, IsCompanyLicense, ExpiryDate, AccountMethod, Material, VoucherPostingConfig, CashPostingConfig, CreatedDate, UpdatedDate)
+                                    VALUES (1, @CompanyName, @DepartmentName, @Address, @BankAccount, @TaxCode, @AccountingYear, @RegistrationCode, @IsCompanyLicense, @ExpiryDate, @AccountMethod, @Material, @VoucherPostingConfig, @CashPostingConfig, GETDATE(), GETDATE())";
                             }
                             else
                             {
@@ -759,6 +1181,7 @@ CREATE TABLE DbConfig (
                             AddParam(cmd, "@AccountMethod", dto.AccountMethod);
                             AddParam(cmd, "@Material", dto.Material);
                             AddParam(cmd, "@VoucherPostingConfig", dto.VoucherPostingConfig ?? "");
+                            AddParam(cmd, "@CashPostingConfig", dto.CashPostingConfig ?? "");
                         }
 
                         cmd.ExecuteNonQuery();

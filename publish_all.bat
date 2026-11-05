@@ -40,11 +40,23 @@ echo.
 echo [2/4] Publish ban 32-bit (x86)...
 dotnet publish "%PROJ%" -r win-x86 %COMMON% -o "Publish\x86"
 if errorlevel 1 goto :error_x86
+if exist "NewaccNet.Plugin.ErpWarehouse\NewaccNet.Plugin.ErpWarehouse.csproj" (
+    dotnet publish "NewaccNet.Plugin.ErpWarehouse\NewaccNet.Plugin.ErpWarehouse.csproj" -r win-x86 %COMMON% -o "Publish\x86\Plugins"
+)
+if exist "NewaccNet.Plugin.CashBank\NewaccNet.Plugin.CashBank.csproj" (
+    dotnet publish "NewaccNet.Plugin.CashBank\NewaccNet.Plugin.CashBank.csproj" -r win-x86 %COMMON% -o "Publish\x86\Plugins"
+)
 
 echo.
 echo [3/4] Publish ban 64-bit (x64)...
 dotnet publish "%PROJ%" -r win-x64 %COMMON% -o "Publish\x64"
 if errorlevel 1 goto :error_x64
+if exist "NewaccNet.Plugin.ErpWarehouse\NewaccNet.Plugin.ErpWarehouse.csproj" (
+    dotnet publish "NewaccNet.Plugin.ErpWarehouse\NewaccNet.Plugin.ErpWarehouse.csproj" -r win-x64 %COMMON% -o "Publish\x64\Plugins"
+)
+if exist "NewaccNet.Plugin.CashBank\NewaccNet.Plugin.CashBank.csproj" (
+    dotnet publish "NewaccNet.Plugin.CashBank\NewaccNet.Plugin.CashBank.csproj" -r win-x64 %COMMON% -o "Publish\x64\Plugins"
+)
 
 echo.
 echo [4/4] Tao bo cai bang Inno Setup...

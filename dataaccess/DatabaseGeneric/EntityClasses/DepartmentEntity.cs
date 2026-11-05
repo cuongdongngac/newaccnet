@@ -27,7 +27,6 @@ namespace DataAccess.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		private EntityCollection<AssetTrackingEntity> _assetTrackings;
-		private EntityCollection<AssetTrackingDepreciationEntity> _assetTrackingDepreciations;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
@@ -39,8 +38,6 @@ namespace DataAccess.EntityClasses
 		{
 			/// <summary>Member name AssetTrackings</summary>
 			public static readonly string AssetTrackings = "AssetTrackings";
-			/// <summary>Member name AssetTrackingDepreciations</summary>
-			public static readonly string AssetTrackingDepreciations = "AssetTrackingDepreciations";
 		}
 
 		/// <summary>Static meta-data storage for navigator related information</summary>
@@ -50,7 +47,6 @@ namespace DataAccess.EntityClasses
 			{
 				SetEntityCoreInfo("DepartmentEntity", InheritanceHierarchyType.None, false, (int)DataAccess.EntityType.DepartmentEntity, typeof(DepartmentEntity), typeof(DepartmentEntityFactory), false);
 				AddNavigatorMetaData<DepartmentEntity, EntityCollection<AssetTrackingEntity>>("AssetTrackings", a => a._assetTrackings, (a, b) => a._assetTrackings = b, a => a.AssetTrackings, () => new DepartmentRelations().AssetTrackingEntityUsingDeptid, typeof(AssetTrackingEntity), (int)DataAccess.EntityType.AssetTrackingEntity);
-				AddNavigatorMetaData<DepartmentEntity, EntityCollection<AssetTrackingDepreciationEntity>>("AssetTrackingDepreciations", a => a._assetTrackingDepreciations, (a, b) => a._assetTrackingDepreciations = b, a => a.AssetTrackingDepreciations, () => new DepartmentRelations().AssetTrackingDepreciationEntityUsingDeptid, typeof(AssetTrackingDepreciationEntity), (int)DataAccess.EntityType.AssetTrackingDepreciationEntity);
 			}
 		}
 
@@ -106,10 +102,6 @@ namespace DataAccess.EntityClasses
 		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'AssetTracking' to this entity.</summary>
 		/// <returns></returns>
 		public virtual IRelationPredicateBucket GetRelationInfoAssetTrackings() { return CreateRelationInfoForNavigator("AssetTrackings"); }
-
-		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'AssetTrackingDepreciation' to this entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoAssetTrackingDepreciations() { return CreateRelationInfoForNavigator("AssetTrackingDepreciations"); }
 		
 		/// <inheritdoc/>
 		protected override EntityStaticMetaDataBase GetEntityStaticMetaData() {	return _staticMetaData; }
@@ -145,10 +137,6 @@ namespace DataAccess.EntityClasses
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
 		public static IPrefetchPathElement2 PrefetchPathAssetTrackings { get { return _staticMetaData.GetPrefetchPathElement("AssetTrackings", CommonEntityBase.CreateEntityCollection<AssetTrackingEntity>()); } }
 
-		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'AssetTrackingDepreciation' for this entity.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathAssetTrackingDepreciations { get { return _staticMetaData.GetPrefetchPathElement("AssetTrackingDepreciations", CommonEntityBase.CreateEntityCollection<AssetTrackingDepreciationEntity>()); } }
-
 		/// <summary>The Deptid property of the Entity Department<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "Department"."Deptid".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
 		public virtual System.String Deptid
@@ -168,10 +156,6 @@ namespace DataAccess.EntityClasses
 		/// <summary>Gets the EntityCollection with the related entities of type 'AssetTrackingEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(AssetTrackingEntity))]
 		public virtual EntityCollection<AssetTrackingEntity> AssetTrackings { get { return GetOrCreateEntityCollection<AssetTrackingEntity, AssetTrackingEntityFactory>("Department", true, false, ref _assetTrackings); } }
-
-		/// <summary>Gets the EntityCollection with the related entities of type 'AssetTrackingDepreciationEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
-		[TypeContainedAttribute(typeof(AssetTrackingDepreciationEntity))]
-		public virtual EntityCollection<AssetTrackingDepreciationEntity> AssetTrackingDepreciations { get { return GetOrCreateEntityCollection<AssetTrackingDepreciationEntity, AssetTrackingDepreciationEntityFactory>("Department", true, false, ref _assetTrackingDepreciations); } }
 
 		// __LLBLGENPRO_USER_CODE_REGION_START CustomEntityCode
 		// __LLBLGENPRO_USER_CODE_REGION_END
@@ -203,19 +187,12 @@ namespace DataAccess.RelationClasses
 			get { return ModelInfoProviderSingleton.GetInstance().CreateRelation(RelationType.OneToMany, "AssetTrackings", true, new[] { DepartmentFields.Deptid, AssetTrackingFields.Deptid }); }
 		}
 
-		/// <summary>Returns a new IEntityRelation object, between DepartmentEntity and AssetTrackingDepreciationEntity over the 1:n relation they have, using the relation between the fields: Department.Deptid - AssetTrackingDepreciation.Deptid</summary>
-		public virtual IEntityRelation AssetTrackingDepreciationEntityUsingDeptid
-		{
-			get { return ModelInfoProviderSingleton.GetInstance().CreateRelation(RelationType.OneToMany, "AssetTrackingDepreciations", true, new[] { DepartmentFields.Deptid, AssetTrackingDepreciationFields.Deptid }); }
-		}
-
 	}
 	
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticDepartmentRelations
 	{
 		internal static readonly IEntityRelation AssetTrackingEntityUsingDeptidStatic = new DepartmentRelations().AssetTrackingEntityUsingDeptid;
-		internal static readonly IEntityRelation AssetTrackingDepreciationEntityUsingDeptidStatic = new DepartmentRelations().AssetTrackingDepreciationEntityUsingDeptid;
 
 		/// <summary>CTor</summary>
 		static StaticDepartmentRelations() { }

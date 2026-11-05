@@ -117,5 +117,72 @@ class Program
         Console.WriteLine("\n=================================================");
         Console.WriteLine("TẤT CẢ CÁC BÀI TEST NGHIỆP VỤ ĐỀU THÀNH CÔNG RỰC RỠ!");
         Console.WriteLine("=================================================");
+
+        // 5. Cập nhật default mapping vào DbConfig của các file template.accdb
+        UpdateTemplateAccdbDefaultPostingConfig();
+    }
+
+    static void UpdateTemplateAccdbDefaultPostingConfig()
+    {
+        Console.WriteLine("\n[5] KHỞI TẠO MAPPING MẶC ĐỊNH VÀO CSDL TEMPLATE.ACCDB:");
+        var defaultCfg = NewaccNet.Core.Data.DbConfigService.GetDefaultVoucherPostingConfig();
+        var options = new System.Text.Json.JsonSerializerOptions { WriteIndented = true };
+        string json = System.Text.Json.JsonSerializer.Serialize(defaultCfg, options);
+
+        var templateFiles = new[]
+        {
+            @"D:\NewaccNet\Template\template.accdb",
+            @"D:\NewaccNet\NewaccNet.Wpf\Template\template.accdb",
+            @"D:\NewaccNet\NewaccNet.Wpf\bin\Debug\net10.0-windows\Template\template.accdb",
+            @"D:\NewaccNet\NewaccNet.Wpf\bin\Release\net10.0-windows\Template\template.accdb"
+        };
+
+        foreach (var path in templateFiles)
+        {
+            if (!System.IO.File.Exists(path)) continue;
+
+            Console.WriteLine($"    -> Đang xử lý file: {path}");
+            string connStr = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={path};Persist Security Info=False;";
+            try
+            {
+                using var conn = new System.Data.OleDb.OleDbConnection(connStr);
+                conn.Open();
+
+                // Đảm bảo cột VoucherPostingConfig tồn tại
+                try
+                {
+                    using var alterCmd = conn.CreateCommand();
+                    alterCmd.CommandText = "ALTER TABLE DbConfig ADD COLUMN VoucherPostingConfig LONGTEXT;";
+                    alterCmd.ExecuteNonQuery();
+                }
+                catch { }
+
+                // Cập nhật giá trị default JSON vào dòng Id = 1
+                using var updateCmd = conn.CreateCommand();
+                updateCmd.CommandText = "UPDATE DbConfig SET VoucherPostingConfig = ? WHERE Id = 1";
+                updateCmd.Parameters.Add(new System.Data.OleDb.OleDbParameter("?", System.Data.OleDb.OleDbType.LongVarWChar) { Value = json });
+                int affected = updateCmd.ExecuteNonQuery();
+
+                if (affected == 0)
+                {
+                    // Nếu chưa có row 1, chèn row 1
+                    using var insertCmd = conn.CreateCommand();
+                    insertCmd.CommandText = "INSERT INTO DbConfig (Id, CompanyName, DepartmentName, Address, BankAccount, TaxCode, AccountingYear, RegistrationCode, IsCompanyLicense, ExpiryDate, AccountMethod, Material, VoucherPostingConfig) " +
+                                            "VALUES (1, 'Công ty TNHH Mẫu', 'Phòng Kế Toán', 'Hà Nội', '', '', " + DateTime.Today.Year + ", '', 0, '20991231', 1, 1, ?)";
+                    insertCmd.Parameters.Add(new System.Data.OleDb.OleDbParameter("?", System.Data.OleDb.OleDbType.LongVarWChar) { Value = json });
+                    insertCmd.ExecuteNonQuery();
+                }
+
+                // Đọc lại kiểm tra
+                using var checkCmd = conn.CreateCommand();
+                checkCmd.CommandText = "SELECT VoucherPostingConfig FROM DbConfig WHERE Id = 1";
+                var checkVal = checkCmd.ExecuteScalar()?.ToString();
+                Console.WriteLine($"       ✅ Cập nhật thành công! Độ dài JSON: {checkVal?.Length ?? 0} ký tự.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"       ❌ Lỗi khi cập nhật {path}: {ex.Message}");
+            }
+        }
     }
 }

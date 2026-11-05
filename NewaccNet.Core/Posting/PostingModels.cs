@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using DataAccess.EntityClasses;
 
 namespace NewaccNet.Core.Posting
 {
@@ -22,7 +23,9 @@ namespace NewaccNet.Core.Posting
     {
         public string AccountId { get; set; } = string.Empty;
         public string AccountName { get; set; } = string.Empty;
-        public string Display => $"{AccountId} - {AccountName}";
+        public string CustomName { get; set; } = string.Empty;
+        public string Display => !string.IsNullOrWhiteSpace(AccountName) ? AccountName : (!string.IsNullOrWhiteSpace(CustomName) ? CustomName : AccountId);
+        public string FullDisplay => !string.IsNullOrWhiteSpace(AccountName) ? $"{AccountId} - {AccountName}" : AccountId;
     }
 
     /// <summary>
@@ -276,6 +279,26 @@ namespace NewaccNet.Core.Posting
         public string OffsetAccountId { get; set; } = "1541"; // Cho NNB hoặc XNB
         public string? PaymentType { get; set; } = "Debt"; // "Debt" (Công nợ), "Cash" (Tiền mặt), "Bank" (Chuyển khoản)
         public bool Bookflag { get; set; } = false;
+
+        // Chi tiết phụ trên dòng đối ứng (Chi phí, Công nợ) - Giữ tương thích
+        public List<CostDetailEntity> OffsetCostDetails { get; set; } = new();
+        public List<DebtDetailEntity> OffsetDebtDetails { get; set; } = new();
+
+        // Chi tiết phụ phân bổ theo từng slot JournalEntry chuẩn ORM / Accounting First
+        public List<CostDetailEntity> TotalCostDetails { get; set; } = new();
+        public List<DebtDetailEntity> TotalDebtDetails { get; set; } = new();
+
+        public List<CostDetailEntity> TaxCostDetails { get; set; } = new();
+        public List<DebtDetailEntity> TaxDebtDetails { get; set; } = new();
+
+        public List<CostDetailEntity> InventoryCostDetails { get; set; } = new();
+        public List<DebtDetailEntity> InventoryDebtDetails { get; set; } = new();
+
+        public List<CostDetailEntity> RevenueCostDetails { get; set; } = new();
+        public List<DebtDetailEntity> RevenueDebtDetails { get; set; } = new();
+
+        public List<CostDetailEntity> CostCostDetails { get; set; } = new();
+        public List<DebtDetailEntity> CostDebtDetails { get; set; } = new();
 
         // Dòng chi tiết
         public List<WarehouseVoucherLineItem> Lines { get; set; } = new();

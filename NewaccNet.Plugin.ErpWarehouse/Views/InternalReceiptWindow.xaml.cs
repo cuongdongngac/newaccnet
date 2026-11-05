@@ -24,6 +24,10 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
         private List<int> _voucherIds = new();
         private int _currentVoucherIndex = -1;
         private int _currentVoucherId = 0;
+        private bool _isCurrentVoucherPosted = false;
+
+        private readonly JournalEntryEntity _offsetEntry = new() { Dbcr = -1, AccountId = "154" };
+        private readonly JournalEntryEntity _invEntry = new() { Dbcr = 1, AccountId = "1561" };
 
         public InternalReceiptWindow()
         {
@@ -71,6 +75,27 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
             _currentVoucherIndex = index;
             _currentVoucherId = data.VoucherId;
 
+            if (data.Bookflag)
+            {
+                _isCurrentVoucherPosted = true;
+                lblNavPosition.Content = $"Phiếu: {index + 1} / {_voucherIds.Count} (Đã ghi sổ)";
+                btnAccept.IsEnabled = false;
+                btnSaveAndNew.IsEnabled = false;
+                btnAddRow.IsEnabled = false;
+                btnDeleteRow.IsEnabled = false;
+                viewDetails.AllowEditing = false;
+            }
+            else
+            {
+                _isCurrentVoucherPosted = false;
+                lblNavPosition.Content = $"Phiếu: {index + 1} / {_voucherIds.Count} (Chưa ghi sổ)";
+                btnAccept.IsEnabled = true;
+                btnSaveAndNew.IsEnabled = true;
+                btnAddRow.IsEnabled = true;
+                btnDeleteRow.IsEnabled = true;
+                viewDetails.AllowEditing = true;
+            }
+
             txtVoucherNo.Text = data.VoucherNo;
             dpVoucherDate.DateTime = data.VoucherDate;
             lueWarehouse.EditValue = data.WarehouseId;
@@ -81,6 +106,28 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
             if (!string.IsNullOrEmpty(data.InventoryAccountId)) lueInventoryAccount.EditValue = data.InventoryAccountId;
             if (!string.IsNullOrEmpty(data.OffsetAccountId)) lueOffsetAccount.EditValue = data.OffsetAccountId;
 
+            _offsetEntry.CostDetails.Clear();
+            if (data.OffsetCostDetails != null)
+            {
+                foreach (var cd in data.OffsetCostDetails) _offsetEntry.CostDetails.Add(cd);
+            }
+            _offsetEntry.DebtDetails.Clear();
+            if (data.OffsetDebtDetails != null)
+            {
+                foreach (var dd in data.OffsetDebtDetails) _offsetEntry.DebtDetails.Add(dd);
+            }
+
+            _invEntry.CostDetails.Clear();
+            if (data.InventoryCostDetails != null)
+            {
+                foreach (var cd in data.InventoryCostDetails) _invEntry.CostDetails.Add(cd);
+            }
+            _invEntry.DebtDetails.Clear();
+            if (data.InventoryDebtDetails != null)
+            {
+                foreach (var dd in data.InventoryDebtDetails) _invEntry.DebtDetails.Add(dd);
+            }
+
             Lines.Clear();
             foreach (var l in data.Lines)
             {
@@ -89,6 +136,8 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
                 Lines.Add(l);
             }
             UpdateTotals();
+            lueInventoryAccount.UpdateDetailStatus();
+            lueOffsetAccount.UpdateDetailStatus();
             RefreshNavigation();
         }
 
@@ -103,9 +152,23 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
             txtDescription.Text = "";
             luePartner.EditValue = null;
 
+            _offsetEntry.CostDetails.Clear();
+            _offsetEntry.DebtDetails.Clear();
+            _invEntry.CostDetails.Clear();
+            _invEntry.DebtDetails.Clear();
+
             Lines.Clear();
             Lines.Add(new WarehouseVoucherLineItem { Quantity = 1, Price = 0 });
             UpdateTotals();
+            lueInventoryAccount.UpdateDetailStatus();
+            lueOffsetAccount.UpdateDetailStatus();
+
+            _isCurrentVoucherPosted = false;
+            btnAccept.IsEnabled = true;
+            btnSaveAndNew.IsEnabled = true;
+            btnAddRow.IsEnabled = true;
+            btnDeleteRow.IsEnabled = true;
+            viewDetails.AllowEditing = true;
 
             RefreshNavigation();
             txtVoucherNo.Focus();
@@ -159,20 +222,22 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
             _partners = WarehouseVoucherDataService.LoadPartners();
             luePartner.ItemsSource = _partners;
 
-            // 4. Tài khoản & Nạp cấu hình Rule định khoản ngầm định (DbConfig)
-            var accounts = WarehouseVoucherDataService.LoadAccounts();
-            lueInventoryAccount.ItemsSource = accounts.Where(a => a.AccountId.StartsWith("15")).ToList();
-            lueInventoryAccount.EditValue = accounts.FirstOrDefault(a => a.AccountId == "1561" || a.AccountId == "152" || a.AccountId == "155")?.AccountId ?? "1561";
+            // 4. Kết nối JournalEntry chuẩn Accounting First và nạp tài khoản theo Slot
+            _offsetEntry.SubEntries.Clear();
+            _offsetEntry.SubEntries.Add(_invEntry);
 
-            lueOffsetAccount.ItemsSource = accounts.Where(a => a.AccountId.StartsWith("154") || a.AccountId.StartsWith("711") || a.AccountId.StartsWith("136") || a.AccountId.StartsWith("336")).ToList();
-            lueOffsetAccount.EditValue = accounts.FirstOrDefault(a => a.AccountId == "1541" || a.AccountId == "154")?.AccountId ?? "1541";
+            lueInventoryAccount.JournalEntry = _invEntry;
+            lueOffsetAccount.JournalEntry = _offsetEntry;
+
+            lueInventoryAccount.ReminderTextBlock = lblInventoryDetailReminder;
+            lueOffsetAccount.ReminderTextBlock = lblOffsetDetailReminder;
 
             var rule = WarehouseVoucherDataService.GetPostingRule("NNB");
-            if (rule != null)
-            {
-                if (!string.IsNullOrEmpty(rule.Name)) Title = $"Phiếu nhập kho nội bộ - {rule.Name}";
-                if (!string.IsNullOrEmpty(rule.TotalAccountId)) lueOffsetAccount.EditValue = rule.TotalAccountId;
-            }
+            if (rule != null && !string.IsNullOrEmpty(rule.Name))
+                Title = $"Phiếu nhập kho nội bộ - {rule.Name}";
+
+            lueInventoryAccount.SetSlotOptions(rule?.AccountSlots.GetValueOrDefault("Inventory"), rule?.GetDefaultAccountIdForSlot("Inventory", "1561"));
+            lueOffsetAccount.SetSlotOptions(rule?.AccountSlots.GetValueOrDefault("Offset"), rule?.GetDefaultAccountIdForSlot("Offset", "154"));
 
             // Dòng mẫu ban đầu
             Lines.Clear();
@@ -229,6 +294,7 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
                 var mat = Materials.FirstOrDefault(m => string.Equals(m.MaterialId?.Trim(), row.MaterialId?.Trim(), StringComparison.OrdinalIgnoreCase));
                 if (mat != null)
                 {
+                    row.MaterialId = mat.MaterialId;
                     row.MaterialName = mat.MaterialName ?? "";
                     row.Unit = mat.Unit ?? "";
                 }
@@ -242,6 +308,8 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
         {
             decimal cost = Lines.Sum(l => l.Amount);
             txtTotalCost.EditValue = cost;
+            _invEntry.Amount = cost;
+            _offsetEntry.Amount = cost;
         }
 
         private void LuePartner_EditValueChanged(object sender, DevExpress.Xpf.Editors.EditValueChangedEventArgs e)
@@ -317,6 +385,12 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
 
         private bool PerformSave(bool isSaveAndNew)
         {
+            if (_isCurrentVoucherPosted)
+            {
+                MessageBox.Show("Chứng từ này đã được Kế toán ghi sổ. Bạn không có quyền chỉnh sửa.", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
             viewDetails.CommitEditing();
 
             string voucherNo = txtVoucherNo.Text?.Trim() ?? "";
@@ -342,6 +416,20 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
                 return false;
             }
 
+            // Kiểm soát chi tiết tài khoản theo kế toán: Cảnh báo và chặn không cho lưu nếu thiếu chi tiết bắt buộc
+            if (!lueInventoryAccount.ValidateDetailRequirement(out string? errInv))
+            {
+                MessageBox.Show(errInv, "Cảnh báo thiếu chi tiết kế toán", MessageBoxButton.OK, MessageBoxImage.Warning);
+                lueInventoryAccount.Focus();
+                return false;
+            }
+            if (!lueOffsetAccount.ValidateDetailRequirement(out string? errOffset))
+            {
+                MessageBox.Show(errOffset, "Cảnh báo thiếu chi tiết kế toán", MessageBoxButton.OK, MessageBoxImage.Warning);
+                lueOffsetAccount.Focus();
+                return false;
+            }
+
             var p = new WarehouseVoucherSaveParams
             {
                 VoucherId = _currentVoucherId,
@@ -355,10 +443,16 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
                 PartnerId = luePartner.EditValue as string ?? "",
                 PartnerName = luePartner.Text ?? "",
 
-                InventoryAccountId = lueInventoryAccount.EditValue as string ?? "1561",
-                OffsetAccountId = lueOffsetAccount.EditValue as string ?? "1541",
+                InventoryAccountId = _invEntry.AccountId ?? (lueInventoryAccount.EditValue as string ?? "1561"),
+                OffsetAccountId = _offsetEntry.AccountId ?? (lueOffsetAccount.EditValue as string ?? "154"),
 
-                Lines = validLines
+                OffsetCostDetails = _offsetEntry.CostDetails.ToList(),
+                OffsetDebtDetails = _offsetEntry.DebtDetails.ToList(),
+                InventoryCostDetails = _invEntry.CostDetails.ToList(),
+                InventoryDebtDetails = _invEntry.DebtDetails.ToList(),
+
+                Lines = validLines,
+                Bookflag = false
             };
 
             if (WarehouseVoucherDataService.SaveVoucher(p, out string error, out int savedId))
@@ -392,7 +486,25 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
 
         private void ExecutePrint()
         {
-            MessageBox.Show($"In phiếu nhập kho nội bộ: {txtVoucherNo.Text}\n(Chức năng in phiếu sẵn sàng)", "In phiếu", MessageBoxButton.OK, MessageBoxImage.Information);
+            string whId = lueWarehouse.EditValue as string ?? "";
+            string whName = _warehouses.FirstOrDefault(w => w.WarehouseId == whId)?.WarehouseName ?? whId;
+            string partnerId = luePartner.EditValue as string ?? "";
+            string partnerName = _partners.FirstOrDefault(p => p.Id == partnerId)?.CustomerName ?? (luePartner.Text ?? partnerId);
+
+            string invAcc = _invEntry.AccountId ?? (lueInventoryAccount.EditValue as string ?? "1561");
+            string offsetAcc = _offsetEntry.AccountId ?? (lueOffsetAccount.EditValue as string ?? "154");
+
+            ErpInventoryPrintHelper.PrintInternalReceipt(
+                this,
+                txtVoucherNo.Text?.Trim() ?? "",
+                dpVoucherDate.DateTime,
+                txtCarrier.Text?.Trim() ?? "",
+                partnerName,
+                whId,
+                whName,
+                invAcc,
+                offsetAcc,
+                Lines);
         }
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)

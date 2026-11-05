@@ -29,7 +29,6 @@ namespace DataAccess.EntityClasses
 		private CostElementEntity _costElement;
 		private CostObjectEntity _costObject;
 		private JournalEntryEntity _journalEntry;
-		private CustomerExportLineEntity _customerExportLine;
 		private ExpenseTaxLineEntity _expenseTaxLine;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
@@ -46,8 +45,6 @@ namespace DataAccess.EntityClasses
 			public static readonly string CostObject = "CostObject";
 			/// <summary>Member name JournalEntry</summary>
 			public static readonly string JournalEntry = "JournalEntry";
-			/// <summary>Member name CustomerExportLine</summary>
-			public static readonly string CustomerExportLine = "CustomerExportLine";
 			/// <summary>Member name ExpenseTaxLine</summary>
 			public static readonly string ExpenseTaxLine = "ExpenseTaxLine";
 		}
@@ -61,7 +58,6 @@ namespace DataAccess.EntityClasses
 				AddNavigatorMetaData<CostDetailEntity, CostElementEntity>("CostElement", "CostDetails", (a, b) => a._costElement = b, a => a._costElement, (a, b) => a.CostElement = b, DataAccess.RelationClasses.StaticCostDetailRelations.CostElementEntityUsingCostElementIdStatic, ()=>new CostDetailRelations().CostElementEntityUsingCostElementId, null, new int[] { (int)CostDetailFieldIndex.CostElementId }, null, true, (int)DataAccess.EntityType.CostElementEntity);
 				AddNavigatorMetaData<CostDetailEntity, CostObjectEntity>("CostObject", "CostDetails", (a, b) => a._costObject = b, a => a._costObject, (a, b) => a.CostObject = b, DataAccess.RelationClasses.StaticCostDetailRelations.CostObjectEntityUsingCostObjectIdStatic, ()=>new CostDetailRelations().CostObjectEntityUsingCostObjectId, null, new int[] { (int)CostDetailFieldIndex.CostObjectId }, null, true, (int)DataAccess.EntityType.CostObjectEntity);
 				AddNavigatorMetaData<CostDetailEntity, JournalEntryEntity>("JournalEntry", "CostDetails", (a, b) => a._journalEntry = b, a => a._journalEntry, (a, b) => a.JournalEntry = b, DataAccess.RelationClasses.StaticCostDetailRelations.JournalEntryEntityUsingJournalEntryIdStatic, ()=>new CostDetailRelations().JournalEntryEntityUsingJournalEntryId, null, new int[] { (int)CostDetailFieldIndex.JournalEntryId }, null, true, (int)DataAccess.EntityType.JournalEntryEntity);
-				AddNavigatorMetaData<CostDetailEntity, CustomerExportLineEntity>("CustomerExportLine", "CostDetail", (a, b) => a._customerExportLine = b, a => a._customerExportLine, (a, b) => a.CustomerExportLine = b, DataAccess.RelationClasses.StaticCostDetailRelations.CustomerExportLineEntityUsingLineIdStatic, ()=>new CostDetailRelations().CustomerExportLineEntityUsingLineId, null, null, null, true, (int)DataAccess.EntityType.CustomerExportLineEntity);
 				AddNavigatorMetaData<CostDetailEntity, ExpenseTaxLineEntity>("ExpenseTaxLine", "CostDetail", (a, b) => a._expenseTaxLine = b, a => a._expenseTaxLine, (a, b) => a.ExpenseTaxLine = b, DataAccess.RelationClasses.StaticCostDetailRelations.ExpenseTaxLineEntityUsingLineidStatic, ()=>new CostDetailRelations().ExpenseTaxLineEntityUsingLineid, null, null, null, true, (int)DataAccess.EntityType.ExpenseTaxLineEntity);
 			}
 		}
@@ -127,10 +123,6 @@ namespace DataAccess.EntityClasses
 		/// <returns></returns>
 		public virtual IRelationPredicateBucket GetRelationInfoJournalEntry() { return CreateRelationInfoForNavigator("JournalEntry"); }
 
-		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'CustomerExportLine' to this entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoCustomerExportLine() { return CreateRelationInfoForNavigator("CustomerExportLine"); }
-
 		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'ExpenseTaxLine' to this entity.</summary>
 		/// <returns></returns>
 		public virtual IRelationPredicateBucket GetRelationInfoExpenseTaxLine() { return CreateRelationInfoForNavigator("ExpenseTaxLine"); }
@@ -176,10 +168,6 @@ namespace DataAccess.EntityClasses
 		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'JournalEntry' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
 		public static IPrefetchPathElement2 PrefetchPathJournalEntry { get { return _staticMetaData.GetPrefetchPathElement("JournalEntry", CommonEntityBase.CreateEntityCollection<JournalEntryEntity>()); } }
-
-		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'CustomerExportLine' for this entity.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathCustomerExportLine { get { return _staticMetaData.GetPrefetchPathElement("CustomerExportLine", CommonEntityBase.CreateEntityCollection<CustomerExportLineEntity>()); } }
 
 		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'ExpenseTaxLine' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
@@ -273,14 +261,6 @@ namespace DataAccess.EntityClasses
 			set { SetSingleRelatedEntityNavigator(value, "JournalEntry"); }
 		}
 
-		/// <summary>Gets / sets related entity of type 'CustomerExportLineEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/></summary>
-		[Browsable(false)]
-		public virtual CustomerExportLineEntity CustomerExportLine
-		{
-			get { return _customerExportLine; }
-			set { SetSingleRelatedEntityNavigator(value, "CustomerExportLine"); }
-		}
-
 		/// <summary>Gets / sets related entity of type 'ExpenseTaxLineEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/></summary>
 		[Browsable(false)]
 		public virtual ExpenseTaxLineEntity ExpenseTaxLine
@@ -326,12 +306,6 @@ namespace DataAccess.RelationClasses
 	public partial class CostDetailRelations: RelationFactory
 	{
 
-		/// <summary>Returns a new IEntityRelation object, between CostDetailEntity and CustomerExportLineEntity over the 1:1 relation they have, using the relation between the fields: CostDetail.Id - CustomerExportLine.LineId</summary>
-		public virtual IEntityRelation CustomerExportLineEntityUsingLineId
-		{
-			get	{ return ModelInfoProviderSingleton.GetInstance().CreateRelation(RelationType.OneToOne, "CustomerExportLine", true, new[] { CostDetailFields.Id, CustomerExportLineFields.LineId }); }
-		}
-
 		/// <summary>Returns a new IEntityRelation object, between CostDetailEntity and ExpenseTaxLineEntity over the 1:1 relation they have, using the relation between the fields: CostDetail.Id - ExpenseTaxLine.Lineid</summary>
 		public virtual IEntityRelation ExpenseTaxLineEntityUsingLineid
 		{
@@ -361,7 +335,6 @@ namespace DataAccess.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticCostDetailRelations
 	{
-		internal static readonly IEntityRelation CustomerExportLineEntityUsingLineIdStatic = new CostDetailRelations().CustomerExportLineEntityUsingLineId;
 		internal static readonly IEntityRelation ExpenseTaxLineEntityUsingLineidStatic = new CostDetailRelations().ExpenseTaxLineEntityUsingLineid;
 		internal static readonly IEntityRelation CostElementEntityUsingCostElementIdStatic = new CostDetailRelations().CostElementEntityUsingCostElementId;
 		internal static readonly IEntityRelation CostObjectEntityUsingCostObjectIdStatic = new CostDetailRelations().CostObjectEntityUsingCostObjectId;

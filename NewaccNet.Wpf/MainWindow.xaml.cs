@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -236,6 +236,13 @@ public partial class MainWindow : ThemedWindow {
         var transferWin = new NewaccNet.Wpf.AppSystem.BalanceTransfer.TransferBalanceWindow();
         transferWin.Owner = this;
         transferWin.ShowDialog();
+    }
+
+    private void BtnConvertDb_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+    {
+        var convertWin = new NewaccNet.Wpf.AppSystem.DbMigration.ConvertDbWindow();
+        convertWin.Owner = this;
+        convertWin.ShowDialog();
     }
     private void BtnUserManagement_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
     {

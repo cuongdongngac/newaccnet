@@ -92,6 +92,7 @@ Name: "desktopicon"; Description: "Tạo biểu tượng ngoài Desktop"; Flags:
 ; App ghi appsettings.json, *.json cấu hình và file .accdb ngay trong thư mục cài
 ; -> cấp quyền sửa cho Users để chạy không cần quyền Admin
 Name: "{app}"; Permissions: users-modify
+Name: "{app}\Plugins"; Permissions: users-modify
 
 [Files]
 ; ---------------- Ứng dụng ----------------
@@ -100,16 +101,23 @@ Name: "{app}"; Permissions: users-modify
 Source: "{#PubX64}\*"; DestDir: "{app}"; Check: UseX64; \
   Excludes: "*.pdb,desktop.ini,\appsettings.json,\DebtBalanceSettings.json,\Template\template.accdb"; \
   Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "{#PubX64}\Template\template.accdb"; DestDir: "{app}\Template"; Check: UseX64; \
-  Flags: onlyifdoesntexist uninsneveruninstall
 #endif
 #if Arch != "x64"
 Source: "{#PubX86}\*"; DestDir: "{app}"; Check: not UseX64; \
   Excludes: "*.pdb,desktop.ini,\appsettings.json,\DebtBalanceSettings.json,\Template\template.accdb"; \
   Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "{#PubX86}\Template\template.accdb"; DestDir: "{app}\Template"; Check: not UseX64; \
-  Flags: onlyifdoesntexist uninsneveruninstall
 #endif
+
+; ---------------- Dữ liệu: Template & sampledb (chung cho x86/x64) ----------------
+; Lấy từ thư mục gốc dự án (bản template.accdb mới nhất), giữ nguyên cấu trúc thư mục.
+; App có thể dùng/ghi thẳng vào các file .accdb này -> chỉ chép khi máy chưa có,
+; không ghi đè khi nâng cấp và không xóa khi gỡ cài đặt.
+Source: "{#Root}\Template\*"; DestDir: "{app}\Template"; \
+  Excludes: "desktop.ini,*.laccdb,*_backup_*.accdb,*_compact_tmp.accdb"; \
+  Flags: onlyifdoesntexist uninsneveruninstall recursesubdirs createallsubdirs
+Source: "{#Root}\sampledb\*"; DestDir: "{app}\sampledb"; \
+  Excludes: "desktop.ini,*.laccdb,*_backup_*.accdb"; \
+  Flags: onlyifdoesntexist uninsneveruninstall recursesubdirs createallsubdirs
 
 ; ---------------- Thành phần phụ thuộc (chỉ giải nén khi cần, xem [Code]) ----------------
 #if Arch != "x86"

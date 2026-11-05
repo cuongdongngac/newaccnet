@@ -26,8 +26,6 @@ namespace DataAccess.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
-		private EntityCollection<AssetTrackingDepreciationEntity> _assetTrackingDepreciations;
-		private EntityCollection<InterestDetailEntity> _interestDetails;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
@@ -37,10 +35,6 @@ namespace DataAccess.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
-			/// <summary>Member name AssetTrackingDepreciations</summary>
-			public static readonly string AssetTrackingDepreciations = "AssetTrackingDepreciations";
-			/// <summary>Member name InterestDetails</summary>
-			public static readonly string InterestDetails = "InterestDetails";
 		}
 
 		/// <summary>Static meta-data storage for navigator related information</summary>
@@ -49,8 +43,6 @@ namespace DataAccess.EntityClasses
 			public InterestRateEntityStaticMetaData()
 			{
 				SetEntityCoreInfo("InterestRateEntity", InheritanceHierarchyType.None, false, (int)DataAccess.EntityType.InterestRateEntity, typeof(InterestRateEntity), typeof(InterestRateEntityFactory), false);
-				AddNavigatorMetaData<InterestRateEntity, EntityCollection<AssetTrackingDepreciationEntity>>("AssetTrackingDepreciations", a => a._assetTrackingDepreciations, (a, b) => a._assetTrackingDepreciations = b, a => a.AssetTrackingDepreciations, () => new InterestRateRelations().AssetTrackingDepreciationEntityUsingEnddate, typeof(AssetTrackingDepreciationEntity), (int)DataAccess.EntityType.AssetTrackingDepreciationEntity);
-				AddNavigatorMetaData<InterestRateEntity, EntityCollection<InterestDetailEntity>>("InterestDetails", a => a._interestDetails, (a, b) => a._interestDetails = b, a => a.InterestDetails, () => new InterestRateRelations().InterestDetailEntityUsingEnddate, typeof(InterestDetailEntity), (int)DataAccess.EntityType.InterestDetailEntity);
 			}
 		}
 
@@ -102,14 +94,6 @@ namespace DataAccess.EntityClasses
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
 			// __LLBLGENPRO_USER_CODE_REGION_END
 		}
-
-		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'AssetTrackingDepreciation' to this entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoAssetTrackingDepreciations() { return CreateRelationInfoForNavigator("AssetTrackingDepreciations"); }
-
-		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'InterestDetail' to this entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoInterestDetails() { return CreateRelationInfoForNavigator("InterestDetails"); }
 		
 		/// <inheritdoc/>
 		protected override EntityStaticMetaDataBase GetEntityStaticMetaData() {	return _staticMetaData; }
@@ -141,14 +125,6 @@ namespace DataAccess.EntityClasses
 		/// <summary>The relations object holding all relations of this entity with other entity classes.</summary>
 		public static InterestRateRelations Relations { get { return _relationsFactory; } }
 
-		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'AssetTrackingDepreciation' for this entity.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathAssetTrackingDepreciations { get { return _staticMetaData.GetPrefetchPathElement("AssetTrackingDepreciations", CommonEntityBase.CreateEntityCollection<AssetTrackingDepreciationEntity>()); } }
-
-		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'InterestDetail' for this entity.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathInterestDetails { get { return _staticMetaData.GetPrefetchPathElement("InterestDetails", CommonEntityBase.CreateEntityCollection<InterestDetailEntity>()); } }
-
 		/// <summary>The Enddate property of the Entity InterestRate<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "InterestRate"."Enddate".<br/>Table field type characteristics (type, precision, scale, length): Date, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
 		public virtual System.DateTime Enddate
@@ -164,14 +140,6 @@ namespace DataAccess.EntityClasses
 			get { return (Nullable<System.Decimal>)GetValue((int)InterestRateFieldIndex.Rate, false); }
 			set { SetValue((int)InterestRateFieldIndex.Rate, value); }
 		}
-
-		/// <summary>Gets the EntityCollection with the related entities of type 'AssetTrackingDepreciationEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
-		[TypeContainedAttribute(typeof(AssetTrackingDepreciationEntity))]
-		public virtual EntityCollection<AssetTrackingDepreciationEntity> AssetTrackingDepreciations { get { return GetOrCreateEntityCollection<AssetTrackingDepreciationEntity, AssetTrackingDepreciationEntityFactory>("InterestRate", true, false, ref _assetTrackingDepreciations); } }
-
-		/// <summary>Gets the EntityCollection with the related entities of type 'InterestDetailEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
-		[TypeContainedAttribute(typeof(InterestDetailEntity))]
-		public virtual EntityCollection<InterestDetailEntity> InterestDetails { get { return GetOrCreateEntityCollection<InterestDetailEntity, InterestDetailEntityFactory>("InterestRate", true, false, ref _interestDetails); } }
 
 		// __LLBLGENPRO_USER_CODE_REGION_START CustomEntityCode
 		// __LLBLGENPRO_USER_CODE_REGION_END
@@ -197,25 +165,12 @@ namespace DataAccess.RelationClasses
 	/// <summary>Implements the relations factory for the entity: InterestRate. </summary>
 	public partial class InterestRateRelations: RelationFactory
 	{
-		/// <summary>Returns a new IEntityRelation object, between InterestRateEntity and AssetTrackingDepreciationEntity over the 1:n relation they have, using the relation between the fields: InterestRate.Enddate - AssetTrackingDepreciation.Enddate</summary>
-		public virtual IEntityRelation AssetTrackingDepreciationEntityUsingEnddate
-		{
-			get { return ModelInfoProviderSingleton.GetInstance().CreateRelation(RelationType.OneToMany, "AssetTrackingDepreciations", true, new[] { InterestRateFields.Enddate, AssetTrackingDepreciationFields.Enddate }); }
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between InterestRateEntity and InterestDetailEntity over the 1:n relation they have, using the relation between the fields: InterestRate.Enddate - InterestDetail.Enddate</summary>
-		public virtual IEntityRelation InterestDetailEntityUsingEnddate
-		{
-			get { return ModelInfoProviderSingleton.GetInstance().CreateRelation(RelationType.OneToMany, "InterestDetails", true, new[] { InterestRateFields.Enddate, InterestDetailFields.Enddate }); }
-		}
 
 	}
 	
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticInterestRateRelations
 	{
-		internal static readonly IEntityRelation AssetTrackingDepreciationEntityUsingEnddateStatic = new InterestRateRelations().AssetTrackingDepreciationEntityUsingEnddate;
-		internal static readonly IEntityRelation InterestDetailEntityUsingEnddateStatic = new InterestRateRelations().InterestDetailEntityUsingEnddate;
 
 		/// <summary>CTor</summary>
 		static StaticInterestRateRelations() { }

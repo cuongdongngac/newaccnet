@@ -1,0 +1,335 @@
+﻿{
+  "ReportTitle": "Tờ Khai Thuế GTGT (Mẫu 01/GTGT)",
+  "Version": "1.0",
+  "ExportedAt": "2026-11-05T20:21:29.7443686+07:00",
+  "Items": [
+    {
+      "Code": "01",
+      "ItemName": "1-Hàng hoá, dịch vụ bán ra",
+      "IsBold": true,
+      "IsItalic": false,
+      "Accounts": [
+        {
+          "AccountId": "111",
+          "CounterAccountId": "",
+          "ColumnNo": 1,
+          "IsAdd": false,
+          "Method": -1
+        },
+        {
+          "AccountId": "3331",
+          "CounterAccountId": "",
+          "ColumnNo": 2,
+          "IsAdd": false,
+          "Method": -1
+        }
+      ]
+    },
+    {
+      "Code": "02",
+      "ItemName": "2-Hàng hóa, dịch vụ chịu thuế GTGT",
+      "IsBold": true,
+      "IsItalic": false,
+      "Accounts": [
+        {
+          "AccountId": "511",
+          "CounterAccountId": "",
+          "ColumnNo": 1,
+          "IsAdd": false,
+          "Method": -1
+        },
+        {
+          "AccountId": "3331",
+          "CounterAccountId": "",
+          "ColumnNo": 2,
+          "IsAdd": false,
+          "Method": -1
+        }
+      ]
+    },
+    {
+      "Code": "03",
+      "ItemName": "a/Hàng hoá xuất khẩu thuế suất 0%",
+      "IsBold": false,
+      "IsItalic": true,
+      "Accounts": []
+    },
+    {
+      "Code": "03",
+      "ItemName": "b/Hàng hoá, dịch vụ thuế suất 5%",
+      "IsBold": false,
+      "IsItalic": true,
+      "Accounts": []
+    },
+    {
+      "Code": "04",
+      "ItemName": "c/Hàng hoá, dịch vụ thuế suất 10%",
+      "IsBold": false,
+      "IsItalic": true,
+      "Accounts": [
+        {
+          "AccountId": "511",
+          "CounterAccountId": "",
+          "ColumnNo": 1,
+          "IsAdd": false,
+          "Method": -1
+        },
+        {
+          "AccountId": "3331",
+          "CounterAccountId": "",
+          "ColumnNo": 2,
+          "IsAdd": false,
+          "Method": -1
+        }
+      ]
+    },
+    {
+      "Code": "05",
+      "ItemName": "d/Hàng hoá, dịch vụ thuế suất 20%",
+      "IsBold": false,
+      "IsItalic": true,
+      "Accounts": []
+    },
+    {
+      "Code": "06",
+      "ItemName": "3-Hàng hoá, dịch vụ mua vào",
+      "IsBold": true,
+      "IsItalic": false,
+      "Accounts": [
+        {
+          "AccountId": "151",
+          "CounterAccountId": "",
+          "ColumnNo": 1,
+          "IsAdd": false,
+          "Method": 1
+        },
+        {
+          "AccountId": "133",
+          "CounterAccountId": "",
+          "ColumnNo": 2,
+          "IsAdd": false,
+          "Method": 1
+        },
+        {
+          "AccountId": "642",
+          "CounterAccountId": "",
+          "ColumnNo": 1,
+          "IsAdd": false,
+          "Method": 1
+        },
+        {
+          "AccountId": "627",
+          "CounterAccountId": "",
+          "ColumnNo": 1,
+          "IsAdd": false,
+          "Method": 1
+        },
+        {
+          "AccountId": "211",
+          "CounterAccountId": "",
+          "ColumnNo": 1,
+          "IsAdd": false,
+          "Method": 1
+        },
+        {
+          "AccountId": "152",
+          "CounterAccountId": "",
+          "ColumnNo": 1,
+          "IsAdd": false,
+          "Method": 1
+        },
+        {
+          "AccountId": "153",
+          "CounterAccountId": "",
+          "ColumnNo": 1,
+          "IsAdd": false,
+          "Method": 1
+        }
+      ]
+    },
+    {
+      "Code": "07",
+      "ItemName": "4-Thuế GTGT của hàng hoá, dịch vụ mua vào",
+      "IsBold": true,
+      "IsItalic": false,
+      "Accounts": [
+        {
+          "AccountId": "133",
+          "CounterAccountId": "",
+          "ColumnNo": 2,
+          "IsAdd": false,
+          "Method": 1
+        }
+      ]
+    },
+    {
+      "Code": "08",
+      "ItemName": "5-Thuế GTGT được khấu trừ",
+      "IsBold": true,
+      "IsItalic": false,
+      "Accounts": [
+        {
+          "AccountId": "133",
+          "CounterAccountId": "",
+          "ColumnNo": 2,
+          "IsAdd": false,
+          "Method": 1
+        }
+      ]
+    },
+    {
+      "Code": "09",
+      "ItemName": "6-Thuế GTGT phải nộp (+) hoặc được thoỏi (-)",
+      "IsBold": true,
+      "IsItalic": false,
+      "Accounts": [
+        {
+          "AccountId": "3331",
+          "CounterAccountId": "",
+          "ColumnNo": 2,
+          "IsAdd": false,
+          "Method": -1
+        },
+        {
+          "AccountId": "133",
+          "CounterAccountId": "",
+          "ColumnNo": 2,
+          "IsAdd": true,
+          "Method": 1
+        }
+      ]
+    },
+    {
+      "Code": "10",
+      "ItemName": "7-Thuế GTGT kỳ trước chuyển qua",
+      "IsBold": true,
+      "IsItalic": false,
+      "Accounts": [
+        {
+          "AccountId": "133",
+          "CounterAccountId": "",
+          "ColumnNo": 2,
+          "IsAdd": true,
+          "Method": 0
+        },
+        {
+          "AccountId": "3331",
+          "CounterAccountId": "",
+          "ColumnNo": 2,
+          "IsAdd": true,
+          "Method": 0
+        }
+      ]
+    },
+    {
+      "Code": "11",
+      "ItemName": " a/Nộp thiếu",
+      "IsBold": false,
+      "IsItalic": true,
+      "Accounts": [
+        {
+          "AccountId": "3331",
+          "CounterAccountId": "",
+          "ColumnNo": 2,
+          "IsAdd": true,
+          "Method": 0
+        }
+      ]
+    },
+    {
+      "Code": "12",
+      "ItemName": " b/Nộp thừa",
+      "IsBold": false,
+      "IsItalic": true,
+      "Accounts": [
+        {
+          "AccountId": "133",
+          "CounterAccountId": "",
+          "ColumnNo": 2,
+          "IsAdd": true,
+          "Method": 0
+        }
+      ]
+    },
+    {
+      "Code": "13",
+      "ItemName": "8-Thuế GTGT đã nộp trong tháng",
+      "IsBold": true,
+      "IsItalic": false,
+      "Accounts": [
+        {
+          "AccountId": "3331",
+          "CounterAccountId": "11",
+          "ColumnNo": 2,
+          "IsAdd": false,
+          "Method": 1
+        }
+      ]
+    },
+    {
+      "Code": "14",
+      "ItemName": "9-Thuế GTGT đã được hoàn trả trong tháng",
+      "IsBold": true,
+      "IsItalic": false,
+      "Accounts": [
+        {
+          "AccountId": "133",
+          "CounterAccountId": "11",
+          "ColumnNo": 2,
+          "IsAdd": false,
+          "Method": -1
+        }
+      ]
+    },
+    {
+      "Code": "15",
+      "ItemName": "10-Thuế GTGT phải nộp tháng này",
+      "IsBold": true,
+      "IsItalic": false,
+      "Accounts": [
+        {
+          "AccountId": "133",
+          "CounterAccountId": "",
+          "ColumnNo": 2,
+          "IsAdd": false,
+          "Method": 0
+        },
+        {
+          "AccountId": "3331",
+          "CounterAccountId": "",
+          "ColumnNo": 2,
+          "IsAdd": true,
+          "Method": 0
+        },
+        {
+          "AccountId": "3331",
+          "CounterAccountId": "11",
+          "ColumnNo": 2,
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "133",
+          "CounterAccountId": "11",
+          "ColumnNo": 2,
+          "IsAdd": false,
+          "Method": -1
+        },
+        {
+          "AccountId": "3331",
+          "CounterAccountId": "",
+          "ColumnNo": 2,
+          "IsAdd": false,
+          "Method": -1
+        },
+        {
+          "AccountId": "133",
+          "CounterAccountId": "",
+          "ColumnNo": 2,
+          "IsAdd": true,
+          "Method": 1
+        }
+      ]
+    }
+  ]
+}

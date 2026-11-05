@@ -564,6 +564,7 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
                 var ivNode = jeNode.SubPath.Add(JournalEntryEntity.PrefetchPathInventoryVouchers);
                 var ivlNode = ivNode.SubPath.Add(InventoryVoucherEntity.PrefetchPathInventoryVoucherLines);
                 ivlNode.SubPath.Add(InventoryVoucherLineEntity.PrefetchPathMaterialTaxLine);
+                jeNode.SubPath.Add(JournalEntryEntity.PrefetchPathChartOfAccount);
                 
                 var freshVoucher = new JournalVoucherEntity(voucherId);
                 if (adapter.FetchEntity(freshVoucher, prefetchPath))

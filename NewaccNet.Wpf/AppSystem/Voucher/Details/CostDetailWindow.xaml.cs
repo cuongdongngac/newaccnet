@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using DevExpress.Xpf.Grid;
@@ -9,16 +10,32 @@ using NewaccNet.Wpf.AppSystem;
 
 namespace NewaccNet.Wpf.AppSystem.Voucher.Details
 {
+    public class TaxRateItem
+    {
+        public short Taxrateid { get; set; }
+        public decimal? Rate { get; set; }
+    }
+
     public partial class CostDetailWindow : NewaccNet.Wpf.Views.Base.BaseDetailWindow
     {
         private JournalEntryEntity _parentEntry;
-        private System.Collections.Generic.List<CostDetailEntity> _originalList;
+        private List<CostDetailEntity> _originalList;
         private bool _isSaved = false;
         private bool _hasTax = false;
 
         public EntityCollection<CostObjectEntity> CostObjects { get; } = new EntityCollection<CostObjectEntity>();
         public EntityCollection<CostElementEntity> CostElements { get; } = new EntityCollection<CostElementEntity>();
         public EntityCollection<PartnerEntity> Partners { get; } = new EntityCollection<PartnerEntity>();
+        public List<TaxRateItem> TaxRates { get; } = new List<TaxRateItem>();
+
+        public static readonly DependencyProperty TargetAmountProperty =
+            DependencyProperty.Register(nameof(TargetAmount), typeof(decimal), typeof(CostDetailWindow), new PropertyMetadata(0m));
+
+        public decimal TargetAmount
+        {
+            get => (decimal)GetValue(TargetAmountProperty);
+            set => SetValue(TargetAmountProperty, value);
+        }
 
         public CostDetailWindow(JournalEntryEntity parentEntry, bool hasTax = false)
         {
@@ -27,13 +44,21 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             _hasTax = hasTax;
             this.DataContext = _parentEntry;
 
+            TargetAmount = _parentEntry.Amount ?? 0m;
+            if (TargetAmount == 0m && _parentEntry.ParentEntry?.Amount != null)
+            {
+                TargetAmount = _parentEntry.ParentEntry.Amount.Value;
+            }
+
             _originalList = _parentEntry.CostDetails.ToList();
-            _parentEntry.SaveFields("undo_parent");
+            try { _parentEntry.SaveFields("undo_parent"); } catch { }
             foreach (var item in _originalList) 
             {
-                item.SaveFields("undo");
-                if (item.ExpenseTaxLine != null) item.ExpenseTaxLine.SaveFields("undo");
+                try { item.SaveFields("undo"); } catch { }
+                try { if (item.ExpenseTaxLine != null) item.ExpenseTaxLine.SaveFields("undo"); } catch { }
             }
+
+            _parentEntry.IsDominoSuspended = true;
 
             if (!_hasTax)
             {
@@ -62,9 +87,11 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
                         adapter.FetchEntityCollection(Partners, null);
                         lookupVatObject.ItemsSource = Partners;
 
-                        var taxRates = new EntityCollection<TaxRateEntity>();
-                        adapter.FetchEntityCollection(taxRates, null);
-                        lookupTaxRate.ItemsSource = taxRates.Select(t => new { Taxrateid = (short)t.Taxrateid, Rate = t.Rate }).ToList();
+                        TaxRates.Clear();
+                        var rawTaxRates = new EntityCollection<TaxRateEntity>();
+                        adapter.FetchEntityCollection(rawTaxRates, null);
+                        TaxRates.AddRange(rawTaxRates.Select(t => new TaxRateItem { Taxrateid = (short)t.Taxrateid, Rate = t.Rate }));
+                        lookupTaxRate.ItemsSource = TaxRates;
                     }
                 }
             }
@@ -79,11 +106,14 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             var newRow = GridCostDetails.GetRow(e.RowHandle) as CostDetailEntity;
             if (newRow != null)
             {
-                newRow.Amount = 0;
+                decimal totalExist = _parentEntry.CostDetails.Where(x => x != newRow).Sum(x => x.Amount ?? 0m);
+                decimal remain = TargetAmount - totalExist;
+                newRow.Amount = remain > 0m ? remain : 0m;
                 
                 if (_hasTax && newRow.ExpenseTaxLine == null)
                 {
                     newRow.ExpenseTaxLine = new ExpenseTaxLineEntity();
+                    try { newRow.ExpenseTaxLine.SaveFields("undo"); } catch { }
                 }
             }
         }
@@ -235,8 +265,8 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             var currentRow = e.NewRow as CostDetailEntity;
             if (currentRow != null && _hasTax && currentRow.ExpenseTaxLine == null)
             {
-                // Safety check in case it was created without tax line
                 currentRow.ExpenseTaxLine = new ExpenseTaxLineEntity();
+                try { currentRow.ExpenseTaxLine.SaveFields("undo"); } catch { }
             }
         }
 
@@ -245,7 +275,8 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             var editor = sender as DevExpress.Xpf.Grid.LookUp.LookUpEdit;
             if (editor == null) return;
             var partner = editor.SelectedItem as PartnerEntity;
-            var taxLine = pnlTax.DataContext as ExpenseTaxLineEntity; if (taxLine == null) taxLine = (GridCostDetails.CurrentItem as CostDetailEntity)?.ExpenseTaxLine;
+            var taxLine = pnlTax.DataContext as ExpenseTaxLineEntity; 
+            if (taxLine == null) taxLine = (GridCostDetails.CurrentItem as CostDetailEntity)?.ExpenseTaxLine;
             if (partner != null && taxLine != null)
             {
                 taxLine.Vatobjectname = partner.CustomerName;
@@ -256,33 +287,57 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
 
         private void lookupTaxRate_EditValueChanged(object sender, DevExpress.Xpf.Editors.EditValueChangedEventArgs e)
         {
-            var editor = sender as DevExpress.Xpf.Grid.LookUp.LookUpEdit;
-            if (editor == null) return;
-            dynamic taxRate = editor.SelectedItem;
-            var taxLine = pnlTax.DataContext as ExpenseTaxLineEntity; if (taxLine == null) taxLine = (GridCostDetails.CurrentItem as CostDetailEntity)?.ExpenseTaxLine;
-            if (taxRate != null && taxLine != null)
+            try
             {
-                taxLine.Rate = taxRate.Rate;
+                var editor = sender as DevExpress.Xpf.Grid.LookUp.LookUpEdit;
+                if (editor == null) return;
+                var taxRate = editor.SelectedItem as TaxRateItem;
+                var taxLine = pnlTax.DataContext as ExpenseTaxLineEntity; 
+                if (taxLine == null) taxLine = (GridCostDetails.CurrentItem as CostDetailEntity)?.ExpenseTaxLine;
+                if (taxRate != null && taxLine != null)
+                {
+                    taxLine.Rate = taxRate.Rate;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"lookupTaxRate error: {ex}");
             }
         }
 
         protected override void BtnAccept_Click(object sender, RoutedEventArgs e)
         {
-            TableViewCost.CloseEditor();
-            TableViewCost.FocusedRowHandle = DevExpress.Xpf.Grid.GridControl.InvalidRowHandle;
-            TableViewCost.CommitEditing();
+            try
+            {
+                TableViewCost.CloseEditor();
+                TableViewCost.FocusedRowHandle = DevExpress.Xpf.Grid.GridControl.InvalidRowHandle;
+                TableViewCost.CommitEditing();
 
-            _parentEntry.NotifyChildCollectionChanged();
+                _parentEntry.IsDominoSuspended = false;
+                decimal totalCost = _parentEntry.CostDetails.Sum(c => c.Amount ?? 0m);
+                if (totalCost > 0 || _parentEntry.CostDetails.Count > 0)
+                {
+                    _parentEntry.Amount = totalCost;
+                }
+                _parentEntry.NotifyChildCollectionChanged();
 
-            _isSaved = true;
-            this.DialogResult = true;
-            this.Close();
+                _isSaved = true;
+                this.DialogResult = true;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"BtnAccept error: {ex}");
+                this.DialogResult = true;
+            }
+            finally
+            {
+                _parentEntry.IsDominoSuspended = false;
+            }
         }
 
         protected override void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = false;
-            this.Close();
         }
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
@@ -294,27 +349,27 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
                 {
                     foreach (var item in _originalList) 
                     {
-                        item.RollbackFields("undo");
-                        if (item.ExpenseTaxLine != null) item.ExpenseTaxLine.RollbackFields("undo");
+                        try { item.RollbackFields("undo"); } catch { }
+                        try { if (item.ExpenseTaxLine != null) item.ExpenseTaxLine.RollbackFields("undo"); } catch { }
                     }
                     _parentEntry.CostDetails.Clear();
                     foreach (var item in _originalList) _parentEntry.CostDetails.Add(item);
-                    _parentEntry.RollbackFields("undo_parent");
+                    try { _parentEntry.RollbackFields("undo_parent"); } catch { }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Error on rollback: {ex}");
                 }
                 finally
                 {
                     _parentEntry.IsDominoSuspended = false;
                 }
             }
+            else
+            {
+                _parentEntry.IsDominoSuspended = false;
+            }
             base.OnClosing(e);
         }
     }
 }
-
-
-
-
-
-
-
-

@@ -144,26 +144,6 @@ namespace DataAccess.FactoryClasses
 		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new AssetDetailEntity(fields); }
 	}
 
-	/// <summary>Factory to create new, empty AssetExportVoucherEntity objects.</summary>
-	[Serializable]
-	public partial class AssetExportVoucherEntityFactory : EntityFactoryBase2<AssetExportVoucherEntity> 
-	{
-		/// <summary>CTor</summary>
-		public AssetExportVoucherEntityFactory() : base("AssetExportVoucherEntity", DataAccess.EntityType.AssetExportVoucherEntity, false) { }
-		/// <inheritdoc/>
-		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new AssetExportVoucherEntity(fields); }
-	}
-
-	/// <summary>Factory to create new, empty AssetLedgerEntity objects.</summary>
-	[Serializable]
-	public partial class AssetLedgerEntityFactory : EntityFactoryBase2<AssetLedgerEntity> 
-	{
-		/// <summary>CTor</summary>
-		public AssetLedgerEntityFactory() : base("AssetLedgerEntity", DataAccess.EntityType.AssetLedgerEntity, false) { }
-		/// <inheritdoc/>
-		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new AssetLedgerEntity(fields); }
-	}
-
 	/// <summary>Factory to create new, empty AssetTrackingEntity objects.</summary>
 	[Serializable]
 	public partial class AssetTrackingEntityFactory : EntityFactoryBase2<AssetTrackingEntity> 
@@ -172,16 +152,6 @@ namespace DataAccess.FactoryClasses
 		public AssetTrackingEntityFactory() : base("AssetTrackingEntity", DataAccess.EntityType.AssetTrackingEntity, false) { }
 		/// <inheritdoc/>
 		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new AssetTrackingEntity(fields); }
-	}
-
-	/// <summary>Factory to create new, empty AssetTrackingDepreciationEntity objects.</summary>
-	[Serializable]
-	public partial class AssetTrackingDepreciationEntityFactory : EntityFactoryBase2<AssetTrackingDepreciationEntity> 
-	{
-		/// <summary>CTor</summary>
-		public AssetTrackingDepreciationEntityFactory() : base("AssetTrackingDepreciationEntity", DataAccess.EntityType.AssetTrackingDepreciationEntity, false) { }
-		/// <inheritdoc/>
-		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new AssetTrackingDepreciationEntity(fields); }
 	}
 
 	/// <summary>Factory to create new, empty BusinessResultItemEntity objects.</summary>
@@ -194,14 +164,14 @@ namespace DataAccess.FactoryClasses
 		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new BusinessResultItemEntity(fields); }
 	}
 
-	/// <summary>Factory to create new, empty CashFlowBalanceEntity objects.</summary>
+	/// <summary>Factory to create new, empty CalculationSessionEntity objects.</summary>
 	[Serializable]
-	public partial class CashFlowBalanceEntityFactory : EntityFactoryBase2<CashFlowBalanceEntity> 
+	public partial class CalculationSessionEntityFactory : EntityFactoryBase2<CalculationSessionEntity> 
 	{
 		/// <summary>CTor</summary>
-		public CashFlowBalanceEntityFactory() : base("CashFlowBalanceEntity", DataAccess.EntityType.CashFlowBalanceEntity, false) { }
+		public CalculationSessionEntityFactory() : base("CalculationSessionEntity", DataAccess.EntityType.CalculationSessionEntity, false) { }
 		/// <inheritdoc/>
-		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new CashFlowBalanceEntity(fields); }
+		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new CalculationSessionEntity(fields); }
 	}
 
 	/// <summary>Factory to create new, empty CashFlowCategoryEntity objects.</summary>
@@ -232,16 +202,6 @@ namespace DataAccess.FactoryClasses
 		public CashFlowPreviousPeriodEntityFactory() : base("CashFlowPreviousPeriodEntity", DataAccess.EntityType.CashFlowPreviousPeriodEntity, false) { }
 		/// <inheritdoc/>
 		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new CashFlowPreviousPeriodEntity(fields); }
-	}
-
-	/// <summary>Factory to create new, empty CashFlowYearBalanceEntity objects.</summary>
-	[Serializable]
-	public partial class CashFlowYearBalanceEntityFactory : EntityFactoryBase2<CashFlowYearBalanceEntity> 
-	{
-		/// <summary>CTor</summary>
-		public CashFlowYearBalanceEntityFactory() : base("CashFlowYearBalanceEntity", DataAccess.EntityType.CashFlowYearBalanceEntity, false) { }
-		/// <inheritdoc/>
-		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new CashFlowYearBalanceEntity(fields); }
 	}
 
 	/// <summary>Factory to create new, empty CategoryEntity objects.</summary>
@@ -304,16 +264,6 @@ namespace DataAccess.FactoryClasses
 		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new CostElementEntity(fields); }
 	}
 
-	/// <summary>Factory to create new, empty CostLedgerEntity objects.</summary>
-	[Serializable]
-	public partial class CostLedgerEntityFactory : EntityFactoryBase2<CostLedgerEntity> 
-	{
-		/// <summary>CTor</summary>
-		public CostLedgerEntityFactory() : base("CostLedgerEntity", DataAccess.EntityType.CostLedgerEntity, false) { }
-		/// <inheritdoc/>
-		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new CostLedgerEntity(fields); }
-	}
-
 	/// <summary>Factory to create new, empty CostObjectEntity objects.</summary>
 	[Serializable]
 	public partial class CostObjectEntityFactory : EntityFactoryBase2<CostObjectEntity> 
@@ -342,16 +292,6 @@ namespace DataAccess.FactoryClasses
 		public CurrencyDetailEntityFactory() : base("CurrencyDetailEntity", DataAccess.EntityType.CurrencyDetailEntity, false) { }
 		/// <inheritdoc/>
 		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new CurrencyDetailEntity(fields); }
-	}
-
-	/// <summary>Factory to create new, empty CurrencyLedgerEntity objects.</summary>
-	[Serializable]
-	public partial class CurrencyLedgerEntityFactory : EntityFactoryBase2<CurrencyLedgerEntity> 
-	{
-		/// <summary>CTor</summary>
-		public CurrencyLedgerEntityFactory() : base("CurrencyLedgerEntity", DataAccess.EntityType.CurrencyLedgerEntity, false) { }
-		/// <inheritdoc/>
-		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new CurrencyLedgerEntity(fields); }
 	}
 
 	/// <summary>Factory to create new, empty CurrencyLiabilityLineEntity objects.</summary>
@@ -384,14 +324,24 @@ namespace DataAccess.FactoryClasses
 		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new CustomCostReportAccountEntity(fields); }
 	}
 
-	/// <summary>Factory to create new, empty CustomerExportLineEntity objects.</summary>
+	/// <summary>Factory to create new, empty CustomFieldDefinitionEntity objects.</summary>
 	[Serializable]
-	public partial class CustomerExportLineEntityFactory : EntityFactoryBase2<CustomerExportLineEntity> 
+	public partial class CustomFieldDefinitionEntityFactory : EntityFactoryBase2<CustomFieldDefinitionEntity> 
 	{
 		/// <summary>CTor</summary>
-		public CustomerExportLineEntityFactory() : base("CustomerExportLineEntity", DataAccess.EntityType.CustomerExportLineEntity, false) { }
+		public CustomFieldDefinitionEntityFactory() : base("CustomFieldDefinitionEntity", DataAccess.EntityType.CustomFieldDefinitionEntity, false) { }
 		/// <inheritdoc/>
-		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new CustomerExportLineEntity(fields); }
+		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new CustomFieldDefinitionEntity(fields); }
+	}
+
+	/// <summary>Factory to create new, empty CustomFieldOptionEntity objects.</summary>
+	[Serializable]
+	public partial class CustomFieldOptionEntityFactory : EntityFactoryBase2<CustomFieldOptionEntity> 
+	{
+		/// <summary>CTor</summary>
+		public CustomFieldOptionEntityFactory() : base("CustomFieldOptionEntity", DataAccess.EntityType.CustomFieldOptionEntity, false) { }
+		/// <inheritdoc/>
+		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new CustomFieldOptionEntity(fields); }
 	}
 
 	/// <summary>Factory to create new, empty DbConfigEntity objects.</summary>
@@ -424,16 +374,6 @@ namespace DataAccess.FactoryClasses
 		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new DebtDetailEntity(fields); }
 	}
 
-	/// <summary>Factory to create new, empty DebtLedgerEntity objects.</summary>
-	[Serializable]
-	public partial class DebtLedgerEntityFactory : EntityFactoryBase2<DebtLedgerEntity> 
-	{
-		/// <summary>CTor</summary>
-		public DebtLedgerEntityFactory() : base("DebtLedgerEntity", DataAccess.EntityType.DebtLedgerEntity, false) { }
-		/// <inheritdoc/>
-		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new DebtLedgerEntity(fields); }
-	}
-
 	/// <summary>Factory to create new, empty DebtReasonEntity objects.</summary>
 	[Serializable]
 	public partial class DebtReasonEntityFactory : EntityFactoryBase2<DebtReasonEntity> 
@@ -464,14 +404,24 @@ namespace DataAccess.FactoryClasses
 		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new DepartmentEntity(fields); }
 	}
 
-	/// <summary>Factory to create new, empty DepreciationEntity objects.</summary>
+	/// <summary>Factory to create new, empty DimensionEntity objects.</summary>
 	[Serializable]
-	public partial class DepreciationEntityFactory : EntityFactoryBase2<DepreciationEntity> 
+	public partial class DimensionEntityFactory : EntityFactoryBase2<DimensionEntity> 
 	{
 		/// <summary>CTor</summary>
-		public DepreciationEntityFactory() : base("DepreciationEntity", DataAccess.EntityType.DepreciationEntity, false) { }
+		public DimensionEntityFactory() : base("DimensionEntity", DataAccess.EntityType.DimensionEntity, false) { }
 		/// <inheritdoc/>
-		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new DepreciationEntity(fields); }
+		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new DimensionEntity(fields); }
+	}
+
+	/// <summary>Factory to create new, empty DimensionValueEntity objects.</summary>
+	[Serializable]
+	public partial class DimensionValueEntityFactory : EntityFactoryBase2<DimensionValueEntity> 
+	{
+		/// <summary>CTor</summary>
+		public DimensionValueEntityFactory() : base("DimensionValueEntity", DataAccess.EntityType.DimensionValueEntity, false) { }
+		/// <inheritdoc/>
+		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new DimensionValueEntity(fields); }
 	}
 
 	/// <summary>Factory to create new, empty ExchangeRateEntity objects.</summary>
@@ -494,46 +444,6 @@ namespace DataAccess.FactoryClasses
 		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new ExpenseTaxLineEntity(fields); }
 	}
 
-	/// <summary>Factory to create new, empty FinancialMonthEntity objects.</summary>
-	[Serializable]
-	public partial class FinancialMonthEntityFactory : EntityFactoryBase2<FinancialMonthEntity> 
-	{
-		/// <summary>CTor</summary>
-		public FinancialMonthEntityFactory() : base("FinancialMonthEntity", DataAccess.EntityType.FinancialMonthEntity, false) { }
-		/// <inheritdoc/>
-		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new FinancialMonthEntity(fields); }
-	}
-
-	/// <summary>Factory to create new, empty GeneralLedgerEntity objects.</summary>
-	[Serializable]
-	public partial class GeneralLedgerEntityFactory : EntityFactoryBase2<GeneralLedgerEntity> 
-	{
-		/// <summary>CTor</summary>
-		public GeneralLedgerEntityFactory() : base("GeneralLedgerEntity", DataAccess.EntityType.GeneralLedgerEntity, false) { }
-		/// <inheritdoc/>
-		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new GeneralLedgerEntity(fields); }
-	}
-
-	/// <summary>Factory to create new, empty InterestEntity objects.</summary>
-	[Serializable]
-	public partial class InterestEntityFactory : EntityFactoryBase2<InterestEntity> 
-	{
-		/// <summary>CTor</summary>
-		public InterestEntityFactory() : base("InterestEntity", DataAccess.EntityType.InterestEntity, false) { }
-		/// <inheritdoc/>
-		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new InterestEntity(fields); }
-	}
-
-	/// <summary>Factory to create new, empty InterestDetailEntity objects.</summary>
-	[Serializable]
-	public partial class InterestDetailEntityFactory : EntityFactoryBase2<InterestDetailEntity> 
-	{
-		/// <summary>CTor</summary>
-		public InterestDetailEntityFactory() : base("InterestDetailEntity", DataAccess.EntityType.InterestDetailEntity, false) { }
-		/// <inheritdoc/>
-		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new InterestDetailEntity(fields); }
-	}
-
 	/// <summary>Factory to create new, empty InterestRateEntity objects.</summary>
 	[Serializable]
 	public partial class InterestRateEntityFactory : EntityFactoryBase2<InterestRateEntity> 
@@ -544,16 +454,6 @@ namespace DataAccess.FactoryClasses
 		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new InterestRateEntity(fields); }
 	}
 
-	/// <summary>Factory to create new, empty InventoryExportVoucherEntity objects.</summary>
-	[Serializable]
-	public partial class InventoryExportVoucherEntityFactory : EntityFactoryBase2<InventoryExportVoucherEntity> 
-	{
-		/// <summary>CTor</summary>
-		public InventoryExportVoucherEntityFactory() : base("InventoryExportVoucherEntity", DataAccess.EntityType.InventoryExportVoucherEntity, false) { }
-		/// <inheritdoc/>
-		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new InventoryExportVoucherEntity(fields); }
-	}
-
 	/// <summary>Factory to create new, empty InventoryItemEntity objects.</summary>
 	[Serializable]
 	public partial class InventoryItemEntityFactory : EntityFactoryBase2<InventoryItemEntity> 
@@ -562,16 +462,6 @@ namespace DataAccess.FactoryClasses
 		public InventoryItemEntityFactory() : base("InventoryItemEntity", DataAccess.EntityType.InventoryItemEntity, false) { }
 		/// <inheritdoc/>
 		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new InventoryItemEntity(fields); }
-	}
-
-	/// <summary>Factory to create new, empty InventoryLedgerEntity objects.</summary>
-	[Serializable]
-	public partial class InventoryLedgerEntityFactory : EntityFactoryBase2<InventoryLedgerEntity> 
-	{
-		/// <summary>CTor</summary>
-		public InventoryLedgerEntityFactory() : base("InventoryLedgerEntity", DataAccess.EntityType.InventoryLedgerEntity, false) { }
-		/// <inheritdoc/>
-		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new InventoryLedgerEntity(fields); }
 	}
 
 	/// <summary>Factory to create new, empty InventoryVoucherEntity objects.</summary>
@@ -602,16 +492,6 @@ namespace DataAccess.FactoryClasses
 		public InvestmentDetailEntityFactory() : base("InvestmentDetailEntity", DataAccess.EntityType.InvestmentDetailEntity, false) { }
 		/// <inheritdoc/>
 		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new InvestmentDetailEntity(fields); }
-	}
-
-	/// <summary>Factory to create new, empty InvestmentLedgerEntity objects.</summary>
-	[Serializable]
-	public partial class InvestmentLedgerEntityFactory : EntityFactoryBase2<InvestmentLedgerEntity> 
-	{
-		/// <summary>CTor</summary>
-		public InvestmentLedgerEntityFactory() : base("InvestmentLedgerEntity", DataAccess.EntityType.InvestmentLedgerEntity, false) { }
-		/// <inheritdoc/>
-		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new InvestmentLedgerEntity(fields); }
 	}
 
 	/// <summary>Factory to create new, empty JournalEntryEntity objects.</summary>
@@ -987,26 +867,18 @@ namespace DataAccess.FactoryClasses
 					return new AssetEntityFactory();
 				case DataAccess.EntityType.AssetDetailEntity:
 					return new AssetDetailEntityFactory();
-				case DataAccess.EntityType.AssetExportVoucherEntity:
-					return new AssetExportVoucherEntityFactory();
-				case DataAccess.EntityType.AssetLedgerEntity:
-					return new AssetLedgerEntityFactory();
 				case DataAccess.EntityType.AssetTrackingEntity:
 					return new AssetTrackingEntityFactory();
-				case DataAccess.EntityType.AssetTrackingDepreciationEntity:
-					return new AssetTrackingDepreciationEntityFactory();
 				case DataAccess.EntityType.BusinessResultItemEntity:
 					return new BusinessResultItemEntityFactory();
-				case DataAccess.EntityType.CashFlowBalanceEntity:
-					return new CashFlowBalanceEntityFactory();
+				case DataAccess.EntityType.CalculationSessionEntity:
+					return new CalculationSessionEntityFactory();
 				case DataAccess.EntityType.CashFlowCategoryEntity:
 					return new CashFlowCategoryEntityFactory();
 				case DataAccess.EntityType.CashFlowItemEntity:
 					return new CashFlowItemEntityFactory();
 				case DataAccess.EntityType.CashFlowPreviousPeriodEntity:
 					return new CashFlowPreviousPeriodEntityFactory();
-				case DataAccess.EntityType.CashFlowYearBalanceEntity:
-					return new CashFlowYearBalanceEntityFactory();
 				case DataAccess.EntityType.CategoryEntity:
 					return new CategoryEntityFactory();
 				case DataAccess.EntityType.ChartOfAccountEntity:
@@ -1019,68 +891,52 @@ namespace DataAccess.FactoryClasses
 					return new CostDetailEntityFactory();
 				case DataAccess.EntityType.CostElementEntity:
 					return new CostElementEntityFactory();
-				case DataAccess.EntityType.CostLedgerEntity:
-					return new CostLedgerEntityFactory();
 				case DataAccess.EntityType.CostObjectEntity:
 					return new CostObjectEntityFactory();
 				case DataAccess.EntityType.CurrencyEntity:
 					return new CurrencyEntityFactory();
 				case DataAccess.EntityType.CurrencyDetailEntity:
 					return new CurrencyDetailEntityFactory();
-				case DataAccess.EntityType.CurrencyLedgerEntity:
-					return new CurrencyLedgerEntityFactory();
 				case DataAccess.EntityType.CurrencyLiabilityLineEntity:
 					return new CurrencyLiabilityLineEntityFactory();
 				case DataAccess.EntityType.CustomCostReportEntity:
 					return new CustomCostReportEntityFactory();
 				case DataAccess.EntityType.CustomCostReportAccountEntity:
 					return new CustomCostReportAccountEntityFactory();
-				case DataAccess.EntityType.CustomerExportLineEntity:
-					return new CustomerExportLineEntityFactory();
+				case DataAccess.EntityType.CustomFieldDefinitionEntity:
+					return new CustomFieldDefinitionEntityFactory();
+				case DataAccess.EntityType.CustomFieldOptionEntity:
+					return new CustomFieldOptionEntityFactory();
 				case DataAccess.EntityType.DbConfigEntity:
 					return new DbConfigEntityFactory();
 				case DataAccess.EntityType.DebtBalanceEntity:
 					return new DebtBalanceEntityFactory();
 				case DataAccess.EntityType.DebtDetailEntity:
 					return new DebtDetailEntityFactory();
-				case DataAccess.EntityType.DebtLedgerEntity:
-					return new DebtLedgerEntityFactory();
 				case DataAccess.EntityType.DebtReasonEntity:
 					return new DebtReasonEntityFactory();
 				case DataAccess.EntityType.DebtTypeEntity:
 					return new DebtTypeEntityFactory();
 				case DataAccess.EntityType.DepartmentEntity:
 					return new DepartmentEntityFactory();
-				case DataAccess.EntityType.DepreciationEntity:
-					return new DepreciationEntityFactory();
+				case DataAccess.EntityType.DimensionEntity:
+					return new DimensionEntityFactory();
+				case DataAccess.EntityType.DimensionValueEntity:
+					return new DimensionValueEntityFactory();
 				case DataAccess.EntityType.ExchangeRateEntity:
 					return new ExchangeRateEntityFactory();
 				case DataAccess.EntityType.ExpenseTaxLineEntity:
 					return new ExpenseTaxLineEntityFactory();
-				case DataAccess.EntityType.FinancialMonthEntity:
-					return new FinancialMonthEntityFactory();
-				case DataAccess.EntityType.GeneralLedgerEntity:
-					return new GeneralLedgerEntityFactory();
-				case DataAccess.EntityType.InterestEntity:
-					return new InterestEntityFactory();
-				case DataAccess.EntityType.InterestDetailEntity:
-					return new InterestDetailEntityFactory();
 				case DataAccess.EntityType.InterestRateEntity:
 					return new InterestRateEntityFactory();
-				case DataAccess.EntityType.InventoryExportVoucherEntity:
-					return new InventoryExportVoucherEntityFactory();
 				case DataAccess.EntityType.InventoryItemEntity:
 					return new InventoryItemEntityFactory();
-				case DataAccess.EntityType.InventoryLedgerEntity:
-					return new InventoryLedgerEntityFactory();
 				case DataAccess.EntityType.InventoryVoucherEntity:
 					return new InventoryVoucherEntityFactory();
 				case DataAccess.EntityType.InventoryVoucherLineEntity:
 					return new InventoryVoucherLineEntityFactory();
 				case DataAccess.EntityType.InvestmentDetailEntity:
 					return new InvestmentDetailEntityFactory();
-				case DataAccess.EntityType.InvestmentLedgerEntity:
-					return new InvestmentLedgerEntityFactory();
 				case DataAccess.EntityType.JournalEntryEntity:
 					return new JournalEntryEntityFactory();
 				case DataAccess.EntityType.JournalVoucherEntity:

@@ -145,7 +145,7 @@
         <!-- DETAILS GRID -->
         <dxg:GridControl x:Name="GridMaterialDetails" Grid.Row="2" Margin="10,0" ItemsSource="{Binding CurrentLines}" CustomUnboundColumnData="GridMaterialDetails_CustomUnboundColumnData" AutoGenerateColumns="None">
             <dxg:GridControl.View>
-                <base:AppDetailTableView x:Name="viewDetails" ShowGroupPanel="False" NewItemRowPosition="Bottom" 
+                <base:AppDetailTableView x:Name="viewDetails" ShowGroupPanel="False" AutoWidth="True" NewItemRowPosition="Bottom" 
                                EditorButtonShowMode="ShowForFocusedRow"
                                InitNewRow="viewDetails_InitNewRow" CellValueChanged="viewDetails_CellValueChanged" FocusedRowChanged="viewDetails_FocusedRowChanged" RowDeleted="viewDetails_RowDeleted"/>
             </dxg:GridControl.View>
@@ -180,37 +180,37 @@
                             </DataTemplate>
                         </dxg:GridColumn.CellTemplate>
                     </dxg:GridColumn>
-                    <dxg:GridColumn FieldName="Unit" Header="ĐVT" UnboundType="String" Width="65" ReadOnly="True" AllowEditing="False" HorizontalHeaderContentAlignment="Center"/>
-                    <dxg:GridColumn FieldName="Quantity" Header="Số lượng" Width="85" HorizontalHeaderContentAlignment="Right">
+                    <dxg:GridColumn FieldName="Unit" Header="ĐVT" UnboundType="String" Width="65" FixedWidth="True" ReadOnly="True" AllowEditing="False" HorizontalHeaderContentAlignment="Center"/>
+                    <dxg:GridColumn FieldName="Quantity" Header="Số lượng" Width="85" FixedWidth="True" HorizontalHeaderContentAlignment="Right">
                         <dxg:GridColumn.EditSettings>
                             <dxe:TextEditSettings MaskType="Numeric" Mask="n2" MaskUseAsDisplayFormat="True" HorizontalContentAlignment="Right"/>
                         </dxg:GridColumn.EditSettings>
                     </dxg:GridColumn>
                 </dxg:GridControlBand>
-                <dxg:GridControlBand Header="Giá vốn" HorizontalHeaderContentAlignment="Center">
-                    <dxg:GridColumn FieldName="Price" Header="Đơn giá" Width="95" HorizontalHeaderContentAlignment="Right">
+                <dxg:GridControlBand x:Name="bandCost" Header="Tiền hàng" HorizontalHeaderContentAlignment="Center">
+                    <dxg:GridColumn FieldName="Price" Header="Đơn giá" Width="95" FixedWidth="True" HorizontalHeaderContentAlignment="Right">
                         <dxg:GridColumn.EditSettings>
                             <dxe:TextEditSettings MaskType="Numeric" Mask="n0" MaskUseAsDisplayFormat="True" HorizontalContentAlignment="Right"/>
                         </dxg:GridColumn.EditSettings>
                     </dxg:GridColumn>
-                    <dxg:GridColumn FieldName="Amount" Header="Thành tiền" UnboundType="Decimal" Width="110" ReadOnly="True" AllowEditing="False" HorizontalHeaderContentAlignment="Right">
+                    <dxg:GridColumn FieldName="Amount" Header="Thành tiền" UnboundType="Decimal" Width="110" FixedWidth="True" ReadOnly="True" AllowEditing="False" HorizontalHeaderContentAlignment="Right">
                         <dxg:GridColumn.EditSettings>
                             <dxe:TextEditSettings MaskType="Numeric" Mask="n0" MaskUseAsDisplayFormat="True" HorizontalContentAlignment="Right"/>
                         </dxg:GridColumn.EditSettings>
                     </dxg:GridColumn>
                 </dxg:GridControlBand>
                 <dxg:GridControlBand x:Name="bandSalesAndTax" Header="Giá bán &amp; Thuế" HorizontalHeaderContentAlignment="Center" Visible="False">
-                    <dxg:GridColumn FieldName="SellPrice" Header="Đơn giá bán" Width="95" HorizontalHeaderContentAlignment="Right">
+                    <dxg:GridColumn FieldName="SellPrice" Header="Đơn giá bán" Width="95" FixedWidth="True" HorizontalHeaderContentAlignment="Right" Visible="False" ShowInColumnChooser="False">
                         <dxg:GridColumn.EditSettings>
                             <dxe:TextEditSettings MaskType="Numeric" Mask="n0" MaskUseAsDisplayFormat="True" HorizontalContentAlignment="Right"/>
                         </dxg:GridColumn.EditSettings>
                     </dxg:GridColumn>
-                    <dxg:GridColumn FieldName="SellAmount" Header="Tiền bán" UnboundType="Decimal" Width="110" ReadOnly="True" AllowEditing="False" HorizontalHeaderContentAlignment="Right">
+                    <dxg:GridColumn FieldName="SellAmount" Header="Tiền bán" UnboundType="Decimal" Width="110" FixedWidth="True" ReadOnly="True" AllowEditing="False" HorizontalHeaderContentAlignment="Right" Visible="False" ShowInColumnChooser="False">
                         <dxg:GridColumn.EditSettings>
                             <dxe:TextEditSettings MaskType="Numeric" Mask="n0" MaskUseAsDisplayFormat="True" HorizontalContentAlignment="Right"/>
                         </dxg:GridColumn.EditSettings>
                     </dxg:GridColumn>
-                    <dxg:GridColumn FieldName="Taxrateid" Header="% Thuế" Width="75" HorizontalHeaderContentAlignment="Right">
+                    <dxg:GridColumn FieldName="Taxrateid" Header="% Thuế" Width="75" FixedWidth="True" HorizontalHeaderContentAlignment="Right" Visible="False" ShowInColumnChooser="False">
                         <dxg:GridColumn.EditSettings>
                             <dxe:ComboBoxEditSettings x:Name="lueTaxRate" 
                                                       DisplayMember="Display" 
@@ -221,7 +221,7 @@
                                                       HorizontalContentAlignment="Right"/>
                         </dxg:GridColumn.EditSettings>
                     </dxg:GridColumn>
-                    <dxg:GridColumn FieldName="TaxAmount" Header="Tiền thuế" UnboundType="Decimal" Width="110" ReadOnly="True" AllowEditing="False" HorizontalHeaderContentAlignment="Right">
+                    <dxg:GridColumn FieldName="TaxAmount" Header="Tiền thuế" UnboundType="Decimal" Width="110" FixedWidth="True" ReadOnly="True" AllowEditing="False" HorizontalHeaderContentAlignment="Right" Visible="False" ShowInColumnChooser="False">
                         <dxg:GridColumn.EditSettings>
                             <dxe:TextEditSettings MaskType="Numeric" Mask="n0" MaskUseAsDisplayFormat="True" HorizontalContentAlignment="Right"/>
                         </dxg:GridColumn.EditSettings>

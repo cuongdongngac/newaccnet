@@ -33,6 +33,7 @@ namespace NewaccNet.Wpf.AppSystem
                     var leafAccounts = accounts
                         .Where(a => !parentIds.Contains(a.AccountId))
                         .OrderBy(a => a.AccountId)
+                        .Select(a => new { a.AccountId, Display = $"{a.AccountId} - {a.AccountName}" })
                         .ToList();
 
                     cboNmTotalAccount.ItemsSource = leafAccounts;

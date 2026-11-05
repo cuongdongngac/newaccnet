@@ -23,6 +23,7 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
         private List<int> _voucherIds = new();
         private int _currentVoucherIndex = -1;
         private int _currentVoucherId = 0;
+        private bool _isCurrentVoucherPosted = false;
 
         public WarehouseTransferWindow()
         {
@@ -70,6 +71,27 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
             _currentVoucherIndex = index;
             _currentVoucherId = data.VoucherId;
 
+            if (data.Bookflag)
+            {
+                _isCurrentVoucherPosted = true;
+                lblNavPosition.Content = $"Phiếu: {index + 1} / {_voucherIds.Count} (Đã ghi sổ)";
+                btnAccept.IsEnabled = false;
+                btnSaveAndNew.IsEnabled = false;
+                btnAddRow.IsEnabled = false;
+                btnDeleteRow.IsEnabled = false;
+                viewDetails.AllowEditing = false;
+            }
+            else
+            {
+                _isCurrentVoucherPosted = false;
+                lblNavPosition.Content = $"Phiếu: {index + 1} / {_voucherIds.Count} (Chưa ghi sổ)";
+                btnAccept.IsEnabled = true;
+                btnSaveAndNew.IsEnabled = true;
+                btnAddRow.IsEnabled = true;
+                btnDeleteRow.IsEnabled = true;
+                viewDetails.AllowEditing = true;
+            }
+
             txtVoucherNo.Text = data.VoucherNo;
             dpVoucherDate.DateTime = data.VoucherDate;
             if (!string.IsNullOrEmpty(data.FromWarehouseId)) lueFromWarehouse.EditValue = data.FromWarehouseId;
@@ -107,6 +129,13 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
             Lines.Clear();
             Lines.Add(new WarehouseVoucherLineItem { Quantity = 1, Price = 0 });
             UpdateTotals();
+
+            _isCurrentVoucherPosted = false;
+            btnAccept.IsEnabled = true;
+            btnSaveAndNew.IsEnabled = true;
+            btnAddRow.IsEnabled = true;
+            btnDeleteRow.IsEnabled = true;
+            viewDetails.AllowEditing = true;
 
             RefreshNavigation();
             txtVoucherNo.Focus();
@@ -165,9 +194,8 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
             Materials.Clear();
             foreach (var m in mats) Materials.Add(m);
 
-            // 3. Tài khoản
-            var accounts = WarehouseVoucherDataService.LoadAccounts();
-            var invAccs = accounts.Where(a => a.AccountId.StartsWith("15")).ToList();
+            // 3. Tài khoản (tự cung tự cấp từ ERP Account Set)
+            var invAccs = WarehouseVoucherDataService.LoadErpAccountsByCategory("Inventory", "15");
 
             lueDebitAccount.ItemsSource = invAccs;
             lueDebitAccount.EditValue = invAccs.FirstOrDefault(a => a.AccountId == "1561" || a.AccountId == "152")?.AccountId ?? "1561";
@@ -230,6 +258,7 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
                 var mat = Materials.FirstOrDefault(m => string.Equals(m.MaterialId?.Trim(), row.MaterialId?.Trim(), StringComparison.OrdinalIgnoreCase));
                 if (mat != null)
                 {
+                    row.MaterialId = mat.MaterialId;
                     row.MaterialName = mat.MaterialName ?? "";
                     row.Unit = mat.Unit ?? "";
                 }
@@ -302,6 +331,12 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
 
         private bool PerformSave(bool isSaveAndNew)
         {
+            if (_isCurrentVoucherPosted)
+            {
+                MessageBox.Show("Chứng từ này đã được Kế toán ghi sổ. Bạn không có quyền chỉnh sửa.", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
             viewDetails.CommitEditing();
 
             string voucherNo = txtVoucherNo.Text?.Trim() ?? "";
@@ -356,7 +391,8 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
 
                 InventoryAccountId = lueDebitAccount.EditValue as string ?? "1561",
 
-                Lines = validLines
+                Lines = validLines,
+                Bookflag = false
             };
 
             if (WarehouseVoucherDataService.SaveVoucher(p, out string error, out int savedId))
@@ -390,7 +426,26 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
 
         private void ExecutePrint()
         {
-            MessageBox.Show($"In phiếu điều chuyển kho: {txtVoucherNo.Text}\n(Chức năng in phiếu sẵn sàng)", "In phiếu", MessageBoxButton.OK, MessageBoxImage.Information);
+            string fromWh = lueFromWarehouse.EditValue as string ?? "";
+            string toWh = lueToWarehouse.EditValue as string ?? "";
+            string fromWhName = _warehouses.FirstOrDefault(w => w.WarehouseId == fromWh)?.WarehouseName ?? fromWh;
+            string toWhName = _warehouses.FirstOrDefault(w => w.WarehouseId == toWh)?.WarehouseName ?? toWh;
+
+            string debitAcc = lueDebitAccount.EditValue as string ?? "1561";
+            string creditAcc = lueCreditAccount.EditValue as string ?? "1561";
+
+            ErpInventoryPrintHelper.PrintWarehouseTransfer(
+                this,
+                txtVoucherNo.Text?.Trim() ?? "",
+                dpVoucherDate.DateTime,
+                txtCarrier.Text?.Trim() ?? "",
+                fromWh,
+                fromWhName,
+                toWh,
+                toWhName,
+                debitAcc,
+                creditAcc,
+                Lines);
         }
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)

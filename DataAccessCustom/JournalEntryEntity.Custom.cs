@@ -26,6 +26,19 @@ namespace DataAccess.EntityClasses
 
         public bool UpdateFilter { get; set; } = false;
 
+        public static Func<string?, string?>? AccountNameResolver { get; set; }
+
+        public string? AccountName => ChartOfAccount?.AccountName ?? AccountNameResolver?.Invoke(AccountId);
+
+        protected override void OnPropertyChanged(string propertyName)
+        {
+            base.OnPropertyChanged(propertyName);
+            if (propertyName == nameof(AccountId))
+            {
+                OnPropertyChanged(nameof(AccountName));
+            }
+        }
+
         /// <summary>
         /// Cờ tạm ngắt hiệu ứng Domino (dùng khi đang nạp dữ liệu hàng loạt hoặc khi Rollback/Cancel trên form chi tiết).
         /// Mặc định = false (Domino luôn tự động chạy khi thêm/sửa/xóa dòng chi tiết con).
@@ -71,6 +84,13 @@ namespace DataAccess.EntityClasses
                 entity.PropertyChanged += ChildEntity_PropertyChanged;
 
                 if (IsDominoSuspended) return;
+
+                // Các dòng chi tiết con (CostDetail, DebtDetail...) khi mới thêm vào lưới thì Amount chưa có dữ liệu,
+                // không được tính lại tổng ngay lập tức vì sẽ ghi đè xóa mất Amount của JournalEntry cha thành 0.
+                if (entity is CostDetailEntity || entity is DebtDetailEntity)
+                {
+                    return;
+                }
 
                 bool shouldRecalculate = entity.IsNew || entity.IsDirty;
                 if (!shouldRecalculate && entity is InventoryVoucherEntity iv)

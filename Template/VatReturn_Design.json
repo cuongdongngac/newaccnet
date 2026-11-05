@@ -1,0 +1,331 @@
+﻿{
+  "ReportTitle": "Bảng Kê Đề Nghị Hoàn Thuế GTGT (Mẫu 01-3/GTGT)",
+  "Version": "1.0",
+  "ExportedAt": "2026-11-05T20:21:19.4815854+07:00",
+  "Items": [
+    {
+      "Code": "10",
+      "ItemName": "1-Số thuế GTGT cần được KT, hoàn lại đầu kỳ",
+      "IsBold": false,
+      "IsItalic": false,
+      "Accounts": [
+        {
+          "AccountId": "133",
+          "CounterAccountId": "",
+          "IsAdd": false,
+          "Method": 0
+        }
+      ]
+    },
+    {
+      "Code": "11",
+      "ItemName": "2-Số thuế GTGT được khấu trừ phát sinh",
+      "IsBold": false,
+      "IsItalic": true,
+      "Accounts": [
+        {
+          "AccountId": "133",
+          "CounterAccountId": "",
+          "IsAdd": false,
+          "Method": 1
+        }
+      ]
+    },
+    {
+      "Code": "12",
+      "ItemName": "3-Số thuế GTGT đó được khấu trừ, hoàn lại",
+      "IsBold": false,
+      "IsItalic": false,
+      "Accounts": [
+        {
+          "AccountId": "133",
+          "CounterAccountId": "3331",
+          "IsAdd": false,
+          "Method": -1
+        }
+      ]
+    },
+    {
+      "Code": "09",
+      "ItemName": "I-Thuế GTGT được khấu trừ",
+      "IsBold": true,
+      "IsItalic": false,
+      "Accounts": [
+        {
+          "AccountId": "",
+          "CounterAccountId": "",
+          "IsAdd": false,
+          "Method": -1
+        }
+      ]
+    },
+    {
+      "Code": "121",
+      "ItemName": "&Trong đó:",
+      "IsBold": true,
+      "IsItalic": false,
+      "Accounts": []
+    },
+    {
+      "Code": "13",
+      "ItemName": "a/Thuế GTGT đó khấu trừ",
+      "IsBold": false,
+      "IsItalic": true,
+      "Accounts": [
+        {
+          "AccountId": "133",
+          "CounterAccountId": "33311",
+          "IsAdd": false,
+          "Method": -1
+        }
+      ]
+    },
+    {
+      "Code": "14",
+      "ItemName": "b/Thuế GTGT đó hoàn lại",
+      "IsBold": false,
+      "IsItalic": true,
+      "Accounts": [
+        {
+          "AccountId": "133",
+          "CounterAccountId": "111",
+          "IsAdd": false,
+          "Method": -1
+        }
+      ]
+    },
+    {
+      "Code": "15",
+      "ItemName": "c/Thuế GTGT không  được khấu trừ",
+      "IsBold": false,
+      "IsItalic": true,
+      "Accounts": [
+        {
+          "AccountId": "133",
+          "CounterAccountId": "142",
+          "IsAdd": false,
+          "Method": -1
+        },
+        {
+          "AccountId": "133",
+          "CounterAccountId": "632",
+          "IsAdd": false,
+          "Method": -1
+        }
+      ]
+    },
+    {
+      "Code": "162",
+      "ItemName": "&II-Thuế GTGT được hoàn lại",
+      "IsBold": true,
+      "IsItalic": false,
+      "Accounts": []
+    },
+    {
+      "Code": "20",
+      "ItemName": "1-Số thuế GTGT cần được hoàn lại đầu kỳ",
+      "IsBold": false,
+      "IsItalic": false,
+      "Accounts": []
+    },
+    {
+      "Code": "21",
+      "ItemName": "2-Số thuế GTGT được hoàn lại phátt sinh",
+      "IsBold": false,
+      "IsItalic": false,
+      "Accounts": []
+    },
+    {
+      "Code": "22",
+      "ItemName": "3-Số thuế GTGT đó được hoàn lại",
+      "IsBold": false,
+      "IsItalic": false,
+      "Accounts": []
+    },
+    {
+      "Code": "23",
+      "ItemName": "4-Số thuế GTGT cần được hoàn lại CK",
+      "IsBold": false,
+      "IsItalic": false,
+      "Accounts": []
+    },
+    {
+      "Code": "231",
+      "ItemName": "&III-Thuế GTGT được miễn giảm",
+      "IsBold": true,
+      "IsItalic": false,
+      "Accounts": []
+    },
+    {
+      "Code": "30",
+      "ItemName": "1-Số thuế GTGT cần được miễn giảm đầu kỳ",
+      "IsBold": false,
+      "IsItalic": false,
+      "Accounts": []
+    },
+    {
+      "Code": "31",
+      "ItemName": "2-Số thuế GTGT được miễn giảm phát sinh",
+      "IsBold": false,
+      "IsItalic": false,
+      "Accounts": []
+    },
+    {
+      "Code": "32",
+      "ItemName": "3-Số thuế GTGT đó được miễn giảm",
+      "IsBold": false,
+      "IsItalic": false,
+      "Accounts": []
+    },
+    {
+      "Code": "33",
+      "ItemName": "4-Số thuế GTGT cần được miễn giảm CK",
+      "IsBold": false,
+      "IsItalic": false,
+      "Accounts": []
+    },
+    {
+      "Code": "16",
+      "ItemName": "4-Số thuế GTGT cần được khấu trừ CK",
+      "IsBold": false,
+      "IsItalic": true,
+      "Accounts": [
+        {
+          "AccountId": "133",
+          "CounterAccountId": "",
+          "IsAdd": false,
+          "Method": 0
+        },
+        {
+          "AccountId": "133",
+          "CounterAccountId": "",
+          "IsAdd": false,
+          "Method": 1
+        },
+        {
+          "AccountId": "133",
+          "CounterAccountId": "",
+          "IsAdd": true,
+          "Method": -1
+        }
+      ]
+    },
+    {
+      "Code": "331",
+      "ItemName": "&IV- Thuế GTGT hàng bán nội địa",
+      "IsBold": true,
+      "IsItalic": false,
+      "Accounts": []
+    },
+    {
+      "Code": "40",
+      "ItemName": "1- Thuế GTGT cần phải nộp đầu kỳ",
+      "IsBold": false,
+      "IsItalic": false,
+      "Accounts": [
+        {
+          "AccountId": "33311",
+          "CounterAccountId": "",
+          "IsAdd": true,
+          "Method": 0
+        }
+      ]
+    },
+    {
+      "Code": "41",
+      "ItemName": "2- Thuế GTGT đầu ra phát sinh",
+      "IsBold": false,
+      "IsItalic": false,
+      "Accounts": [
+        {
+          "AccountId": "33311",
+          "CounterAccountId": "",
+          "IsAdd": false,
+          "Method": -1
+        }
+      ]
+    },
+    {
+      "Code": "42",
+      "ItemName": "3- Thuế GTGT đầu vào đó khấu trừ",
+      "IsBold": false,
+      "IsItalic": false,
+      "Accounts": [
+        {
+          "AccountId": "33311",
+          "CounterAccountId": "133",
+          "IsAdd": false,
+          "Method": 1
+        }
+      ]
+    },
+    {
+      "Code": "43",
+      "ItemName": "4- Thuế GTGT hàng trả lại, giảm giá",
+      "IsBold": false,
+      "IsItalic": false,
+      "Accounts": [
+        {
+          "AccountId": "33311",
+          "CounterAccountId": "131",
+          "IsAdd": false,
+          "Method": 1
+        }
+      ]
+    },
+    {
+      "Code": "44",
+      "ItemName": "5- Thuế GTGT được giảm trừ",
+      "IsBold": false,
+      "IsItalic": false,
+      "Accounts": [
+        {
+          "AccountId": "33311",
+          "CounterAccountId": "711",
+          "IsAdd": false,
+          "Method": 1
+        }
+      ]
+    },
+    {
+      "Code": "45",
+      "ItemName": "6- Thuế GTGT đó nộp Ngân sách",
+      "IsBold": false,
+      "IsItalic": false,
+      "Accounts": [
+        {
+          "AccountId": "33311",
+          "CounterAccountId": "11",
+          "IsAdd": false,
+          "Method": 1
+        }
+      ]
+    },
+    {
+      "Code": "46",
+      "ItemName": "7- Thuế GTGT cần phải nộp",
+      "IsBold": false,
+      "IsItalic": false,
+      "Accounts": [
+        {
+          "AccountId": "33311",
+          "CounterAccountId": "",
+          "IsAdd": true,
+          "Method": 0
+        },
+        {
+          "AccountId": "33311",
+          "CounterAccountId": "",
+          "IsAdd": false,
+          "Method": -1
+        },
+        {
+          "AccountId": "33311",
+          "CounterAccountId": "",
+          "IsAdd": true,
+          "Method": 1
+        }
+      ]
+    }
+  ]
+}

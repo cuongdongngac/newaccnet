@@ -28,23 +28,27 @@
                 <dxlc:LayoutItem Label="Tài khoản:" Width="150">
                     <TextBlock Text="{Binding AccountId}" FontWeight="Bold" Foreground="#1976D2"/>
                 </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Tổng tiền cần phân bổ:" Width="300">
+                    <TextBlock Text="{Binding TargetAmount, ElementName=costWindow, StringFormat='N0'}" FontWeight="Bold" Foreground="#D32F2F"/>
+                </dxlc:LayoutItem>
             </dxlc:LayoutGroup>
         </dxlc:LayoutControl>
 
         <dxg:GridControl x:Name="GridCostDetails" Grid.Row="1" Grid.Column="0" Margin="10,0" ItemsSource="{Binding CostDetails}" CustomUnboundColumnData="GridCostDetails_CustomUnboundColumnData">
             <dxg:GridControl.View>
                 <base:AppDetailTableView x:Name="TableViewCost" ShowGroupPanel="False" NewItemRowPosition="Bottom" 
+                               AutoWidth="True"
                                ShowTotalSummary="True" AlternateRowBackground="#FFF5F5F5" 
                                EditorButtonShowMode="ShowForFocusedRow"
                                InitNewRow="TableViewCost_InitNewRow" FocusedRowChanged="TableViewCost_FocusedRowChanged" CellValueChanged="TableViewCost_CellValueChanged"/>
             </dxg:GridControl.View>
             <dxg:GridControl.Columns>
-                <dxg:GridColumn FieldName="CostObjectId" Header="Đối tượng chi phí" Width="140">
+                <dxg:GridColumn FieldName="CostObjectId" Header="Đối tượng chi phí" Width="200">
                     <dxg:GridColumn.CellTemplate>
                         <DataTemplate>
                             <dxg:LookUpEdit Name="PART_Editor"
                                             ItemsSource="{Binding Path=CostObjects, ElementName=costWindow}"
-                                            DisplayMember="Id" ValueMember="Id"
+                                            DisplayMember="ObjectName" ValueMember="Id"
                                             AutoPopulateColumns="False" PopupWidth="350"
                                             AutoComplete="True" ImmediatePopup="True" IsTextEditable="True">
                                 <dxmvvm:Interaction.Behaviors>
@@ -68,13 +72,13 @@
                     </dxg:GridColumn.CellTemplate>
                 </dxg:GridColumn>
                 
-                <dxg:GridColumn FieldName="CostObjectName" Header="Tên đối tượng" UnboundType="String" Width="150" ReadOnly="True" AllowEditing="False" />
-                <dxg:GridColumn FieldName="CostElementId" Header="Yếu tố chi phí" Width="140">
+
+                <dxg:GridColumn FieldName="CostElementId" Header="Yếu tố chi phí" Width="200">
                     <dxg:GridColumn.CellTemplate>
                         <DataTemplate>
                             <dxg:LookUpEdit Name="PART_Editor"
                                             ItemsSource="{Binding Path=CostElements, ElementName=costWindow}"
-                                            DisplayMember="Id" ValueMember="Id"
+                                            DisplayMember="ElementName" ValueMember="Id"
                                             AutoPopulateColumns="False" PopupWidth="350"
                                             AutoComplete="True" ImmediatePopup="True" IsTextEditable="True">
                                 <dxmvvm:Interaction.Behaviors>
@@ -98,7 +102,9 @@
                     </dxg:GridColumn.CellTemplate>
                 </dxg:GridColumn>
 
-                <dxg:GridColumn FieldName="CostElementName" Header="Tên yếu tố" UnboundType="String" Width="150" ReadOnly="True" AllowEditing="False" />
+
+                <dxg:GridColumn FieldName="Serialno" Header="Nội dung / Ghi chú" Width="180"/>
+
                 <dxg:GridColumn FieldName="Amount" Header="Số tiền" Width="150">
                     <dxg:GridColumn.EditSettings>
                         <dxe:TextEditSettings MaskType="Numeric" Mask="N0" MaskUseAsDisplayFormat="True"/>

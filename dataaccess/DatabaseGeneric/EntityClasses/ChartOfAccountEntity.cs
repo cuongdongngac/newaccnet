@@ -26,7 +26,6 @@ namespace DataAccess.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
-		private EntityCollection<AssetExportVoucherEntity> _assetExportVouchers;
 		private EntityCollection<DebtBalanceEntity> _debtBalances;
 		private EntityCollection<JournalEntryEntity> _journalEntries;
 		private EntityCollection<TrialBalanceEntity> _trialBalances;
@@ -40,8 +39,6 @@ namespace DataAccess.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
-			/// <summary>Member name AssetExportVouchers</summary>
-			public static readonly string AssetExportVouchers = "AssetExportVouchers";
 			/// <summary>Member name DebtBalances</summary>
 			public static readonly string DebtBalances = "DebtBalances";
 			/// <summary>Member name JournalEntries</summary>
@@ -58,7 +55,6 @@ namespace DataAccess.EntityClasses
 			public ChartOfAccountEntityStaticMetaData()
 			{
 				SetEntityCoreInfo("ChartOfAccountEntity", InheritanceHierarchyType.None, false, (int)DataAccess.EntityType.ChartOfAccountEntity, typeof(ChartOfAccountEntity), typeof(ChartOfAccountEntityFactory), false);
-				AddNavigatorMetaData<ChartOfAccountEntity, EntityCollection<AssetExportVoucherEntity>>("AssetExportVouchers", a => a._assetExportVouchers, (a, b) => a._assetExportVouchers = b, a => a.AssetExportVouchers, () => new ChartOfAccountRelations().AssetExportVoucherEntityUsingAccountId, typeof(AssetExportVoucherEntity), (int)DataAccess.EntityType.AssetExportVoucherEntity);
 				AddNavigatorMetaData<ChartOfAccountEntity, EntityCollection<DebtBalanceEntity>>("DebtBalances", a => a._debtBalances, (a, b) => a._debtBalances = b, a => a.DebtBalances, () => new ChartOfAccountRelations().DebtBalanceEntityUsingAccountId, typeof(DebtBalanceEntity), (int)DataAccess.EntityType.DebtBalanceEntity);
 				AddNavigatorMetaData<ChartOfAccountEntity, EntityCollection<JournalEntryEntity>>("JournalEntries", a => a._journalEntries, (a, b) => a._journalEntries = b, a => a.JournalEntries, () => new ChartOfAccountRelations().JournalEntryEntityUsingAccountId, typeof(JournalEntryEntity), (int)DataAccess.EntityType.JournalEntryEntity);
 				AddNavigatorMetaData<ChartOfAccountEntity, EntityCollection<TrialBalanceEntity>>("TrialBalances", a => a._trialBalances, (a, b) => a._trialBalances = b, a => a.TrialBalances, () => new ChartOfAccountRelations().TrialBalanceEntityUsingAccountId, typeof(TrialBalanceEntity), (int)DataAccess.EntityType.TrialBalanceEntity);
@@ -115,10 +111,6 @@ namespace DataAccess.EntityClasses
 			// __LLBLGENPRO_USER_CODE_REGION_END
 		}
 
-		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'AssetExportVoucher' to this entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoAssetExportVouchers() { return CreateRelationInfoForNavigator("AssetExportVouchers"); }
-
 		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'DebtBalance' to this entity.</summary>
 		/// <returns></returns>
 		public virtual IRelationPredicateBucket GetRelationInfoDebtBalances() { return CreateRelationInfoForNavigator("DebtBalances"); }
@@ -164,10 +156,6 @@ namespace DataAccess.EntityClasses
 
 		/// <summary>The relations object holding all relations of this entity with other entity classes.</summary>
 		public static ChartOfAccountRelations Relations { get { return _relationsFactory; } }
-
-		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'AssetExportVoucher' for this entity.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathAssetExportVouchers { get { return _staticMetaData.GetPrefetchPathElement("AssetExportVouchers", CommonEntityBase.CreateEntityCollection<AssetExportVoucherEntity>()); } }
 
 		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'DebtBalance' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
@@ -249,10 +237,6 @@ namespace DataAccess.EntityClasses
 			set { SetValue((int)ChartOfAccountFieldIndex.Taxflag, value); }
 		}
 
-		/// <summary>Gets the EntityCollection with the related entities of type 'AssetExportVoucherEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
-		[TypeContainedAttribute(typeof(AssetExportVoucherEntity))]
-		public virtual EntityCollection<AssetExportVoucherEntity> AssetExportVouchers { get { return GetOrCreateEntityCollection<AssetExportVoucherEntity, AssetExportVoucherEntityFactory>("ChartOfAccount", true, false, ref _assetExportVouchers); } }
-
 		/// <summary>Gets the EntityCollection with the related entities of type 'DebtBalanceEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(DebtBalanceEntity))]
 		public virtual EntityCollection<DebtBalanceEntity> DebtBalances { get { return GetOrCreateEntityCollection<DebtBalanceEntity, DebtBalanceEntityFactory>("ChartOfAccount", true, false, ref _debtBalances); } }
@@ -305,12 +289,6 @@ namespace DataAccess.RelationClasses
 	/// <summary>Implements the relations factory for the entity: ChartOfAccount. </summary>
 	public partial class ChartOfAccountRelations: RelationFactory
 	{
-		/// <summary>Returns a new IEntityRelation object, between ChartOfAccountEntity and AssetExportVoucherEntity over the 1:n relation they have, using the relation between the fields: ChartOfAccount.AccountId - AssetExportVoucher.AccountId</summary>
-		public virtual IEntityRelation AssetExportVoucherEntityUsingAccountId
-		{
-			get { return ModelInfoProviderSingleton.GetInstance().CreateRelation(RelationType.OneToMany, "AssetExportVouchers", true, new[] { ChartOfAccountFields.AccountId, AssetExportVoucherFields.AccountId }); }
-		}
-
 		/// <summary>Returns a new IEntityRelation object, between ChartOfAccountEntity and DebtBalanceEntity over the 1:n relation they have, using the relation between the fields: ChartOfAccount.AccountId - DebtBalance.AccountId</summary>
 		public virtual IEntityRelation DebtBalanceEntityUsingAccountId
 		{
@@ -340,7 +318,6 @@ namespace DataAccess.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticChartOfAccountRelations
 	{
-		internal static readonly IEntityRelation AssetExportVoucherEntityUsingAccountIdStatic = new ChartOfAccountRelations().AssetExportVoucherEntityUsingAccountId;
 		internal static readonly IEntityRelation DebtBalanceEntityUsingAccountIdStatic = new ChartOfAccountRelations().DebtBalanceEntityUsingAccountId;
 		internal static readonly IEntityRelation JournalEntryEntityUsingAccountIdStatic = new ChartOfAccountRelations().JournalEntryEntityUsingAccountId;
 		internal static readonly IEntityRelation TrialBalanceEntityUsingAccountIdStatic = new ChartOfAccountRelations().TrialBalanceEntityUsingAccountId;

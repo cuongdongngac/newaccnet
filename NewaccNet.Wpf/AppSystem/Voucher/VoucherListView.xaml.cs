@@ -41,9 +41,8 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
         private void InitDefaults()
         {
             var types = AccountTypeMapping.GetAccountTypes();
-            types.Insert(0, new AccountTypeMapping { Code = "", Name = "Tất cả" });
             cboTransactionType.ItemsSource = types;
-            cboTransactionType.EditValue = "";
+            cboTransactionType.EditValue = "I"; // Mặc định là Tiền mặt, không theo dõi
 
             DateTime today = DateTime.Today;
             // Mặc định lấy từ đầu năm đến hôm nay để không bỏ sót chứng từ
@@ -53,6 +52,11 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
             
             // Load lại state đã lưu (nếu có)
             UserPreferencesHelper.LoadState(this);
+
+            if (cboTransactionType.EditValue == null || string.IsNullOrEmpty(cboTransactionType.EditValue.ToString()))
+            {
+                cboTransactionType.EditValue = "I";
+            }
 
             // Đảm bảo dtTo không bị bé hơn dtFrom
             if (dtTo.DateTime < dtFrom.DateTime)
@@ -82,6 +86,11 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
                 ToDate = dtTo.DateTime.Date.AddDays(1).AddSeconds(-1);
                 StatusIndex = cboStatus.SelectedIndex;
                 string transactionTypeFilter = cboTransactionType.EditValue?.ToString();
+                if (string.IsNullOrEmpty(transactionTypeFilter))
+                {
+                    transactionTypeFilter = "I";
+                    cboTransactionType.EditValue = "I";
+                }
                 
                 // Lưu state
                 UserPreferencesHelper.SaveState(this);
@@ -90,8 +99,32 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
                 {
                     var qf = new QueryFactory();
 
+                    // Lấy danh mục tài khoản để map CategoryId
+                    var coaList = adapter.FetchQuery(qf.ChartOfAccount).Cast<ChartOfAccountEntity>().ToList();
+                    var coaCatMap = coaList.Where(c => !string.IsNullOrEmpty(c.CategoryId))
+                                           .ToDictionary(c => c.AccountId?.Trim() ?? "", c => c.CategoryId);
+
+                    var allTypes = AccountTypeMapping.GetAccountTypes();
+                    var matchedType = allTypes.FirstOrDefault(t => t.Code == transactionTypeFilter);
+                    string transTypeName = matchedType?.Name ?? "Khác";
+
+                    // Lấy danh sách các tài khoản thuộc loại giao dịch đang chọn
+                    var targetAccounts = coaList
+                        .Where(c => GetCategoryForAccount(c.AccountId, coaCatMap) == transactionTypeFilter)
+                        .Select(c => c.AccountId?.Trim())
+                        .Where(a => !string.IsNullOrEmpty(a))
+                        .Distinct()
+                        .ToList();
+
+                    if (targetAccounts.Count == 0)
+                    {
+                        gridControl.ItemsSource = null;
+                        return;
+                    }
+
                     var predicate = JournalVoucherFields.VoucherDate.GreaterEqual(FromDate)
-                        .And(JournalVoucherFields.VoucherDate.LesserEqual(ToDate));
+                        .And(JournalVoucherFields.VoucherDate.LesserEqual(ToDate))
+                        .And(ChartOfAccountFields.AccountId.In(targetAccounts));
 
                     if (StatusIndex == 1) // Chưa ghi sổ
                     {
@@ -102,21 +135,14 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
                         predicate = predicate.And(JournalVoucherFields.Bookflag.Equal(true));
                     }
 
-                    // Dùng bảng FLAT (DiaryTypedList) đồng bộ với hệ thống báo cáo
+                    // Dùng bảng FLAT (DiaryTypedList) lọc trực tiếp theo danh sách tài khoản từ Database
                     var q = qf.GetDiaryTypedList()
                         .Where(predicate)
                         .OrderBy(JournalVoucherFields.VoucherDate.Descending(), JournalVoucherFields.Id.Descending());
 
                     var flatRows = adapter.FetchQuery(q);
 
-                    // Lấy danh mục tài khoản để map CategoryId
-                    var coaList = adapter.FetchQuery(qf.ChartOfAccount).Cast<ChartOfAccountEntity>().ToList();
-                    var coaCatMap = coaList.Where(c => !string.IsNullOrEmpty(c.CategoryId))
-                                           .ToDictionary(c => c.AccountId?.Trim() ?? "", c => c.CategoryId);
-
-                    var allTypes = AccountTypeMapping.GetAccountTypes();
-
-                    // Nhóm theo JournalVoucherId để lấy UNIQUE chứng từ (vì bảng flat bị phân mảnh khi định khoản kép)
+                    // Nhóm theo JournalVoucherId để lấy UNIQUE chứng từ
                     var grouped = flatRows
                         .Where(r => r.JournalVoucherId.HasValue && r.JournalVoucherId.Value > 0)
                         .GroupBy(r => r.JournalVoucherId.Value);
@@ -126,31 +152,6 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
                     foreach (var g in grouped)
                     {
                         var first = g.First();
-
-                        // Xác định CategoryId của chứng từ từ tất cả các dòng hạch toán
-                        var catCodes = g.Select(r => GetCategoryForAccount(r.AccountId, coaCatMap))
-                                        .Where(c => !string.IsNullOrEmpty(c))
-                                        .Distinct()
-                                        .ToList();
-
-                        // Ưu tiên xác định loại chứng từ: Vật tư (B) > Công nợ (A) > Chi phí (E) > Tài sản (D) > Tiền mặt (I) > Thuế (V)
-                        string transTypeCode = "";
-                        if (catCodes.Contains("B")) transTypeCode = "B";
-                        else if (catCodes.Contains("A")) transTypeCode = "A";
-                        else if (catCodes.Contains("E")) transTypeCode = "E";
-                        else if (catCodes.Contains("D")) transTypeCode = "D";
-                        else if (catCodes.Contains("I")) transTypeCode = "I";
-                        else if (catCodes.Contains("V")) transTypeCode = "V";
-                        else transTypeCode = catCodes.FirstOrDefault() ?? "";
-
-                        // Nếu có lọc loại hình giao dịch mà không khớp thì bỏ qua
-                        if (!string.IsNullOrEmpty(transactionTypeFilter) && transTypeCode != transactionTypeFilter)
-                        {
-                            continue;
-                        }
-
-                        var matchedType = allTypes.FirstOrDefault(t => t.Code == transTypeCode);
-                        string transTypeName = matchedType?.Name ?? "Khác";
 
                         listDto.Add(new VoucherListDto
                         {

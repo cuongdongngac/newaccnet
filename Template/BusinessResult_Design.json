@@ -1,0 +1,753 @@
+﻿{
+  "ReportTitle": "Báo Cáo Kết Quả Kinh Doanh (Mẫu B02-DN)",
+  "Version": "1.0",
+  "ExportedAt": "2026-11-05T20:20:55.948934+07:00",
+  "Items": [
+    {
+      "Code": "01",
+      "ItemName": "1. Doanh thu bán hàng và cung cấp DV",
+      "Illustration": "VI.25",
+      "IsDecrease": false,
+      "IsBold": true,
+      "IsItalic": false,
+      "Accounts": [
+        {
+          "AccountId": "511",
+          "CounterAccountId": "",
+          "IsAdd": false,
+          "Method": -1
+        },
+        {
+          "AccountId": "512",
+          "CounterAccountId": "",
+          "IsAdd": false,
+          "Method": -1
+        }
+      ]
+    },
+    {
+      "Code": "02",
+      "ItemName": "2. Các khoản giảm trừ doanh thu",
+      "Illustration": "",
+      "IsDecrease": false,
+      "IsBold": true,
+      "IsItalic": false,
+      "Accounts": [
+        {
+          "AccountId": "511",
+          "CounterAccountId": "521",
+          "IsAdd": false,
+          "Method": 1
+        },
+        {
+          "AccountId": "511",
+          "CounterAccountId": "531",
+          "IsAdd": false,
+          "Method": 1
+        },
+        {
+          "AccountId": "511",
+          "CounterAccountId": "532",
+          "IsAdd": false,
+          "Method": 1
+        },
+        {
+          "AccountId": "511",
+          "CounterAccountId": "333",
+          "IsAdd": false,
+          "Method": 1
+        },
+        {
+          "AccountId": "512",
+          "CounterAccountId": "521",
+          "IsAdd": false,
+          "Method": 1
+        },
+        {
+          "AccountId": "512",
+          "CounterAccountId": "531",
+          "IsAdd": false,
+          "Method": 1
+        },
+        {
+          "AccountId": "512",
+          "CounterAccountId": "532",
+          "IsAdd": false,
+          "Method": 1
+        },
+        {
+          "AccountId": "512",
+          "CounterAccountId": "333",
+          "IsAdd": false,
+          "Method": 1
+        }
+      ]
+    },
+    {
+      "Code": "10",
+      "ItemName": "3. Doanh thu thuần về bán hàng và CCDV",
+      "Illustration": "",
+      "IsDecrease": false,
+      "IsBold": true,
+      "IsItalic": false,
+      "Accounts": [
+        {
+          "AccountId": "511",
+          "CounterAccountId": "",
+          "IsAdd": false,
+          "Method": -1
+        },
+        {
+          "AccountId": "512",
+          "CounterAccountId": "",
+          "IsAdd": false,
+          "Method": -1
+        },
+        {
+          "AccountId": "511",
+          "CounterAccountId": "521",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "511",
+          "CounterAccountId": "531",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "511",
+          "CounterAccountId": "532",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "511",
+          "CounterAccountId": "333",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "512",
+          "CounterAccountId": "521",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "512",
+          "CounterAccountId": "531",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "512",
+          "CounterAccountId": "532",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "512",
+          "CounterAccountId": "333",
+          "IsAdd": true,
+          "Method": 1
+        }
+      ]
+    },
+    {
+      "Code": "20",
+      "ItemName": "5. Lợi nhuận gộp về bán hàng và CCDV",
+      "Illustration": "",
+      "IsDecrease": false,
+      "IsBold": true,
+      "IsItalic": false,
+      "Accounts": [
+        {
+          "AccountId": "511",
+          "CounterAccountId": "",
+          "IsAdd": false,
+          "Method": -1
+        },
+        {
+          "AccountId": "512",
+          "CounterAccountId": "",
+          "IsAdd": false,
+          "Method": -1
+        },
+        {
+          "AccountId": "511",
+          "CounterAccountId": "521",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "511",
+          "CounterAccountId": "531",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "511",
+          "CounterAccountId": "532",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "511",
+          "CounterAccountId": "333",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "512",
+          "CounterAccountId": "521",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "512",
+          "CounterAccountId": "531",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "512",
+          "CounterAccountId": "532",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "512",
+          "CounterAccountId": "333",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "632",
+          "CounterAccountId": "911",
+          "IsAdd": true,
+          "Method": -1
+        }
+      ]
+    },
+    {
+      "Code": "24",
+      "ItemName": "8. Chi phí bán hàng",
+      "Illustration": "",
+      "IsDecrease": false,
+      "IsBold": true,
+      "IsItalic": false,
+      "Accounts": [
+        {
+          "AccountId": "641",
+          "CounterAccountId": "911",
+          "IsAdd": false,
+          "Method": -1
+        }
+      ]
+    },
+    {
+      "Code": "25",
+      "ItemName": "9. Chi phí quản lý doanh nghiệp",
+      "Illustration": "",
+      "IsDecrease": false,
+      "IsBold": true,
+      "IsItalic": false,
+      "Accounts": [
+        {
+          "AccountId": "642",
+          "CounterAccountId": "911",
+          "IsAdd": false,
+          "Method": -1
+        }
+      ]
+    },
+    {
+      "Code": "30",
+      "ItemName": "10. Lợi nhuận thuần từ HĐ kinh doanh",
+      "Illustration": "",
+      "IsDecrease": false,
+      "IsBold": true,
+      "IsItalic": false,
+      "Accounts": [
+        {
+          "AccountId": "511",
+          "CounterAccountId": "",
+          "IsAdd": false,
+          "Method": -1
+        },
+        {
+          "AccountId": "512",
+          "CounterAccountId": "",
+          "IsAdd": false,
+          "Method": -1
+        },
+        {
+          "AccountId": "511",
+          "CounterAccountId": "521",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "511",
+          "CounterAccountId": "531",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "511",
+          "CounterAccountId": "532",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "511",
+          "CounterAccountId": "333",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "512",
+          "CounterAccountId": "521",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "512",
+          "CounterAccountId": "531",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "512",
+          "CounterAccountId": "532",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "512",
+          "CounterAccountId": "333",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "632",
+          "CounterAccountId": "911",
+          "IsAdd": true,
+          "Method": -1
+        },
+        {
+          "AccountId": "515",
+          "CounterAccountId": "911",
+          "IsAdd": false,
+          "Method": 1
+        },
+        {
+          "AccountId": "635",
+          "CounterAccountId": "911",
+          "IsAdd": true,
+          "Method": -1
+        },
+        {
+          "AccountId": "641",
+          "CounterAccountId": "911",
+          "IsAdd": true,
+          "Method": -1
+        },
+        {
+          "AccountId": "642",
+          "CounterAccountId": "911",
+          "IsAdd": true,
+          "Method": -1
+        }
+      ]
+    },
+    {
+      "Code": "21",
+      "ItemName": "6. Doanh thu hoạt động tài chính",
+      "Illustration": "VI.26",
+      "IsDecrease": false,
+      "IsBold": true,
+      "IsItalic": false,
+      "Accounts": [
+        {
+          "AccountId": "515",
+          "CounterAccountId": "911",
+          "IsAdd": false,
+          "Method": 1
+        }
+      ]
+    },
+    {
+      "Code": "22",
+      "ItemName": "7. Chi phí tài chính",
+      "Illustration": "VI.28",
+      "IsDecrease": false,
+      "IsBold": true,
+      "IsItalic": false,
+      "Accounts": [
+        {
+          "AccountId": "635",
+          "CounterAccountId": "911",
+          "IsAdd": false,
+          "Method": -1
+        }
+      ]
+    },
+    {
+      "Code": "31",
+      "ItemName": "11. Thu nhập khác",
+      "Illustration": "",
+      "IsDecrease": false,
+      "IsBold": true,
+      "IsItalic": false,
+      "Accounts": [
+        {
+          "AccountId": "711",
+          "CounterAccountId": "911",
+          "IsAdd": false,
+          "Method": 1
+        }
+      ]
+    },
+    {
+      "Code": "32",
+      "ItemName": "12. Chi phí khác",
+      "Illustration": "",
+      "IsDecrease": false,
+      "IsBold": true,
+      "IsItalic": false,
+      "Accounts": [
+        {
+          "AccountId": "811",
+          "CounterAccountId": "911",
+          "IsAdd": false,
+          "Method": -1
+        }
+      ]
+    },
+    {
+      "Code": "40",
+      "ItemName": "13. Lợi nhuận khác",
+      "Illustration": "",
+      "IsDecrease": false,
+      "IsBold": true,
+      "IsItalic": false,
+      "Accounts": [
+        {
+          "AccountId": "711",
+          "CounterAccountId": "911",
+          "IsAdd": false,
+          "Method": 1
+        },
+        {
+          "AccountId": "811",
+          "CounterAccountId": "911",
+          "IsAdd": true,
+          "Method": -1
+        }
+      ]
+    },
+    {
+      "Code": "50",
+      "ItemName": "14. Tổng lợi nhuận kế toán trước thuế",
+      "Illustration": "",
+      "IsDecrease": false,
+      "IsBold": true,
+      "IsItalic": false,
+      "Accounts": [
+        {
+          "AccountId": "511",
+          "CounterAccountId": "",
+          "IsAdd": false,
+          "Method": -1
+        },
+        {
+          "AccountId": "512",
+          "CounterAccountId": "",
+          "IsAdd": false,
+          "Method": -1
+        },
+        {
+          "AccountId": "511",
+          "CounterAccountId": "521",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "511",
+          "CounterAccountId": "531",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "511",
+          "CounterAccountId": "532",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "511",
+          "CounterAccountId": "333",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "512",
+          "CounterAccountId": "521",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "512",
+          "CounterAccountId": "531",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "512",
+          "CounterAccountId": "532",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "512",
+          "CounterAccountId": "333",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "632",
+          "CounterAccountId": "911",
+          "IsAdd": true,
+          "Method": -1
+        },
+        {
+          "AccountId": "515",
+          "CounterAccountId": "911",
+          "IsAdd": false,
+          "Method": 1
+        },
+        {
+          "AccountId": "635",
+          "CounterAccountId": "911",
+          "IsAdd": true,
+          "Method": -1
+        },
+        {
+          "AccountId": "641",
+          "CounterAccountId": "911",
+          "IsAdd": true,
+          "Method": -1
+        },
+        {
+          "AccountId": "642",
+          "CounterAccountId": "911",
+          "IsAdd": true,
+          "Method": -1
+        },
+        {
+          "AccountId": "711",
+          "CounterAccountId": "911",
+          "IsAdd": false,
+          "Method": 1
+        },
+        {
+          "AccountId": "811",
+          "CounterAccountId": "911",
+          "IsAdd": true,
+          "Method": -1
+        }
+      ]
+    },
+    {
+      "Code": "51",
+      "ItemName": "15. Chi phí thuế TNDN hiện hành",
+      "Illustration": "VI.30",
+      "IsDecrease": false,
+      "IsBold": true,
+      "IsItalic": false,
+      "Accounts": [
+        {
+          "AccountId": "8211",
+          "CounterAccountId": "911",
+          "IsAdd": false,
+          "Method": -1
+        }
+      ]
+    },
+    {
+      "Code": "52",
+      "ItemName": "16. Chi phí thuế TNDN hoàn lại",
+      "Illustration": "VI.30",
+      "IsDecrease": false,
+      "IsBold": true,
+      "IsItalic": false,
+      "Accounts": [
+        {
+          "AccountId": "8212",
+          "CounterAccountId": "911",
+          "IsAdd": false,
+          "Method": -1
+        }
+      ]
+    },
+    {
+      "Code": "11",
+      "ItemName": "4. Giá vốn hàng bán",
+      "Illustration": "VI.27",
+      "IsDecrease": false,
+      "IsBold": true,
+      "IsItalic": false,
+      "Accounts": [
+        {
+          "AccountId": "632",
+          "CounterAccountId": "911",
+          "IsAdd": false,
+          "Method": -1
+        }
+      ]
+    },
+    {
+      "Code": "23",
+      "ItemName": " - Trong đó: Chi phí lãi vay",
+      "Illustration": "",
+      "IsDecrease": false,
+      "IsBold": false,
+      "IsItalic": true,
+      "Accounts": []
+    },
+    {
+      "Code": "60",
+      "ItemName": "17. Lợi nhuận sau thuế TNDN",
+      "Illustration": "",
+      "IsDecrease": false,
+      "IsBold": true,
+      "IsItalic": false,
+      "Accounts": [
+        {
+          "AccountId": "511",
+          "CounterAccountId": "",
+          "IsAdd": false,
+          "Method": -1
+        },
+        {
+          "AccountId": "512",
+          "CounterAccountId": "",
+          "IsAdd": false,
+          "Method": -1
+        },
+        {
+          "AccountId": "511",
+          "CounterAccountId": "521",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "511",
+          "CounterAccountId": "531",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "511",
+          "CounterAccountId": "532",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "511",
+          "CounterAccountId": "333",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "512",
+          "CounterAccountId": "521",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "512",
+          "CounterAccountId": "531",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "512",
+          "CounterAccountId": "532",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "512",
+          "CounterAccountId": "333",
+          "IsAdd": true,
+          "Method": 1
+        },
+        {
+          "AccountId": "632",
+          "CounterAccountId": "911",
+          "IsAdd": true,
+          "Method": -1
+        },
+        {
+          "AccountId": "515",
+          "CounterAccountId": "911",
+          "IsAdd": false,
+          "Method": 1
+        },
+        {
+          "AccountId": "635",
+          "CounterAccountId": "911",
+          "IsAdd": true,
+          "Method": -1
+        },
+        {
+          "AccountId": "641",
+          "CounterAccountId": "911",
+          "IsAdd": true,
+          "Method": -1
+        },
+        {
+          "AccountId": "642",
+          "CounterAccountId": "911",
+          "IsAdd": true,
+          "Method": -1
+        },
+        {
+          "AccountId": "711",
+          "CounterAccountId": "911",
+          "IsAdd": false,
+          "Method": 1
+        },
+        {
+          "AccountId": "811",
+          "CounterAccountId": "911",
+          "IsAdd": true,
+          "Method": -1
+        },
+        {
+          "AccountId": "8211",
+          "CounterAccountId": "911",
+          "IsAdd": true,
+          "Method": -1
+        },
+        {
+          "AccountId": "8212",
+          "CounterAccountId": "911",
+          "IsAdd": true,
+          "Method": -1
+        }
+      ]
+    },
+    {
+      "Code": "70",
+      "ItemName": "18. Lãi cơ bản trên cổ phiếu (*)",
+      "Illustration": "",
+      "IsDecrease": false,
+      "IsBold": true,
+      "IsItalic": false,
+      "Accounts": []
+    }
+  ]
+}

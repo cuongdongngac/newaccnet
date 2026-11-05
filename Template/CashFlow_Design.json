@@ -1,0 +1,840 @@
+﻿{
+  "ReportTitle": "Báo Cáo Lưu Chuyển Tiền Tệ (Mẫu B03-DN)",
+  "Version": "1.0",
+  "ExportedAt": "2026-11-05T20:21:09.1822033+07:00",
+  "Categories": [
+    {
+      "CashFlowName": "I. Lưu chuyển tiền từ hđ SXKD",
+      "CashFlowNameRepeate": "Lưu chuyển tiền thuần từ hoạt động SXKD (20)",
+      "Items": [
+        {
+          "Code": "01",
+          "ItemName": "1 - Tiền thu từ bán hàng, cung cấp DV và DT khác",
+          "Illustration": "",
+          "Dbcr": true,
+          "IsBold": false,
+          "IsItalic": false,
+          "Accounts": [
+            {
+              "AccountId": "111",
+              "CounterAccountId": "511",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "511",
+              "Dbcr": false
+            }
+          ]
+        },
+        {
+          "Code": "04",
+          "ItemName": "4 - Tiền chi trả lãi vay",
+          "Illustration": "",
+          "Dbcr": false,
+          "IsBold": false,
+          "IsItalic": false,
+          "Accounts": [
+            {
+              "AccountId": "111",
+              "CounterAccountId": "635",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "635",
+              "Dbcr": false
+            }
+          ]
+        },
+        {
+          "Code": "06",
+          "ItemName": "6 - Tiền thu từ khác từ hoạt động kinh doanh",
+          "Illustration": "",
+          "Dbcr": true,
+          "IsBold": false,
+          "IsItalic": false,
+          "Accounts": [
+            {
+              "AccountId": "111",
+              "CounterAccountId": "141",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "138",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "138",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "141",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "338",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "338",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "627",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "627",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "642",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "642",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "142",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "142",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "144",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "144",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "334",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "334",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "451",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "451",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "711",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "711",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "131",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "131",
+              "Dbcr": false
+            }
+          ]
+        },
+        {
+          "Code": "02",
+          "ItemName": "2 - Tiền chi trả cho người cung cấp HH và DV",
+          "Illustration": "",
+          "Dbcr": false,
+          "IsBold": false,
+          "IsItalic": false,
+          "Accounts": [
+            {
+              "AccountId": "111",
+              "CounterAccountId": "331",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "331",
+              "Dbcr": false
+            }
+          ]
+        },
+        {
+          "Code": "03",
+          "ItemName": "3 - Tiền chi trả cho người lao động",
+          "Illustration": "",
+          "Dbcr": false,
+          "IsBold": false,
+          "IsItalic": false,
+          "Accounts": [
+            {
+              "AccountId": "111",
+              "CounterAccountId": "334",
+              "Dbcr": false
+            }
+          ]
+        },
+        {
+          "Code": "05",
+          "ItemName": "5 - Tiền chi nộp thuế Thu nhập doanh nghiệp",
+          "Illustration": "",
+          "Dbcr": false,
+          "IsBold": false,
+          "IsItalic": false,
+          "Accounts": [
+            {
+              "AccountId": "111",
+              "CounterAccountId": "3334",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "3334",
+              "Dbcr": false
+            }
+          ]
+        },
+        {
+          "Code": "07",
+          "ItemName": "7 - Tiền chi khác cho hoạt động kinh doanh",
+          "Illustration": "",
+          "Dbcr": false,
+          "IsBold": false,
+          "IsItalic": false,
+          "Accounts": [
+            {
+              "AccountId": "111",
+              "CounterAccountId": "627",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "627",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "642",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "642",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "142",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "142",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "144",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "144",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "131",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "131",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "152",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "152",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "154",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "154",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "155",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "155",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "153",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "153",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "138",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "138",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "141",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "141",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "414",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "414",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "431",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "431",
+              "Dbcr": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "CashFlowName": "II. Lưu chuyển tiền từ hđ đầu tư",
+      "CashFlowNameRepeate": "Lưu chuyển tiền thuần từ hoạt động đầu tư (30)",
+      "Items": [
+        {
+          "Code": "26",
+          "ItemName": "6. Tiền thu hồi các khoản ĐT vào các đơn vị khác",
+          "Illustration": "",
+          "Dbcr": true,
+          "IsBold": false,
+          "IsItalic": false,
+          "Accounts": [
+            {
+              "AccountId": "111",
+              "CounterAccountId": "221",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "221",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "228",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "228",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "222",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "222",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "121",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "121",
+              "Dbcr": false
+            }
+          ]
+        },
+        {
+          "Code": "27",
+          "ItemName": "7. Tiền thu lãi cho vay, cổ tức và LN được chia",
+          "Illustration": "",
+          "Dbcr": true,
+          "IsBold": false,
+          "IsItalic": false,
+          "Accounts": [
+            {
+              "AccountId": "111",
+              "CounterAccountId": "515",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "515",
+              "Dbcr": false
+            }
+          ]
+        },
+        {
+          "Code": "22",
+          "ItemName": "2. Tiền thu từ thanh lý, nhượng bán TSCD & TS khác",
+          "Illustration": "",
+          "Dbcr": true,
+          "IsBold": false,
+          "IsItalic": false,
+          "Accounts": [
+            {
+              "AccountId": "111",
+              "CounterAccountId": "711",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "711",
+              "Dbcr": false
+            }
+          ]
+        },
+        {
+          "Code": "25",
+          "ItemName": "5. Tiền chi đầu tư  góp vốn vào các đơn vị khác",
+          "Illustration": "",
+          "Dbcr": false,
+          "IsBold": false,
+          "IsItalic": false,
+          "Accounts": [
+            {
+              "AccountId": "111",
+              "CounterAccountId": "228",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "228",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "222",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "222",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "221",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "221",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "121",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "121",
+              "Dbcr": false
+            }
+          ]
+        },
+        {
+          "Code": "24",
+          "ItemName": "4. Tiền thu hồi cho vay, bán lại ccụ nợ đvị khác",
+          "Illustration": "",
+          "Dbcr": true,
+          "IsBold": false,
+          "IsItalic": false,
+          "Accounts": [
+            {
+              "AccountId": "111",
+              "CounterAccountId": "128",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "128",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "228",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "228",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "121",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "121",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "221",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "221",
+              "Dbcr": false
+            }
+          ]
+        },
+        {
+          "Code": "21",
+          "ItemName": "1. Tiền chi để mua sắm, XD TSCĐ và các TSDH khác",
+          "Illustration": "",
+          "Dbcr": false,
+          "IsBold": false,
+          "IsItalic": false,
+          "Accounts": [
+            {
+              "AccountId": "111",
+              "CounterAccountId": "131",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "131",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "341",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "341",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "211",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "211",
+              "Dbcr": false
+            }
+          ]
+        },
+        {
+          "Code": "23",
+          "ItemName": "3. Tiền chi cho vay, mua cụng cụ nợ của đvị khác",
+          "Illustration": "",
+          "Dbcr": false,
+          "IsBold": false,
+          "IsItalic": false,
+          "Accounts": [
+            {
+              "AccountId": "111",
+              "CounterAccountId": "228",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "228",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "128",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "128",
+              "Dbcr": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "CashFlowName": "III. Lưu chuyển tiền từ hđtài chính",
+      "CashFlowNameRepeate": "Lưu chuyển tiền thuần từ hoạt động tài chính (40)",
+      "Items": [
+        {
+          "Code": "31",
+          "ItemName": "1. Tiền thu từ phát hành CP, nhận vốn góp CSH",
+          "Illustration": "",
+          "Dbcr": true,
+          "IsBold": false,
+          "IsItalic": false,
+          "Accounts": [
+            {
+              "AccountId": "111",
+              "CounterAccountId": "411",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "411",
+              "Dbcr": false
+            }
+          ]
+        },
+        {
+          "Code": "35",
+          "ItemName": "5. Tiền chi trả nợ thuế tài chính",
+          "Illustration": "",
+          "Dbcr": false,
+          "IsBold": false,
+          "IsItalic": false,
+          "Accounts": [
+            {
+              "AccountId": "111",
+              "CounterAccountId": "315",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "315",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "342",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "342",
+              "Dbcr": false
+            }
+          ]
+        },
+        {
+          "Code": "33",
+          "ItemName": "3. Tiền vay ngắn hạn, dài hạn nhận được",
+          "Illustration": "",
+          "Dbcr": true,
+          "IsBold": false,
+          "IsItalic": false,
+          "Accounts": [
+            {
+              "AccountId": "111",
+              "CounterAccountId": "311",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "341",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "311",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "341",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "342",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "342",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "343",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "343",
+              "Dbcr": false
+            }
+          ]
+        },
+        {
+          "Code": "34",
+          "ItemName": "4. Tiền chi trả nợ gốc vay",
+          "Illustration": "",
+          "Dbcr": false,
+          "IsBold": false,
+          "IsItalic": false,
+          "Accounts": [
+            {
+              "AccountId": "111",
+              "CounterAccountId": "311",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "341",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "311",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "341",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "315",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "315",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "343",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "343",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "111",
+              "CounterAccountId": "342",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "342",
+              "Dbcr": false
+            }
+          ]
+        },
+        {
+          "Code": "32",
+          "ItemName": "2. Tiền chi trả vốn góp cho CSH, mua lại CP của DN",
+          "Illustration": "",
+          "Dbcr": false,
+          "IsBold": false,
+          "IsItalic": false,
+          "Accounts": [
+            {
+              "AccountId": "111",
+              "CounterAccountId": "411",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "411",
+              "Dbcr": false
+            }
+          ]
+        },
+        {
+          "Code": "36",
+          "ItemName": "6. Cổ tức, lợi nhuận đã trả cho chủ sở hữu",
+          "Illustration": "",
+          "Dbcr": false,
+          "IsBold": false,
+          "IsItalic": false,
+          "Accounts": [
+            {
+              "AccountId": "111",
+              "CounterAccountId": "421",
+              "Dbcr": false
+            },
+            {
+              "AccountId": "112",
+              "CounterAccountId": "421",
+              "Dbcr": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

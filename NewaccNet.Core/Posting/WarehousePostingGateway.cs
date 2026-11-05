@@ -75,19 +75,63 @@ namespace NewaccNet.Core.Posting
             adapter.FetchEntityCollection(list, null);
 
             var parentIds = list.Select(a => a.ParentId).Where(id => !string.IsNullOrEmpty(id)).Distinct().ToHashSet();
-            var query = list.Where(a => !parentIds.Contains(a.AccountId) && a.CategoryId != "B");
+            var query = list.Where(a => !parentIds.Contains(a.AccountId));
 
             if (!string.IsNullOrEmpty(prefixFilter))
             {
                 query = query.Where(a => a.AccountId.StartsWith(prefixFilter));
             }
 
-            return query.OrderBy(a => a.AccountId)
-                        .Select(a => new AccountOption
-                        {
-                            AccountId = a.AccountId,
-                            AccountName = a.AccountName ?? string.Empty
-                        }).ToList();
+            // Gắn bí danh / tên định nghĩa lại (CustomName) từ cấu hình của Plugin ERP
+            var config = DbConfigService.Current.GetVoucherPostingConfig();
+            var erpMap = config.ErpAccounts?
+                .Where(x => x.IsActive)
+                .ToDictionary(x => x.AccountId, x => x, StringComparer.OrdinalIgnoreCase)
+                ?? new Dictionary<string, PluginAccountConfigItemDto>();
+
+            var result = new List<AccountOption>();
+            foreach (var a in query.OrderBy(a => a.AccountId))
+            {
+                string custom = "";
+                if (erpMap.TryGetValue(a.AccountId, out var mapped) && !string.IsNullOrWhiteSpace(mapped.CustomName))
+                {
+                    custom = mapped.CustomName.Trim();
+                }
+
+                result.Add(new AccountOption
+                {
+                    AccountId = a.AccountId,
+                    AccountName = a.AccountName ?? string.Empty,
+                    CustomName = custom
+                });
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Nạp danh sách tài khoản theo phân nhóm đặc thù của Plugin ERP Warehouse
+        /// (Revenue, Cost, Inventory, Tax, Debt, Payment, Internal).
+        /// Độc lập hoàn toàn: nạp trực tiếp từ DTO JSON không cần query bảng gốc.
+        /// </summary>
+        public static List<AccountOption> LoadErpAccountsByCategory(string category, string? fallbackPrefix = null)
+        {
+            var config = DbConfigService.Current.GetVoucherPostingConfig();
+            var matching = config.ErpAccounts?
+                .Where(x => x.IsActive && string.Equals(x.Category, category, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            if (matching != null && matching.Count > 0)
+            {
+                return matching.Select(item => new AccountOption
+                {
+                    AccountId = item.AccountId,
+                    AccountName = !string.IsNullOrWhiteSpace(item.BaseName) ? item.BaseName : item.AccountId,
+                    CustomName = item.CustomName
+                }).ToList();
+            }
+
+            return LoadAccounts(fallbackPrefix);
         }
 
         public static string GenerateNextVoucherNo(string prefix)
@@ -234,6 +278,8 @@ namespace NewaccNet.Core.Posting
                 var prefetch = new PrefetchPath2(EntityType.JournalVoucherEntity);
                 var pEntries = prefetch.Add(JournalVoucherEntity.PrefetchPathJournalEntries);
                 pEntries.SubPath.Add(JournalEntryEntity.PrefetchPathSubEntries);
+                pEntries.SubPath.Add(JournalEntryEntity.PrefetchPathCostDetails);
+                pEntries.SubPath.Add(JournalEntryEntity.PrefetchPathDebtDetails);
                 var pIv = pEntries.SubPath.Add(JournalEntryEntity.PrefetchPathInventoryVouchers);
                 pIv.SubPath.Add(InventoryVoucherEntity.PrefetchPathInventoryVoucherLines);
 
@@ -324,7 +370,16 @@ namespace NewaccNet.Core.Posting
                 var jv = new JournalVoucherEntity(journalVoucherId);
                 var prefetch = new PrefetchPath2(EntityType.JournalVoucherEntity);
                 var pEntries = prefetch.Add(JournalVoucherEntity.PrefetchPathJournalEntries);
-                pEntries.SubPath.Add(JournalEntryEntity.PrefetchPathSubEntries);
+                var pSub = pEntries.SubPath.Add(JournalEntryEntity.PrefetchPathSubEntries);
+                pSub.SubPath.Add(JournalEntryEntity.PrefetchPathCostDetails);
+                pSub.SubPath.Add(JournalEntryEntity.PrefetchPathDebtDetails);
+                pSub.SubPath.Add(JournalEntryEntity.PrefetchPathVatEntries);
+                var pSubIv = pSub.SubPath.Add(JournalEntryEntity.PrefetchPathInventoryVouchers);
+                pSubIv.SubPath.Add(InventoryVoucherEntity.PrefetchPathInventoryVoucherLines);
+
+                pEntries.SubPath.Add(JournalEntryEntity.PrefetchPathCostDetails);
+                pEntries.SubPath.Add(JournalEntryEntity.PrefetchPathDebtDetails);
+                pEntries.SubPath.Add(JournalEntryEntity.PrefetchPathVatEntries);
                 var pIv = pEntries.SubPath.Add(JournalEntryEntity.PrefetchPathInventoryVouchers);
                 pIv.SubPath.Add(InventoryVoucherEntity.PrefetchPathInventoryVoucherLines);
 
@@ -414,6 +469,10 @@ namespace NewaccNet.Core.Posting
 
                 // Tường minh 100% nếu có EntryGraph JSON
                 bool loadedFromGraph = false;
+                var allEntries = new List<JournalEntryEntity>();
+                allEntries.AddRange(jv.JournalEntries);
+                foreach (var j in jv.JournalEntries) allEntries.AddRange(j.SubEntries);
+
                 if (iv != null && !string.IsNullOrWhiteSpace(iv.EntryGraph))
                 {
                     try
@@ -421,40 +480,68 @@ namespace NewaccNet.Core.Posting
                         var graph = JsonSerializer.Deserialize<VoucherEntryGraphDto>(iv.EntryGraph);
                         if (graph != null)
                         {
-                            var allEntries = new List<JournalEntryEntity>();
-                            allEntries.AddRange(jv.JournalEntries);
-                            foreach (var j in jv.JournalEntries) allEntries.AddRange(j.SubEntries);
-
                             if (graph.CostEntryId.HasValue)
                             {
                                 var e = allEntries.FirstOrDefault(x => x.Id == graph.CostEntryId.Value);
-                                if (e != null && !string.IsNullOrEmpty(e.AccountId)) p.CostAccountId = e.AccountId;
+                                if (e != null)
+                                {
+                                    if (!string.IsNullOrEmpty(e.AccountId)) p.CostAccountId = e.AccountId;
+                                    p.CostDebtDetails.AddRange(e.DebtDetails);
+                                    p.CostCostDetails.AddRange(e.CostDetails);
+                                }
                             }
                             if (graph.RevEntryId.HasValue)
                             {
                                 var e = allEntries.FirstOrDefault(x => x.Id == graph.RevEntryId.Value);
-                                if (e != null && !string.IsNullOrEmpty(e.AccountId)) p.RevenueAccountId = e.AccountId;
+                                if (e != null)
+                                {
+                                    if (!string.IsNullOrEmpty(e.AccountId)) p.RevenueAccountId = e.AccountId;
+                                    p.RevenueDebtDetails.AddRange(e.DebtDetails);
+                                    p.RevenueCostDetails.AddRange(e.CostDetails);
+                                }
                             }
                             if (graph.TaxEntryId.HasValue)
                             {
                                 var e = allEntries.FirstOrDefault(x => x.Id == graph.TaxEntryId.Value);
-                                if (e != null && !string.IsNullOrEmpty(e.AccountId)) p.TaxAccountId = e.AccountId;
+                                if (e != null)
+                                {
+                                    if (!string.IsNullOrEmpty(e.AccountId)) p.TaxAccountId = e.AccountId;
+                                    p.TaxDebtDetails.AddRange(e.DebtDetails);
+                                    p.TaxCostDetails.AddRange(e.CostDetails);
+                                }
                             }
                             if (graph.TotalEntryId.HasValue || graph.RevMasterEntryId.HasValue)
                             {
                                 int totId = graph.TotalEntryId ?? graph.RevMasterEntryId!.Value;
                                 var e = allEntries.FirstOrDefault(x => x.Id == totId);
-                                if (e != null && !string.IsNullOrEmpty(e.AccountId)) p.TotalAccountId = e.AccountId;
+                                if (e != null)
+                                {
+                                    if (!string.IsNullOrEmpty(e.AccountId)) p.TotalAccountId = e.AccountId;
+                                    p.TotalDebtDetails.AddRange(e.DebtDetails);
+                                    p.TotalCostDetails.AddRange(e.CostDetails);
+                                    p.OffsetDebtDetails.AddRange(e.DebtDetails);
+                                    p.OffsetCostDetails.AddRange(e.CostDetails);
+                                }
                             }
                             if (graph.OffsetEntryId.HasValue)
                             {
                                 var e = allEntries.FirstOrDefault(x => x.Id == graph.OffsetEntryId.Value);
-                                if (e != null && !string.IsNullOrEmpty(e.AccountId)) p.OffsetAccountId = e.AccountId;
+                                if (e != null)
+                                {
+                                    if (!string.IsNullOrEmpty(e.AccountId)) p.OffsetAccountId = e.AccountId;
+                                    p.OffsetDebtDetails.AddRange(e.DebtDetails);
+                                    p.OffsetCostDetails.AddRange(e.CostDetails);
+                                }
                             }
                             if (graph.MaterialEntryId.HasValue)
                             {
                                 var e = allEntries.FirstOrDefault(x => x.Id == graph.MaterialEntryId.Value);
-                                if (e != null && !string.IsNullOrEmpty(e.AccountId)) p.InventoryAccountId = e.AccountId;
+                                if (e != null)
+                                {
+                                    if (!string.IsNullOrEmpty(e.AccountId)) p.InventoryAccountId = e.AccountId;
+                                    p.InventoryDebtDetails.AddRange(e.DebtDetails);
+                                    p.InventoryCostDetails.AddRange(e.CostDetails);
+                                }
                             }
                             if (!string.IsNullOrEmpty(graph.PaymentType))
                             {
@@ -499,6 +586,42 @@ namespace NewaccNet.Core.Posting
                             }
                         }
                     }
+
+                    foreach (var je in allEntries.Distinct())
+                    {
+                        if (je.AccountId == p.TaxAccountId)
+                        {
+                            p.TaxDebtDetails.AddRange(je.DebtDetails);
+                            p.TaxCostDetails.AddRange(je.CostDetails);
+                        }
+                        if (je.AccountId == p.TotalAccountId)
+                        {
+                            p.TotalDebtDetails.AddRange(je.DebtDetails);
+                            p.TotalCostDetails.AddRange(je.CostDetails);
+                            p.OffsetDebtDetails.AddRange(je.DebtDetails);
+                            p.OffsetCostDetails.AddRange(je.CostDetails);
+                        }
+                        if (je.AccountId == p.InventoryAccountId)
+                        {
+                            p.InventoryDebtDetails.AddRange(je.DebtDetails);
+                            p.InventoryCostDetails.AddRange(je.CostDetails);
+                        }
+                        if (je.AccountId == p.RevenueAccountId)
+                        {
+                            p.RevenueDebtDetails.AddRange(je.DebtDetails);
+                            p.RevenueCostDetails.AddRange(je.CostDetails);
+                        }
+                        if (je.AccountId == p.CostAccountId)
+                        {
+                            p.CostDebtDetails.AddRange(je.DebtDetails);
+                            p.CostCostDetails.AddRange(je.CostDetails);
+                        }
+                        if (je.AccountId == p.OffsetAccountId)
+                        {
+                            p.OffsetDebtDetails.AddRange(je.DebtDetails);
+                            p.OffsetCostDetails.AddRange(je.CostDetails);
+                        }
+                    }
                 }
 
                 if (string.IsNullOrEmpty(p.PaymentType))
@@ -540,8 +663,18 @@ namespace NewaccNet.Core.Posting
             var jv = new JournalVoucherEntity(jvId);
             var prefetch = new PrefetchPath2(EntityType.JournalVoucherEntity);
             var pEntries = prefetch.Add(JournalVoucherEntity.PrefetchPathJournalEntries);
-            pEntries.SubPath.Add(JournalEntryEntity.PrefetchPathSubEntries);
+            var pSubEntries = pEntries.SubPath.Add(JournalEntryEntity.PrefetchPathSubEntries);
+            pSubEntries.SubPath.Add(JournalEntryEntity.PrefetchPathDebtDetails);
+            var pSubCost = pSubEntries.SubPath.Add(JournalEntryEntity.PrefetchPathCostDetails);
+            pSubCost.SubPath.Add(CostDetailEntity.PrefetchPathExpenseTaxLine);
+            pSubEntries.SubPath.Add(JournalEntryEntity.PrefetchPathVatEntries);
+            var pSubIv = pSubEntries.SubPath.Add(JournalEntryEntity.PrefetchPathInventoryVouchers);
+            var pSubLines = pSubIv.SubPath.Add(InventoryVoucherEntity.PrefetchPathInventoryVoucherLines);
+            pSubLines.SubPath.Add(InventoryVoucherLineEntity.PrefetchPathMaterialTaxLine);
+
             pEntries.SubPath.Add(JournalEntryEntity.PrefetchPathDebtDetails);
+            var pCost = pEntries.SubPath.Add(JournalEntryEntity.PrefetchPathCostDetails);
+            pCost.SubPath.Add(CostDetailEntity.PrefetchPathExpenseTaxLine);
             pEntries.SubPath.Add(JournalEntryEntity.PrefetchPathVatEntries);
             var pIv = pEntries.SubPath.Add(JournalEntryEntity.PrefetchPathInventoryVouchers);
             var pLines = pIv.SubPath.Add(InventoryVoucherEntity.PrefetchPathInventoryVoucherLines);
@@ -566,6 +699,11 @@ namespace NewaccNet.Core.Posting
         private static void DeleteEntryChildren(IDataAccessAdapter adapter, JournalEntryEntity je)
         {
             foreach (var d in je.DebtDetails) adapter.DeleteEntity(d);
+            foreach (var c in je.CostDetails)
+            {
+                if (c.ExpenseTaxLine != null) adapter.DeleteEntity(c.ExpenseTaxLine);
+                adapter.DeleteEntity(c);
+            }
             foreach (var v in je.VatEntries) adapter.DeleteEntity(v);
             foreach (var iv in je.InventoryVouchers)
             {
@@ -575,6 +713,49 @@ namespace NewaccNet.Core.Posting
                     adapter.DeleteEntity(l);
                 }
                 adapter.DeleteEntity(iv);
+            }
+        }
+
+        private static void AttachEntryDetails(JournalEntryEntity entry, IEnumerable<DebtDetailEntity>? debts, IEnumerable<CostDetailEntity>? costs, string defaultPartnerId, DateTime defaultDate, decimal fallbackAmount)
+        {
+            if (debts != null && debts.Any())
+            {
+                foreach (var dd in debts)
+                {
+                    entry.DebtDetails.Add(new DebtDetailEntity
+                    {
+                        PartnerId = !string.IsNullOrEmpty(dd.PartnerId) ? dd.PartnerId : defaultPartnerId,
+                        DebtTypeId = dd.DebtTypeId,
+                        DebtReasonId = dd.DebtReasonId,
+                        Amount = dd.Amount,
+                        Liabilitydate = dd.Liabilitydate ?? defaultDate
+                    });
+                }
+            }
+            else if (!string.IsNullOrEmpty(defaultPartnerId) && (entry.AccountId.StartsWith("331") || entry.AccountId.StartsWith("131") || entry.AccountId.StartsWith("141") || entry.AccountId.StartsWith("338")))
+            {
+                entry.DebtDetails.Add(new DebtDetailEntity
+                {
+                    PartnerId = defaultPartnerId,
+                    Amount = fallbackAmount,
+                    Liabilitydate = defaultDate
+                });
+            }
+
+            if (costs != null && costs.Any())
+            {
+                foreach (var cd in costs)
+                {
+                    entry.CostDetails.Add(new CostDetailEntity
+                    {
+                        CostObjectId = cd.CostObjectId,
+                        CostElementId = cd.CostElementId,
+                        Amount = cd.Amount,
+                        Serialno = cd.Serialno,
+                        Transflag = cd.Transflag,
+                        Liabilityflag = cd.Liabilityflag
+                    });
+                }
             }
         }
 
@@ -608,7 +789,7 @@ namespace NewaccNet.Core.Posting
                     VoucherDate = p.VoucherDate,
                     Contents = p.Description.Trim(),
                     Personname = p.Carrier.Trim(),
-                    Bookflag = true
+                    Bookflag = p.Bookflag // Mặc định là false (chưa ghi sổ) theo yêu cầu nghiệp vụ ERP
                 };
 
                 decimal totalCost = p.Lines.Sum(l => l.Amount);
@@ -635,14 +816,35 @@ namespace NewaccNet.Core.Posting
                     Taxno = p.TaxCode
                 };
 
+                // Nạp danh mục vật tư để ánh xạ chính xác khóa chính MaterialId (hỗ trợ cả mã có khoảng trắng trong CSDL lịch sử)
+                var matList = LoadMaterials();
+                var matMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+                foreach (var m in matList)
+                {
+                    if (!string.IsNullOrEmpty(m.MaterialId))
+                    {
+                        matMap[m.MaterialId] = m.MaterialId;
+                        matMap.TryAdd(m.MaterialId.Trim(), m.MaterialId);
+                    }
+                }
+
+                string ResolveMaterialId(string inputId)
+                {
+                    if (string.IsNullOrEmpty(inputId)) return inputId;
+                    if (matMap.TryGetValue(inputId, out var exact)) return exact;
+                    if (matMap.TryGetValue(inputId.Trim(), out var trimmed)) return trimmed;
+                    return inputId;
+                }
+
                 // Dòng chi tiết InventoryVoucherLineEntity
                 foreach (var line in p.Lines)
                 {
                     if (string.IsNullOrWhiteSpace(line.MaterialId)) continue;
 
+                    string finalMatId = ResolveMaterialId(line.MaterialId);
                     var ivLine = new InventoryVoucherLineEntity
                     {
-                        MaterialId = line.MaterialId.Trim(),
+                        MaterialId = finalMatId,
                         Quantity = line.Quantity,
                         Price = line.Price
                     };
@@ -681,9 +883,10 @@ namespace NewaccNet.Core.Posting
                     };
                     subMat.InventoryVouchers.Add(iv);
                     master.SubEntries.Add(subMat);
+                    jv.JournalEntries.Add(subMat);
 
                     JournalEntryEntity? subTax = null;
-                    if (totalTax > 0)
+                    if (totalTax > 0 || !string.IsNullOrWhiteSpace(p.VatBillNo))
                     {
                         subTax = new JournalEntryEntity
                         {
@@ -692,6 +895,7 @@ namespace NewaccNet.Core.Posting
                             Amount = totalTax
                         };
                         master.SubEntries.Add(subTax);
+                        jv.JournalEntries.Add(subTax);
 
                         if (!string.IsNullOrEmpty(p.VatBillNo))
                         {
@@ -712,14 +916,12 @@ namespace NewaccNet.Core.Posting
                         }
                     }
 
-                    if (!string.IsNullOrEmpty(p.PartnerId) && master.AccountId.StartsWith("331"))
+                    // Gắn chi tiết con (DebtDetails, CostDetails) độc lập cho từng JournalEntryEntity
+                    AttachEntryDetails(master, p.TotalDebtDetails.Count > 0 ? p.TotalDebtDetails : p.OffsetDebtDetails, p.TotalCostDetails.Count > 0 ? p.TotalCostDetails : p.OffsetCostDetails, p.PartnerId, p.VoucherDate, totalAll);
+                    AttachEntryDetails(subMat, p.InventoryDebtDetails, p.InventoryCostDetails, p.PartnerId, p.VoucherDate, totalCost);
+                    if (subTax != null)
                     {
-                        master.DebtDetails.Add(new DebtDetailEntity
-                        {
-                            PartnerId = p.PartnerId,
-                            Amount = totalAll,
-                            Liabilitydate = p.VoucherDate
-                        });
+                        AttachEntryDetails(subTax, p.TaxDebtDetails, p.TaxCostDetails, p.PartnerId, p.VoucherDate, totalTax);
                     }
                 }
                 else if (p.VoucherType == "XB") // Xuất bán
@@ -740,6 +942,7 @@ namespace NewaccNet.Core.Posting
                     };
                     costSub.InventoryVouchers.Add(iv);
                     costMaster.SubEntries.Add(costSub);
+                    jv.JournalEntries.Add(costSub);
 
                     var revMaster = new JournalEntryEntity
                     {
@@ -756,16 +959,19 @@ namespace NewaccNet.Core.Posting
                         Amount = totalSell
                     };
                     revMaster.SubEntries.Add(revSub);
+                    jv.JournalEntries.Add(revSub);
 
-                    if (totalTax > 0)
+                    JournalEntryEntity? revTaxSub = null;
+                    if (totalTax > 0 || !string.IsNullOrWhiteSpace(p.VatBillNo))
                     {
-                        var revTaxSub = new JournalEntryEntity
+                        revTaxSub = new JournalEntryEntity
                         {
                             AccountId = string.IsNullOrWhiteSpace(p.TaxAccountId) ? "33311" : p.TaxAccountId,
                             Dbcr = -1,
                             Amount = totalTax
                         };
                         revMaster.SubEntries.Add(revTaxSub);
+                        jv.JournalEntries.Add(revTaxSub);
 
                         if (!string.IsNullOrEmpty(p.VatBillNo))
                         {
@@ -786,15 +992,15 @@ namespace NewaccNet.Core.Posting
                         }
                     }
 
-                    if (!string.IsNullOrEmpty(p.PartnerId) && revMaster.AccountId.StartsWith("131"))
+                    // Gắn chi tiết con (DebtDetails, CostDetails) độc lập cho từng JournalEntryEntity
+                    AttachEntryDetails(revMaster, p.TotalDebtDetails.Count > 0 ? p.TotalDebtDetails : p.OffsetDebtDetails, p.TotalCostDetails, p.PartnerId, p.VoucherDate, totalAll);
+                    AttachEntryDetails(revSub, p.RevenueDebtDetails, p.RevenueCostDetails, p.PartnerId, p.VoucherDate, totalSell);
+                    if (revTaxSub != null)
                     {
-                        revMaster.DebtDetails.Add(new DebtDetailEntity
-                        {
-                            PartnerId = p.PartnerId,
-                            Amount = totalAll,
-                            Liabilitydate = p.VoucherDate
-                        });
+                        AttachEntryDetails(revTaxSub, p.TaxDebtDetails, p.TaxCostDetails, p.PartnerId, p.VoucherDate, totalTax);
                     }
+                    AttachEntryDetails(costMaster, p.CostDebtDetails, p.CostCostDetails.Count > 0 ? p.CostCostDetails : p.OffsetCostDetails, p.PartnerId, p.VoucherDate, totalCost);
+                    AttachEntryDetails(costSub, p.InventoryDebtDetails, p.InventoryCostDetails, p.PartnerId, p.VoucherDate, totalCost);
                 }
                 else if (p.VoucherType == "NNB") // Nhập nội bộ
                 {
@@ -804,6 +1010,7 @@ namespace NewaccNet.Core.Posting
                         Dbcr = -1,
                         Amount = totalCost
                     };
+                    AttachEntryDetails(master, p.OffsetDebtDetails, p.OffsetCostDetails, p.PartnerId, p.VoucherDate, totalCost);
                     jv.JournalEntries.Add(master);
 
                     var sub = new JournalEntryEntity
@@ -813,7 +1020,9 @@ namespace NewaccNet.Core.Posting
                         Amount = totalCost
                     };
                     sub.InventoryVouchers.Add(iv);
+                    AttachEntryDetails(sub, p.InventoryDebtDetails, p.InventoryCostDetails, p.PartnerId, p.VoucherDate, totalCost);
                     master.SubEntries.Add(sub);
+                    jv.JournalEntries.Add(sub);
                 }
                 else if (p.VoucherType == "XNB") // Xuất nội bộ / sản xuất / chi phí
                 {
@@ -823,6 +1032,7 @@ namespace NewaccNet.Core.Posting
                         Dbcr = 1,
                         Amount = totalCost
                     };
+                    AttachEntryDetails(master, p.OffsetDebtDetails, p.OffsetCostDetails, p.PartnerId, p.VoucherDate, totalCost);
                     jv.JournalEntries.Add(master);
 
                     var sub = new JournalEntryEntity
@@ -832,7 +1042,9 @@ namespace NewaccNet.Core.Posting
                         Amount = totalCost
                     };
                     sub.InventoryVouchers.Add(iv);
+                    AttachEntryDetails(sub, p.InventoryDebtDetails, p.InventoryCostDetails, p.PartnerId, p.VoucherDate, totalCost);
                     master.SubEntries.Add(sub);
+                    jv.JournalEntries.Add(sub);
                 }
                 else // CK - Điều chuyển kho nội bộ
                 {
@@ -844,6 +1056,7 @@ namespace NewaccNet.Core.Posting
                     };
                     iv.WarehouseId = p.FromWarehouseId;
                     master.InventoryVouchers.Add(iv);
+                    AttachEntryDetails(master, p.InventoryDebtDetails, p.InventoryCostDetails, p.PartnerId, p.VoucherDate, totalCost);
                     jv.JournalEntries.Add(master);
 
                     var sub = new JournalEntryEntity
@@ -863,18 +1076,34 @@ namespace NewaccNet.Core.Posting
                     foreach (var l in p.Lines)
                     {
                         if (string.IsNullOrWhiteSpace(l.MaterialId)) continue;
+                        string finalMatId = ResolveMaterialId(l.MaterialId);
                         ivTo.InventoryVoucherLines.Add(new InventoryVoucherLineEntity
                         {
-                            MaterialId = l.MaterialId.Trim(),
+                            MaterialId = finalMatId,
                             Quantity = l.Quantity,
                             Price = l.Price
                         });
                     }
                     sub.InventoryVouchers.Add(ivTo);
+                    AttachEntryDetails(sub, p.OffsetDebtDetails, p.OffsetCostDetails, p.PartnerId, p.VoucherDate, totalCost);
                     master.SubEntries.Add(sub);
+                    jv.JournalEntries.Add(sub);
                 }
 
-                // 4. Lưu toàn bộ đồ thị thực thể vào CSDL an toàn 100%
+                // 4. Đảm bảo toàn bộ dòng con (SubEntries) đều thuộc jv.JournalEntries để gán JournalVoucherId (chuẩn Bills)
+                foreach (var m in jv.JournalEntries.ToList())
+                {
+                    foreach (var s in m.SubEntries)
+                    {
+                        s.JournalVoucher = jv;
+                        if (!jv.JournalEntries.Contains(s))
+                        {
+                            jv.JournalEntries.Add(s);
+                        }
+                    }
+                }
+
+                // Lưu toàn bộ đồ thị thực thể vào CSDL an toàn 100%
                 bool success = adapter.SaveEntity(jv, true, true);
                 if (success)
                 {
@@ -882,7 +1111,7 @@ namespace NewaccNet.Core.Posting
                     {
                         if (p.VoucherType == "NM")
                         {
-                            var master = jv.JournalEntries.FirstOrDefault();
+                            var master = jv.JournalEntries.FirstOrDefault(j => j.Dbcr == -1);
                             var subMat = master?.SubEntries.FirstOrDefault(s => s.Dbcr == 1 && s.InventoryVouchers.Contains(iv));
                             var subTax = master?.SubEntries.FirstOrDefault(s => s != subMat);
 
@@ -892,10 +1121,10 @@ namespace NewaccNet.Core.Posting
                         }
                         else if (p.VoucherType == "XB")
                         {
-                            var costMaster = jv.JournalEntries.FirstOrDefault(j => j.AccountId != null && j.AccountId.StartsWith("632"));
-                            var costSub = costMaster?.SubEntries.FirstOrDefault();
-                            var revMaster = jv.JournalEntries.FirstOrDefault(j => j != costMaster);
-                            var revSub = revMaster?.SubEntries.FirstOrDefault(s => s.AccountId != null && s.AccountId.StartsWith("511"));
+                            var costMaster = jv.JournalEntries.FirstOrDefault(j => j.SubEntries.Any(s => s.InventoryVouchers.Contains(iv)));
+                            var costSub = costMaster?.SubEntries.FirstOrDefault(s => s.InventoryVouchers.Contains(iv));
+                            var revMaster = jv.JournalEntries.FirstOrDefault(j => j != costMaster && j != costSub);
+                            var revSub = revMaster?.SubEntries.FirstOrDefault(s => s.AccountId != null && (s.AccountId.StartsWith("511") || s.Dbcr == -1));
                             var revTax = revMaster?.SubEntries.FirstOrDefault(s => s != revSub);
 
                             graphDto.CostEntryId = costMaster?.Id;
@@ -906,7 +1135,7 @@ namespace NewaccNet.Core.Posting
                         }
                         else if (p.VoucherType == "NNB" || p.VoucherType == "XNB")
                         {
-                            var master = jv.JournalEntries.FirstOrDefault();
+                            var master = jv.JournalEntries.FirstOrDefault(j => j.SubEntries.Count > 0);
                             var sub = master?.SubEntries.FirstOrDefault();
 
                             graphDto.OffsetEntryId = master?.Id;

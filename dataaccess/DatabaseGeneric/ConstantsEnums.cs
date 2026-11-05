@@ -60,26 +60,18 @@ namespace DataAccess
 		AssetEntity,
 		///<summary>AssetDetail</summary>
 		AssetDetailEntity,
-		///<summary>AssetExportVoucher</summary>
-		AssetExportVoucherEntity,
-		///<summary>AssetLedger</summary>
-		AssetLedgerEntity,
 		///<summary>AssetTracking</summary>
 		AssetTrackingEntity,
-		///<summary>AssetTrackingDepreciation</summary>
-		AssetTrackingDepreciationEntity,
 		///<summary>BusinessResultItem</summary>
 		BusinessResultItemEntity,
-		///<summary>CashFlowBalance</summary>
-		CashFlowBalanceEntity,
+		///<summary>CalculationSession</summary>
+		CalculationSessionEntity,
 		///<summary>CashFlowCategory</summary>
 		CashFlowCategoryEntity,
 		///<summary>CashFlowItem</summary>
 		CashFlowItemEntity,
 		///<summary>CashFlowPreviousPeriod</summary>
 		CashFlowPreviousPeriodEntity,
-		///<summary>CashFlowYearBalance</summary>
-		CashFlowYearBalanceEntity,
 		///<summary>Category</summary>
 		CategoryEntity,
 		///<summary>ChartOfAccount</summary>
@@ -92,68 +84,52 @@ namespace DataAccess
 		CostDetailEntity,
 		///<summary>CostElement</summary>
 		CostElementEntity,
-		///<summary>CostLedger</summary>
-		CostLedgerEntity,
 		///<summary>CostObject</summary>
 		CostObjectEntity,
 		///<summary>Currency</summary>
 		CurrencyEntity,
 		///<summary>CurrencyDetail</summary>
 		CurrencyDetailEntity,
-		///<summary>CurrencyLedger</summary>
-		CurrencyLedgerEntity,
 		///<summary>CurrencyLiabilityLine</summary>
 		CurrencyLiabilityLineEntity,
 		///<summary>CustomCostReport</summary>
 		CustomCostReportEntity,
 		///<summary>CustomCostReportAccount</summary>
 		CustomCostReportAccountEntity,
-		///<summary>CustomerExportLine</summary>
-		CustomerExportLineEntity,
+		///<summary>CustomFieldDefinition</summary>
+		CustomFieldDefinitionEntity,
+		///<summary>CustomFieldOption</summary>
+		CustomFieldOptionEntity,
 		///<summary>DbConfig</summary>
 		DbConfigEntity,
 		///<summary>DebtBalance</summary>
 		DebtBalanceEntity,
 		///<summary>DebtDetail</summary>
 		DebtDetailEntity,
-		///<summary>DebtLedger</summary>
-		DebtLedgerEntity,
 		///<summary>DebtReason</summary>
 		DebtReasonEntity,
 		///<summary>DebtType</summary>
 		DebtTypeEntity,
 		///<summary>Department</summary>
 		DepartmentEntity,
-		///<summary>Depreciation</summary>
-		DepreciationEntity,
+		///<summary>Dimension</summary>
+		DimensionEntity,
+		///<summary>DimensionValue</summary>
+		DimensionValueEntity,
 		///<summary>ExchangeRate</summary>
 		ExchangeRateEntity,
 		///<summary>ExpenseTaxLine</summary>
 		ExpenseTaxLineEntity,
-		///<summary>FinancialMonth</summary>
-		FinancialMonthEntity,
-		///<summary>GeneralLedger</summary>
-		GeneralLedgerEntity,
-		///<summary>Interest</summary>
-		InterestEntity,
-		///<summary>InterestDetail</summary>
-		InterestDetailEntity,
 		///<summary>InterestRate</summary>
 		InterestRateEntity,
-		///<summary>InventoryExportVoucher</summary>
-		InventoryExportVoucherEntity,
 		///<summary>InventoryItem</summary>
 		InventoryItemEntity,
-		///<summary>InventoryLedger</summary>
-		InventoryLedgerEntity,
 		///<summary>InventoryVoucher</summary>
 		InventoryVoucherEntity,
 		///<summary>InventoryVoucherLine</summary>
 		InventoryVoucherLineEntity,
 		///<summary>InvestmentDetail</summary>
 		InvestmentDetailEntity,
-		///<summary>InvestmentLedger</summary>
-		InvestmentLedgerEntity,
 		///<summary>JournalEntry</summary>
 		JournalEntryEntity,
 		///<summary>JournalVoucher</summary>

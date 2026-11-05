@@ -27,7 +27,6 @@ namespace DataAccess.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		private EntityCollection<AssetDetailEntity> _assetDetails;
-		private EntityCollection<DepreciationEntity> _depreciations;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
@@ -39,8 +38,6 @@ namespace DataAccess.EntityClasses
 		{
 			/// <summary>Member name AssetDetails</summary>
 			public static readonly string AssetDetails = "AssetDetails";
-			/// <summary>Member name Depreciations</summary>
-			public static readonly string Depreciations = "Depreciations";
 		}
 
 		/// <summary>Static meta-data storage for navigator related information</summary>
@@ -50,7 +47,6 @@ namespace DataAccess.EntityClasses
 			{
 				SetEntityCoreInfo("SourceEntity", InheritanceHierarchyType.None, false, (int)DataAccess.EntityType.SourceEntity, typeof(SourceEntity), typeof(SourceEntityFactory), false);
 				AddNavigatorMetaData<SourceEntity, EntityCollection<AssetDetailEntity>>("AssetDetails", a => a._assetDetails, (a, b) => a._assetDetails = b, a => a.AssetDetails, () => new SourceRelations().AssetDetailEntityUsingSrcode, typeof(AssetDetailEntity), (int)DataAccess.EntityType.AssetDetailEntity);
-				AddNavigatorMetaData<SourceEntity, EntityCollection<DepreciationEntity>>("Depreciations", a => a._depreciations, (a, b) => a._depreciations = b, a => a.Depreciations, () => new SourceRelations().DepreciationEntityUsingSrcode, typeof(DepreciationEntity), (int)DataAccess.EntityType.DepreciationEntity);
 			}
 		}
 
@@ -106,10 +102,6 @@ namespace DataAccess.EntityClasses
 		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'AssetDetail' to this entity.</summary>
 		/// <returns></returns>
 		public virtual IRelationPredicateBucket GetRelationInfoAssetDetails() { return CreateRelationInfoForNavigator("AssetDetails"); }
-
-		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'Depreciation' to this entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoDepreciations() { return CreateRelationInfoForNavigator("Depreciations"); }
 		
 		/// <inheritdoc/>
 		protected override EntityStaticMetaDataBase GetEntityStaticMetaData() {	return _staticMetaData; }
@@ -145,10 +137,6 @@ namespace DataAccess.EntityClasses
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
 		public static IPrefetchPathElement2 PrefetchPathAssetDetails { get { return _staticMetaData.GetPrefetchPathElement("AssetDetails", CommonEntityBase.CreateEntityCollection<AssetDetailEntity>()); } }
 
-		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'Depreciation' for this entity.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathDepreciations { get { return _staticMetaData.GetPrefetchPathElement("Depreciations", CommonEntityBase.CreateEntityCollection<DepreciationEntity>()); } }
-
 		/// <summary>The Srcode property of the Entity Source<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "Source"."Srcode".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
 		public virtual System.String Srcode
@@ -168,10 +156,6 @@ namespace DataAccess.EntityClasses
 		/// <summary>Gets the EntityCollection with the related entities of type 'AssetDetailEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(AssetDetailEntity))]
 		public virtual EntityCollection<AssetDetailEntity> AssetDetails { get { return GetOrCreateEntityCollection<AssetDetailEntity, AssetDetailEntityFactory>("Source", true, false, ref _assetDetails); } }
-
-		/// <summary>Gets the EntityCollection with the related entities of type 'DepreciationEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
-		[TypeContainedAttribute(typeof(DepreciationEntity))]
-		public virtual EntityCollection<DepreciationEntity> Depreciations { get { return GetOrCreateEntityCollection<DepreciationEntity, DepreciationEntityFactory>("Source", true, false, ref _depreciations); } }
 
 		// __LLBLGENPRO_USER_CODE_REGION_START CustomEntityCode
 		// __LLBLGENPRO_USER_CODE_REGION_END
@@ -203,19 +187,12 @@ namespace DataAccess.RelationClasses
 			get { return ModelInfoProviderSingleton.GetInstance().CreateRelation(RelationType.OneToMany, "AssetDetails", true, new[] { SourceFields.Srcode, AssetDetailFields.Srcode }); }
 		}
 
-		/// <summary>Returns a new IEntityRelation object, between SourceEntity and DepreciationEntity over the 1:n relation they have, using the relation between the fields: Source.Srcode - Depreciation.Srcode</summary>
-		public virtual IEntityRelation DepreciationEntityUsingSrcode
-		{
-			get { return ModelInfoProviderSingleton.GetInstance().CreateRelation(RelationType.OneToMany, "Depreciations", true, new[] { SourceFields.Srcode, DepreciationFields.Srcode }); }
-		}
-
 	}
 	
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticSourceRelations
 	{
 		internal static readonly IEntityRelation AssetDetailEntityUsingSrcodeStatic = new SourceRelations().AssetDetailEntityUsingSrcode;
-		internal static readonly IEntityRelation DepreciationEntityUsingSrcodeStatic = new SourceRelations().DepreciationEntityUsingSrcode;
 
 		/// <summary>CTor</summary>
 		static StaticSourceRelations() { }

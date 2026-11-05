@@ -26,11 +26,8 @@ namespace DataAccess.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
-		private EntityCollection<CustomerExportLineEntity> _customerExportLines;
 		private EntityCollection<DebtBalanceEntity> _debtBalances;
 		private EntityCollection<DebtDetailEntity> _debtDetails;
-		private EntityCollection<DebtLedgerEntity> _debtLedgers;
-		private EntityCollection<InterestEntity> _interests;
 		private EntityCollection<InvestmentDetailEntity> _investmentDetails;
 		private EntityCollection<LiabilityDueEntity> _liabilityDues;
 
@@ -42,16 +39,10 @@ namespace DataAccess.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
-			/// <summary>Member name CustomerExportLines</summary>
-			public static readonly string CustomerExportLines = "CustomerExportLines";
 			/// <summary>Member name DebtBalances</summary>
 			public static readonly string DebtBalances = "DebtBalances";
 			/// <summary>Member name DebtDetails</summary>
 			public static readonly string DebtDetails = "DebtDetails";
-			/// <summary>Member name DebtLedgers</summary>
-			public static readonly string DebtLedgers = "DebtLedgers";
-			/// <summary>Member name Interests</summary>
-			public static readonly string Interests = "Interests";
 			/// <summary>Member name InvestmentDetails</summary>
 			public static readonly string InvestmentDetails = "InvestmentDetails";
 			/// <summary>Member name LiabilityDues</summary>
@@ -64,11 +55,8 @@ namespace DataAccess.EntityClasses
 			public PartnerEntityStaticMetaData()
 			{
 				SetEntityCoreInfo("PartnerEntity", InheritanceHierarchyType.None, false, (int)DataAccess.EntityType.PartnerEntity, typeof(PartnerEntity), typeof(PartnerEntityFactory), false);
-				AddNavigatorMetaData<PartnerEntity, EntityCollection<CustomerExportLineEntity>>("CustomerExportLines", a => a._customerExportLines, (a, b) => a._customerExportLines = b, a => a.CustomerExportLines, () => new PartnerRelations().CustomerExportLineEntityUsingCustomerId, typeof(CustomerExportLineEntity), (int)DataAccess.EntityType.CustomerExportLineEntity);
 				AddNavigatorMetaData<PartnerEntity, EntityCollection<DebtBalanceEntity>>("DebtBalances", a => a._debtBalances, (a, b) => a._debtBalances = b, a => a.DebtBalances, () => new PartnerRelations().DebtBalanceEntityUsingPartnerId, typeof(DebtBalanceEntity), (int)DataAccess.EntityType.DebtBalanceEntity);
 				AddNavigatorMetaData<PartnerEntity, EntityCollection<DebtDetailEntity>>("DebtDetails", a => a._debtDetails, (a, b) => a._debtDetails = b, a => a.DebtDetails, () => new PartnerRelations().DebtDetailEntityUsingPartnerId, typeof(DebtDetailEntity), (int)DataAccess.EntityType.DebtDetailEntity);
-				AddNavigatorMetaData<PartnerEntity, EntityCollection<DebtLedgerEntity>>("DebtLedgers", a => a._debtLedgers, (a, b) => a._debtLedgers = b, a => a.DebtLedgers, () => new PartnerRelations().DebtLedgerEntityUsingCustomerId, typeof(DebtLedgerEntity), (int)DataAccess.EntityType.DebtLedgerEntity);
-				AddNavigatorMetaData<PartnerEntity, EntityCollection<InterestEntity>>("Interests", a => a._interests, (a, b) => a._interests = b, a => a.Interests, () => new PartnerRelations().InterestEntityUsingCustomerId, typeof(InterestEntity), (int)DataAccess.EntityType.InterestEntity);
 				AddNavigatorMetaData<PartnerEntity, EntityCollection<InvestmentDetailEntity>>("InvestmentDetails", a => a._investmentDetails, (a, b) => a._investmentDetails = b, a => a.InvestmentDetails, () => new PartnerRelations().InvestmentDetailEntityUsingCustomerId, typeof(InvestmentDetailEntity), (int)DataAccess.EntityType.InvestmentDetailEntity);
 				AddNavigatorMetaData<PartnerEntity, EntityCollection<LiabilityDueEntity>>("LiabilityDues", a => a._liabilityDues, (a, b) => a._liabilityDues = b, a => a.LiabilityDues, () => new PartnerRelations().LiabilityDueEntityUsingCustomerId, typeof(LiabilityDueEntity), (int)DataAccess.EntityType.LiabilityDueEntity);
 			}
@@ -123,10 +111,6 @@ namespace DataAccess.EntityClasses
 			// __LLBLGENPRO_USER_CODE_REGION_END
 		}
 
-		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'CustomerExportLine' to this entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoCustomerExportLines() { return CreateRelationInfoForNavigator("CustomerExportLines"); }
-
 		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'DebtBalance' to this entity.</summary>
 		/// <returns></returns>
 		public virtual IRelationPredicateBucket GetRelationInfoDebtBalances() { return CreateRelationInfoForNavigator("DebtBalances"); }
@@ -134,14 +118,6 @@ namespace DataAccess.EntityClasses
 		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'DebtDetail' to this entity.</summary>
 		/// <returns></returns>
 		public virtual IRelationPredicateBucket GetRelationInfoDebtDetails() { return CreateRelationInfoForNavigator("DebtDetails"); }
-
-		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'DebtLedger' to this entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoDebtLedgers() { return CreateRelationInfoForNavigator("DebtLedgers"); }
-
-		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'Interest' to this entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoInterests() { return CreateRelationInfoForNavigator("Interests"); }
 
 		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'InvestmentDetail' to this entity.</summary>
 		/// <returns></returns>
@@ -181,10 +157,6 @@ namespace DataAccess.EntityClasses
 		/// <summary>The relations object holding all relations of this entity with other entity classes.</summary>
 		public static PartnerRelations Relations { get { return _relationsFactory; } }
 
-		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'CustomerExportLine' for this entity.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathCustomerExportLines { get { return _staticMetaData.GetPrefetchPathElement("CustomerExportLines", CommonEntityBase.CreateEntityCollection<CustomerExportLineEntity>()); } }
-
 		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'DebtBalance' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
 		public static IPrefetchPathElement2 PrefetchPathDebtBalances { get { return _staticMetaData.GetPrefetchPathElement("DebtBalances", CommonEntityBase.CreateEntityCollection<DebtBalanceEntity>()); } }
@@ -192,14 +164,6 @@ namespace DataAccess.EntityClasses
 		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'DebtDetail' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
 		public static IPrefetchPathElement2 PrefetchPathDebtDetails { get { return _staticMetaData.GetPrefetchPathElement("DebtDetails", CommonEntityBase.CreateEntityCollection<DebtDetailEntity>()); } }
-
-		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'DebtLedger' for this entity.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathDebtLedgers { get { return _staticMetaData.GetPrefetchPathElement("DebtLedgers", CommonEntityBase.CreateEntityCollection<DebtLedgerEntity>()); } }
-
-		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'Interest' for this entity.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathInterests { get { return _staticMetaData.GetPrefetchPathElement("Interests", CommonEntityBase.CreateEntityCollection<InterestEntity>()); } }
 
 		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'InvestmentDetail' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
@@ -225,12 +189,52 @@ namespace DataAccess.EntityClasses
 			set { SetValue((int)PartnerFieldIndex.CustomerName, value); }
 		}
 
+		/// <summary>The Date1 property of the Entity Partner<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Partner"."Date1".<br/>Table field type characteristics (type, precision, scale, length): Date, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.DateTime> Date1
+		{
+			get { return (Nullable<System.DateTime>)GetValue((int)PartnerFieldIndex.Date1, false); }
+			set { SetValue((int)PartnerFieldIndex.Date1, value); }
+		}
+
+		/// <summary>The Date2 property of the Entity Partner<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Partner"."Date2".<br/>Table field type characteristics (type, precision, scale, length): Date, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.DateTime> Date2
+		{
+			get { return (Nullable<System.DateTime>)GetValue((int)PartnerFieldIndex.Date2, false); }
+			set { SetValue((int)PartnerFieldIndex.Date2, value); }
+		}
+
+		/// <summary>The ExtData property of the Entity Partner<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Partner"."ExtData".<br/>Table field type characteristics (type, precision, scale, length): LongVarWChar, 0, 0, 536870911.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String ExtData
+		{
+			get { return (System.String)GetValue((int)PartnerFieldIndex.ExtData, true); }
+			set { SetValue((int)PartnerFieldIndex.ExtData, value); }
+		}
+
 		/// <summary>The Faxnumber property of the Entity Partner<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "Partner"."Faxnumber".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 30.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Faxnumber
 		{
 			get { return (System.String)GetValue((int)PartnerFieldIndex.Faxnumber, true); }
 			set { SetValue((int)PartnerFieldIndex.Faxnumber, value); }
+		}
+
+		/// <summary>The Flag1 property of the Entity Partner<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Partner"."Flag1".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean Flag1
+		{
+			get { return (System.Boolean)GetValue((int)PartnerFieldIndex.Flag1, true); }
+			set { SetValue((int)PartnerFieldIndex.Flag1, value); }
+		}
+
+		/// <summary>The Flag2 property of the Entity Partner<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Partner"."Flag2".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean Flag2
+		{
+			get { return (System.Boolean)GetValue((int)PartnerFieldIndex.Flag2, true); }
+			set { SetValue((int)PartnerFieldIndex.Flag2, value); }
 		}
 
 		/// <summary>The Id property of the Entity Partner<br/><br/></summary>
@@ -257,6 +261,30 @@ namespace DataAccess.EntityClasses
 			set { SetValue((int)PartnerFieldIndex.Note, value); }
 		}
 
+		/// <summary>The Num1 property of the Entity Partner<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Partner"."Num1".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 18, 4, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Decimal> Num1
+		{
+			get { return (Nullable<System.Decimal>)GetValue((int)PartnerFieldIndex.Num1, false); }
+			set { SetValue((int)PartnerFieldIndex.Num1, value); }
+		}
+
+		/// <summary>The Num2 property of the Entity Partner<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Partner"."Num2".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 18, 4, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Decimal> Num2
+		{
+			get { return (Nullable<System.Decimal>)GetValue((int)PartnerFieldIndex.Num2, false); }
+			set { SetValue((int)PartnerFieldIndex.Num2, value); }
+		}
+
+		/// <summary>The Num3 property of the Entity Partner<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Partner"."Num3".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 18, 4, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Decimal> Num3
+		{
+			get { return (Nullable<System.Decimal>)GetValue((int)PartnerFieldIndex.Num3, false); }
+			set { SetValue((int)PartnerFieldIndex.Num3, value); }
+		}
+
 		/// <summary>The Phonenumber property of the Entity Partner<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "Partner"."Phonenumber".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 30.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Phonenumber
@@ -273,9 +301,45 @@ namespace DataAccess.EntityClasses
 			set { SetValue((int)PartnerFieldIndex.Taxno, value); }
 		}
 
-		/// <summary>Gets the EntityCollection with the related entities of type 'CustomerExportLineEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
-		[TypeContainedAttribute(typeof(CustomerExportLineEntity))]
-		public virtual EntityCollection<CustomerExportLineEntity> CustomerExportLines { get { return GetOrCreateEntityCollection<CustomerExportLineEntity, CustomerExportLineEntityFactory>("Partner", true, false, ref _customerExportLines); } }
+		/// <summary>The Text1 property of the Entity Partner<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Partner"."Text1".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String Text1
+		{
+			get { return (System.String)GetValue((int)PartnerFieldIndex.Text1, true); }
+			set { SetValue((int)PartnerFieldIndex.Text1, value); }
+		}
+
+		/// <summary>The Text2 property of the Entity Partner<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Partner"."Text2".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String Text2
+		{
+			get { return (System.String)GetValue((int)PartnerFieldIndex.Text2, true); }
+			set { SetValue((int)PartnerFieldIndex.Text2, value); }
+		}
+
+		/// <summary>The Text3 property of the Entity Partner<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Partner"."Text3".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String Text3
+		{
+			get { return (System.String)GetValue((int)PartnerFieldIndex.Text3, true); }
+			set { SetValue((int)PartnerFieldIndex.Text3, value); }
+		}
+
+		/// <summary>The Text4 property of the Entity Partner<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Partner"."Text4".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String Text4
+		{
+			get { return (System.String)GetValue((int)PartnerFieldIndex.Text4, true); }
+			set { SetValue((int)PartnerFieldIndex.Text4, value); }
+		}
+
+		/// <summary>The Text5 property of the Entity Partner<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Partner"."Text5".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String Text5
+		{
+			get { return (System.String)GetValue((int)PartnerFieldIndex.Text5, true); }
+			set { SetValue((int)PartnerFieldIndex.Text5, value); }
+		}
 
 		/// <summary>Gets the EntityCollection with the related entities of type 'DebtBalanceEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(DebtBalanceEntity))]
@@ -284,14 +348,6 @@ namespace DataAccess.EntityClasses
 		/// <summary>Gets the EntityCollection with the related entities of type 'DebtDetailEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(DebtDetailEntity))]
 		public virtual EntityCollection<DebtDetailEntity> DebtDetails { get { return GetOrCreateEntityCollection<DebtDetailEntity, DebtDetailEntityFactory>("Partner", true, false, ref _debtDetails); } }
-
-		/// <summary>Gets the EntityCollection with the related entities of type 'DebtLedgerEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
-		[TypeContainedAttribute(typeof(DebtLedgerEntity))]
-		public virtual EntityCollection<DebtLedgerEntity> DebtLedgers { get { return GetOrCreateEntityCollection<DebtLedgerEntity, DebtLedgerEntityFactory>("Partner", true, false, ref _debtLedgers); } }
-
-		/// <summary>Gets the EntityCollection with the related entities of type 'InterestEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
-		[TypeContainedAttribute(typeof(InterestEntity))]
-		public virtual EntityCollection<InterestEntity> Interests { get { return GetOrCreateEntityCollection<InterestEntity, InterestEntityFactory>("Partner", true, false, ref _interests); } }
 
 		/// <summary>Gets the EntityCollection with the related entities of type 'InvestmentDetailEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(InvestmentDetailEntity))]
@@ -315,18 +371,44 @@ namespace DataAccess
 		Address,
 		///<summary>CustomerName. </summary>
 		CustomerName,
+		///<summary>Date1. </summary>
+		Date1,
+		///<summary>Date2. </summary>
+		Date2,
+		///<summary>ExtData. </summary>
+		ExtData,
 		///<summary>Faxnumber. </summary>
 		Faxnumber,
+		///<summary>Flag1. </summary>
+		Flag1,
+		///<summary>Flag2. </summary>
+		Flag2,
 		///<summary>Id. </summary>
 		Id,
 		///<summary>Isemployee. </summary>
 		Isemployee,
 		///<summary>Note. </summary>
 		Note,
+		///<summary>Num1. </summary>
+		Num1,
+		///<summary>Num2. </summary>
+		Num2,
+		///<summary>Num3. </summary>
+		Num3,
 		///<summary>Phonenumber. </summary>
 		Phonenumber,
 		///<summary>Taxno. </summary>
 		Taxno,
+		///<summary>Text1. </summary>
+		Text1,
+		///<summary>Text2. </summary>
+		Text2,
+		///<summary>Text3. </summary>
+		Text3,
+		///<summary>Text4. </summary>
+		Text4,
+		///<summary>Text5. </summary>
+		Text5,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -337,12 +419,6 @@ namespace DataAccess.RelationClasses
 	/// <summary>Implements the relations factory for the entity: Partner. </summary>
 	public partial class PartnerRelations: RelationFactory
 	{
-		/// <summary>Returns a new IEntityRelation object, between PartnerEntity and CustomerExportLineEntity over the 1:n relation they have, using the relation between the fields: Partner.Id - CustomerExportLine.CustomerId</summary>
-		public virtual IEntityRelation CustomerExportLineEntityUsingCustomerId
-		{
-			get { return ModelInfoProviderSingleton.GetInstance().CreateRelation(RelationType.OneToMany, "CustomerExportLines", true, new[] { PartnerFields.Id, CustomerExportLineFields.CustomerId }); }
-		}
-
 		/// <summary>Returns a new IEntityRelation object, between PartnerEntity and DebtBalanceEntity over the 1:n relation they have, using the relation between the fields: Partner.Id - DebtBalance.PartnerId</summary>
 		public virtual IEntityRelation DebtBalanceEntityUsingPartnerId
 		{
@@ -353,18 +429,6 @@ namespace DataAccess.RelationClasses
 		public virtual IEntityRelation DebtDetailEntityUsingPartnerId
 		{
 			get { return ModelInfoProviderSingleton.GetInstance().CreateRelation(RelationType.OneToMany, "DebtDetails", true, new[] { PartnerFields.Id, DebtDetailFields.PartnerId }); }
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between PartnerEntity and DebtLedgerEntity over the 1:n relation they have, using the relation between the fields: Partner.Id - DebtLedger.CustomerId</summary>
-		public virtual IEntityRelation DebtLedgerEntityUsingCustomerId
-		{
-			get { return ModelInfoProviderSingleton.GetInstance().CreateRelation(RelationType.OneToMany, "DebtLedgers", true, new[] { PartnerFields.Id, DebtLedgerFields.CustomerId }); }
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between PartnerEntity and InterestEntity over the 1:n relation they have, using the relation between the fields: Partner.Id - Interest.CustomerId</summary>
-		public virtual IEntityRelation InterestEntityUsingCustomerId
-		{
-			get { return ModelInfoProviderSingleton.GetInstance().CreateRelation(RelationType.OneToMany, "Interests", true, new[] { PartnerFields.Id, InterestFields.CustomerId }); }
 		}
 
 		/// <summary>Returns a new IEntityRelation object, between PartnerEntity and InvestmentDetailEntity over the 1:n relation they have, using the relation between the fields: Partner.Id - InvestmentDetail.CustomerId</summary>
@@ -384,11 +448,8 @@ namespace DataAccess.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticPartnerRelations
 	{
-		internal static readonly IEntityRelation CustomerExportLineEntityUsingCustomerIdStatic = new PartnerRelations().CustomerExportLineEntityUsingCustomerId;
 		internal static readonly IEntityRelation DebtBalanceEntityUsingPartnerIdStatic = new PartnerRelations().DebtBalanceEntityUsingPartnerId;
 		internal static readonly IEntityRelation DebtDetailEntityUsingPartnerIdStatic = new PartnerRelations().DebtDetailEntityUsingPartnerId;
-		internal static readonly IEntityRelation DebtLedgerEntityUsingCustomerIdStatic = new PartnerRelations().DebtLedgerEntityUsingCustomerId;
-		internal static readonly IEntityRelation InterestEntityUsingCustomerIdStatic = new PartnerRelations().InterestEntityUsingCustomerId;
 		internal static readonly IEntityRelation InvestmentDetailEntityUsingCustomerIdStatic = new PartnerRelations().InvestmentDetailEntityUsingCustomerId;
 		internal static readonly IEntityRelation LiabilityDueEntityUsingCustomerIdStatic = new PartnerRelations().LiabilityDueEntityUsingCustomerId;
 

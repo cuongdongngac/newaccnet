@@ -169,6 +169,46 @@ namespace DataAccess.EntityClasses
 			set { SetValue((int)InventoryItemFieldIndex.Categoryid, value); }
 		}
 
+		/// <summary>The Date1 property of the Entity InventoryItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "InventoryItem"."Date1".<br/>Table field type characteristics (type, precision, scale, length): Date, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.DateTime> Date1
+		{
+			get { return (Nullable<System.DateTime>)GetValue((int)InventoryItemFieldIndex.Date1, false); }
+			set { SetValue((int)InventoryItemFieldIndex.Date1, value); }
+		}
+
+		/// <summary>The Date2 property of the Entity InventoryItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "InventoryItem"."Date2".<br/>Table field type characteristics (type, precision, scale, length): Date, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.DateTime> Date2
+		{
+			get { return (Nullable<System.DateTime>)GetValue((int)InventoryItemFieldIndex.Date2, false); }
+			set { SetValue((int)InventoryItemFieldIndex.Date2, value); }
+		}
+
+		/// <summary>The ExtData property of the Entity InventoryItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "InventoryItem"."ExtData".<br/>Table field type characteristics (type, precision, scale, length): LongVarWChar, 0, 0, 536870911.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String ExtData
+		{
+			get { return (System.String)GetValue((int)InventoryItemFieldIndex.ExtData, true); }
+			set { SetValue((int)InventoryItemFieldIndex.ExtData, value); }
+		}
+
+		/// <summary>The Flag1 property of the Entity InventoryItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "InventoryItem"."Flag1".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean Flag1
+		{
+			get { return (System.Boolean)GetValue((int)InventoryItemFieldIndex.Flag1, true); }
+			set { SetValue((int)InventoryItemFieldIndex.Flag1, value); }
+		}
+
+		/// <summary>The Flag2 property of the Entity InventoryItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "InventoryItem"."Flag2".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 2.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean Flag2
+		{
+			get { return (System.Boolean)GetValue((int)InventoryItemFieldIndex.Flag2, true); }
+			set { SetValue((int)InventoryItemFieldIndex.Flag2, value); }
+		}
+
 		/// <summary>The MaterialId property of the Entity InventoryItem<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "InventoryItem"."MaterialId".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 20.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
 		public virtual System.String MaterialId
@@ -183,6 +223,70 @@ namespace DataAccess.EntityClasses
 		{
 			get { return (System.String)GetValue((int)InventoryItemFieldIndex.MaterialName, true); }
 			set { SetValue((int)InventoryItemFieldIndex.MaterialName, value); }
+		}
+
+		/// <summary>The Num1 property of the Entity InventoryItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "InventoryItem"."Num1".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 18, 4, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Decimal> Num1
+		{
+			get { return (Nullable<System.Decimal>)GetValue((int)InventoryItemFieldIndex.Num1, false); }
+			set { SetValue((int)InventoryItemFieldIndex.Num1, value); }
+		}
+
+		/// <summary>The Num2 property of the Entity InventoryItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "InventoryItem"."Num2".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 18, 4, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Decimal> Num2
+		{
+			get { return (Nullable<System.Decimal>)GetValue((int)InventoryItemFieldIndex.Num2, false); }
+			set { SetValue((int)InventoryItemFieldIndex.Num2, value); }
+		}
+
+		/// <summary>The Num3 property of the Entity InventoryItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "InventoryItem"."Num3".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 18, 4, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Decimal> Num3
+		{
+			get { return (Nullable<System.Decimal>)GetValue((int)InventoryItemFieldIndex.Num3, false); }
+			set { SetValue((int)InventoryItemFieldIndex.Num3, value); }
+		}
+
+		/// <summary>The Text1 property of the Entity InventoryItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "InventoryItem"."Text1".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String Text1
+		{
+			get { return (System.String)GetValue((int)InventoryItemFieldIndex.Text1, true); }
+			set { SetValue((int)InventoryItemFieldIndex.Text1, value); }
+		}
+
+		/// <summary>The Text2 property of the Entity InventoryItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "InventoryItem"."Text2".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String Text2
+		{
+			get { return (System.String)GetValue((int)InventoryItemFieldIndex.Text2, true); }
+			set { SetValue((int)InventoryItemFieldIndex.Text2, value); }
+		}
+
+		/// <summary>The Text3 property of the Entity InventoryItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "InventoryItem"."Text3".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String Text3
+		{
+			get { return (System.String)GetValue((int)InventoryItemFieldIndex.Text3, true); }
+			set { SetValue((int)InventoryItemFieldIndex.Text3, value); }
+		}
+
+		/// <summary>The Text4 property of the Entity InventoryItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "InventoryItem"."Text4".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String Text4
+		{
+			get { return (System.String)GetValue((int)InventoryItemFieldIndex.Text4, true); }
+			set { SetValue((int)InventoryItemFieldIndex.Text4, value); }
+		}
+
+		/// <summary>The Text5 property of the Entity InventoryItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "InventoryItem"."Text5".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String Text5
+		{
+			get { return (System.String)GetValue((int)InventoryItemFieldIndex.Text5, true); }
+			set { SetValue((int)InventoryItemFieldIndex.Text5, value); }
 		}
 
 		/// <summary>The Unit property of the Entity InventoryItem<br/><br/></summary>
@@ -221,10 +325,36 @@ namespace DataAccess
 	{
 		///<summary>Categoryid. </summary>
 		Categoryid,
+		///<summary>Date1. </summary>
+		Date1,
+		///<summary>Date2. </summary>
+		Date2,
+		///<summary>ExtData. </summary>
+		ExtData,
+		///<summary>Flag1. </summary>
+		Flag1,
+		///<summary>Flag2. </summary>
+		Flag2,
 		///<summary>MaterialId. </summary>
 		MaterialId,
 		///<summary>MaterialName. </summary>
 		MaterialName,
+		///<summary>Num1. </summary>
+		Num1,
+		///<summary>Num2. </summary>
+		Num2,
+		///<summary>Num3. </summary>
+		Num3,
+		///<summary>Text1. </summary>
+		Text1,
+		///<summary>Text2. </summary>
+		Text2,
+		///<summary>Text3. </summary>
+		Text3,
+		///<summary>Text4. </summary>
+		Text4,
+		///<summary>Text5. </summary>
+		Text5,
 		///<summary>Unit. </summary>
 		Unit,
 		/// <summary></summary>

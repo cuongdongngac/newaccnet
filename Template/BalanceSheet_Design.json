@@ -1,0 +1,1082 @@
+﻿{
+  "ReportTitle": "Bảng Cân Đối Kế Toán (Mẫu B01-DN)",
+  "Version": "1.0",
+  "ExportedAt": "2026-11-05T20:20:30.2743837+07:00",
+  "Sections": [
+    {
+      "SectionName": "Tài sản",
+      "Indebit": true,
+      "Categories": [
+        {
+          "Code": "100",
+          "CategoryName": "A. Tài sản ngắn hạn",
+          "Items": [
+            {
+              "Code": "110",
+              "EntryName": "I. Tiền và các khoản tương đương tiền",
+              "Formulas": [
+                {
+                  "Code": "111",
+                  "ItemsName": "1. Tiền",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "V.01",
+                  "Longorshortterm": 0,
+                  "Order": 1,
+                  "Print": true,
+                  "Accounts": [
+                    "111",
+                    "112",
+                    "113"
+                  ]
+                },
+                {
+                  "Code": "112",
+                  "ItemsName": "2. Các khoản tương đương tiền",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 0,
+                  "Order": 2,
+                  "Print": true,
+                  "Accounts": [
+                    "1211",
+                    "1212"
+                  ]
+                }
+              ]
+            },
+            {
+              "Code": "120",
+              "EntryName": "II. Các khoản đầu tư tài chính ngắn hạn",
+              "Formulas": [
+                {
+                  "Code": "121",
+                  "ItemsName": "1. Đầu tư ngắn hạn",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 0,
+                  "Order": 3,
+                  "Print": true,
+                  "Accounts": [
+                    "1211",
+                    "1212",
+                    "1281",
+                    "1288"
+                  ]
+                },
+                {
+                  "Code": "129",
+                  "ItemsName": "2. Dự phòng giảm giá đầu tư N.hạn (*)",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 0,
+                  "Order": 4,
+                  "Print": true,
+                  "Accounts": [
+                    "129"
+                  ]
+                }
+              ]
+            },
+            {
+              "Code": "130",
+              "EntryName": "III. Các khoản phải thu",
+              "Formulas": [
+                {
+                  "Code": "131",
+                  "ItemsName": "1. Phải thu của khách hàng",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 2,
+                  "Order": 5,
+                  "Print": true,
+                  "Accounts": [
+                    "131"
+                  ]
+                },
+                {
+                  "Code": "132",
+                  "ItemsName": "2. Trả trước cho người bán",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 2,
+                  "Order": 6,
+                  "Print": true,
+                  "Accounts": [
+                    "331"
+                  ]
+                },
+                {
+                  "Code": "135",
+                  "ItemsName": "5. Các khoản phải thu khác",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "V.03",
+                  "Longorshortterm": 2,
+                  "Order": 9,
+                  "Print": true,
+                  "Accounts": [
+                    "138",
+                    "338"
+                  ]
+                },
+                {
+                  "Code": "139",
+                  "ItemsName": "6. Dự phòng các khoản phải thu khi đổi(*)",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 2,
+                  "Order": 10,
+                  "Print": true,
+                  "Accounts": [
+                    "139"
+                  ]
+                },
+                {
+                  "Code": "133",
+                  "ItemsName": "3. Phải thu nội bộ ngắn hạn",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 2,
+                  "Order": 7,
+                  "Print": true,
+                  "Accounts": [
+                    "136"
+                  ]
+                },
+                {
+                  "Code": "134",
+                  "ItemsName": "4. Phải thu theo tiến độ kế hoạch hợp đồng XD",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 2,
+                  "Order": 8,
+                  "Print": true,
+                  "Accounts": [
+                    "337"
+                  ]
+                }
+              ]
+            },
+            {
+              "Code": "140",
+              "EntryName": "IV. Hàng tồn kho",
+              "Formulas": [
+                {
+                  "Code": "141",
+                  "ItemsName": "1. Hàng tồn kho",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "V.04",
+                  "Longorshortterm": 0,
+                  "Order": 11,
+                  "Print": true,
+                  "Accounts": [
+                    "151",
+                    "152",
+                    "153",
+                    "154",
+                    "155",
+                    "156",
+                    "157",
+                    "158"
+                  ]
+                },
+                {
+                  "Code": "149",
+                  "ItemsName": "2. Dự phòng giảm giá hàng tồn kho (*)",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 0,
+                  "Order": 12,
+                  "Print": true,
+                  "Accounts": [
+                    "159"
+                  ]
+                }
+              ]
+            },
+            {
+              "Code": "150",
+              "EntryName": "V. Tài sản ngắn hạn khác",
+              "Formulas": [
+                {
+                  "Code": "151",
+                  "ItemsName": "1. Chi phí trả trước ngắn hạn",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 0,
+                  "Order": 13,
+                  "Print": true,
+                  "Accounts": [
+                    "142"
+                  ]
+                },
+                {
+                  "Code": "152",
+                  "ItemsName": "2. Thuế GTGT được khấu trừ",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 0,
+                  "Order": 14,
+                  "Print": true,
+                  "Accounts": [
+                    "133"
+                  ]
+                },
+                {
+                  "Code": "154",
+                  "ItemsName": "3. Thuế và các khoản khác phải thu NN",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "V.05",
+                  "Longorshortterm": 0,
+                  "Order": 15,
+                  "Print": true,
+                  "Accounts": [
+                    "333"
+                  ]
+                },
+                {
+                  "Code": "158",
+                  "ItemsName": "4. Tài sản ngắn hạn khác",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 2,
+                  "Order": 16,
+                  "Print": true,
+                  "Accounts": [
+                    "1381",
+                    "141",
+                    "144"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Code": "200",
+          "CategoryName": "B. Tài sản dài hạn",
+          "Items": [
+            {
+              "Code": "210",
+              "EntryName": "I. Các khoản phải thu dài hạn",
+              "Formulas": [
+                {
+                  "Code": "211",
+                  "ItemsName": "1. Phải thu dài hạn của khách hàng",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 1,
+                  "Order": 17,
+                  "Print": true,
+                  "Accounts": [
+                    "131"
+                  ]
+                },
+                {
+                  "Code": "212",
+                  "ItemsName": "2. Vốn kinh doanh ở đơn vị trực thuộc",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 1,
+                  "Order": 18,
+                  "Print": true,
+                  "Accounts": [
+                    "1361"
+                  ]
+                },
+                {
+                  "Code": "213",
+                  "ItemsName": "3. Phải thu dài hạn nội bộ",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "V.06",
+                  "Longorshortterm": 1,
+                  "Order": 19,
+                  "Print": true,
+                  "Accounts": []
+                },
+                {
+                  "Code": "218",
+                  "ItemsName": "4. Phải thu dài hạn khác",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "V.07",
+                  "Longorshortterm": 1,
+                  "Order": 20,
+                  "Print": true,
+                  "Accounts": []
+                },
+                {
+                  "Code": "219",
+                  "ItemsName": "5. Dự phòng phải thu dài hạn khi đổi (*)",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 1,
+                  "Order": 21,
+                  "Print": true,
+                  "Accounts": [
+                    "139"
+                  ]
+                }
+              ]
+            },
+            {
+              "Code": "220",
+              "EntryName": "II. Tài sản cố định",
+              "Formulas": [
+                {
+                  "Code": "221",
+                  "ItemsName": "1. Tài sản cố định hữu hình",
+                  "Formula": "",
+                  "Calculate": false,
+                  "Illu": "V.08",
+                  "Longorshortterm": 0,
+                  "Order": 22,
+                  "Print": true,
+                  "Accounts": [
+                    "211",
+                    "2141"
+                  ]
+                },
+                {
+                  "Code": "222",
+                  "ItemsName": "-  Nguyên giá",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 0,
+                  "Order": 23,
+                  "Print": true,
+                  "Accounts": [
+                    "211"
+                  ]
+                },
+                {
+                  "Code": "223",
+                  "ItemsName": "-  Giá trị hao mòn luỹ kế (*)",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 0,
+                  "Order": 24,
+                  "Print": true,
+                  "Accounts": [
+                    "2141"
+                  ]
+                },
+                {
+                  "Code": "224",
+                  "ItemsName": "2. Tài sản cố định thuế tài chính",
+                  "Formula": "",
+                  "Calculate": false,
+                  "Illu": "V.09",
+                  "Longorshortterm": 0,
+                  "Order": 25,
+                  "Print": true,
+                  "Accounts": [
+                    "212",
+                    "2142"
+                  ]
+                },
+                {
+                  "Code": "225",
+                  "ItemsName": "-  Nguyên giá",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 0,
+                  "Order": 26,
+                  "Print": true,
+                  "Accounts": [
+                    "212"
+                  ]
+                },
+                {
+                  "Code": "226",
+                  "ItemsName": "-  Giá trị hao mòn luỹ kế (*)",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 0,
+                  "Order": 27,
+                  "Print": true,
+                  "Accounts": [
+                    "2142"
+                  ]
+                },
+                {
+                  "Code": "227",
+                  "ItemsName": "3. Tài sản cố định vô hình",
+                  "Formula": "",
+                  "Calculate": false,
+                  "Illu": "V.10",
+                  "Longorshortterm": 0,
+                  "Order": 28,
+                  "Print": true,
+                  "Accounts": [
+                    "213",
+                    "2143"
+                  ]
+                },
+                {
+                  "Code": "228",
+                  "ItemsName": "-  Nguyên giá",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 0,
+                  "Order": 29,
+                  "Print": true,
+                  "Accounts": [
+                    "213"
+                  ]
+                },
+                {
+                  "Code": "229",
+                  "ItemsName": "-  Giá trị hao mòn luỹ kế (*)",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 0,
+                  "Order": 30,
+                  "Print": true,
+                  "Accounts": [
+                    "2143"
+                  ]
+                },
+                {
+                  "Code": "230",
+                  "ItemsName": "4. Chi phí xây dựng cơ bản dở dang",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "V.11",
+                  "Longorshortterm": 0,
+                  "Order": 31,
+                  "Print": true,
+                  "Accounts": [
+                    "241"
+                  ]
+                }
+              ]
+            },
+            {
+              "Code": "240",
+              "EntryName": "III. Bất động sản đầu tư",
+              "Formulas": [
+                {
+                  "Code": "240",
+                  "ItemsName": "1. Bất động sản đầu tư",
+                  "Formula": "",
+                  "Calculate": false,
+                  "Illu": "V.12",
+                  "Longorshortterm": 0,
+                  "Order": 32,
+                  "Print": true,
+                  "Accounts": [
+                    "217",
+                    "2147"
+                  ]
+                },
+                {
+                  "Code": "241",
+                  "ItemsName": "- Nguyên giá",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 0,
+                  "Order": 33,
+                  "Print": true,
+                  "Accounts": [
+                    "217"
+                  ]
+                },
+                {
+                  "Code": "242",
+                  "ItemsName": "- Giá trị hao mòn luỹ kế (*)",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 0,
+                  "Order": 34,
+                  "Print": true,
+                  "Accounts": [
+                    "2147"
+                  ]
+                }
+              ]
+            },
+            {
+              "Code": "250",
+              "EntryName": "IV. Các khoản đầu tư tài chính dài hạn",
+              "Formulas": [
+                {
+                  "Code": "251",
+                  "ItemsName": "1. Đầu tư vào công ty con",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 0,
+                  "Order": 35,
+                  "Print": true,
+                  "Accounts": [
+                    "221"
+                  ]
+                },
+                {
+                  "Code": "252",
+                  "ItemsName": "2. Đầu tư vào công ty liên kết, liên doanh",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 0,
+                  "Order": 36,
+                  "Print": true,
+                  "Accounts": [
+                    "222",
+                    "223"
+                  ]
+                },
+                {
+                  "Code": "258",
+                  "ItemsName": "3. Đầu tư dài hạn khác",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "V.13",
+                  "Longorshortterm": 0,
+                  "Order": 37,
+                  "Print": true,
+                  "Accounts": [
+                    "228"
+                  ]
+                },
+                {
+                  "Code": "259",
+                  "ItemsName": "4. Dự phòng giảm giá đầu tư tài chính dài hạn",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 0,
+                  "Order": 38,
+                  "Print": true,
+                  "Accounts": [
+                    "229"
+                  ]
+                }
+              ]
+            },
+            {
+              "Code": "260",
+              "EntryName": "V. Tài sản dài hạn khác",
+              "Formulas": [
+                {
+                  "Code": "261",
+                  "ItemsName": "1. Chi phí trả trước dài hạn",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "V.14",
+                  "Longorshortterm": 0,
+                  "Order": 39,
+                  "Print": true,
+                  "Accounts": [
+                    "242"
+                  ]
+                },
+                {
+                  "Code": "262",
+                  "ItemsName": "2. Tài sản thuế thu nhập hoàn lại",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "V.21",
+                  "Longorshortterm": 0,
+                  "Order": 40,
+                  "Print": true,
+                  "Accounts": [
+                    "243"
+                  ]
+                },
+                {
+                  "Code": "268",
+                  "ItemsName": "3. Tài sản dài hạn khác",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 0,
+                  "Order": 41,
+                  "Print": true,
+                  "Accounts": [
+                    "244"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "Nguồn vốn",
+      "Indebit": false,
+      "Categories": [
+        {
+          "Code": "300",
+          "CategoryName": "A. Nợ phải trả",
+          "Items": [
+            {
+              "Code": "310",
+              "EntryName": "I. Nợ ngắn hạn",
+              "Formulas": [
+                {
+                  "Code": "311",
+                  "ItemsName": "1. Vay và nợ ngắn hạn",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "V.15",
+                  "Longorshortterm": 2,
+                  "Order": 44,
+                  "Print": true,
+                  "Accounts": [
+                    "311",
+                    "315"
+                  ]
+                },
+                {
+                  "Code": "312",
+                  "ItemsName": "2. Phải trả cho người bán",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 2,
+                  "Order": 45,
+                  "Print": true,
+                  "Accounts": [
+                    "331"
+                  ]
+                },
+                {
+                  "Code": "314",
+                  "ItemsName": "4. Thuế và các khoản phải nộp Nhà nước",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "V.16",
+                  "Longorshortterm": 2,
+                  "Order": 47,
+                  "Print": true,
+                  "Accounts": [
+                    "333"
+                  ]
+                },
+                {
+                  "Code": "315",
+                  "ItemsName": "5. Phải trả người lao động",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 2,
+                  "Order": 48,
+                  "Print": true,
+                  "Accounts": [
+                    "334"
+                  ]
+                },
+                {
+                  "Code": "316",
+                  "ItemsName": "6. Chi phí phải trả",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "V.17",
+                  "Longorshortterm": 2,
+                  "Order": 49,
+                  "Print": true,
+                  "Accounts": [
+                    "335"
+                  ]
+                },
+                {
+                  "Code": "319",
+                  "ItemsName": "9. Các khoản phải trả, phải nộp ngắn hạn khác",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 2,
+                  "Order": 52,
+                  "Print": true,
+                  "Accounts": [
+                    "338",
+                    "138"
+                  ]
+                },
+                {
+                  "Code": "313",
+                  "ItemsName": "3. Người mua trả tiền trước",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 2,
+                  "Order": 46,
+                  "Print": true,
+                  "Accounts": [
+                    "131",
+                    "3387"
+                  ]
+                },
+                {
+                  "Code": "318",
+                  "ItemsName": "8. Phải trả theo tiến độ kế hoạch hợp đồng XD",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 2,
+                  "Order": 51,
+                  "Print": true,
+                  "Accounts": [
+                    "337"
+                  ]
+                },
+                {
+                  "Code": "317",
+                  "ItemsName": "7. Phải trả nội bộ",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 2,
+                  "Order": 50,
+                  "Print": true,
+                  "Accounts": [
+                    "336"
+                  ]
+                },
+                {
+                  "Code": "320",
+                  "ItemsName": "10. Dự phòng phải trả ngắn hạn",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 2,
+                  "Order": 53,
+                  "Print": true,
+                  "Accounts": [
+                    "352"
+                  ]
+                }
+              ]
+            },
+            {
+              "Code": "330",
+              "EntryName": "II. Nợ dài hạn",
+              "Formulas": [
+                {
+                  "Code": "331",
+                  "ItemsName": "1. Phải trả dài hạn người bán",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 1,
+                  "Order": 54,
+                  "Print": true,
+                  "Accounts": [
+                    "331"
+                  ]
+                },
+                {
+                  "Code": "332",
+                  "ItemsName": "2. Phải trả dài hạn nội bộ",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "V.19",
+                  "Longorshortterm": 1,
+                  "Order": 55,
+                  "Print": true,
+                  "Accounts": []
+                },
+                {
+                  "Code": "333",
+                  "ItemsName": "3. Phải trả dài hạn khác",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 1,
+                  "Order": 56,
+                  "Print": true,
+                  "Accounts": []
+                },
+                {
+                  "Code": "334",
+                  "ItemsName": "4. Vay và nợ dài hạn",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "V.20",
+                  "Longorshortterm": 1,
+                  "Order": 57,
+                  "Print": true,
+                  "Accounts": [
+                    "341",
+                    "342",
+                    "343"
+                  ]
+                },
+                {
+                  "Code": "335",
+                  "ItemsName": "5. Thuế thu nhập hoàn lại phải trả",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "V.21",
+                  "Longorshortterm": 1,
+                  "Order": 58,
+                  "Print": true,
+                  "Accounts": [
+                    "347"
+                  ]
+                },
+                {
+                  "Code": "336",
+                  "ItemsName": "6. Dự phòng trợ cấp mất việc làm",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 1,
+                  "Order": 59,
+                  "Print": true,
+                  "Accounts": [
+                    "351"
+                  ]
+                },
+                {
+                  "Code": "337",
+                  "ItemsName": "7. Dự phòng phải trả dài hạn",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 1,
+                  "Order": 60,
+                  "Print": true,
+                  "Accounts": [
+                    "352"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Code": "400",
+          "CategoryName": "B. Vốn chủ sở hữu",
+          "Items": [
+            {
+              "Code": "410",
+              "EntryName": "I. Vốn chủ sở hữu",
+              "Formulas": [
+                {
+                  "Code": "411",
+                  "ItemsName": "1. Vốn đầu tư của chủ sở hữu",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 0,
+                  "Order": 61,
+                  "Print": true,
+                  "Accounts": [
+                    "4111"
+                  ]
+                },
+                {
+                  "Code": "412",
+                  "ItemsName": "2. Thặng dư vốn cổ phần",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 0,
+                  "Order": 62,
+                  "Print": true,
+                  "Accounts": [
+                    "4112"
+                  ]
+                },
+                {
+                  "Code": "413",
+                  "ItemsName": "3. Vốn khác của chủ sở hữu",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 0,
+                  "Order": 63,
+                  "Print": true,
+                  "Accounts": [
+                    "4118"
+                  ]
+                },
+                {
+                  "Code": "414",
+                  "ItemsName": "4. Cổ phiếu quỹ (*)",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 0,
+                  "Order": 64,
+                  "Print": true,
+                  "Accounts": [
+                    "419"
+                  ]
+                },
+                {
+                  "Code": "415",
+                  "ItemsName": "5. Chênh lệch định giá lại TS",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 0,
+                  "Order": 65,
+                  "Print": true,
+                  "Accounts": [
+                    "412"
+                  ]
+                },
+                {
+                  "Code": "416",
+                  "ItemsName": "6. Chênh lệch tỷ giá hối đoái",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 0,
+                  "Order": 66,
+                  "Print": true,
+                  "Accounts": [
+                    "413"
+                  ]
+                },
+                {
+                  "Code": "417",
+                  "ItemsName": "7. Quỹ đầu tư phát triển",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 0,
+                  "Order": 67,
+                  "Print": true,
+                  "Accounts": [
+                    "414"
+                  ]
+                },
+                {
+                  "Code": "418",
+                  "ItemsName": "8. Quỹ dự phòng tài chính",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 0,
+                  "Order": 68,
+                  "Print": true,
+                  "Accounts": [
+                    "415"
+                  ]
+                },
+                {
+                  "Code": "419",
+                  "ItemsName": "9. Quỹ khác thuộc vốn chủ sở hữu",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 0,
+                  "Order": 69,
+                  "Print": true,
+                  "Accounts": [
+                    "418"
+                  ]
+                },
+                {
+                  "Code": "420",
+                  "ItemsName": "10. Lợi nhuận sau thuế chưa phân phối",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 0,
+                  "Order": 70,
+                  "Print": true,
+                  "Accounts": [
+                    "421"
+                  ]
+                },
+                {
+                  "Code": "421",
+                  "ItemsName": "11. Nguồn vốn đầu tư XDCB",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 0,
+                  "Order": 71,
+                  "Print": true,
+                  "Accounts": [
+                    "441"
+                  ]
+                }
+              ]
+            },
+            {
+              "Code": "430",
+              "EntryName": "II. Nguồn kinh phí và quỹ khác",
+              "Formulas": [
+                {
+                  "Code": "431",
+                  "ItemsName": "1. Quỹ khen thưởng và phúc lợi",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 0,
+                  "Order": 72,
+                  "Print": true,
+                  "Accounts": [
+                    "431"
+                  ]
+                },
+                {
+                  "Code": "432",
+                  "ItemsName": "2. Nguồn kinh phí",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "V.23",
+                  "Longorshortterm": 0,
+                  "Order": 73,
+                  "Print": true,
+                  "Accounts": [
+                    "461",
+                    "161"
+                  ]
+                },
+                {
+                  "Code": "433",
+                  "ItemsName": "3. Nguồn kinh phí đã hình thành TSCĐ",
+                  "Formula": "",
+                  "Calculate": true,
+                  "Illu": "",
+                  "Longorshortterm": 0,
+                  "Order": 74,
+                  "Print": true,
+                  "Accounts": [
+                    "466"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

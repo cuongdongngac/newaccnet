@@ -1,4 +1,4 @@
-<dx:ThemedWindow x:Class="NewaccNet.Wpf.MainWindow"
+﻿<dx:ThemedWindow x:Class="NewaccNet.Wpf.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -125,6 +125,14 @@
                                 <dx:SuperTip>
                                     <dx:SuperTipHeaderItem Content="Chuyển đổi số dư sang Niên độ mới"/>
                                     <dx:SuperTipItem Content="Chốt sổ cuối kỳ và kết chuyển số dư tài khoản, công nợ, kho vật tư... sang cơ sở dữ liệu niên độ mới."/>
+                                </dx:SuperTip>
+                            </dxb:BarButtonItem.SuperTip>
+                        </dxb:BarButtonItem>
+                        <dxb:BarButtonItem Content="Chuyển đổi CSDL" ItemClick="BtnConvertDb_ItemClick" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_transition.svg'}" auth:AuthHelper.RequiredMask="1">
+                            <dxb:BarButtonItem.SuperTip>
+                                <dx:SuperTip>
+                                    <dx:SuperTipHeaderItem Content="Chuyển đổi CSDL Access (MDB sang ACCDB)"/>
+                                    <dx:SuperTipItem Content="Chuyển đổi toàn bộ dữ liệu từ tệp Access MDB cũ sang CSDL ACCDB mới theo chuẩn NewaccNet."/>
                                 </dx:SuperTip>
                             </dxb:BarButtonItem.SuperTip>
                         </dxb:BarButtonItem>

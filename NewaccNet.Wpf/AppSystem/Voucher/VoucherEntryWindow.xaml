@@ -146,18 +146,23 @@
                 <TextBlock Grid.Row="0" Text="ĐỊNH KHOẢN CHÍNH (Master - Trái)" FontWeight="Bold" Margin="0,0,0,4" Foreground="DarkGreen"/>
                 <dxg:GridControl Grid.Row="1" Name="gridLeft" VerticalAlignment="Stretch" SelectedItemChanged="gridLeft_SelectedItemChanged" CurrentItemChanged="gridLeft_CurrentItemChanged">
                     <dxg:GridControl.View>
-                        <base:AppDetailTableView ShowGroupPanel="False" NewItemRowPosition="Bottom" EnterMoveNextColumn="True" FixDeleteButtonToRight="False" CellValueChanged="GridView_CellValueChanged" PreviewKeyDown="TableView_PreviewKeyDown" ShowingEditor="TableView_ShowingEditor" RowDoubleClick="TableView_RowDoubleClick" RowDeleted="TableView_RowDeleted"/>
+                        <base:AppDetailTableView ShowGroupPanel="False" AutoWidth="True" NewItemRowPosition="Bottom" EnterMoveNextColumn="True" FixDeleteButtonToRight="False" CellValueChanged="GridView_CellValueChanged" PreviewKeyDown="TableView_PreviewKeyDown" ShowingEditor="TableView_ShowingEditor" RowDoubleClick="TableView_RowDoubleClick" RowDeleted="TableView_RowDeleted"/>
                     </dxg:GridControl.View>
                     <dxg:GridControl.Columns>
                         <dxg:GridColumn FieldName="Id" Header="ID" Width="40" ReadOnly="True" AllowEditing="False" Visible="False" ShowInColumnChooser="False"/>
                         <dxg:GridColumn Binding="{Binding ParentId}" FieldName="ParentId" Header="ParentId" Width="60" ReadOnly="True" AllowEditing="False" Visible="False" ShowInColumnChooser="False"/>
-                        <dxg:GridColumn FieldName="Dbcr" Header="Nợ/Có" Width="60">
+                        <dxg:GridColumn FieldName="Dbcr" Header="Nợ/Có" Width="60" FixedWidth="True">
                             <dxg:GridColumn.EditSettings>
                                 <dxe:ComboBoxEditSettings ItemsSource="{Binding DataContext.DbcrList, RelativeSource={RelativeSource AncestorType=Window}}" ValueMember="Id" DisplayMember="Name" IsTextEditable="False" AutoComplete="True" ImmediatePopup="True"/>
                             </dxg:GridColumn.EditSettings>
                         </dxg:GridColumn>
-                        <dxg:GridColumn FieldName="AccountId" Header="Tài khoản" Width="150" CellTemplate="{StaticResource AccountColumnTemplate}"/>
-                        <dxg:GridColumn FieldName="Amount" Header="Số tiền" Width="*">
+                        <dxg:GridColumn FieldName="AccountId" Header="Tài khoản" Width="95" FixedWidth="True" CellTemplate="{StaticResource AccountColumnTemplate}"/>
+                        <dxg:GridColumn FieldName="AccountName" Header="Tên tài khoản" Width="*" MinWidth="130" ReadOnly="True" AllowEditing="False">
+                            <dxg:GridColumn.EditSettings>
+                                <dxe:TextEditSettings TextTrimming="CharacterEllipsis"/>
+                            </dxg:GridColumn.EditSettings>
+                        </dxg:GridColumn>
+                        <dxg:GridColumn FieldName="Amount" Header="Số tiền" Width="110" FixedWidth="True">
                             <dxg:GridColumn.EditSettings>
                                 <dxe:TextEditSettings DisplayFormat="N0" Mask="N0" MaskType="Numeric" MaskUseAsDisplayFormat="True"/>
                             </dxg:GridColumn.EditSettings>
@@ -175,18 +180,23 @@
                 <TextBlock Grid.Row="0" Text="ĐỊNH KHOẢN CHI TIẾT (Detail - Phải)" FontWeight="Bold" Margin="0,0,0,4" Foreground="Blue"/>
                 <dxg:GridControl Grid.Row="1" Name="gridRight" VerticalAlignment="Stretch" >
                     <dxg:GridControl.View>
-                        <base:AppDetailTableView ShowGroupPanel="False" NewItemRowPosition="Bottom" EnterMoveNextColumn="True" FixDeleteButtonToRight="False" CellValueChanged="GridView_CellValueChanged" PreviewKeyDown="TableView_PreviewKeyDown" ShowingEditor="TableView_ShowingEditor" RowDoubleClick="TableView_RowDoubleClick" RowDeleted="TableView_RowDeleted"/>
+                        <base:AppDetailTableView ShowGroupPanel="False" AutoWidth="True" NewItemRowPosition="Bottom" EnterMoveNextColumn="True" FixDeleteButtonToRight="False" CellValueChanged="GridView_CellValueChanged" PreviewKeyDown="TableView_PreviewKeyDown" ShowingEditor="TableView_ShowingEditor" RowDoubleClick="TableView_RowDoubleClick" RowDeleted="TableView_RowDeleted"/>
                     </dxg:GridControl.View>
                     <dxg:GridControl.Columns>
                         <dxg:GridColumn FieldName="Id" Header="ID" Width="40" ReadOnly="True" AllowEditing="False" Visible="False" ShowInColumnChooser="False"/>
                         <dxg:GridColumn Binding="{Binding ParentId}" FieldName="ParentId" Header="ParentId" Width="60" ReadOnly="True" AllowEditing="False" Visible="False" ShowInColumnChooser="False"/>
-                        <dxg:GridColumn FieldName="Dbcr" Header="Nợ/Có" Width="60">
+                        <dxg:GridColumn FieldName="Dbcr" Header="Nợ/Có" Width="60" FixedWidth="True">
                             <dxg:GridColumn.EditSettings>
                                 <dxe:ComboBoxEditSettings ItemsSource="{Binding DataContext.DbcrList, RelativeSource={RelativeSource AncestorType=Window}}" ValueMember="Id" DisplayMember="Name" IsTextEditable="False" AutoComplete="True" ImmediatePopup="True"/>
                             </dxg:GridColumn.EditSettings>
                         </dxg:GridColumn>
-                        <dxg:GridColumn FieldName="AccountId" Header="Tài khoản" Width="150" CellTemplate="{StaticResource AccountColumnTemplate}"/>
-                        <dxg:GridColumn FieldName="Amount" Header="Số tiền" Width="*">
+                        <dxg:GridColumn FieldName="AccountId" Header="Tài khoản" Width="95" FixedWidth="True" CellTemplate="{StaticResource AccountColumnTemplate}"/>
+                        <dxg:GridColumn FieldName="AccountName" Header="Tên tài khoản" Width="*" MinWidth="130" ReadOnly="True" AllowEditing="False">
+                            <dxg:GridColumn.EditSettings>
+                                <dxe:TextEditSettings TextTrimming="CharacterEllipsis"/>
+                            </dxg:GridColumn.EditSettings>
+                        </dxg:GridColumn>
+                        <dxg:GridColumn FieldName="Amount" Header="Số tiền" Width="110" FixedWidth="True">
                             <dxg:GridColumn.EditSettings>
                                 <dxe:TextEditSettings DisplayFormat="N0" Mask="N0" MaskType="Numeric" MaskUseAsDisplayFormat="True"/>
                             </dxg:GridColumn.EditSettings>

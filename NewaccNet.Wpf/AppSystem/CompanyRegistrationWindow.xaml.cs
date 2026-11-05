@@ -166,11 +166,6 @@ namespace NewaccNet.Wpf.AppSystem
                 MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private void BtnVoucherPostingConfig_Click(object sender, RoutedEventArgs e)
-        {
-            var win = new VoucherPostingConfigWindow { Owner = this };
-            win.ShowDialog();
-        }
 
         private void BtnClose_Click(object sender, RoutedEventArgs e)
         {

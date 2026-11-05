@@ -60,26 +60,18 @@ namespace DataAccess.Linq
 					return this.Asset;
 				case DataAccess.EntityType.AssetDetailEntity:
 					return this.AssetDetail;
-				case DataAccess.EntityType.AssetExportVoucherEntity:
-					return this.AssetExportVoucher;
-				case DataAccess.EntityType.AssetLedgerEntity:
-					return this.AssetLedger;
 				case DataAccess.EntityType.AssetTrackingEntity:
 					return this.AssetTracking;
-				case DataAccess.EntityType.AssetTrackingDepreciationEntity:
-					return this.AssetTrackingDepreciation;
 				case DataAccess.EntityType.BusinessResultItemEntity:
 					return this.BusinessResultItem;
-				case DataAccess.EntityType.CashFlowBalanceEntity:
-					return this.CashFlowBalance;
+				case DataAccess.EntityType.CalculationSessionEntity:
+					return this.CalculationSession;
 				case DataAccess.EntityType.CashFlowCategoryEntity:
 					return this.CashFlowCategory;
 				case DataAccess.EntityType.CashFlowItemEntity:
 					return this.CashFlowItem;
 				case DataAccess.EntityType.CashFlowPreviousPeriodEntity:
 					return this.CashFlowPreviousPeriod;
-				case DataAccess.EntityType.CashFlowYearBalanceEntity:
-					return this.CashFlowYearBalance;
 				case DataAccess.EntityType.CategoryEntity:
 					return this.Category;
 				case DataAccess.EntityType.ChartOfAccountEntity:
@@ -92,68 +84,52 @@ namespace DataAccess.Linq
 					return this.CostDetail;
 				case DataAccess.EntityType.CostElementEntity:
 					return this.CostElement;
-				case DataAccess.EntityType.CostLedgerEntity:
-					return this.CostLedger;
 				case DataAccess.EntityType.CostObjectEntity:
 					return this.CostObject;
 				case DataAccess.EntityType.CurrencyEntity:
 					return this.Currency;
 				case DataAccess.EntityType.CurrencyDetailEntity:
 					return this.CurrencyDetail;
-				case DataAccess.EntityType.CurrencyLedgerEntity:
-					return this.CurrencyLedger;
 				case DataAccess.EntityType.CurrencyLiabilityLineEntity:
 					return this.CurrencyLiabilityLine;
 				case DataAccess.EntityType.CustomCostReportEntity:
 					return this.CustomCostReport;
 				case DataAccess.EntityType.CustomCostReportAccountEntity:
 					return this.CustomCostReportAccount;
-				case DataAccess.EntityType.CustomerExportLineEntity:
-					return this.CustomerExportLine;
+				case DataAccess.EntityType.CustomFieldDefinitionEntity:
+					return this.CustomFieldDefinition;
+				case DataAccess.EntityType.CustomFieldOptionEntity:
+					return this.CustomFieldOption;
 				case DataAccess.EntityType.DbConfigEntity:
 					return this.DbConfig;
 				case DataAccess.EntityType.DebtBalanceEntity:
 					return this.DebtBalance;
 				case DataAccess.EntityType.DebtDetailEntity:
 					return this.DebtDetail;
-				case DataAccess.EntityType.DebtLedgerEntity:
-					return this.DebtLedger;
 				case DataAccess.EntityType.DebtReasonEntity:
 					return this.DebtReason;
 				case DataAccess.EntityType.DebtTypeEntity:
 					return this.DebtType;
 				case DataAccess.EntityType.DepartmentEntity:
 					return this.Department;
-				case DataAccess.EntityType.DepreciationEntity:
-					return this.Depreciation;
+				case DataAccess.EntityType.DimensionEntity:
+					return this.Dimension;
+				case DataAccess.EntityType.DimensionValueEntity:
+					return this.DimensionValue;
 				case DataAccess.EntityType.ExchangeRateEntity:
 					return this.ExchangeRate;
 				case DataAccess.EntityType.ExpenseTaxLineEntity:
 					return this.ExpenseTaxLine;
-				case DataAccess.EntityType.FinancialMonthEntity:
-					return this.FinancialMonth;
-				case DataAccess.EntityType.GeneralLedgerEntity:
-					return this.GeneralLedger;
-				case DataAccess.EntityType.InterestEntity:
-					return this.Interest;
-				case DataAccess.EntityType.InterestDetailEntity:
-					return this.InterestDetail;
 				case DataAccess.EntityType.InterestRateEntity:
 					return this.InterestRate;
-				case DataAccess.EntityType.InventoryExportVoucherEntity:
-					return this.InventoryExportVoucher;
 				case DataAccess.EntityType.InventoryItemEntity:
 					return this.InventoryItem;
-				case DataAccess.EntityType.InventoryLedgerEntity:
-					return this.InventoryLedger;
 				case DataAccess.EntityType.InventoryVoucherEntity:
 					return this.InventoryVoucher;
 				case DataAccess.EntityType.InventoryVoucherLineEntity:
 					return this.InventoryVoucherLine;
 				case DataAccess.EntityType.InvestmentDetailEntity:
 					return this.InvestmentDetail;
-				case DataAccess.EntityType.InvestmentLedgerEntity:
-					return this.InvestmentLedger;
 				case DataAccess.EntityType.JournalEntryEntity:
 					return this.JournalEntry;
 				case DataAccess.EntityType.JournalVoucherEntity:
@@ -266,23 +242,14 @@ namespace DataAccess.Linq
 		/// <summary>returns the datasource to use in a Linq query when targeting AssetDetailEntity instances in the database.</summary>
 		public DataSource2<AssetDetailEntity> AssetDetail {	get { return new DataSource2<AssetDetailEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
 		
-		/// <summary>returns the datasource to use in a Linq query when targeting AssetExportVoucherEntity instances in the database.</summary>
-		public DataSource2<AssetExportVoucherEntity> AssetExportVoucher {	get { return new DataSource2<AssetExportVoucherEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
-		
-		/// <summary>returns the datasource to use in a Linq query when targeting AssetLedgerEntity instances in the database.</summary>
-		public DataSource2<AssetLedgerEntity> AssetLedger {	get { return new DataSource2<AssetLedgerEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
-		
 		/// <summary>returns the datasource to use in a Linq query when targeting AssetTrackingEntity instances in the database.</summary>
 		public DataSource2<AssetTrackingEntity> AssetTracking {	get { return new DataSource2<AssetTrackingEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
-		
-		/// <summary>returns the datasource to use in a Linq query when targeting AssetTrackingDepreciationEntity instances in the database.</summary>
-		public DataSource2<AssetTrackingDepreciationEntity> AssetTrackingDepreciation {	get { return new DataSource2<AssetTrackingDepreciationEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting BusinessResultItemEntity instances in the database.</summary>
 		public DataSource2<BusinessResultItemEntity> BusinessResultItem {	get { return new DataSource2<BusinessResultItemEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
 		
-		/// <summary>returns the datasource to use in a Linq query when targeting CashFlowBalanceEntity instances in the database.</summary>
-		public DataSource2<CashFlowBalanceEntity> CashFlowBalance {	get { return new DataSource2<CashFlowBalanceEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
+		/// <summary>returns the datasource to use in a Linq query when targeting CalculationSessionEntity instances in the database.</summary>
+		public DataSource2<CalculationSessionEntity> CalculationSession {	get { return new DataSource2<CalculationSessionEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting CashFlowCategoryEntity instances in the database.</summary>
 		public DataSource2<CashFlowCategoryEntity> CashFlowCategory {	get { return new DataSource2<CashFlowCategoryEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
@@ -292,9 +259,6 @@ namespace DataAccess.Linq
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting CashFlowPreviousPeriodEntity instances in the database.</summary>
 		public DataSource2<CashFlowPreviousPeriodEntity> CashFlowPreviousPeriod {	get { return new DataSource2<CashFlowPreviousPeriodEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
-		
-		/// <summary>returns the datasource to use in a Linq query when targeting CashFlowYearBalanceEntity instances in the database.</summary>
-		public DataSource2<CashFlowYearBalanceEntity> CashFlowYearBalance {	get { return new DataSource2<CashFlowYearBalanceEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting CategoryEntity instances in the database.</summary>
 		public DataSource2<CategoryEntity> Category {	get { return new DataSource2<CategoryEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
@@ -314,9 +278,6 @@ namespace DataAccess.Linq
 		/// <summary>returns the datasource to use in a Linq query when targeting CostElementEntity instances in the database.</summary>
 		public DataSource2<CostElementEntity> CostElement {	get { return new DataSource2<CostElementEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
 		
-		/// <summary>returns the datasource to use in a Linq query when targeting CostLedgerEntity instances in the database.</summary>
-		public DataSource2<CostLedgerEntity> CostLedger {	get { return new DataSource2<CostLedgerEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
-		
 		/// <summary>returns the datasource to use in a Linq query when targeting CostObjectEntity instances in the database.</summary>
 		public DataSource2<CostObjectEntity> CostObject {	get { return new DataSource2<CostObjectEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
 		
@@ -325,9 +286,6 @@ namespace DataAccess.Linq
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting CurrencyDetailEntity instances in the database.</summary>
 		public DataSource2<CurrencyDetailEntity> CurrencyDetail {	get { return new DataSource2<CurrencyDetailEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
-		
-		/// <summary>returns the datasource to use in a Linq query when targeting CurrencyLedgerEntity instances in the database.</summary>
-		public DataSource2<CurrencyLedgerEntity> CurrencyLedger {	get { return new DataSource2<CurrencyLedgerEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting CurrencyLiabilityLineEntity instances in the database.</summary>
 		public DataSource2<CurrencyLiabilityLineEntity> CurrencyLiabilityLine {	get { return new DataSource2<CurrencyLiabilityLineEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
@@ -338,8 +296,11 @@ namespace DataAccess.Linq
 		/// <summary>returns the datasource to use in a Linq query when targeting CustomCostReportAccountEntity instances in the database.</summary>
 		public DataSource2<CustomCostReportAccountEntity> CustomCostReportAccount {	get { return new DataSource2<CustomCostReportAccountEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
 		
-		/// <summary>returns the datasource to use in a Linq query when targeting CustomerExportLineEntity instances in the database.</summary>
-		public DataSource2<CustomerExportLineEntity> CustomerExportLine {	get { return new DataSource2<CustomerExportLineEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
+		/// <summary>returns the datasource to use in a Linq query when targeting CustomFieldDefinitionEntity instances in the database.</summary>
+		public DataSource2<CustomFieldDefinitionEntity> CustomFieldDefinition {	get { return new DataSource2<CustomFieldDefinitionEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting CustomFieldOptionEntity instances in the database.</summary>
+		public DataSource2<CustomFieldOptionEntity> CustomFieldOption {	get { return new DataSource2<CustomFieldOptionEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting DbConfigEntity instances in the database.</summary>
 		public DataSource2<DbConfigEntity> DbConfig {	get { return new DataSource2<DbConfigEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
@@ -350,9 +311,6 @@ namespace DataAccess.Linq
 		/// <summary>returns the datasource to use in a Linq query when targeting DebtDetailEntity instances in the database.</summary>
 		public DataSource2<DebtDetailEntity> DebtDetail {	get { return new DataSource2<DebtDetailEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
 		
-		/// <summary>returns the datasource to use in a Linq query when targeting DebtLedgerEntity instances in the database.</summary>
-		public DataSource2<DebtLedgerEntity> DebtLedger {	get { return new DataSource2<DebtLedgerEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
-		
 		/// <summary>returns the datasource to use in a Linq query when targeting DebtReasonEntity instances in the database.</summary>
 		public DataSource2<DebtReasonEntity> DebtReason {	get { return new DataSource2<DebtReasonEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
 		
@@ -362,8 +320,11 @@ namespace DataAccess.Linq
 		/// <summary>returns the datasource to use in a Linq query when targeting DepartmentEntity instances in the database.</summary>
 		public DataSource2<DepartmentEntity> Department {	get { return new DataSource2<DepartmentEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
 		
-		/// <summary>returns the datasource to use in a Linq query when targeting DepreciationEntity instances in the database.</summary>
-		public DataSource2<DepreciationEntity> Depreciation {	get { return new DataSource2<DepreciationEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
+		/// <summary>returns the datasource to use in a Linq query when targeting DimensionEntity instances in the database.</summary>
+		public DataSource2<DimensionEntity> Dimension {	get { return new DataSource2<DimensionEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting DimensionValueEntity instances in the database.</summary>
+		public DataSource2<DimensionValueEntity> DimensionValue {	get { return new DataSource2<DimensionValueEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting ExchangeRateEntity instances in the database.</summary>
 		public DataSource2<ExchangeRateEntity> ExchangeRate {	get { return new DataSource2<ExchangeRateEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
@@ -371,29 +332,11 @@ namespace DataAccess.Linq
 		/// <summary>returns the datasource to use in a Linq query when targeting ExpenseTaxLineEntity instances in the database.</summary>
 		public DataSource2<ExpenseTaxLineEntity> ExpenseTaxLine {	get { return new DataSource2<ExpenseTaxLineEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
 		
-		/// <summary>returns the datasource to use in a Linq query when targeting FinancialMonthEntity instances in the database.</summary>
-		public DataSource2<FinancialMonthEntity> FinancialMonth {	get { return new DataSource2<FinancialMonthEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
-		
-		/// <summary>returns the datasource to use in a Linq query when targeting GeneralLedgerEntity instances in the database.</summary>
-		public DataSource2<GeneralLedgerEntity> GeneralLedger {	get { return new DataSource2<GeneralLedgerEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
-		
-		/// <summary>returns the datasource to use in a Linq query when targeting InterestEntity instances in the database.</summary>
-		public DataSource2<InterestEntity> Interest {	get { return new DataSource2<InterestEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
-		
-		/// <summary>returns the datasource to use in a Linq query when targeting InterestDetailEntity instances in the database.</summary>
-		public DataSource2<InterestDetailEntity> InterestDetail {	get { return new DataSource2<InterestDetailEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
-		
 		/// <summary>returns the datasource to use in a Linq query when targeting InterestRateEntity instances in the database.</summary>
 		public DataSource2<InterestRateEntity> InterestRate {	get { return new DataSource2<InterestRateEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
 		
-		/// <summary>returns the datasource to use in a Linq query when targeting InventoryExportVoucherEntity instances in the database.</summary>
-		public DataSource2<InventoryExportVoucherEntity> InventoryExportVoucher {	get { return new DataSource2<InventoryExportVoucherEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
-		
 		/// <summary>returns the datasource to use in a Linq query when targeting InventoryItemEntity instances in the database.</summary>
 		public DataSource2<InventoryItemEntity> InventoryItem {	get { return new DataSource2<InventoryItemEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
-		
-		/// <summary>returns the datasource to use in a Linq query when targeting InventoryLedgerEntity instances in the database.</summary>
-		public DataSource2<InventoryLedgerEntity> InventoryLedger {	get { return new DataSource2<InventoryLedgerEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting InventoryVoucherEntity instances in the database.</summary>
 		public DataSource2<InventoryVoucherEntity> InventoryVoucher {	get { return new DataSource2<InventoryVoucherEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
@@ -403,9 +346,6 @@ namespace DataAccess.Linq
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting InvestmentDetailEntity instances in the database.</summary>
 		public DataSource2<InvestmentDetailEntity> InvestmentDetail {	get { return new DataSource2<InvestmentDetailEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
-		
-		/// <summary>returns the datasource to use in a Linq query when targeting InvestmentLedgerEntity instances in the database.</summary>
-		public DataSource2<InvestmentLedgerEntity> InvestmentLedger {	get { return new DataSource2<InvestmentLedgerEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting JournalEntryEntity instances in the database.</summary>
 		public DataSource2<JournalEntryEntity> JournalEntry {	get { return new DataSource2<JournalEntryEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }

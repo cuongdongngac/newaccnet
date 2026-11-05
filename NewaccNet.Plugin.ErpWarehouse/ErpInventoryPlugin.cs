@@ -135,6 +135,22 @@ namespace NewaccNet.Plugin.ErpWarehouse
                     progressWin.ShowDialog();
                 }
             });
+
+            // 7. Cấu hình tập tài khoản nghiệp vụ kho & Định nghĩa lại tên hiển thị (Plugin Scoped Account Set)
+            _context.RegisterRibbonAction(new PluginRibbonAction
+            {
+                Category = category,
+                GroupName = "Cấu hình",
+                Title = "Tài khoản ERP",
+                ToolTip = "Thiết lập danh mục tài khoản phục vụ xuất nhập kho và định nghĩa lại tên hiển thị (Custom Name)",
+                GlyphUri = "pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_security_permission.svg",
+                ExecuteAction = (ownerWindow) =>
+                {
+                    var configWin = new ErpAccountConfigWindow();
+                    if (ownerWindow != null) configWin.Owner = ownerWindow;
+                    configWin.ShowDialog();
+                }
+            });
         }
 
         public void Shutdown()

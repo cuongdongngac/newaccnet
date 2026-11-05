@@ -23,15 +23,35 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
         public EntityCollection<DebtTypeEntity> DebtTypes { get; } = new EntityCollection<DebtTypeEntity>();
         public EntityCollection<DebtReasonEntity> DebtReasons { get; } = new EntityCollection<DebtReasonEntity>();
 
+        public static readonly DependencyProperty TargetAmountProperty =
+            DependencyProperty.Register(nameof(TargetAmount), typeof(decimal), typeof(DebtDetailWindow), new PropertyMetadata(0m));
+
+        public decimal TargetAmount
+        {
+            get => (decimal)GetValue(TargetAmountProperty);
+            set => SetValue(TargetAmountProperty, value);
+        }
+
         public DebtDetailWindow(JournalEntryEntity parentEntry)
         {
             InitializeComponent();
             _parentEntry = parentEntry;
             this.DataContext = _parentEntry;
 
+            TargetAmount = _parentEntry.Amount ?? 0m;
+            if (TargetAmount == 0m && _parentEntry.ParentEntry?.Amount != null)
+            {
+                TargetAmount = _parentEntry.ParentEntry.Amount.Value;
+            }
+
             _originalList = _parentEntry.DebtDetails.ToList();
-            _parentEntry.SaveFields("undo_parent");
-            foreach (var item in _originalList) item.SaveFields("undo");
+            try { _parentEntry.SaveFields("undo_parent"); } catch { }
+            foreach (var item in _originalList) 
+            {
+                try { item.SaveFields("undo"); } catch { }
+            }
+
+            _parentEntry.IsDominoSuspended = true;
 
             LoadDictionaries();
         }
@@ -187,10 +207,41 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             if (newRow != null)
             {
                 decimal totalExist = _parentEntry.DebtDetails.Where(x => x != newRow).Sum(x => x.Amount ?? 0m);
-                decimal remain = (_parentEntry.Amount ?? 0m) - totalExist;
+                decimal remain = TargetAmount - totalExist;
                 
                 newRow.Amount = remain > 0m ? remain : 0m;
                 newRow.Liabilitydate = _parentEntry.JournalVoucher?.VoucherDate ?? DateTime.Today;
+
+                if (string.IsNullOrEmpty(newRow.PartnerId))
+                {
+                    string defaultPartner = _parentEntry.JournalVoucher?.JournalEntries
+                        .SelectMany(j => j.DebtDetails)
+                        .FirstOrDefault(d => !string.IsNullOrEmpty(d.PartnerId))?.PartnerId
+                        ?? _parentEntry.ParentEntry?.DebtDetails.FirstOrDefault(d => !string.IsNullOrEmpty(d.PartnerId))?.PartnerId
+                        ?? _parentEntry.ParentEntry?.SubEntries.SelectMany(s => s.DebtDetails).FirstOrDefault(d => !string.IsNullOrEmpty(d.PartnerId))?.PartnerId
+                        ?? _parentEntry.ParentEntry?.SubEntries.SelectMany(s => s.InventoryVouchers).FirstOrDefault(iv => !string.IsNullOrEmpty(iv.Vatobjectid))?.Vatobjectid
+                        ?? _parentEntry.ParentEntry?.SubEntries.SelectMany(s => s.VatEntries).FirstOrDefault(v => !string.IsNullOrEmpty(v.Vatobjectid))?.Vatobjectid
+                        ?? _parentEntry.JournalVoucher?.JournalEntries
+                        .SelectMany(j => j.InventoryVouchers)
+                        .FirstOrDefault(iv => !string.IsNullOrEmpty(iv.Vatobjectid))?.Vatobjectid
+                        ?? _parentEntry.JournalVoucher?.JournalEntries
+                        .SelectMany(j => j.VatEntries)
+                        .FirstOrDefault(v => !string.IsNullOrEmpty(v.Vatobjectid))?.Vatobjectid;
+
+                    if (string.IsNullOrEmpty(defaultPartner) && this.Owner != null)
+                    {
+                        var partnerCtrl = this.Owner.FindName("luePartner") as DevExpress.Xpf.Editors.LookUpEditBase;
+                        if (partnerCtrl?.EditValue != null)
+                        {
+                            defaultPartner = partnerCtrl.EditValue.ToString();
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(defaultPartner))
+                    {
+                        newRow.PartnerId = defaultPartner;
+                    }
+                }
             }
         }
 
@@ -254,21 +305,37 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
 
         protected override void BtnAccept_Click(object sender, RoutedEventArgs e)
         {
-            TableViewDebt.CloseEditor();
-            TableViewDebt.FocusedRowHandle = DevExpress.Xpf.Grid.GridControl.InvalidRowHandle;
-            TableViewDebt.CommitEditing();
+            try
+            {
+                TableViewDebt.CloseEditor();
+                TableViewDebt.FocusedRowHandle = DevExpress.Xpf.Grid.GridControl.InvalidRowHandle;
+                TableViewDebt.CommitEditing();
 
-            _parentEntry.NotifyChildCollectionChanged();
+                _parentEntry.IsDominoSuspended = false;
+                decimal totalDebt = _parentEntry.DebtDetails.Sum(d => d.Amount ?? 0m);
+                if (totalDebt > 0 || _parentEntry.DebtDetails.Count > 0)
+                {
+                    _parentEntry.Amount = totalDebt;
+                }
+                _parentEntry.NotifyChildCollectionChanged();
 
-            _isSaved = true;
-            this.DialogResult = true;
-            this.Close();
+                _isSaved = true;
+                this.DialogResult = true;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"BtnAccept error: {ex}");
+                this.DialogResult = true;
+            }
+            finally
+            {
+                _parentEntry.IsDominoSuspended = false;
+            }
         }
 
         protected override void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = false;
-            this.Close();
         }
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
@@ -278,15 +345,26 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
                 _parentEntry.IsDominoSuspended = true;
                 try
                 {
-                    foreach (var item in _originalList) item.RollbackFields("undo");
+                    foreach (var item in _originalList) 
+                    {
+                        try { item.RollbackFields("undo"); } catch { }
+                    }
                     _parentEntry.DebtDetails.Clear();
                     foreach (var item in _originalList) _parentEntry.DebtDetails.Add(item);
-                    _parentEntry.RollbackFields("undo_parent");
+                    try { _parentEntry.RollbackFields("undo_parent"); } catch { }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Error on rollback: {ex}");
                 }
                 finally
                 {
                     _parentEntry.IsDominoSuspended = false;
                 }
+            }
+            else
+            {
+                _parentEntry.IsDominoSuspended = false;
             }
             base.OnClosing(e);
         }

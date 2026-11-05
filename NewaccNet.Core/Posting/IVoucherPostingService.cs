@@ -247,6 +247,19 @@ namespace NewaccNet.Core.Posting
                 }
             }
 
+            // Đảm bảo toàn bộ dòng con (SubEntries) đều thuộc voucher.JournalEntries để gán JournalVoucherId (chuẩn Bills)
+            foreach (var master in voucher.JournalEntries.ToList())
+            {
+                foreach (var detail in master.SubEntries)
+                {
+                    detail.JournalVoucher = voucher;
+                    if (!voucher.JournalEntries.Contains(detail))
+                    {
+                        voucher.JournalEntries.Add(detail);
+                    }
+                }
+            }
+
             adapter.SaveEntity(voucher, true, recurse: true);
         }
     }

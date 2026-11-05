@@ -27,7 +27,6 @@ namespace DataAccess.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		private EntityCollection<CostDetailEntity> _costDetails;
-		private EntityCollection<CostLedgerEntity> _costLedgers;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
@@ -39,8 +38,6 @@ namespace DataAccess.EntityClasses
 		{
 			/// <summary>Member name CostDetails</summary>
 			public static readonly string CostDetails = "CostDetails";
-			/// <summary>Member name CostLedgers</summary>
-			public static readonly string CostLedgers = "CostLedgers";
 		}
 
 		/// <summary>Static meta-data storage for navigator related information</summary>
@@ -50,7 +47,6 @@ namespace DataAccess.EntityClasses
 			{
 				SetEntityCoreInfo("CostElementEntity", InheritanceHierarchyType.None, false, (int)DataAccess.EntityType.CostElementEntity, typeof(CostElementEntity), typeof(CostElementEntityFactory), false);
 				AddNavigatorMetaData<CostElementEntity, EntityCollection<CostDetailEntity>>("CostDetails", a => a._costDetails, (a, b) => a._costDetails = b, a => a.CostDetails, () => new CostElementRelations().CostDetailEntityUsingCostElementId, typeof(CostDetailEntity), (int)DataAccess.EntityType.CostDetailEntity);
-				AddNavigatorMetaData<CostElementEntity, EntityCollection<CostLedgerEntity>>("CostLedgers", a => a._costLedgers, (a, b) => a._costLedgers = b, a => a.CostLedgers, () => new CostElementRelations().CostLedgerEntityUsingExpenseAtributeId, typeof(CostLedgerEntity), (int)DataAccess.EntityType.CostLedgerEntity);
 			}
 		}
 
@@ -106,10 +102,6 @@ namespace DataAccess.EntityClasses
 		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'CostDetail' to this entity.</summary>
 		/// <returns></returns>
 		public virtual IRelationPredicateBucket GetRelationInfoCostDetails() { return CreateRelationInfoForNavigator("CostDetails"); }
-
-		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'CostLedger' to this entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoCostLedgers() { return CreateRelationInfoForNavigator("CostLedgers"); }
 		
 		/// <inheritdoc/>
 		protected override EntityStaticMetaDataBase GetEntityStaticMetaData() {	return _staticMetaData; }
@@ -145,10 +137,6 @@ namespace DataAccess.EntityClasses
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
 		public static IPrefetchPathElement2 PrefetchPathCostDetails { get { return _staticMetaData.GetPrefetchPathElement("CostDetails", CommonEntityBase.CreateEntityCollection<CostDetailEntity>()); } }
 
-		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'CostLedger' for this entity.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathCostLedgers { get { return _staticMetaData.GetPrefetchPathElement("CostLedgers", CommonEntityBase.CreateEntityCollection<CostLedgerEntity>()); } }
-
 		/// <summary>The ElementName property of the Entity CostElement<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "CostElement"."ElementName".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String ElementName
@@ -176,10 +164,6 @@ namespace DataAccess.EntityClasses
 		/// <summary>Gets the EntityCollection with the related entities of type 'CostDetailEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(CostDetailEntity))]
 		public virtual EntityCollection<CostDetailEntity> CostDetails { get { return GetOrCreateEntityCollection<CostDetailEntity, CostDetailEntityFactory>("CostElement", true, false, ref _costDetails); } }
-
-		/// <summary>Gets the EntityCollection with the related entities of type 'CostLedgerEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
-		[TypeContainedAttribute(typeof(CostLedgerEntity))]
-		public virtual EntityCollection<CostLedgerEntity> CostLedgers { get { return GetOrCreateEntityCollection<CostLedgerEntity, CostLedgerEntityFactory>("CostElement", true, false, ref _costLedgers); } }
 
 		// __LLBLGENPRO_USER_CODE_REGION_START CustomEntityCode
 		// __LLBLGENPRO_USER_CODE_REGION_END
@@ -213,19 +197,12 @@ namespace DataAccess.RelationClasses
 			get { return ModelInfoProviderSingleton.GetInstance().CreateRelation(RelationType.OneToMany, "CostDetails", true, new[] { CostElementFields.Id, CostDetailFields.CostElementId }); }
 		}
 
-		/// <summary>Returns a new IEntityRelation object, between CostElementEntity and CostLedgerEntity over the 1:n relation they have, using the relation between the fields: CostElement.Id - CostLedger.ExpenseAtributeId</summary>
-		public virtual IEntityRelation CostLedgerEntityUsingExpenseAtributeId
-		{
-			get { return ModelInfoProviderSingleton.GetInstance().CreateRelation(RelationType.OneToMany, "CostLedgers", true, new[] { CostElementFields.Id, CostLedgerFields.ExpenseAtributeId }); }
-		}
-
 	}
 	
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticCostElementRelations
 	{
 		internal static readonly IEntityRelation CostDetailEntityUsingCostElementIdStatic = new CostElementRelations().CostDetailEntityUsingCostElementId;
-		internal static readonly IEntityRelation CostLedgerEntityUsingExpenseAtributeIdStatic = new CostElementRelations().CostLedgerEntityUsingExpenseAtributeId;
 
 		/// <summary>CTor</summary>
 		static StaticCostElementRelations() { }

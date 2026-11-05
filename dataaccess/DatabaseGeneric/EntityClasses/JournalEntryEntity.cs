@@ -289,12 +289,68 @@ namespace DataAccess.EntityClasses
 			set { SetValue((int)JournalEntryFieldIndex.Createuser, value); }
 		}
 
+		/// <summary>The Date1 property of the Entity JournalEntry<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "JournalEntry"."Date1".<br/>Table field type characteristics (type, precision, scale, length): Date, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.DateTime> Date1
+		{
+			get { return (Nullable<System.DateTime>)GetValue((int)JournalEntryFieldIndex.Date1, false); }
+			set { SetValue((int)JournalEntryFieldIndex.Date1, value); }
+		}
+
 		/// <summary>The Dbcr property of the Entity JournalEntry<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "JournalEntry"."Dbcr".<br/>Table field type characteristics (type, precision, scale, length): SmallInt, 5, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int16> Dbcr
 		{
 			get { return (Nullable<System.Int16>)GetValue((int)JournalEntryFieldIndex.Dbcr, false); }
 			set { SetValue((int)JournalEntryFieldIndex.Dbcr, value); }
+		}
+
+		/// <summary>The Dim1 property of the Entity JournalEntry<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "JournalEntry"."Dim1".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String Dim1
+		{
+			get { return (System.String)GetValue((int)JournalEntryFieldIndex.Dim1, true); }
+			set { SetValue((int)JournalEntryFieldIndex.Dim1, value); }
+		}
+
+		/// <summary>The Dim2 property of the Entity JournalEntry<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "JournalEntry"."Dim2".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String Dim2
+		{
+			get { return (System.String)GetValue((int)JournalEntryFieldIndex.Dim2, true); }
+			set { SetValue((int)JournalEntryFieldIndex.Dim2, value); }
+		}
+
+		/// <summary>The Dim3 property of the Entity JournalEntry<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "JournalEntry"."Dim3".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String Dim3
+		{
+			get { return (System.String)GetValue((int)JournalEntryFieldIndex.Dim3, true); }
+			set { SetValue((int)JournalEntryFieldIndex.Dim3, value); }
+		}
+
+		/// <summary>The Dim4 property of the Entity JournalEntry<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "JournalEntry"."Dim4".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String Dim4
+		{
+			get { return (System.String)GetValue((int)JournalEntryFieldIndex.Dim4, true); }
+			set { SetValue((int)JournalEntryFieldIndex.Dim4, value); }
+		}
+
+		/// <summary>The Dim5 property of the Entity JournalEntry<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "JournalEntry"."Dim5".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String Dim5
+		{
+			get { return (System.String)GetValue((int)JournalEntryFieldIndex.Dim5, true); }
+			set { SetValue((int)JournalEntryFieldIndex.Dim5, value); }
+		}
+
+		/// <summary>The ExtData property of the Entity JournalEntry<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "JournalEntry"."ExtData".<br/>Table field type characteristics (type, precision, scale, length): LongVarWChar, 0, 0, 536870911.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String ExtData
+		{
+			get { return (System.String)GetValue((int)JournalEntryFieldIndex.ExtData, true); }
+			set { SetValue((int)JournalEntryFieldIndex.ExtData, value); }
 		}
 
 		/// <summary>The Id property of the Entity JournalEntry<br/><br/></summary>
@@ -337,12 +393,52 @@ namespace DataAccess.EntityClasses
 			set { SetValue((int)JournalEntryFieldIndex.Modifyuser, value); }
 		}
 
+		/// <summary>The Num1 property of the Entity JournalEntry<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "JournalEntry"."Num1".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 18, 4, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Decimal> Num1
+		{
+			get { return (Nullable<System.Decimal>)GetValue((int)JournalEntryFieldIndex.Num1, false); }
+			set { SetValue((int)JournalEntryFieldIndex.Num1, value); }
+		}
+
+		/// <summary>The Num2 property of the Entity JournalEntry<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "JournalEntry"."Num2".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 18, 4, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Decimal> Num2
+		{
+			get { return (Nullable<System.Decimal>)GetValue((int)JournalEntryFieldIndex.Num2, false); }
+			set { SetValue((int)JournalEntryFieldIndex.Num2, value); }
+		}
+
 		/// <summary>The ParentId property of the Entity JournalEntry<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "JournalEntry"."ParentId".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Int32> ParentId
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)JournalEntryFieldIndex.ParentId, false); }
 			set { SetValue((int)JournalEntryFieldIndex.ParentId, value); }
+		}
+
+		/// <summary>The Text1 property of the Entity JournalEntry<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "JournalEntry"."Text1".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String Text1
+		{
+			get { return (System.String)GetValue((int)JournalEntryFieldIndex.Text1, true); }
+			set { SetValue((int)JournalEntryFieldIndex.Text1, value); }
+		}
+
+		/// <summary>The Text2 property of the Entity JournalEntry<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "JournalEntry"."Text2".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String Text2
+		{
+			get { return (System.String)GetValue((int)JournalEntryFieldIndex.Text2, true); }
+			set { SetValue((int)JournalEntryFieldIndex.Text2, value); }
+		}
+
+		/// <summary>The Text3 property of the Entity JournalEntry<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "JournalEntry"."Text3".<br/>Table field type characteristics (type, precision, scale, length): VarWChar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String Text3
+		{
+			get { return (System.String)GetValue((int)JournalEntryFieldIndex.Text3, true); }
+			set { SetValue((int)JournalEntryFieldIndex.Text3, value); }
 		}
 
 		/// <summary>The Version property of the Entity JournalEntry<br/><br/></summary>
@@ -427,8 +523,22 @@ namespace DataAccess
 		Createdate,
 		///<summary>Createuser. </summary>
 		Createuser,
+		///<summary>Date1. </summary>
+		Date1,
 		///<summary>Dbcr. </summary>
 		Dbcr,
+		///<summary>Dim1. </summary>
+		Dim1,
+		///<summary>Dim2. </summary>
+		Dim2,
+		///<summary>Dim3. </summary>
+		Dim3,
+		///<summary>Dim4. </summary>
+		Dim4,
+		///<summary>Dim5. </summary>
+		Dim5,
+		///<summary>ExtData. </summary>
+		ExtData,
 		///<summary>Id. </summary>
 		Id,
 		///<summary>JournalVoucherId. </summary>
@@ -439,8 +549,18 @@ namespace DataAccess
 		Modifydate,
 		///<summary>Modifyuser. </summary>
 		Modifyuser,
+		///<summary>Num1. </summary>
+		Num1,
+		///<summary>Num2. </summary>
+		Num2,
 		///<summary>ParentId. </summary>
 		ParentId,
+		///<summary>Text1. </summary>
+		Text1,
+		///<summary>Text2. </summary>
+		Text2,
+		///<summary>Text3. </summary>
+		Text3,
 		///<summary>Version. </summary>
 		Version,
 		/// <summary></summary>

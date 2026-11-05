@@ -1,0 +1,219 @@
+<dx:ThemedWindow xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+                  xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+                  xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+                  x:Class="NewaccNet.Plugin.CashBank.Views.CashAccountConfigWindow"
+                  Title="Cấu hình nghiệp vụ &amp; Tài khoản Vốn bằng tiền - NEWACCNET"
+                  Height="720" Width="1100"
+                  WindowStartupLocation="CenterOwner"
+                  ShowInTaskbar="False">
+    <Grid Background="#F8FAFC">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="#FF0D47A1" Padding="20,12">
+            <StackPanel>
+                <TextBlock Text="CẤU HÌNH NGHIỆP VỤ &amp; DANH MỤC TÀI KHOẢN TIỀN MẶT - TIỀN GỬI NGÂN HÀNG" FontSize="15" FontWeight="Bold" Foreground="White"/>
+                <TextBlock Text="Khai báo các mối định khoản (Alias), tài khoản đối ứng ngầm định, điều kiện ràng buộc công nợ/chi phí và tài khoản quỹ/ngân hàng" FontSize="12" Foreground="#BBDEFB" Margin="0,3,0,0"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Main Tabs -->
+        <dx:DXTabControl Grid.Row="1" x:Name="tabControl" Margin="12,10">
+            <!-- Tab 1: Tài khoản Quỹ & Ngân hàng -->
+            <dx:DXTabItem Header="1. Tài khoản Quỹ &amp; Ngân hàng">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Top default selectors -->
+                    <Border Grid.Row="0" Background="White" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="4" Padding="15,10" Margin="0,0,0,10">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Tài khoản tiền mặt mặc định:" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#334155" Margin="0,0,8,0"/>
+                            <dxe:ComboBoxEdit x:Name="cboDefaultCash" Width="150" DisplayMember="FullDisplay" ValueMember="AccountId" Margin="0,0,25,0"/>
+
+                            <TextBlock Text="Tài khoản ngân hàng mặc định:" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#334155" Margin="0,0,8,0"/>
+                            <dxe:ComboBoxEdit x:Name="cboDefaultBank" Width="150" DisplayMember="FullDisplay" ValueMember="AccountId"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Accounts Grid -->
+                    <Border Grid.Row="1" Background="White" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="4">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <Border Grid.Row="0" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="0,0,0,1" Padding="12,8">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Danh sách tài khoản áp dụng cho phân hệ tiền" FontWeight="Bold" Foreground="#1E3A8A" VerticalAlignment="Center" Margin="0,0,16,0"/>
+                                    <dx:SimpleButton Content="+ Thêm tài khoản tiền" Height="26" Padding="10,0" Margin="0,0,6,0" Click="BtnAddCashAccount_Click"/>
+                                    <dx:SimpleButton Content="- Xóa dòng" Height="26" Padding="10,0" Click="BtnDeleteCashAccount_Click"/>
+                                </StackPanel>
+                            </Border>
+
+                            <dxg:GridControl Grid.Row="1" x:Name="gridCashAccounts" AutoGenerateColumns="None">
+                                <dxg:GridControl.View>
+                                    <dxg:TableView ShowGroupPanel="False" AllowEditing="True" NavigationStyle="Cell" AutoWidth="True" RowMinHeight="28"/>
+                                </dxg:GridControl.View>
+                                <dxg:GridControl.Columns>
+                                    <dxg:GridColumn FieldName="AccountId" Header="Số tài khoản" Width="120" MinWidth="100"/>
+                                    <dxg:GridColumn FieldName="BaseName" Header="Tên gốc tài khoản" Width="200" ReadOnly="True"/>
+                                    <dxg:GridColumn FieldName="CustomName" Header="Tên hiển thị ERP (Chỉnh sửa tùy ý)" Width="*" MinWidth="250"/>
+                                    <dxg:GridColumn FieldName="Category" Header="Phân loại" Width="110" FixedWidth="True" HorizontalHeaderContentAlignment="Center">
+                                        <dxg:GridColumn.EditSettings>
+                                            <dxe:ComboBoxEditSettings ItemsSource="{Binding CashCategories, RelativeSource={RelativeSource AncestorType=dx:ThemedWindow}}" HorizontalContentAlignment="Center"/>
+                                        </dxg:GridColumn.EditSettings>
+                                    </dxg:GridColumn>
+                                    <dxg:GridColumn FieldName="IsActive" Header="Kích hoạt" Width="85" FixedWidth="True" HorizontalHeaderContentAlignment="Center">
+                                        <dxg:GridColumn.EditSettings>
+                                            <dxe:CheckEditSettings HorizontalContentAlignment="Center"/>
+                                        </dxg:GridColumn.EditSettings>
+                                    </dxg:GridColumn>
+                                </dxg:GridControl.Columns>
+                            </dxg:GridControl>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </dx:DXTabItem>
+
+            <!-- Tab 2: Nghiệp vụ Thu tiền -->
+            <dx:DXTabItem Header="2. Nghiệp vụ Thu tiền (Phiếu thu / Báo có)">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1,1,1,0" CornerRadius="4,4,0,0" Padding="12,8">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Danh sách nghiệp vụ thu tiền (Tài khoản đối ứng Có)" FontWeight="Bold" Foreground="#1E3A8A" VerticalAlignment="Center" Margin="0,0,16,0"/>
+                            <dx:SimpleButton Content="+ Thêm nghiệp vụ thu" Height="26" Padding="10,0" Margin="0,0,6,0" Click="BtnAddReceiptAlias_Click"/>
+                            <dx:SimpleButton Content="- Xóa nghiệp vụ" Height="26" Padding="10,0" Click="BtnDeleteReceiptAlias_Click"/>
+                        </StackPanel>
+                    </Border>
+
+                    <dxg:GridControl Grid.Row="1" x:Name="gridReceiptAliases" AutoGenerateColumns="None">
+                        <dxg:GridControl.View>
+                            <dxg:TableView ShowGroupPanel="False" AllowEditing="True" NavigationStyle="Cell" AutoWidth="True" RowMinHeight="28"/>
+                        </dxg:GridControl.View>
+                        <dxg:GridControl.Columns>
+                            <dxg:GridColumn FieldName="Code" Header="Mã nghiệp vụ" Width="130" MinWidth="100"/>
+                            <dxg:GridColumn FieldName="Name" Header="Tên nghiệp vụ (Lý do thu)" Width="220" MinWidth="180"/>
+                            <dxg:GridColumn FieldName="OffsetAccount" Header="TK Có đối ứng" Width="120" HorizontalHeaderContentAlignment="Center">
+                                <dxg:GridColumn.EditSettings>
+                                    <dxe:TextEditSettings HorizontalContentAlignment="Center"/>
+                                </dxg:GridColumn.EditSettings>
+                            </dxg:GridColumn>
+                            <dxg:GridColumn FieldName="VatAccount" Header="TK Thuế GTGT" Width="100" HorizontalHeaderContentAlignment="Center">
+                                <dxg:GridColumn.EditSettings>
+                                    <dxe:TextEditSettings HorizontalContentAlignment="Center"/>
+                                </dxg:GridColumn.EditSettings>
+                            </dxg:GridColumn>
+                            <dxg:GridColumn FieldName="Category" Header="Phân loại" Width="110" FixedWidth="True" HorizontalHeaderContentAlignment="Center"/>
+                            <dxg:GridColumn FieldName="RequireDetail" Header="Yêu cầu chi tiết" Width="115" FixedWidth="True" HorizontalHeaderContentAlignment="Center">
+                                <dxg:GridColumn.EditSettings>
+                                    <dxe:CheckEditSettings HorizontalContentAlignment="Center"/>
+                                </dxg:GridColumn.EditSettings>
+                            </dxg:GridColumn>
+                            <dxg:GridColumn FieldName="DefaultDescription" Header="Diễn giải mặc định" Width="220"/>
+                            <dxg:GridColumn FieldName="IsDefault" Header="Mặc định" Width="75" FixedWidth="True" HorizontalHeaderContentAlignment="Center">
+                                <dxg:GridColumn.EditSettings>
+                                    <dxe:CheckEditSettings HorizontalContentAlignment="Center"/>
+                                </dxg:GridColumn.EditSettings>
+                            </dxg:GridColumn>
+                            <dxg:GridColumn FieldName="IsActive" Header="Kích hoạt" Width="75" FixedWidth="True" HorizontalHeaderContentAlignment="Center">
+                                <dxg:GridColumn.EditSettings>
+                                    <dxe:CheckEditSettings HorizontalContentAlignment="Center"/>
+                                </dxg:GridColumn.EditSettings>
+                            </dxg:GridColumn>
+                        </dxg:GridControl.Columns>
+                    </dxg:GridControl>
+                </Grid>
+            </dx:DXTabItem>
+
+            <!-- Tab 3: Nghiệp vụ Chi tiền -->
+            <dx:DXTabItem Header="3. Nghiệp vụ Chi tiền (Phiếu chi / Báo nợ / UNC)">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1,1,1,0" CornerRadius="4,4,0,0" Padding="12,8">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Danh sách nghiệp vụ chi tiền (Tài khoản đối ứng Nợ)" FontWeight="Bold" Foreground="#1E3A8A" VerticalAlignment="Center" Margin="0,0,16,0"/>
+                            <dx:SimpleButton Content="+ Thêm nghiệp vụ chi" Height="26" Padding="10,0" Margin="0,0,6,0" Click="BtnAddPaymentAlias_Click"/>
+                            <dx:SimpleButton Content="- Xóa nghiệp vụ" Height="26" Padding="10,0" Click="BtnDeletePaymentAlias_Click"/>
+                        </StackPanel>
+                    </Border>
+
+                    <dxg:GridControl Grid.Row="1" x:Name="gridPaymentAliases" AutoGenerateColumns="None">
+                        <dxg:GridControl.View>
+                            <dxg:TableView ShowGroupPanel="False" AllowEditing="True" NavigationStyle="Cell" AutoWidth="True" RowMinHeight="28"/>
+                        </dxg:GridControl.View>
+                        <dxg:GridControl.Columns>
+                            <dxg:GridColumn FieldName="Code" Header="Mã nghiệp vụ" Width="130" MinWidth="100"/>
+                            <dxg:GridColumn FieldName="Name" Header="Tên nghiệp vụ (Lý do chi)" Width="220" MinWidth="180"/>
+                            <dxg:GridColumn FieldName="OffsetAccount" Header="TK Nợ đối ứng" Width="120" HorizontalHeaderContentAlignment="Center">
+                                <dxg:GridColumn.EditSettings>
+                                    <dxe:TextEditSettings HorizontalContentAlignment="Center"/>
+                                </dxg:GridColumn.EditSettings>
+                            </dxg:GridColumn>
+                            <dxg:GridColumn FieldName="VatAccount" Header="TK Thuế GTGT" Width="100" HorizontalHeaderContentAlignment="Center">
+                                <dxg:GridColumn.EditSettings>
+                                    <dxe:TextEditSettings HorizontalContentAlignment="Center"/>
+                                </dxg:GridColumn.EditSettings>
+                            </dxg:GridColumn>
+                            <dxg:GridColumn FieldName="Category" Header="Phân loại" Width="110" FixedWidth="True" HorizontalHeaderContentAlignment="Center"/>
+                            <dxg:GridColumn FieldName="RequireDetail" Header="Yêu cầu chi tiết" Width="115" FixedWidth="True" HorizontalHeaderContentAlignment="Center">
+                                <dxg:GridColumn.EditSettings>
+                                    <dxe:CheckEditSettings HorizontalContentAlignment="Center"/>
+                                </dxg:GridColumn.EditSettings>
+                            </dxg:GridColumn>
+                            <dxg:GridColumn FieldName="DefaultDescription" Header="Diễn giải mặc định" Width="220"/>
+                            <dxg:GridColumn FieldName="IsDefault" Header="Mặc định" Width="75" FixedWidth="True" HorizontalHeaderContentAlignment="Center">
+                                <dxg:GridColumn.EditSettings>
+                                    <dxe:CheckEditSettings HorizontalContentAlignment="Center"/>
+                                </dxg:GridColumn.EditSettings>
+                            </dxg:GridColumn>
+                            <dxg:GridColumn FieldName="IsActive" Header="Kích hoạt" Width="75" FixedWidth="True" HorizontalHeaderContentAlignment="Center">
+                                <dxg:GridColumn.EditSettings>
+                                    <dxe:CheckEditSettings HorizontalContentAlignment="Center"/>
+                                </dxg:GridColumn.EditSettings>
+                            </dxg:GridColumn>
+                        </dxg:GridControl.Columns>
+                    </dxg:GridControl>
+                </Grid>
+            </dx:DXTabItem>
+        </dx:DXTabControl>
+
+        <!-- Footer -->
+        <Border Grid.Row="2" Background="White" BorderBrush="#E2E8F0" BorderThickness="0,1,0,0" Padding="16,10">
+            <DockPanel LastChildFill="False">
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                    <TextBlock VerticalAlignment="Center" Foreground="#475569" FontSize="12">
+                        <Run Text="💡 " FontSize="14"/>
+                        <Run Text="Khi lập phiếu Thu / Chi, chọn Mã nghiệp vụ sẽ tự động điền Tài khoản đối ứng và kích hoạt điều kiện chi tiết tương ứng."/>
+                    </TextBlock>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                    <dx:SimpleButton Content="Xuất JSON..." Height="30" Margin="0,0,8,0" Padding="12,0" ToolTip="Xuất toàn bộ cấu hình nghiệp vụ tiền ra file JSON để lưu trữ hoặc dùng cho CSDL khác" Click="BtnExportJson_Click"/>
+                    <dx:SimpleButton Content="Nạp JSON..." Height="30" Margin="0,0,14,0" Padding="12,0" ToolTip="Nạp cấu hình từ file JSON và cập nhật lên hệ thống" Click="BtnImportJson_Click"/>
+                    <dx:SimpleButton Content="Khôi phục mặc định" Height="30" Margin="0,0,10,0" Padding="12,0" Click="BtnResetAllDefault_Click"/>
+                    <dx:SimpleButton Content="Lưu cấu hình" Height="30" Width="120" Margin="0,0,8,0" Background="#FF1976D2" Foreground="White" FontWeight="Bold" Click="BtnSave_Click"/>
+                    <dx:SimpleButton Content="Đóng" Height="30" Width="85" Click="BtnClose_Click"/>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+    </Grid>
+</dx:ThemedWindow>

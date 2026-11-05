@@ -26,12 +26,8 @@ namespace DataAccess.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
-		private EntityCollection<AssetExportVoucherEntity> _assetExportVouchers;
 		private EntityCollection<AssetTrackingEntity> _assetTrackings;
-		private EntityCollection<AssetTrackingDepreciationEntity> _assetTrackingDepreciations;
 		private EntityCollection<CostDetailEntity> _costDetails;
-		private EntityCollection<CostLedgerEntity> _costLedgers;
-		private EntityCollection<InventoryExportVoucherEntity> _inventoryExportVouchers;
 		private EntityCollection<InventoryVoucherEntity> _inventoryVouchers;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
@@ -42,18 +38,10 @@ namespace DataAccess.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
-			/// <summary>Member name AssetExportVouchers</summary>
-			public static readonly string AssetExportVouchers = "AssetExportVouchers";
 			/// <summary>Member name AssetTrackings</summary>
 			public static readonly string AssetTrackings = "AssetTrackings";
-			/// <summary>Member name AssetTrackingDepreciations</summary>
-			public static readonly string AssetTrackingDepreciations = "AssetTrackingDepreciations";
 			/// <summary>Member name CostDetails</summary>
 			public static readonly string CostDetails = "CostDetails";
-			/// <summary>Member name CostLedgers</summary>
-			public static readonly string CostLedgers = "CostLedgers";
-			/// <summary>Member name InventoryExportVouchers</summary>
-			public static readonly string InventoryExportVouchers = "InventoryExportVouchers";
 			/// <summary>Member name InventoryVouchers</summary>
 			public static readonly string InventoryVouchers = "InventoryVouchers";
 		}
@@ -64,12 +52,8 @@ namespace DataAccess.EntityClasses
 			public CostObjectEntityStaticMetaData()
 			{
 				SetEntityCoreInfo("CostObjectEntity", InheritanceHierarchyType.None, false, (int)DataAccess.EntityType.CostObjectEntity, typeof(CostObjectEntity), typeof(CostObjectEntityFactory), false);
-				AddNavigatorMetaData<CostObjectEntity, EntityCollection<AssetExportVoucherEntity>>("AssetExportVouchers", a => a._assetExportVouchers, (a, b) => a._assetExportVouchers = b, a => a.AssetExportVouchers, () => new CostObjectRelations().AssetExportVoucherEntityUsingExobjectId, typeof(AssetExportVoucherEntity), (int)DataAccess.EntityType.AssetExportVoucherEntity);
 				AddNavigatorMetaData<CostObjectEntity, EntityCollection<AssetTrackingEntity>>("AssetTrackings", a => a._assetTrackings, (a, b) => a._assetTrackings = b, a => a.AssetTrackings, () => new CostObjectRelations().AssetTrackingEntityUsingExobjectId, typeof(AssetTrackingEntity), (int)DataAccess.EntityType.AssetTrackingEntity);
-				AddNavigatorMetaData<CostObjectEntity, EntityCollection<AssetTrackingDepreciationEntity>>("AssetTrackingDepreciations", a => a._assetTrackingDepreciations, (a, b) => a._assetTrackingDepreciations = b, a => a.AssetTrackingDepreciations, () => new CostObjectRelations().AssetTrackingDepreciationEntityUsingExobjectId, typeof(AssetTrackingDepreciationEntity), (int)DataAccess.EntityType.AssetTrackingDepreciationEntity);
 				AddNavigatorMetaData<CostObjectEntity, EntityCollection<CostDetailEntity>>("CostDetails", a => a._costDetails, (a, b) => a._costDetails = b, a => a.CostDetails, () => new CostObjectRelations().CostDetailEntityUsingCostObjectId, typeof(CostDetailEntity), (int)DataAccess.EntityType.CostDetailEntity);
-				AddNavigatorMetaData<CostObjectEntity, EntityCollection<CostLedgerEntity>>("CostLedgers", a => a._costLedgers, (a, b) => a._costLedgers = b, a => a.CostLedgers, () => new CostObjectRelations().CostLedgerEntityUsingExobjectId, typeof(CostLedgerEntity), (int)DataAccess.EntityType.CostLedgerEntity);
-				AddNavigatorMetaData<CostObjectEntity, EntityCollection<InventoryExportVoucherEntity>>("InventoryExportVouchers", a => a._inventoryExportVouchers, (a, b) => a._inventoryExportVouchers = b, a => a.InventoryExportVouchers, () => new CostObjectRelations().InventoryExportVoucherEntityUsingExobjectId, typeof(InventoryExportVoucherEntity), (int)DataAccess.EntityType.InventoryExportVoucherEntity);
 				AddNavigatorMetaData<CostObjectEntity, EntityCollection<InventoryVoucherEntity>>("InventoryVouchers", a => a._inventoryVouchers, (a, b) => a._inventoryVouchers = b, a => a.InventoryVouchers, () => new CostObjectRelations().InventoryVoucherEntityUsingExobjectId, typeof(InventoryVoucherEntity), (int)DataAccess.EntityType.InventoryVoucherEntity);
 			}
 		}
@@ -123,29 +107,13 @@ namespace DataAccess.EntityClasses
 			// __LLBLGENPRO_USER_CODE_REGION_END
 		}
 
-		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'AssetExportVoucher' to this entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoAssetExportVouchers() { return CreateRelationInfoForNavigator("AssetExportVouchers"); }
-
 		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'AssetTracking' to this entity.</summary>
 		/// <returns></returns>
 		public virtual IRelationPredicateBucket GetRelationInfoAssetTrackings() { return CreateRelationInfoForNavigator("AssetTrackings"); }
 
-		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'AssetTrackingDepreciation' to this entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoAssetTrackingDepreciations() { return CreateRelationInfoForNavigator("AssetTrackingDepreciations"); }
-
 		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'CostDetail' to this entity.</summary>
 		/// <returns></returns>
 		public virtual IRelationPredicateBucket GetRelationInfoCostDetails() { return CreateRelationInfoForNavigator("CostDetails"); }
-
-		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'CostLedger' to this entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoCostLedgers() { return CreateRelationInfoForNavigator("CostLedgers"); }
-
-		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'InventoryExportVoucher' to this entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoInventoryExportVouchers() { return CreateRelationInfoForNavigator("InventoryExportVouchers"); }
 
 		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'InventoryVoucher' to this entity.</summary>
 		/// <returns></returns>
@@ -181,29 +149,13 @@ namespace DataAccess.EntityClasses
 		/// <summary>The relations object holding all relations of this entity with other entity classes.</summary>
 		public static CostObjectRelations Relations { get { return _relationsFactory; } }
 
-		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'AssetExportVoucher' for this entity.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathAssetExportVouchers { get { return _staticMetaData.GetPrefetchPathElement("AssetExportVouchers", CommonEntityBase.CreateEntityCollection<AssetExportVoucherEntity>()); } }
-
 		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'AssetTracking' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
 		public static IPrefetchPathElement2 PrefetchPathAssetTrackings { get { return _staticMetaData.GetPrefetchPathElement("AssetTrackings", CommonEntityBase.CreateEntityCollection<AssetTrackingEntity>()); } }
 
-		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'AssetTrackingDepreciation' for this entity.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathAssetTrackingDepreciations { get { return _staticMetaData.GetPrefetchPathElement("AssetTrackingDepreciations", CommonEntityBase.CreateEntityCollection<AssetTrackingDepreciationEntity>()); } }
-
 		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'CostDetail' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
 		public static IPrefetchPathElement2 PrefetchPathCostDetails { get { return _staticMetaData.GetPrefetchPathElement("CostDetails", CommonEntityBase.CreateEntityCollection<CostDetailEntity>()); } }
-
-		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'CostLedger' for this entity.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathCostLedgers { get { return _staticMetaData.GetPrefetchPathElement("CostLedgers", CommonEntityBase.CreateEntityCollection<CostLedgerEntity>()); } }
-
-		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'InventoryExportVoucher' for this entity.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathInventoryExportVouchers { get { return _staticMetaData.GetPrefetchPathElement("InventoryExportVouchers", CommonEntityBase.CreateEntityCollection<InventoryExportVoucherEntity>()); } }
 
 		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'InventoryVoucher' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
@@ -233,29 +185,13 @@ namespace DataAccess.EntityClasses
 			set { SetValue((int)CostObjectFieldIndex.Syncronizeflag, value); }
 		}
 
-		/// <summary>Gets the EntityCollection with the related entities of type 'AssetExportVoucherEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
-		[TypeContainedAttribute(typeof(AssetExportVoucherEntity))]
-		public virtual EntityCollection<AssetExportVoucherEntity> AssetExportVouchers { get { return GetOrCreateEntityCollection<AssetExportVoucherEntity, AssetExportVoucherEntityFactory>("CostObject", true, false, ref _assetExportVouchers); } }
-
 		/// <summary>Gets the EntityCollection with the related entities of type 'AssetTrackingEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(AssetTrackingEntity))]
 		public virtual EntityCollection<AssetTrackingEntity> AssetTrackings { get { return GetOrCreateEntityCollection<AssetTrackingEntity, AssetTrackingEntityFactory>("CostObject", true, false, ref _assetTrackings); } }
 
-		/// <summary>Gets the EntityCollection with the related entities of type 'AssetTrackingDepreciationEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
-		[TypeContainedAttribute(typeof(AssetTrackingDepreciationEntity))]
-		public virtual EntityCollection<AssetTrackingDepreciationEntity> AssetTrackingDepreciations { get { return GetOrCreateEntityCollection<AssetTrackingDepreciationEntity, AssetTrackingDepreciationEntityFactory>("CostObject", true, false, ref _assetTrackingDepreciations); } }
-
 		/// <summary>Gets the EntityCollection with the related entities of type 'CostDetailEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(CostDetailEntity))]
 		public virtual EntityCollection<CostDetailEntity> CostDetails { get { return GetOrCreateEntityCollection<CostDetailEntity, CostDetailEntityFactory>("CostObject", true, false, ref _costDetails); } }
-
-		/// <summary>Gets the EntityCollection with the related entities of type 'CostLedgerEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
-		[TypeContainedAttribute(typeof(CostLedgerEntity))]
-		public virtual EntityCollection<CostLedgerEntity> CostLedgers { get { return GetOrCreateEntityCollection<CostLedgerEntity, CostLedgerEntityFactory>("CostObject", true, false, ref _costLedgers); } }
-
-		/// <summary>Gets the EntityCollection with the related entities of type 'InventoryExportVoucherEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
-		[TypeContainedAttribute(typeof(InventoryExportVoucherEntity))]
-		public virtual EntityCollection<InventoryExportVoucherEntity> InventoryExportVouchers { get { return GetOrCreateEntityCollection<InventoryExportVoucherEntity, InventoryExportVoucherEntityFactory>("CostObject", true, false, ref _inventoryExportVouchers); } }
 
 		/// <summary>Gets the EntityCollection with the related entities of type 'InventoryVoucherEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(InventoryVoucherEntity))]
@@ -287,40 +223,16 @@ namespace DataAccess.RelationClasses
 	/// <summary>Implements the relations factory for the entity: CostObject. </summary>
 	public partial class CostObjectRelations: RelationFactory
 	{
-		/// <summary>Returns a new IEntityRelation object, between CostObjectEntity and AssetExportVoucherEntity over the 1:n relation they have, using the relation between the fields: CostObject.Id - AssetExportVoucher.ExobjectId</summary>
-		public virtual IEntityRelation AssetExportVoucherEntityUsingExobjectId
-		{
-			get { return ModelInfoProviderSingleton.GetInstance().CreateRelation(RelationType.OneToMany, "AssetExportVouchers", true, new[] { CostObjectFields.Id, AssetExportVoucherFields.ExobjectId }); }
-		}
-
 		/// <summary>Returns a new IEntityRelation object, between CostObjectEntity and AssetTrackingEntity over the 1:n relation they have, using the relation between the fields: CostObject.Id - AssetTracking.ExobjectId</summary>
 		public virtual IEntityRelation AssetTrackingEntityUsingExobjectId
 		{
 			get { return ModelInfoProviderSingleton.GetInstance().CreateRelation(RelationType.OneToMany, "AssetTrackings", true, new[] { CostObjectFields.Id, AssetTrackingFields.ExobjectId }); }
 		}
 
-		/// <summary>Returns a new IEntityRelation object, between CostObjectEntity and AssetTrackingDepreciationEntity over the 1:n relation they have, using the relation between the fields: CostObject.Id - AssetTrackingDepreciation.ExobjectId</summary>
-		public virtual IEntityRelation AssetTrackingDepreciationEntityUsingExobjectId
-		{
-			get { return ModelInfoProviderSingleton.GetInstance().CreateRelation(RelationType.OneToMany, "AssetTrackingDepreciations", true, new[] { CostObjectFields.Id, AssetTrackingDepreciationFields.ExobjectId }); }
-		}
-
 		/// <summary>Returns a new IEntityRelation object, between CostObjectEntity and CostDetailEntity over the 1:n relation they have, using the relation between the fields: CostObject.Id - CostDetail.CostObjectId</summary>
 		public virtual IEntityRelation CostDetailEntityUsingCostObjectId
 		{
 			get { return ModelInfoProviderSingleton.GetInstance().CreateRelation(RelationType.OneToMany, "CostDetails", true, new[] { CostObjectFields.Id, CostDetailFields.CostObjectId }); }
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between CostObjectEntity and CostLedgerEntity over the 1:n relation they have, using the relation between the fields: CostObject.Id - CostLedger.ExobjectId</summary>
-		public virtual IEntityRelation CostLedgerEntityUsingExobjectId
-		{
-			get { return ModelInfoProviderSingleton.GetInstance().CreateRelation(RelationType.OneToMany, "CostLedgers", true, new[] { CostObjectFields.Id, CostLedgerFields.ExobjectId }); }
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between CostObjectEntity and InventoryExportVoucherEntity over the 1:n relation they have, using the relation between the fields: CostObject.Id - InventoryExportVoucher.ExobjectId</summary>
-		public virtual IEntityRelation InventoryExportVoucherEntityUsingExobjectId
-		{
-			get { return ModelInfoProviderSingleton.GetInstance().CreateRelation(RelationType.OneToMany, "InventoryExportVouchers", true, new[] { CostObjectFields.Id, InventoryExportVoucherFields.ExobjectId }); }
 		}
 
 		/// <summary>Returns a new IEntityRelation object, between CostObjectEntity and InventoryVoucherEntity over the 1:n relation they have, using the relation between the fields: CostObject.Id - InventoryVoucher.ExobjectId</summary>
@@ -334,12 +246,8 @@ namespace DataAccess.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticCostObjectRelations
 	{
-		internal static readonly IEntityRelation AssetExportVoucherEntityUsingExobjectIdStatic = new CostObjectRelations().AssetExportVoucherEntityUsingExobjectId;
 		internal static readonly IEntityRelation AssetTrackingEntityUsingExobjectIdStatic = new CostObjectRelations().AssetTrackingEntityUsingExobjectId;
-		internal static readonly IEntityRelation AssetTrackingDepreciationEntityUsingExobjectIdStatic = new CostObjectRelations().AssetTrackingDepreciationEntityUsingExobjectId;
 		internal static readonly IEntityRelation CostDetailEntityUsingCostObjectIdStatic = new CostObjectRelations().CostDetailEntityUsingCostObjectId;
-		internal static readonly IEntityRelation CostLedgerEntityUsingExobjectIdStatic = new CostObjectRelations().CostLedgerEntityUsingExobjectId;
-		internal static readonly IEntityRelation InventoryExportVoucherEntityUsingExobjectIdStatic = new CostObjectRelations().InventoryExportVoucherEntityUsingExobjectId;
 		internal static readonly IEntityRelation InventoryVoucherEntityUsingExobjectIdStatic = new CostObjectRelations().InventoryVoucherEntityUsingExobjectId;
 
 		/// <summary>CTor</summary>

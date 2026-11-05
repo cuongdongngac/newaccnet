@@ -6,6 +6,7 @@
         xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
         xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
         xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+        xmlns:coreUi="clr-namespace:NewaccNet.Core.UI;assembly=NewaccNet.Core"
         Title="Phiếu xuất kho bán hàng (XB)" Height="700" Width="1180" MinWidth="1050" MinHeight="550" 
         WindowStartupLocation="CenterScreen"
         PreviewKeyDown="Window_PreviewKeyDown">
@@ -44,94 +45,98 @@
         </dxb:BarContainerControl>
 
         <!-- HEADER XUẤT BÁN (FIX CỨNG) -->
-        <dxlc:LayoutControl Grid.Row="1" Orientation="Horizontal" Padding="10">
-            <!-- Cột 1: Thông tin phiếu & Kho -->
-            <dxlc:LayoutGroup Orientation="Vertical" Width="300">
-                <dxlc:LayoutItem Label="Số chứng từ:">
-                    <dxe:TextEdit x:Name="txtVoucherNo" FontWeight="SemiBold"/>
-                </dxlc:LayoutItem>
-                <dxlc:LayoutItem Label="Ngày chứng từ:">
-                    <dxe:DateEdit x:Name="dpVoucherDate"/>
-                </dxlc:LayoutItem>
-                <dxlc:LayoutItem Label="Kho xuất:">
-                    <dxg:LookUpEdit x:Name="lueWarehouse" 
-                                    DisplayMember="WarehouseName" ValueMember="WarehouseId" 
-                                    AutoPopulateColumns="False" AutoComplete="True" ImmediatePopup="True" IsTextEditable="True"
-                                    PopupWidth="360">
-                        <dxg:LookUpEdit.Buttons>
-                            <dxe:ButtonInfo GlyphKind="Plus" ToolTip="Tạo mới kho hàng" Click="BtnAddWarehouse_Click"/>
-                        </dxg:LookUpEdit.Buttons>
-                        <dxg:LookUpEdit.PopupContentTemplate>
-                            <ControlTemplate>
-                                <dxg:GridControl Name="PART_GridControl">
-                                    <dxg:GridControl.Columns>
-                                        <dxg:GridColumn FieldName="WarehouseId" Header="Mã Kho" Width="100"/>
-                                        <dxg:GridColumn FieldName="WarehouseName" Header="Tên Kho" Width="220"/>
-                                    </dxg:GridControl.Columns>
-                                </dxg:GridControl>
-                            </ControlTemplate>
-                        </dxg:LookUpEdit.PopupContentTemplate>
-                    </dxg:LookUpEdit>
-                </dxlc:LayoutItem>
-                <dxlc:LayoutItem Label="Người nhận hàng:">
-                    <dxe:TextEdit x:Name="txtCarrier"/>
-                </dxlc:LayoutItem>
-                <dxlc:LayoutItem Label="Diễn giải:">
-                    <dxe:TextEdit x:Name="txtDescription"/>
-                </dxlc:LayoutItem>
-            </dxlc:LayoutGroup>
-
-            <!-- Cột 2 & 3: Thông tin Hóa đơn & Khách Hàng -->
-            <dxlc:LayoutGroup Orientation="Horizontal" Margin="20,0,0,0">
-                <!-- Cột Hóa đơn -->
-                <dxlc:LayoutGroup Orientation="Vertical" Width="230">
-                    <dxlc:LayoutItem Label="Số hóa đơn:">
-                        <dxe:TextEdit x:Name="txtVatBillNo"/>
+        <dxlc:LayoutControl Grid.Row="1" Orientation="Vertical" Padding="10,6">
+            <dxlc:LayoutGroup Orientation="Horizontal">
+                <!-- Cột 1: Thông tin phiếu & Kho -->
+                <dxlc:LayoutGroup Orientation="Vertical" Width="300">
+                    <dxlc:LayoutItem Label="Số chứng từ:">
+                        <dxe:TextEdit x:Name="txtVoucherNo" FontWeight="SemiBold"/>
                     </dxlc:LayoutItem>
-                    <dxlc:LayoutItem Label="Ký hiệu (Seri):">
-                        <dxe:TextEdit x:Name="txtSerialNo"/>
+                    <dxlc:LayoutItem Label="Ngày chứng từ:">
+                        <dxe:DateEdit x:Name="dpVoucherDate"/>
                     </dxlc:LayoutItem>
-                    <dxlc:LayoutItem Label="Ngày hóa đơn:">
-                        <dxe:DateEdit x:Name="dpVatBillDate"/>
-                    </dxlc:LayoutItem>
-                </dxlc:LayoutGroup>
-
-                <!-- Cột Khách hàng -->
-                <dxlc:LayoutGroup Orientation="Vertical" Margin="15,0,0,0">
-                    <dxlc:LayoutItem Label="Khách hàng:">
-                        <dxg:LookUpEdit x:Name="luePartner" 
-                                        DisplayMember="CustomerName" ValueMember="Id" 
+                    <dxlc:LayoutItem Label="Kho xuất:">
+                        <dxg:LookUpEdit x:Name="lueWarehouse" 
+                                        DisplayMember="WarehouseName" ValueMember="WarehouseId" 
                                         AutoPopulateColumns="False" AutoComplete="True" ImmediatePopup="True" IsTextEditable="True"
-                                        PopupWidth="450" EditValueChanged="LuePartner_EditValueChanged">
+                                        PopupWidth="360">
                             <dxg:LookUpEdit.Buttons>
-                                <dxe:ButtonInfo GlyphKind="Plus" ToolTip="Tạo mới đối tác" Click="BtnAddPartner_Click"/>
+                                <dxe:ButtonInfo GlyphKind="Plus" ToolTip="Tạo mới kho hàng" Click="BtnAddWarehouse_Click"/>
                             </dxg:LookUpEdit.Buttons>
                             <dxg:LookUpEdit.PopupContentTemplate>
                                 <ControlTemplate>
                                     <dxg:GridControl Name="PART_GridControl">
                                         <dxg:GridControl.Columns>
-                                            <dxg:GridColumn FieldName="Id" Header="Mã KH" Width="110"/>
-                                            <dxg:GridColumn FieldName="CustomerName" Header="Tên Khách Hàng" Width="250"/>
-                                            <dxg:GridColumn FieldName="Taxno" Header="MST" Width="100"/>
+                                            <dxg:GridColumn FieldName="WarehouseId" Header="Mã Kho" Width="100"/>
+                                            <dxg:GridColumn FieldName="WarehouseName" Header="Tên Kho" Width="220"/>
                                         </dxg:GridControl.Columns>
                                     </dxg:GridControl>
                                 </ControlTemplate>
                             </dxg:LookUpEdit.PopupContentTemplate>
                         </dxg:LookUpEdit>
                     </dxlc:LayoutItem>
-                    <dxlc:LayoutItem Label="Tên KH:">
-                        <dxe:TextEdit x:Name="txtPartnerName"/>
+                    <dxlc:LayoutItem Label="Người nhận hàng:">
+                        <dxe:TextEdit x:Name="txtCarrier"/>
                     </dxlc:LayoutItem>
-                    <dxlc:LayoutGroup Orientation="Horizontal">
-                        <dxlc:LayoutItem Label="Địa chỉ:">
-                            <dxe:TextEdit x:Name="txtAddress"/>
+                </dxlc:LayoutGroup>
+
+                <!-- Cột 2 & 3: Thông tin Hóa đơn & Khách Hàng -->
+                <dxlc:LayoutGroup Orientation="Horizontal" Margin="20,0,0,0">
+                    <!-- Cột Hóa đơn -->
+                    <dxlc:LayoutGroup Orientation="Vertical" Width="230">
+                        <dxlc:LayoutItem Label="Số hóa đơn:">
+                            <dxe:TextEdit x:Name="txtVatBillNo"/>
                         </dxlc:LayoutItem>
-                        <dxlc:LayoutItem Label="Mã số thuế:" Width="180" Margin="10,0,0,0">
-                            <dxe:TextEdit x:Name="txtTaxCode"/>
+                        <dxlc:LayoutItem Label="Ký hiệu (Seri):">
+                            <dxe:TextEdit x:Name="txtSerialNo"/>
                         </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="Ngày hóa đơn:">
+                            <dxe:DateEdit x:Name="dpVatBillDate"/>
+                        </dxlc:LayoutItem>
+                    </dxlc:LayoutGroup>
+
+                    <!-- Cột Khách hàng -->
+                    <dxlc:LayoutGroup Orientation="Vertical" Margin="15,0,0,0">
+                        <dxlc:LayoutItem Label="Khách hàng:">
+                            <dxg:LookUpEdit x:Name="luePartner" 
+                                            DisplayMember="CustomerName" ValueMember="Id" 
+                                            AutoPopulateColumns="False" AutoComplete="True" ImmediatePopup="True" IsTextEditable="True"
+                                            PopupWidth="450" EditValueChanged="LuePartner_EditValueChanged">
+                                <dxg:LookUpEdit.Buttons>
+                                    <dxe:ButtonInfo GlyphKind="Plus" ToolTip="Tạo mới đối tác" Click="BtnAddPartner_Click"/>
+                                </dxg:LookUpEdit.Buttons>
+                                <dxg:LookUpEdit.PopupContentTemplate>
+                                    <ControlTemplate>
+                                        <dxg:GridControl Name="PART_GridControl">
+                                            <dxg:GridControl.Columns>
+                                                <dxg:GridColumn FieldName="Id" Header="Mã KH" Width="110"/>
+                                                <dxg:GridColumn FieldName="CustomerName" Header="Tên Khách Hàng" Width="250"/>
+                                                <dxg:GridColumn FieldName="Taxno" Header="MST" Width="100"/>
+                                            </dxg:GridControl.Columns>
+                                        </dxg:GridControl>
+                                    </ControlTemplate>
+                                </dxg:LookUpEdit.PopupContentTemplate>
+                            </dxg:LookUpEdit>
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="Tên KH:">
+                            <dxe:TextEdit x:Name="txtPartnerName"/>
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutGroup Orientation="Horizontal">
+                            <dxlc:LayoutItem Label="Địa chỉ:">
+                                <dxe:TextEdit x:Name="txtAddress"/>
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Mã số thuế:" Width="180" Margin="10,0,0,0">
+                                <dxe:TextEdit x:Name="txtTaxCode"/>
+                            </dxlc:LayoutItem>
+                        </dxlc:LayoutGroup>
                     </dxlc:LayoutGroup>
                 </dxlc:LayoutGroup>
             </dxlc:LayoutGroup>
+
+            <!-- Hàng Diễn giải rộng toàn bộ chiều ngang -->
+            <dxlc:LayoutItem Label="Diễn giải:" HorizontalAlignment="Stretch" Margin="0,4,0,0">
+                <dxe:TextEdit x:Name="txtDescription"/>
+            </dxlc:LayoutItem>
         </dxlc:LayoutControl>
 
         <!-- DETAILS GRID XUẤT BÁN -->
@@ -229,31 +234,31 @@
                     <ColumnDefinition Width="*" MinWidth="140"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Cột 1: Giá vốn (Nợ 632 / Có 156) -->
+                <!-- Cột 1: Giá vốn -->
                 <StackPanel Grid.Column="0" Orientation="Vertical">
-                    <TextBlock Text="Giá vốn (Nợ 632 / Có 156)" FontWeight="SemiBold" Foreground="#333" Margin="0,0,0,4"/>
-                    <dxg:LookUpEdit x:Name="lueCostAccount" DisplayMember="Display" ValueMember="AccountId" 
-                                    AutoComplete="True" ImmediatePopup="True" IsTextEditable="True"/>
+                    <TextBlock Text="Giá vốn" FontWeight="SemiBold" Foreground="#333" Margin="0,0,0,4"/>
+                    <coreUi:ErpAccountLookUpEdit x:Name="lueCostAccount" AutoComplete="True" ImmediatePopup="True"/>
+                    <TextBlock x:Name="lblCostDetailReminder" FontSize="11" Margin="0,2,0,0" TextWrapping="Wrap" Visibility="Collapsed"/>
                     <dxe:TextEdit x:Name="txtTotalCost" EditValue="0" IsReadOnly="True" ShowBorder="False" Focusable="False"
                                   MaskType="Numeric" Mask="n0" MaskUseAsDisplayFormat="True" 
                                   FontWeight="Bold" FontSize="14" Foreground="#2E7D32" HorizontalContentAlignment="Right" Margin="0,4,0,0"/>
                 </StackPanel>
 
-                <!-- Cột 2: Doanh thu (Có 511) -->
+                <!-- Cột 2: Doanh thu -->
                 <StackPanel Grid.Column="2" Orientation="Vertical">
-                    <TextBlock Text="Doanh thu (Có TK 511)" FontWeight="SemiBold" Foreground="#333" Margin="0,0,0,4"/>
-                    <dxg:LookUpEdit x:Name="lueRevenueAccount" DisplayMember="Display" ValueMember="AccountId" 
-                                    AutoComplete="True" ImmediatePopup="True" IsTextEditable="True"/>
+                    <TextBlock Text="Doanh thu" FontWeight="SemiBold" Foreground="#333" Margin="0,0,0,4"/>
+                    <coreUi:ErpAccountLookUpEdit x:Name="lueRevenueAccount" AutoComplete="True" ImmediatePopup="True"/>
+                    <TextBlock x:Name="lblRevenueDetailReminder" FontSize="11" Margin="0,2,0,0" TextWrapping="Wrap" Visibility="Collapsed"/>
                     <dxe:TextEdit x:Name="txtTotalSell" EditValue="0" IsReadOnly="True" ShowBorder="False" Focusable="False"
                                   MaskType="Numeric" Mask="n0" MaskUseAsDisplayFormat="True" 
                                   FontWeight="Bold" FontSize="14" Foreground="#1565C0" HorizontalContentAlignment="Right" Margin="0,4,0,0"/>
                 </StackPanel>
 
-                <!-- Cột 3: Thuế GTGT (Có 3331) -->
+                <!-- Cột 3: Thuế GTGT -->
                 <StackPanel Grid.Column="4" Orientation="Vertical">
-                    <TextBlock Text="Thuế GTGT (Có TK 3331)" FontWeight="SemiBold" Foreground="#333" Margin="0,0,0,4"/>
-                    <dxg:LookUpEdit x:Name="lueTaxAccount" DisplayMember="Display" ValueMember="AccountId" 
-                                    AutoComplete="True" ImmediatePopup="True" IsTextEditable="True"/>
+                    <TextBlock Text="Thuế GTGT" FontWeight="SemiBold" Foreground="#333" Margin="0,0,0,4"/>
+                    <coreUi:ErpAccountLookUpEdit x:Name="lueTaxAccount" AutoComplete="True" ImmediatePopup="True"/>
+                    <TextBlock x:Name="lblTaxDetailReminder" FontSize="11" Margin="0,2,0,0" TextWrapping="Wrap" Visibility="Collapsed"/>
                     <dxe:TextEdit x:Name="txtTotalTax" EditValue="0" IsReadOnly="True" ShowBorder="False" Focusable="False"
                                   MaskType="Numeric" Mask="n0" MaskUseAsDisplayFormat="True" 
                                   FontWeight="Bold" FontSize="14" Foreground="#E65100" HorizontalContentAlignment="Right" Margin="0,4,0,0"/>
@@ -262,15 +267,8 @@
                 <!-- Cột 4: Tổng thanh toán -->
                 <StackPanel Grid.Column="6" Orientation="Vertical">
                     <TextBlock Text="Tổng thanh toán" FontWeight="SemiBold" Foreground="#333" Margin="0,0,0,4"/>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <dxe:ComboBoxEdit x:Name="cboPaymentType" DisplayMember="Name" ValueMember="Code" IsTextEditable="False" EditValueChanged="CboPaymentType_EditValueChanged"/>
-                        <Button x:Name="btnDebtDetail" Grid.Column="1" Content="..." ToolTip="Xem / Nhập chi tiết công nợ" Width="28" Margin="4,0,0,0" Click="BtnDebtDetail_Click"/>
-                    </Grid>
-                    <dxg:LookUpEdit x:Name="lueTotalAccount" DisplayMember="Display" ValueMember="AccountId" Visibility="Collapsed"/>
+                    <coreUi:ErpAccountLookUpEdit x:Name="lueTotalAccount" AutoComplete="True" ImmediatePopup="True"/>
+                    <TextBlock x:Name="lblTotalDetailReminder" FontSize="11" Margin="0,2,0,0" TextWrapping="Wrap" Visibility="Collapsed"/>
                     <dxe:TextEdit x:Name="txtTotalAll" EditValue="0" IsReadOnly="True" ShowBorder="False" Focusable="False"
                                   MaskType="Numeric" Mask="n0" MaskUseAsDisplayFormat="True" 
                                   FontWeight="Bold" FontSize="15" Foreground="#C2185B" HorizontalContentAlignment="Right" Margin="0,4,0,0"/>

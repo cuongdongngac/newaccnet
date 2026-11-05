@@ -74,6 +74,7 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _currentEntity = _context.InventoryVoucher;
             _isNew = _context.IsNew;
+            this.Loaded += (s, e) => UpdateUIVisibility();
 
             LoadLookupData();
             InitData();
@@ -377,31 +378,49 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
         private void UpdateUIVisibility()
         {
             string type = _context?.VoucherType ?? "";
+            bool isImport = _context?.MaterialEntry?.Dbcr != -1;
+
+            if (bandCost != null)
+            {
+                bandCost.Header = isImport ? "Tiền hàng" : "Giá vốn";
+            }
 
             if (type == "XB")
             {
                 bandSalesAndTax.Header = "Giá bán & Thuế";
                 bandSalesAndTax.Visible = true;
-                GridMaterialDetails.Columns["SellPrice"].Visible = true;
-                GridMaterialDetails.Columns["SellAmount"].Visible = true;
-                GridMaterialDetails.Columns["Taxrateid"].Visible = true;
-                GridMaterialDetails.Columns["TaxAmount"].Visible = true;
+                SetColumnVisible("SellPrice", true);
+                SetColumnVisible("SellAmount", true);
+                SetColumnVisible("Taxrateid", true);
+                SetColumnVisible("TaxAmount", true);
             }
             else if (type == "NM")
             {
                 bandSalesAndTax.Header = "Thuế GTGT";
                 bandSalesAndTax.Visible = true;
-                GridMaterialDetails.Columns["SellPrice"].Visible = false;
-                GridMaterialDetails.Columns["SellAmount"].Visible = false;
-                GridMaterialDetails.Columns["Taxrateid"].Visible = true;
-                GridMaterialDetails.Columns["TaxAmount"].Visible = true;
+                SetColumnVisible("SellPrice", false);
+                SetColumnVisible("SellAmount", false);
+                SetColumnVisible("Taxrateid", true);
+                SetColumnVisible("TaxAmount", true);
             }
             else
             {
                 bandSalesAndTax.Visible = false;
+                SetColumnVisible("SellPrice", false);
+                SetColumnVisible("SellAmount", false);
+                SetColumnVisible("Taxrateid", false);
+                SetColumnVisible("TaxAmount", false);
             }
         }
 
+        private void SetColumnVisible(string fieldName, bool visible)
+        {
+            if (GridMaterialDetails?.Columns != null && GridMaterialDetails.Columns[fieldName] != null)
+            {
+                GridMaterialDetails.Columns[fieldName].Visible = visible;
+                GridMaterialDetails.Columns[fieldName].ShowInColumnChooser = visible;
+            }
+        }
         private void viewDetails_InitNewRow(object sender, InitNewRowEventArgs e)
         {
             var row = GridMaterialDetails.GetRowByListIndex(e.RowHandle) as InventoryVoucherLineEntity;

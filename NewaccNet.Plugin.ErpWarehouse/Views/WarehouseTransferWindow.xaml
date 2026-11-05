@@ -42,8 +42,9 @@
         </dxb:BarContainerControl>
 
         <!-- HEADER ĐIỀU CHUYỂN KHO (FIX CỨNG: KHO XUẤT & KHO NHẬP) -->
-        <dxlc:LayoutControl Grid.Row="1" Orientation="Horizontal" Padding="10">
-            <!-- Nhóm 1: Thông tin chứng từ -->
+        <dxlc:LayoutControl Grid.Row="1" Orientation="Vertical" Padding="10,6">
+            <dxlc:LayoutGroup Orientation="Horizontal">
+                <!-- Nhóm 1: Thông tin chứng từ -->
             <dxlc:LayoutGroup Orientation="Vertical" Width="280">
                 <dxlc:LayoutItem Label="Số chứng từ:">
                     <dxe:TextEdit x:Name="txtVoucherNo" FontWeight="SemiBold"/>
@@ -100,16 +101,19 @@
                 </dxlc:LayoutItem>
             </dxlc:LayoutGroup>
 
-            <!-- Nhóm 3: Vận chuyển & Diễn giải -->
+            <!-- Nhóm 3: Vận chuyển -->
             <dxlc:LayoutGroup Orientation="Vertical" Margin="20,0,0,0">
                 <dxlc:LayoutItem Label="Người vận chuyển:">
                     <dxe:TextEdit x:Name="txtCarrier"/>
                 </dxlc:LayoutItem>
-                <dxlc:LayoutItem Label="Diễn giải điều chuyển:">
-                    <dxe:TextEdit x:Name="txtDescription"/>
-                </dxlc:LayoutItem>
             </dxlc:LayoutGroup>
-        </dxlc:LayoutControl>
+        </dxlc:LayoutGroup>
+
+        <!-- Hàng Diễn giải rộng toàn bộ chiều ngang -->
+        <dxlc:LayoutItem Label="Diễn giải điều chuyển:" HorizontalAlignment="Stretch" Margin="0,4,0,0">
+            <dxe:TextEdit x:Name="txtDescription"/>
+        </dxlc:LayoutItem>
+    </dxlc:LayoutControl>
 
         <!-- DETAILS GRID ĐIỀU CHUYỂN -->
         <dxg:GridControl x:Name="gridDetails" Grid.Row="2" Margin="10,0" AutoGenerateColumns="None">

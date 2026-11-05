@@ -28,6 +28,12 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
         private int _currentVoucherId = 0;
         private bool _isCurrentVoucherPosted = false;
 
+        private readonly JournalEntryEntity _costMasterEntry = new() { Dbcr = 1, AccountId = "6321" };
+        private readonly JournalEntryEntity _costSubEntry = new() { Dbcr = -1, AccountId = "1561" };
+        private readonly JournalEntryEntity _revMasterEntry = new() { Dbcr = 1, AccountId = "131" };
+        private readonly JournalEntryEntity _revEntry = new() { Dbcr = -1, AccountId = "5111" };
+        private readonly JournalEntryEntity _taxEntry = new() { Dbcr = -1, AccountId = "33311" };
+
         public SalesDeliveryWindow()
         {
             InitializeComponent();
@@ -93,20 +99,30 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
             if (!string.IsNullOrEmpty(data.TaxAccountId)) lueTaxAccount.EditValue = data.TaxAccountId;
             if (!string.IsNullOrEmpty(data.TotalAccountId)) lueTotalAccount.EditValue = data.TotalAccountId;
 
-            // Đồng bộ trạng thái thanh toán từ DTO/Data
-            if (cboPaymentType.ItemsSource is IEnumerable<PaymentMethodOptionDto> methods)
-            {
-                var match = methods.FirstOrDefault(m => (!string.IsNullOrEmpty(data.PaymentType) && m.Code.Equals(data.PaymentType, StringComparison.OrdinalIgnoreCase))
-                                                     || (!string.IsNullOrEmpty(data.TotalAccountId) && m.AccountId == data.TotalAccountId));
-                if (match != null)
-                {
-                    cboPaymentType.SelectedItem = match;
-                }
-                else
-                {
-                    cboPaymentType.SelectedIndex = 0;
-                }
-            }
+            _revMasterEntry.DebtDetails.Clear();
+            foreach (var dd in data.TotalDebtDetails) _revMasterEntry.DebtDetails.Add(dd);
+            _revMasterEntry.CostDetails.Clear();
+            foreach (var cd in data.TotalCostDetails) _revMasterEntry.CostDetails.Add(cd);
+
+            _revEntry.DebtDetails.Clear();
+            foreach (var dd in data.RevenueDebtDetails) _revEntry.DebtDetails.Add(dd);
+            _revEntry.CostDetails.Clear();
+            foreach (var cd in data.RevenueCostDetails) _revEntry.CostDetails.Add(cd);
+
+            _taxEntry.DebtDetails.Clear();
+            foreach (var dd in data.TaxDebtDetails) _taxEntry.DebtDetails.Add(dd);
+            _taxEntry.CostDetails.Clear();
+            foreach (var cd in data.TaxCostDetails) _taxEntry.CostDetails.Add(cd);
+
+            _costMasterEntry.DebtDetails.Clear();
+            foreach (var dd in data.CostDebtDetails) _costMasterEntry.DebtDetails.Add(dd);
+            _costMasterEntry.CostDetails.Clear();
+            foreach (var cd in data.CostCostDetails) _costMasterEntry.CostDetails.Add(cd);
+
+            _costSubEntry.DebtDetails.Clear();
+            foreach (var dd in data.InventoryDebtDetails) _costSubEntry.DebtDetails.Add(dd);
+            _costSubEntry.CostDetails.Clear();
+            foreach (var cd in data.InventoryCostDetails) _costSubEntry.CostDetails.Add(cd);
 
             // Khóa sửa nếu kế toán đã ghi sổ
             _isCurrentVoucherPosted = data.Bookflag;
@@ -137,6 +153,10 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
                 Lines.Add(l);
             }
             UpdateTotals();
+            lueCostAccount.UpdateDetailStatus();
+            lueRevenueAccount.UpdateDetailStatus();
+            lueTaxAccount.UpdateDetailStatus();
+            lueTotalAccount.UpdateDetailStatus();
             RefreshNavigation();
         }
 
@@ -157,12 +177,26 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
             txtAddress.Text = "";
             txtTaxCode.Text = "";
 
+            _revMasterEntry.DebtDetails.Clear();
+            _revMasterEntry.CostDetails.Clear();
+            _revEntry.DebtDetails.Clear();
+            _revEntry.CostDetails.Clear();
+            _taxEntry.DebtDetails.Clear();
+            _taxEntry.CostDetails.Clear();
+            _costMasterEntry.DebtDetails.Clear();
+            _costMasterEntry.CostDetails.Clear();
+            _costSubEntry.DebtDetails.Clear();
+            _costSubEntry.CostDetails.Clear();
+
             Lines.Clear();
             Lines.Add(new WarehouseVoucherLineItem { Quantity = 1, Price = 0, SellPrice = 0 });
             UpdateTotals();
+            lueCostAccount.UpdateDetailStatus();
+            lueRevenueAccount.UpdateDetailStatus();
+            lueTaxAccount.UpdateDetailStatus();
+            lueTotalAccount.UpdateDetailStatus();
 
             _isCurrentVoucherPosted = false;
-            cboPaymentType.SelectedIndex = 0;
             btnAccept.IsEnabled = true;
             btnSaveAndNew.IsEnabled = true;
             btnAddRow.IsEnabled = true;
@@ -226,37 +260,44 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
             _taxRates = WarehouseVoucherDataService.LoadTaxRates();
             cboTaxRates.ItemsSource = _taxRates;
 
-            // 5. Tài khoản & Nạp cấu hình Rule định khoản ngầm định (DbConfig)
-            var accounts = WarehouseVoucherDataService.LoadAccounts();
-            lueCostAccount.ItemsSource = accounts.Where(a => a.AccountId.StartsWith("632")).ToList();
-            lueCostAccount.EditValue = accounts.FirstOrDefault(a => a.AccountId == "6321" || a.AccountId == "632")?.AccountId ?? "6321";
+            // 5. Kết nối JournalEntry chuẩn Accounting First và nạp tài khoản theo Slot
+            _costMasterEntry.SubEntries.Clear();
+            _costMasterEntry.SubEntries.Add(_costSubEntry);
 
-            lueRevenueAccount.ItemsSource = accounts.Where(a => a.AccountId.StartsWith("511")).ToList();
-            lueRevenueAccount.EditValue = accounts.FirstOrDefault(a => a.AccountId == "5111" || a.AccountId == "511")?.AccountId ?? "5111";
+            _revMasterEntry.SubEntries.Clear();
+            _revMasterEntry.SubEntries.Add(_revEntry);
+            _revMasterEntry.SubEntries.Add(_taxEntry);
 
-            lueTaxAccount.ItemsSource = accounts.Where(a => a.AccountId.StartsWith("3331")).ToList();
-            lueTaxAccount.EditValue = accounts.FirstOrDefault(a => a.AccountId == "33311" || a.AccountId == "3331")?.AccountId ?? "33311";
+            lueCostAccount.JournalEntry = _costMasterEntry;
+            lueRevenueAccount.JournalEntry = _revEntry;
+            lueTaxAccount.JournalEntry = _taxEntry;
+            lueTotalAccount.JournalEntry = _revMasterEntry;
 
-            lueTotalAccount.ItemsSource = accounts.Where(a => a.AccountId.StartsWith("131") || a.AccountId.StartsWith("111") || a.AccountId.StartsWith("112")).ToList();
-            lueTotalAccount.EditValue = accounts.FirstOrDefault(a => a.AccountId == "1311" || a.AccountId == "131")?.AccountId ?? "131";
+            lueCostAccount.ReminderTextBlock = lblCostDetailReminder;
+            lueRevenueAccount.ReminderTextBlock = lblRevenueDetailReminder;
+            lueTaxAccount.ReminderTextBlock = lblTaxDetailReminder;
+            lueTotalAccount.ReminderTextBlock = lblTotalDetailReminder;
+
+            lueTotalAccount.ExternalDetailChecker = () =>
+            {
+                string acc = lueTotalAccount.EditValue?.ToString() ?? "";
+                if (acc.StartsWith("131") || acc.StartsWith("331"))
+                {
+                    return !string.IsNullOrEmpty(luePartner.EditValue as string);
+                }
+                return false;
+            };
+
+            luePartner.EditValueChanged += (s, e) => lueTotalAccount.UpdateDetailStatus();
 
             var rule = WarehouseVoucherDataService.GetPostingRule("XB");
-            if (rule != null)
-            {
-                if (!string.IsNullOrEmpty(rule.Name)) Title = $"Phiếu xuất kho bán hàng - {rule.Name}";
-                if (!string.IsNullOrEmpty(rule.CostAccountId)) lueCostAccount.EditValue = rule.CostAccountId;
-                if (!string.IsNullOrEmpty(rule.RevenueAccountId)) lueRevenueAccount.EditValue = rule.RevenueAccountId;
-                if (!string.IsNullOrEmpty(rule.TaxAccountId)) lueTaxAccount.EditValue = rule.TaxAccountId;
-                if (!string.IsNullOrEmpty(rule.TotalAccountId)) lueTotalAccount.EditValue = rule.TotalAccountId;
-            }
+            if (rule != null && !string.IsNullOrEmpty(rule.Name))
+                Title = $"Phiếu xuất kho bán hàng - {rule.Name}";
 
-            // Nạp danh mục hình thức thanh toán từ cấu hình
-            var paymentMethods = rule?.GetEffectivePaymentMethods() ?? new List<PaymentMethodOptionDto>();
-            cboPaymentType.ItemsSource = paymentMethods;
-            if (paymentMethods.Count > 0)
-            {
-                cboPaymentType.SelectedIndex = 0;
-            }
+            lueCostAccount.SetSlotOptions(rule?.AccountSlots.GetValueOrDefault("Cost"), rule?.GetDefaultAccountIdForSlot("Cost", "6321"));
+            lueRevenueAccount.SetSlotOptions(rule?.AccountSlots.GetValueOrDefault("Revenue"), rule?.GetDefaultAccountIdForSlot("Revenue", "5111"));
+            lueTaxAccount.SetSlotOptions(rule?.AccountSlots.GetValueOrDefault("Tax"), rule?.GetDefaultAccountIdForSlot("Tax", "33311"));
+            lueTotalAccount.SetSlotOptions(rule?.AccountSlots.GetValueOrDefault("Total"), rule?.GetDefaultAccountIdForSlot("Total", "131"));
 
             // Dòng mẫu ban đầu
             Lines.Clear();
@@ -318,6 +359,7 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
                 var mat = Materials.FirstOrDefault(m => string.Equals(m.MaterialId?.Trim(), row.MaterialId?.Trim(), StringComparison.OrdinalIgnoreCase));
                 if (mat != null)
                 {
+                    row.MaterialId = mat.MaterialId;
                     row.MaterialName = mat.MaterialName ?? "";
                     row.Unit = mat.Unit ?? "";
                 }
@@ -350,6 +392,15 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
             txtTotalSell.EditValue = sell;
             txtTotalTax.EditValue = tax;
             txtTotalAll.EditValue = total;
+
+            _costMasterEntry.Amount = cost;
+            _costSubEntry.Amount = cost;
+            _revMasterEntry.Amount = total;
+            _revEntry.Amount = sell;
+            _taxEntry.Amount = tax;
+            _costSubEntry.ParentEntry = _costMasterEntry;
+            _revEntry.ParentEntry = _revMasterEntry;
+            _taxEntry.ParentEntry = _revMasterEntry;
         }
 
         private void LuePartner_EditValueChanged(object sender, DevExpress.Xpf.Editors.EditValueChangedEventArgs e)
@@ -442,38 +493,6 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
             }
         }
 
-        private void CboPaymentType_EditValueChanged(object sender, DevExpress.Xpf.Editors.EditValueChangedEventArgs e)
-        {
-            if (cboPaymentType.SelectedItem is PaymentMethodOptionDto opt)
-            {
-                lueTotalAccount.EditValue = opt.AccountId;
-                if (btnDebtDetail != null)
-                {
-                    btnDebtDetail.Visibility = opt.IsDebt ? Visibility.Visible : Visibility.Collapsed;
-                }
-            }
-        }
-
-        private void BtnDebtDetail_Click(object sender, RoutedEventArgs e)
-        {
-            var selectedPayment = cboPaymentType.SelectedItem as PaymentMethodOptionDto;
-            string pName = txtPartnerName.Text?.Trim() ?? "";
-            string pId = luePartner.EditValue as string ?? "";
-            decimal amount = txtTotalAll.EditValue is decimal d ? d : 0m;
-            DateTime vDate = dpVoucherDate.DateTime;
-            string accId = selectedPayment?.AccountId ?? (lueTotalAccount.EditValue as string ?? "131");
-
-            MessageBox.Show(
-                $"Thông tin công nợ đối ứng:\n" +
-                $"- Khách hàng chịu trách nhiệm công nợ: {pId} - {pName}\n" +
-                $"- Hình thức: {selectedPayment?.Name ?? "Công nợ"}\n" +
-                $"- Tài khoản: {accId}\n" +
-                $"- Số tiền công nợ: {amount:n0} VNĐ\n" +
-                $"- Hạn thanh toán mặc định: {vDate:dd/MM/yyyy}\n\n" +
-                $"Hệ thống ORM sẽ tự động sinh bản ghi chi tiết công nợ tương ứng khi lưu phiếu.",
-                "Chi tiết công nợ", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-
         private void BtnAccept_Click(object sender, RoutedEventArgs e)
         {
             PerformSave(isSaveAndNew: false);
@@ -517,7 +536,56 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
                 return false;
             }
 
-            var selectedPayment = cboPaymentType.SelectedItem as PaymentMethodOptionDto;
+            // Kiểm soát chi tiết tài khoản theo kế toán: Cảnh báo và chặn không cho lưu nếu thiếu chi tiết bắt buộc
+            if (!lueCostAccount.ValidateDetailRequirement(out string? errCost))
+            {
+                MessageBox.Show(errCost, "Cảnh báo thiếu chi tiết kế toán", MessageBoxButton.OK, MessageBoxImage.Warning);
+                lueCostAccount.Focus();
+                return false;
+            }
+            if (!lueRevenueAccount.ValidateDetailRequirement(out string? errRev))
+            {
+                MessageBox.Show(errRev, "Cảnh báo thiếu chi tiết kế toán", MessageBoxButton.OK, MessageBoxImage.Warning);
+                lueRevenueAccount.Focus();
+                return false;
+            }
+            if (!lueTaxAccount.ValidateDetailRequirement(out string? errTax))
+            {
+                MessageBox.Show(errTax, "Cảnh báo thiếu chi tiết kế toán", MessageBoxButton.OK, MessageBoxImage.Warning);
+                lueTaxAccount.Focus();
+                return false;
+            }
+            if (!lueTotalAccount.ValidateDetailRequirement(out string? errTot))
+            {
+                MessageBox.Show(errTot, "Cảnh báo thiếu chi tiết kế toán", MessageBoxButton.OK, MessageBoxImage.Warning);
+                lueTotalAccount.Focus();
+                return false;
+            }
+
+            string totalAcc = _revMasterEntry.AccountId ?? (lueTotalAccount.EditValue as string ?? "131");
+            string partnerId = luePartner.EditValue as string ?? "";
+
+            var totalDebt = _revMasterEntry.DebtDetails.ToList();
+            var totalCost = _revMasterEntry.CostDetails.ToList();
+            var revDebt = _revEntry.DebtDetails.ToList();
+            var revCost = _revEntry.CostDetails.ToList();
+            var taxDebt = _taxEntry.DebtDetails.ToList();
+            var taxCost = _taxEntry.CostDetails.ToList();
+            var costDebt = _costMasterEntry.DebtDetails.ToList();
+            var costCost = _costMasterEntry.CostDetails.ToList();
+            var invDebt = _costSubEntry.DebtDetails.ToList();
+            var invCost = _costSubEntry.CostDetails.ToList();
+
+            decimal totalAll = (_revMasterEntry.Amount ?? 0m) > 0 ? _revMasterEntry.Amount.GetValueOrDefault() : Lines.Sum(l => l.SellAmount + l.TaxAmount);
+            if (totalDebt.Count == 0 && !string.IsNullOrEmpty(partnerId) && (totalAcc.StartsWith("131") || totalAcc.StartsWith("331")))
+            {
+                totalDebt.Add(new DebtDetailEntity
+                {
+                    PartnerId = partnerId,
+                    Amount = totalAll,
+                    Liabilitydate = dpVoucherDate.DateTime
+                });
+            }
 
             var p = new WarehouseVoucherSaveParams
             {
@@ -532,19 +600,37 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
                 VatBillNo = txtVatBillNo.Text?.Trim() ?? "",
                 SerialNo = txtSerialNo.Text?.Trim() ?? "",
                 VatBillDate = dpVatBillDate.DateTime,
-                PartnerId = luePartner.EditValue as string ?? "",
+                PartnerId = partnerId,
                 PartnerName = txtPartnerName.Text?.Trim() ?? "",
                 Address = txtAddress.Text?.Trim() ?? "",
                 TaxCode = txtTaxCode.Text?.Trim() ?? "",
 
-                CostAccountId = lueCostAccount.EditValue as string ?? "6321",
-                InventoryAccountId = "1561",
-                RevenueAccountId = lueRevenueAccount.EditValue as string ?? "5111",
-                TaxAccountId = lueTaxAccount.EditValue as string ?? "33311",
-                TotalAccountId = selectedPayment?.AccountId ?? (lueTotalAccount.EditValue as string ?? "131"),
-                PaymentType = selectedPayment?.Code ?? "Debt",
+                CostAccountId = _costMasterEntry.AccountId ?? (lueCostAccount.EditValue as string ?? "6321"),
+                InventoryAccountId = _costSubEntry.AccountId ?? "1561",
+                RevenueAccountId = _revEntry.AccountId ?? (lueRevenueAccount.EditValue as string ?? "5111"),
+                TaxAccountId = _taxEntry.AccountId ?? (lueTaxAccount.EditValue as string ?? "33311"),
+                TotalAccountId = totalAcc,
+                PaymentType = totalAcc.StartsWith("131") ? "Debt" : "Cash",
 
-                Lines = validLines
+                TotalDebtDetails = totalDebt,
+                TotalCostDetails = totalCost,
+                OffsetDebtDetails = totalDebt,
+                OffsetCostDetails = costCost,
+
+                RevenueDebtDetails = revDebt,
+                RevenueCostDetails = revCost,
+
+                TaxDebtDetails = taxDebt,
+                TaxCostDetails = taxCost,
+
+                CostDebtDetails = costDebt,
+                CostCostDetails = costCost,
+
+                InventoryDebtDetails = invDebt,
+                InventoryCostDetails = invCost,
+
+                Lines = validLines,
+                Bookflag = false
             };
 
             if (WarehouseVoucherDataService.SaveVoucher(p, out string error, out int savedId))
@@ -578,7 +664,30 @@ namespace NewaccNet.Plugin.ErpWarehouse.Views
 
         private void ExecutePrint()
         {
-            MessageBox.Show($"In phiếu xuất kho bán hàng: {txtVoucherNo.Text}\n(Chức năng in phiếu sẵn sàng)", "In phiếu", MessageBoxButton.OK, MessageBoxImage.Information);
+            string whId = lueWarehouse.EditValue as string ?? "";
+            string whName = _warehouses.FirstOrDefault(w => w.WarehouseId == whId)?.WarehouseName ?? whId;
+
+            string revAcc = _revEntry.AccountId ?? (lueRevenueAccount.EditValue as string ?? "5111");
+            string taxAcc = _taxEntry.AccountId ?? (lueTaxAccount.EditValue as string ?? "33311");
+            string totalAcc = _revMasterEntry.AccountId ?? (lueTotalAccount.EditValue as string ?? "131");
+
+            ErpInventoryPrintHelper.PrintSalesDelivery(
+                this,
+                txtVoucherNo.Text?.Trim() ?? "",
+                dpVoucherDate.DateTime,
+                txtCarrier.Text?.Trim() ?? "",
+                txtVatBillNo.Text?.Trim() ?? "",
+                txtSerialNo.Text?.Trim() ?? "",
+                dpVatBillDate.DateTime,
+                txtPartnerName.Text?.Trim() ?? "",
+                txtAddress.Text?.Trim() ?? "",
+                txtTaxCode.Text?.Trim() ?? "",
+                whId,
+                whName,
+                revAcc,
+                taxAcc,
+                totalAcc,
+                Lines);
         }
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)

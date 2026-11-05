@@ -1,0 +1,131 @@
+
+📐 Mô hình Toán học của Phân hệ Vốn bằng tiền trên UI ERP
+
+Đối với tiền mặt và tiền gửi ngân hàng, ma trận biến số (Vế đối ứng) hẹp và ít phức tạp hơn kho bán hàng rất nhiều. Bản chất luồng dữ liệu lúc này chỉ là:
+\(\text{Tài khoản Tiền (111/112)}\quad \rightleftarrows \quad \text{[Mapping\ Rule\ Engine]}\quad \rightleftarrows \quad \text{Tài khoản Đối ứng (Alias)}\)
+Người dùng chỉ thao tác trên một Form tổng quát duy nhất cho dòng tiền (Thu hoặc Chi), hệ thống tự động bốc các tham số toán học để lấp đầy ma trận:
+
+1. Ma trận Vector Đầu vào (UI lấy từ User)
+
+• Vector Hành động (\(A\)): [Thu] hoặc [Chi] \(\rightarrow \) Xác định tài khoản Tiền nằm ở vế Nợ hay vế Có.
+• Vector Loại tiền (\(T\)): [Tiền mặt] hoặc [Ngân hàng X] \(\rightarrow \) Xác định chính xác Tài khoản tiền chi tiết (1111, 1121_VCB, 1121_BIDV...).
+• Vector Định tính (\(R\)): Chọn mã [Alias] nghiệp vụ (Thu nợ khách hàng, Chi tạm ứng, Thanh toán chi phí...) \(\rightarrow \) Trả về số tài khoản đối ứng ngầm và điều kiện ràng buộc.
+
+2. Hàm ánh xạ trong suốt (Transparent Mapping Rule Engine)
+
+Hệ thống sẽ chạy một hàm logic ngầm để "hợp nhất" các Vector trên thành bút toán kế toán:
+\(\text{Mapping}(A,T,R)\rightarrow \text{Bút toán hoàn chỉnh (Nợ, Có, Chi tiết đối tượng)}\)
+• Nếu \(A = \text{Thu}\) và \(T = \text{Tiền mặt}\): Hệ thống tự động gán Nợ 1111.
+• Hệ thống nhìn sang \(R\) (ví dụ: THU_NO_KH): Trả về tài khoản Có 131. Đồng thời, kích hoạt điều kiện bắt buộc điền tham số Mã khách hàng.
+
+💡 Thiết kế UI Tiền mặt tối giản dựa trên tư duy toán học
+
+Vì kiến trúc Mapping của bạn đã quá linh hoạt, Form nhập liệu của phân hệ Vốn bằng tiền lúc này sẽ cực kỳ gọn nhẹ. Bạn chỉ cần tạo đúng 2 Form mẫu (Template Form):
+
+Form 1: Phiếu Thu / Báo Có (Dòng tiền đi vào)
+
+• Header: Người nộp | Thu vào đâu (Quỹ/Ngân hàng nào) | Ngày chứng từ.
+• Grid Chi tiết (Multi-lines): Mỗi dòng là một nội dung thu:
+	• Cột 1: Lý do thu (Alias) \(\rightarrow \) Bản chất là giấu TK Có.
+	• Cột 2: Đối tượng chi tiết (Chỉ hiện lên nếu Alias yêu cầu).
+	• Cột 3: Số tiền.
+
+Form 2: Phiếu Chi / Báo Nợ (Dòng tiền đi ra)
+
+• Header: Người nhận | Chi từ đâu (Quỹ/Ngân hàng nào) | Ngày chứng từ.
+• Grid Chi tiết:
+	• Cột 1: Mục đích chi (Alias) \(\rightarrow \) Bản chất là giấu TK Nợ.
+	• Cột 2: Đối tượng chi tiết / Khoản mục chi phí.
+	• Cột 3: Số tiền.
+
+🚀 Điểm cộng lớn nhất khi bạn đi theo hướng này
+
+Bằng cách quy hoạch hệ thống bằng tư duy toán học thay vì code nghiệp vụ cứng, phân hệ Vốn bằng tiền của bạn sẽ tự động thừa hưởng các tính năng ERP cao cấp:
+1. Dễ dàng Đa tiền tệ (Multi-currency): Bản chất chỉ là thêm một hệ số nhân tỷ giá (\(E\)) vào dòng tiền. Người dùng nhập USD, Mapping Rule tự nhân tỷ giá để ghi sổ VND chạy ngầm, đồng thời tự tính chênh lệch tỷ giá dựa trên Alias cấu hình sẵn.
+2. Khớp dòng tiền tự động (Bank Reconciliation): Khi bạn import file Excel sao kê từ ngân hàng vào, hệ thống chỉ cần so khớp Số tiền, Ngày giao dịch và Mã đối tượng để tự tạo ra các dòng chứng từ nháp, kế toán chỉ cần bấm "Duyệt" là xong.
+Tư duy hệ thống của bạn rất mạch lạc và đi đúng bản chất cốt lõi của những hệ thống ERP lớn như SAP hay Oracle (họ gọi cơ chế này là Account Determination).
+Khi chuyển đổi sang giao diện mới này, bạn có dự định làm thêm phần "Duyệt chứng từ" (Approval Workflow) không? (Ví dụ: Trưởng phòng tạo đề nghị chi \(\rightarrow \) Kế toán trưởng duyệt \(\rightarrow \) Thủ quỹ bấm Chi tiền trên UI).
+
+Mình sẽ viết theo kiểu plugin, nếu người ta thích Accounting first thì không cài thêm plugin, có nếu theo phân hệ thì cài thêm vào. 
+Giờ bạn chi tiết cho mình các form và tính huống liên quan đến phân hệ tiền mà bạn nói trên - tên nó sẽ là thế nào để mình thiết lập y như là  phân hệ vật tư, mua bán. Thực ra các phân hệ này nó đan nhau. Thí dụ mua bán vẫn có công nợ mà, nó không tách hoàn toàn đâu
+
+Thiết kế theo dạng Plugin kiến trúc hướng sự kiện (Event-Driven Plugin Architecture) là một giải pháp cực kỳ thông minh. Plugin Phân hệ Tiền (gọi tên chuẩn ERP là Cash & Bank Management - Quản lý Quỹ & Ngân hàng) thực chất là một lớp bọc (Wrapper) UI và Business Logic nằm đè lên Core kế toán.
+Khi chạy độc lập, Core kế toán bắt các sự kiện định khoản. Khi cài thêm Plugin, Plugin này sẽ hứng thông tin nghiệp vụ từ các phân hệ Mua/Bán/Kho, chuyển đổi qua Mapping Rule Engine rồi đẩy ngược dữ liệu định khoản xuống Core.
+Dưới đây là chi tiết các Form (Giao diện), Tình huống (Nghiệp vụ) và cấu trúc liên kết đan xen của phân hệ Tiền để bạn thiết lập đồng bộ với phân hệ Kho/Mua/Bán.
+
+🏗️ 1. Hệ thống Form mẫu (UI Templates) của Phân hệ Tiền
+
+Bạn chỉ cần tạo ra 3 Form gốc (Generic Forms). Tên hiển thị của Form trên Menu sẽ thay đổi linh hoạt theo Loại chứng từ.
+
+📜 Form A: Chứng từ Thu tiền (Inbound Money Form)
+
+Sử dụng cho: Phiếu Thu (Tiền mặt) và Giấy Báo Có (Ngân hàng).
+• Thông tin Chung (Header):
+	• Mã chứng từ (Tự động nhảy theo format cấu hình).
+	• Phương thức (Dropdown: Tiền mặt 111 / Ngân hàng 112 - Khi chọn ngân hàng thì hiện thêm ô chọn Tài khoản ngân hàng công ty).
+	• Đối tượng nộp (Dropdown tìm kiếm từ Master Data: Khách hàng, Nhà cung cấp, Nhân viên).
+	• Ngày hạch toán & Ngày chứng từ.
+• Lưới Chi tiết (Grid Lines):
+	• Nội dung / Mục đích (Alias) ➔ Đây là ô cốt lõi giấu TK Có.
+	• Số tiền (Nguyên tệ & Thành tiền VND).
+	• Đối tượng chi tiết (Chỉ bật lên nếu dòng Alias đó yêu cầu theo dõi chi tiết đối tượng khác với Header).
+	• Hóa đơn kèm theo (Dropdown liên kết với Phân hệ Bán hàng để chọn hóa đơn cần cấn trừ công nợ).
+
+💸 Form B: Chứng từ Chi tiền (Outbound Money Form)
+
+Sử dụng cho: Phiếu Chi (Tiền mặt) và Giấy Báo Nợ / Ủy Nhiệm Chi (Ngân hàng).
+• Thông tin Chung (Header): Tương tự Form Thu nhưng đổi thành Đối tượng nhận và Chi từ Quỹ/Ngân hàng.
+• Lưới Chi tiết (Grid Lines):
+	• Mục đích chi (Alias) ➔ Giấu TK Nợ.
+	• Trung tâm chi phí / Khoản mục CP (Hiện lên nếu Alias liên quan đến tài khoản đầu 6/8).
+	• Số tiền.
+	• Hóa đơn mua vào (Dropdown liên kết với Phân hệ Mua hàng để chọn hóa đơn của NCC cần trả tiền).
+
+🔄 Form C: Chuyển tiền nội bộ (Internal Transfer Form)
+
+Form đặc biệt để xử lý tình huống dòng tiền chạy qua lại giữa Quỹ và Ngân hàng mà không làm trùng dữ liệu.
+• Giao diện chỉ gồm các ô: Từ tài khoản/Quỹ nào ➔ Đến tài khoản/Quỹ nào ➔ Số tiền ➔ Lý do chuyển.
+• Mecanism ngầm: Tạo ra một cặp định khoản duy nhất dưới Core: Nợ TK Nhận / Có TK Xuất.
+
+🎯 2. Các Tình huống (Nghiệp vụ) và Ma trận Mapping tương ứng
+
+Dưới đây là các tình huống thực tế hằng ngày, tên gọi trên UI của Alias và cách nó đan xen với các phân hệ khác:
+
+🤝 Nhóm 1: Đan xen với Phân hệ Bán hàng (Thu tiền)
+
+
+Tên nghiệp vụ trên UI (Alias)	Bản chất TK Đối ứng	Hành vi UI (Ràng buộc toán học)	Logic liên kết phân hệ khác
+Thu tiền nợ của Khách hàng	131	Bắt buộc chọn Mã Khách hàng.	Hiện danh sách Hóa đơn chưa thanh toán bên Phân hệ Bán hàng để chọn khớp xu (Match).
+Khách hàng đặt cọc trước	131	Bắt buộc chọn Mã Khách hàng.	Tạo số dư Có cho khách hàng, dùng để cấn trừ khi lập Phiếu xuất kho/Hóa đơn bán hàng sau này.
+Thu tiền bán hàng ngay (Không qua sổ công nợ)	511, 33311	Ẩn ô Mã khách hàng (hoặc cho gõ text tự do).	Thừa hưởng hàm tính Thuế VAT từ core toán học. Nếu cài kèm Phân hệ Kho, hệ thống tự động trigger sinh thêm 1 Phiếu Xuất Kho ngầm để trừ tồn kho và ghi nhận Giá vốn 632/Có 156.
+
+
+🛒 Nhóm 2: Đan xen với Phân hệ Mua hàng & Chi phí (Chi tiền)
+
+
+Tên nghiệp vụ trên UI (Alias)	Bản chất TK Đối ứng	Hành vi UI (Ràng buộc toán học)	Logic liên kết phân hệ khác
+Trả tiền nợ cho Nhà cung cấp	331	Bắt buộc chọn Mã NCC.	Hiện danh sách Phiếu Nhập Kho / Hóa đơn mua hàng chưa trả tiền bên Phân hệ Mua hàng.
+Trả trước tiền cho người bán	331	Bắt buộc chọn Mã NCC.	Lưu trạng thái đặt cọc để Phân hệ Mua hàng đối chiếu khi hàng về.
+Chi mua hàng/vật tư trả tiền ngay	152, 156, 33312	Yêu cầu nhập lưới chi tiết Vật tư (Mã hàng, Số lượng).	Form Chi tiền biến hình thành Form Nhập kho. Hệ thống tự tăng kho ngầm bên Phân hệ Kho.
+Chi phí quản lý / Hành chính	642 (hoặc đầu 6 tùy thông tư)	Hiện thêm ô chọn Khoản mục chi phí (Tiền điện, nước, tiếp khách...).	Đẩy dữ liệu về Phân hệ Quản trị / Tính giá thành.
+
+
+💼 Nhóm 3: Nghiệp vụ Nội bộ & Nhân sự
+
+
+Tên nghiệp vụ trên UI (Alias)	Bản chất TK Đối ứng	Hành vi UI (Ràng buộc toán học)	Logic liên kết phân hệ khác
+Tạm ứng cho nhân viên	141	Bắt buộc chọn Mã Nhân viên.	Theo dõi hạn thanh toán tạm ứng của từng nhân sự.
+Chi trả lương cho người lao động	334	Thường chọn Đối tượng là "Toàn bộ CNV".	Khớp số liệu với Phân hệ Tiền lương (Bảng lương tháng).
+Rút/Nộp tiền nội bộ	Dùng riêng Form C	Chỉ chọn nguồn đi và nguồn đến.	Không sinh công nợ, không liên quan kho, chỉ biến động số dư Quỹ/Bank.
+
+
+🛠️ 3. Cách thiết lập cấu trúc cho Plugin để không phá vỡ Core
+
+Vì bạn làm theo kiểu Plugin, cấu trúc Database và Event nên được thiết kế như sau:
+1. Core Database (Luôn có): Chỉ có bảng GL_Transactions (Sổ cái) lưu: Ngân sách | Ngày | TK Nợ | TK Có | Số tiền | Mã đối tượng | Mã yếu tố chi phí.
+2. Plugin Database (Khi cài thêm): Sẽ có thêm bảng CA_Transactions (Sổ chi tiết Quỹ/Bank) lưu thông tin nghiệp vụ: Mã chứng từ ERP | Loại chứng từ (Thu/Chi) | Alias_Code | Trạng thái duyệt | Mã hóa đơn liên kết.
+3. Cơ chế Giao tiếp (Hook/Event):
+	• Khi người dùng bấm "Lưu" trên Form Thu/Chi của Plugin ➔ Plugin xử lý toán học ma trận Mapping ➔ Plugin gọi một Hàm API ngầm của Core: Core.PostJournal(DebitAcc, CreditAcc, Amount, OjectID...).
+	• Nếu người dùng gỡ Plugin (Uninstall) ➔ Hệ thống ẩn các Menu Phân hệ đi, trả lại giao diện nhập liệu dạng Grid "Táng tài khoản trực tiếp" vào bảng GL_Transactions của mô hình Accounting First.
+Cách thiết kế này giúp phần mềm của bạn cực kỳ linh hoạt: Bán cho hộ kinh doanh nhỏ thì tắt plugin cho họ gõ thẳng tài khoản cho nhanh; bán cho doanh nghiệp lớn thì bật plugin lên thành một hệ thống ERP chuyên nghiệp.
+Để hoàn thiện logic cho phần đan xen này, bạn đã thiết kế cơ chế "Cấn trừ công nợ tự động" chưa? (Ví dụ: Khi khách hàng trả tiền, hệ thống tự động phân bổ số tiền đó để xóa nợ cho các hóa đơn cũ nhất theo nguyên tắc FIFO - Vào trước Xuất trước).
