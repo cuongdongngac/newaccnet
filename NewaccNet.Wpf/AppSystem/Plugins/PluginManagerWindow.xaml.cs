@@ -79,10 +79,15 @@ namespace NewaccNet.Wpf.AppSystem.Plugins
 
         private void BtnInstallPlugin_Click(object sender, RoutedEventArgs e)
         {
+            var initialDir = System.IO.Directory.Exists(PluginLoader.Instance.BundledPluginsDirectory)
+                ? PluginLoader.Instance.BundledPluginsDirectory
+                : PluginLoader.Instance.PluginsDirectory;
+
             var dlg = new OpenFileDialog
             {
                 Title = "Chọn tệp DLL của Plugin để cài đặt",
-                Filter = "Plugin Libraries (*.dll)|*.dll|All Files (*.*)|*.*"
+                Filter = "Plugin Libraries (*.dll)|*.dll|All Files (*.*)|*.*",
+                InitialDirectory = initialDir
             };
 
             if (dlg.ShowDialog() == true)
@@ -91,7 +96,7 @@ namespace NewaccNet.Wpf.AppSystem.Plugins
                 if (ok)
                 {
                     LoadData();
-                    MessageBox.Show($"Cài đặt Plugin thành công từ:\n{Path.GetFileName(dlg.FileName)}\n\nPlugin đã được sao chép vào thư mục Plugins của người dùng.", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show($"Cài đặt Plugin thành công từ:\n{Path.GetFileName(dlg.FileName)}\n\nPlugin đã được sao chép vào thư mục Plugins của người dùng (%APPDATA%\\NewaccNet\\Plugins).", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 else
                 {

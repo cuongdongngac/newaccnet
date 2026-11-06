@@ -97,6 +97,7 @@ namespace NewaccNet.Wpf.AppSystem.DbMigration
             string baseDir = AppDomain.CurrentDomain.BaseDirectory;
             string[] candidates = new[]
             {
+                baseDir,
                 Path.Combine(baseDir, "Migration"),
                 Path.Combine(baseDir, @"..\..\..\Migration"),
                 @"D:\NewaccNet\NewaccNet.Wpf\Migration",

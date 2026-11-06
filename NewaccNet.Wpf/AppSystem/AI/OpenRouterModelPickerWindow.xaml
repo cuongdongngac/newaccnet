@@ -1,0 +1,119 @@
+<base:BaseWindow xmlns:base="clr-namespace:NewaccNet.Wpf.Views.Base"
+        x:Class="NewaccNet.Wpf.AppSystem.AI.OpenRouterModelPickerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+        xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+        Title="Danh mục Mô hình Trí tuệ Nhân tạo (OpenRouter Models)" Height="620" Width="920"
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- 1. Thanh tìm kiếm & Bộ lọc thông minh -->
+        <Border Grid.Row="0" Background="#FFF8F9FA" BorderBrush="#FFE9ECEF" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Hàng 1: Ô tìm kiếm và lọc hãng -->
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="180"/>
+                        <ColumnDefinition Width="130"/>
+                    </Grid.ColumnDefinitions>
+
+                    <dxe:TextEdit x:Name="txtSearch" Grid.Column="0" NullText="🔍 Tìm kiếm mô hình: gemini, claude, deepseek, gpt, flash..." 
+                                  Margin="0,0,8,0" Height="30" EditValueChanged="FilterChanged"/>
+
+                    <dxe:ComboBoxEdit x:Name="cboProvider" Grid.Column="1" NullText="Tất cả hãng" Margin="0,0,8,0" Height="30"
+                                      IsTextEditable="False" EditValueChanged="FilterChanged"/>
+
+                    <dx:SimpleButton x:Name="btnRefresh" Grid.Column="2" Content="Tải lại từ mạng" Height="30"
+                                     Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/icon%20builder/actions_refresh.svg'}"
+                                     Click="BtnRefresh_Click"/>
+                </Grid>
+
+                <!-- Hàng 2: Bộ lọc tính năng nhanh -->
+                <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,8,0,0">
+                    <TextBlock Text="Lọc nhanh: " VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#495057" Margin="0,0,10,0"/>
+                    <dxe:CheckEdit x:Name="chkFreeOnly" Content="Chỉ hiện bản Miễn phí (Free)" Margin="0,0,15,0" EditValueChanged="FilterChanged"/>
+                    <dxe:CheckEdit x:Name="chkVisionOnly" Content="Hỗ trợ đọc ảnh (OCR / Vision)" Margin="0,0,15,0" EditValueChanged="FilterChanged"/>
+                    <dxe:CheckEdit x:Name="chkJsonOnly" Content="Hỗ trợ JSON chuẩn" Margin="0,0,15,0" EditValueChanged="FilterChanged"/>
+                    <TextBlock x:Name="lblCount" Text="0 model" VerticalAlignment="Center" Foreground="#6C757D" FontSize="11" Margin="10,0,0,0"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- 2. Danh sách Model trên GridControl -->
+        <dxg:GridControl x:Name="gridModels" Grid.Row="1" SelectionMode="Row" SelectedItemChanged="GridModels_SelectedItemChanged">
+            <dxg:GridControl.Columns>
+                <dxg:GridColumn FieldName="Name" Header="Tên Mô Hình AI" Width="200" MinWidth="160"/>
+                <dxg:GridColumn FieldName="Id" Header="Mã Model (ID API)" Width="200" MinWidth="160"/>
+                <dxg:GridColumn FieldName="Provider" Header="Hãng" Width="85"/>
+                <dxg:GridColumn FieldName="DisplayContext" Header="Ngữ Cảnh" Width="75">
+                    <dxg:GridColumn.EditSettings>
+                        <dxe:TextEditSettings HorizontalContentAlignment="Right"/>
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
+                <dxg:GridColumn FieldName="DisplayPrice" Header="Chi Phí (Vào / Ra)" Width="170"/>
+                <dxg:GridColumn FieldName="DisplayBadge" Header="Tính Năng Hỗ Trợ" Width="160"/>
+            </dxg:GridControl.Columns>
+            <dxg:GridControl.View>
+                <dxg:TableView x:Name="tableViewModels" ShowGroupPanel="False" AllowEditing="False"
+                               NavigationStyle="Row" AutoWidth="True" ShowSearchPanelMode="Never"
+                               RowDoubleClick="TableView_RowDoubleClick"/>
+            </dxg:GridControl.View>
+        </dxg:GridControl>
+
+        <!-- 3. Khung tóm tắt Model đang chọn -->
+        <Border Grid.Row="2" Background="#FFF3E8FF" BorderBrush="#FFD8B4FE" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,10,0,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,2">
+                        <TextBlock Text="ĐANG CHỌN: " FontWeight="Bold" Foreground="#6B21A8" FontSize="11"/>
+                        <TextBlock x:Name="txtSelectedName" Text="Chưa chọn mô hình nào" FontWeight="Bold" Foreground="#1E1B4B" FontSize="13"/>
+                    </StackPanel>
+                    <TextBlock x:Name="txtSelectedId" Text="" FontFamily="Consolas" Foreground="#581C87" FontSize="11" Margin="0,0,0,3"/>
+                    <TextBlock x:Name="txtSelectedDetails" Text="" Foreground="#4C1D95" FontSize="11" TextWrapping="Wrap"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- 4. Thanh điều hướng & Buttons -->
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Cho phép nhập mã tùy ý nếu muốn -->
+            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Text="Hoặc gõ mã ID trực tiếp: " VerticalAlignment="Center" Foreground="#495057" FontSize="11"/>
+                <dxe:TextEdit x:Name="txtManualId" Width="280" Height="26" FontFamily="Consolas" Margin="5,0,0,0" EditValueChanged="TxtManualId_EditValueChanged"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <dx:SimpleButton x:Name="btnSelect" Content="Chọn Mô Hình Này" Width="150" Height="32" Margin="0,0,10,0"
+                                 Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/icon%20builder/actions_check.svg'}"
+                                 Click="BtnSelect_Click"/>
+                <dx:SimpleButton x:Name="btnCancel" Content="Đóng" Width="90" Height="32"
+                                 Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/xaf/action_close.svg'}"
+                                 Click="BtnCancel_Click"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</base:BaseWindow>

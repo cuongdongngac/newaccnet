@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -65,6 +65,14 @@ public partial class MainWindow : ThemedWindow {
         txtStatusRoleMask.Text = $"{roleMask} → {Convert.ToString(roleMask, 2).PadLeft(32, '0')}";
 
         this.Closed += (_, _) => Application.Current.Shutdown();
+        this.KeyDown += (s, e) =>
+        {
+            if (e.Key == System.Windows.Input.Key.F1)
+            {
+                BtnOnlineHelp_ItemClick(this, null!);
+                e.Handled = true;
+            }
+        };
 
         LoadBackground();
         UpdateAppTitle();
@@ -571,29 +579,52 @@ public partial class MainWindow : ThemedWindow {
         {
             if (defaultCategory != null)
             {
-                // 1. Dọn dẹp các RibbonPage động do Plugin tạo trước đó
+                // 1. Dọn dẹp các RibbonPage và RibbonPageGroup động do Plugin tạo trước đó
                 var dynamicPages = defaultCategory.Pages.OfType<DevExpress.Xpf.Ribbon.RibbonPage>()
                     .Where(p => p.Tag is string tag && tag == "DYNAMIC_PLUGIN_PAGE").ToList();
                 foreach (var p in dynamicPages)
                 {
                     defaultCategory.Pages.Remove(p);
                 }
+                foreach (var p in defaultCategory.Pages.OfType<DevExpress.Xpf.Ribbon.RibbonPage>())
+                {
+                    var dynamicGroups = p.Groups.OfType<DevExpress.Xpf.Ribbon.RibbonPageGroup>()
+                        .Where(g => g.Tag is string tag && tag == "DYNAMIC_PLUGIN_GROUP").ToList();
+                    foreach (var g in dynamicGroups)
+                    {
+                        p.Groups.Remove(g);
+                    }
+                }
 
                 // 2. Render các RibbonAction từ các Plugin ngoại vi đang kích hoạt
                 var actions = AppSystem.Plugins.PluginHost.Instance.RegisteredRibbonActions;
                 foreach (var grp in actions.GroupBy(a => a.Category))
                 {
-                    var page = new DevExpress.Xpf.Ribbon.RibbonPage
+                    var existingPage = defaultCategory.Pages.OfType<DevExpress.Xpf.Ribbon.RibbonPage>()
+                        .FirstOrDefault(p => string.Equals(p.Caption?.ToString(), grp.Key, StringComparison.OrdinalIgnoreCase));
+
+                    DevExpress.Xpf.Ribbon.RibbonPage page;
+                    bool isNewPage = false;
+                    if (existingPage != null)
                     {
-                        Caption = grp.Key,
-                        Tag = "DYNAMIC_PLUGIN_PAGE"
-                    };
+                        page = existingPage;
+                    }
+                    else
+                    {
+                        page = new DevExpress.Xpf.Ribbon.RibbonPage
+                        {
+                            Caption = grp.Key,
+                            Tag = "DYNAMIC_PLUGIN_PAGE"
+                        };
+                        isNewPage = true;
+                    }
 
                     foreach (var subGrp in grp.GroupBy(a => a.GroupName))
                     {
                         var pageGroup = new DevExpress.Xpf.Ribbon.RibbonPageGroup
                         {
-                            Caption = subGrp.Key
+                            Caption = subGrp.Key,
+                            Tag = "DYNAMIC_PLUGIN_GROUP"
                         };
 
                         foreach (var act in subGrp)
@@ -636,7 +667,17 @@ public partial class MainWindow : ThemedWindow {
                         page.Groups.Add(pageGroup);
                     }
 
-                    defaultCategory.Pages.Add(page);
+                    if (isNewPage)
+                    {
+                        defaultCategory.Pages.Add(page);
+                    }
+                }
+
+                // Đảm bảo tab Trợ giúp luôn luôn ở ngoài rìa bên phải (vị trí cuối cùng), bất kể có bao nhiêu plugin nạp vào
+                if (ribbonPageHelp != null && defaultCategory.Pages.Contains(ribbonPageHelp))
+                {
+                    defaultCategory.Pages.Remove(ribbonPageHelp);
+                    defaultCategory.Pages.Add(ribbonPageHelp);
                 }
             }
         }

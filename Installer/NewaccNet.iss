@@ -40,6 +40,11 @@
 #define PreNet     Root + "\Prerequisites\.NET 10.0"
 #define PreVC      Root + "\Prerequisites\Visual C++ Redistributable for Visual Studio 2015-2022"
 #define PreAce     Root + "\Prerequisites\Access Database Engine 2016"
+; migrate.exe (Go, dùng ODBC Access driver) PHẢI cùng bitness với ACE/app.
+; Lấy từ D:\NewaccNet\migrate\x86 và migrate\x64; [Files] bên dưới
+; tự chọn bản đúng theo bản app được cài và đưa vào thư mục gốc ứng dụng.
+#define MigX86     Root + "\migrate\x86\migrate.exe"
+#define MigX64     Root + "\migrate\x64\migrate.exe"
 
 ; Tên file các bộ cài phụ thuộc – đổi ở đây khi cập nhật phiên bản mới
 #define NetX64     "windowsdesktop-runtime-10.0.9-win-x64.exe"
@@ -87,13 +92,11 @@ ArchitecturesInstallIn64BitMode=x64compatible
 
 [Tasks]
 Name: "desktopicon"; Description: "Tạo biểu tượng ngoài Desktop"; Flags: unchecked
-Name: "migrateicon"; Description: "Tạo biểu tượng Chuyển đổi dữ liệu (Migrate) ngoài Desktop"; Flags: unchecked
 
 [Dirs]
 ; App ghi appsettings.json, *.json cấu hình và file .accdb ngay trong thư mục cài
 ; -> cấp quyền sửa cho Users để chạy không cần quyền Admin
 Name: "{app}"; Permissions: users-modify
-Name: "{app}\Plugins"; Permissions: users-modify
 Name: "{app}\sampledb"; Permissions: users-modify
 Name: "{app}\Template"; Permissions: users-modify
 Name: "{app}\mapping"; Permissions: users-modify
@@ -103,16 +106,16 @@ Name: "{app}\mapping"; Permissions: users-modify
 ; Loại file cấu hình/DB do app tạo khi chạy để không ghi đè dữ liệu người dùng
 #if Arch != "x86"
 Source: "{#PubX64}\*"; DestDir: "{app}"; Check: UseX64; \
-  Excludes: "*.pdb,desktop.ini,\appsettings.json,\DebtBalanceSettings.json,\Template\template.accdb"; \
+  Excludes: "*.pdb,desktop.ini,\appsettings.json,\DebtBalanceSettings.json,\Template\template.accdb,\migrate.exe"; \
   Flags: ignoreversion recursesubdirs createallsubdirs
 #endif
 #if Arch != "x64"
 Source: "{#PubX86}\*"; DestDir: "{app}"; Check: not UseX64; \
-  Excludes: "*.pdb,desktop.ini,\appsettings.json,\DebtBalanceSettings.json,\Template\template.accdb"; \
+  Excludes: "*.pdb,desktop.ini,\appsettings.json,\DebtBalanceSettings.json,\Template\template.accdb,\migrate.exe"; \
   Flags: ignoreversion recursesubdirs createallsubdirs
 #endif
 
-; ---------------- Dữ liệu: Template, sampledb, mapping, Plugins, migrate.exe (chung cho x86/x64) ----------------
+; ---------------- Dữ liệu: Template, sampledb, mapping, migrate.exe (chung cho x86/x64) ----------------
 ; JSON cấu hình mẫu (luôn cập nhật bản mới nhất)
 Source: "{#Root}\Template\*.json"; DestDir: "{app}\Template"; Flags: ignoreversion
 ; Database mẫu & template (chỉ chép khi chưa có để không mất dữ liệu người dùng khi update)
@@ -124,9 +127,13 @@ Source: "{#Root}\sampledb\*"; DestDir: "{app}\sampledb"; \
   Flags: onlyifdoesntexist uninsneveruninstall recursesubdirs createallsubdirs
 Source: "{#Root}\mapping\*"; DestDir: "{app}\mapping"; \
   Excludes: "desktop.ini,*.laccdb"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "{#Root}\migrate.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#Root}\Plugins\*"; DestDir: "{app}\Plugins"; \
-  Excludes: "*.pdb"; Flags: ignoreversion recursesubdirs createallsubdirs
+; migrate.exe: đưa vào thư mục gốc của ứng dụng ({app}\migrate.exe), tự chọn đúng bản 32/64-bit theo bản app được cài
+#if Arch != "x86"
+Source: "{#MigX64}"; DestDir: "{app}"; Check: UseX64; Flags: ignoreversion
+#endif
+#if Arch != "x64"
+Source: "{#MigX86}"; DestDir: "{app}"; Check: not UseX64; Flags: ignoreversion
+#endif
 
 ; ---------------- Thành phần phụ thuộc (chỉ giải nén khi cần, xem [Code]) ----------------
 #if Arch != "x86"
@@ -142,10 +149,8 @@ Source: "{#PreAce}\{#AceX86}"; DestDir: "{tmp}"; Flags: dontcopy
 
 [Icons]
 Name: "{group}\{#AppName}";                   Filename: "{app}\{#AppExe}"
-Name: "{group}\Chuyển đổi dữ liệu (Migrate)"; Filename: "{app}\migrate.exe"; IconFilename: "{app}\{#AppExe}"
 Name: "{group}\Gỡ cài {#AppName}";            Filename: "{uninstallexe}"
 Name: "{autodesktop}\{#AppName}";             Filename: "{app}\{#AppExe}"; Tasks: desktopicon
-Name: "{autodesktop}\Chuyển đổi dữ liệu";      Filename: "{app}\migrate.exe"; IconFilename: "{app}\{#AppExe}"; Tasks: migrateicon
 
 [Run]
 Filename: "{app}\{#AppExe}"; Description: "Chạy {#AppName}"; Flags: nowait postinstall skipifsilent

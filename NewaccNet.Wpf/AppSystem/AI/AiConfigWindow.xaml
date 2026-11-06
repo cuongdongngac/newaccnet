@@ -5,7 +5,7 @@
         xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
         xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
         xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
-        Title="Cấu hình Trí tuệ Nhân tạo (OpenRouter AI Gateway)" Height="480" Width="600" 
+        Title="Cấu hình Trí tuệ Nhân tạo (OpenRouter AI Gateway)" Height="520" Width="680" 
         WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
     <Grid>
         <dxlc:LayoutControl Orientation="Vertical" Padding="15">
@@ -22,31 +22,55 @@
 
             <dxlc:LayoutGroup Header="Mô hình Trí tuệ Nhân tạo (Models)" View="GroupBox" Orientation="Vertical" Margin="0,10,0,0">
                 <dxlc:LayoutItem Label="Mô hình Trợ lý &amp; Nhập liệu:">
-                    <dxe:ComboBoxEdit x:Name="cboChatModel" IsTextEditable="True">
-                        <dxe:ComboBoxEditItem Content="google/gemini-2.5-flash"/>
-                        <dxe:ComboBoxEditItem Content="google/gemini-2.5-pro"/>
-                        <dxe:ComboBoxEditItem Content="anthropic/claude-3.5-sonnet"/>
-                        <dxe:ComboBoxEditItem Content="deepseek/deepseek-chat"/>
-                        <dxe:ComboBoxEditItem Content="openai/gpt-4o-mini"/>
-                    </dxe:ComboBoxEdit>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <dxe:ComboBoxEdit x:Name="cboChatModel" Grid.Column="0" IsTextEditable="True">
+                            <dxe:ComboBoxEditItem Content="google/gemini-2.5-flash"/>
+                            <dxe:ComboBoxEditItem Content="google/gemini-2.5-pro"/>
+                            <dxe:ComboBoxEditItem Content="anthropic/claude-3.5-sonnet"/>
+                            <dxe:ComboBoxEditItem Content="deepseek/deepseek-chat"/>
+                            <dxe:ComboBoxEditItem Content="openai/gpt-4o-mini"/>
+                        </dxe:ComboBoxEdit>
+                        <dx:SimpleButton x:Name="btnPickChatModel" Grid.Column="1" Content="🔍 Chọn..." Width="95" Height="26" Margin="6,0,0,0"
+                                         Click="BtnPickChatModel_Click"/>
+                    </Grid>
                 </dxlc:LayoutItem>
 
                 <dxlc:LayoutItem Label="Mô hình Nhận dạng OCR &amp; Ảnh:">
-                    <dxe:ComboBoxEdit x:Name="cboVisionModel" IsTextEditable="True">
-                        <dxe:ComboBoxEditItem Content="google/gemini-2.5-flash"/>
-                        <dxe:ComboBoxEditItem Content="google/gemini-2.5-pro"/>
-                        <dxe:ComboBoxEditItem Content="anthropic/claude-3.5-sonnet"/>
-                        <dxe:ComboBoxEditItem Content="openai/gpt-4o"/>
-                    </dxe:ComboBoxEdit>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <dxe:ComboBoxEdit x:Name="cboVisionModel" Grid.Column="0" IsTextEditable="True">
+                            <dxe:ComboBoxEditItem Content="google/gemini-2.5-flash"/>
+                            <dxe:ComboBoxEditItem Content="google/gemini-2.5-pro"/>
+                            <dxe:ComboBoxEditItem Content="anthropic/claude-3.5-sonnet"/>
+                            <dxe:ComboBoxEditItem Content="openai/gpt-4o"/>
+                        </dxe:ComboBoxEdit>
+                        <dx:SimpleButton x:Name="btnPickVisionModel" Grid.Column="1" Content="🔍 Chọn..." Width="95" Height="26" Margin="6,0,0,0"
+                                         Click="BtnPickVisionModel_Click"/>
+                    </Grid>
                 </dxlc:LayoutItem>
 
                 <dxlc:LayoutItem Label="Mô hình Phân tích &amp; CFO Brain:">
-                    <dxe:ComboBoxEdit x:Name="cboAnalysisModel" IsTextEditable="True">
-                        <dxe:ComboBoxEditItem Content="google/gemini-2.5-pro"/>
-                        <dxe:ComboBoxEditItem Content="anthropic/claude-3.5-sonnet"/>
-                        <dxe:ComboBoxEditItem Content="openai/gpt-4o"/>
-                        <dxe:ComboBoxEditItem Content="deepseek/deepseek-r1"/>
-                    </dxe:ComboBoxEdit>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <dxe:ComboBoxEdit x:Name="cboAnalysisModel" Grid.Column="0" IsTextEditable="True">
+                            <dxe:ComboBoxEditItem Content="google/gemini-2.5-pro"/>
+                            <dxe:ComboBoxEditItem Content="anthropic/claude-3.5-sonnet"/>
+                            <dxe:ComboBoxEditItem Content="openai/gpt-4o"/>
+                            <dxe:ComboBoxEditItem Content="deepseek/deepseek-r1"/>
+                        </dxe:ComboBoxEdit>
+                        <dx:SimpleButton x:Name="btnPickAnalysisModel" Grid.Column="1" Content="🔍 Chọn..." Width="95" Height="26" Margin="6,0,0,0"
+                                         Click="BtnPickAnalysisModel_Click"/>
+                    </Grid>
                 </dxlc:LayoutItem>
             </dxlc:LayoutGroup>
 

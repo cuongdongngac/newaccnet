@@ -40,6 +40,7 @@ namespace NewaccNet.Wpf.AppSystem.Plugins
 
         public string PluginsDirectory { get; }
         public string ManifestFilePath { get; }
+        public string BundledPluginsDirectory => System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins");
 
         private readonly List<LoadedPluginInfo> _plugins = new();
         public event Action? PluginStateChanged;
@@ -57,6 +58,7 @@ namespace NewaccNet.Wpf.AppSystem.Plugins
 
         public PluginLoader()
         {
+            // Thư mục Plugins của người dùng: user/app (%APPDATA%\NewaccNet\Plugins)
             var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             var root = System.IO.Path.Combine(appData, "NewaccNet");
             PluginsDirectory = System.IO.Path.Combine(root, "Plugins");
@@ -64,21 +66,20 @@ namespace NewaccNet.Wpf.AppSystem.Plugins
 
             System.IO.Directory.CreateDirectory(PluginsDirectory);
 
-            // Hỗ trợ AssemblyResolve để các DLL Plugin bên ngoài luôn tìm thấy NewaccNet.Contracts.dll và các thư viện Core
+            // Hỗ trợ AssemblyResolve để các DLL Plugin luôn tìm thấy NewaccNet.Contracts.dll và các thư viện Core
             AppDomain.CurrentDomain.AssemblyResolve += (s, args) =>
             {
                 var reqName = new AssemblyName(args.Name);
                 var simpleName = reqName.Name;
                 if (string.IsNullOrEmpty(simpleName)) return null;
 
-                // 1. WPF luôn dò tìm satellite assembly (.resources) trước khi fallback sang tài nguyên mặc định.
-                // Tránh tìm kiếm các file .resources.dll không tồn tại.
+                // 1. Tránh tìm kiếm các file .resources.dll không tồn tại
                 if (simpleName.EndsWith(".resources", StringComparison.OrdinalIgnoreCase))
                 {
                     return null;
                 }
 
-                // 2. Kiểm tra xem assembly đã được nạp trong AppDomain chưa (tránh nạp trùng lặp làm phân mảnh kiểu dữ liệu)
+                // 2. Kiểm tra xem assembly đã được nạp trong AppDomain chưa
                 var existing = AppDomain.CurrentDomain.GetAssemblies()
                     .FirstOrDefault(a => string.Equals(a.GetName().Name, simpleName, StringComparison.OrdinalIgnoreCase));
                 if (existing != null) return existing;
@@ -87,17 +88,10 @@ namespace NewaccNet.Wpf.AppSystem.Plugins
                 var appPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, assemblyFileName);
                 if (File.Exists(appPath)) return Assembly.LoadFrom(appPath);
 
-                var localPluginPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins", assemblyFileName);
+                var localPluginPath = System.IO.Path.Combine(PluginsDirectory, assemblyFileName);
                 if (File.Exists(localPluginPath))
                 {
                     try { return Assembly.LoadFrom(localPluginPath); }
-                    catch { }
-                }
-
-                var pluginPath = System.IO.Path.Combine(PluginsDirectory, assemblyFileName);
-                if (File.Exists(pluginPath))
-                {
-                    try { return Assembly.LoadFrom(pluginPath); }
                     catch { }
                 }
                 return null;
@@ -124,30 +118,16 @@ namespace NewaccNet.Wpf.AppSystem.Plugins
                 var records = LoadManifest().Where(r => !string.Equals(r.Id, "plugin.ai", StringComparison.OrdinalIgnoreCase)).ToList();
                 var recordDict = records.ToDictionary(x => x.Id, StringComparer.OrdinalIgnoreCase);
 
-                // 3. Quét các file .dll plugin (gom nhóm theo tên file để tránh load 2 lần từ cả BaseDir và AppData)
+                // 3. Chỉ quét các file .dll plugin đã được cài đặt trong thư mục Plugins của người dùng (%APPDATA%\NewaccNet\Plugins).
+                // Thư mục {app}\Plugins của bộ cài chỉ là kho lưu trữ offline đi kèm (thay vì gửi email), không tự động quét nạp khi khởi động.
                 var dllFilesMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
-                // Ưu tiên 1: Thư mục Plugins cục bộ trong BaseDirectory
-                var localPluginDir = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins");
-                if (System.IO.Directory.Exists(localPluginDir))
-                {
-                    foreach (var file in System.IO.Directory.GetFiles(localPluginDir, "*.dll", SearchOption.AllDirectories))
-                    {
-                        var fname = System.IO.Path.GetFileName(file);
-                        dllFilesMap[fname] = file;
-                    }
-                }
-
-                // Ưu tiên 2: Thư mục Plugins trong AppData của người dùng (chỉ thêm nếu chưa có ở BaseDir)
                 if (System.IO.Directory.Exists(PluginsDirectory))
                 {
                     foreach (var file in System.IO.Directory.GetFiles(PluginsDirectory, "*.dll", SearchOption.AllDirectories))
                     {
                         var fname = System.IO.Path.GetFileName(file);
-                        if (!dllFilesMap.ContainsKey(fname))
-                        {
-                            dllFilesMap[fname] = file;
-                        }
+                        dllFilesMap[fname] = file;
                     }
                 }
 
@@ -190,7 +170,7 @@ namespace NewaccNet.Wpf.AppSystem.Plugins
                                         Description = plugin.Description,
                                         Author = plugin.Author,
                                         DllFileName = fileName,
-                                        IsEnabled = true,
+                                        IsEnabled = true, // Vì file này đã nằm trong thư mục user/app do người dùng chủ động cài vào
                                         InstalledDate = DateTime.Now
                                     };
                                     recordDict[plugin.Id] = rec;
@@ -330,13 +310,10 @@ namespace NewaccNet.Wpf.AppSystem.Plugins
 
                 if (!string.IsNullOrEmpty(target.Record.DllFileName))
                 {
-                    // 1. Xóa sạch file DLL và file liên đới (.pdb, .deps.json) trong thư mục người dùng (%APPDATA%\NewaccNet\Plugins)
+                    // Xóa file DLL và file liên đới (.pdb, .deps.json) trong thư mục người dùng (%APPDATA%\NewaccNet\Plugins)
+                    // TUYỆT ĐỐI KHÔNG xóa tệp trong BaseDirectory\Plugins (đây là gói đóng kèm theo bộ cài đặt)
                     var appDataFile = System.IO.Path.Combine(PluginsDirectory, target.Record.DllFileName);
                     DeleteFileAndRelated(appDataFile);
-
-                    // 2. Xóa sạch trong thư mục cài đặt ứng dụng (BaseDirectory\Plugins) nếu có
-                    var localFile = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins", target.Record.DllFileName);
-                    DeleteFileAndRelated(localFile);
                 }
 
                 _plugins.Remove(target);

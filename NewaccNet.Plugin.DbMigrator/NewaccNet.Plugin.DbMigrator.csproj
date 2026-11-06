@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <AssemblyName>NewaccNet.Plugin.DbMigrator</AssemblyName>
+    <RootNamespace>NewaccNet.Plugin.DbMigrator</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\dataaccess\DatabaseGeneric\DataAccess.csproj" />
+    <ProjectReference Include="..\NewaccNet.Contracts\NewaccNet.Contracts.csproj" />
+    <ProjectReference Include="..\NewaccNet.Core\NewaccNet.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DevExpress.Wpf.Core" Version="25.2.3" />
+    <PackageReference Include="DevExpress.Wpf.Grid" Version="25.2.3" />
+    <PackageReference Include="DevExpress.Wpf.LayoutControl" Version="25.2.3" />
+    <PackageReference Include="DevExpress.Images" Version="25.2.3" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.2" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <!-- Tự động đồng bộ DLL sang thư mục AppData Plugins của ứng dụng -->
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(AppData)\NewaccNet\Plugins\" ContinueOnError="true" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(AppData)\NewaccNet\Plugins\" Condition="Exists('$(TargetDir)$(TargetName).pdb')" ContinueOnError="true" />
+    <!-- Tự động đồng bộ sang thư mục Plugins của ứng dụng NewaccNet.Wpf -->
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="..\NewaccNet.Wpf\Plugins\" ContinueOnError="true" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="..\NewaccNet.Wpf\Plugins\" Condition="Exists('$(TargetDir)$(TargetName).pdb')" ContinueOnError="true" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="..\NewaccNet.Wpf\bin\$(Configuration)\net10.0-windows\Plugins\" ContinueOnError="true" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="..\NewaccNet.Wpf\bin\$(Configuration)\net10.0-windows\Plugins\" Condition="Exists('$(TargetDir)$(TargetName).pdb')" ContinueOnError="true" />
+  </Target>
+
+</Project>

@@ -12,6 +12,8 @@
   <Project Path="NewaccNet.AI/NewaccNet.AI.csproj" />
   <Project Path="NewaccNet.Reports/NewaccNet.Reports.csproj" />
   <Project Path="NewaccNet.Plugin.ErpWarehouse/NewaccNet.Plugin.ErpWarehouse.csproj" />
+  <Project Path="NewaccNet.Plugin.CashBank/NewaccNet.Plugin.CashBank.csproj" />
+  <Project Path="NewaccNet.Plugin.DbMigrator/NewaccNet.Plugin.DbMigrator.csproj" />
   <Project Path="NewaccNet.TaxInvoice/NewaccNet.TaxInvoice.csproj" />
   <Project Path="NewaccNet.Wpf/NewaccNet.Wpf.csproj" />
 </Solution>

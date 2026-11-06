@@ -14,4 +14,10 @@
   - Báo cáo sổ sách/BCTC: Dùng `XtraReport` với Band layout thuần WPF.
   - Danh mục: Mới sử dụng `GridControl` + `ReportManager.PrintGridControl`.
 
-Tham khảo chi tiết tại `.ai_context/02_rules/csharp_rules.md` và `.ai_context/02_rules/report_rules.md`.
+## 3. Kiến Trúc Plugin & Trí Tuệ Nhân Tạo (AI)
+- **Plugin - Clean Core:** Không `ALTER TABLE` thêm/xóa cột trên các bảng Core. Dữ liệu mở rộng dùng bảng riêng 1-1 (`Plg_...`) hoặc JSON attributes.
+- **Plugin - Self-cleaning:** Khi gỡ bỏ (Uninstall), plugin tự chịu trách nhiệm dọn dẹp các bảng của nó (`IPluginLifecycle`). Plugin Manager điều phối, cảnh báo người dùng và bảo vệ tuyệt đối các bảng Core.
+- **AI - Core Platform:** Core quản lý tập trung 1 cổng OpenRouter (API Key, Base URL, định tuyến Model, đếm token) và là chốt chặn kiểm toán (kiểm tra cân Nợ/Có của mọi bút toán AI đề xuất).
+- **AI - Plugin Skills:** Plugin không tạo API Key riêng; Plugin gọi nhờ hạ tầng AI của Core, cung cấp Prompt nghiệp vụ chuyên sâu và đăng ký các AI Tools mở rộng.
+
+Tham khảo chi tiết tại `.ai_context/02_rules/csharp_rules.md`, `.ai_context/02_rules/report_rules.md` và `.ai_context/02_rules/plugin_and_ai_architecture_rules.md`.

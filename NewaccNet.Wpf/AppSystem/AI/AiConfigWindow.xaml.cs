@@ -103,6 +103,38 @@ namespace NewaccNet.Wpf.AppSystem.AI
             this.Close();
         }
 
+        private void BtnPickChatModel_Click(object sender, RoutedEventArgs e)
+        {
+            PickModel(cboChatModel, filterVisionOnly: false);
+        }
+
+        private void BtnPickVisionModel_Click(object sender, RoutedEventArgs e)
+        {
+            PickModel(cboVisionModel, filterVisionOnly: true);
+        }
+
+        private void BtnPickAnalysisModel_Click(object sender, RoutedEventArgs e)
+        {
+            PickModel(cboAnalysisModel, filterVisionOnly: false);
+        }
+
+        private void PickModel(DevExpress.Xpf.Editors.ComboBoxEdit targetCbo, bool filterVisionOnly)
+        {
+            string currentId = targetCbo.EditValue?.ToString() ?? "";
+            string apiKey = txtApiKey.Text?.Trim() ?? "";
+            string baseUrl = txtBaseUrl.Text?.Trim() ?? "";
+
+            var win = new OpenRouterModelPickerWindow(currentId, filterVisionOnly, apiKey, baseUrl)
+            {
+                Owner = this
+            };
+
+            if (win.ShowDialog() == true && !string.IsNullOrWhiteSpace(win.SelectedModelId))
+            {
+                targetCbo.EditValue = win.SelectedModelId;
+            }
+        }
+
         private void BtnClose_Click(object sender, RoutedEventArgs e)
         {
             this.Close();

@@ -60,7 +60,7 @@ namespace NewaccNet.Wpf.AppSystem
             }
             else
             {
-                txtExpiryNotice.Text = "Phiên bản chưa đăng ký bản quyền (Bản dùng thử miễn phí 100 chứng từ). Vui lòng nhập Số đăng ký để nâng hạn mức chứng từ.";
+                txtExpiryNotice.Text = "Phiên bản chưa đăng ký bản quyền (Bản dùng thử miễn phí 1.000 chứng từ). Vui lòng nhập Số đăng ký để nâng hạn mức chứng từ.";
                 txtExpiryNotice.Foreground = new SolidColorBrush(Color.FromRgb(217, 119, 6)); // Cam cảnh báo
             }
         }
@@ -133,7 +133,7 @@ namespace NewaccNet.Wpf.AppSystem
                     {
                         ThemedMessageBox.Show(
                             "Thông báo",
-                            "Đã lưu thông tin đơn vị vào CSDL thành công.\n(Chưa nhập Số đăng ký, phần mềm tiếp tục chạy ở chế độ Dùng Thử 100 chứng từ).",
+                            "Đã lưu thông tin đơn vị vào CSDL thành công.\n(Chưa nhập Số đăng ký, phần mềm tiếp tục chạy ở chế độ Dùng Thử 1.000 chứng từ).",
                             MessageBoxButton.OK, MessageBoxImage.Information);
                         this.Close();
                     }

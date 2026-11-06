@@ -56,7 +56,7 @@ namespace NewaccNet.Core.Data
         public string ExpiryDate { get; set; } = "20991231"; // YYYYMMDD (20991231 = Dài hạn / Vĩnh viễn)
         public short AccountMethod { get; set; } = 1; // 1 = Nhật ký chung, 2 = CT ghi sổ, ...
         public short Material { get; set; } = 1; // 1 = Bình quân, 2 = FIFO, 3 = Đích danh
-        public int MaxRecords { get; set; } = 100; // Hạn mức bản ghi JournalVoucher (Mặc định dùng thử = 100)
+        public int MaxRecords { get; set; } = 1000; // Hạn mức bản ghi JournalVoucher (Mặc định dùng thử = 1000)
         public string VoucherPostingConfig { get; set; } = ""; // Chuỗi JSON cấu hình định khoản ngầm định cho các loại phiếu
         public string CashPostingConfig { get; set; } = ""; // Chuỗi JSON cấu hình định khoản cho phân hệ Tiền mặt & Ngân hàng
     }
@@ -1345,7 +1345,7 @@ CREATE TABLE DbConfig (
         /// </summary>
         public static bool ValidateRegistrationCode(DbConfigDto config, string machineCode, out int maxRecords)
         {
-            maxRecords = 100; // Mặc định dùng thử 100 bản ghi
+            maxRecords = 1000; // Mặc định dùng thử 1000 bản ghi
             if (config == null || string.IsNullOrWhiteSpace(config.RegistrationCode))
                 return false;
 
@@ -1498,7 +1498,7 @@ CREATE TABLE DbConfig (
             var cfg = Current;
             string machineCode = License.HardwareHelper.GetMachineCode();
             bool isValid = ValidateRegistrationCode(cfg, machineCode, out int limit);
-            maxLimit = isValid ? limit : 100;
+            maxLimit = isValid ? limit : 1000;
 
             currentCount = GetJournalVoucherCount();
 

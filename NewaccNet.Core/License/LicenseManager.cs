@@ -20,7 +20,7 @@ namespace NewaccNet.Core.License
         // Khóa bí mật nội bộ chỉ tác giả Phạm Việt Cường sở hữu
         private const string MasterSecretKey = "PVCUONG@NEWACCNET#2026$LICENSE!KEY_CONTROL_V1";
 
-        public const int TrialVoucherLimit = 100; // Giới hạn 100 chứng từ ở bản dùng thử
+        public const int TrialVoucherLimit = 1000; // Giới hạn 1.000 chứng từ ở bản dùng thử
 
         private static LicenseInfo? _currentLicense;
         private static bool _isInitialized = false;
@@ -252,7 +252,7 @@ namespace NewaccNet.Core.License
                 string limitStr = max >= 999999 ? "Vô hạn (Không giới hạn)" : $"{max:N0} chứng từ";
                 return $"Bản quyền chính thức (Gói {limitStr})";
             }
-            return "Bản Dùng Thử (Giới hạn 100 chứng từ)";
+            return "Bản Dùng Thử (Giới hạn 1.000 chứng từ)";
         }
     }
 }

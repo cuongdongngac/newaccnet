@@ -7,13 +7,6 @@ REM     publish_all.bat                 (phien ban 1.0.0, setup tu chon x86/x64)
 REM     publish_all.bat 1.2.0           (dat so phien ban)
 REM     publish_all.bat 1.2.0 x64       (chi tao setup rieng ban x64)
 REM     publish_all.bat 1.2.0 x86       (chi tao setup rieng ban x86)
-REM
-REM  Ket qua:
-REM     Publish\x86\  , Publish\x64\    (ban da publish cua app)
-REM     Installer\Output\NewaccNet-Setup-<version>.exe
-REM
-REM  Can: .NET 10 SDK, Inno Setup 6.3+ (https://jrsoftware.org/isdl.php)
-REM  Ban cu cua file nay: publish_all.bat.bak
 REM ==================================================================
 setlocal
 cd /d "%~dp0"
@@ -24,7 +17,6 @@ set "ARCH=%~2"
 if "%ARCH%"=="" set "ARCH=auto"
 
 set "PROJ=NewaccNet.Wpf\NewaccNet.Wpf.csproj"
-REM  Chi giu file ngon ngu tieng Anh cua DevExpress (bo cs, de, ja, ...)
 set "COMMON=-c Release --self-contained false -p:Version=%VERSION% -p:DebugType=none -p:SatelliteResourceLanguages=en"
 
 echo ========================================================
@@ -37,50 +29,36 @@ if exist "Publish\x86" rmdir /s /q "Publish\x86"
 if exist "Publish\x64" rmdir /s /q "Publish\x64"
 
 echo.
-echo [2/4] Publish ban 32-bit (x86)...
+echo [2/4] Publish ban 32-bit (x86) va 64-bit (x64)...
 dotnet publish "%PROJ%" -r win-x86 %COMMON% -o "Publish\x86"
 if errorlevel 1 goto :error_x86
-if exist "NewaccNet.Plugin.ErpWarehouse\NewaccNet.Plugin.ErpWarehouse.csproj" (
-    dotnet publish "NewaccNet.Plugin.ErpWarehouse\NewaccNet.Plugin.ErpWarehouse.csproj" -r win-x86 %COMMON% -o "Publish\x86\Plugins"
-)
-if exist "NewaccNet.Plugin.CashBank\NewaccNet.Plugin.CashBank.csproj" (
-    dotnet publish "NewaccNet.Plugin.CashBank\NewaccNet.Plugin.CashBank.csproj" -r win-x86 %COMMON% -o "Publish\x86\Plugins"
-)
-if exist "Template" (
-    xcopy /E /I /Y "Template" "Publish\x86\Template"
-)
-if exist "sampledb" (
-    xcopy /E /I /Y "sampledb" "Publish\x86\sampledb"
-)
-if exist "mapping" (
-    xcopy /E /I /Y "mapping" "Publish\x86\mapping"
-)
-if exist "migrate.exe" (
-    copy /Y "migrate.exe" "Publish\x86\"
+
+dotnet publish "%PROJ%" -r win-x64 %COMMON% -o "Publish\x64"
+if errorlevel 1 goto :error_x64
+
+REM Dam bao Publish\x86 va Publish\x64 thuan tuy chi co file chay, khong chua cac thu muc khac
+for %%A in (x86 x64) do (
+    if exist "Publish\%%A\Template" rmdir /s /q "Publish\%%A\Template"
+    if exist "Publish\%%A\Migration" rmdir /s /q "Publish\%%A\Migration"
+    if exist "Publish\%%A\Plugins" rmdir /s /q "Publish\%%A\Plugins"
+    if exist "Publish\%%A\sampledb" rmdir /s /q "Publish\%%A\sampledb"
+    if exist "Publish\%%A\mapping" rmdir /s /q "Publish\%%A\mapping"
 )
 
 echo.
-echo [3/4] Publish ban 64-bit (x64)...
-dotnet publish "%PROJ%" -r win-x64 %COMMON% -o "Publish\x64"
-if errorlevel 1 goto :error_x64
-if exist "NewaccNet.Plugin.ErpWarehouse\NewaccNet.Plugin.ErpWarehouse.csproj" (
-    dotnet publish "NewaccNet.Plugin.ErpWarehouse\NewaccNet.Plugin.ErpWarehouse.csproj" -r win-x64 %COMMON% -o "Publish\x64\Plugins"
-)
-if exist "NewaccNet.Plugin.CashBank\NewaccNet.Plugin.CashBank.csproj" (
-    dotnet publish "NewaccNet.Plugin.CashBank\NewaccNet.Plugin.CashBank.csproj" -r win-x64 %COMMON% -o "Publish\x64\Plugins"
-)
-if exist "Template" (
-    xcopy /E /I /Y "Template" "Publish\x64\Template"
-)
-if exist "sampledb" (
-    xcopy /E /I /Y "sampledb" "Publish\x64\sampledb"
-)
-if exist "mapping" (
-    xcopy /E /I /Y "mapping" "Publish\x64\mapping"
-)
-if exist "migrate.exe" (
-    copy /Y "migrate.exe" "Publish\x64\"
-)
+echo [3/4] Build cac plugin (dua DLL vao Plugins)...
+dotnet build "NewaccNet.Plugin.CashBank\NewaccNet.Plugin.CashBank.csproj" -c Release -p:Version=%VERSION%
+if errorlevel 1 goto :error_plugin
+
+dotnet build "NewaccNet.Plugin.ErpWarehouse\NewaccNet.Plugin.ErpWarehouse.csproj" -c Release -p:Version=%VERSION%
+if errorlevel 1 goto :error_plugin
+
+dotnet build "NewaccNet.Plugin.DbMigrator\NewaccNet.Plugin.DbMigrator.csproj" -c Release -p:Version=%VERSION%
+if errorlevel 1 goto :error_plugin
+
+copy /Y "NewaccNet.Plugin.CashBank\bin\Release\net10.0-windows\NewaccNet.Plugin.CashBank.dll" "Plugins\" >nul
+copy /Y "NewaccNet.Plugin.ErpWarehouse\bin\Release\net10.0-windows\NewaccNet.Plugin.ErpWarehouse.dll" "Plugins\" >nul
+copy /Y "NewaccNet.Plugin.DbMigrator\bin\Release\net10.0-windows\NewaccNet.Plugin.DbMigrator.dll" "Plugins\" >nul
 
 echo.
 echo [4/4] Tao bo cai bang Inno Setup...
@@ -118,6 +96,11 @@ goto :fail
 :error_x64
 echo.
 echo [LOI] Publish ban x64 that bai!
+goto :fail
+
+:error_plugin
+echo.
+echo [LOI] Build plugin that bai!
 goto :fail
 
 :error_iscc

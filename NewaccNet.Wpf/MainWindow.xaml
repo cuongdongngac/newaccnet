@@ -1,4 +1,4 @@
-﻿<dx:ThemedWindow x:Class="NewaccNet.Wpf.MainWindow"
+<dx:ThemedWindow x:Class="NewaccNet.Wpf.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -21,6 +21,24 @@
 
         <!-- Menu chính dạng Ribbon -->
         <dxr:RibbonControl x:Name="mainRibbon" Grid.Row="0" RibbonStyle="Office2019" ShowApplicationButton="False">
+            <!-- Biểu tượng Trợ giúp luôn ghim cố định ở ngoài rìa bên phải của Menu chính -->
+            <dxr:RibbonControl.PageHeaderItems>
+                <dxb:BarButtonItem x:Name="btnHelpPageHeader"
+                                   Content="Trợ giúp"
+                                   Hint="Hướng dẫn sử dụng trực tuyến (F1)"
+                                   Glyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/icon%20builder/actions_question.svg'}"
+                                   ItemClick="BtnOnlineHelp_ItemClick">
+                    <dxb:BarButtonItem.SuperTip>
+                        <dx:SuperTip>
+                            <dx:SuperTipHeaderItem Content="Trợ giúp &amp; Hướng dẫn (F1)"/>
+                            <dx:SuperTipItem Content="Mở trang tài liệu trợ giúp trực tuyến trên trình duyệt web."/>
+                        </dx:SuperTip>
+                    </dxb:BarButtonItem.SuperTip>
+                </dxb:BarButtonItem>
+            </dxr:RibbonControl.PageHeaderItems>
+            <dxr:RibbonControl.PageHeaderItemLinks>
+                <dxb:BarButtonItemLink BarItemName="btnHelpPageHeader" />
+            </dxr:RibbonControl.PageHeaderItemLinks>
             <!-- Tab: Hệ thống -->
             <dxr:RibbonDefaultPageCategory x:Name="defaultCategory">
                 <!-- ==================== Tab 1: NGHIỆP VỤ (ƯU TIÊN) ==================== -->
@@ -549,6 +567,37 @@ Bao gồm liên kết tới loại hình tương ứng."/>
                                 <dx:SuperTip>
                                     <dx:SuperTipHeaderItem Content="Cấu hình OpenRouter Gateway &amp; Models"/>
                                     <dx:SuperTipItem Content="Thiết lập khóa API OpenRouter, lựa chọn model Claude, Gemini, GPT-4o và kiểm tra kết nối."/>
+                                </dx:SuperTip>
+                            </dxb:BarButtonItem.SuperTip>
+                        </dxb:BarButtonItem>
+                    </dxr:RibbonPageGroup>
+                </dxr:RibbonPage>
+                <!-- ==================== Tab: Trợ giúp (Luôn nằm ở ngoài rìa) ==================== -->
+                <dxr:RibbonPage x:Name="ribbonPageHelp" Caption="Trợ giúp">
+                    <dxr:RibbonPageGroup Caption="Tài liệu &amp; Hướng dẫn">
+                        <dxb:BarButtonItem Content="Hướng dẫn" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/icon%20builder/actions_question.svg'}" ItemClick="BtnOnlineHelp_ItemClick">
+                            <dxb:BarButtonItem.SuperTip>
+                                <dx:SuperTip>
+                                    <dx:SuperTipHeaderItem Content="Hướng dẫn Sử dụng Trực tuyến (F1)"/>
+                                    <dx:SuperTipItem Content="Mở trang tài liệu trợ giúp trực tuyến trên trình duyệt web."/>
+                                </dx:SuperTip>
+                            </dxb:BarButtonItem.SuperTip>
+                        </dxb:BarButtonItem>
+                    </dxr:RibbonPageGroup>
+                    <dxr:RibbonPageGroup Caption="Thông tin &amp; Bản quyền">
+                        <dxb:BarButtonItem Content="Giới thiệu" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/outlook%20inspired/about.svg'}" ItemClick="BtnAbout_ItemClick">
+                            <dxb:BarButtonItem.SuperTip>
+                                <dx:SuperTip>
+                                    <dx:SuperTipHeaderItem Content="Thông tin Phần mềm (About)"/>
+                                    <dx:SuperTipItem Content="Xem thông tin bản quyền tác giả Phạm Việt Cường, phiên bản và thông tin liên hệ."/>
+                                </dx:SuperTip>
+                            </dxb:BarButtonItem.SuperTip>
+                        </dxb:BarButtonItem>
+                        <dxb:BarButtonItem Content="Bản quyền" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/icon%20builder/security_key.svg'}" ItemClick="BtnLicense_ItemClick">
+                            <dxb:BarButtonItem.SuperTip>
+                                <dx:SuperTip>
+                                    <dx:SuperTipHeaderItem Content="Đăng ký &amp; Quản lý Bản quyền"/>
+                                    <dx:SuperTipItem Content="Xem mã máy tính, kiểm tra hạn mức chứng từ hoặc nhập mã kích hoạt bản quyền."/>
                                 </dx:SuperTip>
                             </dxb:BarButtonItem.SuperTip>
                         </dxb:BarButtonItem>
