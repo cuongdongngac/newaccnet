@@ -169,7 +169,7 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
 
         private void ViewEntries_RowDoubleClick(object sender, DevExpress.Xpf.Grid.RowDoubleClickEventArgs e)
         {
-            if (viewEntries.FocusedRow is JournalEntryEntity entry)
+            if (gridEntries.SelectedItem is JournalEntryEntity entry)
             {
                 OpenDetailFormIfRequired(entry);
             }
@@ -205,7 +205,7 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
 
         private void DeleteFocusedRow()
         {
-            if (viewEntries.FocusedRow is JournalEntryEntity selected)
+            if (gridEntries.SelectedItem is JournalEntryEntity selected)
             {
                 string desc = !string.IsNullOrEmpty(selected.AccountId) ? $"tài khoản '{selected.AccountId}'" : "dòng này";
                 if (MessageBox.Show($"Bạn có chắc chắn muốn xóa số dư {desc}?", "Xác nhận xóa", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
@@ -394,7 +394,7 @@ namespace NewaccNet.Wpf.AppSystem.Voucher
             }
             else if (e.Key == Key.F4)
             {
-                if (viewEntries.FocusedRow is JournalEntryEntity entry)
+                if (gridEntries.SelectedItem is JournalEntryEntity entry)
                 {
                     OpenDetailFormIfRequired(entry);
                     e.Handled = true;

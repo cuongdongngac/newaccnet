@@ -43,12 +43,12 @@
                 <!-- Detail: Tầng 2 - ReportCategory -->
                 <dxg:GridControl.DetailDescriptor>
                     <dxg:DataControlDetailDescriptor ItemsSourceBinding="{Binding ReportCategories}">
-                        <dxg:GridControl AutoGenerateColumns="None">
+                        <dxg:GridControl AutoGenerateColumns="None" CurrentItemChanged="CategoryGrid_CurrentItemChanged">
                             <dxg:GridControl.View>
                                 <dxg:TableView AutoWidth="True" ShowGroupPanel="False" AllowEditing="True" NewItemRowPosition="Bottom"
                                                NavigationStyle="Cell" DetailHeaderContent="Nhóm chỉ tiêu"
                                                ShowAutoFilterRow="False" ShowSearchPanelMode="Always" RowMinHeight="30"
-                                               FocusedRowChanged="CategoryView_FocusedRowChanged">
+                                               >
                                     <dxg:TableView.FormatConditions>
                                         <dxg:FormatCondition FieldName="Id" Expression="[Id] % 2 = 0" ApplyToRow="True">
                                             <dxg:FormatCondition.Format><dx:Format Background="#FFF3E5F5"/></dxg:FormatCondition.Format>

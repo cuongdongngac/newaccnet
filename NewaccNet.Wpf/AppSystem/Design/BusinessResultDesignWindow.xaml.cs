@@ -27,7 +27,7 @@ namespace NewaccNet.Wpf.AppSystem.Design
             };
         }
 
-        public void LoadData()
+        public override void LoadData()
         {
             try
             {

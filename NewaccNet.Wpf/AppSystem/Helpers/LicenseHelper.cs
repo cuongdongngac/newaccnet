@@ -182,7 +182,7 @@ namespace MyApp.Licensing
 
         private static string ShortHash(string s)
         {
-            using (SHA256 sha = new SHA256Managed())
+            using (SHA256 sha = SHA256.Create())
             {
                 byte[] h = sha.ComputeHash(Encoding.UTF8.GetBytes(Salt + "|" + s));
                 return BitConverter.ToString(h, 0, 4).Replace("-", "");

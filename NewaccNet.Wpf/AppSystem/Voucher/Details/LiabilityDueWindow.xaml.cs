@@ -228,7 +228,7 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             }
         }
 
-        private void BtnAccept_Click(object sender, RoutedEventArgs e)
+        protected override void BtnAccept_Click(object sender, RoutedEventArgs e)
         {
             if (SaveData())
             {
@@ -238,7 +238,7 @@ namespace NewaccNet.Wpf.AppSystem.Voucher.Details
             }
         }
 
-        private void BtnCancel_Click(object sender, RoutedEventArgs e)
+        protected override void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }

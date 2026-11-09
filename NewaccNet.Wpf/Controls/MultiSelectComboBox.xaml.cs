@@ -43,7 +43,7 @@ namespace NewaccNet.Wpf.Controls
                 }
             }
 
-            public event PropertyChangedEventHandler PropertyChanged;
+            public event PropertyChangedEventHandler? PropertyChanged;
         }
 
         private List<CheckItem> _items = new List<CheckItem>();

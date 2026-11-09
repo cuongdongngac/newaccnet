@@ -61,18 +61,16 @@ namespace NewaccNet.Wpf.AppSystem.Design
             }
         }
 
-        private void CategoryView_FocusedRowChanged(object sender, FocusedRowChangedEventArgs e)
+        private void CategoryGrid_CurrentItemChanged(object sender, CurrentItemChangedEventArgs e)
         {
-            var view = sender as TableView;
-            if (view == null) return;
-            var category = view.Grid.CurrentItem as ReportCategoryEntity;
+            var category = e.NewItem as ReportCategoryEntity;
             if (category != null && category.ReportItems != null)
             {
                 gridItems.ItemsSource = category.ReportItems;
             }
         }
 
-        public void LoadData()
+        public override void LoadData()
         {
             try
             {

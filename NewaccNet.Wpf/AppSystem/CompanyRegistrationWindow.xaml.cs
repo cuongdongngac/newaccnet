@@ -20,7 +20,7 @@ namespace NewaccNet.Wpf.AppSystem
             LoadData();
         }
 
-        private void LoadData()
+        public override void LoadData()
         {
             var cfg = DbConfigService.LoadDbConfig();
 
