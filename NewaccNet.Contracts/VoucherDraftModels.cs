@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using NewaccNet.Contracts.AI;
 
 namespace NewaccNet.Contracts
 {
@@ -185,6 +186,7 @@ namespace NewaccNet.Contracts
         public List<ProposedMasterData> ProposedMasterData { get; set; } = new();
         public List<DraftIssue> Issues { get; set; } = new();
         public List<DraftAuditEntry> Audit { get; set; } = new();
+        public List<AiSuggestion> Suggestions { get; set; } = new();
 
         public int? PostedVoucherId { get; set; }
     }

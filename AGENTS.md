@@ -1,5 +1,8 @@
 # Quy tắc Phát triển & Phiên bản Công nghệ Chuẩn
 
+> **⚠️ ƯU TIÊN CAO NHẤT cho mọi việc liên quan AI và Plugin:** đọc `docs/AI_PLATFORM_AND_PLUGIN_SPEC_v5.md` trước khi viết code. Khi mâu thuẫn với các tài liệu khác về AI/Plugin, làm theo tài liệu đó. Chỉ làm đúng task được giao (A1, A2, B1… theo Mục 12), chỉ sửa file trong danh sách "Được sửa" của task, dừng sau mỗi task.
+
+
 ## 1. Công nghệ & Thư viện Cố định
 - **DevExpress:** Chuẩn **DevExpress v25** (phiên bản đang dùng: `25.2.3`). Áp dụng cho toàn bộ WPF UI components, Data Grid, LayoutControl và XtraReport.
 - **ORM:** Chuẩn **LLBLGen Pro v5.12** (phiên bản package: `5.12.0`). Tuân thủ chặt chẽ cấu trúc Entity, TypedList, Unit of Work / Adapter của LLBLGen. Không tự ý thay đổi hay nâng cấp version ORM.

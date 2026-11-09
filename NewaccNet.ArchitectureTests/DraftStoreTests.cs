@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using NewaccNet.Contracts;
@@ -454,6 +455,124 @@ namespace NewaccNet.ArchitectureTests
                     try { Directory.Delete(tempFolder, true); } catch { }
                 }
             }
+        }
+
+        [Fact]
+        public void VoucherDraft_LegacyJsonWithoutSuggestions_ShouldDeserializeWithEmptySuggestionsList()
+        {
+            // Mô phỏng chuỗi JSON được lưu từ phiên bản cũ (hoàn toàn không có thuộc tính "Suggestions")
+            string legacyJson = """
+            {
+                "SchemaVersion": 1,
+                "DraftId": "LEGACY_DRAFT_123",
+                "DraftType": 0,
+                "Status": 1,
+                "Header": {
+                    "VoucherDate": "2026-11-01T00:00:00",
+                    "VoucherNo": "NM0001",
+                    "VoucherSourceCode": "NM"
+                },
+                "Counterparty": {
+                    "Raw": { "TaxCode": "0101234567", "Name": "Nhà Cung Cấp Cũ" }
+                },
+                "Lines": [
+                    {
+                        "LineNo": 1,
+                        "Raw": { "ItemName": "Vật tư cũ", "Amount": 1000000 }
+                    }
+                ]
+            }
+            """;
+
+            var deserialized = System.Text.Json.JsonSerializer.Deserialize<VoucherDraft>(legacyJson);
+
+            Assert.NotNull(deserialized);
+            Assert.Equal("LEGACY_DRAFT_123", deserialized.DraftId);
+            Assert.NotNull(deserialized.Suggestions);
+            Assert.Empty(deserialized.Suggestions);
+        }
+
+        [Fact]
+        public async Task JsonFileDraftStore_LegacyJsonFileOnDisk_ShouldLoadWithEmptySuggestions()
+        {
+            string tempFolder = Path.Combine(Path.GetTempPath(), "NewaccNet_LegacyTest_" + Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(tempFolder);
+            try
+            {
+                string draftId = "LEGACY_DISK_001";
+                string filePath = Path.Combine(tempFolder, $"Draft_{draftId}.json");
+
+                // Ghi trực tiếp file JSON cũ không có trường Suggestions
+                string legacyJson = """
+                {
+                    "SchemaVersion": 1,
+                    "DraftId": "LEGACY_DISK_001",
+                    "DraftType": 0,
+                    "Status": 0,
+                    "Source": { "Kind": "TaxInvoice", "Ref": "INV_OLD_001" },
+                    "Header": { "VoucherDate": "2026-10-15T00:00:00", "VoucherSourceCode": "NM", "Contents": "Hóa đơn cũ" },
+                    "Counterparty": { "Raw": { "Name": "Công ty Cổ phần Cũ", "TaxCode": "0301112222" } },
+                    "Lines": []
+                }
+                """;
+                await File.WriteAllTextAsync(filePath, legacyJson);
+
+                var store = new JsonFileDraftStore(tempFolder);
+                var loaded = await store.GetAsync(draftId);
+
+                Assert.NotNull(loaded);
+                Assert.Equal("LEGACY_DISK_001", loaded.DraftId);
+                Assert.NotNull(loaded.Suggestions);
+                Assert.Empty(loaded.Suggestions);
+            }
+            finally
+            {
+                if (Directory.Exists(tempFolder))
+                {
+                    try { Directory.Delete(tempFolder, true); } catch { }
+                }
+            }
+        }
+
+        [Fact]
+        public void VoucherDraft_WithAiSuggestions_RoundtripSerialization_PreservesAllFields()
+        {
+            var draft = new VoucherDraft
+            {
+                DraftId = "SUGGEST_DRAFT_001",
+                Suggestions = new List<NewaccNet.Contracts.AI.AiSuggestion>
+                {
+                    new()
+                    {
+                        SuggestionId = "SUGG_1",
+                        LineNo = 1,
+                        FieldPath = "Lines[0].DebitAccountId",
+                        Value = "1561",
+                        Confidence = 0.95,
+                        Reason = "Phù hợp mặt hàng tiêu dùng",
+                        Evidence = new() { "search_accounts: khớp 1561" },
+                        SkillId = "purchase-invoice-mapping",
+                        SkillVersion = "1.2.0",
+                        ModelUsed = "anthropic/claude-3.5-sonnet",
+                        CallId = "CALL_123",
+                        Outcome = NewaccNet.Contracts.AI.SuggestionOutcome.Pending
+                    }
+                }
+            };
+
+            string json = System.Text.Json.JsonSerializer.Serialize(draft);
+            var deserialized = System.Text.Json.JsonSerializer.Deserialize<VoucherDraft>(json);
+
+            Assert.NotNull(deserialized);
+            Assert.Single(deserialized.Suggestions);
+            var s = deserialized.Suggestions[0];
+            Assert.Equal("SUGG_1", s.SuggestionId);
+            Assert.Equal(1, s.LineNo);
+            Assert.Equal("Lines[0].DebitAccountId", s.FieldPath);
+            Assert.Equal("1561", s.Value);
+            Assert.Equal(0.95, s.Confidence);
+            Assert.Equal("purchase-invoice-mapping", s.SkillId);
+            Assert.Equal(NewaccNet.Contracts.AI.SuggestionOutcome.Pending, s.Outcome);
         }
     }
 }
