@@ -5,7 +5,7 @@
         xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
         xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
         xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
-        Title="Chuyển đổi CSDL Access (MDB sang ACCDB)" 
+        Title="Nâng cấp CSDL từ bản Access cũ (MDB sang ACCDB)" 
         Height="700" Width="860" WindowStartupLocation="CenterOwner">
     <Grid>
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">

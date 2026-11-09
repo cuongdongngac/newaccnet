@@ -8,9 +8,9 @@ namespace NewaccNet.Plugin.DbMigrator
     public class DbMigratorPlugin : IPlugin
     {
         public string Id => "plugin.dbmigrator";
-        public string Name => "Công cụ Chuyển đổi & Nhân bản CSDL";
+        public string Name => "Công cụ Chuyển CSDL lên SQL Server";
         public string Version => "1.0.0";
-        public string Description => "Khởi tạo CSDL MS SQL Server từ tệp script DDL và nhân bản dữ liệu từ CSDL hiện tại.";
+        public string Description => "Khởi tạo CSDL MS SQL Server và nhân bản dữ liệu từ CSDL Access hiện tại.";
         public string Author => "NewaccNet Development Team";
 
         public void Initialize(IPluginContext context)
@@ -19,7 +19,7 @@ namespace NewaccNet.Plugin.DbMigrator
             {
                 Category = "Hệ thống",
                 GroupName = "Cơ sở dữ liệu",
-                Title = "Chuyển đổi CSDL",
+                Title = "Lên SQL Server",
                 ToolTip = "Khởi tạo CSDL MS SQL Server và nhân bản dữ liệu từ CSDL đang kết nối",
                 GlyphUri = "pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/icon%20builder/actions_database.svg",
                 ExecuteAction = (owner) =>

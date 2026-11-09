@@ -146,10 +146,10 @@
                                 </dx:SuperTip>
                             </dxb:BarButtonItem.SuperTip>
                         </dxb:BarButtonItem>
-                        <dxb:BarButtonItem Content="Chuyển đổi CSDL" ItemClick="BtnConvertDb_ItemClick" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_transition.svg'}" auth:AuthHelper.RequiredMask="1">
+                        <dxb:BarButtonItem Content="Nâng cấp MDB" ItemClick="BtnConvertDb_ItemClick" LargeGlyph="{dx:SvgImageSource Uri='pack://application:,,,/DevExpress.Images.v25.2;component/svgimages/business%20objects/bo_transition.svg'}" auth:AuthHelper.RequiredMask="1">
                             <dxb:BarButtonItem.SuperTip>
                                 <dx:SuperTip>
-                                    <dx:SuperTipHeaderItem Content="Chuyển đổi CSDL Access (MDB sang ACCDB)"/>
+                                    <dx:SuperTipHeaderItem Content="Nâng cấp CSDL từ bản Access cũ (.MDB)"/>
                                     <dx:SuperTipItem Content="Chuyển đổi toàn bộ dữ liệu từ tệp Access MDB cũ sang CSDL ACCDB mới theo chuẩn NewaccNet."/>
                                 </dx:SuperTip>
                             </dxb:BarButtonItem.SuperTip>
