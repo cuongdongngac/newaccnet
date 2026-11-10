@@ -24,6 +24,44 @@ namespace NewaccNet.Core.Data
             return File.Exists(ConfigFilePath) || File.Exists(LegacyConfigFilePath);
         }
 
+        /// <summary>
+        /// Đường dẫn tới tệp CSDL mẫu mydata.accdb trong thư mục sampledb của ứng dụng.
+        /// </summary>
+        public static string GetSampleDbPath()
+        {
+            var candidates = new[]
+            {
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "sampledb", "mydata.accdb"),
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "mydata.accdb"),
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "sampledb", "mydata.accdb"),
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "sampledb", "mydata.accdb"),
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "sampledb", "mydata.accdb"),
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "sampledb", "mydata.accdb")
+            };
+
+            foreach (var c in candidates)
+            {
+                try
+                {
+                    if (File.Exists(c)) return Path.GetFullPath(c);
+                }
+                catch { }
+            }
+
+            return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "sampledb", "mydata.accdb");
+        }
+
+        /// <summary>
+        /// Tự động cấu hình kết nối vào tệp CSDL mẫu mydata.accdb và lưu lại cấu hình.
+        /// </summary>
+        public static void ConfigureSampleDatabase()
+        {
+            Current.DbType = DatabaseType.Access;
+            Current.AccessFilePath = GetSampleDbPath();
+            BuildConnectionString();
+            SaveConfig();
+        }
+
         public static void LoadConfig()
         {
             try

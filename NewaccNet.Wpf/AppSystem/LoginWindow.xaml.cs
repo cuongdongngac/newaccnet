@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Windows;
 using System.Linq;
@@ -33,60 +33,12 @@ namespace NewaccNet.Wpf.AppSystem
         /// </summary>
         private void UpdateDbConfigLinkVisibility()
         {
-            string configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appsettings.json");
-            if (!File.Exists(configPath))
-            {
-                layoutItemDbConfig.Visibility = Visibility.Collapsed;
-                return;
-            }
-
-            bool isConnectionValid = TestConfiguredDatabaseConnection();
-            layoutItemDbConfig.Visibility = isConnectionValid ? Visibility.Collapsed : Visibility.Visible;
+            layoutItemDbConfig.Visibility = Visibility.Visible;
         }
 
         private static bool TestConfiguredDatabaseConnection()
         {
-            try
-            {
-                ConfigManager.LoadConfig();
-                var cfg = ConfigManager.Current;
-                if (cfg == null || string.IsNullOrWhiteSpace(cfg.ConnectionString))
-                    return false;
-
-                if (cfg.DbType == DatabaseType.Access)
-                {
-                    if (string.IsNullOrWhiteSpace(cfg.AccessFilePath) || !File.Exists(cfg.AccessFilePath))
-                        return false;
-
-                    using (var conn = new System.Data.OleDb.OleDbConnection(cfg.ConnectionString))
-                    {
-                        conn.Open();
-                        return true;
-                    }
-                }
-                else if (cfg.DbType == DatabaseType.SqlServer)
-                {
-                    using (var conn = new Microsoft.Data.SqlClient.SqlConnection(cfg.ConnectionString))
-                    {
-                        conn.Open();
-                        return true;
-                    }
-                }
-                else if (cfg.DbType == DatabaseType.PostgreSql)
-                {
-                    using (var conn = new Npgsql.NpgsqlConnection(cfg.ConnectionString))
-                    {
-                        conn.Open();
-                        return true;
-                    }
-                }
-
-                return false;
-            }
-            catch
-            {
-                return false;
-            }
+            return NewaccNet.Core.Data.AppDataAccessAdapter.TestConnection(out _);
         }
 
         private void BtnLogin_Click(object sender, RoutedEventArgs e)
@@ -133,7 +85,17 @@ namespace NewaccNet.Wpf.AppSystem
             catch (System.Exception ex)
             {
                 UpdateDbConfigLinkVisibility();
-                MessageBox.Show($"Lỗi kết nối CSDL: {ex.Message}\n\nVui lòng kiểm tra lại cấu hình DB.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                var result = MessageBox.Show(
+                    $"Lỗi kết nối CSDL: {ex.Message}\n\nBạn có muốn chuyển kết nối sang CSDL mẫu (sampledb\\mydata.accdb) không?",
+                    "Lỗi kết nối CSDL",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    ConfigManager.ConfigureSampleDatabase();
+                    MessageBox.Show("Đã chuyển kết nối về CSDL mẫu (sampledb\\mydata.accdb).\nVui lòng thử đăng nhập lại bằng tài khoản admin.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
             }
         }
 
@@ -150,4 +112,3 @@ namespace NewaccNet.Wpf.AppSystem
         }
     }
 }
-

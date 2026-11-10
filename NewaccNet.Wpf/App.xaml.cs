@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using System.Windows;
 using NewaccNet.Wpf.AppSystem;
 
@@ -36,26 +36,23 @@ public partial class App : Application
         NewaccNet.Core.UI.AccountLookUpEditBase.DetailWindowOpener = (entry, owner, showMsg) => NewaccNet.Wpf.AppSystem.Voucher.AccountLookUpEdit.OpenDetailWindow(entry, owner, false, showMsg);
         ConfigManager.LoadConfig();
 
-        // 2. Kiểm tra xem file cấu hình đã tồn tại chưa (Lần chạy đầu tiên)
+        // 2. Xử lý kết nối CSDL:
+        // - Lần đầu chạy (chưa có tệp cấu hình): tự động kết nối vào app\sampledb\mydata.accdb
+        // - Đã có cấu hình nhưng bị sai / không kết nối được: tự động fallback về mydata.accdb
         if (!ConfigManager.HasConfigFile())
         {
-            // Gợi ý mặc định trỏ vào file mẫu template.accdb
-            var config = ConfigManager.Current;
-            config.DbType = DatabaseType.Access;
-            string tPath = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Template", "template.accdb");
-            config.AccessFilePath = File.Exists(tPath) ? tPath : Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "template.accdb");
-
-            // Mở cửa sổ cấu hình DB
-            var configWindow = new DbConfigWindow();
-            configWindow.ShowDialog();
-            
-            // Sau khi form cấu hình đóng (hoặc tự restart sau khi lưu), tắt luồng hiện tại.
-            System.Environment.Exit(0);
-            return;
+            ConfigManager.ConfigureSampleDatabase();
         }
         else
         {
-            // 3. Đã có cấu hình: Mở cửa sổ Đăng nhập
+            if (!NewaccNet.Core.Data.AppDataAccessAdapter.TestConnection(out string testError))
+            {
+                System.Diagnostics.Debug.WriteLine($"[Startup] CSDL cấu hình không hợp lệ ({testError}). Tự động fallback về sampledb\\mydata.accdb.");
+                ConfigManager.ConfigureSampleDatabase();
+            }
+        }
+
+        // 3. Mở cửa sổ Đăng nhập
             var loginWindow = new LoginWindow();
             bool? loginResult = loginWindow.ShowDialog();
 
@@ -82,7 +79,6 @@ public partial class App : Application
                 // Người dùng bấm Hủy/Thoát hoặc đóng form Login
                 System.Environment.Exit(0);
             }
-        }
     }
 }
 

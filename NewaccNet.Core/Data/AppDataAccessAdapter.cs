@@ -78,6 +78,44 @@ namespace NewaccNet.Core.Data
                 return new System.Data.OleDb.OleDbConnection(cfg.ConnectionString);
             }
         }
+
+        /// <summary>
+        /// Kiểm tra xem cấu hình CSDL hiện tại có mở kết nối thành công không.
+        /// Trả về false kèm thông báo lỗi nếu tệp không tồn tại hoặc thông số kết nối sai.
+        /// </summary>
+        public static bool TestConnection(out string errorMessage)
+        {
+            errorMessage = string.Empty;
+            try
+            {
+                var cfg = ConfigManager.Current;
+                if (cfg == null)
+                {
+                    errorMessage = "Chưa có thông tin cấu hình CSDL.";
+                    return false;
+                }
+
+                ConfigManager.BuildConnectionString();
+
+                if (cfg.DbType == DatabaseType.Access)
+                {
+                    if (string.IsNullOrWhiteSpace(cfg.AccessFilePath) || !System.IO.File.Exists(cfg.AccessFilePath))
+                    {
+                        errorMessage = $"Tệp CSDL Access không tồn tại hoặc đường dẫn trống: '{cfg.AccessFilePath}'";
+                        return false;
+                    }
+                }
+
+                using var conn = CreateRawConnection();
+                conn.Open();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                errorMessage = ex.Message;
+                return false;
+            }
+        }
     }
 }
 
